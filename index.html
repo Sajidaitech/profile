@@ -1,190 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ai image Generator</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-body{font-family:'Inter',sans-serif;background-color:#f7f7f7;}
-.container-card{background-color:white;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);}
-.loading-ring{display:inline-block;width:80px;height:80px;}
-.loading-ring:after{content:" ";display:block;width:64px;height:64px;margin:8px;border-radius:50%;border:6px solid #4ade80;border-color:#4ade80 transparent #4ade80 transparent;animation:loading-ring 1.2s linear infinite;}
-@keyframes loading-ring{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sajid Mehmood - IT Engineer & Technical Support Specialist Portfolio">
+    <meta name="theme-color" content="#1a3a52">
+    <title>Sajid Mehmood | IT Engineer Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-4 md:p-8 min-h-screen flex items-start justify-center">
+<body>
+    <header class="navbar">
+        <a href="#home" class="logo">SAJID MEHMOOD</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="nav-menu" id="navMenu">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#documents">Documents</a>
+            <a href="#education">Education</a>
+            <a href="Sajid CV 2025.pdf" target="_blank" class="cv-link">Full CV</a>
+        </nav>
+    </header>
 
-<div id="app" class="w-full max-w-4xl container-card rounded-xl p-6 md:p-10 my-4">
-  <h1 class="text-3xl font-bold text-gray-800 mb-2">🎬 Generate your Ai Image from your Prompt</h1>
-  <p class="text-gray-600 mb-6">Describe your Idea in  shot and generate multiple AI-visualized scenes.</p>
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <div class="profile-section">
+                <img src="photo.jpg" alt="Sajid Mehmood" class="profile-img">
+                <h1 class="sidebar-name">Sajid Mehmood</h1>
+                <p class="sidebar-title">IT Engineer</p>
+                <p class="sidebar-subtitle">Technical Support Specialist</p>
+            </div>
 
-  <!-- Prompt + Copy -->
-  <div class="mb-6 relative">
-    <label for="prompt-input" class="block text-lg font-semibold text-gray-700 mb-2">Scene Description Prompt:</label>
-    <textarea id="prompt-input" rows="4"
-      class="w-full p-3 border-2 border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 transition"
-      placeholder="Example: A farmer guiding oxen through sunrise fields.">Write Your Prompt Here </textarea>
-    <button id="copy-prompt"
-      class="absolute top-2 right-2 px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition">Copy</button>
-  </div>
+            <div class="contact-section">
+                <h3 class="sidebar-heading">Contact</h3>
+                <div class="contact-item">
+                    <span class="icon">📧</span>
+                    <a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📱</span>
+                    <a href="tel:+97466969598">+974 6696 9598</a>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📍</span>
+                    <p>Doha, Qatar</p>
+                </div>
+                <div class="contact-buttons">
+                    <a href="mailto:sajid.teech@gmail.com" class="btn primary">Email Me</a>
+                    <a href="tel:+97466969598" class="btn secondary">Call Me</a>
+                </div>
+                <!-- NEW: LinkedIn Profile Link -->
+                <div class="contact-item">
+                    <span class="icon">🌐</span>
+                    <a href="https://www.linkedin.com/in/sajid-t-1b3954333?utm_source=share_via&utm_content=profile&utm_medium=member_ios" target="_blank">LinkedIn Profile</a>
+                </div>
+                
+                <!-- NEW: Instagram Profile Link -->
+                <div class="contact-item">
+                    <span class="icon">📸</span>
+                    <a href="https://www.instagram.com/sajidteech?igsh=MXNoN21zenk3cTVoOQ%3D%3D&utm_source=qr" target="_blank">Instagram Profile</a>
+                </div>
+            </div>
 
-  <!-- Controls -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4 mb-6">
-    <div class="flex items-center mb-3 sm:mb-0">
-      <label for="image-count" class="font-semibold text-gray-700 mr-2">Images:</label>
-      <select id="image-count" class="border-2 border-gray-300 rounded-lg p-2 focus:ring-green-500 focus:border-green-500">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-      </select>
+            <div class="skills-section">
+                <h3 class="sidebar-heading">Core Competencies</h3>
+                <div class="skills-list">
+                    <span class="skill-tag">System Reimaging</span>
+                    <span class="skill-tag">Hardware Repair</span>
+                    <span class="skill-tag">Office 365</span>
+                    <span class="skill-tag">Network Support</span>
+                    <span class="skill-tag">IT Asset Management</span>
+                    <span class="skill-tag">Level 1 & 2 Support</span>
+                    <span class="skill-tag">Active Directory</span>
+                    <span class="skill-tag">OS Troubleshooting</span>
+                </div>
+            </div>
+
+            <div class="languages-section">
+                <h3 class="sidebar-heading">Languages</h3>
+                <div class="language-item">
+                    <span>English</span>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="language-item">
+                    <span>Urdu/Hindi</span>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="language-item">
+                    <span>Pashto</span>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-skills-section">
+                <h3 class="sidebar-heading">Tech Skills</h3>
+                <div class="tech-category">
+                    <h4>Operating Systems</h4>
+                    <p>Windows • macOS</p>
+                </div>
+                <div class="tech-category">
+                    <h4>Productivity</h4>
+                    <p>Office 365 • SharePoint • Active Directory</p>
+                </div>
+                <div class="tech-category">
+                    <h4>Development</h4>
+                    <p>JavaScript (MERN) • SQL</p>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="home" class="hero-section">
+                <div class="hero-text">
+                    <h2>Welcome to My Profile</h2>
+                    <p class="hero-subtitle">IT Support Engineer </p>
+                    <p class="hero-description">Dedicated IT Technical Support Engineer with <span class="highlight">4+ years</span> of experience providing Level 1 & Level 2 IT support across healthcare, immigration, and telecom sectors. Skilled in hardware/software troubleshooting, network administration, and IT asset management.</p>
+                </div>
+            </section>
+
+            <section id="about" class="content-section">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <p>I am a proactive IT Support Engineer with a passion for solving technical challenges and ensuring seamless IT operations. With extensive experience in enterprise environments, I have successfully managed complex ticket systems, coordinated with cross-functional teams, and delivered high-quality technical support.</p>
+                    <p>My expertise spans from basic user support to advanced system troubleshooting, infrastructure setup, and asset management. I excel in fast-paced environments and am committed to continuous learning and professional development.</p>
+                </div>
+            </section>
+
+            <section id="experience" class="content-section">
+                <h2 class="section-title">Professional Experience</h2>
+                <div class="experience-container">
+                    <div class="exp-card">
+                        <div class="exp-header">
+                            <h3>IT Executive & Business Development Intern</h3>
+                            <span class="company">Al Tawkel Immigration Center</span>
+                        </div>
+                        <p class="period">04/2025 – 08/2025 | Dubai, UAE</p>
+                        <ul class="exp-points">
+                            <li>Delivered Level 2 IT support, including hardware repairs, system reimaging, network troubleshooting</li>
+                            <li>Installed, configured, and maintained enterprise IT infrastructure</li>
+                            <li>Created and maintained digital IT asset records</li>
+                            <li>Assisted with immigration business operations</li>
+                        </ul>
+                        <a href="Experience Letter 3.pdf" target="_blank" class="document-link">View Experience Letter (PDF) 📄</a>
+                    </div>
+
+                    <div class="exp-card">
+                        <div class="exp-header">
+                            <h3>IT Support Engineer</h3>
+                            <span class="company">Military Medical City Hospital (MMCH)</span>
+                        </div>
+                        <p class="period">11/2023 – 02/2024 | Doha, Qatar</p>
+                        <ul class="exp-points">
+                            <li>Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance</li>
+                            <li>Performed system reimaging and OS deployment for 300+ medical staff</li>
+                            <li>Supported EMR application troubleshooting for doctors and nurses</li>
+                            <li>Maintained digital asset inventory, improving lifecycle management</li>
+                        </ul>
+                        <a href="Experience Letter 2.pdf" target="_blank" class="document-link">View Experience Letter (PDF) 📄</a>
+                    </div>
+
+                    <div class="exp-card">
+                        <div class="exp-header">
+                            <h3>IT Support Engineer / IT Officer</h3>
+                            <span class="company">Star Link / UCC-Bahadir-Tedeschia JV (HIAEP)</span>
+                        </div>
+                        <p class="period">05/2021 – 11/2023 | Doha, Qatar</p>
+                        <ul class="exp-points">
+                            <li>Delivered daily IT support for 200+ staff across retail and corporate offices (Starlink)</li>
+                            <li>Resolved L1 & L2 incidents with quick turnaround times</li>
+                            <li>Managed IT support for the Hamad International Airport Expansion Project (UBTJV)</li>
+                            <li>Monitored and documented IT assets, reducing missing equipment by 20%</li>
+                        </ul>
+                        <a href="Experience Letter 4.pdf" target="_blank" class="document-link">View Starlink Experience Letter (PDF) 📄</a>
+                        <a href="Experience Letter 1.pdf" target="_blank" class="document-link">View Airport Project Experience Letter (PDF) 📄</a>
+                    </div>
+
+                    <div class="exp-card">
+                        <div class="exp-header">
+                            <h3>Customer Service Agent</h3>
+                            <span class="company">STARLINK (Ooredoo International)</span>
+                        </div>
+                        <p class="period">05/2021 – 02/2022 | Qatar</p>
+                        <ul class="exp-points">
+                            <li>Handled inbound/outbound customer calls with resolution focus</li>
+                            <li>Identified customer needs and provided technical support</li>
+                            <li>Maintained accurate call records in database systems</li>
+                            <li>Built sustainable customer relationships</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="documents" class="content-section">
+                <h2 class="section-title">Documents & Achievements</h2>
+                
+                <h3 class="subsection-title">Academic & Technical Certificates 🎓</h3>
+                <div class="document-grid">
+                    <div class="doc-card">
+                        <h4>Odoo ERP Training Completion</h4>
+                        <p>Workshop covering business processes, product, vendor, and customer management.</p>
+                        <a href="https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing" target="_blank" class="doc-btn primary">View PDF 📄</a>
+                    </div>
+                    
+                                       
+                    <div class="doc-card">
+                        <h4>Aptech Graduation Certificate</h4>
+                        <p>Advanced Diploma in Software Engineering (ACCP) certification.</p>
+                        <a href="https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=sharing" target="_blank" class="doc-btn primary">View Image 🖼️</a>
+                    </div>
+                </div>
+
+                <h3 class="subsection-title">Volunteering & Recognition ✨</h3>
+                <div class="document-grid">
+                    <div class="doc-card">
+                        <h4>MDX Career Fair Volunteering</h4>
+                        <p>Certificate of appreciation for volunteering at the Middlesex University Career Fair.</p>
+                        <a href="https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing" target="_blank" class="doc-btn primary">View Image 🖼️</a>
+                    </div>
+                    
+                    <div class="doc-card">
+                        <h4>Safety Award - HIA Project</h4>
+                        <p>Recognition for following the best safety rules during the Hamad International Airport Project.</p>
+                        <a href="https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=sharing" target="_blank" class="doc-btn primary">View Certificate (PDF)</a>
+                    </div>
+                    
+                    <div class="doc-card">
+                        <h4>Photography Contest Participation</h4>
+                        <p>Participation in the TECHVIBES 2023 Photography contest held at Aptech Qatar.</p>
+                        <a href="https://drive.google.com/file/d/12sPuwNrd2uWZfszUXMKbOVUFOGgzD0Uo/view?usp=sharing" target="_blank" class="doc-btn primary">View Certificate (PDF)</a>
+                    </div>
+                </div>
+
+                <h3 class="subsection-title">Full CV Document</h3>
+                <div class="document-grid">
+                    <div class="doc-card full-cv-card">
+                        <h4>Sajid Mehmood Full CV (2025)</h4>
+                        <p>Complete professional resume, including education, experience, and skills.</p>
+                        <a href="https://drive.google.com/file/d/1bS0MO-9GPHlz359Fdq3ebmvLHnKlmy2t/view?usp=sharing" target="_blank" class="doc-btn secondary">Download / View Full CV 💾</a>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="skills" class="content-section">
+                <h2 class="section-title">Skills & Expertise</h2>
+                <div class="skills-grid">
+                    <div class="skill-box">
+                        <h4>🔧 Hardware & System</h4>
+                        <p>System Reimaging, Hardware Repair, System Setup & Maintenance, OS Troubleshooting</p>
+                    </div>
+                    <div class="skill-box">
+                        <h4>🌐 Network & Infrastructure</h4>
+                        <p>Network Support (LAN/WAN/Wi-Fi), Active Directory, SharePoint Administration</p>
+                    </div>
+                    <div class="skill-box">
+                        <h4>💼 IT Operations</h4>
+                        <p>IT Asset Management, Lifecycle Management, Ticket Resolution, SLA Compliance</p>
+                    </div>
+                    <div class="skill-box">
+                        <h4>👥 Support & Training</h4>
+                        <p>Level 1 & 2 Support, User Training, Onboarding, Cross-functional Coordination</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="education" class="content-section">
+                <h2 class="section-title">Education</h2>
+                <div class="education-container">
+                    <div class="edu-card">
+                        <h3>Bachelor of Science in Information Technology</h3>
+                        <p class="edu-institute">Middlesex University Dubai</p>
+                        <p class="edu-period">09/2024 – 06/2025</p>
+                    </div>
+                    <div class="edu-card">
+                        <h3>Advanced Diploma in Software Engineering (ACCP)</h3>
+                        <p class="edu-institute">Aptech Qatar</p>
+                        <p class="edu-period">11/2020 – 11/2023</p>
+                    </div>
+                    <div class="edu-card">
+                        <h3>IGCSE</h3>
+                        <p class="edu-institute">Bright Future International School, Doha</p>
+                        <p class="edu-period">09/2017 – 07/2018</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <h2 class="section-title">Achievements</h2>
+                <div class="achievements-container">
+                    <div class="achievement">
+                        <span class="achievement-number">95%</span>
+                        <p>SLA Compliance Rate</p>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-number">500+</span>
+                        <p>Support Tickets Managed</p>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-number">4+</span>
+                        <p>Years Experience</p>
+                    </div>
+                    <div class="achievement">
+                        <span class="achievement-number">20%</span>
+                        <p>Equipment Loss Reduction</p>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-    <button id="generate-button"
-      class="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 transition transform hover:scale-[1.01] w-full sm:w-auto">
-      Generate Scene Images
-    </button>
-  </div>
 
-  <!-- Loading & Status -->
-  <div id="status-area" class="mt-6" aria-live="polite">
-    <div id="loading-indicator" class="hidden flex flex-col items-center justify-center py-10">
-      <div class="loading-ring"></div>
-      <p class="mt-4 text-green-600 font-medium">Generating your scenes... this may take a moment.</p>
-    </div>
-    <div id="message-box" class="hidden p-4 rounded-lg"></div>
-  </div>
+    <footer>
+        <p>&copy; 2025 Sajid Mehmood. All rights reserved. | IT Engineer & Technical Support Specialist</p>
+    </footer>
 
-  <!-- Image Gallery -->
-  <div id="image-output" class="mt-8">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Visualized Scenes</h2>
-    <div id="carousel" class="relative flex items-center justify-center min-h-64 bg-gray-100 rounded-lg overflow-hidden border-4 border-dashed border-gray-300">
-      <button id="prev-btn"
-        class="absolute left-3 bg-gray-800 text-white rounded-full p-2 opacity-75 hover:opacity-100 focus:outline-none hidden">
-        ◀
-      </button>
-      <img id="generated-image" class="w-full h-auto object-contain object-center max-h-[80vh]"
-        src="https://placehold.co/800x450/e5e7eb/4b5563?text=Your+Scene+Visualization+Will+Appear+Here"
-        alt="Placeholder for generated images">
-      <button id="next-btn"
-        class="absolute right-3 bg-gray-800 text-white rounded-full p-2 opacity-75 hover:opacity-100 focus:outline-none hidden">
-        ▶
-      </button>
-    </div>
-    <p id="image-counter" class="text-center text-gray-600 mt-2 hidden"></p>
-  </div>
-</div>
-
-<script type="module">
-const apiKey = "AIzaSyBLp5r_iRRP3kxmx1O8yZcumwJ77yDkVFA"; // supply securely
-const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict";
-
-const promptInput = document.getElementById('prompt-input');
-const imageCountSelect = document.getElementById('image-count');
-const generateButton = document.getElementById('generate-button');
-const copyPromptButton = document.getElementById('copy-prompt');
-const loadingIndicator = document.getElementById('loading-indicator');
-const messageBox = document.getElementById('message-box');
-const generatedImage = document.getElementById('generated-image');
-const imageOutput = document.getElementById('image-output');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const imageCounter = document.getElementById('image-counter');
-
-let imageList = [];
-let currentIndex = 0;
-
-async function fetchWithExponentialBackoff(url, options, maxRetries = 5, delay = 1000) {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const response = await fetch(url, options);
-      if (response.status !== 429) return response;
-      console.warn(`Rate limit hit. Retrying in ${delay / 1000}s...`);
-    } catch (err) {
-      if (i === maxRetries - 1) throw err;
-    }
-    await new Promise(r => setTimeout(r, delay));
-    delay *= 2;
-  }
-  throw new Error("Failed after multiple retries");
-}
-
-function showMessage(msg, isError = false) {
-  if (!msg) return messageBox.classList.add('hidden');
-  messageBox.textContent = msg;
-  messageBox.classList.remove('hidden');
-  messageBox.className = isError
-    ? "p-4 bg-red-100 text-red-700 border border-red-300 rounded-lg"
-    : "p-4 bg-green-100 text-green-700 border border-green-300 rounded-lg";
-}
-
-function updateCarousel() {
-  if (!imageList.length) return;
-  generatedImage.src = imageList[currentIndex];
-  imageCounter.textContent = `Image ${currentIndex + 1} of ${imageList.length}`;
-  imageCounter.classList.remove('hidden');
-  prevBtn.classList.toggle('hidden', currentIndex === 0);
-  nextBtn.classList.toggle('hidden', currentIndex === imageList.length - 1);
-}
-
-generateButton.addEventListener('click', async () => {
-  const prompt = promptInput.value.trim();
-  if (!prompt) return showMessage("Please enter a scene description prompt.", true);
-  const count = parseInt(imageCountSelect.value);
-
-  // UI state
-  generateButton.disabled = true;
-  loadingIndicator.classList.remove('hidden');
-  showMessage("", false);
-  generatedImage.src = 'https://placehold.co/800x450/e5e7eb/4b5563?text=Generating...';
-  prevBtn.classList.add('hidden');
-  nextBtn.classList.add('hidden');
-  imageCounter.classList.add('hidden');
-
-  try {
-    const payload = {
-      instances: [{ prompt }],
-      parameters: { sampleCount: count, outputMimeType: "image/jpeg", aspectRatio: "16:9" }
-    };
-
-    const res = await fetchWithExponentialBackoff(`${API_URL}?key=${apiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.error?.message || 'Unknown server error');
-
-    const preds = result?.predictions || [];
-    imageList = preds.map(p => `data:image/jpeg;base64,${p.bytesBase64Encoded}`).filter(Boolean);
-    if (!imageList.length) throw new Error("No image data returned.");
-
-    currentIndex = 0;
-    updateCarousel();
-    showMessage(`Generated ${imageList.length} image${imageList.length>1?'s':''} successfully!`, false);
-    imageOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } catch (err) {
-    console.error(err);
-    generatedImage.src = 'https://placehold.co/800x450/e5e7eb/ef4444/ffffff?text=Error+Loading+Images';
-    showMessage("Image generation failed: " + err.message, true);
-  } finally {
-    generateButton.disabled = false;
-    loadingIndicator.classList.add('hidden');
-  }
-});
-
-prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; updateCarousel(); } });
-nextBtn.addEventListener('click', () => { if (currentIndex < imageList.length - 1) { currentIndex++; updateCarousel(); } });
-
-copyPromptButton.addEventListener('click', () => {
-  const text = promptInput.value.trim();
-  if (!text) return showMessage("Nothing to copy!", true);
-  navigator.clipboard.writeText(text)
-    .then(() => showMessage("Prompt copied!", false))
-    .catch(() => showMessage("Copy failed.", true));
-});
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
