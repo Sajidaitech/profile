@@ -290,6 +290,46 @@ body {
 }
 
 /* ===================================
+   Mobile Responsive Styles
+   =================================== */
+@media (max-width: 768px) {
+    /* Show mobile toggle button */
+    .mobile-nav-toggle {
+        display: flex;
+    }
+    
+    /* Hide side nav by default on mobile */
+    .side-nav {
+        transform: translateX(-100%);
+    }
+    
+    /* Show side nav when active */
+    .side-nav.active {
+        transform: translateX(0);
+    }
+    
+    /* Reduce side nav width on small screens */
+    .side-nav {
+        width: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Full width side nav on very small screens */
+    .side-nav {
+        width: 100%;
+    }
+    
+    .nav-profile-img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .nav-name {
+        font-size: 1.3rem;
+    }
+}
+/* ===================================
    Main Container
    =================================== */
 .main-container {

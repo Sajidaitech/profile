@@ -416,3 +416,21 @@ function scrollToSection(sectionId) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DocumentsManager;
 }
+const mobileToggle = document.querySelector('.mobile-nav-toggle');
+const sideNav = document.querySelector('.side-nav');
+
+mobileToggle.addEventListener('click', () => {
+    mobileToggle.classList.toggle('active');
+    sideNav.classList.toggle('active');
+});
+
+// Close nav when clicking a link on mobile
+const navLinks = document.querySelectorAll('.nav-link');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            mobileToggle.classList.remove('active');
+            sideNav.classList.remove('active');
+        }
+    });
+});
