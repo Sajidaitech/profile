@@ -288,7 +288,6 @@ body {
     transform: translateY(-5px) rotate(5deg);
     box-shadow: var(--shadow-glow);
 }
-
 /* ===================================
    Mobile Responsive Styles
    =================================== */
@@ -312,6 +311,12 @@ body {
     .side-nav {
         width: 280px;
     }
+    
+    /* Remove margin on mobile - full width content */
+    .main-container {
+        margin-left: 0;
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -328,13 +333,35 @@ body {
     .nav-name {
         font-size: 1.3rem;
     }
+    
+    .mobile-nav-toggle {
+        top: 15px;
+        left: 15px;
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Add overlay for mobile when nav is open */
+@media (max-width: 768px) {
+    .side-nav.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
+    }
 }
 /* ===================================
-   Main Container
+   Main Content Container
    =================================== */
 .main-container {
-    margin-left: 320px;
+    margin-left: 320px; /* Same as side-nav width */
     min-height: 100vh;
+    width: calc(100% - 320px);
     transition: margin-left var(--transition-slow);
 }
 

@@ -416,16 +416,17 @@ function scrollToSection(sectionId) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DocumentsManager;
 }
-const mobileToggle = document.querySelector('.mobile-nav-toggle');
-const sideNav = document.querySelector('.side-nav');
+const mobileToggle = document.getElementById('mobileNavToggle');
+const sideNav = document.getElementById('sideNav');
+const navLinks = document.querySelectorAll('.nav-link');
 
+// Toggle mobile navigation
 mobileToggle.addEventListener('click', () => {
     mobileToggle.classList.toggle('active');
     sideNav.classList.toggle('active');
 });
 
 // Close nav when clicking a link on mobile
-const navLinks = document.querySelectorAll('.nav-link');
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
         if (window.innerWidth <= 768) {
@@ -433,4 +434,14 @@ navLinks.forEach(link => {
             sideNav.classList.remove('active');
         }
     });
+});
+
+// Close nav when clicking outside on mobile
+document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+        if (!sideNav.contains(e.target) && !mobileToggle.contains(e.target)) {
+            mobileToggle.classList.remove('active');
+            sideNav.classList.remove('active');
+        }
+    }
 });
