@@ -1398,9 +1398,21 @@ body {
    Responsive Design
    =================================== */
 @media (max-width: 768px) {
-    .documents-section {
-        padding: 60px 20px;
+    /* Add this part */
+    .main-content {
+        margin-left: 0 !important;
+        width: 100%;
     }
+
+    .side-nav {
+        transform: translateX(-100%); /* Hide the menu off-screen */
+        transition: transform 0.3s ease;
+    }
+
+    .side-nav.active {
+        transform: translateX(0); /* Show menu when active */
+    }
+}
     
     .subsection-title {
         font-size: 1.5rem;
@@ -1438,7 +1450,7 @@ body {
         padding: 12px 25px;
         font-size: 1rem;
     }
-}
+
 
 @media (max-width: 480px) {
     .doc-btn {
