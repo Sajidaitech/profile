@@ -296,6 +296,11 @@ body {
     .mobile-nav-toggle {
         display: flex;
     }
+   .documents-grid, 
+    .education-grid {
+        grid-template-columns: 1fr; /* Use 1 column instead of 2 or 3 */
+        gap: 1.5rem;
+    }
     
     /* Hide side nav by default on mobile */
     .side-nav {
@@ -1806,4 +1811,5 @@ body {
         height: 45px;
         font-size: 1.125rem;
     }
+
 }
