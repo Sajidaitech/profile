@@ -1,204 +1,358 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Sajid Mehmood - IT Engineer & Technical Support Specialist Portfolio">
-<meta name="theme-color" content="#1a3a52">
-<title>Sajid Mehmood | IT Engineer Portfolio</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sajid Mehmood - IT Engineer & Technical Support Specialist Portfolio">
+    <meta name="theme-color" content="#1a3a52">
+    <title>Sajid Mehmood | IT Engineer Portfolio</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="cursor"></div>
-<div class="cursor-follower"></div>
-<button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
-<span></span><span></span><span></span>
-</button>
-<nav class="side-nav" id="sideNav">
-<div class="nav-header">
-<div class="nav-avatar">
-<img src="photo.jpg" alt="Sajid Mehmood">
-<div class="avatar-ring"></div>
-</div>
-<h2 class="nav-name">Sajid Mehmood</h2>
-<p class="nav-title">IT Engineer</p>
-<div class="status-badge">
-<span class="status-dot"></span>Available for opportunities
-</div>
-</div>
-<ul class="nav-links">
-<li><a href="#home" class="nav-link active"><i class="fas fa-home"></i><span>Home</span></a></li>
-<li><a href="#about" class="nav-link"><i class="fas fa-user"></i><span>About</span></a></li>
-<li><a href="#education" class="nav-link"><i class="fas fa-graduation-cap"></i><span>Education</span></a></li>
-<li><a href="#experience" class="nav-link"><i class="fas fa-briefcase"></i><span>Experience</span></a></li>
-<li><a href="#skills" class="nav-link"><i class="fas fa-code"></i><span>Skills</span></a></li>
-<li><a href="#certifications" class="nav-link"><i class="fas fa-certificate"></i><span>Certifications</span></a></li>
-<li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i><span>Contact</span></a></li>
-</ul>
-<div class="nav-footer">
-<div class="nav-social">
-<a href="https://www.linkedin.com/in/sajid-m-1b3954333/" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-<a href="https://www.instagram.com/sajidteech" target="_blank" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-<a href="mailto:sajid.teech@gmail.com" class="social-link" aria-label="Email"><i class="fas fa-envelope"></i></a>
-</div>
-</div>
-</nav>
-<main class="main-container">
-<section id="home" class="hero">
-<div class="hero-particles"></div>
-<div class="hero-content">
-<div class="hero-text">
-<span class="hero-greeting" data-aos="fade-up">Hey there! I'm</span>
-<h1 class="hero-name" data-aos="fade-up" data-aos-delay="100">Sajid <span class="text-gradient">Mehmood</span></h1>
-<p class="hero-role" data-aos="fade-up" data-aos-delay="200"><span class="typing-effect"></span></p>
-<p class="hero-description" data-aos="fade-up" data-aos-delay="300">IT Support Engineer with <strong>4+ years</strong> of experience delivering exceptional technical support across healthcare, immigration, and telecom sectors. CCNA certified professional specializing in network administration and infrastructure management.</p>
-<div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
-<a href="#contact" class="btn btn-primary"><span>Let's Connect</span><i class="fas fa-arrow-right"></i></a>
-<a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" class="btn btn-outline"><i class="fas fa-download"></i><span>Download CV</span></a>
-</div>
-</div>
-<div class="hero-stats" data-aos="fade-left" data-aos-delay="500">
-<div class="stat-card">
-<div class="stat-icon"><i class="fas fa-clock"></i></div>
-<div class="stat-content">
-<span class="stat-number" data-count="4">0</span><span class="stat-plus">+</span>
-<span class="stat-label">Years Experience</span>
-</div>
-</div>
-<div class="stat-card">
-<div class="stat-icon"><i class="fas fa-ticket-alt"></i></div>
-<div class="stat-content">
-<span class="stat-number" data-count="500">0</span><span class="stat-plus">+</span>
-<span class="stat-label">Tickets Resolved</span>
-</div>
-</div>
-<div class="stat-card">
-<div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-<div class="stat-content">
-<span class="stat-number" data-count="95">0</span><span class="stat-plus">%</span>
-<span class="stat-label">SLA Compliance</span>
-</div>
-</div>
-</div>
-</div>
-<div class="scroll-indicator">
-<div class="mouse"><div class="wheel"></div></div>
-<span>Scroll to explore</span>
-</div>
-</section>
-<section id="about" class="section about-section">
-<div class="container">
-<h2 class="section-title" data-aos="fade-up"><span class="title-number">01.</span>About Me</h2>
-<div class="about-grid">
-<div class="about-image" data-aos="fade-right">
-<div class="image-container">
-<img src="photo.jpg" alt="Sajid Mehmood">
-<div class="image-overlay"></div>
-</div>
-<div class="floating-badge"><i class="fas fa-award"></i><span>CCNA Certified</span></div>
-</div>
-<div class="about-content" data-aos="fade-left">
-<p class="about-text">I'm a dedicated IT Technical Support Engineer with over 4 years of experience providing Level 1 & Level 2 IT support across diverse sectors including healthcare, immigration, and telecommunications.</p>
-<p class="about-text">My expertise spans hardware/software troubleshooting, network administration, and IT asset management. I take pride in ensuring minimal downtime and maintaining high service availability while delivering exceptional end-user support.</p>
-<p class="about-text">Recently completed my <strong>CCNA 200-301 Network Fundamentals</strong> certification, further strengthening my networking capabilities and technical knowledge.</p>
-<div class="about-highlights">
-<div class="highlight-item"><i class="fas fa-check-circle"></i><span>Level 1 & 2 IT Support</span></div>
-<div class="highlight-item"><i class="fas fa-check-circle"></i><span>Network Administration</span></div>
-<div class="highlight-item"><i class="fas fa-check-circle"></i><span>Asset Management</span></div>
-<div class="highlight-item"><i class="fas fa-check-circle"></i><span>System Troubleshooting</span></div>
-</div>
+    <!-- Cursor Effect -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
 
-</div>
-</div>
-</div>
-</section>
-<section id="education" class="section education-section">
-<div class="container">
-<h2 class="section-title" data-aos="fade-up"><span class="title-number">02.</span>Education</h2>
-<div class="education-grid"></div>
-</div>
-</section>
-<section id="experience" class="section experience-section">
-<div class="container">
-<h2 class="section-title" data-aos="fade-up"><span class="title-number">03.</span>Professional Experience</h2>
-<div class="timeline"></div>
-</div>
-</section>
-<section id="skills" class="section skills-section">
-<div class="container">
-<h2 class="section-title" data-aos="fade-up"><span class="title-number">04.</span>Skills & Expertise</h2>
-<div class="skills-content">
-<div class="skills-grid" data-aos="fade-up"></div>
-<div class="tech-stack" data-aos="fade-up" data-aos-delay="200">
-<h3 class="subsection-title">Technical Stack</h3>
-<div class="tech-items"></div>
-</div>
-<div class="languages-section" data-aos="fade-up" data-aos-delay="300">
-<h3 class="subsection-title">Languages</h3>
-<div class="languages-grid"></div>
-</div>
-</div>
-</div>
-</section>
-<section id="certifications" class="section certifications-section">
-<div class="container">
-<h2 class="section-title" data-aos="fade-up"><span class="title-number">05.</span>Certifications & Achievements</h2>
-<div class="featured-cert" data-aos="zoom-in">
-<div class="featured-cert-badge"><i class="fas fa-star"></i><span>Latest Achievement</span></div>
-<div class="featured-cert-content">
-<div class="cert-icon"><i class="fas fa-network-wired"></i></div>
-<div class="cert-info">
-<h3>CCNA 200-301 Network Fundamentals</h3>
-<p class="cert-issuer">Simplilearn SkillUp</p>
-<p class="cert-date">Completed: January 17, 2026</p>
-<p class="cert-description">Comprehensive online course covering network fundamentals, routing, switching, and network security principles. Certificate Code: 9726449</p>
-<a href="https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing" target="_blank" class="cert-btn"><i class="fas fa-external-link-alt"></i>View Certificate</a>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="contact" class="section contact-section">
-<div class="container">
-<h2 class="section-title" data-aos="fade-up"><span class="title-number">06.</span>Let's Connect</h2>
-<div class="contact-content" data-aos="fade-up" data-aos-delay="200">
-<p class="contact-intro">I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out!</p>
-<div class="contact-grid">
-<div class="contact-card">
-<div class="contact-icon"><i class="fas fa-envelope"></i></div>
-<h3>Email</h3>
-<a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
-</div>
-<div class="contact-card">
-<div class="contact-icon"><i class="fas fa-phone"></i></div>
-<h3>Phone</h3>
-<a href="tel:+97466969598">+974 6696 9598</a>
-</div>
-<div class="contact-card">
-<div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-<h3>Location</h3>
-<p>Doha, Qatar</p>
-</div>
-</div>
-<div class="social-links-large">
-<a href="https://www.linkedin.com/in/sajid-m-1b3954333/" target="_blank" class="social-link-large"><i class="fab fa-linkedin-in"></i><span>LinkedIn</span></a>
-<a href="https://www.instagram.com/sajidteech" target="_blank" class="social-link-large"><i class="fab fa-instagram"></i><span>Instagram</span></a>
-</div>
-</div>
-</div>
-</section>
-<footer class="footer">
-<div class="footer-content">
-<p>&copy; 2026 Sajid Mehmood. Crafted with <i class="fas fa-heart"></i> and dedication.</p>
-<p class="footer-subtitle">IT Engineer & Technical Support Specialist</p>
-</div>
-</footer>
-</main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-<script src="script.js"></script>
+    <!-- Mobile Navigation Toggle -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Side Navigation -->
+    <nav class="side-nav" id="sideNav">
+        <div class="nav-header">
+            <div class="nav-avatar">
+                <img src="photo.jpg" alt="Sajid Mehmood">
+                <div class="avatar-ring"></div>
+            </div>
+            <h2 class="nav-name">Sajid Mehmood</h2>
+            <p class="nav-title">IT Engineer</p>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                Available for opportunities
+            </div>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link active"><i class="fas fa-home"></i> <span>Home</span></a></li>
+            <li><a href="#about" class="nav-link"><i class="fas fa-user"></i> <span>About</span></a></li>
+            <li><a href="#education" class="nav-link"><i class="fas fa-graduation-cap"></i> <span>Education</span></a></li>
+            <li><a href="#experience" class="nav-link"><i class="fas fa-briefcase"></i> <span>Experience</span></a></li>
+            <li><a href="#skills" class="nav-link"><i class="fas fa-code"></i> <span>Skills</span></a></li>
+            <li><a href="#certifications" class="nav-link"><i class="fas fa-certificate"></i> <span>Certifications</span></a></li>
+            <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> <span>Contact</span></a></li>
+        </ul>
+
+        <div class="nav-footer">
+            <div class="nav-social">
+                <a href="https://www.linkedin.com/in/sajid-t-1b3954333" target="_blank" class="social-link" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://www.instagram.com/sajidteech" target="_blank" class="social-link" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="mailto:sajid.teech@gmail.com" class="social-link" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-particles"></div>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <span class="hero-greeting" data-aos="fade-up">Hey there! I'm</span>
+                    <h1 class="hero-name" data-aos="fade-up" data-aos-delay="100">
+                        Sajid <span class="text-gradient">Mehmood</span>
+                    </h1>
+                    <p class="hero-role" data-aos="fade-up" data-aos-delay="200">
+                        <span class="typing-effect"></span>
+                    </p>
+                    <p class="hero-description" data-aos="fade-up" data-aos-delay="300">
+                        IT Support Engineer with <strong>4+ years</strong> of experience delivering exceptional technical support across healthcare, immigration, and telecom sectors. CCNA certified professional specializing in network administration and infrastructure management.
+                    </p>
+                    <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400">
+                        <a href="#contact" class="btn btn-primary">
+                            <span>Let's Connect</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1bS0MO-9GPHlz359Fdq3ebmvLHnKlmy2t/view?usp=drive_link" target="_blank" class="btn btn-outline">
+                            <i class="fas fa-download"></i>
+                            <span>Download CV</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-stats" data-aos="fade-left" data-aos-delay="500">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-count="4">0</span>
+                            <span class="stat-plus">+</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-count="500">0</span>
+                            <span class="stat-plus">+</span>
+                            <span class="stat-label">Tickets Resolved</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-number" data-count="95">0</span>
+                            <span class="stat-plus">%</span>
+                            <span class="stat-label">SLA Compliance</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+                <span>Scroll to explore</span>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section about-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    <span class="title-number">01.</span>
+                    About Me
+                </h2>
+
+                <div class="about-grid">
+                    <div class="about-image" data-aos="fade-right">
+                        <div class="image-container">
+                            <img src="photo.jpg" alt="Sajid Mehmood">
+                            <div class="image-overlay"></div>
+                        </div>
+                        <div class="floating-badge">
+                            <i class="fas fa-award"></i>
+                            <span>CCNA Certified</span>
+                        </div>
+                    </div>
+
+                    <div class="about-content" data-aos="fade-left">
+                        <p class="about-text">
+                            I'm a dedicated IT Technical Support Engineer with over 4 years of experience providing Level 1 & Level 2 IT support across diverse sectors including healthcare, immigration, and telecommunications.
+                        </p>
+                        <p class="about-text">
+                            My expertise spans hardware/software troubleshooting, network administration, and IT asset management. I take pride in ensuring minimal downtime and maintaining high service availability while delivering exceptional end-user support.
+                        </p>
+                        <p class="about-text">
+                            Recently completed my <strong>CCNA 200-301 Network Fundamentals</strong> certification, further strengthening my networking capabilities and technical knowledge.
+                        </p>
+
+                        <div class="about-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Level 1 & 2 IT Support</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Network Administration</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Asset Management</span>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>System Troubleshooting</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+<!-- Education Section -->
+        <section id="education" class="section education-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    <span class="title-number">02.</span>
+                    Education
+                </h2>
+
+                <div class="education-grid">
+                    <!-- Education will be loaded via JavaScript -->
+                </div>
+            </div>
+        </section>
+        <!-- Experience Section -->
+        <section id="experience" class="section experience-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    <span class="title-number">03.</span>
+                    Professional Experience
+                </h2>
+
+                <div class="timeline">
+                    <!-- Experience items will be loaded via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section skills-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    <span class="title-number">04.</span>
+                    Skills & Expertise
+                </h2>
+
+                <div class="skills-content">
+                    <div class="skills-grid" data-aos="fade-up">
+                        <!-- Skills will be loaded via JavaScript -->
+                    </div>
+
+                    <div class="tech-stack" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="subsection-title">Technical Stack</h3>
+                        <div class="tech-items">
+                            <!-- Tech items will be loaded via JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="languages-section" data-aos="fade-up" data-aos-delay="300">
+                        <h3 class="subsection-title">Languages</h3>
+                        <div class="languages-grid">
+                            <!-- Languages will be loaded via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section id="certifications" class="section certifications-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    <span class="title-number">05.</span>
+                    Certifications & Achievements
+                </h2>
+
+                <div class="featured-cert" data-aos="zoom-in">
+                    <div class="featured-cert-badge">
+                        <i class="fas fa-star"></i>
+                        <span>Latest Achievement</span>
+                    </div>
+                    <div class="featured-cert-content">
+                        <div class="cert-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="cert-info">
+                            <h3>CCNA 200-301 Network Fundamentals</h3>
+                            <p class="cert-issuer">Simplilearn SkillUp</p>
+                            <p class="cert-date">Completed: January 17, 2026</p>
+                            <p class="cert-description">
+                                Comprehensive online course covering network fundamentals, routing, switching, and network security principles. Certificate Code: 9726449
+                            </p>
+                            <a href="https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing" target="_blank" class="cert-btn">
+                                <i class="fas fa-external-link-alt"></i>
+                                View Certificate
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="certs-grid">
+                    <!-- Certifications will be loaded via JavaScript -->
+                </div>
+
+                
+            </div>
+        </section>
+        <!-- Contact Section -->
+        <section id="contact" class="section contact-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">
+                    <span class="title-number">06.</span>
+                    Let's Connect
+                </h2>
+
+                <div class="contact-content" data-aos="fade-up" data-aos-delay="200">
+                    <p class="contact-intro">
+                        I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out!
+                    </p>
+
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h3>Email</h3>
+                            <a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <h3>Phone</h3>
+                            <a href="tel:+97466969598">+974 6696 9598</a>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h3>Location</h3>
+                            <p>Doha, Qatar</p>
+                        </div>
+                    </div>
+
+                    <div class="social-links-large">
+                        <a href="https://www.linkedin.com/in/sajid-t-1b3954333" target="_blank" class="social-link-large">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://www.instagram.com/sajidteech" target="_blank" class="social-link-large">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2026 Sajid Mehmood. Crafted with <i class="fas fa-heart"></i> and dedication.</p>
+                <p class="footer-subtitle">IT Engineer & Technical Support Specialist</p>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <script src="script.js"></script>
 </body>
 </html>
