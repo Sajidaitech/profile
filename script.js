@@ -235,11 +235,11 @@ const experienceData = [
         date: 'Nov 2023 - Feb 2024',
         title: 'IT Support Engineer',
         company: 'Military Medical City Hospital (MMCH)',
-        location: 'Doha, Qatar',
-        subLocations: [
+             [
             'TVH (The View Hospital) - Al Qutaifiya, Doha & The Pearl',
             'KMC (Korean Medical Center) - Street 169, Lusail'
         ],
+        location: 'Doha, Qatar',
         responsibilities: [
             'Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance',
             'Performed system reimaging and OS deployment for 300+ medical staff',
@@ -754,3 +754,4 @@ style.textContent = `
 document.head.appendChild(style);
 
 console.log('Portfolio loaded successfully! 🚀');
+
