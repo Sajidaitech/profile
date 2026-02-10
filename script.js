@@ -245,16 +245,26 @@ const experienceData = [
         link: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'
     },
     {
-        date: 'May 2021 - Nov 2023',
-        title: 'IT Support Engineer / IT Officer',
-        company: 'Star Link / UCC-Bahadir-Tedeschia JV (HIAEP)',
-        location: 'Doha, Qatar',
-        responsibilities: [
-            'Delivered daily IT support for 200+ staff across retail and corporate offices',
-            'Resolved L1 & L2 incidents with quick turnaround times',
-            'Managed IT support for the Hamad International Airport Expansion Project',
-            'Monitored and documented IT assets, reducing missing equipment by 20%'
-        ],
+        [
+  {
+    company: "Power International Holding",
+    subsidiary: "Star Link / UBT Joint Venture",
+    title: "IT Support Engineer / IT Officer",
+    period: "May 2021 - Nov 2023",
+    locations: {
+      headOffice: "The 18th Tower, Lusail",
+      projectSite: "Hamad International Airport, Doha, Qatar"
+    },
+    project: "Western Taxiway & Stand Development Works (HIAEP/0012)",
+    responsibilities: [
+      "Provided L1 & L2 technical support for 200+ corporate and onsite staff.",
+      "Managed IT infrastructure for the Hamad International Airport Expansion Project.",
+      "Coordinated between the Lusail head office and airport site operations.",
+      "Optimized asset management protocols, reducing equipment loss by 10%."
+    ],
+    skills: ["Incident Management", "Infrastructure Support", "Asset Tracking", "L1/L2 Troubleshooting"]
+  }
+];
         links: [
             { text: 'Starlink Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
             { text: 'Airport Project Letter', url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' }
@@ -717,5 +727,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
 
 console.log('Portfolio loaded successfully! 🚀');
