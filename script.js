@@ -236,6 +236,10 @@ const experienceData = [
         title: 'IT Support Engineer',
         company: 'Military Medical City Hospital (MMCH)',
         location: 'Doha, Qatar',
+        subLocations: [
+            'TVH (The View Hospital) - Al Qutaifiya, Doha & The Pearl',
+            'KMC (Korean Medical Center) - Street 169, Lusail'
+        ],
         responsibilities: [
             'Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance',
             'Performed system reimaging and OS deployment for 300+ medical staff',
@@ -294,6 +298,15 @@ function loadExperience() {
         if (exp.project) {
             projectHTML = `<p class="timeline-project"><i class="fas fa-briefcase"></i> ${exp.project}</p>`;
         }
+
+        let subLocationsHTML = '';
+        if (exp.subLocations) {
+            subLocationsHTML = '<div class="timeline-sublocations">';
+            exp.subLocations.forEach(subLoc => {
+                subLocationsHTML += `<p class="timeline-sublocation">${subLoc}</p>`;
+            });
+            subLocationsHTML += '</div>';
+        }
         
         let linksHTML = '';
         if (exp.link) {
@@ -316,6 +329,7 @@ function loadExperience() {
                 <h3>${exp.title}</h3>
                 <h4>${exp.company}</h4>
                 <p class="timeline-location"><i class="fas fa-map-marker-alt"></i> ${exp.location}</p>
+                ${subLocationsHTML}
                 ${projectHTML}
                 <ul>${responsibilities}</ul>
                 ${linksHTML}
@@ -706,7 +720,7 @@ document.querySelectorAll('.btn, .doc-btn, .download-btn').forEach(button => {
     });
 });
 
-// Add ripple animation
+// Add ripple animation and sublocation styles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes ripple {
@@ -723,6 +737,18 @@ style.textContent = `
     @keyframes blink {
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
+    }
+    
+    .timeline-sublocations {
+        margin: 8px 0;
+        padding-left: 20px;
+    }
+    
+    .timeline-sublocation {
+        font-size: 0.85em;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 4px 0;
+        font-style: italic;
     }
 `;
 document.head.appendChild(style);
