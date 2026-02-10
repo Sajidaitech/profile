@@ -593,6 +593,7 @@ window.addEventListener('scroll', () => {
 class ParticleAnimation {
     constructor() {
         this.canvas = this.createCanvas();
+        if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
         this.numberOfParticles = 50;
