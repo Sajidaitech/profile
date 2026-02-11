@@ -249,7 +249,7 @@ const experienceData = [
         link: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'
     },
     {
-        date: 'Feb 2021 - Nov 2023',
+        date: 'Feb 2022 - Nov 2023',
         title: 'IT Support Engineer / IT Officer',
         company: 'Power International Holding - Star Link / UBT Joint Venture',
         location: 'Head Office: The 18th Tower, Lusail | Project Site: Hamad International Airport, Doha, Qatar',
@@ -755,4 +755,5 @@ style.textContent = `
 document.head.appendChild(style);
 
 console.log('Portfolio loaded successfully! 🚀');
+
 
