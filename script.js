@@ -269,7 +269,7 @@ const experienceData = [
     {
         date: 'May 2021 - Feb 2022',
         title: 'Customer Service Agent',
-        company: 'STARLINK (Ooredoo International)',
+        company: 'STARLINK (Ooredoo Telecommunications Company )',
         location: 'Qatar',
         responsibilities: [
             'Handled inbound/outbound customer calls with resolution focus',
@@ -755,5 +755,6 @@ style.textContent = `
 document.head.appendChild(style);
 
 console.log('Portfolio loaded successfully! 🚀');
+
 
 
