@@ -237,8 +237,8 @@ const experienceData = [
         company: 'Military Medical City Hospital (MMCH)',
         location: 'Doha, Qatar',
         subLocations: [
-            'TVH (The View Hospital) - Al Qutaifiya, Doha & The Pearl',
-            'KMC (Korean Medical Center) - Street 169, Lusail'
+            'TVH (The View Hospital)',
+            'KMC (Korean Medical Center)'
         ],
         responsibilities: [
             'Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance',
@@ -300,10 +300,10 @@ function loadExperience() {
         }
 
         let subLocationsHTML = '';
-        if (exp.subLocations) {
+        if (exp.subLocations && exp.subLocations.length > 0) {
             subLocationsHTML = '<div class="timeline-sublocations">';
-            exp.subLocations.forEach(subLoc => {
-                subLocationsHTML += `<p class="timeline-sublocation">${subLoc}</p>`;
+            exp.subLocations.forEach((subLoc, idx) => {
+                subLocationsHTML += `<p class="timeline-sublocation">${idx + 1}. ${subLoc}</p>`;
             });
             subLocationsHTML += '</div>';
         }
@@ -740,15 +740,16 @@ style.textContent = `
     }
     
     .timeline-sublocations {
-        margin: 8px 0;
-        padding-left: 20px;
+        margin: 10px 0;
+        padding-left: 10px;
     }
     
     .timeline-sublocation {
-        font-size: 0.85em;
-        color: rgba(255, 255, 255, 0.7);
-        margin: 4px 0;
-        font-style: italic;
+        font-size: 0.9em;
+        color: #6366f1;
+        margin: 5px 0;
+        font-weight: 600;
+        line-height: 1.4;
     }
 `;
 document.head.appendChild(style);
