@@ -673,7 +673,7 @@ function initializeParticles() {
             // Draw particle
             ctx.beginPath();
             ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(184, 115, 51, ${particle.opacity})`;
+            ctx.fillStyle = `rgba(141, 110, 99, ${particle.opacity})`;
             ctx.fill();
         });
         
@@ -767,7 +767,7 @@ dynamicStyles.textContent = `
     
     .timeline-project {
         font-size: 0.9rem;
-        color: var(--copper-light);
+        color: var(--brown-light);
         margin-bottom: 12px;
     }
     
