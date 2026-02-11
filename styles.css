@@ -8,16 +8,16 @@
    CSS CUSTOM PROPERTIES
    =================================== */
 :root {
-    /* Core Color Palette */
-    --charcoal-base: #121212;
-    --charcoal-light: #1A1A1A;
-    --charcoal-card: #1E1E1E;
+    /* Core Color Palette - Rich Brown Wood */
+    --charcoal-base: #0D0907;
+    --charcoal-light: #1A1410;
+    --charcoal-card: #221C17;
     
-    /* Walnut Wood Tones */
+    /* Brown Wood Tones */
     --walnut-dark: #3E2723;
-    --walnut-medium: #4E342E;
-    --walnut-light: #5D4037;
-    --wood-grain: #6D4C41;
+    --walnut-medium: #5D4037;
+    --walnut-light: #6D4C41;
+    --wood-grain: #8D6E63;
     
     /* Glass Effect */
     --glass-bg: rgba(255, 255, 255, 0.03);
@@ -25,26 +25,25 @@
     --glass-hover: rgba(255, 255, 255, 0.06);
     --glass-active: rgba(255, 255, 255, 0.1);
     
-    /* Accent Colors */
-    --copper: #B87333;
-    --copper-light: #D4956C;
-    --copper-dark: #9D6028;
-    --cyan-accent: #00E5FF;
-    --cyan-glow: rgba(0, 229, 255, 0.4);
+    /* Accent Colors - Brown Spectrum */
+    --brown-primary: #8D6E63;
+    --brown-light: #A1887F;
+    --brown-dark: #6D4C41;
+    --amber-accent: #BCAAA4;
+    --amber-glow: rgba(141, 110, 99, 0.4);
     
     /* Text Colors */
-    --text-primary: #F0F0F0;
-    --text-secondary: #B8B8B8;
-    --text-muted: #808080;
-    --text-accent: #00E5FF;
+    --text-primary: #F5F5F0;
+    --text-secondary: #D7CCC8;
+    --text-muted: #A1887F;
+    --text-accent: #BCAAA4;
     
     /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
-    --shadow-glow-copper: 0 0 30px rgba(184, 115, 51, 0.3);
-    --shadow-glow-cyan: 0 0 30px var(--cyan-glow);
-    --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.7);
+    --shadow-glow-brown: 0 0 30px rgba(141, 110, 99, 0.3);
+    --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.6);
     
     /* Transitions */
     --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -137,14 +136,14 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(180deg, var(--brown-light) 0%, var(--brown-dark) 100%);
     border-radius: 5px;
     border: 2px solid var(--charcoal-light);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, var(--copper-light) 0%, var(--copper) 100%);
-    box-shadow: var(--shadow-glow-copper);
+    background: linear-gradient(180deg, var(--amber-accent) 0%, var(--brown-light) 100%);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 /* ===================================
@@ -163,14 +162,14 @@ body::after {
 }
 
 .cursor {
-    background: var(--cyan-accent);
-    box-shadow: var(--shadow-glow-cyan);
+    background: var(--brown-light);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .cursor-follower {
     width: 36px;
     height: 36px;
-    border: 2px solid var(--copper);
+    border: 2px solid var(--brown-primary);
     background: transparent;
     transition: all 0.3s ease-out;
 }
@@ -208,17 +207,17 @@ body::after {
 
 .mobile-nav-toggle:hover {
     background: var(--glass-hover);
-    border-color: var(--copper);
-    box-shadow: var(--shadow-inset), var(--shadow-glow-copper);
+    border-color: var(--brown-primary);
+    box-shadow: var(--shadow-inset), var(--shadow-glow-brown);
 }
 
 .mobile-nav-toggle span {
     width: 22px;
     height: 2.5px;
-    background: var(--copper);
+    background: var(--brown-light);
     border-radius: 2px;
     transition: var(--transition-normal);
-    box-shadow: 0 0 8px var(--copper);
+    box-shadow: 0 0 8px var(--brown-primary);
 }
 
 .mobile-nav-toggle.active span:nth-child(1) {
@@ -254,7 +253,7 @@ body::after {
     box-shadow: 4px 0 32px rgba(0, 0, 0, 0.6);
 }
 
-/* Copper Accent Line */
+/* Brown Accent Line */
 .side-nav::before {
     content: '';
     position: absolute;
@@ -264,8 +263,8 @@ body::after {
     height: 100%;
     background: repeating-linear-gradient(
         0deg,
-        var(--copper) 0px,
-        var(--copper) 8px,
+        var(--brown-primary) 0px,
+        var(--brown-primary) 8px,
         transparent 8px,
         transparent 16px
     );
@@ -296,7 +295,7 @@ body::after {
     box-shadow: var(--shadow-md);
 }
 
-/* Rotating Copper Ring */
+/* Rotating Brown Ring */
 .avatar-ring {
     position: absolute;
     top: -5px;
@@ -305,15 +304,15 @@ body::after {
     bottom: -5px;
     border-radius: 50%;
     background: conic-gradient(
-        var(--copper) 0deg,
-        var(--cyan-accent) 90deg,
-        var(--copper-dark) 180deg,
-        var(--copper-light) 270deg,
-        var(--copper) 360deg
+        var(--brown-primary) 0deg,
+        var(--amber-accent) 90deg,
+        var(--brown-dark) 180deg,
+        var(--brown-light) 270deg,
+        var(--brown-primary) 360deg
     );
     animation: rotate-ring 4s linear infinite;
     z-index: 1;
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 @keyframes rotate-ring {
@@ -326,8 +325,8 @@ body::after {
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 8px;
-    color: var(--copper-light);
-    text-shadow: var(--shadow-glow-copper);
+    color: var(--brown-light);
+    text-shadow: var(--shadow-glow-brown);
     letter-spacing: 0.3px;
 }
 
@@ -347,27 +346,27 @@ body::after {
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     font-size: 0.8rem;
-    color: var(--cyan-accent);
+    color: var(--amber-accent);
     box-shadow: var(--shadow-inset);
 }
 
 .status-dot {
     width: 7px;
     height: 7px;
-    background: var(--cyan-accent);
+    background: var(--brown-light);
     border-radius: 50%;
     animation: pulse-dot 2s ease-in-out infinite;
-    box-shadow: var(--shadow-glow-cyan);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 @keyframes pulse-dot {
     0%, 100% { 
         opacity: 1; 
-        box-shadow: var(--shadow-glow-cyan);
+        box-shadow: var(--shadow-glow-brown);
     }
     50% { 
         opacity: 0.5; 
-        box-shadow: 0 0 5px var(--cyan-glow);
+        box-shadow: 0 0 5px var(--amber-glow);
     }
 }
 
@@ -397,7 +396,7 @@ body::after {
     box-shadow: var(--shadow-inset);
 }
 
-/* Copper Accent Bar */
+/* Brown Accent Bar */
 .nav-link::before {
     content: '';
     position: absolute;
@@ -405,18 +404,18 @@ body::after {
     top: 0;
     width: 3px;
     height: 100%;
-    background: var(--copper);
+    background: var(--brown-primary);
     transform: scaleY(0);
     transition: var(--transition-normal);
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .nav-link:hover,
 .nav-link.active {
     background: var(--glass-hover);
-    color: var(--copper-light);
+    color: var(--brown-light);
     border-color: var(--glass-border);
-    box-shadow: var(--shadow-inset), 0 0 15px rgba(184, 115, 51, 0.2);
+    box-shadow: var(--shadow-inset), 0 0 15px rgba(141, 110, 99, 0.2);
 }
 
 .nav-link:hover::before,
@@ -427,7 +426,7 @@ body::after {
 .nav-link i {
     width: 20px;
     font-size: 1.05rem;
-    color: var(--copper);
+    color: var(--brown-primary);
 }
 
 /* Navigation Footer */
@@ -459,11 +458,11 @@ body::after {
 }
 
 .social-link:hover {
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
-    color: var(--charcoal-base);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
+    color: var(--text-primary);
     transform: translateY(-3px);
-    box-shadow: var(--shadow-glow-copper), var(--shadow-sm);
-    border-color: var(--copper);
+    box-shadow: var(--shadow-glow-brown), var(--shadow-sm);
+    border-color: var(--brown-primary);
 }
 
 /* ===================================
@@ -496,8 +495,8 @@ body::after {
     top: 0;
     left: 0;
     background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(184, 115, 51, 0.03) 49px, rgba(184, 115, 51, 0.03) 50px),
-        repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(184, 115, 51, 0.03) 49px, rgba(184, 115, 51, 0.03) 50px);
+        repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(141, 110, 99, 0.03) 49px, rgba(141, 110, 99, 0.03) 50px),
+        repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(141, 110, 99, 0.03) 49px, rgba(141, 110, 99, 0.03) 50px);
     opacity: 0.5;
     pointer-events: none;
 }
@@ -524,11 +523,11 @@ body::after {
 
 .hero-greeting {
     font-size: 1.05rem;
-    color: var(--cyan-accent);
+    color: var(--amber-accent);
     font-weight: 500;
     display: block;
     margin-bottom: 10px;
-    text-shadow: var(--shadow-glow-cyan);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .hero-name {
@@ -541,7 +540,7 @@ body::after {
 }
 
 .text-gradient {
-    background: linear-gradient(135deg, var(--copper-light) 0%, var(--cyan-accent) 100%);
+    background: linear-gradient(135deg, var(--brown-light) 0%, var(--amber-accent) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -562,7 +561,7 @@ body::after {
 }
 
 .hero-description strong {
-    color: var(--copper-light);
+    color: var(--brown-light);
     font-weight: 600;
 }
 
@@ -608,28 +607,28 @@ body::after {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
     font-weight: 700;
-    border: 1px solid var(--copper-light);
+    border: 1px solid var(--brown-light);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-glow-copper), var(--shadow-md);
+    box-shadow: var(--shadow-glow-brown), var(--shadow-md);
 }
 
 .btn-outline {
     background: var(--glass-bg);
-    color: var(--copper-light);
-    border: 2px solid var(--copper);
+    color: var(--brown-light);
+    border: 2px solid var(--brown-primary);
     backdrop-filter: blur(10px);
 }
 
 .btn-outline:hover {
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 /* ===================================
@@ -656,7 +655,7 @@ body::after {
     overflow: hidden;
 }
 
-/* Subtle Copper Line on Hover */
+/* Subtle Brown Line on Hover */
 .stat-card::before {
     content: '';
     position: absolute;
@@ -664,7 +663,7 @@ body::after {
     top: 50%;
     width: 100%;
     height: 1px;
-    background: linear-gradient(90deg, var(--copper), transparent);
+    background: linear-gradient(90deg, var(--brown-primary), transparent);
     opacity: 0;
     transition: var(--transition-normal);
 }
@@ -672,8 +671,8 @@ body::after {
 .stat-card:hover {
     background: var(--glass-hover);
     transform: translateX(-6px);
-    border-color: var(--copper);
-    box-shadow: 0 0 25px rgba(184, 115, 51, 0.2), var(--shadow-md);
+    border-color: var(--brown-primary);
+    box-shadow: 0 0 25px rgba(141, 110, 99, 0.2), var(--shadow-md);
 }
 
 .stat-card:hover::before {
@@ -683,15 +682,15 @@ body::after {
 .stat-icon {
     width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
     color: var(--text-primary);
-    box-shadow: var(--shadow-glow-copper), var(--shadow-inset);
-    border: 1px solid var(--copper-light);
+    box-shadow: var(--shadow-glow-brown), var(--shadow-inset);
+    border: 1px solid var(--brown-light);
 }
 
 .stat-content {
@@ -701,13 +700,13 @@ body::after {
 .stat-number {
     font-size: 2.3rem;
     font-weight: 800;
-    color: var(--copper-light);
-    text-shadow: var(--shadow-glow-copper);
+    color: var(--brown-light);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .stat-plus {
     font-size: 1.8rem;
-    color: var(--copper);
+    color: var(--brown-primary);
 }
 
 .stat-label {
@@ -734,23 +733,23 @@ body::after {
 .mouse {
     width: 22px;
     height: 36px;
-    border: 2px solid var(--copper);
+    border: 2px solid var(--brown-primary);
     border-radius: 12px;
     position: relative;
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .wheel {
     width: 2.5px;
     height: 7px;
-    background: var(--copper);
+    background: var(--brown-primary);
     border-radius: 2px;
     position: absolute;
     top: 7px;
     left: 50%;
     transform: translateX(-50%);
     animation: scroll-wheel 2s ease-in-out infinite;
-    box-shadow: 0 0 5px var(--copper);
+    box-shadow: 0 0 5px var(--brown-primary);
 }
 
 @keyframes scroll-wheel {
@@ -790,18 +789,18 @@ body::after {
 
 .title-number {
     font-size: 1.4rem;
-    color: var(--copper);
+    color: var(--brown-primary);
     font-weight: 700;
-    text-shadow: var(--shadow-glow-copper);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .section-title::after {
     content: '';
     flex: 1;
     height: 2px;
-    background: linear-gradient(to right, var(--copper), transparent);
+    background: linear-gradient(to right, var(--brown-primary), transparent);
     max-width: 280px;
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 /* ===================================
@@ -809,7 +808,7 @@ body::after {
    =================================== */
 .about-grid {
     display: grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 320px 1fr;
     gap: 55px;
     align-items: start;
 }
@@ -845,7 +844,7 @@ body::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     mix-blend-mode: multiply;
     transition: var(--transition-slow);
     opacity: 0.25;
@@ -859,7 +858,7 @@ body::after {
     position: absolute;
     bottom: -18px;
     right: -18px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
     padding: 11px 18px;
     border-radius: 8px;
@@ -867,9 +866,9 @@ body::after {
     align-items: center;
     gap: 9px;
     font-weight: 700;
-    box-shadow: var(--shadow-glow-copper), var(--shadow-lg);
+    box-shadow: var(--shadow-glow-brown), var(--shadow-lg);
     animation: float-badge 3s ease-in-out infinite;
-    border: 1px solid var(--copper-light);
+    border: 1px solid var(--brown-light);
 }
 
 @keyframes float-badge {
@@ -899,9 +898,9 @@ body::after {
 }
 
 .highlight-item i {
-    color: var(--copper);
+    color: var(--brown-primary);
     font-size: 1.05rem;
-    text-shadow: var(--shadow-glow-copper);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .about-info {
@@ -925,14 +924,14 @@ body::after {
 
 .info-item:hover {
     background: var(--glass-hover);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateX(6px);
-    box-shadow: 0 0 18px rgba(184, 115, 51, 0.2), var(--shadow-sm);
+    box-shadow: 0 0 18px rgba(141, 110, 99, 0.2), var(--shadow-sm);
 }
 
 .info-item i {
     font-size: 1.2rem;
-    color: var(--copper);
+    color: var(--brown-primary);
 }
 
 .info-item div {
@@ -968,8 +967,8 @@ body::after {
     top: 0;
     bottom: 0;
     width: 3px;
-    background: linear-gradient(180deg, var(--copper) 0%, var(--copper-dark) 100%);
-    box-shadow: var(--shadow-glow-copper);
+    background: linear-gradient(180deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .timeline-item {
@@ -985,10 +984,10 @@ body::after {
     top: 0;
     width: 16px;
     height: 16px;
-    background: radial-gradient(circle, var(--copper-light) 0%, var(--copper-dark) 100%);
+    background: radial-gradient(circle, var(--brown-light) 0%, var(--brown-dark) 100%);
     border: 3px solid var(--charcoal-base);
     border-radius: 50%;
-    box-shadow: var(--shadow-glow-copper), 0 0 0 4px var(--copper);
+    box-shadow: var(--shadow-glow-brown), 0 0 0 4px var(--brown-primary);
 }
 
 .timeline-content {
@@ -1003,21 +1002,21 @@ body::after {
 
 .timeline-content:hover {
     background: var(--glass-hover);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateY(-4px);
-    box-shadow: 0 0 25px rgba(184, 115, 51, 0.2), var(--shadow-lg);
+    box-shadow: 0 0 25px rgba(141, 110, 99, 0.2), var(--shadow-lg);
 }
 
 .timeline-date {
     display: inline-block;
     padding: 5px 13px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
     border-radius: 18px;
     font-size: 0.82rem;
     font-weight: 700;
     margin-bottom: 14px;
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .timeline-content h3 {
@@ -1028,7 +1027,7 @@ body::after {
 
 .timeline-content h4 {
     font-size: 1.08rem;
-    color: var(--copper-light);
+    color: var(--brown-light);
     margin-bottom: 5px;
 }
 
@@ -1054,9 +1053,9 @@ body::after {
     content: '▹';
     position: absolute;
     left: 0;
-    color: var(--copper);
+    color: var(--brown-primary);
     font-size: 1.15rem;
-    text-shadow: var(--shadow-glow-copper);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .exp-link {
@@ -1064,10 +1063,10 @@ body::after {
     align-items: center;
     gap: 7px;
     padding: 7px 14px;
-    background: rgba(184, 115, 51, 0.1);
-    border: 1px solid var(--copper);
+    background: rgba(141, 110, 99, 0.1);
+    border: 1px solid var(--brown-primary);
     border-radius: 6px;
-    color: var(--copper-light);
+    color: var(--brown-light);
     text-decoration: none;
     font-size: 0.88rem;
     margin-top: 11px;
@@ -1075,9 +1074,9 @@ body::after {
 }
 
 .exp-link:hover {
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 /* Timeline Sublocations */
@@ -1088,7 +1087,7 @@ body::after {
 
 .timeline-sublocation {
     font-size: 0.88rem;
-    color: var(--copper);
+    color: var(--brown-primary);
     margin: 5px 0;
     font-weight: 600;
     line-height: 1.4;
@@ -1117,24 +1116,24 @@ body::after {
 
 .skill-card:hover {
     background: var(--glass-hover);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateY(-7px);
-    box-shadow: 0 0 28px rgba(184, 115, 51, 0.2), var(--shadow-lg);
+    box-shadow: 0 0 28px rgba(141, 110, 99, 0.2), var(--shadow-lg);
 }
 
 .skill-icon {
     width: 66px;
     height: 66px;
     margin: 0 auto 18px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.7rem;
     color: var(--text-primary);
-    box-shadow: var(--shadow-glow-copper), var(--shadow-inset);
-    border: 1px solid var(--copper-light);
+    box-shadow: var(--shadow-glow-brown), var(--shadow-inset);
+    border: 1px solid var(--brown-light);
 }
 
 .skill-card h3 {
@@ -1152,19 +1151,19 @@ body::after {
 
 .tag {
     padding: 5px 13px;
-    background: rgba(184, 115, 51, 0.1);
-    border: 1px solid var(--copper);
+    background: rgba(141, 110, 99, 0.1);
+    border: 1px solid var(--brown-primary);
     border-radius: 15px;
     font-size: 0.82rem;
-    color: var(--copper-light);
+    color: var(--brown-light);
     transition: var(--transition-normal);
     backdrop-filter: blur(5px);
 }
 
 .tag:hover {
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .subsection-title {
@@ -1205,15 +1204,15 @@ body::after {
 
 .tech-item:hover {
     background: var(--walnut-dark);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateY(-4px);
-    box-shadow: 0 0 18px rgba(184, 115, 51, 0.2);
+    box-shadow: 0 0 18px rgba(141, 110, 99, 0.2);
 }
 
 .tech-item i {
     font-size: 2.4rem;
-    color: var(--copper);
-    text-shadow: var(--shadow-glow-copper);
+    color: var(--brown-primary);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .tech-item span {
@@ -1261,17 +1260,17 @@ body::after {
 
 .language-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(90deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     border-radius: 9px;
     transition: width 1s ease;
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .language-percent {
     min-width: 48px;
     text-align: right;
     font-weight: 600;
-    color: var(--copper);
+    color: var(--brown-primary);
 }
 
 /* ===================================
@@ -1282,14 +1281,14 @@ body::after {
 }
 
 .featured-cert {
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     border-radius: 14px;
     padding: 38px;
     margin-bottom: 55px;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-glow-copper), var(--shadow-lg);
-    border: 2px solid var(--copper-light);
+    box-shadow: var(--shadow-glow-brown), var(--shadow-lg);
+    border: 2px solid var(--brown-light);
 }
 
 .featured-cert::before {
@@ -1380,7 +1379,7 @@ body::after {
     gap: 9px;
     padding: 11px 22px;
     background: var(--charcoal-base);
-    color: var(--copper-light);
+    color: var(--brown-light);
     text-decoration: none;
     border-radius: 8px;
     font-weight: 700;
@@ -1414,17 +1413,17 @@ body::after {
 
 .cert-card:hover {
     background: var(--glass-hover);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateY(-7px);
-    box-shadow: 0 0 28px rgba(184, 115, 51, 0.2), var(--shadow-lg);
+    box-shadow: 0 0 28px rgba(141, 110, 99, 0.2), var(--shadow-lg);
 }
 
 .cert-card .cert-icon {
     width: 66px;
     height: 66px;
     margin: 0 auto 18px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
-    box-shadow: var(--shadow-glow-copper);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .cert-card h4 {
@@ -1444,7 +1443,7 @@ body::after {
     align-items: center;
     gap: 7px;
     padding: 9px 18px;
-    background: var(--copper);
+    background: var(--brown-primary);
     color: var(--text-primary);
     text-decoration: none;
     border-radius: 8px;
@@ -1453,9 +1452,9 @@ body::after {
 }
 
 .doc-btn:hover {
-    background: var(--copper-dark);
+    background: var(--brown-dark);
     transform: scale(1.05);
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .cv-download {
@@ -1481,15 +1480,15 @@ body::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     opacity: 0.05;
 }
 
 .cv-card i {
     font-size: 3.8rem;
-    color: var(--copper);
+    color: var(--brown-primary);
     margin-bottom: 22px;
-    text-shadow: var(--shadow-glow-copper);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .cv-card h4 {
@@ -1509,19 +1508,19 @@ body::after {
     align-items: center;
     gap: 9px;
     padding: 15px 34px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
     text-decoration: none;
     border-radius: 8px;
     font-weight: 700;
     font-size: 1.08rem;
     transition: var(--transition-normal);
-    border: 2px solid var(--copper-light);
+    border: 2px solid var(--brown-light);
 }
 
 .download-btn:hover {
     transform: scale(1.05);
-    box-shadow: var(--shadow-glow-copper), var(--shadow-lg);
+    box-shadow: var(--shadow-glow-brown), var(--shadow-lg);
 }
 
 /* ===================================
@@ -1545,15 +1544,15 @@ body::after {
 
 .edu-card:hover {
     background: var(--glass-hover);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateY(-7px);
-    box-shadow: 0 0 28px rgba(184, 115, 51, 0.2), var(--shadow-lg);
+    box-shadow: 0 0 28px rgba(141, 110, 99, 0.2), var(--shadow-lg);
 }
 
 .edu-icon {
     width: 56px;
     height: 56px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -1561,8 +1560,8 @@ body::after {
     font-size: 1.4rem;
     color: var(--text-primary);
     margin-bottom: 18px;
-    box-shadow: var(--shadow-glow-copper);
-    border: 1px solid var(--copper-light);
+    box-shadow: var(--shadow-glow-brown);
+    border: 1px solid var(--brown-light);
 }
 
 .edu-card h3 {
@@ -1573,7 +1572,7 @@ body::after {
 
 .edu-card h4 {
     font-size: 1.02rem;
-    color: var(--copper-light);
+    color: var(--brown-light);
     margin-bottom: 11px;
 }
 
@@ -1619,24 +1618,24 @@ body::after {
 
 .contact-card:hover {
     background: var(--glass-hover);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateY(-7px);
-    box-shadow: 0 0 28px rgba(184, 115, 51, 0.2);
+    box-shadow: 0 0 28px rgba(141, 110, 99, 0.2);
 }
 
 .contact-icon {
     width: 56px;
     height: 56px;
     margin: 0 auto 18px;
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
     color: var(--text-primary);
-    box-shadow: var(--shadow-glow-copper);
-    border: 1px solid var(--copper-light);
+    box-shadow: var(--shadow-glow-brown);
+    border: 1px solid var(--brown-light);
 }
 
 .contact-card h3 {
@@ -1646,13 +1645,13 @@ body::after {
 }
 
 .contact-card a {
-    color: var(--copper-light);
+    color: var(--brown-light);
     text-decoration: none;
     font-size: 0.98rem;
 }
 
 .contact-card a:hover {
-    color: var(--copper);
+    color: var(--brown-primary);
 }
 
 .contact-card p {
@@ -1682,11 +1681,11 @@ body::after {
 }
 
 .social-link-large:hover {
-    background: linear-gradient(135deg, var(--copper) 0%, var(--copper-dark) 100%);
+    background: linear-gradient(135deg, var(--brown-primary) 0%, var(--brown-dark) 100%);
     color: var(--text-primary);
-    border-color: var(--copper);
+    border-color: var(--brown-primary);
     transform: translateY(-4px);
-    box-shadow: var(--shadow-glow-copper);
+    box-shadow: var(--shadow-glow-brown);
 }
 
 .social-link-large i {
@@ -1709,8 +1708,8 @@ body::after {
 }
 
 .footer-content .fa-heart {
-    color: var(--copper);
-    text-shadow: var(--shadow-glow-copper);
+    color: var(--brown-primary);
+    text-shadow: var(--shadow-glow-brown);
 }
 
 .footer-subtitle {
