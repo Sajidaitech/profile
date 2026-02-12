@@ -1,7 +1,7 @@
 // ===================================
 // LUXURY IT ENGINEER PORTFOLIO
 // Premium Dashboard Interactions
-// =================================== ==
+// ===================================
 
 // Initialize AOS (Animate On Scroll)
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===================================
 // Premium Custom Cursor
-// =================================== 
+// ===================================
 class CustomCursor {
     constructor() {
         this.cursor = document.querySelector('.cursor');
@@ -234,7 +234,7 @@ const experienceData = [
             'Implemented preventive maintenance schedules for IT equipment, reducing unexpected downtime by proactive issue resolution',
             'Provided end-user training on new systems and applications to enhance staff productivity and technology adoption'
         ],
-        link: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing'
+        experienceLetter: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing'
     },
     {
         date: 'Nov 2023 - Feb 2024',
@@ -262,7 +262,7 @@ const experienceData = [
             'Optimized digital asset inventory protocols, implementing a tracking system that significantly improved hardware lifecycle management and procurement planning',
             'Collaborated with the network team to troubleshoot connectivity issues within critical care units, maintaining strict HIPAA compliance standards'
         ],
-        link: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'
+        experienceLetter: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'
     },
     {
         date: 'Feb 2022 - Nov 2023',
@@ -289,9 +289,15 @@ const experienceData = [
             'Monitored and audited IT asset movements across multiple project sites, reducing equipment loss and discrepancies by 20% through rigorous documentation',
             'Implemented standardized troubleshooting checklists, reducing average ticket turnaround time and improving service efficiency'
         ],
-        links: [
-            { text: 'Starlink Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
-            { text: 'Airport Project Letter', url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' }
+        experienceLetters: [
+            { 
+                text: 'Starlink Experience Letter', 
+                url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' 
+            },
+            { 
+                text: 'Airport Project Letter', 
+                url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' 
+            }
         ]
     },
     {
@@ -330,7 +336,7 @@ function loadExperience() {
 
         const responsibilities = exp.responsibilities.map(resp => `<li>${resp}</li>`).join('');
         
-        // Handle projects for Elegancia Healthcare
+        // Handle projects for experiences with multiple projects
         let projectsHTML = '';
         if (exp.projects) {
             projectsHTML = `
@@ -349,19 +355,28 @@ function loadExperience() {
             `;
         }
         
-        let linksHTML = '';
-        if (exp.link) {
-            linksHTML = `<a href="${exp.link}" target="_blank" class="timeline-link">
-                <i class="fas fa-file-pdf"></i> View Experience Letter
-            </a>`;
-        } else if (exp.links) {
-            linksHTML = '<div class="timeline-links">';
-            exp.links.forEach(link => {
-                linksHTML += `<a href="${link.url}" target="_blank" class="timeline-link">
-                    <i class="fas fa-file-pdf"></i> ${link.text}
-                </a>`;
+        // Handle experience letter links
+        let lettersHTML = '';
+        if (exp.experienceLetter) {
+            // Single experience letter
+            lettersHTML = `
+                <div class="experience-actions">
+                    <a href="${exp.experienceLetter}" target="_blank" class="timeline-link">
+                        <i class="fas fa-file-pdf"></i> View Experience Letter
+                    </a>
+                </div>
+            `;
+        } else if (exp.experienceLetters && exp.experienceLetters.length > 0) {
+            // Multiple experience letters
+            lettersHTML = '<div class="experience-actions">';
+            exp.experienceLetters.forEach(letter => {
+                lettersHTML += `
+                    <a href="${letter.url}" target="_blank" class="timeline-link">
+                        <i class="fas fa-file-pdf"></i> ${letter.text}
+                    </a>
+                `;
             });
-            linksHTML += '</div>';
+            lettersHTML += '</div>';
         }
 
         item.innerHTML = `
@@ -372,7 +387,7 @@ function loadExperience() {
                 <p class="timeline-location"><i class="fas fa-map-marker-alt"></i> ${exp.location}</p>
                 ${projectsHTML}
                 <ul class="timeline-responsibilities">${responsibilities}</ul>
-                ${linksHTML}
+                ${lettersHTML}
             </div>
         `;
 
@@ -533,25 +548,25 @@ const certificationsData = [
         icon: 'fa-graduation-cap',
         title: 'Odoo ERP Training',
         description: 'Workshop covering business processes, product, vendor, and customer management.',
-        link: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
+        certificateLink: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
     },
     {
         icon: 'fa-trophy',
         title: 'Aptech Graduation',
         description: 'Advanced Diploma in Software Engineering (ACCP) certification.',
-        link: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
+        certificateLink: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
     },
     {
         icon: 'fa-hands-helping',
         title: 'MDX Career Fair',
         description: 'Certificate of appreciation for volunteering at the Middlesex University Career Fair.',
-        link: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
+        certificateLink: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
     },
     {
         icon: 'fa-award',
         title: 'Safety Award - HIA',
         description: 'Recognition for following the best safety rules during the Airport Project.',
-        link: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=drive_link'
+        certificateLink: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=drive_link'
     }
 ];
 
@@ -567,15 +582,18 @@ function loadCertifications() {
         card.setAttribute('data-aos', 'fade-up');
         card.setAttribute('data-aos-delay', index * 100);
 
+        const certButton = cert.certificateLink ? 
+            `<a href="${cert.certificateLink}" target="_blank" class="cert-btn">
+                <i class="fas fa-eye"></i> View Certificate
+            </a>` : '';
+
         card.innerHTML = `
             <div class="cert-icon">
                 <i class="fas ${cert.icon}"></i>
             </div>
             <h4>${cert.title}</h4>
             <p>${cert.description}</p>
-            <a href="${cert.link}" target="_blank" class="cert-btn">
-                <i class="fas fa-eye"></i> View Certificate
-            </a>
+            ${certButton}
         `;
 
         certsGrid.appendChild(card);
@@ -593,14 +611,14 @@ const educationData = [
         degree: 'Bachelor of Science in IT',
         institution: 'Middlesex University Dubai',
         date: 'Sep 2024 - Jun 2025',
-        certificateLink: 'https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing' // Add your certificate link here
+        certificateLink: 'https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing'
     },
     {
         icon: 'fa-laptop-code',
         degree: 'Advanced Diploma in Software Engineering',
         institution: 'Aptech Qatar',
         date: 'Nov 2020 - Nov 2023',
-        certificateLink: 'https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing' // Add your certificate link here
+        certificateLink: 'https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing'
     },
     {
         icon: 'fa-school',
@@ -863,4 +881,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('🎯 Luxury IT Engineer Portfolio Loaded Successfully!');
-
