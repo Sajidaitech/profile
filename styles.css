@@ -1,6 +1,6 @@
 /* ===================================
    LUXURY IT ENGINEER PORTFOLIO
-   Walnut Wood × Matte Black Metal × Gold Etching
+   Matte Black Metal × Gold Etching
    Isometric 3D Dashboard Aesthetic - 2026
    =================================== */
 
@@ -17,19 +17,12 @@
     --smoke: #2C2825;
     --metal-black: #1C1C1C;
     
-    /* Walnut Wood Spectrum */
-    --walnut-rich: #3D2818;
-    --walnut-medium: #52402F;
-    --walnut-light: #6B5444;
-    --wood-highlight: #8B7355;
-    --wood-grain: #4A3526;
-    
-    /* Gold Luxury Accents - Etched Typography */
+    /* Gold Accent Spectrum */
     --gold-bright: #D4AF37;
-    --gold-muted: #B8922D;
-    --gold-dark: #9C7A23;
-    --gold-shimmer: #E8C547;
-    --gold-etched: #C9A428;
+    --gold-shimmer: #FFD700;
+    --gold-muted: #B8935E;
+    --gold-dark: #8B7355;
+    --gold-etched: #C9A962;
     
     /* Glass Morphism - Control Panel Surfaces */
     --glass-light: rgba(255, 255, 255, 0.04);
@@ -93,7 +86,7 @@ body {
 }
 
 /* ===================================
-   WALNUT WOOD BASE BACKGROUND
+   MATTE BLACK METAL BASE BACKGROUND
    Cinematic Studio Lighting
    =================================== */
 body::before {
@@ -101,10 +94,10 @@ body::before {
     position: fixed;
     inset: 0;
     background: 
-        radial-gradient(ellipse 1000px 700px at 20% 20%, rgba(61, 40, 24, 0.6), transparent),
-        radial-gradient(ellipse 800px 1000px at 80% 80%, rgba(82, 64, 47, 0.5), transparent),
-        radial-gradient(ellipse 600px 800px at 50% 50%, rgba(74, 53, 38, 0.3), transparent),
-        linear-gradient(135deg, var(--walnut-rich) 0%, var(--wood-grain) 50%, var(--walnut-rich) 100%);
+        radial-gradient(ellipse 1000px 700px at 20% 20%, rgba(28, 28, 28, 0.6), transparent),
+        radial-gradient(ellipse 800px 1000px at 80% 80%, rgba(32, 32, 32, 0.5), transparent),
+        radial-gradient(ellipse 600px 800px at 50% 50%, rgba(20, 20, 20, 0.3), transparent),
+        linear-gradient(135deg, var(--metal-black) 0%, var(--onyx) 50%, var(--metal-black) 100%);
     z-index: -3;
     animation: cinematic-shift 25s ease-in-out infinite alternate;
 }
@@ -115,7 +108,7 @@ body::before {
     100% { transform: scale(1.05) rotate(0.6deg); filter: brightness(1.1); }
 }
 
-/* Organic Wood Grain Texture */
+/* Subtle Metal Texture Overlay */
 body::after {
     content: '';
     position: fixed;
@@ -130,10 +123,10 @@ body::after {
         ),
         repeating-linear-gradient(
             180deg,
-            rgba(107, 84, 68, 0.25) 0px,
+            rgba(255, 255, 255, 0.02) 0px,
             transparent 0.5px,
             transparent 2px,
-            rgba(82, 64, 47, 0.15) 3px,
+            rgba(255, 255, 255, 0.01) 3px,
             transparent 3.5px,
             transparent 18px
         );
@@ -152,7 +145,7 @@ body::after {
 
 ::-webkit-scrollbar-track {
     background: var(--onyx);
-    border-left: 1px solid var(--walnut-rich);
+    border-left: 1px solid var(--charcoal);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -1575,13 +1568,14 @@ body::after {
 .edu-cert-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-gold-strong);
-    background: linear-gradient(135deg, #FFD700, var(--gold-bright));
+    background: linear-gradient(135deg, var(--gold-shimmer), var(--gold-bright));
 }
 
 .edu-cert-btn i {
     font-size: 1rem;
 }
 
+/* Continue with remaining sections... */
 /* ===================================
    EXPERIENCE SECTION - TIMELINE
    =================================== */
@@ -2051,7 +2045,7 @@ body::after {
 
 .contact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmin(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
     margin-bottom: 56px;
 }
