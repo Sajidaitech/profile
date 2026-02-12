@@ -497,7 +497,7 @@ loadTechStack();
 // Load Languages
 // ===================================
 const languages = [
-    { name: 'English', level: 'Native/Fluent' },
+    { name: 'English', level: 'Fluent' },
     { name: 'Urdu/Hindi', level: 'Native/Fluent' },
     { name: 'Pashto', level: 'Native/Fluent' }
 ];
@@ -863,3 +863,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('🎯 Luxury IT Engineer Portfolio Loaded Successfully!');
+
