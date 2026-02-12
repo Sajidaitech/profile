@@ -19,11 +19,11 @@
     --walnut-light: #6D4C41;
     --wood-grain: #8D6E63;
     
-    /* Glass Effect */
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-hover: rgba(255, 255, 255, 0.06);
-    --glass-active: rgba(255, 255, 255, 0.1);
+    /* Glass Effect - Enhanced Bubble Glass */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-hover: rgba(255, 255, 255, 0.12);
+    --glass-active: rgba(255, 255, 255, 0.16);
     
     /* Accent Colors - Brown Spectrum */
     --brown-primary: #8D6E63;
@@ -70,7 +70,12 @@ html {
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--charcoal-base);
+    background: 
+        radial-gradient(ellipse 80px 120px at 15% 25%, rgba(62, 39, 35, 0.6), transparent),
+        radial-gradient(ellipse 60px 90px at 85% 65%, rgba(78, 52, 46, 0.5), transparent),
+        radial-gradient(ellipse 70px 100px at 45% 80%, rgba(93, 64, 55, 0.4), transparent),
+        linear-gradient(135deg, #3E2723 0%, #5D4037 100%);
+    background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
@@ -90,20 +95,18 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        linear-gradient(180deg, rgba(18, 18, 18, 0.7) 0%, rgba(62, 39, 35, 0.4) 100%),
+        linear-gradient(180deg, rgba(13, 9, 7, 0.85) 0%, rgba(62, 39, 35, 0.6) 100%),
         repeating-linear-gradient(
             90deg,
-            transparent 0px,
-            rgba(78, 52, 46, 0.05) 50px,
-            transparent 100px
-        ),
-        repeating-linear-gradient(
-            0deg,
-            rgba(93, 64, 55, 0.02) 0px,
-            transparent 2px,
-            transparent 100px
+            #3E2723 0px,
+            #4E342E 3px,
+            #5D4037 6px,
+            #3E2723 9px,
+            #6D4C41 12px,
+            #3E2723 15px
         );
-    opacity: 0.6;
+    background-size: 100% 100%;
+    opacity: 0.9;
     z-index: -2;
     pointer-events: none;
 }
@@ -117,8 +120,16 @@ body::after {
     width: 100%;
     height: 100%;
     background-image:
-        radial-gradient(ellipse at 30% 40%, rgba(93, 64, 55, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 60%, rgba(78, 52, 46, 0.1) 0%, transparent 50%);
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            rgba(93, 64, 55, 0.3) 1px,
+            transparent 2px,
+            transparent 30px
+        ),
+        radial-gradient(ellipse at 20% 30%, rgba(109, 76, 65, 0.4) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 70%, rgba(78, 52, 46, 0.3) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 50%, rgba(62, 39, 35, 0.2) 0%, transparent 60%);
     z-index: -1;
     pointer-events: none;
 }
@@ -192,9 +203,9 @@ body::after {
     width: 48px;
     height: 48px;
     background: var(--glass-bg);
-    backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 2px solid var(--glass-border);
+    border-radius: 10px;
     cursor: pointer;
     display: none;
     flex-direction: column;
@@ -202,7 +213,7 @@ body::after {
     align-items: center;
     gap: 5px;
     transition: var(--transition-normal);
-    box-shadow: var(--shadow-inset), var(--shadow-md);
+    box-shadow: var(--shadow-inset), var(--shadow-md), inset -1px -1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .mobile-nav-toggle:hover {
@@ -242,15 +253,15 @@ body::after {
     width: 280px;
     height: 100vh;
     background: var(--glass-bg);
-    border-right: 1px solid var(--glass-border);
-    backdrop-filter: blur(20px) saturate(180%);
+    border-right: 2px solid var(--glass-border);
+    backdrop-filter: blur(25px) saturate(200%);
     padding: 40px 20px;
     display: flex;
     flex-direction: column;
     z-index: 1000;
     overflow-y: auto;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.6);
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.7), inset -1px 0 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Brown Accent Line */
@@ -343,11 +354,12 @@ body::after {
     gap: 8px;
     padding: 7px 14px;
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+    border: 1.5px solid var(--glass-border);
     border-radius: 20px;
     font-size: 0.8rem;
     color: var(--amber-accent);
-    box-shadow: var(--shadow-inset);
+    box-shadow: var(--shadow-inset), inset -1px -1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
 }
 
 .status-dot {
@@ -387,13 +399,13 @@ body::after {
     padding: 11px 14px;
     color: var(--text-secondary);
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: var(--transition-normal);
     position: relative;
     overflow: hidden;
     background: var(--glass-bg);
-    border: 1px solid transparent;
-    box-shadow: var(--shadow-inset);
+    border: 1.5px solid transparent;
+    box-shadow: var(--shadow-inset), inset -1px -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Brown Accent Bar */
@@ -450,11 +462,11 @@ body::after {
     justify-content: center;
     background: var(--glass-bg);
     color: var(--text-secondary);
-    border-radius: 8px;
-    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    border: 1.5px solid var(--glass-border);
     text-decoration: none;
     transition: var(--transition-normal);
-    box-shadow: var(--shadow-inset);
+    box-shadow: var(--shadow-inset), inset -1px -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .social-link:hover {
@@ -642,15 +654,15 @@ body::after {
 
 .stat-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    backdrop-filter: blur(20px) saturate(200%);
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 22px;
     display: flex;
     align-items: center;
     gap: 18px;
     transition: var(--transition-normal);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -915,11 +927,11 @@ body::after {
     gap: 14px;
     padding: 14px;
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
+    border: 2px solid var(--glass-border);
+    border-radius: 10px;
     transition: var(--transition-normal);
-    backdrop-filter: blur(10px);
-    box-shadow: var(--shadow-inset);
+    backdrop-filter: blur(15px) saturate(180%);
+    box-shadow: var(--shadow-inset), inset -1px -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .info-item:hover {
@@ -992,12 +1004,12 @@ body::after {
 
 .timeline-content {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 26px;
     transition: var(--transition-normal);
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .timeline-content:hover {
@@ -1105,13 +1117,13 @@ body::after {
 
 .skill-card {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 30px;
     text-align: center;
     transition: var(--transition-normal);
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .skill-card:hover {
@@ -1175,12 +1187,12 @@ body::after {
 
 .tech-stack {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 38px;
     margin-bottom: 38px;
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .tech-items {
@@ -1223,11 +1235,11 @@ body::after {
 
 .languages-section {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 38px;
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .languages-grid {
@@ -1402,13 +1414,13 @@ body::after {
 
 .cert-card {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 30px;
     text-align: center;
     transition: var(--transition-normal);
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .cert-card:hover {
@@ -1463,14 +1475,14 @@ body::after {
 
 .cv-card {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 14px;
+    border: 2px solid var(--glass-border);
+    border-radius: 18px;
     padding: 48px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .cv-card::before {
@@ -1534,12 +1546,12 @@ body::after {
 
 .edu-card {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 30px;
     transition: var(--transition-normal);
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .edu-card:hover {
@@ -1607,13 +1619,13 @@ body::after {
 
 .contact-card {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
     padding: 30px;
     text-align: center;
     transition: var(--transition-normal);
-    backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) saturate(200%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .contact-card:hover {
@@ -1671,13 +1683,14 @@ body::after {
     gap: 11px;
     padding: 15px 30px;
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 8px;
+    border: 2px solid var(--glass-border);
+    border-radius: 12px;
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 600;
     transition: var(--transition-normal);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px) saturate(180%);
+    box-shadow: var(--shadow-sm), inset -1px -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .social-link-large:hover {
