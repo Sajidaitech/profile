@@ -227,10 +227,12 @@ const experienceData = [
         company: 'Al Tawkel Immigration Center',
         location: 'Dubai, UAE',
         responsibilities: [
-            'Delivered Level 2 IT support, including hardware repairs, system reimaging, network troubleshooting',
-            'Installed, configured, and maintained enterprise IT infrastructure',
-            'Created and maintained comprehensive digital IT asset records',
-            'Assisted with immigration business operations and client support'
+            'Delivered comprehensive Level 2 IT support, including advanced hardware diagnostics, repairs, system reimaging, and network troubleshooting',
+            'Installed, configured, and maintained enterprise IT infrastructure components including servers, workstations, and network equipment',
+            'Created and maintained comprehensive digital IT asset records, improving inventory accuracy and lifecycle management',
+            'Assisted with immigration business operations and client support, providing technical solutions for visa processing systems',
+            'Implemented preventive maintenance schedules for IT equipment, reducing unexpected downtime by proactive issue resolution',
+            'Provided end-user training on new systems and applications to enhance staff productivity and technology adoption'
         ],
         link: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing'
     },
@@ -240,10 +242,13 @@ const experienceData = [
         company: 'Military Medical City Hospital (MMCH)',
         location: 'Doha, Qatar',
         responsibilities: [
-            'Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance',
-            'Performed system reimaging and OS deployment for 300+ medical staff',
-            'Supported EMR application troubleshooting for doctors and nurses',
-            'Maintained digital asset inventory, improving lifecycle management'
+            'Spearheaded the resolution of 500+ high-priority support tickets across three hospital facilities, consistently maintaining a 95% SLA compliance rate',
+            'Executed large-scale system reimaging and automated OS deployment using SCCM/MDT for 300+ medical workstations to minimize clinical downtime',
+            'Provided specialized technical support for Electronic Medical Record (EMR) applications, ensuring seamless data access for doctors and nursing staff',
+            'Optimized digital asset inventory protocols, implementing a tracking system that significantly improved hardware lifecycle management and procurement planning',
+            'Collaborated with the network team to troubleshoot connectivity issues within critical care units, ensuring 24/7 uptime for medical IoT devices',
+            'Maintained strict HIPAA compliance standards while performing system maintenance and data handling procedures',
+            'Coordinated with healthcare staff to schedule system updates during off-peak hours, minimizing impact on patient care operations'
         ],
         link: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'
     },
@@ -253,14 +258,18 @@ const experienceData = [
         company: 'Star Link / UCC-Bahadir-Tedeschia JV (HIAEP)',
         location: 'Doha, Qatar',
         responsibilities: [
+            'Delivered comprehensive L1 and L2 technical support for a diverse user base of 200+ employees across retail, corporate, and construction site offices',
+            'Managed the end-to-end IT infrastructure setup for the Hamad International Airport Expansion Project (HIAEP) site offices, including hardware staging and peripheral configuration',
             'Systems & Cloud Administration: Full Microsoft 365 suite administration including User Accounts, Security Groups, and Permission Management via M365 Admin Center',
-            'Operating Systems: Advanced troubleshooting for Windows 10/11 and Windows Server environments',
-            'Directory Services: Management of Active Directory objects and Group Policy Objects (GPO)',
+            'Operating Systems: Advanced troubleshooting for Windows 10/11 and Windows Server environments, resolving complex boot issues and system failures',
+            'Directory Services: Administered Active Directory user accounts, group policies, and Office 365 permissions to ensure secure and efficient access for project personnel',
             'Infrastructure & Networking: End-to-end onsite office setup including structured cabling, workstation staging, and configuration of managed switches',
-            'Telephony: Installation and troubleshooting of VoIP phone systems and IP-based communication tools',
-            'L1/L2 Incident Management: Rapid diagnosis and resolution of hardware, software, and connectivity issues for 200+ staff',
-            'Industry-Specific Support: Specialized technical support for engineering tools including AutoCAD and Primavera P6',
-            'IT Asset Management (ITAM): Rigorous tracking and documentation of hardware lifecycle, reducing missing equipment by 20%'
+            'Telephony: Installation and troubleshooting of VoIP phone systems and IP-based communication tools for seamless project communications',
+            'Diagnosed and resolved complex hardware and software incidents, reducing average ticket turnaround time by implementing standardized troubleshooting checklists',
+            'Industry-Specific Support: Specialized technical support for engineering tools including AutoCAD and Primavera P6, ensuring project teams maintained productivity',
+            'IT Asset Management (ITAM): Monitored and audited IT asset movements across multiple project sites, reducing equipment loss and discrepancies by 20% through rigorous documentation',
+            'Performed regular system health checks and preventive maintenance to ensure optimal performance of critical business applications',
+            'Provided on-call support for emergency IT incidents, maintaining high availability of systems supporting airport construction operations'
         ],
         links: [
             { text: 'Starlink Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
@@ -273,12 +282,12 @@ const experienceData = [
         company: 'STARLINK (Ooredoo International)',
         location: 'Qatar',
         responsibilities: [
-            'Handled inbound/outbound customer calls with resolution focus',
-            'Identified customer needs and provided technical support',
-            'Maintained accurate call records in database systems',
-            'Built sustainable customer relationships',
-            'Consistently ranked in the top 10% for First Call Resolution (FCR) by diagnosing technical mobile and internet issues over the phone.',
-            'Bridged the gap between non-technical customers and the backend engineering team by documenting complex bugs in the CRM/Ticketing system.',
+            'Facilitated high-volume inbound and outbound communications, resolving complex technical inquiries and service issues for Ooredoo\'s international clientele',
+            'Utilized advanced diagnostic questioning to identify customer needs, providing immediate remote technical support for mobile and connectivity services',
+            'Maintained meticulous data integrity by documenting all interactions and technical resolutions within the CRM database system',
+            'Achieved consistently high customer satisfaction scores through effective problem resolution and professional communication',
+            'Built sustainable customer relationships by providing follow-up support and proactive service recommendations',
+            'Collaborated with technical teams to escalate and resolve complex network and service issues affecting multiple customers'
         ]
     }
 ];
