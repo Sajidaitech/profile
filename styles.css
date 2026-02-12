@@ -2,9 +2,10 @@
    LUXURY IT ENGINEER PORTFOLIO
    Matte Black Metal × Gold Etching
    Isometric 3D Dashboard Aesthetic - 2026
+   NOW WITH COMIC SANS MS!
    =================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Darker+Grotesque:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+/* Using Comic Sans MS system font */
 
 /* ===================================
    CSS CUSTOM PROPERTIES
@@ -73,7 +74,7 @@ html {
 }
 
 body {
-    font-family: 'Darker Grotesque', -apple-system, system-ui, sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-weight: 400;
     background: var(--obsidian);
     color: var(--text-primary);
@@ -377,6 +378,7 @@ body::after {
     text-transform: uppercase;
     margin-bottom: 16px;
     box-shadow: var(--shadow-gold);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .bubble-icon-main {
@@ -401,7 +403,7 @@ body::after {
 }
 
 .bubble-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.3rem;
     font-weight: 900;
     color: var(--text-bright);
@@ -414,10 +416,11 @@ body::after {
     font-weight: 600;
     color: var(--gold-bright);
     margin-bottom: 10px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .bubble-date {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--text-tertiary);
@@ -628,7 +631,7 @@ body::after {
     cursor: pointer;
     transition: all 0.3s var(--ease-smooth);
     letter-spacing: 1px;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .lang-btn:hover {
@@ -690,7 +693,7 @@ body::after {
 }
 
 .nav-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.65rem;
     font-weight: 700;
     margin-bottom: 6px;
@@ -705,6 +708,7 @@ body::after {
     color: var(--text-secondary);
     margin-bottom: 14px;
     letter-spacing: 0.3px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 /* Status Badge with LED Indicator */
@@ -721,6 +725,7 @@ body::after {
     color: var(--gold-bright);
     box-shadow: var(--shadow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(12px);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .status-dot {
@@ -756,6 +761,7 @@ body::after {
     position: relative;
     overflow: hidden;
     background: transparent;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 /* Gold Etched Indicator */
@@ -901,7 +907,7 @@ body::after {
 }
 
 .hero-greeting {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1rem;
     font-weight: 600;
     color: var(--gold-bright);
@@ -913,7 +919,7 @@ body::after {
 }
 
 .hero-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 4.2rem;
     font-weight: 900;
     line-height: 1.08;
@@ -938,7 +944,7 @@ body::after {
 }
 
 .hero-role {
-    font-family: 'Darker Grotesque', sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-secondary);
@@ -953,6 +959,7 @@ body::after {
     color: var(--text-secondary);
     line-height: 1.8;
     margin-bottom: 28px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .hero-description strong {
@@ -976,7 +983,7 @@ body::after {
     gap: 10px;
     padding: 14px 32px;
     border-radius: 10px;
-    font-family: 'Darker Grotesque', sans-serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-weight: 700;
     font-size: 1rem;
     text-decoration: none;
@@ -1116,7 +1123,7 @@ body::after {
 }
 
 .stat-number {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 2.5rem;
     font-weight: 900;
     color: var(--gold-bright);
@@ -1136,6 +1143,7 @@ body::after {
     color: var(--text-secondary);
     margin-top: 4px;
     letter-spacing: 0.4px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 /* Rotary Dial Decoration */
@@ -1176,6 +1184,7 @@ body::after {
     font-weight: 600;
     letter-spacing: 1.2px;
     text-transform: uppercase;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .mouse {
@@ -1230,7 +1239,7 @@ body::after {
 }
 
 .section-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 2.8rem;
     font-weight: 900;
     margin-bottom: 56px;
@@ -1243,7 +1252,7 @@ body::after {
 }
 
 .title-number {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.6rem;
     font-weight: 900;
     color: var(--gold-bright);
@@ -1295,6 +1304,7 @@ body::after {
     color: var(--text-secondary);
     line-height: 1.8;
     margin-bottom: 18px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .lead-text {
@@ -1318,6 +1328,7 @@ body::after {
     color: var(--text-secondary);
     font-weight: 500;
     font-size: 0.95rem;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .highlight-item i {
@@ -1416,7 +1427,7 @@ body::after {
 }
 
 .panel-label {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-tertiary);
@@ -1434,6 +1445,7 @@ body::after {
     border: 1px solid rgba(0, 255, 136, 0.3);
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .panel-metrics {
@@ -1453,6 +1465,7 @@ body::after {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-secondary);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .metric-bar {
@@ -1472,7 +1485,7 @@ body::after {
 }
 
 .metric-value {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 0.9rem;
     font-weight: 700;
     color: var(--gold-bright);
@@ -1529,7 +1542,7 @@ body::after {
 }
 
 .edu-card h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 10px;
@@ -1541,12 +1554,14 @@ body::after {
     font-weight: 600;
     color: var(--gold-bright);
     margin-bottom: 10px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .edu-date {
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-tertiary);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .edu-cert-btn {
@@ -1563,6 +1578,7 @@ body::after {
     text-decoration: none;
     transition: all 0.3s var(--ease-smooth);
     box-shadow: var(--shadow-gold);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .edu-cert-btn:hover {
@@ -1649,7 +1665,7 @@ body::after {
 }
 
 .timeline-date {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 0.85rem;
     font-weight: 700;
     color: var(--gold-bright);
@@ -1658,7 +1674,7 @@ body::after {
 }
 
 .timeline-content h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-bright);
@@ -1670,12 +1686,14 @@ body::after {
     font-weight: 600;
     color: var(--gold-muted);
     margin-bottom: 4px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .timeline-location {
     font-size: 0.9rem;
     color: var(--text-tertiary);
     margin-bottom: 16px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .timeline-responsibilities {
@@ -1690,6 +1708,7 @@ body::after {
     font-size: 0.95rem;
     color: var(--text-secondary);
     line-height: 1.6;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .timeline-responsibilities li::before {
@@ -1714,6 +1733,7 @@ body::after {
     font-size: 0.9rem;
     font-weight: 600;
     transition: all 0.3s var(--ease-smooth);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .timeline-link:hover {
@@ -1765,7 +1785,7 @@ body::after {
 }
 
 .skill-name {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.3rem;
     font-weight: 700;
     color: var(--text-bright);
@@ -1806,7 +1826,7 @@ body::after {
 }
 
 .subsection-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--text-bright);
@@ -1828,6 +1848,7 @@ body::after {
     font-weight: 600;
     font-size: 0.95rem;
     transition: all 0.3s var(--ease-smooth);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .tech-badge:hover {
@@ -1864,12 +1885,14 @@ body::after {
     font-weight: 700;
     color: var(--text-bright);
     margin-bottom: 6px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .language-level {
     font-size: 0.9rem;
     color: var(--gold-bright);
     font-weight: 600;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 /* ===================================
@@ -1917,6 +1940,7 @@ body::after {
     box-shadow: var(--shadow-gold);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .featured-cert-content {
@@ -1942,7 +1966,7 @@ body::after {
 }
 
 .cert-info h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 2rem;
     font-weight: 900;
     color: var(--text-bright);
@@ -1954,12 +1978,14 @@ body::after {
     font-weight: 600;
     color: var(--gold-bright);
     margin-bottom: 6px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .cert-date {
     font-size: 0.95rem;
     color: var(--text-tertiary);
     margin-bottom: 14px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .cert-description {
@@ -1967,6 +1993,7 @@ body::after {
     color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: 18px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .cert-btn {
@@ -1982,6 +2009,7 @@ body::after {
     font-weight: 700;
     font-size: 0.95rem;
     transition: all 0.3s var(--ease-smooth);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .cert-btn:hover {
@@ -2011,7 +2039,7 @@ body::after {
 }
 
 .cert-card h4 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.3rem;
     font-weight: 700;
     color: var(--text-bright);
@@ -2022,6 +2050,7 @@ body::after {
     font-size: 0.95rem;
     color: var(--text-secondary);
     margin-bottom: 6px;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 /* ===================================
@@ -2041,6 +2070,7 @@ body::after {
     margin-left: auto;
     margin-right: auto;
     line-height: 1.8;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .contact-grid {
@@ -2102,7 +2132,7 @@ body::after {
 }
 
 .contact-card h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 10px;
@@ -2115,6 +2145,7 @@ body::after {
     font-size: 1rem;
     font-weight: 600;
     transition: color 0.3s var(--ease-smooth);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .contact-card a:hover {
@@ -2125,6 +2156,7 @@ body::after {
     color: var(--text-secondary);
     font-size: 1rem;
     font-weight: 400;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .social-links-large {
@@ -2149,6 +2181,7 @@ body::after {
     transition: all 0.4s var(--ease-smooth);
     backdrop-filter: blur(20px) saturate(180%);
     box-shadow: var(--shadow-subtle);
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .social-link-large:hover {
@@ -2190,6 +2223,7 @@ body::after {
     font-size: 0.95rem;
     font-weight: 500;
     margin: 6px 0;
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .footer-content .fa-heart {
