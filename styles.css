@@ -3,10 +3,14 @@
    Black Matte × Pearl White Theme
    Isometric 3D Dashboard Aesthetic - 2026
    Poppins + Montserrat Fonts
+   Enhanced with Icons & Emojis
    =================================== */
 
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Import Font Awesome for Icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 /* ===================================
    CSS CUSTOM PROPERTIES
@@ -44,6 +48,8 @@
     --led-green: #00FF88;
     --led-amber: #FFB84D;
     --led-red: #FF4757;
+    --led-blue: #4D9FFF;
+    --led-purple: #B84DFF;
     
     /* Shadows & Cinematic Effects */
     --shadow-subtle: 0 2px 12px rgba(0, 0, 0, 0.5);
@@ -326,7 +332,7 @@ body::after {
     to { transform: rotate(360deg); }
 }
 
-/* Small Satellite Bubbles */
+/* Small Satellite Bubbles with Emojis */
 .bubble-satellite {
     position: absolute;
     width: 60px;
@@ -650,7 +656,7 @@ body::after {
     50% { opacity: 0.5; filter: brightness(1.2); }
 }
 
-/* Language Switcher */
+/* Language Switcher with Emoji Flags */
 .lang-switch {
     display: flex;
     gap: 8px;
@@ -670,6 +676,21 @@ body::after {
     transition: all 0.3s var(--ease-smooth);
     letter-spacing: 1px;
     font-family: 'Poppins', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lang-btn::before {
+    font-size: 1.1rem;
+}
+
+.lang-btn[data-lang="en"]::before {
+    content: '🇬🇧';
+}
+
+.lang-btn[data-lang="ar"]::before {
+    content: '🇸🇦';
 }
 
 .lang-btn:hover {
@@ -778,7 +799,7 @@ body::after {
     box-shadow: 0 0 10px var(--led-green);
 }
 
-/* Navigation Links */
+/* Navigation Links with Icons */
 .nav-links {
     list-style: none;
     margin-bottom: auto;
@@ -959,6 +980,21 @@ body::after {
     text-transform: uppercase;
 }
 
+/* Add wave emoji to greeting */
+.hero-greeting::before {
+    content: '👋 ';
+    font-size: 1.3rem;
+    display: inline-block;
+    animation: wave 2.5s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    10%, 30% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    40%, 100% { transform: rotate(0deg); }
+}
+
 .hero-name {
     font-family: 'Montserrat', sans-serif;
     font-size: 4rem;
@@ -995,6 +1031,20 @@ body::after {
     margin-bottom: 20px;
     min-height: 40px;
     letter-spacing: 0.3px;
+}
+
+/* Add rotating emoji before role */
+.hero-role::before {
+    content: '💻';
+    font-size: 1.8rem;
+    margin-right: 10px;
+    display: inline-block;
+    animation: rotate-emoji 4s ease-in-out infinite;
+}
+
+@keyframes rotate-emoji {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(360deg) scale(1.1); }
 }
 
 .hero-description {
@@ -1322,6 +1372,13 @@ body::after {
     box-shadow: 0 0 15px rgba(200, 200, 200, 0.25);
 }
 
+/* Section Title Icons */
+.section-title .title-icon {
+    font-size: 2.4rem;
+    margin-right: -8px;
+    filter: drop-shadow(0 0 20px rgba(200, 200, 200, 0.3));
+}
+
 /* ===================================
    ABOUT SECTION - CONTROL PANEL
    =================================== */
@@ -1481,6 +1538,12 @@ body::after {
     text-transform: uppercase;
 }
 
+/* Add emoji to panel label */
+.panel-label::before {
+    content: '⚡ ';
+    font-size: 1rem;
+}
+
 .panel-indicator {
     font-size: 0.8rem;
     font-weight: 700;
@@ -1611,56 +1674,610 @@ body::after {
     font-weight: 500;
     color: var(--text-tertiary);
     font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
+/* Add calendar emoji to date */
+.edu-date::before {
+    content: '📅';
+    font-size: 1rem;
+}
+
+/* ===================================
+   ENHANCED CERTIFICATE BUTTON
+   Golden & Gray Border Design
+   =================================== */
 .edu-cert-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     margin-top: 20px;
     padding: 11px 20px;
-    background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
-    color: var(--obsidian);
-    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(20, 18, 16, 0.95));
+    color: var(--gold-bright);
+    border-radius: 12px;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: none;
-    transition: all 0.3s var(--ease-smooth);
-    box-shadow: var(--shadow-gold);
+    transition: all 0.4s var(--ease-smooth);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+    box-shadow: var(--shadow-medium);
     font-family: 'Poppins', sans-serif;
 }
 
+/* Golden and Gray Border Effect */
+.edu-cert-btn::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(135deg, 
+        var(--gold-bright) 0%, 
+        var(--gold-shimmer) 25%,
+        var(--gold-muted) 50%,
+        var(--smoke) 75%,
+        var(--gold-bright) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+    opacity: 0.8;
+    transition: all 0.4s var(--ease-smooth);
+}
+
+/* Animated gradient on hover */
+.edu-cert-btn::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(135deg, 
+        var(--gold-shimmer) 0%, 
+        var(--gold-bright) 50%,
+        var(--gold-etched) 100%);
+    background-size: 200% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+    opacity: 0;
+    transition: all 0.4s var(--ease-smooth);
+}
+
 .edu-cert-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-gold-strong);
-    background: linear-gradient(135deg, var(--gold-shimmer), var(--gold-bright));
+    transform: translateY(-3px);
+    color: var(--text-bright);
+    background: linear-gradient(135deg, rgba(32, 32, 32, 0.95), rgba(24, 22, 20, 1));
+    box-shadow: var(--shadow-gold-strong), var(--shadow-heavy);
+}
+
+.edu-cert-btn:hover::before {
+    opacity: 0;
+}
+
+.edu-cert-btn:hover::after {
+    opacity: 1;
+    animation: border-shimmer 2s linear infinite;
+}
+
+@keyframes border-shimmer {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
 }
 
 .edu-cert-btn i {
     font-size: 1.05rem;
+    transition: transform 0.3s var(--ease-smooth);
 }
 
-/* Continue with remaining sections (Experience, Skills, Certifications, Contact, Footer)... */
-/* Due to length, I'll add the key sections and responsive design */
+.edu-cert-btn:hover i {
+    transform: translateX(3px);
+}
+
+/* Add certificate emoji */
+.edu-cert-btn::before {
+    content: '🎓 ';
+}
 
 /* ===================================
-   TIMELINE & OTHER SECTIONS
-   (Similar structure with Montserrat for headings, Poppins for body)
+   EXPERIENCE SECTION
    =================================== */
-
-.timeline-content h3,
-.skill-name,
-.cert-info h3,
-.contact-card h3 {
-    font-family: 'Montserrat', sans-serif;
+.experience-section {
+    background: var(--charcoal);
 }
 
-.timeline-responsibilities li,
-.tech-badge,
-.language-name,
-.cert-description,
-.contact-card a {
+.timeline {
+    position: relative;
+    padding-left: 60px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, 
+        transparent 0%,
+        var(--gold-bright) 10%,
+        var(--gold-muted) 50%,
+        var(--gold-bright) 90%,
+        transparent 100%
+    );
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 50px;
+    padding: 28px;
+    background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(20, 18, 16, 0.95));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    transition: all 0.4s var(--ease-smooth);
+    backdrop-filter: blur(32px) saturate(200%);
+    box-shadow: var(--shadow-subtle);
+}
+
+.timeline-item:hover {
+    background: linear-gradient(135deg, rgba(32, 32, 32, 0.95), rgba(24, 22, 20, 1));
+    border-color: var(--gold-bright);
+    transform: translateX(8px);
+    box-shadow: var(--shadow-gold), var(--shadow-heavy);
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -48px;
+    top: 32px;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
+    border: 3px solid var(--obsidian);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(200, 200, 200, 0.4);
+    z-index: 2;
+}
+
+.timeline-item:hover .timeline-dot {
+    animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(200, 200, 200, 0.4);
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 30px rgba(200, 200, 200, 0.6);
+    }
+}
+
+.timeline-content h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: var(--text-bright);
+}
+
+.timeline-content h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 6px;
     font-family: 'Poppins', sans-serif;
+}
+
+.timeline-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Add briefcase emoji to date */
+.timeline-date::before {
+    content: '💼';
+    font-size: 1rem;
+}
+
+.timeline-description {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.timeline-responsibilities {
+    list-style: none;
+    margin-top: 14px;
+}
+
+.timeline-responsibilities li {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    padding-left: 26px;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+}
+
+.timeline-responsibilities li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--gold-bright);
+    font-weight: 900;
+    font-size: 1.1rem;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.tech-badge {
+    padding: 6px 14px;
+    background: var(--glass-medium);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    transition: all 0.3s var(--ease-smooth);
+    font-family: 'Poppins', sans-serif;
+}
+
+.tech-badge:hover {
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold-muted));
+    color: var(--obsidian);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+}
+
+/* ===================================
+   SKILLS SECTION
+   =================================== */
+.skills-section {
+    background: var(--metal-black);
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.skill-category {
+    background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(20, 18, 16, 0.95));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 28px;
+    transition: all 0.4s var(--ease-smooth);
+    backdrop-filter: blur(32px) saturate(200%);
+    box-shadow: var(--shadow-subtle);
+}
+
+.skill-category:hover {
+    background: linear-gradient(135deg, rgba(32, 32, 32, 0.95), rgba(24, 22, 20, 1));
+    border-color: var(--gold-bright);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-gold), var(--shadow-heavy);
+}
+
+.skill-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.skill-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--obsidian);
+    box-shadow: var(--shadow-gold), inset 0 -2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform 0.4s var(--ease-bounce);
+}
+
+.skill-category:hover .skill-icon {
+    transform: rotate(-5deg) scale(1.08);
+}
+
+.skill-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--text-bright);
+}
+
+.skill-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: 'Poppins', sans-serif;
+}
+
+.skill-level {
+    display: flex;
+    gap: 4px;
+}
+
+.skill-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--glass-light);
+    border-radius: 50%;
+    transition: all 0.3s var(--ease-smooth);
+}
+
+.skill-dot.filled {
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold-muted));
+    box-shadow: 0 0 8px rgba(200, 200, 200, 0.3);
+}
+
+/* ===================================
+   CERTIFICATIONS SECTION
+   =================================== */
+.certifications-section {
+    background: var(--charcoal);
+}
+
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.cert-card {
+    background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(20, 18, 16, 0.95));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 28px;
+    transition: all 0.4s var(--ease-smooth);
+    backdrop-filter: blur(32px) saturate(200%);
+    box-shadow: var(--shadow-subtle);
+    position: relative;
+    overflow: hidden;
+}
+
+.cert-card:hover {
+    background: linear-gradient(135deg, rgba(32, 32, 32, 0.95), rgba(24, 22, 20, 1));
+    border-color: var(--gold-bright);
+    transform: translateY(-8px) scale(1.015);
+    box-shadow: var(--shadow-gold-strong), var(--shadow-heavy);
+}
+
+.cert-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: var(--shadow-gold);
+    transition: transform 0.4s var(--ease-bounce);
+}
+
+.cert-card:hover .cert-badge {
+    transform: rotate(10deg) scale(1.1);
+}
+
+.cert-info h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+    color: var(--text-bright);
+    padding-right: 60px;
+}
+
+.cert-issuer {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cert-date {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-bottom: 14px;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Add medal emoji to cert date */
+.cert-date::before {
+    content: '🏆';
+    font-size: 1rem;
+}
+
+.cert-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===================================
+   LANGUAGES SECTION
+   =================================== */
+.languages-section {
+    background: var(--metal-black);
+}
+
+.languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.language-card {
+    background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(20, 18, 16, 0.95));
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    transition: all 0.4s var(--ease-smooth);
+    backdrop-filter: blur(32px) saturate(200%);
+    box-shadow: var(--shadow-subtle);
+}
+
+.language-card:hover {
+    background: linear-gradient(135deg, rgba(32, 32, 32, 0.95), rgba(24, 22, 20, 1));
+    border-color: var(--gold-bright);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-gold), var(--shadow-heavy);
+}
+
+.language-flag {
+    font-size: 3rem;
+    transition: transform 0.4s var(--ease-bounce);
+}
+
+.language-card:hover .language-flag {
+    transform: scale(1.15) rotate(-5deg);
+}
+
+.language-info {
+    flex: 1;
+}
+
+.language-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+}
+
+.language-level {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===================================
+   CONTACT SECTION
+   =================================== */
+.contact-section {
+    background: var(--charcoal);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.contact-card {
+    background: linear-gradient(135deg, rgba(28, 28, 28, 0.9), rgba(20, 18, 16, 0.95));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.4s var(--ease-smooth);
+    backdrop-filter: blur(32px) saturate(200%);
+    box-shadow: var(--shadow-subtle);
+}
+
+.contact-card:hover {
+    background: linear-gradient(135deg, rgba(32, 32, 32, 0.95), rgba(24, 22, 20, 1));
+    border-color: var(--gold-bright);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-gold-strong), var(--shadow-heavy);
+}
+
+.contact-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--obsidian);
+    margin: 0 auto 20px;
+    box-shadow: var(--shadow-gold), inset 0 -3px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s var(--ease-bounce);
+}
+
+.contact-card:hover .contact-icon {
+    transform: rotate(-10deg) scale(1.1);
+}
+
+.contact-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+    color: var(--text-bright);
+}
+
+.contact-card a {
+    display: inline-block;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--gold-bright);
+    text-decoration: none;
+    transition: all 0.3s var(--ease-smooth);
+    font-family: 'Poppins', sans-serif;
+}
+
+.contact-card a:hover {
+    color: var(--text-bright);
+    transform: translateY(-2px);
 }
 
 /* ===================================
@@ -1706,6 +2323,15 @@ body::after {
 
 .footer-subtitle {
     color: var(--text-secondary) !important;
+}
+
+/* Add emoji to footer */
+.footer-content p:first-child::before {
+    content: '⚡ ';
+}
+
+.footer-content p:last-child::after {
+    content: ' 🚀';
 }
 
 /* ===================================
@@ -1754,7 +2380,6 @@ body::after {
         margin: 0 auto;
     }
     
-    /* Achievement Bubble Responsive */
     .achievement-bubble {
         bottom: 20px;
         right: 20px;
@@ -1815,7 +2440,6 @@ body::after {
         font-size: 2.2rem;
     }
     
-    /* Achievement Bubble on Tablet */
     .achievement-bubble {
         bottom: 15px;
         right: 15px;
@@ -1948,7 +2572,6 @@ body::after {
         font-size: 0.9rem;
     }
     
-    /* Achievement Bubble on Mobile */
     .achievement-bubble {
         bottom: 10px;
         right: 10px;
@@ -2015,7 +2638,6 @@ body::after {
         display: none;
     }
     
-    /* Mobile Navigation */
     .nav-name {
         font-size: 1.4rem;
     }
@@ -2033,7 +2655,6 @@ body::after {
     }
 }
 
-/* Extra small devices */
 @media (max-width: 375px) {
     body {
         font-size: 14px;
@@ -2054,5 +2675,94 @@ body::after {
     .btn {
         font-size: 0.95rem;
         padding: 12px 24px;
+    }
+}
+
+/* ===================================
+   LOADING ANIMATION
+   =================================== */
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--obsidian);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.5s var(--ease-smooth);
+}
+
+.page-loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--glass-border);
+    border-top-color: var(--gold-bright);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loader-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    letter-spacing: 2px;
+}
+
+/* ===================================
+   UTILITY CLASSES
+   =================================== */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.opacity-0 { opacity: 0; }
+.opacity-50 { opacity: 0.5; }
+.opacity-100 { opacity: 1; }
+
+/* ===================================
+   PRINT STYLES
+   =================================== */
+@media print {
+    .side-nav,
+    .mobile-nav-toggle,
+    .achievement-bubble,
+    .scroll-indicator,
+    .cursor,
+    .cursor-follower {
+        display: none !important;
+    }
+    
+    .main-container {
+        margin-left: 0;
+    }
+    
+    body {
+        background: white;
+        color: black;
     }
 }
