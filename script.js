@@ -534,14 +534,14 @@ const educationData = [
         degree: 'Bachelor of Science in IT',
         institution: 'Middlesex University Dubai',
         date: 'Sep 2024 - Jun 2025',
-        certificateLink: '#' // Add your certificate link here
+        certificateLink: 'https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing' // Add your certificate link here
     },
     {
         icon: 'fa-laptop-code',
         degree: 'Advanced Diploma in Software Engineering',
         institution: 'Aptech Qatar',
         date: 'Nov 2020 - Nov 2023',
-        certificateLink: '#' // Add your certificate link here
+        certificateLink: 'https:/https://drive.google.com/file/d/1hYnsw-6tLpbGuWy4RZCoeGUPDkzIrNSr/view?usp=sharing' // Add your certificate link here
     },
     {
         icon: 'fa-school',
