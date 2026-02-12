@@ -1127,16 +1127,18 @@ body::after {
 
 .about-grid {
     display: grid;
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 400px 1fr;
     gap: 60px;
     align-items: start;
 }
 
-.about-content {
+.about-image {
     order: 1;
+    position: sticky;
+    top: 100px;
 }
 
-.about-visual {
+.about-content {
     order: 2;
 }
 
@@ -2468,15 +2470,12 @@ body::after {
     .about-content {
         order: 2;
     }
-    .about-visual {
-        order: 1;
-        max-width: 450px;
-        margin: 0 auto;
-    }
     .about-image {
         order: 1;
-        max-width: 350px;
+        max-width: 400px;
         margin: 0 auto;
+        position: relative;
+        top: 0;
     }
 
     .featured-cert-content {
@@ -2767,95 +2766,118 @@ body::after {
 }
 
 /* ===================================
-   EXPERIENCE LETTER BUTTONS - GOLD THEME
+   EXPERIENCE LETTER BUTTONS & GOLD ACCENTS
    =================================== */
-.timeline-link,
-.view-link {
+
+/* Experience Letter Button Styles */
+.timeline-link {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     padding: 12px 24px;
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 215, 0, 0.08));
-    border: 2px solid rgba(212, 175, 55, 0.4);
-    border-radius: 10px;
-    color: #FFD700;
+    background: linear-gradient(135deg, 
+        rgba(212, 175, 55, 0.1),
+        rgba(255, 215, 0, 0.08)
+    );
+    border: 2px solid transparent;
+    border-radius: 12px;
+    color: #D4AF37;
     text-decoration: none;
     font-size: 15px;
     font-weight: 600;
     font-family: 'Darker Grotesque', sans-serif;
-    transition: all 0.4s var(--ease-elegant);
+    letter-spacing: 0.3px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
 }
 
-.timeline-link::before,
-.view-link::before {
+/* Animated gold border gradient */
+.timeline-link::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
-    transition: left 0.5s ease;
+    inset: 0;
+    border-radius: 12px;
+    padding: 2px;
+    background: linear-gradient(
+        135deg,
+        #FFD700,
+        #D4AF37,
+        #FFA500,
+        #FFD700
+    );
+    background-size: 300% 300%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: gold-shimmer 3s ease infinite;
+    opacity: 0.6;
 }
 
-.timeline-link:hover::before,
-.view-link:hover::before {
-    left: 100%;
+@keyframes gold-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
-.timeline-link:hover,
-.view-link:hover {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(255, 215, 0, 0.18));
-    border-color: #FFD700;
+.timeline-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.15),
+        transparent
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.timeline-link:hover {
+    background: linear-gradient(135deg, 
+        rgba(212, 175, 55, 0.2),
+        rgba(255, 215, 0, 0.15)
+    );
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4), 0 0 30px rgba(255, 215, 0, 0.2);
-    color: #FFF;
+    box-shadow: 
+        0 8px 25px rgba(212, 175, 55, 0.3),
+        0 0 40px rgba(255, 215, 0, 0.2);
+    color: #FFD700;
 }
 
-.timeline-link i,
-.view-link i {
+.timeline-link:hover::after {
+    opacity: 1;
+}
+
+.timeline-link:hover::before {
+    opacity: 1;
+    animation-duration: 2s;
+}
+
+.timeline-link i {
     font-size: 18px;
     transition: transform 0.3s ease;
 }
 
-.timeline-link:hover i,
-.view-link:hover i {
-    transform: scale(1.2) rotate(5deg);
+.timeline-link:hover i {
+    transform: scale(1.15) rotate(5deg);
 }
 
-.experience-actions,
-.cert-actions {
+.timeline-link:active {
+    transform: translateY(-1px);
+}
+
+/* Experience actions container */
+.experience-actions {
     margin-top: 20px;
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 12px;
 }
 
-/* ===================================
-   GOLD TOUCHES - HEADINGS & BORDERS
-   =================================== */
-
-/* Section Titles with Gold Gradient */
+/* Gold accents for section titles */
 .section-title {
     position: relative;
-    background: linear-gradient(135deg, #FFD700, #FFA500, #FFD700);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gold-shimmer 3s ease-in-out infinite;
-}
-
-@keyframes gold-shimmer {
-    0%, 100% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
+    text-shadow: 0 2px 20px rgba(212, 175, 55, 0.3);
 }
 
 .section-title .title-number {
@@ -2863,160 +2885,139 @@ body::after {
     text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
 }
 
-/* Hero Name Gold Gradient */
-.hero-name .text-gradient {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gold-shimmer 3s ease-in-out infinite;
-    text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-}
-
-/* Timeline Item Gold Border Accent */
-.timeline-item::before {
-    border: 3px solid rgba(212, 175, 55, 0.3);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-}
-
-.timeline-item:hover::before {
-    border-color: #FFD700;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-}
-
-/* Stat Cards Gold Border */
-.stat-card {
-    border: 2px solid rgba(212, 175, 55, 0.2);
-    box-shadow: var(--shadow-medium), 0 0 25px rgba(212, 175, 55, 0.1);
-}
-
-.stat-card:hover {
-    border-color: rgba(212, 175, 55, 0.5);
-    box-shadow: var(--shadow-heavy), 0 0 40px rgba(255, 215, 0, 0.3);
-}
-
-/* Education Cards Gold Accent */
-.edu-card {
-    border-top: 3px solid rgba(212, 175, 55, 0.3);
-}
-
-.edu-card:hover {
-    border-top-color: #FFD700;
-    box-shadow: var(--shadow-heavy), 0 0 30px rgba(255, 215, 0, 0.2);
-}
-
-/* Certification Cards Gold Glow */
-.cert-card:hover,
-.featured-cert:hover {
-    box-shadow: var(--shadow-heavy), 0 0 35px rgba(212, 175, 55, 0.3);
-}
-
-/* Skill Cards Gold Progress Bar */
-.skill-fill {
-    background: linear-gradient(90deg, #D4AF37, #FFD700, #FFA500);
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        #FFD700,
+        #D4AF37,
+        transparent
+    );
+    border-radius: 2px;
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
-/* Contact Cards Gold LED */
-.contact-led {
-    background: radial-gradient(circle, #FFD700, #D4AF37);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 40px rgba(212, 175, 55, 0.3);
+/* Gold touch for hero name */
+.text-gradient {
+    background: linear-gradient(135deg, 
+        #FFD700 0%,
+        #D4AF37 50%,
+        #FFA500 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gold-gradient-shift 4s ease infinite;
 }
 
-/* Glass Container Gold Border Enhancement */
-.glass-container:hover::before {
-    opacity: 0.8;
+@keyframes gold-gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Gold borders for cards */
+.glass-container:hover::before,
+.stat-card:hover::before,
+.edu-card:hover::before,
+.timeline-item:hover::before,
+.skill-card:hover::before,
+.cert-card:hover::before {
     background: linear-gradient(
         135deg,
         #FFD700 0%,
-        #FFA500 20%,
+        var(--gold-shimmer) 20%,
         #D4AF37 40%,
-        #FFD700 60%,
+        var(--gold-etched) 60%,
         #FFA500 80%,
         #FFD700 100%
     );
+    opacity: 0.8;
 }
 
-/* Navigation Gold Accents */
-.nav-link.active {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(255, 215, 0, 0.1));
-    border-left: 4px solid #FFD700;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-}
-
-.nav-link.active i {
-    color: #FFD700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-/* Timeline Dot Gold */
+/* Timeline dot gold accent */
 .timeline-dot {
-    background: radial-gradient(circle, #FFD700, #D4AF37);
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 0 50px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
 }
 
-/* Primary Button Gold Glow */
-.btn-primary {
-    background: linear-gradient(135deg, #D4AF37, #FFD700);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+/* About Section Specific Styles */
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 
-.btn-primary:hover {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    box-shadow: 0 12px 35px rgba(255, 215, 0, 0.5), 0 0 40px rgba(212, 175, 55, 0.3);
+.about-paragraph {
+    margin-bottom: 20px;
+    line-height: 1.9;
+    color: var(--text-primary);
+    font-size: 17px;
+    text-align: justify;
 }
 
-/* Featured Cert Gold Badge */
-.featured-cert-badge {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+.about-paragraph:last-child {
+    margin-bottom: 0;
 }
 
-/* Tech Badge Gold Hover */
-.tech-badge:hover {
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(255, 215, 0, 0.15));
-    border-color: #FFD700;
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+.about-highlights {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 10px;
 }
 
-/* ===================================
-   RESPONSIVE ADJUSTMENTS FOR BUTTONS
-   =================================== */
-@media (max-width: 768px) {
-    .timeline-link,
-    .view-link {
-        padding: 10px 20px;
-        font-size: 14px;
+/* Responsive adjustments for about paragraphs */
+@media (max-width: 968px) {
+    .about-content {
+        gap: 25px;
     }
     
-    .experience-actions,
-    .cert-actions {
-        flex-direction: column;
+    .about-paragraph {
+        font-size: 16px;
+        text-align: left;
+    }
+    
+    .about-highlights {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-paragraph {
+        font-size: 15px;
+    }
+    
+    .about-highlights {
         gap: 12px;
     }
+}
+
+@media (max-width: 768px) {
+    .timeline-link {
+        font-size: 14px;
+        padding: 10px 18px;
+    }
     
-    .timeline-link,
-    .view-link {
-        width: 100%;
-        justify-content: center;
+    .experience-actions {
+        gap: 10px;
+    }
+    
+    .about-highlights {
+        grid-template-columns: 1fr;
     }
 }
 
 @media (max-width: 480px) {
-    .timeline-link,
-    .view-link {
-        padding: 9px 16px;
-        font-size: 13px;
-        gap: 8px;
+    .timeline-link {
+        width: 100%;
+        justify-content: center;
     }
     
-    .timeline-link i,
-    .view-link i {
-        font-size: 16px;
+    .experience-actions {
+        flex-direction: column;
     }
 }
-
-/* ===================================
-   END OF STYLESHEET
-   =================================== */
