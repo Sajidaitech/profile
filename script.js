@@ -253,10 +253,14 @@ const experienceData = [
         company: 'Star Link / UCC-Bahadir-Tedeschia JV (HIAEP)',
         location: 'Doha, Qatar',
         responsibilities: [
-            'Delivered daily IT support for 200+ staff across retail and corporate offices',
-            'Resolved L1 & L2 incidents with quick turnaround times',
-            'Managed IT support for the Hamad International Airport Expansion Project',
-            'Monitored and documented IT assets, reducing missing equipment by 20%'
+            'Systems & Cloud Administration: Full Microsoft 365 suite administration including User Accounts, Security Groups, and Permission Management via M365 Admin Center',
+            'Operating Systems: Advanced troubleshooting for Windows 10/11 and Windows Server environments',
+            'Directory Services: Management of Active Directory objects and Group Policy Objects (GPO)',
+            'Infrastructure & Networking: End-to-end onsite office setup including structured cabling, workstation staging, and configuration of managed switches',
+            'Telephony: Installation and troubleshooting of VoIP phone systems and IP-based communication tools',
+            'L1/L2 Incident Management: Rapid diagnosis and resolution of hardware, software, and connectivity issues for 200+ staff',
+            'Industry-Specific Support: Specialized technical support for engineering tools including AutoCAD and Primavera P6',
+            'IT Asset Management (ITAM): Rigorous tracking and documentation of hardware lifecycle, reducing missing equipment by 20%'
         ],
         links: [
             { text: 'Starlink Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
@@ -272,7 +276,9 @@ const experienceData = [
             'Handled inbound/outbound customer calls with resolution focus',
             'Identified customer needs and provided technical support',
             'Maintained accurate call records in database systems',
-            'Built sustainable customer relationships'
+            'Built sustainable customer relationships',
+            'Consistently ranked in the top 10% for First Call Resolution (FCR) by diagnosing technical mobile and internet issues over the phone.',
+            'Bridged the gap between non-technical customers and the backend engineering team by documenting complex bugs in the CRM/Ticketing system.',
         ]
     }
 ];
@@ -771,67 +777,27 @@ const translations = {
         contact_location_value: "Doha, Qatar",
         footer_copyright: "© 2026 Sajid Mehmood. Engineered with precision.",
         footer_subtitle: "IT Engineer & Technical Support Specialist"
-    },
-    ar: {
-        nav_name: "ساجد محمود",
-        nav_title: "مهندس تقنية معلومات",
-        nav_status: "متاح للفرص",
-        nav_home: "الرئيسية",
-        nav_about: "من أنا",
-        nav_education: "التعليم",
-        nav_experience: "الخبرة",
-        nav_skills: "المهارات",
-        nav_certifications: "الشهادات",
-        nav_contact: "اتصل",
-        hero_greeting: "تهيئة النظام...",
-        hero_first_name: "ساجد",
-        hero_last_name: "محمود",
-        hero_description: "مهندس دعم تقني متميز بخبرة تزيد عن 4 سنوات في تقديم دعم فني استثنائي في قطاعات الرعاية الصحية والهجرة والاتصالات. متخصص معتمد CCNA في بنية الشبكات وتحسين البنية التحتية.",
-        btn_connect: "بدء الاتصال",
-        btn_download_cv: "تحميل السيرة الذاتية",
-        stat_years: "سنوات خبرة",
-        stat_tickets: "تذاكر محلولة",
-        stat_sla: "الامتثال لاتفاقية مستوى الخدمة",
-        scroll_explore: "مرر لاستكشاف لوحات التحكم",
-        about_title: "من أنا",
-        education_title: "التعليم",
-        experience_title: "الخبرة المهنية",
-        skills_title: "المهارات والخبرة",
-        certifications_title: "الشهادات والإنجازات",
-        contact_title: "تواصل معي",
-        tech_stack_title: "الأدوات التقنية",
-        languages_title: "اللغات",
-        latest_achievement: "آخر إنجاز",
-        ccna_cert_title: "CCNA 200-301 أساسيات الشبكات",
-        ccna_cert_issuer: "Simplilearn SkillUp",
-        ccna_cert_date: "مكتمل: 17 يناير 2026",
-        ccna_cert_desc: "شهادة شاملة تغطي أساسيات الشبكات وبروتوكولات التوجيه وتقنيات التبديل ومبادئ أمان الشبكات المؤسسية. رمز الشهادة: 9726449",
-        view_certificate: "عرض الشهادة",
-        contact_intro: "مستعد للتعاون في حلول تقنية مبتكرة؟ أنا دائمًا منفتح لمناقشة مشاريع جديدة وتحديات تقنية أو فرص للمساهمة في مبادرات تكنولوجية متطورة. لنتواصل.",
-        contact_email: "البريد الإلكتروني",
-        contact_phone: "الهاتف",
-        contact_location: "الموقع",
-        contact_location_value: "الدوحة، قطر",
-        footer_copyright: "© 2026 ساجد محمود. مصمم بدقة.",
-        footer_subtitle: "مهندس تقنية معلومات ومتخصص دعم فني"
     }
 };
 
 function changeLanguage(lang) {
     document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = 'ltr';
     
     // Update all text with data-i18n attribute
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (translations[lang][key]) {
+        if (translations[lang] && translations[lang][key]) {
             el.textContent = translations[lang][key];
         }
     });
 
     // Update active button state
     document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(`btn-${lang}`).classList.add('active');
+    const langBtn = document.getElementById(`btn-${lang}`);
+    if (langBtn) {
+        langBtn.classList.add('active');
+    }
 
     // Save choice
     localStorage.setItem('lang', lang);
@@ -844,4 +810,3 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('🎯 Luxury IT Engineer Portfolio Loaded Successfully!');
-
