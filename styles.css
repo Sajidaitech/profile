@@ -1,6 +1,6 @@
 /* ===================================
    LUXURY IT ENGINEER PORTFOLIO
-   Matte Black Metal × Gold Etching
+   Black Matte × Pearl White Theme
    Isometric 3D Dashboard Aesthetic - 2026
    NOW WITH COMIC SANS MS!
    =================================== */
@@ -11,33 +11,33 @@
    CSS CUSTOM PROPERTIES
    =================================== */
 :root {
-    /* Luxury Dark Palette - Matte Black Metal */
-    --obsidian: #0A0806;
-    --onyx: #141210;
-    --charcoal: #1A1A1A;      /* Primary section background */
-    --smoke: #2C2825;
-    --metal-black: #1C1C1C;
+    /* Black Matte, Dark Gray, Gray, Pearl White Palette */
+    --obsidian: #000000;          /* Black Matte */
+    --onyx: #1a1a1a;              /* Very Dark Gray */
+    --charcoal: #2d2d2d;          /* Dark Gray - Primary section background */
+    --smoke: #4a4a4a;             /* Medium Gray */
+    --metal-black: #0f0f0f;       /* Deep Black */
     
-    /* Gold Accent Spectrum */
-    --gold-bright: #D4AF37;
-    --gold-shimmer: #FFD700;
-    --gold-muted: #B8935E;
-    --gold-dark: #8B7355;
-    --gold-etched: #C9A962;
+    /* Gray Accent Spectrum */
+    --gold-bright: #d1d1d1;       /* Light Gray */
+    --gold-shimmer: #e8e8e8;      /* Pearl White */
+    --gold-muted: #a8a8a8;        /* Medium Light Gray */
+    --gold-dark: #7a7a7a;         /* Medium Gray */
+    --gold-etched: #c0c0c0;       /* Silver Gray */
     
     /* Glass Morphism - Control Panel Surfaces */
     --glass-light: rgba(255, 255, 255, 0.04);
     --glass-medium: rgba(255, 255, 255, 0.08);
     --glass-heavy: rgba(255, 255, 255, 0.12);
-    --glass-border: rgba(212, 175, 55, 0.12);
-    --glass-glow: rgba(212, 175, 55, 0.06);
+    --glass-border: rgba(200, 200, 200, 0.12);
+    --glass-glow: rgba(200, 200, 200, 0.06);
     
-    /* Typography */
-    --text-bright: #FAF8F5;
-    --text-primary: #E8E4DF;
-    --text-secondary: #C4BDB5;
-    --text-tertiary: #9A8F84;
-    --text-muted: #6B625A;
+    /* Typography - Pearl White to Gray scale */
+    --text-bright: #f5f5f5;       /* Pearl White */
+    --text-primary: #e0e0e0;      /* Light Pearl */
+    --text-secondary: #b8b8b8;    /* Light Gray */
+    --text-tertiary: #8a8a8a;     /* Medium Gray */
+    --text-muted: #626262;        /* Dark Gray */
     
     /* LED Indicators */
     --led-green: #00FF88;
@@ -48,8 +48,8 @@
     --shadow-subtle: 0 2px 12px rgba(0, 0, 0, 0.5);
     --shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.6);
     --shadow-heavy: 0 16px 48px rgba(0, 0, 0, 0.7);
-    --shadow-gold: 0 0 40px rgba(212, 175, 55, 0.2);
-    --shadow-gold-strong: 0 0 60px rgba(212, 175, 55, 0.35);
+    --shadow-gold: 0 0 40px rgba(200, 200, 200, 0.2);
+    --shadow-gold-strong: 0 0 60px rgba(200, 200, 200, 0.35);
     --shadow-inset-dark: inset 0 2px 8px rgba(0, 0, 0, 0.6);
     --shadow-inset-recess: inset 0 4px 12px rgba(0, 0, 0, 0.7);
     
@@ -78,12 +78,48 @@ body {
     font-weight: 400;
     background: var(--obsidian);
     color: var(--text-primary);
-    line-height: 1.7;
-    font-size: 18px;
+    line-height: 1.8;
+    font-size: 20px;  /* Increased from 18px for better readability */
     overflow-x: hidden;
     position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===================================
+   HEADING STYLES - SINGLE LINE & BOLD
+   =================================== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+    font-weight: 900;  /* Extra bold */
+    white-space: nowrap;  /* Single line */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-bright);
+}
+
+h1 {
+    font-size: 4.5rem;  /* Increased */
+}
+
+h2 {
+    font-size: 3.2rem;  /* Increased */
+}
+
+h3 {
+    font-size: 2rem;    /* Increased */
+}
+
+h4 {
+    font-size: 1.6rem;  /* Increased */
+}
+
+h5 {
+    font-size: 1.3rem;  /* Increased */
+}
+
+h6 {
+    font-size: 1.1rem;  /* Increased */
 }
 
 /* ===================================
@@ -118,7 +154,7 @@ body::after {
         repeating-linear-gradient(
             90deg,
             transparent 0px,
-            rgba(212, 175, 55, 0.015) 1px,
+            rgba(200, 200, 200, 0.015) 1px,
             transparent 2px,
             transparent 60px
         ),
@@ -243,7 +279,7 @@ body::after {
     box-shadow: 
         var(--shadow-gold-strong),
         var(--shadow-heavy),
-        inset 0 0 60px rgba(212, 175, 55, 0.08);
+        inset 0 0 60px rgba(200, 200, 200, 0.08);
     backdrop-filter: blur(40px) saturate(200%);
     padding: 35px;
     display: flex;
@@ -259,12 +295,12 @@ body::after {
     transform: scale(1.05);
     border-color: var(--gold-shimmer);
     box-shadow: 
-        0 0 80px rgba(212, 175, 55, 0.5),
+        0 0 80px rgba(200, 200, 200, 0.5),
         var(--shadow-heavy),
-        inset 0 0 80px rgba(212, 175, 55, 0.12);
+        inset 0 0 80px rgba(200, 200, 200, 0.12);
 }
 
-/* Rotating Gold Ring */
+/* Rotating Gray Ring */
 .bubble-ring {
     position: absolute;
     inset: -8px;
@@ -372,7 +408,7 @@ body::after {
     background: linear-gradient(135deg, var(--gold-bright), var(--gold-muted));
     color: var(--obsidian);
     border-radius: 20px;
-    font-size: 0.7rem;
+    font-size: 0.8rem;  /* Increased */
     font-weight: 800;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -404,7 +440,7 @@ body::after {
 
 .bubble-title {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.3rem;
+    font-size: 1.4rem;  /* Increased */
     font-weight: 900;
     color: var(--text-bright);
     margin-bottom: 8px;
@@ -412,7 +448,7 @@ body::after {
 }
 
 .bubble-subtitle {
-    font-size: 0.85rem;
+    font-size: 0.95rem;  /* Increased */
     font-weight: 600;
     color: var(--gold-bright);
     margin-bottom: 10px;
@@ -421,7 +457,7 @@ body::after {
 
 .bubble-date {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 0.75rem;
+    font-size: 0.85rem;  /* Increased */
     font-weight: 600;
     color: var(--text-tertiary);
     letter-spacing: 0.5px;
@@ -549,7 +585,7 @@ body::after {
     background: linear-gradient(90deg, var(--gold-bright), var(--gold-muted));
     border-radius: 2px;
     transition: all 0.3s var(--ease-smooth);
-    box-shadow: 0 0 8px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 0 8px rgba(200, 200, 200, 0.25);
 }
 
 .mobile-nav-toggle.active span:nth-child(1) {
@@ -584,10 +620,10 @@ body::after {
     z-index: 1000;
     overflow-y: auto;
     transition: transform 0.5s var(--ease-elegant);
-    box-shadow: 8px 0 64px rgba(0, 0, 0, 0.7), inset -1px 0 0 rgba(212, 175, 55, 0.08);
+    box-shadow: 8px 0 64px rgba(0, 0, 0, 0.7), inset -1px 0 0 rgba(200, 200, 200, 0.08);
 }
 
-/* Gold Etched Accent Line */
+/* Gray Etched Accent Line */
 .side-nav::before {
     content: '';
     position: absolute;
@@ -627,7 +663,7 @@ body::after {
     border-radius: 10px;
     color: var(--text-tertiary);
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.95rem;  /* Increased */
     cursor: pointer;
     transition: all 0.3s var(--ease-smooth);
     letter-spacing: 1px;
@@ -673,7 +709,7 @@ body::after {
         var(--shadow-heavy);
 }
 
-/* Gold Rotating Ring */
+/* Gray Rotating Ring */
 .avatar-ring {
     position: absolute;
     inset: -6px;
@@ -694,16 +730,19 @@ body::after {
 
 .nav-name {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.65rem;
-    font-weight: 700;
+    font-size: 1.8rem;  /* Increased */
+    font-weight: 900;
     margin-bottom: 6px;
     color: var(--text-bright);
     letter-spacing: 0.5px;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .nav-title {
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     font-weight: 500;
     color: var(--text-secondary);
     margin-bottom: 14px;
@@ -720,7 +759,7 @@ body::after {
     background: var(--glass-medium);
     border: 1px solid var(--gold-muted);
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;  /* Increased */
     font-weight: 600;
     color: var(--gold-bright);
     box-shadow: var(--shadow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -755,7 +794,7 @@ body::after {
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: 10px;
-    font-size: 1rem;
+    font-size: 1.1rem;  /* Increased */
     font-weight: 500;
     transition: all 0.3s var(--ease-smooth);
     position: relative;
@@ -764,7 +803,7 @@ body::after {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
-/* Gold Etched Indicator */
+/* Gray Etched Indicator */
 .nav-link::before {
     content: '';
     position: absolute;
@@ -807,7 +846,7 @@ body::after {
 
 .nav-link i {
     width: 22px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;  /* Increased */
     color: var(--gold-muted);
     transition: all 0.3s var(--ease-smooth);
 }
@@ -842,7 +881,7 @@ body::after {
     border-radius: 10px;
     border: 1px solid var(--glass-border);
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1.2rem;  /* Increased */
     transition: all 0.3s var(--ease-bounce);
     box-shadow: var(--shadow-subtle);
 }
@@ -883,8 +922,8 @@ body::after {
     position: absolute;
     inset: 0;
     background-image:
-        repeating-linear-gradient(0deg, transparent 0px, transparent 79px, rgba(212, 175, 55, 0.015) 79px, rgba(212, 175, 55, 0.015) 80px),
-        repeating-linear-gradient(90deg, transparent 0px, transparent 79px, rgba(212, 175, 55, 0.015) 79px, rgba(212, 175, 55, 0.015) 80px);
+        repeating-linear-gradient(0deg, transparent 0px, transparent 79px, rgba(200, 200, 200, 0.015) 79px, rgba(200, 200, 200, 0.015) 80px),
+        repeating-linear-gradient(90deg, transparent 0px, transparent 79px, rgba(200, 200, 200, 0.015) 79px, rgba(200, 200, 200, 0.015) 80px);
     opacity: 0.4;
     pointer-events: none;
 }
@@ -908,24 +947,27 @@ body::after {
 
 .hero-greeting {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 1.1rem;  /* Increased */
+    font-weight: 700;
     color: var(--gold-bright);
     display: block;
     margin-bottom: 10px;
     letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 20px rgba(200, 200, 200, 0.4);
     text-transform: uppercase;
 }
 
 .hero-name {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 4.2rem;
+    font-size: 4.5rem;  /* Increased */
     font-weight: 900;
     line-height: 1.08;
     margin-bottom: 14px;
     color: var(--text-bright);
     letter-spacing: -1.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .text-gradient {
@@ -935,7 +977,7 @@ body::after {
     background-clip: text;
     animation: gold-shimmer 3.5s ease-in-out infinite;
     background-size: 200% 200%;
-    filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
+    filter: drop-shadow(0 0 30px rgba(200, 200, 200, 0.3));
 }
 
 @keyframes gold-shimmer {
@@ -945,7 +987,7 @@ body::after {
 
 .hero-role {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.5rem;
+    font-size: 1.7rem;  /* Increased */
     font-weight: 600;
     color: var(--text-secondary);
     margin-bottom: 20px;
@@ -954,7 +996,7 @@ body::after {
 }
 
 .hero-description {
-    font-size: 1.05rem;
+    font-size: 1.2rem;  /* Increased */
     font-weight: 400;
     color: var(--text-secondary);
     line-height: 1.8;
@@ -975,17 +1017,17 @@ body::after {
 
 /* ===================================
    BUTTON STYLES
-   Gold-Etched Control Buttons
+   Gray-Etched Control Buttons
    =================================== */
 .btn {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 32px;
+    padding: 16px 36px;  /* Increased padding */
     border-radius: 10px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.1rem;  /* Increased */
     text-decoration: none;
     transition: all 0.4s var(--ease-smooth);
     cursor: pointer;
@@ -1099,7 +1141,7 @@ body::after {
     animation: led-pulse 2.5s ease-in-out infinite;
 }
 
-/* Gold Icon Badge */
+/* Gray Icon Badge */
 .stat-icon {
     width: 60px;
     height: 60px;
@@ -1108,7 +1150,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.6rem;  /* Increased */
     color: var(--obsidian);
     box-shadow: var(--shadow-gold), inset 0 -2px 6px rgba(0, 0, 0, 0.25);
     transition: transform 0.4s var(--ease-bounce);
@@ -1124,21 +1166,21 @@ body::after {
 
 .stat-number {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 2.5rem;
+    font-size: 2.8rem;  /* Increased */
     font-weight: 900;
     color: var(--gold-bright);
     line-height: 1;
-    text-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+    text-shadow: 0 0 25px rgba(200, 200, 200, 0.35);
 }
 
 .stat-plus {
-    font-size: 1.8rem;
+    font-size: 2rem;  /* Increased */
     color: var(--gold-muted);
 }
 
 .stat-label {
     display: block;
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     font-weight: 600;
     color: var(--text-secondary);
     margin-top: 4px;
@@ -1180,7 +1222,7 @@ body::after {
     align-items: center;
     gap: 10px;
     color: var(--text-tertiary);
-    font-size: 0.8rem;
+    font-size: 0.9rem;  /* Increased */
     font-weight: 600;
     letter-spacing: 1.2px;
     text-transform: uppercase;
@@ -1240,7 +1282,7 @@ body::after {
 
 .section-title {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 2.8rem;
+    font-size: 3.2rem;  /* Increased */
     font-weight: 900;
     margin-bottom: 56px;
     display: flex;
@@ -1249,14 +1291,16 @@ body::after {
     color: var(--text-bright);
     letter-spacing: -0.5px;
     position: relative;
+    white-space: nowrap;
+    overflow: visible;  /* Allow overflow for decoration */
 }
 
 .title-number {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.6rem;
+    font-size: 1.8rem;  /* Increased */
     font-weight: 900;
     color: var(--gold-bright);
-    text-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 25px rgba(200, 200, 200, 0.4);
 }
 
 .title-decoration {
@@ -1264,7 +1308,7 @@ body::after {
     height: 2px;
     background: linear-gradient(to right, var(--gold-bright) 0%, transparent 100%);
     max-width: 350px;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 0 15px rgba(200, 200, 200, 0.25);
 }
 
 .section-title::after {
@@ -1273,7 +1317,7 @@ body::after {
     height: 2px;
     background: linear-gradient(to right, var(--gold-bright) 0%, transparent 100%);
     max-width: 350px;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 0 15px rgba(200, 200, 200, 0.25);
 }
 
 /* ===================================
@@ -1299,7 +1343,7 @@ body::after {
 }
 
 .about-text p {
-    font-size: 1.05rem;
+    font-size: 1.2rem;  /* Increased */
     font-weight: 400;
     color: var(--text-secondary);
     line-height: 1.8;
@@ -1308,7 +1352,7 @@ body::after {
 }
 
 .lead-text {
-    font-size: 1.2rem !important;
+    font-size: 1.4rem !important;  /* Increased */
     color: var(--text-primary) !important;
     font-weight: 500 !important;
     margin-bottom: 24px !important;
@@ -1327,14 +1371,14 @@ body::after {
     gap: 10px;
     color: var(--text-secondary);
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .highlight-item i {
     color: var(--gold-bright);
-    font-size: 1.05rem;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    font-size: 1.15rem;  /* Increased */
+    text-shadow: 0 0 10px rgba(200, 200, 200, 0.4);
 }
 
 /* About Image Section */
@@ -1385,7 +1429,7 @@ body::after {
     transform: translate(-50%, -50%);
     width: 120%;
     height: 120%;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(200, 200, 200, 0.15) 0%, transparent 70%);
     border-radius: 50%;
     z-index: 0;
     opacity: 0.6;
@@ -1428,7 +1472,7 @@ body::after {
 
 .panel-label {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 0.8rem;
+    font-size: 0.9rem;  /* Increased */
     font-weight: 700;
     color: var(--text-tertiary);
     letter-spacing: 1.5px;
@@ -1436,7 +1480,7 @@ body::after {
 }
 
 .panel-indicator {
-    font-size: 0.75rem;
+    font-size: 0.85rem;  /* Increased */
     font-weight: 700;
     color: var(--led-green);
     padding: 4px 10px;
@@ -1462,7 +1506,7 @@ body::after {
 }
 
 .metric-label {
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     font-weight: 600;
     color: var(--text-secondary);
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -1480,13 +1524,13 @@ body::after {
     height: 100%;
     background: linear-gradient(90deg, var(--gold-bright), var(--gold-etched));
     border-radius: 6px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 10px rgba(200, 200, 200, 0.4);
     transition: width 1s var(--ease-elegant);
 }
 
 .metric-value {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     font-weight: 700;
     color: var(--gold-bright);
     text-align: right;
@@ -1530,7 +1574,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.7rem;
+    font-size: 1.8rem;  /* Increased */
     color: var(--obsidian);
     margin-bottom: 20px;
     box-shadow: var(--shadow-gold), inset 0 -2px 8px rgba(0, 0, 0, 0.25);
@@ -1543,22 +1587,25 @@ body::after {
 
 .edu-card h3 {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.4rem;
-    font-weight: 700;
+    font-size: 1.6rem;  /* Increased */
+    font-weight: 900;
     margin-bottom: 10px;
     color: var(--text-bright);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .edu-card h4 {
-    font-size: 1.05rem;
-    font-weight: 600;
+    font-size: 1.2rem;  /* Increased */
+    font-weight: 700;
     color: var(--gold-bright);
     margin-bottom: 10px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .edu-date {
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     font-weight: 500;
     color: var(--text-tertiary);
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -1569,11 +1616,11 @@ body::after {
     align-items: center;
     gap: 8px;
     margin-top: 20px;
-    padding: 10px 20px;
+    padding: 12px 22px;  /* Increased */
     background: linear-gradient(135deg, var(--gold-bright), var(--gold-dark));
     color: var(--obsidian);
     border-radius: 10px;
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     font-weight: 600;
     text-decoration: none;
     transition: all 0.3s var(--ease-smooth);
@@ -1588,10 +1635,9 @@ body::after {
 }
 
 .edu-cert-btn i {
-    font-size: 1rem;
+    font-size: 1.1rem;  /* Increased */
 }
 
-/* Continue with remaining sections... */
 /* ===================================
    EXPERIENCE SECTION - TIMELINE
    =================================== */
@@ -1612,7 +1658,7 @@ body::after {
     bottom: 0;
     width: 2px;
     background: linear-gradient(180deg, var(--gold-bright), var(--gold-muted), var(--gold-bright));
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 0 15px rgba(200, 200, 200, 0.3);
 }
 
 .timeline-item {
@@ -1631,7 +1677,7 @@ body::after {
     background: var(--gold-bright);
     border-radius: 50%;
     border: 3px solid var(--obsidian);
-    box-shadow: 0 0 0 2px var(--gold-muted), 0 0 20px rgba(212, 175, 55, 0.5);
+    box-shadow: 0 0 0 2px var(--gold-muted), 0 0 20px rgba(200, 200, 200, 0.5);
     z-index: 2;
 }
 
@@ -1666,7 +1712,7 @@ body::after {
 
 .timeline-date {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 0.85rem;
+    font-size: 0.95rem;  /* Increased */
     font-weight: 700;
     color: var(--gold-bright);
     margin-bottom: 8px;
@@ -1675,22 +1721,25 @@ body::after {
 
 .timeline-content h3 {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.7rem;  /* Increased */
+    font-weight: 900;
     color: var(--text-bright);
     margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .timeline-company {
-    font-size: 1.05rem;
-    font-weight: 600;
+    font-size: 1.2rem;  /* Increased */
+    font-weight: 700;
     color: var(--gold-muted);
     margin-bottom: 4px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .timeline-location {
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     color: var(--text-tertiary);
     margin-bottom: 16px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -1705,7 +1754,7 @@ body::after {
     padding-left: 24px;
     margin-bottom: 8px;
     position: relative;
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     color: var(--text-secondary);
     line-height: 1.6;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -1716,7 +1765,7 @@ body::after {
     position: absolute;
     left: 0;
     color: var(--gold-bright);
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
 }
 
 .timeline-link {
@@ -1724,13 +1773,13 @@ body::after {
     align-items: center;
     gap: 8px;
     margin-top: 14px;
-    padding: 8px 16px;
+    padding: 10px 18px;  /* Increased */
     background: var(--glass-medium);
     color: var(--gold-bright);
     border: 1px solid var(--gold-muted);
     border-radius: 8px;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     font-weight: 600;
     transition: all 0.3s var(--ease-smooth);
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -1786,9 +1835,12 @@ body::after {
 
 .skill-name {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.3rem;
-    font-weight: 700;
+    font-size: 1.5rem;  /* Increased */
+    font-weight: 900;
     color: var(--text-bright);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .skill-icon {
@@ -1799,7 +1851,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.4rem;  /* Increased */
     color: var(--obsidian);
     box-shadow: var(--shadow-gold), inset 0 -2px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.4s var(--ease-bounce);
@@ -1821,16 +1873,19 @@ body::after {
     height: 100%;
     background: linear-gradient(90deg, var(--gold-bright), var(--gold-etched));
     border-radius: 6px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 10px rgba(200, 200, 200, 0.4);
     transition: width 1s var(--ease-elegant);
 }
 
 .subsection-title {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-size: 2rem;  /* Increased */
+    font-weight: 900;
     color: var(--text-bright);
     margin-bottom: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tech-items {
@@ -1840,13 +1895,13 @@ body::after {
 }
 
 .tech-badge {
-    padding: 10px 18px;
+    padding: 12px 20px;  /* Increased */
     background: var(--glass-light);
     border: 1px solid var(--glass-border);
     border-radius: 10px;
     color: var(--text-secondary);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     transition: all 0.3s var(--ease-smooth);
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
@@ -1881,15 +1936,15 @@ body::after {
 }
 
 .language-name {
-    font-size: 1.15rem;
-    font-weight: 700;
+    font-size: 1.3rem;  /* Increased */
+    font-weight: 900;
     color: var(--text-bright);
     margin-bottom: 6px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .language-level {
-    font-size: 0.9rem;
+    font-size: 1rem;  /* Increased */
     color: var(--gold-bright);
     font-weight: 600;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -1935,7 +1990,7 @@ body::after {
     background: linear-gradient(135deg, var(--gold-bright), var(--gold-muted));
     color: var(--obsidian);
     border-radius: 12px;
-    font-size: 0.85rem;
+    font-size: 0.95rem;  /* Increased */
     font-weight: 700;
     box-shadow: var(--shadow-gold);
     text-transform: uppercase;
@@ -1959,7 +2014,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
+    font-size: 2.8rem;  /* Increased */
     color: var(--obsidian);
     box-shadow: var(--shadow-gold-strong), inset 0 -3px 10px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
@@ -1967,29 +2022,32 @@ body::after {
 
 .cert-info h3 {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 2rem;
+    font-size: 2.3rem;  /* Increased */
     font-weight: 900;
     color: var(--text-bright);
     margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cert-issuer {
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-size: 1.3rem;  /* Increased */
+    font-weight: 700;
     color: var(--gold-bright);
     margin-bottom: 6px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .cert-date {
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     color: var(--text-tertiary);
     margin-bottom: 14px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 .cert-description {
-    font-size: 1rem;
+    font-size: 1.15rem;  /* Increased */
     color: var(--text-secondary);
     line-height: 1.7;
     margin-bottom: 18px;
@@ -2000,14 +2058,14 @@ body::after {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 12px 24px;
+    padding: 14px 26px;  /* Increased */
     background: var(--glass-medium);
     color: var(--gold-bright);
     border: 1.5px solid var(--gold-muted);
     border-radius: 10px;
     text-decoration: none;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     transition: all 0.3s var(--ease-smooth);
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
@@ -2040,14 +2098,17 @@ body::after {
 
 .cert-card h4 {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.3rem;
-    font-weight: 700;
+    font-size: 1.5rem;  /* Increased */
+    font-weight: 900;
     color: var(--text-bright);
     margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cert-card p {
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     color: var(--text-secondary);
     margin-bottom: 6px;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -2062,7 +2123,7 @@ body::after {
 
 .contact-intro {
     text-align: center;
-    font-size: 1.15rem;
+    font-size: 1.3rem;  /* Increased */
     font-weight: 400;
     color: var(--text-secondary);
     margin-bottom: 56px;
@@ -2121,7 +2182,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.7rem;
+    font-size: 1.8rem;  /* Increased */
     color: var(--obsidian);
     box-shadow: var(--shadow-gold), inset 0 -2px 8px rgba(0, 0, 0, 0.25);
     transition: transform 0.4s var(--ease-bounce);
@@ -2133,16 +2194,19 @@ body::after {
 
 .contact-card h3 {
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-    font-size: 1.3rem;
-    font-weight: 700;
+    font-size: 1.5rem;  /* Increased */
+    font-weight: 900;
     margin-bottom: 10px;
     color: var(--text-bright);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .contact-card a {
     color: var(--gold-bright);
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.15rem;  /* Increased */
     font-weight: 600;
     transition: color 0.3s var(--ease-smooth);
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -2154,7 +2218,7 @@ body::after {
 
 .contact-card p {
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-size: 1.15rem;  /* Increased */
     font-weight: 400;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
@@ -2170,14 +2234,14 @@ body::after {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 16px 32px;
+    padding: 18px 36px;  /* Increased */
     background: var(--glass-light);
     border: 1px solid var(--glass-border);
     border-radius: 14px;
     color: var(--text-secondary);
     text-decoration: none;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.15rem;  /* Increased */
     transition: all 0.4s var(--ease-smooth);
     backdrop-filter: blur(20px) saturate(180%);
     box-shadow: var(--shadow-subtle);
@@ -2193,7 +2257,7 @@ body::after {
 }
 
 .social-link-large i {
-    font-size: 1.5rem;
+    font-size: 1.7rem;  /* Increased */
 }
 
 /* ===================================
@@ -2215,12 +2279,12 @@ body::after {
     width: 200px;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 15px rgba(200, 200, 200, 0.4);
 }
 
 .footer-content p {
     color: var(--text-tertiary);
-    font-size: 0.95rem;
+    font-size: 1.05rem;  /* Increased */
     font-weight: 500;
     margin: 6px 0;
     font-family: 'Comic Sans MS', 'Comic Sans', cursive;
@@ -2228,7 +2292,7 @@ body::after {
 
 .footer-content .fa-heart {
     color: var(--gold-bright);
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 15px rgba(200, 200, 200, 0.4);
     animation: heartbeat 1.8s ease-in-out infinite;
 }
 
@@ -2245,6 +2309,22 @@ body::after {
    RESPONSIVE DESIGN
    =================================== */
 @media (max-width: 1200px) {
+    body {
+        font-size: 19px;
+    }
+    
+    h1 {
+        font-size: 4rem;
+    }
+    
+    h2 {
+        font-size: 2.8rem;
+    }
+    
+    h3 {
+        font-size: 1.8rem;
+    }
+    
     .hero-content {
         grid-template-columns: 1fr;
         gap: 40px;
@@ -2296,6 +2376,10 @@ body::after {
 }
 
 @media (max-width: 968px) {
+    body {
+        font-size: 18px;
+    }
+    
     .mobile-nav-toggle {
         display: flex;
     }
@@ -2317,7 +2401,7 @@ body::after {
     }
     
     .hero-name {
-        font-size: 3.2rem;
+        font-size: 3.6rem;
     }
     
     .section {
@@ -2325,7 +2409,7 @@ body::after {
     }
     
     .section-title {
-        font-size: 2.2rem;
+        font-size: 2.6rem;
     }
     
     /* Achievement Bubble on Tablet */
@@ -2352,11 +2436,11 @@ body::after {
     }
     
     .bubble-title {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
     }
     
     .bubble-subtitle {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
     }
     
     .bubble-satellite {
@@ -2367,16 +2451,36 @@ body::after {
 }
 
 @media (max-width: 640px) {
+    body {
+        font-size: 17px;
+    }
+    
+    h1 {
+        font-size: 3rem;
+        white-space: normal;  /* Allow wrapping on mobile */
+    }
+    
+    h2 {
+        font-size: 2.2rem;
+        white-space: normal;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+        white-space: normal;
+    }
+    
     .hero {
         padding: 80px 20px 35px;
     }
     
     .hero-name {
-        font-size: 2.6rem;
+        font-size: 2.8rem;
+        white-space: normal;
     }
     
     .hero-role {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
     }
     
     .hero-buttons {
@@ -2394,9 +2498,10 @@ body::after {
     }
     
     .section-title {
-        font-size: 1.9rem;
+        font-size: 2rem;
         flex-direction: column;
         align-items: flex-start;
+        white-space: normal;
     }
     
     .section-title::after {
@@ -2426,7 +2531,8 @@ body::after {
     }
     
     .cert-info h3 {
-        font-size: 1.7rem;
+        font-size: 1.9rem;
+        white-space: normal;
     }
     
     .footer {
@@ -2461,21 +2567,21 @@ body::after {
     }
     
     .bubble-title {
-        font-size: 0.95rem;
+        font-size: 1rem;
         margin-bottom: 6px;
     }
     
     .bubble-subtitle {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         margin-bottom: 6px;
     }
     
     .bubble-date {
-        font-size: 0.65rem;
+        font-size: 0.7rem;
     }
     
     .bubble-badge {
-        font-size: 0.6rem;
+        font-size: 0.65rem;
         padding: 4px 10px;
         margin-bottom: 10px;
     }
