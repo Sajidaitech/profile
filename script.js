@@ -239,37 +239,55 @@ const experienceData = [
     {
         date: 'Nov 2023 - Feb 2024',
         title: 'IT Support Engineer',
-        company: 'Military Medical City Hospital (MMCH)',
+        company: 'Elegancia HealthCare (Military Medical City Hospital)',
         location: 'Doha, Qatar',
+        projects: [
+            '1. EWS-MMC (Qatar Armed Force Military Medical City Hospital)',
+            '2. TVH (The View Hospital)',
+            '3. KMC (Korean Medical Center)'
+        ],
         responsibilities: [
             'Spearheaded the resolution of 500+ high-priority support tickets across three hospital facilities, consistently maintaining a 95% SLA compliance rate',
+            'Installed and configured computer hardware, operating systems, and healthcare-specific applications across multiple medical centers',
             'Executed large-scale system reimaging and automated OS deployment using SCCM/MDT for 300+ medical workstations to minimize clinical downtime',
             'Provided specialized technical support for Electronic Medical Record (EMR) applications, ensuring seamless data access for doctors and nursing staff',
+            'Monitored and maintained critical computer systems and networks, ensuring 24/7 uptime for medical IoT devices and patient care systems',
+            'Delivered face-to-face and remote technical support, guiding healthcare staff through complex system configurations and issue resolution',
+            'Troubleshot system and network problems, diagnosing and solving hardware or software faults in high-pressure medical environments',
+            'Performed hardware repairs and break-fix operations on medical workstations, minimizing equipment downtime',
+            'Resolved system slowness issues and performed online software updates to maintain optimal system performance',
+            'Troubleshot and resolved mail-related problems in Office 365, Outlook Express, and Microsoft Outlook for medical staff',
+            'Configured email clients and performed backup and restore operations to ensure data integrity and business continuity',
+            'Installed and configured network printers (Sharp, HP, Canon), troubleshooting printer connectivity issues across hospital departments',
             'Optimized digital asset inventory protocols, implementing a tracking system that significantly improved hardware lifecycle management and procurement planning',
-            'Collaborated with the network team to troubleshoot connectivity issues within critical care units, ensuring 24/7 uptime for medical IoT devices',
-            'Maintained strict HIPAA compliance standards while performing system maintenance and data handling procedures',
-            'Coordinated with healthcare staff to schedule system updates during off-peak hours, minimizing impact on patient care operations'
+            'Collaborated with the network team to troubleshoot connectivity issues within critical care units, maintaining strict HIPAA compliance standards'
         ],
         link: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'
     },
     {
-        date: 'May 2021 - Nov 2023',
-        title: 'IT Support Engineer / IT Officer',
-        company: 'Star Link / UCC-Bahadir-Tedeschia JV (HIAEP)',
+        date: 'Feb 2022 - Nov 2023',
+        title: 'IT Support Engineer',
+        company: 'Star Link (Client: Power International Holding)',
         location: 'Doha, Qatar',
+        project: 'HIA Western Taxiway & Stand Development Works (May 2022 - Oct 2023)',
         responsibilities: [
             'Delivered comprehensive L1 and L2 technical support for a diverse user base of 200+ employees across retail, corporate, and construction site offices',
             'Managed the end-to-end IT infrastructure setup for the Hamad International Airport Expansion Project (HIAEP) site offices, including hardware staging and peripheral configuration',
-            'Systems & Cloud Administration: Full Microsoft 365 suite administration including User Accounts, Security Groups, and Permission Management via M365 Admin Center',
-            'Operating Systems: Advanced troubleshooting for Windows 10/11 and Windows Server environments, resolving complex boot issues and system failures',
-            'Directory Services: Administered Active Directory user accounts, group policies, and Office 365 permissions to ensure secure and efficient access for project personnel',
-            'Infrastructure & Networking: End-to-end onsite office setup including structured cabling, workstation staging, and configuration of managed switches',
-            'Telephony: Installation and troubleshooting of VoIP phone systems and IP-based communication tools for seamless project communications',
-            'Diagnosed and resolved complex hardware and software incidents, reducing average ticket turnaround time by implementing standardized troubleshooting checklists',
-            'Industry-Specific Support: Specialized technical support for engineering tools including AutoCAD and Primavera P6, ensuring project teams maintained productivity',
-            'IT Asset Management (ITAM): Monitored and audited IT asset movements across multiple project sites, reducing equipment loss and discrepancies by 20% through rigorous documentation',
-            'Performed regular system health checks and preventive maintenance to ensure optimal performance of critical business applications',
-            'Provided on-call support for emergency IT incidents, maintaining high availability of systems supporting airport construction operations'
+            'Installed and configured computer hardware, operating systems, and specialized engineering applications for airport construction project teams',
+            'Monitored and maintained computer systems and networks across multiple remote construction sites, ensuring reliable connectivity',
+            'Provided face-to-face and remote technical support to staff and clients, resolving complex configuration and system issues',
+            'Troubleshot system and network problems, diagnosing and solving hardware or software faults in challenging field environments',
+            'Performed hardware repairs and break-fix operations, minimizing downtime for critical project management systems',
+            'Executed system reimaging and hard drive troubleshooting to resolve software issues and restore system functionality',
+            'Conducted troubleshooting and maintenance of computers, operating systems, and network infrastructure',
+            'Resolved mail-related problems in Office 365, Outlook Express, and Microsoft Outlook for project personnel',
+            'Configured email clients including Outlook Express and Office 365, performing backup and restore operations',
+            'Installed and configured network printers (Sharp, HP, Canon) and troubleshot printer connectivity issues across project sites',
+            'Resolved system slowness problems and performed online software updates to maintain optimal performance',
+            'Administered Active Directory user accounts, group policies, and Office 365 permissions to ensure secure access for project personnel',
+            'Provided specialized technical support for engineering tools including AutoCAD and Primavera P6, ensuring project teams maintained productivity',
+            'Monitored and audited IT asset movements across multiple project sites, reducing equipment loss and discrepancies by 20% through rigorous documentation',
+            'Implemented standardized troubleshooting checklists, reducing average ticket turnaround time and improving service efficiency'
         ],
         links: [
             { text: 'Starlink Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
@@ -279,14 +297,20 @@ const experienceData = [
     {
         date: 'May 2021 - Feb 2022',
         title: 'Customer Service Agent',
-        company: 'STARLINK (Ooredoo International)',
+        company: 'STARLINK (Ooredoo International Telecommunications)',
         location: 'Qatar',
         responsibilities: [
-            'Facilitated high-volume inbound and outbound communications, resolving complex technical inquiries and service issues for Ooredoo\'s international clientele',
-            'Utilized advanced diagnostic questioning to identify customer needs, providing immediate remote technical support for mobile and connectivity services',
-            'Maintained meticulous data integrity by documenting all interactions and technical resolutions within the CRM database system',
+            'Received inbound calls including transferred sales leads and calls from current and potential customers for international telecommunications services',
+            'Managed large amounts of inbound and outbound calls in a timely manner, maintaining high service quality standards',
+            'Identified customer needs, clarified information, researched every issue, and provided solutions and/or alternatives',
+            'Placed outbound follow-up calls to sales leads and persuaded potential customers to complete and submit applications',
+            'Answered questions about product details, company policies, and accounting issues for diverse international clientele',
+            'Assisted customers with technical issues experienced with network and connectivity services, providing immediate remote support',
+            'Utilized advanced diagnostic questioning to provide remote technical support for mobile and telecommunications services',
+            'Built sustainable relationships and engaged customers by going the extra mile in service delivery',
+            'Kept records of all conversations in the call center database in a comprehensible way, maintaining meticulous data integrity',
+            'Frequently attended educational seminars to improve knowledge and performance level, staying current with product offerings',
             'Achieved consistently high customer satisfaction scores through effective problem resolution and professional communication',
-            'Built sustainable customer relationships by providing follow-up support and proactive service recommendations',
             'Collaborated with technical teams to escalate and resolve complex network and service issues affecting multiple customers'
         ]
     }
@@ -305,6 +329,25 @@ function loadExperience() {
         item.setAttribute('data-aos-delay', index * 100);
 
         const responsibilities = exp.responsibilities.map(resp => `<li>${resp}</li>`).join('');
+        
+        // Handle projects for Elegancia Healthcare
+        let projectsHTML = '';
+        if (exp.projects) {
+            projectsHTML = `
+                <div class="timeline-projects">
+                    <strong>Projects:</strong>
+                    <ul class="projects-list">
+                        ${exp.projects.map(proj => `<li>${proj}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        } else if (exp.project) {
+            projectsHTML = `
+                <div class="timeline-projects">
+                    <strong>Project:</strong> ${exp.project}
+                </div>
+            `;
+        }
         
         let linksHTML = '';
         if (exp.link) {
@@ -327,6 +370,7 @@ function loadExperience() {
                 <h3>${exp.title}</h3>
                 <h4 class="timeline-company">${exp.company}</h4>
                 <p class="timeline-location"><i class="fas fa-map-marker-alt"></i> ${exp.location}</p>
+                ${projectsHTML}
                 <ul class="timeline-responsibilities">${responsibilities}</ul>
                 ${linksHTML}
             </div>
