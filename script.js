@@ -541,7 +541,7 @@ const educationData = [
         degree: 'Advanced Diploma in Software Engineering',
         institution: 'Aptech Qatar',
         date: 'Nov 2020 - Nov 2023',
-        certificateLink: 'https:/https://drive.google.com/file/d/1hYnsw-6tLpbGuWy4RZCoeGUPDkzIrNSr/view?usp=sharing' // Add your certificate link here
+        certificateLink: 'https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing' // Add your certificate link here
     },
     {
         icon: 'fa-school',
@@ -844,3 +844,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('🎯 Luxury IT Engineer Portfolio Loaded Successfully!');
+
