@@ -212,37 +212,19 @@ body::after {
 }
 
 /* ===================================
-   PREMIUM CURSOR SYSTEM - SKY BLUE
+   PREMIUM CURSOR SYSTEM - DISABLED
    =================================== */
 .cursor {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #ff6b35;
-    position: fixed;
-    pointer-events: none;
-    z-index: 10000;
-    mix-blend-mode: screen;
-    transition: transform 0.08s ease-out;
-    box-shadow: 0 0 24px #ff6b35, 0 0 12px #f7931e;
-    display: none;
+    display: none !important;
 }
 
 .cursor-follower {
-    width: 36px;
-    height: 36px;
-    border: 2px solid #ee5a6f;
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: all 0.12s var(--ease-smooth);
-    display: none;
+    display: none !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .cursor, .cursor-follower {
-        display: block;
+        display: none !important;
     }
 }
 
@@ -673,13 +655,13 @@ body::after {
 
 .hero-greeting {
     font-family: 'Darker Grotesque', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: #D4A574;
+    color: #FFD700;
     display: block;
     margin-bottom: 10px;
     letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(212, 165, 116, 0.5), 0 2px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 215, 0, 0.6);
     text-transform: uppercase;
 }
 
@@ -689,8 +671,9 @@ body::after {
     font-weight: 900;
     line-height: 1.1;
     margin-bottom: 14px;
-    color: var(--text-bright);
+    color: #ffffff;
     letter-spacing: -1.2px;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.7);
 }
 
 .text-gradient {
@@ -715,28 +698,32 @@ body::after {
 
 .hero-role {
     font-family: 'Darker Grotesque', sans-serif;
-    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-size: clamp(1.2rem, 2.5vw, 1.7rem);
     font-weight: 600;
-    color: var(--text-secondary);
+    color: #ffffff;
     margin-bottom: 20px;
     min-height: 40px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.6);
 }
 
 .hero-description {
-    font-size: 1.05rem;
-    font-weight: 400;
-    color: #f0f4f8;
-    line-height: 1.8;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 1.9;
     margin-bottom: 28px;
     font-family: 'Darker Grotesque', sans-serif;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .hero-description strong {
-    color: #ffffff;
+    color: #FFD700;
     font-weight: 700;
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 2px 2px 6px rgba(0, 0, 0, 0.8);
 }
 
 .hero-buttons {
@@ -2839,4 +2826,4 @@ body::after {
     margin: 48px 0;
     background: linear-gradient(90deg, transparent, var(--gold-bright), var(--gold-muted), var(--gold-bright), transparent);
     opacity: 0.35;
-}   
+}
