@@ -16,49 +16,49 @@
    CSS CUSTOM PROPERTIES
    =================================== */
 :root {
-    /* Night Sky & Cloud Palette */
-    --obsidian: #000000;          /* Pure Black Sky */
-    --onyx: #0a0e1a;              /* Deep Night Blue */
-    --charcoal: #141824;          /* Dark Cloud Gray */
-    --smoke: #1e2838;             /* Storm Cloud */
-    --metal-black: #050810;       /* Midnight Black */
+    /* Warm Wood & Leather Workspace Palette */
+    --obsidian: #2c2420;          /* Dark Brown */
+    --onyx: #3a342f;              /* Warm Dark Brown */
+    --charcoal: #4a403a;          /* Medium Brown */
+    --smoke: #5e5248;             /* Light Brown */
+    --metal-black: #1f1b18;       /* Deep Brown */
     
-    /* Sky Blue Accent Spectrum */
-    --gold-bright: #87ceeb;       /* Sky Blue */
-    --gold-shimmer: #b0e0f6;      /* Bright Sky Blue */
-    --gold-muted: #5fa8d3;        /* Medium Sky Blue */
-    --gold-dark: #4a90c4;         /* Deep Sky Blue */
-    --gold-etched: #6fb9e8;       /* Azure Blue */
+    /* Warm Accent Spectrum - Amber & Copper */
+    --gold-bright: #D4A574;       /* Warm Gold */
+    --gold-shimmer: #C9985F;      /* Copper Gold */
+    --gold-muted: #B8895A;        /* Muted Gold */
+    --gold-dark: #A67B4F;         /* Dark Copper */
+    --gold-etched: #E0B889;       /* Light Amber */
     
-    /* Glass Morphism - Cloud Surfaces */
-    --glass-light: rgba(135, 206, 235, 0.04);
-    --glass-medium: rgba(135, 206, 235, 0.08);
-    --glass-heavy: rgba(135, 206, 235, 0.12);
-    --glass-border: rgba(135, 206, 235, 0.15);
-    --glass-glow: rgba(135, 206, 235, 0.08);
+    /* Glass Morphism - Warm Surfaces */
+    --glass-light: rgba(212, 165, 116, 0.08);
+    --glass-medium: rgba(212, 165, 116, 0.12);
+    --glass-heavy: rgba(212, 165, 116, 0.16);
+    --glass-border: rgba(212, 165, 116, 0.25);
+    --glass-glow: rgba(212, 165, 116, 0.15);
     
-    /* Typography - Sky Blue to White scale */
-    --text-bright: #ffffff;       /* Pure White */
-    --text-primary: #e8f4f8;      /* Light Sky */
-    --text-secondary: #b0d4e8;    /* Soft Blue */
-    --text-tertiary: #7ba8c4;     /* Medium Blue */
-    --text-muted: #4a6b84;        /* Dark Blue Gray */
+    /* Typography - Warm Light Colors */
+    --text-bright: #F5E6D3;       /* Warm Cream */
+    --text-primary: #E8D7C3;      /* Soft Cream */
+    --text-secondary: #D4C4B0;    /* Light Tan */
+    --text-tertiary: #BFB09C;     /* Muted Tan */
+    --text-muted: #A89C88;        /* Dark Tan */
     
-    /* LED Indicators - Sky Theme */
+    /* LED Indicators */
     --led-green: #00FF88;
     --led-amber: #FFB84D;
     --led-red: #FF4757;
-    --led-blue: #87ceeb;
+    --led-blue: #D4A574;
     --led-purple: #B84DFF;
     
-    /* Shadows & Cinematic Effects */
-    --shadow-subtle: 0 2px 12px rgba(0, 0, 0, 0.5);
-    --shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.6);
-    --shadow-heavy: 0 16px 48px rgba(0, 0, 0, 0.7);
-    --shadow-gold: 0 0 40px rgba(135, 206, 235, 0.3);
-    --shadow-gold-strong: 0 0 60px rgba(135, 206, 235, 0.5);
-    --shadow-inset-dark: inset 0 2px 8px rgba(0, 0, 0, 0.6);
-    --shadow-inset-recess: inset 0 4px 12px rgba(0, 0, 0, 0.7);
+    /* Shadows & Warm Effects */
+    --shadow-subtle: 0 2px 12px rgba(0, 0, 0, 0.3);
+    --shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --shadow-heavy: 0 16px 48px rgba(0, 0, 0, 0.5);
+    --shadow-gold: 0 0 40px rgba(212, 165, 116, 0.3);
+    --shadow-gold-strong: 0 0 60px rgba(212, 165, 116, 0.5);
+    --shadow-inset-dark: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-inset-recess: inset 0 4px 12px rgba(0, 0, 0, 0.5);
     
     /* Transitions */
     --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -66,8 +66,8 @@
     --ease-elegant: cubic-bezier(0.65, 0, 0.35, 1);
     
     /* Dual border effect */
-    --border-dual: inset 0 0 0 1.5px rgba(135,206,235,0.25), inset 0 0 0 3px rgba(135,206,235,0.02);
-    --border-dual-hover: inset 0 0 0 2px var(--gold-bright), inset 0 0 0 4px rgba(135,206,235,0.08);
+    --border-dual: inset 0 0 0 1.5px rgba(212,165,116,0.3), inset 0 0 0 3px rgba(212,165,116,0.08);
+    --border-dual-hover: inset 0 0 0 2px var(--gold-bright), inset 0 0 0 4px rgba(212,165,116,0.15);
     
     /* Navigation width */
     --nav-width: 320px;
@@ -92,7 +92,7 @@ html {
 body {
     font-family: 'Darker Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 400;
-    background: var(--obsidian);
+    background: #2c2420;
     color: var(--text-primary);
     line-height: 1.8;
     font-size: 18px;
@@ -148,52 +148,15 @@ h5 { font-size: 1.2rem; }
 h6 { font-size: 1rem; }
 
 /* ===================================
-   STARRY NIGHT SKY BACKGROUND
-   Animated Stars & Clouds
+   WARM WORKSPACE BACKGROUND
+   Neutral Background for Wood Table
    =================================== */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: 
-        radial-gradient(2px 2px at 20% 30%, white, transparent),
-        radial-gradient(2px 2px at 60% 70%, white, transparent),
-        radial-gradient(1px 1px at 50% 50%, white, transparent),
-        radial-gradient(1px 1px at 80% 10%, white, transparent),
-        radial-gradient(2px 2px at 90% 60%, white, transparent),
-        radial-gradient(1px 1px at 33% 80%, white, transparent),
-        radial-gradient(2px 2px at 70% 40%, white, transparent),
-        radial-gradient(ellipse 1000px 700px at 20% 20%, rgba(30, 40, 56, 0.4), transparent),
-        radial-gradient(ellipse 800px 1000px at 80% 80%, rgba(20, 30, 48, 0.3), transparent),
-        linear-gradient(135deg, var(--metal-black) 0%, var(--onyx) 50%, var(--metal-black) 100%);
-    background-size: 
-        200% 200%,
-        200% 200%,
-        200% 200%,
-        200% 200%,
-        200% 200%,
-        200% 200%,
-        200% 200%,
-        100% 100%,
-        100% 100%,
-        100% 100%;
+    background: linear-gradient(180deg, #3a342f 0%, #2c2420 50%, #1f1b18 100%);
     z-index: -3;
-    animation: starry-sky 120s ease-in-out infinite, cinematic-shift 25s ease-in-out infinite alternate;
-}
-
-@keyframes starry-sky {
-    0%, 100% { 
-        background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 50% 50%, 50% 50%, 50% 50%;
-    }
-    50% { 
-        background-position: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 50% 50%, 50% 50%, 50% 50%;
-    }
-}
-
-@keyframes cinematic-shift {
-    0% { transform: scale(1) rotate(0deg); filter: brightness(1); }
-    50% { transform: scale(1.03) rotate(0.3deg); filter: brightness(1.05); }
-    100% { transform: scale(1.05) rotate(0.6deg); filter: brightness(1.1); }
 }
 
 /* Subtle Cloud Texture Overlay */
@@ -237,15 +200,15 @@ body::after {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--gold-bright), var(--gold-muted));
+    background: linear-gradient(180deg, #ff6b35, #c44569);
     border-radius: 5px;
     border: 2px solid var(--onyx);
-    box-shadow: var(--shadow-gold);
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, var(--gold-shimmer), var(--gold-bright));
-    box-shadow: var(--shadow-gold-strong);
+    background: linear-gradient(180deg, #f7931e, #ff6b35);
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.6);
 }
 
 /* ===================================
@@ -255,20 +218,20 @@ body::after {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: var(--gold-bright);
+    background: #ff6b35;
     position: fixed;
     pointer-events: none;
     z-index: 10000;
     mix-blend-mode: screen;
     transition: transform 0.08s ease-out;
-    box-shadow: 0 0 24px var(--gold-bright);
+    box-shadow: 0 0 24px #ff6b35, 0 0 12px #f7931e;
     display: none;
 }
 
 .cursor-follower {
     width: 36px;
     height: 36px;
-    border: 2px solid var(--gold-muted);
+    border: 2px solid #ee5a6f;
     border-radius: 50%;
     position: fixed;
     pointer-events: none;
@@ -505,7 +468,7 @@ body::after {
 .nav-title {
     font-size: 1rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: #d4e2f0;
     margin-bottom: 14px;
     letter-spacing: 0.3px;
     font-family: 'Darker Grotesque', sans-serif;
@@ -712,11 +675,11 @@ body::after {
     font-family: 'Darker Grotesque', sans-serif;
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--gold-bright);
+    color: #D4A574;
     display: block;
     margin-bottom: 10px;
     letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(135, 206, 235, 0.4);
+    text-shadow: 0 0 20px rgba(212, 165, 116, 0.5), 0 2px 8px rgba(0, 0, 0, 0.5);
     text-transform: uppercase;
 }
 
@@ -731,13 +694,18 @@ body::after {
 }
 
 .text-gradient {
-    background: linear-gradient(135deg, var(--gold-shimmer) 0%, var(--gold-bright) 50%, var(--gold-etched) 100%);
+    background: linear-gradient(135deg, 
+        #E0B889 0%, 
+        #D4A574 30%, 
+        #C9985F 60%, 
+        #B8895A 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: gold-shimmer 3.5s ease-in-out infinite;
     background-size: 200% 200%;
-    filter: drop-shadow(0 0 30px rgba(135, 206, 235, 0.3));
+    filter: drop-shadow(0 0 30px rgba(212, 165, 116, 0.4)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
 }
 
 @keyframes gold-shimmer {
@@ -758,15 +726,17 @@ body::after {
 .hero-description {
     font-size: 1.05rem;
     font-weight: 400;
-    color: var(--text-secondary);
+    color: #f0f4f8;
     line-height: 1.8;
     margin-bottom: 28px;
     font-family: 'Darker Grotesque', sans-serif;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero-description strong {
-    color: var(--gold-bright);
+    color: #ffffff;
     font-weight: 700;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
 }
 
 .hero-buttons {
@@ -940,10 +910,11 @@ body::after {
     display: block;
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: #d4e2f0;
     margin-top: 4px;
     letter-spacing: 0.4px;
     font-family: 'Darker Grotesque', sans-serif;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Rotary Dial Decoration */
@@ -1075,19 +1046,20 @@ body::after {
     display: flex;
     align-items: center;
     gap: 20px;
-    color: var(--text-bright);
+    color: #F5E6D3;
     letter-spacing: -0.5px;
     position: relative;
     white-space: nowrap;
     overflow: visible;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 165, 116, 0.3);
 }
 
 .title-number {
     font-family: 'Playfair Display', serif;
     font-size: 1.6rem;
     font-weight: 900;
-    color: var(--gold-bright);
-    text-shadow: 0 0 25px rgba(135, 206, 235, 0.4);
+    color: #D4A574;
+    text-shadow: 0 0 35px rgba(212, 165, 116, 0.6), 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .title-decoration,
@@ -1995,8 +1967,9 @@ body::after {
     font-family: 'Playfair Display', serif;
     font-size: 1.6rem;
     font-weight: 900;
-    color: var(--text-bright);
+    color: #ffffff;
     margin-bottom: 24px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 .tech-items {
@@ -2866,4 +2839,4 @@ body::after {
     margin: 48px 0;
     background: linear-gradient(90deg, transparent, var(--gold-bright), var(--gold-muted), var(--gold-bright), transparent);
     opacity: 0.35;
-}
+}   
