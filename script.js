@@ -1,6 +1,6 @@
 // ===================================
-// WOOD OFFICE TABLE PORTFOLIO
-// Professional Desk Interactions
+// PROFESSIONAL MAHOGANY OFFICE PORTFOLIO
+// Executive Desk Interactions
 // VERSION: February 2026
 // ===================================
 
@@ -334,7 +334,7 @@ function loadExperience() {
         if (exp.projects) {
             projectsHTML = `
                 <div style="margin: 15px 0;">
-                    <strong style="color: var(--brass-medium);">Projects:</strong>
+                    <strong style="color: #e8622a; font-weight:700;">Projects:</strong>
                     ${exp.projects.map(proj => `<div style="margin-left: 15px; color: var(--text-secondary);">${proj}</div>`).join('')}
                 </div>
             `;
@@ -343,7 +343,7 @@ function loadExperience() {
         if (exp.project) {
             projectsHTML = `
                 <div style="margin: 15px 0;">
-                    <strong style="color: var(--brass-medium);">Project:</strong>
+                    <strong style="color: #e8622a; font-weight:700;">Project:</strong>
                     <div style="margin-left: 15px; color: var(--text-secondary);">${exp.project}</div>
                 </div>
             `;
@@ -351,14 +351,14 @@ function loadExperience() {
 
         let lettersHTML = '';
         if (exp.experienceLetter) {
-            lettersHTML = `<a href="${exp.experienceLetter}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: var(--ink-black); text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
+            lettersHTML = `<a href="${exp.experienceLetter}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
                 <i class="fas fa-file-contract"></i> View Experience Letter
             </a>`;
         }
         
         if (exp.experienceLetters) {
             lettersHTML = exp.experienceLetters.map(letter => 
-                `<a href="${letter.url}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; margin-right: 10px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: var(--ink-black); text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
+                `<a href="${letter.url}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; margin-right: 10px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
                     <i class="fas fa-file-contract"></i> ${letter.text}
                 </a>`
             ).join('');
@@ -424,7 +424,7 @@ function loadEducation() {
         item.setAttribute('data-aos-delay', index * 100);
 
         const certificateButton = edu.certificateLink ? 
-            `<a href="${edu.certificateLink}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: var(--ink-black); text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
+            `<a href="${edu.certificateLink}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
                 <i class="fas fa-certificate"></i> View Certificate
             </a>` : '';
 
@@ -686,7 +686,7 @@ function loadCertifications() {
         card.setAttribute('data-aos-delay', index * 100);
 
         const certButton = cert.certificateLink ? 
-            `<a href="${cert.certificateLink}" target="_blank" class="cert-btn" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: var(--ink-black); text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
+            `<a href="${cert.certificateLink}" target="_blank" class="cert-btn" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
                 <i class="fas fa-eye"></i> View Certificate
             </a>` : '';
 
