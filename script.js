@@ -609,6 +609,41 @@ function loadLanguages() {
 loadLanguages();
 
 // ===================================
+// Animate Circular Progress Bars in About Section
+// ===================================
+function animateCircularProgress() {
+    const progressBars = document.querySelectorAll('.progress-bar');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const circle = entry.target;
+                const percent = parseInt(circle.getAttribute('data-percent'));
+                const radius = 52;
+                const circumference = 2 * Math.PI * radius;
+                const offset = circumference - (percent / 100) * circumference;
+                
+                // Animate the stroke-dashoffset
+                setTimeout(() => {
+                    circle.style.strokeDashoffset = offset;
+                }, 300);
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    progressBars.forEach(bar => observer.observe(bar));
+}
+
+// Run animation when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animateCircularProgress);
+} else {
+    animateCircularProgress();
+}
+
+// ===================================
 // Load Additional Certifications
 // ===================================
 const certificationsData = [
