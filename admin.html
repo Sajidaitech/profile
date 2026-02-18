@@ -629,14 +629,14 @@
         <!-- Stats Row -->
         <div class="stats-row">
             <div class="stat-box">
-                <div class="stat-box-label"><i class="fas fa-users"></i> Total Subscribers</div>
-                <div class="stat-box-value" id="statTotal">—</div>
-                <div class="stat-box-sub">emails collected</div>
+                <div class="stat-box-label"><i class="fas fa-eye"></i> Total Visits</div>
+                <div class="stat-box-value" id="statVisits">—</div>
+                <div class="stat-box-sub">portfolio page loads</div>
             </div>
             <div class="stat-box">
-                <div class="stat-box-label"><i class="fas fa-calendar-plus"></i> Last Signup</div>
-                <div class="stat-box-value" id="statLast" style="font-size:18px;margin-top:6px">—</div>
-                <div class="stat-box-sub">most recent subscriber</div>
+                <div class="stat-box-label"><i class="fas fa-calendar-check"></i> Last Visit</div>
+                <div class="stat-box-value" id="statLastVisit" style="font-size:18px;margin-top:6px">—</div>
+                <div class="stat-box-sub">most recent visitor</div>
             </div>
             <div class="stat-box">
                 <div class="stat-box-label"><i class="fas fa-clock"></i> Countdown Target</div>
@@ -656,20 +656,11 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="form-label" for="countdownDate">Target Date & Time</label>
-                        <input
-                            type="datetime-local"
-                            id="countdownDate"
-                            class="form-input"
-                        />
+                        <input type="datetime-local" id="countdownDate" class="form-input" />
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="countdownLabel">Banner Label</label>
-                        <input
-                            type="text"
-                            id="countdownLabel"
-                            class="form-input"
-                            placeholder="e.g. Something exciting is launching in"
-                        />
+                        <input type="text" id="countdownLabel" class="form-input" placeholder="e.g. Something exciting is launching in" />
                     </div>
                     <button class="btn-save" id="btnSaveCountdown">
                         <i class="fas fa-save"></i> Save Countdown
@@ -688,11 +679,8 @@
                 </div>
                 <div class="panel-body">
                     <div style="display:flex;flex-direction:column;gap:12px">
-                        <button class="btn-save" id="btnExportCSV" style="background:linear-gradient(135deg,#334155,#1e293b)">
-                            <i class="fas fa-file-csv"></i> Export Emails as CSV
-                        </button>
-                        <button class="btn-save" id="btnExportTxt" style="background:linear-gradient(135deg,#334155,#1e293b)">
-                            <i class="fas fa-file-alt"></i> Export Emails as TXT
+                        <button class="btn-save" id="btnRefresh" style="background:linear-gradient(135deg,#334155,#1e293b)">
+                            <i class="fas fa-sync-alt"></i> Refresh Visit Count
                         </button>
                         <a href="index.html" target="_blank" class="btn-save" style="text-decoration:none;text-align:center;display:block;background:rgba(160,120,85,0.15);color:#a07855;border:1px solid rgba(160,120,85,0.3);">
                             <i class="fas fa-external-link-alt"></i> View Portfolio Site
@@ -703,49 +691,8 @@
                         <p style="font-size:12px;color:var(--text2);line-height:1.7">
                             1. Pick a target date above<br>
                             2. Click <strong style="color:var(--accent)">Save Countdown</strong><br>
-                            3. Settings are stored in your browser's <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">localStorage</code><br>
-                            4. To sync across devices, update <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">script.js</code> directly
+                            3. To make it permanent across all devices, also update <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">targetDate</code> in <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">script.js</code>
                         </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Subscribers Table -->
-            <div class="panel panel-full">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-envelope-open-text"></i> Subscribers</span>
-                    <div class="table-toolbar">
-                        <input type="search" class="search-input" id="searchInput" placeholder="Search emails…">
-                        <button class="btn-sm btn-refresh" id="btnRefresh">
-                            <i class="fas fa-sync-alt"></i> Refresh
-                        </button>
-                    </div>
-                </div>
-                <div class="panel-body">
-                    <div class="table-wrap">
-                        <table id="subscribersTable">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Email Address</th>
-                                    <th>Date Signed Up</th>
-                                    <th>Time</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="subscribersTbody">
-                                <tr class="loading-row">
-                                    <td colspan="5"><i class="fas fa-circle-notch fa-spin"></i> Loading subscribers…</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination">
-                        <span id="paginationInfo">—</span>
-                        <div class="pagination-btns">
-                            <button id="btnPrev" disabled><i class="fas fa-chevron-left"></i></button>
-                            <button id="btnNext" disabled><i class="fas fa-chevron-right"></i></button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -759,11 +706,11 @@
 
 <!-- Firebase SDK -->
 <script type="module">
-    import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, orderBy, query }
-                                    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc }
+                               from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-                                    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+                               from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey:            "AIzaSyDg8sXFAY9uvOQRf1Y_ccK0aPMDYPRYT38",
@@ -775,23 +722,14 @@
         measurementId:     "G-8WQEKQ8SR2"
     };
 
-    // ══════════════════════════════════════════════════
-    // ▶ SET YOUR GMAIL ADDRESS HERE — only this account
-    //   will be allowed to log in to the admin panel.
-    // ══════════════════════════════════════════════════
-    const ADMIN_EMAIL = "sajid.teech@gmail.com"; // ← change this
+    const ADMIN_EMAIL = "sajid.teech@gmail.com";
 
     const app      = initializeApp(firebaseConfig);
     const db       = getFirestore(app);
     const auth     = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    /* ── helpers ── */
-    const $  = (id) => document.getElementById(id);
-    let allSubscribers = [];
-    let filteredSubs   = [];
-    let currentPage    = 1;
-    const PAGE_SIZE    = 20;
+    const $ = (id) => document.getElementById(id);
 
     function showToast(msg, isError = false) {
         const t = $('toast');
@@ -807,67 +745,23 @@
         return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     }
 
-    function formatTime(ts) {
-        if (!ts) return '—';
-        const d = ts.toDate ? ts.toDate() : new Date(ts);
-        return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    }
-
-    /* ── render subscribers table ── */
-    function renderTable() {
-        const tbody    = $('subscribersTbody');
-        const query_   = $('searchInput').value.toLowerCase();
-        filteredSubs   = allSubscribers.filter(s => s.email.toLowerCase().includes(query_));
-        const total    = filteredSubs.length;
-        const totalPages = Math.ceil(total / PAGE_SIZE) || 1;
-        if (currentPage > totalPages) currentPage = 1;
-
-        const start   = (currentPage - 1) * PAGE_SIZE;
-        const slice   = filteredSubs.slice(start, start + PAGE_SIZE);
-
-        $('paginationInfo').textContent = total
-            ? `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, total)} of ${total}`
-            : 'No results';
-
-        $('btnPrev').disabled = currentPage <= 1;
-        $('btnNext').disabled = currentPage >= totalPages;
-
-        if (!slice.length) {
-            tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fas fa-inbox"></i><p>No subscribers yet.</p></div></td></tr>`;
-            return;
-        }
-
-        tbody.innerHTML = slice.map((sub, i) => `
-            <tr>
-                <td style="color:var(--text3)">${start + i + 1}</td>
-                <td class="email-cell">${sub.email}</td>
-                <td>${formatDate(sub.timestamp)}</td>
-                <td>${formatTime(sub.timestamp)}</td>
-                <td><span class="tag">Active</span></td>
-            </tr>
-        `).join('');
-    }
-
-    /* ── load subscribers from Firestore ── */
-    async function loadSubscribers() {
+    /* ── load visitor count ── */
+    async function loadVisitorCount() {
         try {
-            const q    = query(collection(db, 'subscribers'), orderBy('timestamp', 'desc'));
-            const snap = await getDocs(q);
-            allSubscribers = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-            $('statTotal').textContent = allSubscribers.length;
-
-            if (allSubscribers.length > 0) {
-                const last = allSubscribers[0];
-                $('statLast').textContent = formatDate(last.timestamp);
+            const snap = await getDoc(doc(db, 'siteStats', 'visitors'));
+            if (snap.exists()) {
+                const data = snap.data();
+                $('statVisits').textContent    = (data.totalVisits || 0).toLocaleString();
+                $('statLastVisit').textContent = formatDate(data.lastVisit);
+            } else {
+                $('statVisits').textContent    = '0';
+                $('statLastVisit').textContent = 'No visits yet';
             }
-
-            renderTable();
-            showToast(`Loaded ${allSubscribers.length} subscriber(s)`);
+            showToast('✓ Visit count loaded');
         } catch (err) {
             console.error(err);
-            $('subscribersTbody').innerHTML = `<tr class="loading-row"><td colspan="5">⚠ Failed to load. Check Firestore rules.</td></tr>`;
-            showToast('Failed to load subscribers', true);
+            $('statVisits').textContent = 'Error';
+            showToast('Failed to load visit count', true);
         }
     }
 
@@ -894,17 +788,14 @@
         const saved = localStorage.getItem('adminCountdownDate');
         const label = localStorage.getItem('adminCountdownLabel');
         if (saved) {
-            // format for datetime-local input
             const d = new Date(saved);
-            const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-                .toISOString().slice(0, 16);
-            $('countdownDate').value  = local;
-            adminTargetDate           = d.getTime();
+            const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+            $('countdownDate').value = local;
+            adminTargetDate = d.getTime();
             $('statCountdown').textContent = d.toLocaleDateString('en-GB', {
                 day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
             });
         } else {
-            // default
             adminTargetDate = new Date("March 1, 2026 00:00:00").getTime();
         }
         if (label) $('countdownLabel').value = label;
@@ -923,60 +814,22 @@
             day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
         });
         startAdminPreview();
-        showToast('✓ Countdown saved! Update script.js targetDate to make it permanent.');
+        showToast('✓ Countdown saved! Also update targetDate in script.js to make it permanent.');
     });
 
-    /* ── export ── */
-    function exportCSV() {
-        const rows = [['#', 'Email', 'Date', 'Time'],
-            ...allSubscribers.map((s, i) => [
-                i + 1,
-                s.email,
-                formatDate(s.timestamp),
-                formatTime(s.timestamp)
-            ])
-        ];
-        const csv  = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-        download('subscribers.csv', csv, 'text/csv');
-    }
-
-    function exportTXT() {
-        const lines = allSubscribers.map(s => s.email);
-        download('subscribers.txt', lines.join('\n'), 'text/plain');
-    }
-
-    function download(filename, content, type) {
-        const blob = new Blob([content], { type });
-        const url  = URL.createObjectURL(blob);
-        const a    = Object.assign(document.createElement('a'), { href: url, download: filename });
-        a.click();
-        URL.revokeObjectURL(url);
-        showToast(`✓ ${filename} downloaded`);
-    }
-
-    $('btnExportCSV').addEventListener('click', exportCSV);
-    $('btnExportTxt').addEventListener('click', exportTXT);
-    $('btnRefresh').addEventListener('click', loadSubscribers);
-    $('searchInput').addEventListener('input', () => { currentPage = 1; renderTable(); });
-    $('btnPrev').addEventListener('click', () => { currentPage--; renderTable(); });
-    $('btnNext').addEventListener('click', () => { currentPage++; renderTable(); });
+    $('btnRefresh').addEventListener('click', loadVisitorCount);
 
     /* ── auth ── */
     $('btnGoogleLogin').addEventListener('click', async () => {
         try {
             const result = await signInWithPopup(auth, provider);
-            const user   = result.user;
-
-            // Security: only allow the configured admin email
-            if (user.email !== ADMIN_EMAIL) {
+            if (result.user.email !== ADMIN_EMAIL) {
                 await signOut(auth);
                 const errEl = $('loginError');
-                errEl.textContent = `Access denied for ${user.email}. Only the site owner can log in.`;
+                errEl.textContent = `Access denied for ${result.user.email}.`;
                 errEl.style.display = 'block';
-                return;
             }
         } catch (err) {
-            console.error(err);
             const errEl = $('loginError');
             errEl.textContent = 'Sign-in failed: ' + err.message;
             errEl.style.display = 'block';
@@ -987,15 +840,13 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user && user.email === ADMIN_EMAIL) {
-            // Show dashboard
             $('loginScreen').style.display = 'none';
             $('dashboard').style.display   = 'block';
             $('adminUserName').textContent  = user.displayName || 'Admin';
             $('adminUserEmail').textContent = user.email;
-            $('adminAvatar').src = user.photoURL || '';
-            $('adminAvatar').style.display = user.photoURL ? 'block' : 'none';
-
-            loadSubscribers();
+            $('adminAvatar').src            = user.photoURL || '';
+            $('adminAvatar').style.display  = user.photoURL ? 'block' : 'none';
+            loadVisitorCount();
             loadCountdownSettings();
         } else {
             $('loginScreen').style.display = 'flex';
