@@ -485,13 +485,14 @@
 
     <!-- Firebase SDK — visitor counter only -->
     <script type="module">
-        import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, increment, serverTimestamp }
-                                   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp }                from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, runTransaction, set, get }
+                                                from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey:            "AIzaSyDg8sXFAY9uvOQRf1Y_ccK0aPMDYPRYT38",
             authDomain:        "website-a1502.firebaseapp.com",
+            databaseURL:       "https://website-a1502-default-rtdb.firebaseio.com",
             projectId:         "website-a1502",
             storageBucket:     "website-a1502.firebasestorage.app",
             messagingSenderId: "545587358769",
@@ -500,14 +501,13 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db  = getFirestore(app);
+        const db  = getDatabase(app);
 
         // Silently count every visit
         try {
-            await setDoc(doc(db, 'siteStats', 'visitors'), {
-                totalVisits: increment(1),
-                lastVisit:   serverTimestamp()
-            }, { merge: true });
+            const visitsRef = ref(db, 'siteStats/totalVisits');
+            await runTransaction(visitsRef, (current) => (current || 0) + 1);
+            await set(ref(db, 'siteStats/lastVisit'), new Date().toISOString());
         } catch (err) {
             console.warn('Visit tracking failed:', err);
         }
