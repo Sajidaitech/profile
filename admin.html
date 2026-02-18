@@ -707,14 +707,15 @@
 <!-- Firebase SDK -->
 <script type="module">
     import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, getDoc }
-                               from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getDatabase, ref, get }
+                               from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
                                from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey:            "AIzaSyDg8sXFAY9uvOQRf1Y_ccK0aPMDYPRYT38",
         authDomain:        "website-a1502.firebaseapp.com",
+        databaseURL:       "https://website-a1502-default-rtdb.firebaseio.com",
         projectId:         "website-a1502",
         storageBucket:     "website-a1502.firebasestorage.app",
         messagingSenderId: "545587358769",
@@ -725,7 +726,7 @@
     const ADMIN_EMAIL = "sajid.teech@gmail.com";
 
     const app      = initializeApp(firebaseConfig);
-    const db       = getFirestore(app);
+    const db       = getDatabase(app);
     const auth     = getAuth(app);
     const provider = new GoogleAuthProvider();
 
@@ -741,22 +742,17 @@
 
     function formatDate(ts) {
         if (!ts) return '—';
-        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        const d = new Date(ts);
         return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     }
 
     /* ── load visitor count ── */
     async function loadVisitorCount() {
         try {
-            const snap = await getDoc(doc(db, 'siteStats', 'visitors'));
-            if (snap.exists()) {
-                const data = snap.data();
-                $('statVisits').textContent    = (data.totalVisits || 0).toLocaleString();
-                $('statLastVisit').textContent = formatDate(data.lastVisit);
-            } else {
-                $('statVisits').textContent    = '0';
-                $('statLastVisit').textContent = 'No visits yet';
-            }
+            const visitsSnap = await get(ref(db, 'siteStats/totalVisits'));
+            const lastSnap   = await get(ref(db, 'siteStats/lastVisit'));
+            $('statVisits').textContent    = visitsSnap.exists() ? visitsSnap.val().toLocaleString() : '0';
+            $('statLastVisit').textContent = lastSnap.exists() ? formatDate(lastSnap.val()) : 'No visits yet';
             showToast('✓ Visit count loaded');
         } catch (err) {
             console.error(err);
