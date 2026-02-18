@@ -2404,18 +2404,34 @@ body.banner-visible .mobile-nav-toggle {
 
 
 /* ===================================
-   ADMIN PANEL LINK (hidden in footer)
+   ADMIN LOGIN BUTTON (footer)
    =================================== */
-.admin-access-link {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 11px;
-    color: rgba(160, 120, 85, 0.4);
+.admin-login-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 9px 20px;
+    background: transparent;
+    border: 1.5px solid rgba(160, 120, 85, 0.45);
+    border-radius: 8px;
+    color: rgba(160, 120, 85, 0.7);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
     text-decoration: none;
-    letter-spacing: 1px;
-    transition: color 0.3s;
+    transition: all 0.3s var(--ease-smooth);
 }
 
-.admin-access-link:hover {
-    color: rgba(160, 120, 85, 0.9);
+.admin-login-btn i {
+    font-size: 12px;
+}
+
+.admin-login-btn:hover {
+    background: rgba(160, 120, 85, 0.12);
+    border-color: var(--brass-bright);
+    color: var(--brass-bright);
+    box-shadow: 0 0 14px rgba(160, 120, 85, 0.2);
+    transform: translateY(-1px);
 }
