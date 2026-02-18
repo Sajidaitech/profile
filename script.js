@@ -63,18 +63,29 @@ new CustomCursor();
 const mobileToggle = document.getElementById('mobileNavToggle');
 const sideNav = document.getElementById('sideNav');
 const navLinks = document.querySelectorAll('.nav-link');
+const navOverlay = document.getElementById('navOverlay');
+
+function closeNav() {
+    mobileToggle.classList.remove('active');
+    sideNav.classList.remove('active');
+    if (navOverlay) navOverlay.classList.remove('active');
+}
 
 if (mobileToggle && sideNav) {
     mobileToggle.addEventListener('click', () => {
+        const isActive = sideNav.classList.toggle('active');
         mobileToggle.classList.toggle('active');
-        sideNav.classList.toggle('active');
+        if (navOverlay) navOverlay.classList.toggle('active', isActive);
     });
+
+    if (navOverlay) {
+        navOverlay.addEventListener('click', closeNav);
+    }
 
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             if (window.innerWidth <= 968) {
-                mobileToggle.classList.remove('active');
-                sideNav.classList.remove('active');
+                closeNav();
             }
         });
     });
@@ -772,3 +783,57 @@ document.querySelectorAll('.business-card, .notepad-card').forEach(card => {
 // ===================================
 console.log('%c🪵 Wood Office Portfolio ', 'font-size: 20px; font-weight: bold; color: #c9a961; background: #3d2f24; padding: 10px 20px; border-radius: 5px;');
 console.log('%cDesigned with craftsmanship by Sajid Mehmood', 'font-size: 12px; color: #8b6f47;');
+// ===================================
+// COUNTDOWN TIMER
+// ===================================
+// ▶ Change this date whenever you want to update the target
+const targetDate = new Date("March 1, 2026 00:00:00").getTime();
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const gap = targetDate - now;
+    const el  = document.getElementById('timer');
+    if (!el) return;
+
+    if (gap <= 0) {
+        el.innerHTML = '🚀 LAUNCHED';
+        return;
+    }
+
+    const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+    const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((gap % (1000 * 60)) / 1000);
+
+    el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown(); // run immediately
+
+// ===================================
+// COUNTDOWN BANNER DISMISS
+// ===================================
+(function () {
+    const banner      = document.getElementById('countdownBanner');
+    const dismissBtn  = document.getElementById('dismissBanner');
+    const body        = document.body;
+
+    if (!banner) return;
+
+    // Check if user previously dismissed
+    const dismissed = sessionStorage.getItem('bannerDismissed');
+    if (dismissed) {
+        banner.classList.add('hidden');
+    } else {
+        body.classList.add('banner-visible');
+    }
+
+    if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => {
+            banner.classList.add('hidden');
+            body.classList.remove('banner-visible');
+            sessionStorage.setItem('bannerDismissed', '1');
+        });
+    }
+})();
