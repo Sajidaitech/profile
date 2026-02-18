@@ -479,42 +479,6 @@
             </div>
         </section>
 
-        <!-- ══════════════════════════════════
-             EMAIL CAPTURE SECTION
-             ══════════════════════════════════ -->
-        <section class="section subscriber-section">
-            <div class="container">
-                <div class="document-card subscriber-card" data-aos="fade-up">
-                    <div class="paper-texture"></div>
-                    <div class="subscriber-inner">
-                        <div class="subscriber-icon">
-                            <i class="fas fa-paper-plane"></i>
-                        </div>
-                        <div class="subscriber-text">
-                            <h2 class="subscriber-title">Stay in the Loop</h2>
-                            <p class="subscriber-desc">Get notified when I launch new projects, publish articles, or become available for new roles.</p>
-                        </div>
-                        <form class="subscriber-form" id="subscriberForm">
-                            <div class="subscriber-input-wrap">
-                                <input
-                                    type="email"
-                                    id="subscriberEmail"
-                                    placeholder="your@email.com"
-                                    required
-                                    class="subscriber-input"
-                                    autocomplete="email"
-                                />
-                                <button type="submit" id="subscriberBtn" class="subscriber-btn btn btn-primary">
-                                    Notify Me
-                                </button>
-                            </div>
-                            <p class="subscriber-msg" id="subscriberMsg"></p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Footer (Embossed Plate) -->
         <footer class="footer">
             <div class="brass-plate">
@@ -532,11 +496,11 @@
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK — visitor counter only -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, increment, serverTimestamp }
+                                   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey:            "AIzaSyDg8sXFAY9uvOQRf1Y_ccK0aPMDYPRYT38",
@@ -548,52 +512,18 @@
             measurementId:     "G-8WQEKQ8SR2"
         };
 
-        const app  = initializeApp(firebaseConfig);
-        const db   = getFirestore(app);
-        const auth = getAuth(app);
+        const app = initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
 
-        // Expose to window so script.js can access
-        window.__db   = db;
-        window.__auth = auth;
-        window.__GoogleAuthProvider = GoogleAuthProvider;
-        window.__signInWithPopup    = signInWithPopup;
-        window.__signOut            = signOut;
-        window.__onAuthStateChanged = onAuthStateChanged;
-        window.__addDoc             = addDoc;
-        window.__collection         = collection;
-        window.__serverTimestamp    = serverTimestamp;
-
-        // Handle email form
-        document.getElementById('subscriberForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const emailInput = document.getElementById('subscriberEmail');
-            const btn        = document.getElementById('subscriberBtn');
-            const msg        = document.getElementById('subscriberMsg');
-            const email      = emailInput.value.trim();
-            if (!email) return;
-
-            btn.disabled    = true;
-            btn.textContent = 'Saving…';
-
-            try {
-                await addDoc(collection(db, 'subscribers'), {
-                    email,
-                    timestamp: serverTimestamp(),
-                    page: window.location.href
-                });
-                msg.textContent   = '✓ You\'re on the list!';
-                msg.style.color   = '#4ade80';
-                emailInput.value  = '';
-            } catch (err) {
-                console.error(err);
-                msg.textContent = '✗ Something went wrong. Try again.';
-                msg.style.color = '#f87171';
-            } finally {
-                btn.disabled    = false;
-                btn.textContent = 'Notify Me';
-                setTimeout(() => msg.textContent = '', 5000);
-            }
-        });
+        // Silently count every visit
+        try {
+            await setDoc(doc(db, 'siteStats', 'visitors'), {
+                totalVisits: increment(1),
+                lastVisit:   serverTimestamp()
+            }, { merge: true });
+        } catch (err) {
+            console.warn('Visit tracking failed:', err);
+        }
     </script>
 
     <script src="script.js"></script>
