@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initNav();
+    initDarkMode();
     initCursor();
     initCounters();
     initRings();
@@ -83,6 +84,41 @@ function initNav() {
             if (!target) return;
             e.preventDefault();
             window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        });
+    });
+}
+
+
+// ════════════════════════════════════════
+// DARK MODE
+// ════════════════════════════════════════
+
+function initDarkMode() {
+    const body       = document.body;
+    const toggles    = [document.getElementById('darkToggle'), document.getElementById('darkToggleMob')];
+    const STORAGE_KEY = 'sm-dark-mode';
+
+    function applyDark(isDark) {
+        body.classList.toggle('dark-mode', isDark);
+        toggles.forEach(btn => {
+            if (!btn) return;
+            const icon  = btn.querySelector('.toggle-icon');
+            const label = btn.querySelector('.toggle-label');
+            if (icon)  icon.textContent  = isDark ? '☀️' : '🌙';
+            if (label) label.textContent = isDark ? 'Light' : 'Dark';
+        });
+    }
+
+    // Restore saved preference
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyDark(saved !== null ? saved === '1' : prefersDark);
+
+    toggles.forEach(btn => {
+        btn?.addEventListener('click', () => {
+            const isDark = !body.classList.contains('dark-mode');
+            applyDark(isDark);
+            localStorage.setItem(STORAGE_KEY, isDark ? '1' : '0');
         });
     });
 }
@@ -438,6 +474,8 @@ function loadLanguages() {
 // DATA — CERTIFICATIONS
 // ════════════════════════════════════════
 
+const cvLink = 'https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing';
+
 const additionalCerts = [
     {
         icon: 'fa-graduation-cap',
@@ -461,7 +499,7 @@ const additionalCerts = [
         icon: 'fa-award',
         title: 'Safety Award — HIA',
         desc: 'Recognition for exemplary safety practices during the Airport Expansion Project.',
-        url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVGbGi5HcFh4lrN9/view?usp=drive_link'
+        url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=sharing'
     }
 ];
 
