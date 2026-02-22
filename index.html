@@ -417,26 +417,29 @@
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="mailto:info@sajidmk.com">info@sajidmk.com</a>
-                        </div>
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
-                            <h4>Email</h4>
-                            <a href="mailto:sajid.teech@gmail.com.com">sajid.teech@gmail.com.com</a>
+                            <a href="mailto:sajid@sajidmk.com">sajid@sajidmk.com</a>
+                            <a href="mailto:sajid@outlook.com">sajid@outlook.com</a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-phone"></i></div>
                             <h4>Phone</h4>
                             <a href="tel:+97466969598">+974 6696 9598</a>
                         </div>
+                        <div class="contact-card glass-card">
+                            <div class="cc-icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
+                            <h4>Location</h4>
+                            <p>Doha, Qatar</p>
+                        </div>
                     </div>
 
-                    <!-- CONTACT FORM -->
                     <div class="social-exec-row">
-                        <a href="https://www.linkedin.com/in/sajid-m-1b3954333" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
+                        <a href="https://sajidmk.com" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
+                            <i class="fas fa-globe"></i> sajidmk.com
+                        </a>
+                        <a href="https://www.linkedin.com/in/sajid-t-1b3954333" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
                             <i class="fab fa-linkedin-in"></i> Connect on LinkedIn
                         </a>
-                        <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
+                        <a href="https://www.instagram.com/sajidteech" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
                             <i class="fab fa-instagram"></i> Follow on Instagram
                         </a>
                     </div>
@@ -446,18 +449,22 @@
 
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="script.js"></script>
+
     <footer class="footer">
         <div class="footer-inner">
             <span class="f-name">Sajid Mehmood</span>
             <span class="f-sep">·</span>
-            <span class="f-sub">IT Support Engineer &amp; CCNA Certified · Doha, Qatar</span>
+            <span class="f-sub">IT Support Engineer &amp; CCNA Certified</span>
             <span class="f-sep">·</span>
-            <a href="https://sajidmk.com" target="_blank" rel="noopener noreferrer" class="f-link">sajidmk.com</a>
+            <span class="f-copy">&copy; <span id="footerYear"></span> All rights reserved.</span>
         </div>
-        <div class="footer-copy">© 2026 Sajid Mehmood. Crafted with precision.</div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('footerYear').textContent = new Date().getFullYear();
+    </script>
+
 </body>
 </html>
