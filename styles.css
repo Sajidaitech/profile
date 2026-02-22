@@ -346,7 +346,7 @@ a { color: inherit; text-decoration: none; }
     position: relative; padding: 20px 18px 0; background: var(--paper);
 }
 .id-photo {
-    width: 100%; aspect-ratio: 1; object-fit: cover;
+    width: 100%; aspect-ratio: 0; object-fit: cover;
     border-radius: 6px; filter: grayscale(10%);
 }
 .id-photo-border {
@@ -1078,4 +1078,5 @@ a { color: inherit; text-decoration: none; }
     color: var(--gold); border-color: rgba(197,160,89,.35);
     background: rgba(197,160,89,.06);
 }
+
 .footer-admin-link i { font-size: 9px; }
