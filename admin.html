@@ -1,855 +1,1308 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel — Sajid Mehmood</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg:        #0f0d0b;
-            --surface:   #1a1208;
-            --surface2:  #241a0e;
-            --border:    rgba(160,120,85,0.25);
-            --accent:    #a07855;
-            --accent2:   #8b5e3c;
-            --accent3:   #6f4a2e;
-            --text:      #f1e8de;
-            --text2:     #b8a898;
-            --text3:     #7a6a5a;
-            --green:     #4ade80;
-            --red:       #f87171;
-            --radius:    10px;
-        }
-
-        html, body { height: 100%; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 15px;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        /* ── LOGIN SCREEN ── */
-        #loginScreen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background:
-                radial-gradient(ellipse at 30% 50%, rgba(139,94,60,0.12) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 50%, rgba(111,74,46,0.08) 0%, transparent 60%),
-                var(--bg);
-        }
-
-        .login-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 48px 44px;
-            max-width: 420px;
-            width: 90%;
-            text-align: center;
-            box-shadow:
-                0 20px 60px rgba(0,0,0,0.5),
-                0 0 0 1px rgba(160,120,85,0.1);
-        }
-
-        .login-logo {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #a07855, #6f4a2e);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            color: #fff;
-            margin: 0 auto 24px;
-            box-shadow: 0 8px 24px rgba(139,94,60,0.4);
-        }
-
-        .login-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            margin-bottom: 8px;
-            color: var(--text);
-        }
-
-        .login-subtitle {
-            font-size: 14px;
-            color: var(--text2);
-            margin-bottom: 32px;
-        }
-
-        .btn-google {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 14px 20px;
-            background: linear-gradient(135deg, #a07855, #6f4a2e);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 14px rgba(139,94,60,0.35);
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn-google:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(139,94,60,0.45);
-        }
-
-        .btn-google:active { transform: translateY(0); }
-
-        .login-note {
-            margin-top: 20px;
-            font-size: 12px;
-            color: var(--text3);
-        }
-
-        .login-error {
-            margin-top: 16px;
-            padding: 10px 14px;
-            background: rgba(248,113,113,0.1);
-            border: 1px solid rgba(248,113,113,0.3);
-            border-radius: 7px;
-            color: var(--red);
-            font-size: 13px;
-            display: none;
-        }
-
-        /* ── MAIN DASHBOARD ── */
-        #dashboard { display: none; }
-
-        /* HEADER */
-        .admin-header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            gap: 16px;
-        }
-
-        .admin-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .admin-brand-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #a07855, #6f4a2e);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            color: #fff;
-        }
-
-        .admin-brand-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-        }
-
-        .admin-brand-sub {
-            font-size: 11px;
-            color: var(--text3);
-        }
-
-        .admin-user {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .admin-user-info {
-            text-align: right;
-        }
-
-        .admin-user-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .admin-user-email-text {
-            font-size: 11px;
-            color: var(--text3);
-        }
-
-        .admin-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: 2px solid var(--accent2);
-            object-fit: cover;
-        }
-
-        .btn-logout {
-            padding: 8px 16px;
-            background: transparent;
-            border: 1px solid var(--border);
-            border-radius: 7px;
-            color: var(--text2);
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.25s;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-logout:hover {
-            border-color: var(--accent2);
-            color: var(--accent);
-        }
-
-        /* CONTENT */
-        .admin-content {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 36px 24px;
-        }
-
-        /* STATS ROW */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .stat-box {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px 22px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent3));
-        }
-
-        .stat-box-label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text3);
-            margin-bottom: 8px;
-        }
-
-        .stat-box-value {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            color: var(--accent);
-            line-height: 1;
-        }
-
-        .stat-box-sub {
-            font-size: 12px;
-            color: var(--text3);
-            margin-top: 4px;
-        }
-
-        /* PANELS */
-        .panel-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 768px) {
-            .panel-grid { grid-template-columns: 1fr; }
-            .admin-header { padding: 12px 16px; }
-            .admin-content { padding: 20px 12px; }
-        }
-
-        .panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        .panel-full { grid-column: 1 / -1; }
-
-        .panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .panel-title {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .panel-body {
-            padding: 20px;
-        }
-
-        /* COUNTDOWN EDITOR */
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text2);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 10px 14px;
-            background: rgba(248,250,252,0.06);
-            border: 1.5px solid var(--border);
-            border-radius: 7px;
-            color: var(--text);
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border-color 0.25s;
-        }
-
-        .form-input:focus { border-color: var(--accent); }
-        .form-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.7);
-            cursor: pointer;
-        }
-
-        .btn-save {
-            width: 100%;
-            padding: 11px;
-            background: linear-gradient(135deg, #a07855, #6f4a2e);
-            color: #fff;
-            border: none;
-            border-radius: 7px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(139,94,60,0.4); }
-
-        .countdown-live-preview {
-            margin-top: 16px;
-            padding: 14px;
-            background: rgba(160,120,85,0.08);
-            border: 1px solid rgba(160,120,85,0.2);
-            border-radius: 7px;
-            text-align: center;
-        }
-
-        .countdown-live-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: var(--text3);
-            margin-bottom: 4px;
-        }
-
-        .countdown-live-value {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            color: var(--accent);
-            letter-spacing: 1px;
-        }
-
-        /* EMAIL TABLE */
-        .table-toolbar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .search-input {
-            flex: 1;
-            min-width: 180px;
-            padding: 8px 12px;
-            background: rgba(248,250,252,0.06);
-            border: 1.5px solid var(--border);
-            border-radius: 7px;
-            color: var(--text);
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border-color 0.25s;
-        }
-
-        .search-input:focus { border-color: var(--accent); }
-        .search-input::placeholder { color: var(--text3); }
-
-        .btn-sm {
-            padding: 8px 14px;
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s;
-            font-family: 'Inter', sans-serif;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-export {
-            background: rgba(160,120,85,0.15);
-            color: var(--accent);
-            border: 1px solid rgba(160,120,85,0.3);
-        }
-
-        .btn-export:hover {
-            background: rgba(160,120,85,0.25);
-        }
-
-        .btn-refresh {
-            background: rgba(248,250,252,0.06);
-            color: var(--text2);
-            border: 1px solid var(--border);
-        }
-
-        .btn-refresh:hover {
-            color: var(--text);
-            border-color: var(--accent2);
-        }
-
-        .table-wrap {
-            margin-top: 16px;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        thead th {
-            padding: 10px 14px;
-            text-align: left;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text3);
-            border-bottom: 1px solid var(--border);
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid rgba(160,120,85,0.07);
-            transition: background 0.2s;
-        }
-
-        tbody tr:hover { background: rgba(160,120,85,0.05); }
-        tbody tr:last-child { border-bottom: none; }
-
-        tbody td {
-            padding: 10px 14px;
-            color: var(--text2);
-            vertical-align: middle;
-        }
-
-        td.email-cell {
-            color: var(--text);
-            font-weight: 500;
-        }
-
-        td .tag {
-            display: inline-block;
-            padding: 2px 8px;
-            background: rgba(74, 222, 128, 0.12);
-            color: var(--green);
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text3);
-        }
-
-        .empty-state i {
-            font-size: 32px;
-            margin-bottom: 12px;
-            opacity: 0.4;
-        }
-
-        .loading-row td {
-            text-align: center;
-            padding: 32px;
-            color: var(--text3);
-        }
-
-        .pagination {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 14px;
-            font-size: 12px;
-            color: var(--text3);
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .pagination-btns {
-            display: flex;
-            gap: 6px;
-        }
-
-        .pagination-btns button {
-            padding: 5px 10px;
-            background: rgba(248,250,252,0.06);
-            border: 1px solid var(--border);
-            border-radius: 5px;
-            color: var(--text2);
-            cursor: pointer;
-            font-size: 12px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.2s;
-        }
-
-        .pagination-btns button:hover { border-color: var(--accent2); color: var(--accent); }
-        .pagination-btns button:disabled { opacity: 0.3; cursor: not-allowed; }
-
-        /* TOAST */
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            padding: 12px 20px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-left: 3px solid var(--accent);
-            border-radius: var(--radius);
-            color: var(--text);
-            font-size: 13px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            z-index: 9999;
-            transform: translateX(120%);
-            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-            max-width: 320px;
-        }
-
-        .toast.show { transform: translateX(0); }
-        .toast.error { border-left-color: var(--red); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Sajid Mehmood Portfolio</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ── PORTFOLIO TOKENS ── */
+:root {
+    --offwhite:#F8F9FA; --paper:#FFFFFF;
+    --graphite:#2D3436; --graphite-md:#4A5568; --graphite-lt:#718096; --graphite-xl:#A0AEC0;
+    --gold:#C5A059; --gold-lt:#E8C97A; --gold-dk:#A07840;
+    --border:#E2E8EF; --border-dk:#CBD5E1;
+    --shadow-sm:0 2px 12px rgba(45,52,54,.07);
+    --shadow-md:0 8px 30px rgba(45,52,54,.10);
+    --shadow-lg:0 16px 48px rgba(45,52,54,.13);
+    --glass-bg:rgba(255,255,255,.78);
+    --transition:0.3s cubic-bezier(0.4,0,0.2,1);
+    --nav-h:68px;
+    --red:#e74c3c; --green:#27ae60;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--offwhite);color:var(--graphite);line-height:1.7;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+
+/* ── GRAIN ── */
+.grain-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:.5;}
+
+/* ══════════════
+   LOGIN
+══════════════ */
+#loginScreen{
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;position:relative;z-index:10;
+    background:linear-gradient(160deg,rgba(197,160,89,.06) 0%,transparent 50%),var(--offwhite);
+}
+.login-wrap{width:100%;max-width:420px;padding:24px;}
+
+.login-eyebrow{
+    display:flex;align-items:center;gap:12px;
+    font-family:'DM Mono',monospace;font-size:10px;
+    color:var(--graphite-lt);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;
+}
+.login-rule{width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+
+.login-box{
+    background:var(--paper);border:1px solid var(--border);
+    border-radius:10px;overflow:hidden;
+    box-shadow:var(--shadow-lg),0 0 0 1px rgba(197,160,89,.08);
+}
+.login-top{
+    background:linear-gradient(135deg,var(--graphite),#4A5568);
+    padding:28px 32px 24px;position:relative;
+}
+.login-top::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--gold),var(--gold-lt));
+}
+.login-top-icon{
+    width:52px;height:52px;border-radius:8px;
+    background:rgba(197,160,89,.15);border:1px solid rgba(197,160,89,.3);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--gold);font-size:20px;margin-bottom:14px;
+}
+.login-top h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+.login-top p{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.45);letter-spacing:1px;}
+
+.login-body{padding:28px 32px 32px;}
+.l-field{margin-bottom:18px;}
+.l-field label{
+    display:flex;align-items:center;gap:7px;
+    font-size:11px;font-weight:700;color:var(--graphite-md);
+    text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;
+}
+.l-field label i{color:var(--gold);font-size:10px;}
+.l-field input{
+    width:100%;padding:13px 16px;
+    background:var(--offwhite);border:1.5px solid var(--border);
+    border-radius:6px;font-family:'Montserrat',sans-serif;
+    font-size:14px;color:var(--graphite);outline:none;transition:all var(--transition);
+}
+.l-field input:focus{border-color:var(--gold);background:var(--paper);box-shadow:0 0 0 3px rgba(197,160,89,.1);}
+.login-btn{
+    width:100%;padding:13px 26px;
+    background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+    color:var(--graphite);border:none;border-radius:4px;
+    font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:.6px;text-transform:uppercase;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:all var(--transition);box-shadow:0 4px 16px rgba(197,160,89,.25);
+}
+.login-btn:hover{background:linear-gradient(135deg,var(--gold-dk),var(--gold));transform:translateY(-1px);box-shadow:0 6px 24px rgba(197,160,89,.4);}
+.login-err{margin-top:12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--red);min-height:18px;text-align:center;}
+.login-back{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    font-family:'DM Mono',monospace;font-size:11px;color:var(--graphite-lt);
+    margin-top:20px;letter-spacing:.5px;transition:color var(--transition);
+}
+.login-back:hover{color:var(--gold);}
+.login-back i{font-size:10px;}
+
+/* ══════════════
+   ADMIN SHELL
+══════════════ */
+#adminApp{display:none;}
+
+/* NAV */
+.adm-nav{
+    position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);
+    background:rgba(248,249,250,.92);backdrop-filter:blur(20px) saturate(200%);
+    -webkit-backdrop-filter:blur(20px) saturate(200%);
+    border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);
+}
+.adm-nav-inner{
+    max-width:1400px;margin:0 auto;padding:0 32px;height:100%;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.adm-logo{display:flex;align-items:center;gap:12px;}
+.adm-logo img{width:38px;height:38px;object-fit:contain;}
+.adm-logo-text{display:flex;flex-direction:column;}
+.adm-logo-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--graphite);line-height:1.2;}
+.adm-logo-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;}
+.adm-nav-actions{display:flex;align-items:center;gap:8px;}
+
+.mob-sidebar-btn{
+    display:none;background:none;border:1.5px solid var(--border);border-radius:4px;
+    padding:8px 10px;cursor:pointer;color:var(--graphite-md);font-size:14px;
+    transition:all var(--transition);
+}
+.mob-sidebar-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+.btn-preview-site,.btn-logout-adm{
+    display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:4px;
+    font-size:12px;font-family:'Montserrat',sans-serif;font-weight:700;
+    letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:all var(--transition);
+}
+.btn-preview-site{background:var(--graphite);color:var(--paper);border:none;}
+.btn-preview-site:hover{background:var(--gold);color:var(--graphite);transform:translateY(-1px);}
+.btn-logout-adm{background:transparent;color:var(--graphite-lt);border:1.5px solid var(--border);}
+.btn-logout-adm:hover{border-color:var(--red);color:var(--red);}
+
+/* LAYOUT */
+.adm-body{display:flex;padding-top:var(--nav-h);min-height:100vh;}
+
+/* SIDEBAR */
+.adm-sidebar{
+    width:240px;flex-shrink:0;
+    background:var(--paper);border-right:1px solid var(--border);
+    position:fixed;top:var(--nav-h);left:0;bottom:0;
+    overflow-y:auto;z-index:100;box-shadow:var(--shadow-sm);
+    transition:transform var(--transition);
+}
+.sb-section{
+    padding:18px 20px 6px;
+    font-family:'DM Mono',monospace;font-size:9px;
+    color:var(--graphite-xl);letter-spacing:2px;text-transform:uppercase;
+}
+.sb-link{
+    display:flex;align-items:center;gap:12px;padding:11px 20px;
+    font-size:13px;font-weight:600;color:var(--graphite-md);cursor:pointer;
+    border-left:3px solid transparent;transition:all var(--transition);
+    font-family:'Montserrat',sans-serif;
+}
+.sb-link:hover{color:var(--graphite);background:var(--offwhite);}
+.sb-link.active{color:var(--gold-dk);border-left-color:var(--gold);background:rgba(197,160,89,.06);}
+.sb-link i{width:16px;text-align:center;font-size:13px;color:var(--gold);flex-shrink:0;}
+.sb-link.active i{color:var(--gold-dk);}
+
+/* MAIN */
+.adm-main{flex:1;margin-left:240px;padding:40px;transition:margin-left var(--transition);}
+
+/* PANELS */
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+.panel-eyebrow{
+    display:flex;align-items:center;gap:12px;
+    font-family:'DM Mono',monospace;font-size:10px;
+    color:var(--graphite-lt);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;
+}
+.panel-rule{width:28px;height:1px;background:var(--gold);flex-shrink:0;}
+.panel-heading{
+    font-family:'Playfair Display',serif;font-size:clamp(26px,3vw,36px);
+    font-weight:900;color:var(--graphite);letter-spacing:-.5px;margin-bottom:6px;
+}
+.panel-sub{font-size:14px;color:var(--graphite-lt);margin-bottom:32px;line-height:1.7;}
+
+/* CARD */
+.a-card{
+    background:var(--paper);border:1px solid var(--border);
+    border-radius:8px;overflow:hidden;box-shadow:var(--shadow-sm);
+    margin-bottom:20px;transition:box-shadow var(--transition);
+}
+.a-card:hover{box-shadow:var(--shadow-md);}
+.a-card-head{
+    background:linear-gradient(135deg,rgba(197,160,89,.08),rgba(197,160,89,.02));
+    border-bottom:1px solid rgba(197,160,89,.15);
+    padding:16px 24px;display:flex;align-items:center;gap:12px;
+}
+.a-card-icon{
+    width:36px;height:36px;border-radius:6px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--graphite);font-size:14px;
+}
+.a-card-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--graphite);}
+.a-card-body{padding:24px;}
+
+/* FORM */
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.f-group{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;}
+.f-group:last-child{margin-bottom:0;}
+.f-group label{
+    display:flex;align-items:center;gap:6px;
+    font-size:11px;font-weight:700;color:var(--graphite-md);
+    text-transform:uppercase;letter-spacing:.6px;font-family:'Montserrat',sans-serif;
+}
+.f-group label i{color:var(--gold);font-size:10px;}
+.f-group input,.f-group textarea,.f-group select{
+    padding:12px 16px;background:var(--offwhite);border:1.5px solid var(--border);
+    border-radius:6px;font-family:'Montserrat',sans-serif;
+    font-size:14px;color:var(--graphite);outline:none;
+    transition:all var(--transition);resize:vertical;
+}
+.f-group input:focus,.f-group textarea:focus,.f-group select:focus{
+    border-color:var(--gold);background:var(--paper);box-shadow:0 0 0 3px rgba(197,160,89,.1);
+}
+.f-hint{font-family:'DM Mono',monospace;font-size:11px;color:var(--graphite-xl);margin-top:2px;}
+
+/* BUTTONS */
+.btn-save{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 26px;border-radius:4px;font-size:13px;
+    font-family:'Montserrat',sans-serif;font-weight:700;
+    letter-spacing:.6px;text-transform:uppercase;cursor:pointer;border:none;
+    background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+    color:var(--graphite);box-shadow:0 4px 16px rgba(197,160,89,.25);
+    transition:all var(--transition);
+}
+.btn-save:hover{background:linear-gradient(135deg,var(--gold-dk),var(--gold));box-shadow:0 6px 24px rgba(197,160,89,.4);transform:translateY(-2px);}
+.btn-add{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 18px;border-radius:4px;font-size:12px;
+    font-family:'Montserrat',sans-serif;font-weight:700;
+    letter-spacing:.5px;text-transform:uppercase;cursor:pointer;
+    background:transparent;color:var(--graphite-md);border:1.5px solid var(--border);
+    transition:all var(--transition);margin-bottom:16px;
+}
+.btn-add:hover{border-color:var(--gold);color:var(--gold-dk);background:rgba(197,160,89,.05);}
+.btn-add i{color:var(--gold);}
+.btn-danger{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:7px 14px;border-radius:4px;font-size:11px;
+    font-family:'Montserrat',sans-serif;font-weight:700;letter-spacing:.5px;
+    text-transform:uppercase;cursor:pointer;
+    background:transparent;color:var(--graphite-lt);border:1.5px solid var(--border);
+    transition:all var(--transition);
+}
+.btn-danger:hover{border-color:var(--red);color:var(--red);}
+.btn-gh{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 26px;border-radius:4px;font-size:13px;
+    font-family:'Montserrat',sans-serif;font-weight:700;
+    letter-spacing:.6px;text-transform:uppercase;cursor:pointer;border:none;
+    background:var(--graphite);color:var(--paper);
+    box-shadow:var(--shadow-sm);transition:all var(--transition);
+}
+.btn-gh:hover{background:#24292e;transform:translateY(-2px);}
+.btn-gh:disabled{opacity:.5;pointer-events:none;}
+
+/* REPEAT ITEMS */
+.repeat-item{
+    background:var(--offwhite);border:1px solid var(--border);
+    border-radius:8px;padding:20px;margin-bottom:14px;
+    transition:border-color var(--transition);
+}
+.repeat-item:hover{border-color:rgba(197,160,89,.3);}
+.ri-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.ri-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:1px;font-weight:600;}
+
+/* SKILL RANGE */
+.range-wrap{display:flex;align-items:center;gap:14px;}
+.range-wrap input[type=range]{flex:1;accent-color:var(--gold);}
+.range-val{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--gold);min-width:48px;text-align:right;}
+
+/* TOAST */
+#saveToast{
+    position:fixed;bottom:28px;right:28px;
+    background:var(--paper);color:var(--graphite);
+    padding:14px 22px;border-radius:6px;
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.5px;
+    display:none;z-index:9999;box-shadow:var(--shadow-lg);
+    border-left:3px solid var(--gold);align-items:center;gap:10px;
+}
+#saveToast i{color:var(--gold);}
+@keyframes toastIn{from{transform:translateY(10px);opacity:0;}to{transform:none;opacity:1;}}
+
+/* DASHBOARD STATS */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:28px;}
+.dash-stat{
+    background:var(--paper);border:1px solid var(--border);border-radius:8px;
+    padding:22px 20px;text-align:center;box-shadow:var(--shadow-sm);
+    transition:all var(--transition);position:relative;overflow:hidden;
+}
+.dash-stat::after{
+    content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--gold),var(--gold-lt));
+    transform:scaleX(0);transform-origin:left;transition:transform var(--transition);
+}
+.dash-stat:hover::after{transform:scaleX(1);}
+.dash-stat:hover{box-shadow:var(--shadow-md);}
+.ds-num{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;color:var(--graphite);line-height:1;}
+.ds-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--graphite-lt);margin-top:6px;letter-spacing:.5px;text-transform:uppercase;}
+
+/* GITHUB PANEL */
+.gh-status{
+    display:flex;align-items:center;gap:10px;padding:14px 18px;
+    background:var(--offwhite);border:1px solid var(--border);
+    border-radius:6px;margin-bottom:16px;font-size:13px;color:var(--graphite-md);
+    font-family:'DM Mono',monospace;
+}
+.gh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.gh-dot.ok{background:var(--green);}
+.gh-dot.warn{background:#f39c12;}
+.gh-dot.err{background:var(--red);}
+.gh-log{
+    background:var(--graphite);color:rgba(255,255,255,.7);border-radius:6px;
+    padding:16px;font-family:'DM Mono',monospace;font-size:12px;line-height:1.8;
+    max-height:200px;overflow-y:auto;margin-top:16px;display:none;
+}
+.gh-log.show{display:block;}
+.token-wrap{position:relative;}
+.token-wrap input{padding-right:44px;}
+.token-eye{
+    position:absolute;right:14px;top:50%;transform:translateY(-50%);
+    background:none;border:none;cursor:pointer;color:var(--graphite-lt);font-size:14px;
+}
+
+/* GUIDE STEPS */
+.guide-steps{counter-reset:st;list-style:none;}
+.guide-steps li{counter-increment:st;display:flex;gap:16px;margin-bottom:18px;align-items:flex-start;}
+.guide-steps li::before{
+    content:counter(st);flex-shrink:0;width:28px;height:28px;border-radius:50%;
+    background:linear-gradient(135deg,var(--gold),var(--gold-lt));
+    color:var(--graphite);font-family:'Playfair Display',serif;
+    font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.guide-steps li p{font-size:14px;line-height:1.8;color:var(--graphite-md);}
+code{
+    font-family:'DM Mono',monospace;font-size:12px;color:var(--gold-dk);
+    background:rgba(197,160,89,.1);border:1px solid rgba(197,160,89,.2);
+    padding:2px 7px;border-radius:3px;
+}
+
+/* PASS HINT */
+.pass-hint{
+    display:flex;align-items:flex-start;gap:10px;
+    background:rgba(197,160,89,.06);border:1px solid rgba(197,160,89,.2);
+    border-radius:6px;padding:14px;font-size:13px;color:var(--graphite-md);
+    line-height:1.6;margin-top:4px;
+}
+.pass-hint i{color:var(--gold);font-size:14px;margin-top:2px;flex-shrink:0;}
+
+/* MOBILE */
+@media(max-width:900px){
+    .adm-sidebar{transform:translateX(-100%);}
+    .adm-sidebar.open{transform:none;}
+    .adm-main{margin-left:0;}
+    .mob-sidebar-btn{display:block;}
+    .adm-main{padding:24px 16px;}
+    .f-row{grid-template-columns:1fr;}
+    .adm-nav-inner{padding:0 16px;}
+}
+</style>
 </head>
 <body>
+<div class="grain-overlay" aria-hidden="true"></div>
 
-<!-- ══ LOGIN SCREEN ══ -->
+<!-- ══════════════════════════
+     LOGIN
+══════════════════════════ -->
 <div id="loginScreen">
-    <div class="login-card">
-        <div class="login-logo"><i class="fas fa-shield-alt"></i></div>
-        <h1 class="login-title">Admin Panel</h1>
-        <p class="login-subtitle">Sign in with your Google account to access the dashboard.</p>
-        <button class="btn-google" id="btnGoogleLogin">
-            <i class="fab fa-google"></i>
-            Continue with Google
+  <div class="login-wrap">
+    <div class="login-eyebrow"><span class="login-rule"></span> Secure Access</div>
+    <div class="login-box">
+      <div class="login-top">
+        <div class="login-top-icon"><i class="fas fa-shield-alt"></i></div>
+        <h1>Portfolio Admin</h1>
+        <p>Sajid Mehmood · IT Support Engineer</p>
+      </div>
+      <div class="login-body">
+        <div class="l-field">
+          <label><i class="fas fa-user"></i> Username</label>
+          <input type="text" id="loginUser" placeholder="Enter username" autocomplete="username">
+        </div>
+        <div class="l-field">
+          <label><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="loginPass" placeholder="Enter password" autocomplete="current-password"
+                 onkeydown="if(event.key==='Enter') doLogin()">
+        </div>
+        <button class="login-btn" onclick="doLogin()">
+          <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
         </button>
-        <div class="login-error" id="loginError"></div>
-        <p class="login-note">Only authorised accounts can access this panel.</p>
+        <div class="login-err" id="loginErr"></div>
+      </div>
     </div>
+    <a href="index.html" class="login-back"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+  </div>
 </div>
 
-<!-- ══ DASHBOARD ══ -->
-<div id="dashboard">
-    <!-- Header -->
-    <header class="admin-header">
-        <div class="admin-brand">
-            <div class="admin-brand-icon"><i class="fas fa-chart-bar"></i></div>
-            <div>
-                <div class="admin-brand-name">Admin Panel</div>
-                <div class="admin-brand-sub">sajidmk.com</div>
-            </div>
+<!-- ══════════════════════════
+     ADMIN APP
+══════════════════════════ -->
+<div id="adminApp">
+
+  <!-- NAV -->
+  <header class="adm-nav">
+    <div class="adm-nav-inner">
+      <div class="adm-logo">
+        <button class="mob-sidebar-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <img src="logo.png" alt="SM">
+        <div class="adm-logo-text">
+          <span class="adm-logo-name">Sajid Mehmood</span>
+          <span class="adm-logo-sub">Admin Panel</span>
         </div>
-        <div class="admin-user">
-            <div class="admin-user-info">
-                <div class="admin-user-name" id="adminUserName">—</div>
-                <div class="admin-user-email-text" id="adminUserEmail">—</div>
-            </div>
-            <img class="admin-avatar" id="adminAvatar" src="" alt="Avatar">
-            <button class="btn-logout" id="btnLogout">
-                <i class="fas fa-sign-out-alt"></i> Sign Out
-            </button>
+      </div>
+      <div class="adm-nav-actions">
+        <button class="btn-preview-site" onclick="window.open('index.html','_blank')">
+          <i class="fas fa-eye"></i> Preview Site
+        </button>
+        <button class="btn-logout-adm" onclick="doLogout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="adm-body">
+
+    <!-- SIDEBAR -->
+    <aside class="adm-sidebar" id="admSidebar">
+      <div class="sb-section">Overview</div>
+      <div class="sb-link active" onclick="showTab('dashboard',this)"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
+
+      <div class="sb-section">Content</div>
+      <div class="sb-link" onclick="showTab('hero',this)"><i class="fas fa-home"></i> Hero Section</div>
+      <div class="sb-link" onclick="showTab('about',this)"><i class="fas fa-user"></i> About Me</div>
+      <div class="sb-link" onclick="showTab('education',this)"><i class="fas fa-graduation-cap"></i> Education</div>
+      <div class="sb-link" onclick="showTab('experience',this)"><i class="fas fa-briefcase"></i> Experience</div>
+      <div class="sb-link" onclick="showTab('skills',this)"><i class="fas fa-tools"></i> Skills</div>
+      <div class="sb-link" onclick="showTab('certifications',this)"><i class="fas fa-certificate"></i> Certifications</div>
+      <div class="sb-link" onclick="showTab('contact',this)"><i class="fas fa-envelope"></i> Contact Info</div>
+
+      <div class="sb-section">Deploy</div>
+      <div class="sb-link" onclick="showTab('github',this)"><i class="fab fa-github"></i> Push to GitHub</div>
+
+      <div class="sb-section">Settings</div>
+      <div class="sb-link" onclick="showTab('password',this)"><i class="fas fa-key"></i> Change Password</div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="adm-main">
+
+      <!-- DASHBOARD -->
+      <div class="tab-panel active" id="tab-dashboard">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Overview</div>
+        <h1 class="panel-heading">Dashboard</h1>
+        <p class="panel-sub">Welcome back, Sajid. Edit any section from the sidebar and push to GitHub to publish live.</p>
+        <div class="dash-grid" id="dashStats"></div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-info"></i></div><span class="a-card-title">Quick Guide</span></div>
+          <div class="a-card-body" style="font-size:14px;line-height:1.9;color:var(--graphite-md)">
+            <strong style="color:var(--graphite)">1.</strong> Edit any section using the sidebar.<br>
+            <strong style="color:var(--graphite)">2.</strong> Click <strong style="color:var(--gold)">Save Changes</strong> on each page.<br>
+            <strong style="color:var(--graphite)">3.</strong> Go to <strong style="color:var(--graphite)">Push to GitHub</strong> — enter your token and click Push.<br>
+            <strong style="color:var(--graphite)">4.</strong> Your portfolio at <strong style="color:var(--graphite)">sajidmk.com</strong> updates automatically within ~1 minute.
+          </div>
         </div>
-    </header>
+      </div>
 
-    <!-- Content -->
-    <div class="admin-content">
+      <!-- HERO -->
+      <div class="tab-panel" id="tab-hero">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Section 00</div>
+        <h1 class="panel-heading">Hero Section</h1>
+        <p class="panel-sub">Edit the main headline, ID card info, KPI numbers and resume link.</p>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-id-card"></i></div><span class="a-card-title">ID Card Info</span></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-group"><label><i class="fas fa-user"></i> Full Name</label><input id="h-name"></div>
+              <div class="f-group"><label><i class="fas fa-briefcase"></i> Job Title</label><input id="h-title"></div>
+            </div>
+            <div class="f-row">
+              <div class="f-group"><label><i class="fas fa-map-marker-alt"></i> Location</label><input id="h-location"></div>
+              <div class="f-group"><label><i class="fas fa-circle"></i> Availability Text</label><input id="h-avail"></div>
+            </div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-heading"></i></div><span class="a-card-title">Headline & Brief</span></div>
+          <div class="a-card-body">
+            <div class="f-group"><label>Headline Line 1</label><input id="h-line1"></div>
+            <div class="f-group"><label>Headline Line 2 <span style="color:var(--gold-dk);font-size:10px">(shown in italic gold)</span></label><input id="h-line2"></div>
+            <div class="f-group"><label>Headline Line 3</label><input id="h-line3"></div>
+            <div class="f-group"><label>Brief Paragraph</label><textarea id="h-brief" rows="4"></textarea></div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-chart-bar"></i></div><span class="a-card-title">KPI Numbers</span></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-group"><label>Years of Experience</label><input id="h-years" type="number"></div>
+              <div class="f-group"><label>Tickets Resolved</label><input id="h-tickets" type="number"></div>
+              <div class="f-group"><label>SLA Compliance %</label><input id="h-sla" type="number"></div>
+            </div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-link"></i></div><span class="a-card-title">Resume Link</span></div>
+          <div class="a-card-body">
+            <div class="f-group"><label>Google Drive Resume URL</label><input id="h-resume" type="url"></div>
+          </div>
+        </div>
+        <button class="btn-save" onclick="saveSection('hero')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
 
-        <!-- Stats Row -->
-        <div class="stats-row">
-            <div class="stat-box">
-                <div class="stat-box-label"><i class="fas fa-eye"></i> Total Visits</div>
-                <div class="stat-box-value" id="statVisits">—</div>
-                <div class="stat-box-sub">portfolio page loads</div>
+      <!-- ABOUT -->
+      <div class="tab-panel" id="tab-about">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Section 01</div>
+        <h1 class="panel-heading">About Me</h1>
+        <p class="panel-sub">Edit your bio paragraphs and achievement highlights.</p>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-align-left"></i></div><span class="a-card-title">Bio Text</span></div>
+          <div class="a-card-body">
+            <div class="f-group"><label>Lead Paragraph</label><textarea id="a-lead" rows="4"></textarea></div>
+            <div class="f-group"><label>Second Paragraph</label><textarea id="a-body1" rows="3"></textarea></div>
+            <div class="f-group"><label>Third Paragraph</label><textarea id="a-body2" rows="3"></textarea></div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-trophy"></i></div><span class="a-card-title">Achievement Highlights</span></div>
+          <div class="a-card-body">
+            <div id="achievesList"></div>
+            <button class="btn-add" onclick="addAchieve()"><i class="fas fa-plus"></i> Add Achievement</button>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-chart-pie"></i></div><span class="a-card-title">Performance Panel Numbers</span></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-group"><label>Systems Managed</label><input id="a-systems"></div>
+              <div class="f-group"><label>Networks Configured</label><input id="a-networks"></div>
+              <div class="f-group"><label>SLA Ring %</label><input id="a-sla" type="number"></div>
             </div>
-            <div class="stat-box">
-                <div class="stat-box-label"><i class="fas fa-calendar-check"></i> Last Visit</div>
-                <div class="stat-box-value" id="statLastVisit" style="font-size:18px;margin-top:6px">—</div>
-                <div class="stat-box-sub">most recent visitor</div>
+          </div>
+        </div>
+        <button class="btn-save" onclick="saveSection('about')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="tab-panel" id="tab-education">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Section 02</div>
+        <h1 class="panel-heading">Education</h1>
+        <p class="panel-sub">Each entry appears as a tab on your portfolio.</p>
+        <div id="eduList"></div>
+        <button class="btn-add" onclick="addEdu()"><i class="fas fa-plus"></i> Add Entry</button>
+        <br><button class="btn-save" onclick="saveSection('education')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="tab-panel" id="tab-experience">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Section 03</div>
+        <h1 class="panel-heading">Professional Experience</h1>
+        <p class="panel-sub">Add, edit or remove jobs. Most recent first.</p>
+        <div id="expList"></div>
+        <button class="btn-add" onclick="addExp()"><i class="fas fa-plus"></i> Add Experience</button>
+        <br><button class="btn-save" onclick="saveSection('experience')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="tab-panel" id="tab-skills">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Section 04</div>
+        <h1 class="panel-heading">Skills &amp; Expertise</h1>
+        <p class="panel-sub">Adjust skill levels, tech stack pills and languages.</p>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-sliders-h"></i></div><span class="a-card-title">Core Skills</span></div>
+          <div class="a-card-body"><div id="skillsList"></div><button class="btn-add" onclick="addSkill()"><i class="fas fa-plus"></i> Add Skill</button></div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-tags"></i></div><span class="a-card-title">Tech Stack Pills</span></div>
+          <div class="a-card-body"><div class="f-group"><label>One technology per line</label><textarea id="techStack" rows="10"></textarea></div></div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-language"></i></div><span class="a-card-title">Languages</span></div>
+          <div class="a-card-body"><div id="langList"></div><button class="btn-add" onclick="addLang()"><i class="fas fa-plus"></i> Add Language</button></div>
+        </div>
+        <button class="btn-save" onclick="saveSection('skills')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+
+      <!-- CERTIFICATIONS -->
+      <div class="tab-panel" id="tab-certifications">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Section 05</div>
+        <h1 class="panel-heading">Certifications</h1>
+        <p class="panel-sub">Edit your featured CCNA and additional certifications.</p>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-star"></i></div><span class="a-card-title">Featured Certification (CCNA)</span></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-group"><label>Title</label><input id="fc-title"></div>
+              <div class="f-group"><label>Subtitle</label><input id="fc-subtitle"></div>
             </div>
-            <div class="stat-box">
-                <div class="stat-box-label"><i class="fas fa-clock"></i> Countdown Target</div>
-                <div class="stat-box-value countdown-live-value" id="statCountdown" style="font-size:16px;margin-top:6px">—</div>
-                <div class="stat-box-sub">current target date</div>
+            <div class="f-row">
+              <div class="f-group"><label>Issuer</label><input id="fc-issuer"></div>
+              <div class="f-group"><label>Issue Date</label><input id="fc-date"></div>
             </div>
+            <div class="f-group"><label>Certificate Code</label><input id="fc-code"></div>
+            <div class="f-group"><label>Description</label><textarea id="fc-desc" rows="3"></textarea></div>
+            <div class="f-group"><label>Certificate URL</label><input id="fc-url" type="url"></div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-award"></i></div><span class="a-card-title">Additional Certifications</span></div>
+          <div class="a-card-body"><div id="certsList"></div><button class="btn-add" onclick="addCert()"><i class="fas fa-plus"></i> Add Certificate</button></div>
+        </div>
+        <button class="btn-save" onclick="saveSection('certifications')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="tab-panel" id="tab-contact">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Section 06</div>
+        <h1 class="panel-heading">Contact Info</h1>
+        <p class="panel-sub">Update emails, phone, location and social links.</p>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-address-book"></i></div><span class="a-card-title">Contact Details</span></div>
+          <div class="a-card-body">
+            <div class="f-row">
+              <div class="f-group"><label><i class="fas fa-envelope"></i> Primary Email</label><input id="c-email1" type="email"></div>
+              <div class="f-group"><label><i class="fas fa-envelope"></i> Secondary Email</label><input id="c-email2" type="email"></div>
+            </div>
+            <div class="f-row">
+              <div class="f-group"><label><i class="fas fa-phone"></i> Phone</label><input id="c-phone"></div>
+              <div class="f-group"><label><i class="fas fa-map-marker-alt"></i> Location</label><input id="c-location"></div>
+            </div>
+          </div>
+        </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-share-alt"></i></div><span class="a-card-title">Social Links</span></div>
+          <div class="a-card-body">
+            <div class="f-group"><label><i class="fas fa-globe"></i> Website</label><input id="c-web" type="url"></div>
+            <div class="f-group"><label><i class="fab fa-linkedin"></i> LinkedIn URL</label><input id="c-linkedin" type="url"></div>
+            <div class="f-group"><label><i class="fab fa-instagram"></i> Instagram URL</label><input id="c-instagram" type="url"></div>
+          </div>
+        </div>
+        <button class="btn-save" onclick="saveSection('contact')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+
+      <!-- GITHUB PUSH -->
+      <div class="tab-panel" id="tab-github">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Deploy</div>
+        <h1 class="panel-heading">Push to GitHub</h1>
+        <p class="panel-sub">Save your changes then push directly to your GitHub repo. Your site will auto-update via GitHub Pages.</p>
+
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fab fa-github"></i></div><span class="a-card-title">GitHub Configuration</span></div>
+          <div class="a-card-body">
+            <div class="f-group">
+              <label><i class="fas fa-code-branch"></i> Repository</label>
+              <input id="gh-repo" value="Sajidaitech/profile" placeholder="username/repo-name">
+              <span class="f-hint">e.g. Sajidaitech/profile</span>
+            </div>
+            <div class="f-group">
+              <label><i class="fas fa-key"></i> Personal Access Token</label>
+              <div class="token-wrap">
+                <input id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                <button class="token-eye" onclick="toggleToken()"><i class="fas fa-eye" id="tokenEyeIcon"></i></button>
+              </div>
+              <span class="f-hint">Token needs <strong>repo</strong> scope. Stored only in this browser session.</span>
+            </div>
+            <div class="f-group">
+              <label><i class="fas fa-comment"></i> Commit Message</label>
+              <input id="gh-msg" value="Update portfolio content via Admin Panel">
+            </div>
+          </div>
         </div>
 
-        <!-- Panel Grid -->
-        <div class="panel-grid">
-
-            <!-- Countdown Editor -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-hourglass-half"></i> Countdown Timer</span>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label class="form-label" for="countdownDate">Target Date & Time</label>
-                        <input type="datetime-local" id="countdownDate" class="form-input" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="countdownLabel">Banner Label</label>
-                        <input type="text" id="countdownLabel" class="form-input" placeholder="e.g. Something exciting is launching in" />
-                    </div>
-                    <button class="btn-save" id="btnSaveCountdown">
-                        <i class="fas fa-save"></i> Save Countdown
-                    </button>
-                    <div class="countdown-live-preview">
-                        <div class="countdown-live-label">Live Preview</div>
-                        <div class="countdown-live-value" id="adminTimerPreview">Loading…</div>
-                    </div>
-                </div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-upload"></i></div><span class="a-card-title">Push Files</span></div>
+          <div class="a-card-body">
+            <div class="gh-status" id="ghStatus">
+              <span class="gh-dot warn"></span>
+              <span>Ready — enter your token and click Push.</span>
             </div>
-
-            <!-- Quick Actions -->
-            <div class="panel">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fas fa-bolt"></i> Quick Actions</span>
-                </div>
-                <div class="panel-body">
-                    <div style="display:flex;flex-direction:column;gap:12px">
-                        <button class="btn-save" id="btnRefresh" style="background:linear-gradient(135deg,#334155,#1e293b)">
-                            <i class="fas fa-sync-alt"></i> Refresh Visit Count
-                        </button>
-                        <a href="index.html" target="_blank" class="btn-save" style="text-decoration:none;text-align:center;display:block;background:rgba(160,120,85,0.15);color:#a07855;border:1px solid rgba(160,120,85,0.3);">
-                            <i class="fas fa-external-link-alt"></i> View Portfolio Site
-                        </a>
-                    </div>
-                    <div style="margin-top:20px;padding:14px;background:rgba(160,120,85,0.06);border-radius:8px;border:1px solid rgba(160,120,85,0.15)">
-                        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:8px">Countdown Instructions</div>
-                        <p style="font-size:12px;color:var(--text2);line-height:1.7">
-                            1. Pick a target date above<br>
-                            2. Click <strong style="color:var(--accent)">Save Countdown</strong><br>
-                            3. To make it permanent across all devices, also update <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">targetDate</code> in <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">script.js</code>
-                        </p>
-                    </div>
-                </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+              <button class="btn-gh" id="ghPushBtn" onclick="pushToGitHub()">
+                <i class="fab fa-github"></i> Push to GitHub
+              </button>
+              <button class="btn-add" onclick="document.getElementById('ghLog').classList.toggle('show')">
+                <i class="fas fa-terminal"></i> Toggle Log
+              </button>
             </div>
-
+            <div class="gh-log" id="ghLog"></div>
+          </div>
         </div>
-    </div><!-- /admin-content -->
-</div><!-- /dashboard -->
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-question-circle"></i></div><span class="a-card-title">How to Get a GitHub Token</span></div>
+          <div class="a-card-body">
+            <ol class="guide-steps">
+              <li><p>Go to <strong>github.com</strong> → click your profile photo → <strong>Settings</strong></p></li>
+              <li><p>Scroll down to <strong>Developer settings</strong> → <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></p></li>
+              <li><p>Click <strong>Generate new token (classic)</strong>. Give it a name like <code>portfolio-admin</code>.</p></li>
+              <li><p>Tick the <strong>repo</strong> checkbox. Set expiry as needed. Click <strong>Generate token</strong>.</p></li>
+              <li><p>Copy the token (starts with <code>ghp_</code>) and paste it above. It is stored only in your browser session.</p></li>
+            </ol>
+          </div>
+        </div>
+      </div>
 
-<!-- Firebase SDK -->
-<script type="module">
-    import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, get }
-                               from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-                               from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+      <!-- CHANGE PASSWORD -->
+      <div class="tab-panel" id="tab-password">
+        <div class="panel-eyebrow"><span class="panel-rule"></span> Settings</div>
+        <h1 class="panel-heading">Change Password</h1>
+        <p class="panel-sub">Update your admin login credentials.</p>
+        <div class="a-card">
+          <div class="a-card-head"><div class="a-card-icon"><i class="fas fa-key"></i></div><span class="a-card-title">Update Credentials</span></div>
+          <div class="a-card-body">
+            <div class="f-group"><label><i class="fas fa-user"></i> Username</label><input id="new-user"></div>
+            <div class="f-group"><label><i class="fas fa-lock"></i> New Password</label><input type="password" id="new-pass"></div>
+            <div class="f-group"><label><i class="fas fa-lock"></i> Confirm Password</label><input type="password" id="new-pass2"></div>
+            <div class="pass-hint"><i class="fas fa-exclamation-triangle"></i> Store your password somewhere safe — there is no recovery option.</div>
+          </div>
+        </div>
+        <button class="btn-save" onclick="changePassword()"><i class="fas fa-save"></i> Update Credentials</button>
+      </div>
 
-    const firebaseConfig = {
-        apiKey:            "AIzaSyDg8sXFAY9uvOQRf1Y_ccK0aPMDYPRYT38",
-        authDomain:        "website-a1502.firebaseapp.com",
-        databaseURL:       "https://website-a1502-default-rtdb.firebaseio.com",
-        projectId:         "website-a1502",
-        storageBucket:     "website-a1502.firebasestorage.app",
-        messagingSenderId: "545587358769",
-        appId:             "1:545587358769:web:9425dae3b9198d1aecb910",
-        measurementId:     "G-8WQEKQ8SR2"
-    };
+    </main>
+  </div>
+</div>
 
-    const ADMIN_EMAIL = "sajid.teech@gmail.com";
+<div id="saveToast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Saved successfully!</span></div>
 
-    const app      = initializeApp(firebaseConfig);
-    const db       = getDatabase(app);
-    const auth     = getAuth(app);
-    const provider = new GoogleAuthProvider();
+<script>
+// ════════════════════════════════
+// AUTH
+// ════════════════════════════════
+const DEF_USER = 'sajid', DEF_PASS = 'sajid2020';
+function getCreds(){ return { user: localStorage.getItem('adm_u')||DEF_USER, pass: localStorage.getItem('adm_p')||DEF_PASS }; }
 
-    const $ = (id) => document.getElementById(id);
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+  const c=getCreds();
+  if(u===c.user && p===c.pass){
+    sessionStorage.setItem('adm_auth','1');
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('adminApp').style.display='block';
+    initAdmin();
+  } else {
+    document.getElementById('loginErr').textContent='✕ Incorrect username or password.';
+  }
+}
+function doLogout(){ sessionStorage.removeItem('adm_auth'); location.reload(); }
+function changePassword(){
+  const u=document.getElementById('new-user').value.trim();
+  const p=document.getElementById('new-pass').value.trim();
+  const p2=document.getElementById('new-pass2').value.trim();
+  if(!u||!p) return alert('Fill in username and password.');
+  if(p!==p2) return alert('Passwords do not match.');
+  localStorage.setItem('adm_u',u); localStorage.setItem('adm_p',p);
+  showToast('Credentials updated!');
+}
 
-    function showToast(msg, isError = false) {
-        const t = $('toast');
-        t.textContent = msg;
-        t.className   = 'toast' + (isError ? ' error' : '');
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3500);
+// Auto-login if session still active
+if(sessionStorage.getItem('adm_auth')==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('adminApp').style.display='block';
+  document.addEventListener('DOMContentLoaded', initAdmin);
+}
+
+// ════════════════════════════════
+// UI
+// ════════════════════════════════
+function showTab(name, el){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(window.innerWidth<=900) document.getElementById('admSidebar').classList.remove('open');
+}
+function toggleSidebar(){ document.getElementById('admSidebar').classList.toggle('open'); }
+function toggleToken(){
+  const inp=document.getElementById('gh-token');
+  const ico=document.getElementById('tokenEyeIcon');
+  if(inp.type==='password'){ inp.type='text'; ico.className='fas fa-eye-slash'; }
+  else { inp.type='password'; ico.className='fas fa-eye'; }
+}
+function showToast(msg){
+  const t=document.getElementById('saveToast');
+  document.getElementById('toastMsg').textContent=msg||'Saved!';
+  t.style.display='flex'; t.style.animation='toastIn .3s ease';
+  setTimeout(()=>{ t.style.display='none'; }, 2800);
+}
+
+// ════════════════════════════════
+// DEFAULTS & STORAGE
+// ════════════════════════════════
+const DEFAULTS = {
+  hero:{ name:'Sajid Mehmood', title:'IT Support Engineer', location:'Doha, Qatar', avail:'Available for Opportunities',
+    line1:'From Hospitals to Airports —', line2:'I Keep IT', line3:'Running.',
+    brief:'CCNA-certified IT Support Engineer with 4+ years of experience in healthcare, telecom, and immigration sectors. Skilled in hardware, software, and network troubleshooting — delivering Level 1 & Level 2 support that keeps businesses operational.',
+    years:4, tickets:500, sla:95,
+    resume:'https://drive.google.com/file/d/1bS0MO-9GPHlz359Fdq3ebmvLHnKlmy2t/view?usp=drive_link' },
+  about:{ lead:"I'm Sajid Mehmood, a CCNA-certified IT Support Engineer with over 4 years of hands-on experience in healthcare, telecom, and immigration sectors. I specialise in hardware, software, and network troubleshooting — delivering Level 1 and Level 2 support that users can rely on.",
+    body1:"I have proven experience managing IT assets, deploying systems, and training staff. My focus on proactive maintenance and fast resolution has helped me maintain a consistent 95% SLA compliance record across every role I've held.",
+    body2:"Currently based in Doha, Qatar, I'm open to new opportunities where reliability, speed, and technical depth are valued.",
+    systems:'200+', networks:'50+', sla:95,
+    achieves:[
+      {icon:'fa-trophy',title:'Safety Award — HIA Airport Project',desc:'Recognition for exemplary safety practices'},
+      {icon:'fa-chart-line',title:'Consistent 95% SLA Compliance',desc:'Maintained across all projects and roles'},
+      {icon:'fa-industry',title:'Multi-Sector Experience',desc:'Healthcare · Telecom · Immigration · Aviation'}
+    ]},
+  education:[
+    {date:'Sep 2024 – Jun 2025',degree:'Bachelor of Science in Information Technology',inst:'Middlesex University Dubai',note:'Expected Graduation: 2025',url:'https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing'},
+    {date:'Nov 2020 – Nov 2023',degree:'Advanced Diploma in Software Engineering',inst:'Aptech Qatar',note:'ACCP Certification',url:'https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing'},
+    {date:'Sep 2017 – Jul 2018',degree:'IGCSE',inst:'Bright Future International School',note:'Cambridge International Examination',url:''}
+  ],
+  experience:[
+    {date:'Apr 2025 – Aug 2025',title:'IT Executive & Business Development Intern',type:'Internship',company:'Al Tawkel Immigration Center · Dubai, UAE',
+     resp:'Delivered Level 2 IT support including hardware repairs, system reimaging, network troubleshooting, and Office 365 email configurations\nInstalled, configured, and maintained enterprise IT infrastructure (servers, networks, printers)\nCreated and maintained digital IT asset records, streamlining lifecycle management\nAssisted with immigration business operations including visa applications, cancellations, and Golden Visa processing\nCoordinated with government authorities to resolve absconding employee cases, overstay fines, and lost passports',
+     letterText:'Experience Letter',letterUrl:'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing'},
+    {date:'Nov 2023 – Feb 2024',title:'IT Support Engineer',type:'Short-term Project',company:'Military Medical City Hospital (MMCH) · Doha, Qatar',
+     resp:'Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance\nHandled L1 tasks (password resets, software installs, network fixes) and L2 troubleshooting (OS crashes, hardware failures)\nPerformed system reimaging, OS deployment, and application configuration for 300+ medical staff\nSupported EMR application troubleshooting for doctors and nurses, reducing downtime\nConducted preventive maintenance and patching for compliance with IT policies\nMaintained digital asset inventory, improving lifecycle management accuracy',
+     letterText:'Experience Letter',letterUrl:'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'},
+    {date:'Feb 2022 – Nov 2023',title:'IT Support Engineer',type:'Full Time',company:'Star Link – Power International Holding · Doha, Qatar',
+     resp:'Delivered daily IT support for 200+ staff across retail and corporate offices\nResolved L1 issues: login errors, email configs, printer problems, software installations\nHandled L2 incidents: hardware replacements, OS troubleshooting, network failures\nPerformed imaging, upgrades, and preventive maintenance for desktops, laptops, POS systems\nMonitored and documented IT assets, reducing missing equipment by 20%\nCollaborated with vendors and telecoms for VoIP/connectivity issues\nSupported onboarding (device provisioning, account setup, access control)\nTrained staff on troubleshooting and IT best practices, reducing repeat tickets',
+     letterText:'Starlink Experience Letter',letterUrl:'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing'},
+    {date:'May 2021 – Feb 2022',title:'Customer Service Agent',type:'Full Time',company:'STARLINK (Ooredoo International Telecommunications Company) · Qatar',
+     resp:'Handled inbound/outbound customer calls, resolving service and product issues\nIdentified customer needs, researched solutions, and provided appropriate alternatives\nSupported customers with network and technical issues across Ooredoo products\nMaintained accurate call records in database systems\nEngaged customers and built sustainable long-term relationships\nRegularly attended training sessions to improve product knowledge and performance',
+     letterText:'Experience Letter',letterUrl:'https://drive.google.com/file/d/1F1dRuB9Bp3aLm0M2A0RZ_xmzFoYaElKp/view?usp=sharing'}
+  ],
+  skills:[
+    {name:'L1 & L2 IT Support',icon:'fa-headset',level:85,cat:'Core Competency'},
+    {name:'Hardware Repair & Maint.',icon:'fa-tools',level:82,cat:'Hands-on Experience'},
+    {name:'System Reimaging & OS Deploy',icon:'fa-compact-disc',level:80,cat:'Practiced Regularly'},
+    {name:'Network Support (LAN/WAN)',icon:'fa-network-wired',level:78,cat:'CCNA Foundation'},
+    {name:'IT Asset Management',icon:'fa-database',level:75,cat:'Full Lifecycle'},
+    {name:'Office 365 & SharePoint',icon:'fa-envelope-open',level:80,cat:'Daily Use'},
+    {name:'Onboarding IT Processes',icon:'fa-user-plus',level:72,cat:'Multi-company Experience'},
+    {name:'H/W, S/W & OS Troubleshoot',icon:'fa-bug',level:83,cat:'Expert Level'},
+    {name:'Digital Asset Inventory',icon:'fa-clipboard-list',level:76,cat:'Cross-sector Practice'}
+  ],
+  techStack:['Windows 10 / 11','macOS','Office 365','SharePoint','Active Directory','Outlook','Microsoft Teams','LAN / WAN / Wi-Fi','VoIP','Network Troubleshooting','TCP/IP','System Reimaging','Hardware Repair','EMR Systems','POS Systems','SQL Basics','Project Management','Odoo ERP'],
+  languages:[{name:'English',level:'Professional'},{name:'Urdu / Hindi',level:'Native'},{name:'Pashto',level:'Native'}],
+  featuredCert:{title:'CCNA 200-301',subtitle:'Network Fundamentals',issuer:'Simplilearn SkillUp',date:'January 17, 2026',code:'9726449',
+    desc:'Covering network fundamentals, routing protocols, switching technologies, and enterprise network security principles.',
+    url:'https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing'},
+  certs:[
+    {icon:'fa-graduation-cap',title:'Odoo ERP Training',desc:'Workshop covering business processes, product, vendor, and customer management.',url:'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'},
+    {icon:'fa-trophy',title:'Aptech Graduation',desc:'Advanced Diploma in Software Engineering (ACCP) certification.',url:'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'},
+    {icon:'fa-hands-helping',title:'MDX Career Fair',desc:'Certificate of appreciation for volunteering at the Middlesex University Career Fair.',url:'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'},
+    {icon:'fa-award',title:'Safety Award — HIA',desc:'Recognition for exemplary safety practices during the Airport Expansion Project.',url:'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVGbGi5HcFh4lrN9/view?usp=drive_link'}
+  ],
+  contact:{email1:'sajidmehmood@outlook.com',email2:'sajid@sajidmk.com',phone:'+974 6696 9598',location:'Doha, Qatar',
+    web:'https://sajidmk.com',linkedin:'https://www.linkedin.com/in/sajid-t-1b3954333',instagram:'https://www.instagram.com/sajidteech'}
+};
+
+function getData(k){ const r=localStorage.getItem('pd_'+k); return r?JSON.parse(r):DEFAULTS[k]; }
+function setData(k,v){ localStorage.setItem('pd_'+k,JSON.stringify(v)); }
+function v(id){ const el=document.getElementById(id); return el?el.value.trim():''; }
+
+// ════════════════════════════════
+// INIT
+// ════════════════════════════════
+function initAdmin(){
+  loadHeroForm(); loadAboutForm(); loadEduForm();
+  loadExpForm(); loadSkillsForm(); loadCertsForm(); loadContactForm();
+  updateDashboard();
+}
+
+function updateDashboard(){
+  const stats=[
+    {n:getData('experience').length,l:'Jobs Listed'},
+    {n:getData('skills').length,l:'Skills'},
+    {n:getData('certs').length+1,l:'Certifications'},
+    {n:getData('education').length,l:'Education Entries'}
+  ];
+  document.getElementById('dashStats').innerHTML=stats.map(s=>
+    `<div class="dash-stat"><div class="ds-num">${s.n}</div><div class="ds-lbl">${s.l}</div></div>`
+  ).join('');
+}
+
+// ════════════════════════════════
+// FORM LOADERS & SAVERS
+// ════════════════════════════════
+function loadHeroForm(){
+  const d=getData('hero');
+  ['name','title','location','avail','line1','line2','line3','brief','resume'].forEach(k=>{
+    const el=document.getElementById('h-'+k); if(el) el.value=d[k]||'';
+  });
+  document.getElementById('h-years').value=d.years;
+  document.getElementById('h-tickets').value=d.tickets;
+  document.getElementById('h-sla').value=d.sla;
+}
+
+function loadAboutForm(){
+  const d=getData('about');
+  document.getElementById('a-lead').value=d.lead;
+  document.getElementById('a-body1').value=d.body1;
+  document.getElementById('a-body2').value=d.body2;
+  document.getElementById('a-systems').value=d.systems;
+  document.getElementById('a-networks').value=d.networks;
+  document.getElementById('a-sla').value=d.sla;
+  renderAchieves(d.achieves);
+}
+function renderAchieves(list){
+  document.getElementById('achievesList').innerHTML=list.map((a,i)=>`
+    <div class="repeat-item">
+      <div class="ri-header"><span class="ri-num">ACHIEVEMENT ${i+1}</span>
+        <button class="btn-danger" onclick="removeAchieve(${i})"><i class="fas fa-times"></i> Remove</button>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Title</label><input id="ach-t-${i}" value="${esc(a.title)}"></div>
+        <div class="f-group"><label>Description</label><input id="ach-d-${i}" value="${esc(a.desc)}"></div>
+      </div>
+    </div>`).join('');
+}
+function addAchieve(){ const d=getData('about'); d.achieves.push({icon:'fa-star',title:'',desc:''}); setData('about',d); renderAchieves(d.achieves); }
+function removeAchieve(i){ const d=getData('about'); d.achieves.splice(i,1); setData('about',d); renderAchieves(d.achieves); }
+
+function loadEduForm(){ renderEdu(getData('education')); }
+function renderEdu(list){
+  document.getElementById('eduList').innerHTML=list.map((e,i)=>`
+    <div class="repeat-item">
+      <div class="ri-header"><span class="ri-num">ENTRY ${i+1}</span>
+        <button class="btn-danger" onclick="removeEdu(${i})"><i class="fas fa-times"></i> Remove</button>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Date Range</label><input id="edu-date-${i}" value="${esc(e.date)}"></div>
+        <div class="f-group"><label>Institution</label><input id="edu-inst-${i}" value="${esc(e.inst)}"></div>
+      </div>
+      <div class="f-group"><label>Degree / Qualification</label><input id="edu-deg-${i}" value="${esc(e.degree)}"></div>
+      <div class="f-row">
+        <div class="f-group"><label>Note</label><input id="edu-note-${i}" value="${esc(e.note)}"></div>
+        <div class="f-group"><label>Certificate URL</label><input id="edu-url-${i}" value="${esc(e.url)}"></div>
+      </div>
+    </div>`).join('');
+}
+function addEdu(){ const d=getData('education'); d.unshift({date:'',degree:'',inst:'',note:'',url:''}); setData('education',d); renderEdu(d); }
+function removeEdu(i){ const d=getData('education'); d.splice(i,1); setData('education',d); renderEdu(d); }
+
+function loadExpForm(){ renderExp(getData('experience')); }
+function renderExp(list){
+  document.getElementById('expList').innerHTML=list.map((e,i)=>`
+    <div class="repeat-item">
+      <div class="ri-header"><span class="ri-num">JOB ${i+1}</span>
+        <button class="btn-danger" onclick="removeExp(${i})"><i class="fas fa-times"></i> Remove</button>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Job Title</label><input id="exp-t-${i}" value="${esc(e.title)}"></div>
+        <div class="f-group"><label>Type</label><input id="exp-ty-${i}" value="${esc(e.type)}"></div>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Company & Location</label><input id="exp-c-${i}" value="${esc(e.company)}"></div>
+        <div class="f-group"><label>Date Range</label><input id="exp-d-${i}" value="${esc(e.date)}"></div>
+      </div>
+      <div class="f-group">
+        <label>Responsibilities <span style="color:var(--graphite-xl);font-size:10px;font-weight:400">(one per line = one bullet)</span></label>
+        <textarea id="exp-r-${i}" rows="6">${esc(e.resp)}</textarea>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Letter Button Text</label><input id="exp-lt-${i}" value="${esc(e.letterText||'')}"></div>
+        <div class="f-group"><label>Letter URL</label><input id="exp-lu-${i}" value="${esc(e.letterUrl||'')}"></div>
+      </div>
+    </div>`).join('');
+}
+function addExp(){ const d=getData('experience'); d.unshift({date:'',title:'New Position',type:'Full Time',company:'',resp:'',letterText:'Experience Letter',letterUrl:''}); setData('experience',d); renderExp(d); }
+function removeExp(i){ const d=getData('experience'); d.splice(i,1); setData('experience',d); renderExp(d); }
+
+function loadSkillsForm(){
+  renderSkills(getData('skills'));
+  document.getElementById('techStack').value=getData('techStack').join('\n');
+  renderLangs(getData('languages'));
+}
+function renderSkills(list){
+  document.getElementById('skillsList').innerHTML=list.map((s,i)=>`
+    <div class="repeat-item">
+      <div class="ri-header"><span class="ri-num">SKILL ${i+1}</span>
+        <button class="btn-danger" onclick="removeSkill(${i})"><i class="fas fa-times"></i> Remove</button>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Skill Name</label><input id="sk-n-${i}" value="${esc(s.name)}"></div>
+        <div class="f-group"><label>Category Label</label><input id="sk-c-${i}" value="${esc(s.cat)}"></div>
+      </div>
+      <div class="f-group">
+        <label>Proficiency Level</label>
+        <div class="range-wrap">
+          <input type="range" min="10" max="100" value="${s.level}" id="sk-l-${i}"
+            oninput="document.getElementById('sk-v-${i}').textContent=this.value+'%'">
+          <span class="range-val" id="sk-v-${i}">${s.level}%</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function addSkill(){ const d=getData('skills'); d.push({name:'New Skill',icon:'fa-star',level:70,cat:'Intermediate'}); setData('skills',d); renderSkills(d); }
+function removeSkill(i){ const d=getData('skills'); d.splice(i,1); setData('skills',d); renderSkills(d); }
+function renderLangs(list){
+  document.getElementById('langList').innerHTML=list.map((l,i)=>`
+    <div class="repeat-item">
+      <div class="ri-header"><span class="ri-num">LANGUAGE ${i+1}</span>
+        <button class="btn-danger" onclick="removeLang(${i})"><i class="fas fa-times"></i> Remove</button>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Language</label><input id="lang-n-${i}" value="${esc(l.name)}"></div>
+        <div class="f-group"><label>Level</label><input id="lang-l-${i}" value="${esc(l.level)}"></div>
+      </div>
+    </div>`).join('');
+}
+function addLang(){ const d=getData('languages'); d.push({name:'',level:''}); setData('languages',d); renderLangs(d); }
+function removeLang(i){ const d=getData('languages'); d.splice(i,1); setData('languages',d); renderLangs(d); }
+
+function loadCertsForm(){
+  const fc=getData('featuredCert');
+  ['title','subtitle','issuer','date','code','desc','url'].forEach(k=>{
+    const el=document.getElementById('fc-'+k); if(el) el.value=fc[k]||'';
+  });
+  renderCerts(getData('certs'));
+}
+function renderCerts(list){
+  document.getElementById('certsList').innerHTML=list.map((c,i)=>`
+    <div class="repeat-item">
+      <div class="ri-header"><span class="ri-num">CERT ${i+1}</span>
+        <button class="btn-danger" onclick="removeCert(${i})"><i class="fas fa-times"></i> Remove</button>
+      </div>
+      <div class="f-row">
+        <div class="f-group"><label>Title</label><input id="cert-t-${i}" value="${esc(c.title)}"></div>
+        <div class="f-group"><label>Description</label><input id="cert-d-${i}" value="${esc(c.desc)}"></div>
+      </div>
+      <div class="f-group"><label>Certificate URL</label><input id="cert-u-${i}" value="${esc(c.url)}"></div>
+    </div>`).join('');
+}
+function addCert(){ const d=getData('certs'); d.push({icon:'fa-award',title:'',desc:'',url:''}); setData('certs',d); renderCerts(d); }
+function removeCert(i){ const d=getData('certs'); d.splice(i,1); setData('certs',d); renderCerts(d); }
+
+function loadContactForm(){
+  const d=getData('contact');
+  ['email1','email2','phone','location','web','linkedin','instagram'].forEach(k=>{
+    const el=document.getElementById('c-'+k); if(el) el.value=d[k]||'';
+  });
+}
+
+// ════════════════════════════════
+// UNIFIED SAVE
+// ════════════════════════════════
+function saveSection(sec){
+  if(sec==='hero'){
+    setData('hero',{name:v('h-name'),title:v('h-title'),location:v('h-location'),avail:v('h-avail'),
+      line1:v('h-line1'),line2:v('h-line2'),line3:v('h-line3'),brief:v('h-brief'),
+      years:+v('h-years'),tickets:+v('h-tickets'),sla:+v('h-sla'),resume:v('h-resume')});
+  }
+  if(sec==='about'){
+    const d=getData('about');
+    const achieves=d.achieves.map((_,i)=>({icon:d.achieves[i].icon||'fa-star',title:v(`ach-t-${i}`),desc:v(`ach-d-${i}`)}));
+    setData('about',{lead:v('a-lead'),body1:v('a-body1'),body2:v('a-body2'),
+      systems:v('a-systems'),networks:v('a-networks'),sla:+v('a-sla'),achieves});
+  }
+  if(sec==='education'){
+    const d=getData('education');
+    setData('education',d.map((_,i)=>({date:v(`edu-date-${i}`),degree:v(`edu-deg-${i}`),
+      inst:v(`edu-inst-${i}`),note:v(`edu-note-${i}`),url:v(`edu-url-${i}`)})));
+  }
+  if(sec==='experience'){
+    const d=getData('experience');
+    setData('experience',d.map((_,i)=>({title:v(`exp-t-${i}`),type:v(`exp-ty-${i}`),
+      company:v(`exp-c-${i}`),date:v(`exp-d-${i}`),resp:document.getElementById(`exp-r-${i}`).value.trim(),
+      letterText:v(`exp-lt-${i}`),letterUrl:v(`exp-lu-${i}`)})));
+  }
+  if(sec==='skills'){
+    const d=getData('skills');
+    setData('skills',d.map((_,i)=>({name:v(`sk-n-${i}`),icon:d[i].icon||'fa-star',cat:v(`sk-c-${i}`),
+      level:+document.getElementById(`sk-l-${i}`).value})));
+    setData('techStack',document.getElementById('techStack').value.split('\n').map(t=>t.trim()).filter(Boolean));
+    const ld=getData('languages');
+    setData('languages',ld.map((_,i)=>({name:v(`lang-n-${i}`),level:v(`lang-l-${i}`)})));
+  }
+  if(sec==='certifications'){
+    setData('featuredCert',{title:v('fc-title'),subtitle:v('fc-subtitle'),issuer:v('fc-issuer'),
+      date:v('fc-date'),code:v('fc-code'),desc:v('fc-desc'),url:v('fc-url')});
+    const d=getData('certs');
+    setData('certs',d.map((_,i)=>({icon:d[i].icon||'fa-award',title:v(`cert-t-${i}`),desc:v(`cert-d-${i}`),url:v(`cert-u-${i}`)})));
+  }
+  if(sec==='contact'){
+    setData('contact',{email1:v('c-email1'),email2:v('c-email2'),phone:v('c-phone'),
+      location:v('c-location'),web:v('c-web'),linkedin:v('c-linkedin'),instagram:v('c-instagram')});
+  }
+  updateDashboard();
+  showToast('Saved! Now push to GitHub to go live.');
+}
+
+// ════════════════════════════════
+// GITHUB PUSH
+// ════════════════════════════════
+async function pushToGitHub(){
+  const repo=v('gh-repo');
+  const token=document.getElementById('gh-token').value.trim();
+  const msg=v('gh-msg')||'Update portfolio content';
+  const log=document.getElementById('ghLog');
+  const status=document.getElementById('ghStatus');
+  const btn=document.getElementById('ghPushBtn');
+
+  if(!token){ setGhStatus('warn','Enter your GitHub token first.'); return; }
+  if(!repo){ setGhStatus('warn','Enter your repository name.'); return; }
+
+  log.classList.add('show');
+  btn.disabled=true;
+  appendLog('🚀 Starting push to '+repo+'...');
+
+  // Generate script.js content from saved data
+  const scriptContent = generateScript();
+  const files = [{ path:'script.js', content: scriptContent }];
+
+  try {
+    const base = `https://api.github.com/repos/${repo}`;
+    const headers = { 'Authorization':'Bearer '+token, 'Content-Type':'application/json', 'Accept':'application/vnd.github+json' };
+
+    // Get latest commit SHA
+    appendLog('📡 Fetching latest commit SHA...');
+    const refRes = await fetch(`${base}/git/refs/heads/main`, {headers});
+    if(!refRes.ok){ const e=await refRes.json(); throw new Error('Branch not found: '+e.message+' (try changing "main" to "master")'); }
+    const refData = await refRes.json();
+    const latestSha = refData.object.sha;
+    appendLog('✓ Latest commit: '+latestSha.substring(0,7));
+
+    // Get base tree SHA
+    appendLog('🌲 Fetching base tree...');
+    const commitRes = await fetch(`${base}/git/commits/${latestSha}`, {headers});
+    const commitData = await commitRes.json();
+    const baseTreeSha = commitData.tree.sha;
+
+    // Create blobs for each file
+    appendLog('📄 Creating file blobs...');
+    const treeItems = [];
+    for(const file of files){
+      const blobRes = await fetch(`${base}/git/blobs`, {
+        method:'POST', headers,
+        body: JSON.stringify({ content: btoa(unescape(encodeURIComponent(file.content))), encoding:'base64' })
+      });
+      if(!blobRes.ok){ const e=await blobRes.json(); throw new Error('Blob error: '+e.message); }
+      const blobData = await blobRes.json();
+      treeItems.push({ path: file.path, mode:'100644', type:'blob', sha: blobData.sha });
+      appendLog('✓ Blob created for '+file.path);
     }
 
-    function formatDate(ts) {
-        if (!ts) return '—';
-        const d = new Date(ts);
-        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    }
-
-    /* ── load visitor count ── */
-    async function loadVisitorCount() {
-        try {
-            const visitsSnap = await get(ref(db, 'siteStats/totalVisits'));
-            const lastSnap   = await get(ref(db, 'siteStats/lastVisit'));
-            $('statVisits').textContent    = visitsSnap.exists() ? visitsSnap.val().toLocaleString() : '0';
-            $('statLastVisit').textContent = lastSnap.exists() ? formatDate(lastSnap.val()) : 'No visits yet';
-            showToast('✓ Visit count loaded');
-        } catch (err) {
-            console.error(err);
-            $('statVisits').textContent = 'Error';
-            showToast('Failed to load visit count', true);
-        }
-    }
-
-    /* ── countdown ── */
-    let adminCountdownInterval;
-    let adminTargetDate;
-
-    function startAdminPreview() {
-        if (adminCountdownInterval) clearInterval(adminCountdownInterval);
-        adminCountdownInterval = setInterval(() => {
-            if (!adminTargetDate) return;
-            const gap = adminTargetDate - Date.now();
-            const el  = $('adminTimerPreview');
-            if (gap <= 0) { el.textContent = '🚀 LAUNCHED'; return; }
-            const d = Math.floor(gap / 86400000);
-            const h = Math.floor((gap % 86400000) / 3600000);
-            const m = Math.floor((gap % 3600000) / 60000);
-            const s = Math.floor((gap % 60000) / 1000);
-            el.textContent = `${d}d ${h}h ${m}m ${s}s`;
-        }, 1000);
-    }
-
-    function loadCountdownSettings() {
-        const saved = localStorage.getItem('adminCountdownDate');
-        const label = localStorage.getItem('adminCountdownLabel');
-        if (saved) {
-            const d = new Date(saved);
-            const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-            $('countdownDate').value = local;
-            adminTargetDate = d.getTime();
-            $('statCountdown').textContent = d.toLocaleDateString('en-GB', {
-                day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-            });
-        } else {
-            adminTargetDate = new Date("March 1, 2026 00:00:00").getTime();
-        }
-        if (label) $('countdownLabel').value = label;
-        startAdminPreview();
-    }
-
-    $('btnSaveCountdown').addEventListener('click', () => {
-        const dateVal  = $('countdownDate').value;
-        const labelVal = $('countdownLabel').value.trim();
-        if (!dateVal) { showToast('Please pick a date', true); return; }
-        const d = new Date(dateVal);
-        adminTargetDate = d.getTime();
-        localStorage.setItem('adminCountdownDate',  d.toISOString());
-        localStorage.setItem('adminCountdownLabel', labelVal);
-        $('statCountdown').textContent = d.toLocaleDateString('en-GB', {
-            day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-        });
-        startAdminPreview();
-        showToast('✓ Countdown saved! Also update targetDate in script.js to make it permanent.');
+    // Create new tree
+    appendLog('🌳 Creating new tree...');
+    const treeRes = await fetch(`${base}/git/trees`, {
+      method:'POST', headers,
+      body: JSON.stringify({ base_tree: baseTreeSha, tree: treeItems })
     });
+    if(!treeRes.ok){ const e=await treeRes.json(); throw new Error('Tree error: '+e.message); }
+    const newTree = await treeRes.json();
 
-    $('btnRefresh').addEventListener('click', loadVisitorCount);
-
-    /* ── auth ── */
-    $('btnGoogleLogin').addEventListener('click', async () => {
-        try {
-            const result = await signInWithPopup(auth, provider);
-            if (result.user.email !== ADMIN_EMAIL) {
-                await signOut(auth);
-                const errEl = $('loginError');
-                errEl.textContent = `Access denied for ${result.user.email}.`;
-                errEl.style.display = 'block';
-            }
-        } catch (err) {
-            const errEl = $('loginError');
-            errEl.textContent = 'Sign-in failed: ' + err.message;
-            errEl.style.display = 'block';
-        }
+    // Create commit
+    appendLog('💾 Creating commit...');
+    const newCommitRes = await fetch(`${base}/git/commits`, {
+      method:'POST', headers,
+      body: JSON.stringify({ message: msg, tree: newTree.sha, parents: [latestSha] })
     });
+    if(!newCommitRes.ok){ const e=await newCommitRes.json(); throw new Error('Commit error: '+e.message); }
+    const newCommit = await newCommitRes.json();
+    appendLog('✓ Commit created: '+newCommit.sha.substring(0,7));
 
-    $('btnLogout').addEventListener('click', () => signOut(auth));
-
-    onAuthStateChanged(auth, (user) => {
-        if (user && user.email === ADMIN_EMAIL) {
-            $('loginScreen').style.display = 'none';
-            $('dashboard').style.display   = 'block';
-            $('adminUserName').textContent  = user.displayName || 'Admin';
-            $('adminUserEmail').textContent = user.email;
-            $('adminAvatar').src            = user.photoURL || '';
-            $('adminAvatar').style.display  = user.photoURL ? 'block' : 'none';
-            loadVisitorCount();
-            loadCountdownSettings();
-        } else {
-            $('loginScreen').style.display = 'flex';
-            $('dashboard').style.display   = 'none';
-            if (adminCountdownInterval) clearInterval(adminCountdownInterval);
-        }
+    // Update ref
+    appendLog('🔀 Updating branch ref...');
+    const updateRes = await fetch(`${base}/git/refs/heads/main`, {
+      method:'PATCH', headers,
+      body: JSON.stringify({ sha: newCommit.sha })
     });
+    if(!updateRes.ok){ const e=await updateRes.json(); throw new Error('Ref update error: '+e.message); }
+
+    appendLog('✅ Push successful! Your site will update in ~60 seconds.');
+    setGhStatus('ok','✓ Pushed successfully! Site updating at sajidmk.com...');
+  } catch(err){
+    appendLog('❌ Error: '+err.message);
+    setGhStatus('err','Push failed: '+err.message);
+  }
+  btn.disabled=false;
+}
+
+function setGhStatus(type, msg){
+  const el=document.getElementById('ghStatus');
+  el.querySelector('.gh-dot').className='gh-dot '+type;
+  el.querySelector('span').textContent=msg;
+}
+function appendLog(line){
+  const log=document.getElementById('ghLog');
+  log.textContent+=line+'\n';
+  log.scrollTop=log.scrollHeight;
+}
+
+// ════════════════════════════════
+// SCRIPT.JS GENERATOR
+// ════════════════════════════════
+function generateScript(){
+  const hero=getData('hero'), about=getData('about'), edu=getData('education');
+  const exp=getData('experience'), skills=getData('skills'), tech=getData('techStack');
+  const langs=getData('languages'), fc=getData('featuredCert'), certs=getData('certs');
+  const contact=getData('contact');
+
+  const expJS = exp.map(e=>{
+    const resps=e.resp.split('\n').filter(Boolean);
+    const letters=[];
+    if(e.letterText&&e.letterUrl) letters.push({text:e.letterText,url:e.letterUrl});
+    return `{date:'${s(e.date)}',title:'${s(e.title)}',type:'${s(e.type)}',company:'${s(e.company)}',responsibilities:[${resps.map(r=>`'${s(r)}'`).join(',')}],letters:[${letters.map(l=>`{text:'${s(l.text)}',url:'${s(l.url)}'}`).join(',')}]}`;
+  }).join(',');
+
+  return `// Portfolio JS — Generated by Admin Panel · ${new Date().toLocaleString()}
+
+const PORTFOLIO={
+  hero:${JSON.stringify(hero)},
+  about:${JSON.stringify(about)},
+  contact:${JSON.stringify(contact)},
+  featuredCert:${JSON.stringify(fc)}
+};
+
+document.addEventListener('DOMContentLoaded',()=>{
+  if(typeof AOS!=='undefined') AOS.init({duration:700,easing:'ease-out-cubic',once:true,offset:40});
+  applyLiveData();
+  initNav(); initCursor(); initCounters(); initRings(); initFolderTabs();
+  loadExperience(); loadSkills(); loadTechStack(); loadLanguages(); loadCertifications();
+  initSkillBars();
+});
+
+function applyLiveData(){
+  const h=PORTFOLIO.hero, a=PORTFOLIO.about, c=PORTFOLIO.contact, fc=PORTFOLIO.featuredCert;
+  // Hero
+  const sel=(s,v)=>{const e=document.querySelector(s);if(e)e.textContent=v;};
+  sel('.id-name',h.name); sel('.id-title',h.title);
+  const loc=document.querySelector('.id-location span');if(loc)loc.textContent=h.location;
+  const av=document.querySelector('.id-availability span:last-child');if(av)av.textContent=h.avail;
+  const hl=document.querySelector('.hero-headline');if(hl)hl.innerHTML=h.line1+'<br><em>'+h.line2+'</em><br>'+h.line3;
+  sel('.hero-brief',h.brief);
+  const cnts=document.querySelectorAll('[data-count]');
+  [[h.years],[h.tickets],[h.sla]].forEach(([val],i)=>{if(cnts[i]){cnts[i].setAttribute('data-count',val);cnts[i].textContent='0';}});
+  document.querySelectorAll('a[href*="drive.google.com"]').forEach(a=>{if(a.closest('.nav-resume-btn,.mob-cta,.hero-ctas'))a.href=h.resume;});
+  const ls=document.querySelector('.logo-sub');if(ls)ls.textContent=h.title;
+  document.title=h.name+' | '+h.title;
+  // About
+  const bl=document.querySelector('.bio-lead');if(bl)bl.innerHTML=a.lead;
+  const bb=document.querySelectorAll('.bio-body');if(bb[0])bb[0].innerHTML=a.body1;if(bb[1])bb[1].innerHTML=a.body2;
+  const m=document.querySelectorAll('.pm-label strong');if(m[0])m[0].textContent=a.systems;if(m[1])m[1].textContent=a.networks;
+  const rv=document.querySelector('.ring-val');if(rv)rv.textContent=a.sla;
+  const rf=document.querySelector('.ring-fg');if(rf)rf.setAttribute('data-percent',a.sla);
+  const ach=document.querySelector('.bio-achieves');
+  if(ach&&a.achieves)ach.innerHTML=a.achieves.map(ac=>\`<div class="achieve-item"><span class="achieve-icon"><i class="fas \${ac.icon}"></i></span><div><strong>\${ac.title}</strong><span>\${ac.desc}</span></div></div>\`).join('');
+  // Contact
+  const ph=document.querySelector('a[href^="tel"]');if(ph){ph.href='tel:'+c.phone.replace(/\\s/g,'');ph.textContent=c.phone;}
+  document.querySelectorAll('.contact-card p').forEach(el=>{if(!el.closest('h4'))el.textContent=c.location;});
+  document.querySelectorAll('.contact-card a[href^="mailto"]').forEach((el,i)=>{if(i===0){el.href='mailto:'+c.email1;el.textContent=c.email1;}else{el.href='mailto:'+c.email2;el.textContent=c.email2;}});
+  const wb=document.querySelector('.exec-social-btn[href*="sajidmk"]');if(wb){wb.href=c.web;}
+  const lb=document.querySelector('.exec-social-btn[href*="linkedin"]');if(lb)lb.href=c.linkedin;
+  const ib=document.querySelector('.exec-social-btn[href*="instagram"]');if(ib)ib.href=c.instagram;
+  // Featured cert
+  const ct=document.querySelector('.cwf-title');if(ct)ct.innerHTML=fc.title+'<br><span>'+fc.subtitle+'</span>';
+  const ci=document.querySelector('.cwf-issuer');if(ci)ci.textContent=fc.issuer;
+  const cd=document.querySelector('.cwf-date');if(cd)cd.textContent='Issued: '+fc.date;
+  const cc=document.querySelector('.cwf-code');if(cc)cc.textContent='Code: '+fc.code;
+  const cds=document.querySelector('.cwf-desc');if(cds)cds.textContent=fc.desc;
+  const cl=document.querySelector('.featured-cert-frame a');if(cl)cl.href=fc.url;
+}
+
+function initNav(){const nav=document.getElementById('topNav'),hb=document.getElementById('hamburger'),dr=document.getElementById('mobileDrawer'),nl=document.querySelectorAll('.nav-link');window.addEventListener('scroll',()=>{nav?.classList.toggle('scrolled',window.scrollY>60);const sec=document.querySelectorAll('section[id]');let cur='';sec.forEach(s=>{if(window.scrollY>=s.offsetTop-160)cur=s.id;});nl.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+cur)l.classList.add('active');});});hb?.addEventListener('click',()=>{hb.classList.toggle('open');dr?.classList.toggle('open');});document.querySelectorAll('.mob-link').forEach(l=>l.addEventListener('click',()=>{hb?.classList.remove('open');dr?.classList.remove('open');}));document.addEventListener('click',(e)=>{if(dr?.classList.contains('open')&&!dr.contains(e.target)&&!hb?.contains(e.target)){hb?.classList.remove('open');dr?.classList.remove('open');}});document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',function(e){const h=this.getAttribute('href');if(h==='#')return;e.preventDefault();const t=document.querySelector(h);if(t)window.scrollTo({top:t.offsetTop-80,behavior:'smooth'});}));}
+function initCursor(){const d=document.getElementById('cursorDot'),r=document.getElementById('cursorRing');if(!d||!r||window.innerWidth<1024)return;d.style.transform='translate(-50%,-50%)';r.style.transform='translate(-50%,-50%)';document.addEventListener('mousemove',(e)=>{d.style.left=e.clientX+'px';d.style.top=e.clientY+'px';setTimeout(()=>{r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';},70);});document.querySelectorAll('a,button,.skill-card,.achieve-item,.exp-card').forEach(el=>{el.addEventListener('mouseenter',()=>{r.style.width='44px';r.style.height='44px';r.style.opacity='.4';});el.addEventListener('mouseleave',()=>{r.style.width='28px';r.style.height='28px';r.style.opacity='.6';});});}
+function initCounters(){document.querySelectorAll('[data-count]').forEach(el=>{const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCount(el);io.unobserve(el);}});},{threshold:0.5});io.observe(el);});}
+function animateCount(el){const t=+el.getAttribute('data-count'),d=1400,st=performance.now(),step=(n)=>{const p=Math.min((n-st)/d,1);el.textContent=Math.ceil(p*t);if(p<1)requestAnimationFrame(step);else el.textContent=t;};requestAnimationFrame(step);}
+function initRings(){document.querySelectorAll('.ring-fg').forEach(ring=>{const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const p=parseInt(ring.getAttribute('data-percent')),c=2*Math.PI*50;ring.style.strokeDasharray=c;ring.style.strokeDashoffset=c;setTimeout(()=>{ring.style.strokeDashoffset=c-(p/100)*c;},300);io.unobserve(ring);}});},{threshold:0.4});io.observe(ring);});}
+function initFolderTabs(){const tabs=document.querySelectorAll('.ftab');tabs.forEach(t=>t.addEventListener('click',()=>{const id=t.getAttribute('data-pane');tabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');document.querySelectorAll('.folder-pane').forEach(p=>p.classList.remove('active'));document.getElementById(id)?.classList.add('active');}));}
+function initSkillBars(){const b=document.getElementById('skillsBento');if(!b)return;const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.sk-bar-fill').forEach(bar=>{setTimeout(()=>{bar.style.width=bar.getAttribute('data-width');},200);});io.unobserve(e.target);}});},{threshold:0.2});io.observe(b);}
+
+const experienceData=[${expJS}];
+function loadExperience(){const tl=document.getElementById('expTimeline');if(!tl)return;experienceData.forEach((exp,i)=>{const it=document.createElement('div');it.className='exp-item';it.setAttribute('data-aos','fade-up');it.setAttribute('data-aos-delay',i*80);const lh=(exp.letters||[]).map(l=>\`<a href="\${l.url}" target="_blank" rel="noopener noreferrer" class="exp-btn"><i class="fas fa-file-contract"></i>\${l.text}</a>\`).join('');it.innerHTML=\`<div class="exp-card"><div class="exp-header"><div class="exp-title-row"><h3 class="exp-title">\${exp.title}</h3>\${exp.type?\`<span class="exp-type-badge">\${exp.type}</span>\`:''}</div><div class="exp-meta"><span class="exp-date"><i class="fas fa-calendar-alt"></i> \${exp.date}</span><span class="exp-company-name">\${exp.company}</span></div></div><ul class="exp-list">\${exp.responsibilities.map(r=>\`<li>\${r}</li>\`).join('')}</ul><div class="exp-actions">\${lh}</div></div>\`;tl.appendChild(it);});}
+
+const skillsData=${JSON.stringify(skills)};
+function loadSkills(){const b=document.getElementById('skillsBento');if(!b)return;skillsData.forEach((s,i)=>{const c=document.createElement('div');c.className='skill-card';c.setAttribute('data-aos','fade-up');c.setAttribute('data-aos-delay',i*60);c.innerHTML=\`<div class="sk-icon"><i class="fas \${s.icon}"></i></div><div class="sk-name">\${s.name}</div><div class="sk-cat">\${s.cat}</div><div class="sk-bar-track"><div class="sk-bar-fill" data-width="\${s.level}%"></div></div><div class="sk-pct">\${s.level}%</div>\`;b.appendChild(c);});}
+
+const techStack=${JSON.stringify(tech)};
+function loadTechStack(){const c=document.getElementById('techPills');if(!c)return;techStack.forEach((t,i)=>{const p=document.createElement('span');p.className='tech-pill';p.textContent=t;p.setAttribute('data-aos','zoom-in');p.setAttribute('data-aos-delay',i*25);c.appendChild(p);});}
+
+const languages=${JSON.stringify(langs)};
+function loadLanguages(){const g=document.getElementById('langGrid');if(!g)return;languages.forEach(l=>{const c=document.createElement('div');c.className='lang-card';c.innerHTML=\`<span class="lang-name">\${l.name}</span><span class="lang-level">\${l.level}</span>\`;g.appendChild(c);});}
+
+const additionalCerts=${JSON.stringify(certs)};
+function loadCertifications(){const w=document.getElementById('certsWall');if(!w)return;additionalCerts.forEach((c,i)=>{const f=document.createElement('div');f.className='cw-frame';f.setAttribute('data-aos','fade-up');f.setAttribute('data-aos-delay',i*80);f.innerHTML=\`<div class="cw-frame-inner"><div class="cw-icon"><i class="fas \${c.icon}"></i></div><div class="cw-title">\${c.title}</div><div class="cw-desc">\${c.desc}</div>\${c.url?\`<a href="\${c.url}" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</a>\`:''}</div>\`;w.appendChild(f);});}
+
+console.log('%c⚜ Sajid Mehmood · IT Support Engineer','font-size:16px;font-weight:bold;color:#C5A059;background:#2D3436;padding:10px 22px;border-radius:4px;');
+`;
+}
+
+function esc(str){ return (str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+function s(str){ return (str||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n'); }
 </script>
 </body>
 </html>
