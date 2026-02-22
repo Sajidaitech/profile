@@ -1,785 +1,460 @@
-// ===================================
-// PROFESSIONAL MAHOGANY OFFICE PORTFOLIO
-// Executive Desk Interactions
-// VERSION: February 2026
-// ===================================
+// ============================================
+// Portfolio JavaScript
+// Sajid Mehmood · IT Support Engineer
+// ============================================
 
-// Initialize AOS (Animate On Scroll)
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 800,
-            easing: 'ease-out-cubic',
-            once: true,
-            offset: 50
-        });
+        AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 40 });
     }
+
+    initNav();
+    initCursor();
+    initCounters();
+    initRings();
+    initFolderTabs();
+    loadExperience();
+    loadSkills();
+    loadTechStack();
+    loadLanguages();
+    loadCertifications();
+    initSkillBars();
 });
 
-// ===================================
-// Custom Cursor (Leather Notepad Style)
-// ===================================
-class CustomCursor {
-    constructor() {
-        this.cursor = document.querySelector('.cursor');
-        this.cursorFollower = document.querySelector('.cursor-follower');
-        
-        if (this.cursor && this.cursorFollower && window.innerWidth > 1024) {
-            this.init();
-        }
-    }
+// ── NAV SCROLL EFFECT + ACTIVE LINKS ──
+function initNav() {
+    const nav = document.getElementById('topNav');
+    const hamburger = document.getElementById('hamburger');
+    const drawer = document.getElementById('mobileDrawer');
+    const navLinks = document.querySelectorAll('.nav-link');
 
-    init() {
-        document.addEventListener('mousemove', (e) => {
-            this.cursor.style.left = e.clientX + 'px';
-            this.cursor.style.top = e.clientY + 'px';
-            
-            setTimeout(() => {
-                this.cursorFollower.style.left = e.clientX + 'px';
-                this.cursorFollower.style.top = e.clientY + 'px';
-            }, 70);
+    window.addEventListener('scroll', () => {
+        nav?.classList.toggle('scrolled', window.scrollY > 60);
+
+        const sections = document.querySelectorAll('section[id]');
+        let current = '';
+        sections.forEach(s => {
+            if (window.scrollY >= s.offsetTop - 160) current = s.id;
         });
-
-        // Enhanced cursor on hover
-        const hoverElements = document.querySelectorAll('a, button, .btn, .nav-link, .stat-card, .skill-card, .business-card');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                this.cursorFollower.style.transform = 'scale(1.5)';
-                this.cursorFollower.style.borderColor = 'var(--brass-bright)';
-            });
-            el.addEventListener('mouseleave', () => {
-                this.cursorFollower.style.transform = 'scale(1)';
-                this.cursorFollower.style.borderColor = 'var(--brass-medium)';
-            });
+        navLinks.forEach(l => {
+            l.classList.remove('active');
+            if (l.getAttribute('href') === `#${current}`) l.classList.add('active');
         });
-    }
-}
-
-new CustomCursor();
-
-// ===================================
-// Mobile Navigation
-// ===================================
-const mobileToggle = document.getElementById('mobileNavToggle');
-const sideNav = document.getElementById('sideNav');
-const navLinks = document.querySelectorAll('.nav-link');
-const navOverlay = document.getElementById('navOverlay');
-
-function closeNav() {
-    mobileToggle.classList.remove('active');
-    sideNav.classList.remove('active');
-    if (navOverlay) navOverlay.classList.remove('active');
-}
-
-if (mobileToggle && sideNav) {
-    mobileToggle.addEventListener('click', () => {
-        const isActive = sideNav.classList.toggle('active');
-        mobileToggle.classList.toggle('active');
-        if (navOverlay) navOverlay.classList.toggle('active', isActive);
     });
 
-    if (navOverlay) {
-        navOverlay.addEventListener('click', closeNav);
-    }
+    hamburger?.addEventListener('click', () => {
+        hamburger.classList.toggle('open');
+        drawer?.classList.toggle('open');
+    });
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 968) {
-                closeNav();
-            }
+    document.querySelectorAll('.mob-link').forEach(l => {
+        l.addEventListener('click', () => {
+            hamburger?.classList.remove('open');
+            drawer?.classList.remove('open');
         });
     });
 
     document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 968) {
-            if (!sideNav.contains(e.target) && !mobileToggle.contains(e.target)) {
-                mobileToggle.classList.remove('active');
-                sideNav.classList.remove('active');
+        if (drawer?.classList.contains('open') &&
+            !drawer.contains(e.target) && !hamburger?.contains(e.target)) {
+            hamburger?.classList.remove('open');
+            drawer?.classList.remove('open');
+        }
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
             }
-        }
+        });
     });
 }
 
-// ===================================
-// Active Navigation Link Tracking
-// ===================================
-const sections = document.querySelectorAll('.section, .hero');
-const navLinksArray = Array.from(navLinks);
+// ── CUSTOM CURSOR ──
+function initCursor() {
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    if (!dot || !ring || window.innerWidth < 1024) return;
 
-window.addEventListener('scroll', () => {
-    let current = '';
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (pageYOffset >= sectionTop - 200) {
-            current = section.getAttribute('id');
-        }
+    dot.style.transform = 'translate(-50%,-50%)';
+    ring.style.transform = 'translate(-50%,-50%)';
+
+    document.addEventListener('mousemove', (e) => {
+        dot.style.left  = e.clientX + 'px';
+        dot.style.top   = e.clientY + 'px';
+        setTimeout(() => {
+            ring.style.left = e.clientX + 'px';
+            ring.style.top  = e.clientY + 'px';
+        }, 70);
     });
 
-    navLinksArray.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
-        }
+    document.querySelectorAll('a, button, .skill-card, .achieve-item, .exp-card').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            ring.style.width = '44px'; ring.style.height = '44px'; ring.style.opacity = '.4';
+        });
+        el.addEventListener('mouseleave', () => {
+            ring.style.width = '28px'; ring.style.height = '28px'; ring.style.opacity = '.6';
+        });
     });
-});
-
-// ===================================
-// Typing Effect for Hero Section
-// ===================================
-class TypeWriter {
-    constructor(element, words, wait = 2500) {
-        this.element = element;
-        this.words = words;
-        this.txt = '';
-        this.wordIndex = 0;
-        this.wait = parseInt(wait, 10);
-        this.isDeleting = false;
-        this.type();
-    }
-
-    type() {
-        const current = this.wordIndex % this.words.length;
-        const fullTxt = this.words[current];
-
-        if (this.isDeleting) {
-            this.txt = fullTxt.substring(0, this.txt.length - 1);
-        } else {
-            this.txt = fullTxt.substring(0, this.txt.length + 1);
-        }
-
-        this.element.innerHTML = this.txt;
-
-        let typeSpeed = 90;
-
-        if (this.isDeleting) {
-            typeSpeed /= 2;
-        }
-
-        if (!this.isDeleting && this.txt === fullTxt) {
-            typeSpeed = this.wait;
-            this.isDeleting = true;
-        } else if (this.isDeleting && this.txt === '') {
-            this.isDeleting = false;
-            this.wordIndex++;
-            typeSpeed = 500;
-        }
-
-        setTimeout(() => this.type(), typeSpeed);
-    }
 }
 
-const typingElement = document.querySelector('.typing-effect');
-if (typingElement) {
-    const words = [
-        'IT Support Engineer',
-        'Network Specialist',
-        'CCNA Certified Professional',
-        'System Administrator'
-    ];
-    new TypeWriter(typingElement, words, 2200);
-}
-
-// ===================================
-// Counter Animation for Stats
-// ===================================
-class CountUp {
-    constructor() {
-        this.counters = document.querySelectorAll('.stat-number');
-        this.speed = 180;
-        this.hasAnimated = false;
-        this.init();
-    }
-
-    init() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !this.hasAnimated) {
-                    this.hasAnimated = true;
-                    this.animateCounters();
+// ── COUNTER ANIMATION ──
+function initCounters() {
+    document.querySelectorAll('[data-count]').forEach(el => {
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    animateCount(el);
+                    io.unobserve(el);
                 }
             });
         }, { threshold: 0.5 });
-
-        const statsSection = document.querySelector('.hero-stats');
-        if (statsSection) {
-            observer.observe(statsSection);
-        }
-    }
-
-    animateCounters() {
-        this.counters.forEach(counter => {
-            const updateCount = () => {
-                const target = +counter.getAttribute('data-count');
-                const count = +counter.innerText;
-                const inc = target / this.speed;
-
-                if (count < target) {
-                    counter.innerText = Math.ceil(count + inc);
-                    setTimeout(updateCount, 1);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            updateCount();
-        });
-    }
+        io.observe(el);
+    });
 }
 
-new CountUp();
+function animateCount(el) {
+    const target = +el.getAttribute('data-count');
+    const duration = 1400;
+    const start = performance.now();
+    const step = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        el.textContent = Math.ceil(t * target);
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+    };
+    requestAnimationFrame(step);
+}
 
-// ===================================
-// Load Professional Experience
-// ===================================
+// ── CIRCULAR RING ANIMATION ──
+function initRings() {
+    document.querySelectorAll('.ring-fg').forEach(ring => {
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const pct  = parseInt(ring.getAttribute('data-percent'));
+                    const circ = 2 * Math.PI * 50; // r=50
+                    ring.style.strokeDasharray  = circ;
+                    ring.style.strokeDashoffset = circ;
+                    setTimeout(() => {
+                        ring.style.strokeDashoffset = circ - (pct / 100) * circ;
+                    }, 300);
+                    io.unobserve(ring);
+                }
+            });
+        }, { threshold: 0.4 });
+        io.observe(ring);
+    });
+}
+
+// ── FOLDER TABS (Education) ──
+function initFolderTabs() {
+    const tabs = document.querySelectorAll('.ftab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const paneId = tab.getAttribute('data-pane');
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.folder-pane').forEach(p => p.classList.remove('active'));
+            document.getElementById(paneId)?.classList.add('active');
+        });
+    });
+}
+
+// ── SKILL BARS ──
+function initSkillBars() {
+    const bento = document.getElementById('skillsBento');
+    if (!bento) return;
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.querySelectorAll('.sk-bar-fill').forEach(bar => {
+                    setTimeout(() => { bar.style.width = bar.getAttribute('data-width'); }, 200);
+                });
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    io.observe(bento);
+}
+
+// ── CONTACT FORM ──
+function handleContactForm() {
+    const name    = document.getElementById('cf-name')?.value.trim();
+    const email   = document.getElementById('cf-email')?.value.trim();
+    const subject = document.getElementById('cf-subject')?.value.trim();
+    const message = document.getElementById('cf-message')?.value.trim();
+    const note    = document.getElementById('cfNote');
+    const btn     = document.getElementById('cfSubmit');
+
+    if (!name || !email || !message) {
+        note.textContent = '⚠ Please fill in your name, email, and message.';
+        note.style.color = '#e74c3c';
+        return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        note.textContent = '⚠ Please enter a valid email address.';
+        note.style.color = '#e74c3c';
+        return;
+    }
+
+    // Build mailto link as a reliable fallback that works without a backend
+    const mailtoLink = `mailto:sajidmehmood@outlook.com?subject=${encodeURIComponent(subject || 'Portfolio Enquiry — ' + name)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
+    window.location.href = mailtoLink;
+
+    note.textContent = '✓ Your mail client has been opened. Looking forward to hearing from you!';
+    note.style.color = '#27ae60';
+    if (btn) btn.disabled = true;
+}
+
+// ============================================
+// DATA & CONTENT LOADERS
+// ============================================
+
+// ── EXPERIENCE ──
 const experienceData = [
     {
-        date: 'Apr 2025 - Aug 2025',
+        date: 'Apr 2025 – Aug 2025',
         title: 'IT Executive & Business Development Intern',
-        company: 'Al Tawkel Immigration Center',
-        location: 'Dubai, UAE',
+        type: 'Internship',
+        company: 'Al Tawkel Immigration Center · Dubai, UAE',
         responsibilities: [
-            'Delivered comprehensive Level 2 IT support, including advanced hardware diagnostics, repairs, system reimaging, and network troubleshooting',
-            'Installed, configured, and maintained enterprise IT infrastructure components including servers, workstations, and network equipment',
-            'Created and maintained comprehensive digital IT asset records, improving inventory accuracy and lifecycle management',
-            'Assisted with immigration business operations and client support, providing technical solutions for visa processing systems',
-            'Implemented preventive maintenance schedules for IT equipment, reducing unexpected downtime by proactive issue resolution',
-            'Provided end-user training on new systems and applications to enhance staff productivity and technology adoption'
+            'Delivered Level 2 IT support including hardware repairs, system reimaging, network troubleshooting, and Office 365 email configurations',
+            'Installed, configured, and maintained enterprise IT infrastructure (servers, networks, printers)',
+            'Created and maintained digital IT asset records, streamlining lifecycle management',
+            'Assisted with immigration business operations including visa applications, cancellations, and Golden Visa processing',
+            'Coordinated with government authorities to resolve absconding employee cases, overstay fines, and lost passports'
         ],
-        experienceLetter: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing'
+        letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing' }]
     },
     {
-        date: 'Nov 2023 - Feb 2024',
+        date: 'Nov 2023 – Feb 2024',
         title: 'IT Support Engineer',
-        company: 'Elegancia HealthCare (Military Medical City Hospital)',
-        location: 'Doha, Qatar',
-        projects: [
-            '1. EWS-MMC (Qatar Armed Force Military Medical City Hospital)',
-            '2. TVH (The View Hospital)',
-            '3. KMC (Korean Medical Center)'
-        ],
+        type: 'Short-term Project',
+        company: 'Military Medical City Hospital (MMCH) · Doha, Qatar',
         responsibilities: [
-            'Spearheaded the resolution of 500+ high-priority support tickets across three hospital facilities, consistently maintaining a 95% SLA compliance rate',
-            'Installed and configured computer hardware, operating systems, and healthcare-specific applications across multiple medical centers',
-            'Executed large-scale system reimaging and automated OS deployment using SCCM/MDT for 300+ medical workstations to minimize clinical downtime',
-            'Provided specialized technical support for Electronic Medical Record (EMR) applications, ensuring seamless data access for doctors and nursing staff',
-            'Monitored and maintained critical computer systems and networks, ensuring 24/7 uptime for medical IoT devices and patient care systems',
-            'Delivered face-to-face and remote technical support, guiding healthcare staff through complex system configurations and issue resolution',
-            'Troubleshot system and network problems, diagnosing and solving hardware or software faults in high-pressure medical environments',
-            'Performed hardware repairs and break-fix operations on medical workstations, minimizing equipment downtime',
-            'Resolved system slowness issues and performed online software updates to maintain optimal system performance',
-            'Troubleshot and resolved mail-related problems in Office 365, Outlook Express, and Microsoft Outlook for medical staff',
-            'Configured email clients and performed backup and restore operations to ensure data integrity and business continuity',
-            'Installed and configured network printers (Sharp, HP, Canon), troubleshooting printer connectivity issues across hospital departments',
-            'Optimized digital asset inventory protocols, implementing a tracking system that significantly improved hardware lifecycle management and procurement planning',
-            'Collaborated with the network team to troubleshoot connectivity issues within critical care units, maintaining strict HIPAA compliance standards'
+            'Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance',
+            'Handled L1 tasks (password resets, software installs, network fixes) and L2 troubleshooting (OS crashes, hardware failures)',
+            'Performed system reimaging, OS deployment, and application configuration for 300+ medical staff',
+            'Supported EMR application troubleshooting for doctors and nurses, reducing downtime',
+            'Conducted preventive maintenance and patching for compliance with IT policies',
+            'Maintained digital asset inventory, improving lifecycle management accuracy'
         ],
-        experienceLetter: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing'
+        letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }]
     },
     {
-        date: 'Feb 2022 - Nov 2023',
+        date: 'Feb 2022 – Nov 2023',
         title: 'IT Support Engineer',
-        company: 'Star Link (Client: Power International Holding)',
-        location: 'Doha, Qatar',
-        project: 'HIA Western Taxiway & Stand Development Works (May 2022 - Oct 2023)',
+        type: 'Full Time',
+        company: 'Star Link – Power International Holding · Doha, Qatar',
         responsibilities: [
-            'Delivered comprehensive L1 and L2 technical support for a diverse user base of 200+ employees across retail, corporate, and construction site offices',
-            'Managed the end-to-end IT infrastructure setup for the Hamad International Airport Expansion Project (HIAEP) site offices, including hardware staging and peripheral configuration',
-            'Installed and configured computer hardware, operating systems, and specialized engineering applications for airport construction project teams',
-            'Monitored and maintained computer systems and networks across multiple remote construction sites, ensuring reliable connectivity',
-            'Provided face-to-face and remote technical support to staff and clients, resolving complex configuration and system issues',
-            'Troubleshot system and network problems, diagnosing and solving hardware or software faults in challenging field environments',
-            'Performed hardware repairs and break-fix operations, minimizing downtime for critical project management systems',
-            'Executed system reimaging and hard drive troubleshooting to resolve software issues and restore system functionality',
-            'Conducted troubleshooting and maintenance of computers, operating systems, and network infrastructure',
-            'Resolved mail-related problems in Office 365, Outlook Express, and Microsoft Outlook for project personnel',
-            'Configured email clients including Outlook Express and Office 365, performing backup and restore operations',
-            'Installed and configured network printers (Sharp, HP, Canon) and troubleshot printer connectivity issues across project sites',
-            'Resolved system slowness problems and performed online software updates to maintain optimal performance',
-            'Administered Active Directory user accounts, group policies, and Office 365 permissions to ensure secure access for project personnel',
-            'Provided specialized technical support for engineering tools including AutoCAD and Primavera P6, ensuring project teams maintained productivity',
-            'Monitored and audited IT asset movements across multiple project sites, reducing equipment loss and discrepancies by 20% through rigorous documentation',
-            'Implemented standardized troubleshooting checklists, reducing average ticket turnaround time and improving service efficiency'
+            'Delivered daily IT support for 200+ staff across retail and corporate offices',
+            'Resolved L1 issues: login errors, email configs, printer problems, software installations',
+            'Handled L2 incidents: hardware replacements, OS troubleshooting, network failures',
+            'Performed imaging, upgrades, and preventive maintenance for desktops, laptops, POS systems',
+            'Monitored and documented IT assets, reducing missing equipment by 20%',
+            'Collaborated with vendors and telecoms for VoIP/connectivity issues',
+            'Supported onboarding (device provisioning, account setup, access control)',
+            'Trained staff on troubleshooting and IT best practices, reducing repeat tickets'
         ],
-        experienceLetters: [
-            { 
-                text: 'Starlink Experience Letter', 
-                url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' 
-            },
-            { 
-                text: 'Airport Project Letter', 
-                url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' 
-            }
+        letters: [
+            { text: 'Starlink Experience Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
+            { text: 'Airport Project Letter', url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' }
         ]
     },
     {
-        date: 'Oct 2020 - Feb 2022',
-        title: 'IT Support Technician',
-        company: 'Ooredoo Qatar',
-        location: 'Doha, Qatar',
+        date: 'May 2021 – Feb 2022',
+        title: 'Customer Service Agent',
+        type: 'Full Time',
+        company: 'STARLINK (Ooredoo International Telecommunications Company) · Qatar',
         responsibilities: [
-            'Delivered comprehensive IT technical support to Ooredoo retail staff and customers across multiple service centers',
-            'Performed hardware diagnostics, repairs, and software troubleshooting on computers and telecommunications equipment',
-            'Assisted customers and staff with configuration of mobile devices, routers, and network equipment',
-            'Maintained IT infrastructure in retail outlets, ensuring minimal downtime and optimal service delivery',
-            'Documented technical issues and solutions in ticketing systems to improve knowledge base and support processes',
-            'Collaborated with network teams to resolve connectivity and service delivery issues for enterprise and retail customers'
+            'Handled inbound/outbound customer calls, resolving service and product issues',
+            'Identified customer needs, researched solutions, and provided appropriate alternatives',
+            'Supported customers with network and technical issues across Ooredoo products',
+            'Maintained accurate call records in database systems',
+            'Engaged customers and built sustainable long-term relationships',
+            'Regularly attended training sessions to improve product knowledge and performance'
         ],
-        experienceLetter: 'https://drive.google.com/file/d/1F1dRuB9Bp3aLm0M2A0RZ_xmzFoYaElKp/view?usp=sharing'
+        letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1F1dRuB9Bp3aLm0M2A0RZ_xmzFoYaElKp/view?usp=sharing' }]
     }
 ];
 
 function loadExperience() {
-    const timeline = document.querySelector('.timeline');
+    const timeline = document.getElementById('expTimeline');
     if (!timeline) return;
 
-    timeline.innerHTML = '';
-
-    experienceData.forEach((exp, index) => {
+    experienceData.forEach((exp, i) => {
         const item = document.createElement('div');
-        item.className = 'timeline-item';
+        item.className = 'exp-item';
         item.setAttribute('data-aos', 'fade-up');
-        item.setAttribute('data-aos-delay', index * 100);
+        item.setAttribute('data-aos-delay', i * 80);
 
-        let projectsHTML = '';
-        if (exp.projects) {
-            projectsHTML = `
-                <div style="margin: 15px 0;">
-                    <strong style="color: #38bdf8; font-weight:700;">Projects:</strong>
-                    ${exp.projects.map(proj => `<div style="margin-left: 15px; color: var(--text-secondary);">${proj}</div>`).join('')}
-                </div>
-            `;
-        }
-
-        if (exp.project) {
-            projectsHTML = `
-                <div style="margin: 15px 0;">
-                    <strong style="color: #38bdf8; font-weight:700;">Project:</strong>
-                    <div style="margin-left: 15px; color: var(--text-secondary);">${exp.project}</div>
-                </div>
-            `;
-        }
-
-        let lettersHTML = '';
-        if (exp.experienceLetter) {
-            lettersHTML = `<a href="${exp.experienceLetter}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #0f0f0f; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
-                <i class="fas fa-file-contract"></i> View Experience Letter
-            </a>`;
-        }
-        
-        if (exp.experienceLetters) {
-            lettersHTML = exp.experienceLetters.map(letter => 
-                `<a href="${letter.url}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; margin-right: 10px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #0f0f0f; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
-                    <i class="fas fa-file-contract"></i> ${letter.text}
-                </a>`
-            ).join('');
-        }
+        const lettersHTML = (exp.letters || []).map(l =>
+            `<a href="${l.url}" target="_blank" rel="noopener noreferrer" class="exp-btn">
+                <i class="fas fa-file-contract"></i>${l.text}
+            </a>`
+        ).join('');
 
         item.innerHTML = `
-            <div class="timeline-date">${exp.date}</div>
-            <div class="timeline-content">
-                <h3 class="timeline-title">${exp.title}</h3>
-                <div class="timeline-subtitle">${exp.company} - ${exp.location}</div>
-                ${projectsHTML}
-                <div class="timeline-description">
-                    <ul>
-                        ${exp.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
-                    </ul>
+            <div class="exp-card">
+                <div class="exp-header">
+                    <div class="exp-title-row">
+                        <h3 class="exp-title">${exp.title}</h3>
+                        ${exp.type ? `<span class="exp-type-badge">${exp.type}</span>` : ''}
+                    </div>
+                    <div class="exp-meta">
+                        <span class="exp-date"><i class="fas fa-calendar-alt"></i> ${exp.date}</span>
+                        <span class="exp-company-name">${exp.company}</span>
+                    </div>
                 </div>
-                ${lettersHTML}
+                <ul class="exp-list">
+                    ${exp.responsibilities.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+                <div class="exp-actions">${lettersHTML}</div>
             </div>
         `;
-
         timeline.appendChild(item);
     });
 }
 
-loadExperience();
-
-// ===================================
-// Load Education
-// ===================================
-const educationData = [
-    {
-        degree: 'Bachelor of Science in IT',
-        institution: 'Middlesex University Dubai',
-        date: 'Sep 2024 - Jun 2025',
-        grade: 'Expected Graduation: 2025',
-        certificateLink: 'https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing'
-    },
-    {
-        degree: 'Advanced Diploma in Software Engineering',
-        institution: 'Aptech Qatar',
-        date: 'Nov 2020 - Nov 2023',
-        grade: 'ACCP Certification',
-        certificateLink: 'https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing'
-    },
-    {
-        degree: 'IGCSE',
-        institution: 'Bright Future International School',
-        date: 'Sep 2017 - Jul 2018',
-        grade: 'Cambridge International Examination'
-    }
-];
-
-function loadEducation() {
-    const educationTimeline = document.querySelector('.education-timeline');
-    if (!educationTimeline) return;
-
-    educationTimeline.innerHTML = '';
-
-    educationData.forEach((edu, index) => {
-        const item = document.createElement('div');
-        item.className = 'timeline-item';
-        item.setAttribute('data-aos', 'fade-up');
-        item.setAttribute('data-aos-delay', index * 100);
-
-        const certificateButton = edu.certificateLink ? 
-            `<a href="${edu.certificateLink}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #0f0f0f; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
-                <i class="fas fa-certificate"></i> View Certificate
-            </a>` : '';
-
-        item.innerHTML = `
-            <div class="timeline-date">${edu.date}</div>
-            <div class="timeline-content">
-                <h3 class="timeline-title">${edu.degree}</h3>
-                <div class="timeline-subtitle">${edu.institution}</div>
-                <p style="color: var(--text-secondary); margin-top: 10px;">${edu.grade}</p>
-                ${certificateButton}
-            </div>
-        `;
-
-        educationTimeline.appendChild(item);
-    });
-}
-
-loadEducation();
-
-// ===================================
-// Load Skills Data
-// ===================================
+// ── SKILLS ──
+// Note: percentages reflect relative proficiency, not absolute self-rating
 const skillsData = [
-    {
-        name: 'Hardware & Systems',
-        icon: 'fa-tools',
-        level: 95,
-        category: 'Expert'
-    },
-    {
-        name: 'Network Administration',
-        icon: 'fa-network-wired',
-        level: 92,
-        category: 'Expert'
-    },
-    {
-        name: 'IT Operations',
-        icon: 'fa-server',
-        level: 90,
-        category: 'Expert'
-    },
-    {
-        name: 'Technical Support',
-        icon: 'fa-headset',
-        level: 98,
-        category: 'Expert'
-    },
-    {
-        name: 'Asset Management',
-        icon: 'fa-database',
-        level: 88,
-        category: 'Advanced'
-    },
-    {
-        name: 'Troubleshooting',
-        icon: 'fa-bug',
-        level: 96,
-        category: 'Expert'
-    }
+    { name: 'L1 & L2 IT Support',        icon: 'fa-headset',        level: 85, cat: 'Core Competency' },
+    { name: 'Hardware Repair & Maint.',   icon: 'fa-tools',          level: 82, cat: 'Hands-on Experience' },
+    { name: 'System Reimaging & OS Deploy', icon: 'fa-compact-disc', level: 80, cat: 'Practiced Regularly' },
+    { name: 'Network Support (LAN/WAN)', icon: 'fa-network-wired',   level: 78, cat: 'CCNA Foundation' },
+    { name: 'IT Asset Management',        icon: 'fa-database',       level: 75, cat: 'Full Lifecycle' },
+    { name: 'Office 365 & SharePoint',    icon: 'fa-envelope-open',  level: 80, cat: 'Daily Use' },
+    { name: 'Onboarding IT Processes',    icon: 'fa-user-plus',      level: 72, cat: 'Multi-company Experience' },
+    { name: 'H/W, S/W & OS Troubleshoot',icon: 'fa-bug',            level: 83, cat: 'Expert Level' },
+    { name: 'Digital Asset Inventory',    icon: 'fa-clipboard-list', level: 76, cat: 'Cross-sector Practice' }
 ];
 
 function loadSkills() {
-    const skillsGrid = document.querySelector('.skills-grid');
-    if (!skillsGrid) return;
-
-    skillsGrid.innerHTML = '';
-
-    skillsData.forEach((skill, index) => {
+    const bento = document.getElementById('skillsBento');
+    if (!bento) return;
+    skillsData.forEach((s, i) => {
         const card = document.createElement('div');
         card.className = 'skill-card';
         card.setAttribute('data-aos', 'fade-up');
-        card.setAttribute('data-aos-delay', index * 100);
-
+        card.setAttribute('data-aos-delay', i * 60);
         card.innerHTML = `
-            <div class="skill-header">
-                <div class="skill-icon">
-                    <i class="fas ${skill.icon}"></i>
-                </div>
-                <div>
-                    <h4 class="skill-name">${skill.name}</h4>
-                    <p class="skill-level">${skill.category}</p>
-                </div>
+            <div class="sk-icon"><i class="fas ${s.icon}"></i></div>
+            <div class="sk-name">${s.name}</div>
+            <div class="sk-cat">${s.cat}</div>
+            <div class="sk-bar-track">
+                <div class="sk-bar-fill" data-width="${s.level}%"></div>
             </div>
-            <div class="skill-progress">
-                <div class="skill-progress-fill" style="width: 0%" data-width="${skill.level}%"></div>
-            </div>
+            <div class="sk-pct">${s.level}%</div>
         `;
-
-        skillsGrid.appendChild(card);
+        bento.appendChild(card);
     });
-
-    // Animate skill bars when they come into view
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const skillBars = entry.target.querySelectorAll('.skill-progress-fill');
-                skillBars.forEach(bar => {
-                    const width = bar.getAttribute('data-width');
-                    setTimeout(() => {
-                        bar.style.width = width;
-                    }, 300);
-                });
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
-
-    if (skillsGrid) {
-        observer.observe(skillsGrid);
-    }
 }
 
-loadSkills();
-
-// ===================================
-// Load Tech Stack
-// ===================================
+// ── TECH STACK ──
 const techStack = [
-    'Windows Server',
-    'Active Directory',
-    'Office 365',
-    'SharePoint',
-    'Network Protocols',
-    'CCNA',
-    'System Imaging',
-    'Hardware Repair',
-    'Ticketing Systems',
-    'Asset Management',
-    'SQL Basics',
-    'EMR Systems'
+    // Operating Systems
+    'Windows 10 / 11', 'macOS',
+    // Productivity & Cloud
+    'Office 365', 'SharePoint', 'Active Directory', 'Outlook', 'Microsoft Teams',
+    // Networking
+    'LAN / WAN / Wi-Fi', 'VoIP', 'Network Troubleshooting', 'TCP/IP',
+    // IT Operations
+    'System Reimaging', 'Hardware Repair', 'EMR Systems', 'POS Systems',
+    // Other
+    'SQL Basics', 'Project Management', 'Odoo ERP'
 ];
 
 function loadTechStack() {
-    const techItems = document.querySelector('.tech-items');
-    if (!techItems) return;
-
-    techItems.innerHTML = '';
-
-    techStack.forEach((tech, index) => {
-        const badge = document.createElement('span');
-        badge.className = 'tech-item';
-        badge.textContent = tech;
-        badge.setAttribute('data-aos', 'zoom-in');
-        badge.setAttribute('data-aos-delay', index * 40);
-
-        techItems.appendChild(badge);
+    const container = document.getElementById('techPills');
+    if (!container) return;
+    techStack.forEach((t, i) => {
+        const pill = document.createElement('span');
+        pill.className = 'tech-pill';
+        pill.textContent = t;
+        pill.setAttribute('data-aos', 'zoom-in');
+        pill.setAttribute('data-aos-delay', i * 25);
+        container.appendChild(pill);
     });
 }
 
-loadTechStack();
-
-// ===================================
-// Load Languages
-// ===================================
+// ── LANGUAGES ──
 const languages = [
-    { name: 'English', level: 'Fluent' },
-    { name: 'Urdu/Hindi', level: 'Native/Fluent' },
-    { name: 'Pashto', level: 'Native/Fluent' }
+    { name: 'English',      level: 'Professional' },
+    { name: 'Urdu / Hindi', level: 'Native' },
+    { name: 'Pashto',       level: 'Native' }
 ];
 
 function loadLanguages() {
-    const languagesGrid = document.querySelector('.languages-grid');
-    if (!languagesGrid) return;
-
-    languagesGrid.innerHTML = '';
-
-    languages.forEach((lang, index) => {
+    const grid = document.getElementById('langGrid');
+    if (!grid) return;
+    languages.forEach(l => {
         const card = document.createElement('div');
-        card.className = 'language-item';
-        card.setAttribute('data-aos', 'fade-up');
-        card.setAttribute('data-aos-delay', index * 100);
-
+        card.className = 'lang-card';
         card.innerHTML = `
-            <h5 class="language-name">${lang.name}</h5>
-            <p class="language-level">${lang.level}</p>
+            <span class="lang-name">${l.name}</span>
+            <span class="lang-level">${l.level}</span>
         `;
-
-        languagesGrid.appendChild(card);
+        grid.appendChild(card);
     });
 }
 
-loadLanguages();
-
-// ===================================
-// Animate Circular Progress Bars in About Section
-// ===================================
-function animateCircularProgress() {
-    const progressBars = document.querySelectorAll('.progress-bar');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const circle = entry.target;
-                const percent = parseInt(circle.getAttribute('data-percent'));
-                const radius = 52;
-                const circumference = 2 * Math.PI * radius;
-                const offset = circumference - (percent / 100) * circumference;
-                
-                // Animate the stroke-dashoffset
-                setTimeout(() => {
-                    circle.style.strokeDashoffset = offset;
-                }, 300);
-                
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-    
-    progressBars.forEach(bar => observer.observe(bar));
-}
-
-// Run animation when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', animateCircularProgress);
-} else {
-    animateCircularProgress();
-}
-
-// ===================================
-// Load Additional Certifications
-// ===================================
-const certificationsData = [
+// ── CERTIFICATIONS ──
+const additionalCerts = [
     {
         icon: 'fa-graduation-cap',
         title: 'Odoo ERP Training',
-        description: 'Workshop covering business processes, product, vendor, and customer management.',
-        certificateLink: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
+        desc: 'Workshop covering business processes, product, vendor, and customer management.',
+        url: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
     },
     {
         icon: 'fa-trophy',
         title: 'Aptech Graduation',
-        description: 'Advanced Diploma in Software Engineering (ACCP) certification.',
-        certificateLink: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
+        desc: 'Advanced Diploma in Software Engineering (ACCP) certification.',
+        url: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
     },
     {
         icon: 'fa-hands-helping',
         title: 'MDX Career Fair',
-        description: 'Certificate of appreciation for volunteering at the Middlesex University Career Fair.',
-        certificateLink: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
+        desc: 'Certificate of appreciation for volunteering at the Middlesex University Career Fair.',
+        url: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
     },
     {
         icon: 'fa-award',
-        title: 'Safety Award - HIA',
-        description: 'Recognition for following the best safety rules during the Airport Project.',
-        certificateLink: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=drive_link'
+        title: 'Safety Award — HIA',
+        desc: 'Recognition for exemplary safety practices during the Airport Expansion Project.',
+        url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVGbGi5HcFh4lrN9/view?usp=drive_link'
     }
 ];
 
 function loadCertifications() {
-    const certsGrid = document.querySelector('.certs-grid');
-    if (!certsGrid) return;
-
-    certsGrid.innerHTML = '';
-
-    certificationsData.forEach((cert, index) => {
-        const card = document.createElement('div');
-        card.className = 'cert-card';
-        card.setAttribute('data-aos', 'fade-up');
-        card.setAttribute('data-aos-delay', index * 100);
-
-        const certButton = cert.certificateLink ? 
-            `<a href="${cert.certificateLink}" target="_blank" class="cert-btn" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, var(--brass-bright), var(--brass-dark)); color: #0f0f0f; text-decoration: none; border-radius: 6px; font-weight: 600; transition: all 0.3s;">
-                <i class="fas fa-eye"></i> View Certificate
-            </a>` : '';
-
-        card.innerHTML = `
-            <div class="cert-icon">
-                <i class="fas ${cert.icon}"></i>
+    const wall = document.getElementById('certsWall');
+    if (!wall) return;
+    additionalCerts.forEach((cert, i) => {
+        const frame = document.createElement('div');
+        frame.className = 'cw-frame';
+        frame.setAttribute('data-aos', 'fade-up');
+        frame.setAttribute('data-aos-delay', i * 80);
+        frame.innerHTML = `
+            <div class="cw-frame-inner">
+                <div class="cw-icon"><i class="fas ${cert.icon}"></i></div>
+                <div class="cw-title">${cert.title}</div>
+                <div class="cw-desc">${cert.desc}</div>
+                ${cert.url ? `<a href="${cert.url}" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
+                    <i class="fas fa-eye"></i> View Certificate
+                </a>` : ''}
             </div>
-            <h4 style="font-family: 'Playfair Display', serif; font-size: 20px; margin: 15px 0 10px; color: var(--text-primary);">${cert.title}</h4>
-            <p style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 10px;">${cert.description}</p>
-            ${certButton}
         `;
-
-        certsGrid.appendChild(card);
+        wall.appendChild(frame);
     });
 }
 
-loadCertifications();
-
-// ===================================
-// Greeting based on time of day
-// ===================================
-function setGreeting() {
-    const greetingElement = document.querySelector('.hero-greeting');
-    if (!greetingElement) return;
-
-    const hour = new Date().getHours();
-    let greeting = 'Good Day!';
-
-    if (hour < 12) {
-        greeting = 'Good Morning!';
-    } else if (hour < 18) {
-        greeting = 'Good Afternoon!';
-    } else {
-        greeting = 'Good Evening!';
-    }
-
-    greetingElement.textContent = greeting;
-}
-
-setGreeting();
-
-// ===================================
-// Smooth Scrolling Enhancement
-// ===================================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href === '#') return;
-        
-        e.preventDefault();
-        const target = document.querySelector(href);
-        
-        if (target) {
-            const offsetTop = target.offsetTop - 100;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// ===================================
-// Parallax effect removed for smooth scrolling
-// ===================================
-
-// ===================================
-// Add subtle hover effects
-// ===================================
-document.querySelectorAll('.business-card, .notepad-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transition = 'transform 0.3s ease';
-        this.style.transform = 'translateY(-5px)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-    });
-});
-
-// ===================================
-// Console signature
-// ===================================
-console.log('%c🪵 Wood Office Portfolio ', 'font-size: 20px; font-weight: bold; color: #c9a961; background: #3d2f24; padding: 10px 20px; border-radius: 5px;');
-console.log('%cDesigned with craftsmanship by Sajid Mehmood', 'font-size: 12px; color: #8b6f47;');
+// ── CONSOLE SIGNATURE ──
+console.log('%c⚜ Sajid Mehmood — IT Support Engineer Portfolio', 'font-size:16px;font-weight:bold;color:#C5A059;background:#2D3436;padding:10px 22px;border-radius:4px;');
+console.log('%cBuilt with precision · sajidmk.com', 'font-size:11px;color:#718096;');
