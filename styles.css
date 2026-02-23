@@ -1039,9 +1039,9 @@ a { color: inherit; text-decoration: none; }
    RESPONSIVE
 ══════════════════════════════════════ */
 @media(max-width:1000px) {
-    .hero-layout { flex-direction: column; align-items: center; padding: 50px 24px; text-align: center; }
-    .id-card { width: 100%; max-width: 340px; }
-    .hero-copy { max-width: 100%; width: 100%; }
+    .hero-layout { flex-direction: column; align-items: center; padding: 50px 0; text-align: center; }
+    .id-card { width: 100%; max-width: 100%; }
+    .hero-copy { max-width: 100%; width: 100%; padding: 0; }
     .hero-eyebrow { justify-content: center; }
     .hero-ctas { justify-content: center; }
     .cred-tags { justify-content: center; }
@@ -1056,15 +1056,15 @@ a { color: inherit; text-decoration: none; }
     .certs-intro { text-align: center; margin-left: auto; margin-right: auto; }
     .social-exec-row { justify-content: center; }
     .about-intro { text-align: center; }
-    .container { width: 100%; }
+    .container { width: 100%; padding-left: 0; padding-right: 0; }
 }
 @media(max-width:680px) {
-    .section { padding: 60px 16px; }
-    .hero-layout { padding: 40px 16px; gap: 32px; align-items: center; text-align: center; }
+    .section { padding: 60px 0; }
+    .hero-layout { padding: 40px 0; gap: 32px; align-items: center; text-align: center; }
     .hero-headline { font-size: 30px; text-align: center; }
     .hero-brief { text-align: center; }
     .skills-bento { grid-template-columns: 1fr; }
-    .nav-inner { padding: 0 16px; }
+    .nav-inner { padding: 0 12px; }
     .hero-kpis { flex-direction: column; width: 100%; }
     .kpi-sep { display: none; }
     .kpi-block { width: 100%; border-bottom: 1px solid var(--border); }
@@ -1073,21 +1073,37 @@ a { color: inherit; text-decoration: none; }
     .ftab { border-bottom: 1px solid var(--border); border-radius: 4px 4px 0 0; }
     .ftab.active { border-bottom: 2px solid var(--gold); }
     .footer-inner { flex-direction: column; gap: 6px; }
-    .id-card { max-width: 100%; width: 100%; }
+    .id-card { max-width: 100%; width: 100%; border-radius: 0; }
     .hero-eyebrow { justify-content: center; }
-    .hero-ctas { justify-content: center; flex-direction: column; align-items: center; }
+    .hero-ctas { justify-content: center; flex-direction: column; align-items: center; padding: 0 12px; }
     .hero-ctas .btn { width: 100%; justify-content: center; }
-    .cred-tags { justify-content: center; }
-    .section-header { justify-content: center; text-align: center; flex-direction: column; align-items: center; gap: 8px; }
-    .contact-intro { text-align: center; }
-    .certs-intro { text-align: center; }
-    .social-exec-row { justify-content: center; flex-direction: column; align-items: center; }
+    .cred-tags { justify-content: center; padding: 0 12px; }
+    .hero-brief { padding: 0 12px; }
+    .hero-headline { padding: 0 12px; }
+    .section-header { justify-content: center; text-align: center; flex-direction: column; align-items: center; gap: 8px; padding: 0 12px; }
+    .contact-intro { text-align: center; padding: 0 12px; }
+    .certs-intro { text-align: center; padding: 0 12px; }
+    .social-exec-row { justify-content: center; flex-direction: column; align-items: center; padding: 0 12px; }
     .exec-social-btn { width: 100%; justify-content: center; }
-    .cwf-outer { max-width: 100%; }
-    .contact-card { width: 100%; }
+    .cwf-outer { max-width: 100%; border-radius: 0; }
+    .contact-card { width: 100%; border-radius: 0; }
     .container { padding: 0; width: 100%; }
     .about-intro { text-align: center; }
     .cw-frame-inner { align-items: center; text-align: center; }
+    .about-text { padding: 0 12px; }
+    .about-panel { border-radius: 0; }
+    .exp-card { border-radius: 0; }
+    .skill-card { border-radius: 0; }
+    .folder-body { border-radius: 0; }
+    .cwf-inner { border-radius: 0; }
+    .bio-lead, .bio-body { padding: 0; }
+    .bio-achieves { padding: 0 12px; }
+    .tech-pills { padding: 0 12px; }
+    .lang-grid { padding: 0 12px; }
+    .sub-block { padding: 0; }
+    .sub-label { padding-left: 12px; }
+    .certs-wall-grid { padding: 0; }
+    .exp-timeline { padding: 0; }
 }
 /* ══════════════════════════════════════
    DARK MODE
@@ -1569,14 +1585,6 @@ body.dark-mode .dark-toggle:hover {
 .avail-dot {
     animation: dotPulse 1.5s ease-in-out infinite;
 }
-.avail-dot::after {
-    content: '';
-    position: absolute; inset: -4px;
-    border-radius: 50%;
-    border: 2px solid #22c55e;
-    animation: ripple 2s ease-out infinite;
-}
-.id-availability { position: relative; }
 
 /* ── Hero headline: animated gradient text ── */
 .hero-headline em {
@@ -1929,11 +1937,6 @@ body.dark-mode .dark-toggle:hover {
     /* Emoji visual indicators next to KPI blocks */
     .kpi-block:nth-child(1) .kpi-label::after { content: " ⏱️"; }
     .kpi-block:nth-child(3) .kpi-label::after { content: " ✅"; }
-
-    /* Mobile: avail dot with bigger ripple */
-    .avail-dot::after {
-        animation-duration: 1.5s;
-    }
 
     /* Mobile: cert wall animation */
     .cwf-outer {
