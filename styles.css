@@ -1569,6 +1569,14 @@ body.dark-mode .dark-toggle:hover {
 .avail-dot {
     animation: dotPulse 1.5s ease-in-out infinite;
 }
+.avail-dot::after {
+    content: '';
+    position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 2px solid #22c55e;
+    animation: ripple 2s ease-out infinite;
+}
+.id-availability { position: relative; }
 
 /* ── Hero headline: animated gradient text ── */
 .hero-headline em {
@@ -1921,6 +1929,11 @@ body.dark-mode .dark-toggle:hover {
     /* Emoji visual indicators next to KPI blocks */
     .kpi-block:nth-child(1) .kpi-label::after { content: " ⏱️"; }
     .kpi-block:nth-child(3) .kpi-label::after { content: " ✅"; }
+
+    /* Mobile: avail dot with bigger ripple */
+    .avail-dot::after {
+        animation-duration: 1.5s;
+    }
 
     /* Mobile: cert wall animation */
     .cwf-outer {
