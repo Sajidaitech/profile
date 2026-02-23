@@ -532,3 +532,115 @@ console.log(
     'font-size:16px;font-weight:bold;color:#C5A059;background:#2D3436;padding:10px 22px;border-radius:4px;'
 );
 console.log('%cBuilt with precision · sajidmk.com', 'font-size:11px;color:#718096;');
+// ════════════════════════════════════════
+// ANIMATION ENHANCEMENTS
+// ════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', () => {
+    initScrollReveal();
+    initHeroEmoji();
+    initMobileEmojiTicker();
+    initHoverParticles();
+});
+
+/* Intersection Observer for scroll-triggered mobile animations */
+function initScrollReveal() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    const els = document.querySelectorAll(
+        '.achieve-item, .skill-card, .exp-card, .contact-card, .cw-frame, .lang-card, .tech-pill'
+    );
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+                entry.target.style.opacity = '1';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+    els.forEach(el => {
+        el.style.animationPlayState = 'paused';
+        observer.observe(el);
+    });
+}
+
+/* Wave emoji on hover of ID card name on mobile */
+function initHeroEmoji() {
+    const idName = document.querySelector('.id-name');
+    if (!idName) return;
+    // Add waving hand emoji that animates
+    const wave = document.createElement('span');
+    wave.textContent = ' 👋';
+    wave.style.cssText = 'display:inline-block;animation:none;cursor:pointer;';
+    wave.setAttribute('aria-hidden', 'true');
+    idName.appendChild(wave);
+    wave.addEventListener('click', () => {
+        wave.style.animation = 'none';
+        requestAnimationFrame(() => {
+            wave.style.animation = 'waveEmoji .8s ease';
+        });
+        wave.addEventListener('animationend', () => { wave.style.animation = 'none'; }, { once: true });
+    });
+    // auto-wave once on load
+    setTimeout(() => {
+        wave.style.animation = 'waveEmoji .8s ease';
+        wave.addEventListener('animationend', () => { wave.style.animation = 'none'; }, { once: true });
+    }, 1800);
+}
+
+/* Mobile: animated emoji ticker above hero on small screens */
+function initMobileEmojiTicker() {
+    if (window.innerWidth > 768) return;
+    const hero = document.querySelector('.hero-copy');
+    if (!hero) return;
+    const ticker = document.createElement('div');
+    ticker.setAttribute('aria-hidden', 'true');
+    ticker.style.cssText = [
+        'font-size:22px',
+        'letter-spacing:8px',
+        'text-align:center',
+        'margin-bottom:12px',
+        'animation:fadeInDown .8s ease both',
+        'user-select:none'
+    ].join(';');
+    ticker.textContent = '💻 🌐 ⚙️ 🔧 📡';
+    hero.insertAdjacentElement('afterbegin', ticker);
+}
+
+/* Subtle gold particle burst on .btn-gold click */
+function initHoverParticles() {
+    document.querySelectorAll('.btn-gold').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const rect = btn.getBoundingClientRect();
+            const cx = e.clientX - rect.left;
+            const cy = e.clientY - rect.top;
+            for (let i = 0; i < 8; i++) {
+                const dot = document.createElement('span');
+                const angle = (i / 8) * 2 * Math.PI;
+                const dist = 28 + Math.random() * 20;
+                dot.style.cssText = [
+                    'position:absolute',
+                    'width:5px', 'height:5px',
+                    'border-radius:50%',
+                    'background:var(--gold-lt)',
+                    'pointer-events:none',
+                    'z-index:99',
+                    'left:' + (cx - 2.5) + 'px',
+                    'top:' + (cy - 2.5) + 'px',
+                    'transition:transform .5s ease,opacity .5s ease',
+                    'opacity:1'
+                ].join(';');
+                btn.style.position = 'relative';
+                btn.style.overflow = 'visible';
+                btn.appendChild(dot);
+                requestAnimationFrame(() => {
+                    dot.style.transform = 'translate(' +
+                        (Math.cos(angle)*dist) + 'px,' +
+                        (Math.sin(angle)*dist) + 'px) scale(0)';
+                    dot.style.opacity = '0';
+                });
+                setTimeout(() => dot.remove(), 550);
+            }
+        });
+    });
+}
