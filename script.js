@@ -392,13 +392,13 @@ function loadExperience() {
 // ════════════════════════════════════════
 
 const skillsData = [
-    { name: 'L1 & L2 IT Support',            icon: 'fa-headset',        level: 100,  cat: 'Core Competency' },
+    { name: 'L1 & L2 IT Support',            icon: 'fa-headset',        level: 90,  cat: 'Core Competency' },
     { name: 'Hardware Repair & Maintenance',  icon: 'fa-tools',          level: 98,  cat: 'Hands-on Experience' },
     { name: 'System Reimaging & OS Deploy',   icon: 'fa-compact-disc',   level: 85,  cat: 'Practiced Regularly' },
     { name: 'Network Support (LAN/WAN)',      icon: 'fa-network-wired',  level: 85,  cat: 'CCNA Foundation' },
     { name: 'IT Asset Management',            icon: 'fa-database',       level: 100, cat: 'Full Lifecycle' },
     { name: 'Office 365 & SharePoint',        icon: 'fa-envelope-open',  level: 97,  cat: 'Daily Use' },
-    { name: 'Onboarding IT Processes',        icon: 'fa-user-plus',      level: 95,  cat: 'Multi-company Experience' },
+    { name: 'Onboarding IT Processes',        icon: 'fa-user-plus',      level: 90,  cat: 'Multi-company Experience' },
     { name: 'H/W, S/W & OS Troubleshooting', icon: 'fa-bug',            level: 100, cat: 'Expert Level' },
     { name: 'Digital Asset Inventory',        icon: 'fa-clipboard-list', level: 100, cat: 'Cross-sector Practice' }
 ];
@@ -643,5 +643,4 @@ function initHoverParticles() {
             }
         });
     });
-
 }
