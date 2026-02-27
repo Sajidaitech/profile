@@ -360,7 +360,7 @@ const experienceData = [
             '<b>Cross-Subsidiary Support:</b> Delivered specialised onsite IT support for <b>Elegancia Health Care</b>, <b>UCC Holding</b>, and <b>ASSETS Group</b>, conducting frequent site visits to resolve complex hardware and network issues.',
             '<b>L1/L2 Incident Management:</b> Resolved complex login errors, email configurations, and network failures for <b>200+ staff</b> across retail and corporate environments.',
             '<b>Infrastructure & Deployment:</b> Managed full-cycle device provisioning including OS imaging, hardware upgrades, and preventive maintenance for desktops, laptops, and specialised POS hardware.',
-            '<b>Asset Optimisation:</b> Monitored and documented IT assets across multiple group companies, implementing tracking protocols that <b>reduced equipment loss by 20%</b>.',
+            '<b>Asset Optimisation:</b> Monitored and documented IT assets across multiple group companies, implementing tracking protocols that <b>reduced equipment loss by 10%</b>.',
             '<b>Vendor Coordination:</b> Collaborated with external vendors and telecommunications providers to resolve VoIP and connectivity issues across diverse project sites.'
         ],
         letters: [
@@ -733,3 +733,4 @@ console.log(
     'font-size:16px;font-weight:bold;color:#C5A059;background:#2D3436;padding:10px 22px;border-radius:4px;'
 );
 console.log('%cBuilt with precision · sajidmk.com', 'font-size:11px;color:#718096;');
+
