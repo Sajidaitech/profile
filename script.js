@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadLanguages();
     loadCertifications();
     initSkillBars();
+    initScrollReveal();
+    initHeroEmoji();
+    initMobileEmojiTicker();
+    initHoverParticles();
 });
 
 
@@ -94,8 +98,8 @@ function initNav() {
 // ════════════════════════════════════════
 
 function initDarkMode() {
-    const body       = document.body;
-    const toggles    = [document.getElementById('darkToggle'), document.getElementById('darkToggleMob')];
+    const body        = document.body;
+    const toggles     = [document.getElementById('darkToggle'), document.getElementById('darkToggleMob')];
     const STORAGE_KEY = 'sm-dark-mode';
 
     function applyDark(isDark) {
@@ -109,8 +113,8 @@ function initDarkMode() {
         });
     }
 
-    // Restore saved preference
-    const saved = localStorage.getItem(STORAGE_KEY);
+    // Restore saved preference, fall back to system preference
+    const saved       = localStorage.getItem(STORAGE_KEY);
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyDark(saved !== null ? saved === '1' : prefersDark);
 
@@ -136,18 +140,24 @@ function initCursor() {
     document.addEventListener('mousemove', e => {
         dot.style.left = e.clientX + 'px';
         dot.style.top  = e.clientY + 'px';
+        // Ring follows with a slight lag for a trailing effect
         setTimeout(() => {
             ring.style.left = e.clientX + 'px';
             ring.style.top  = e.clientY + 'px';
         }, 70);
     });
 
+    // Expand ring on interactive elements
     document.querySelectorAll('a, button, .skill-card, .exp-card').forEach(el => {
         el.addEventListener('mouseenter', () => {
-            ring.style.width = '44px'; ring.style.height = '44px'; ring.style.opacity = '.4';
+            ring.style.width   = '44px';
+            ring.style.height  = '44px';
+            ring.style.opacity = '.4';
         });
         el.addEventListener('mouseleave', () => {
-            ring.style.width = '28px'; ring.style.height = '28px'; ring.style.opacity = '.6';
+            ring.style.width   = '28px';
+            ring.style.height  = '28px';
+            ring.style.opacity = '.6';
         });
     });
 }
@@ -176,8 +186,8 @@ function animateCount(el) {
     const duration = 1400;
     const start    = performance.now();
     const step = now => {
-        const progress = Math.min((now - start) / duration, 1);
-        el.textContent = Math.ceil(progress * target);
+        const progress  = Math.min((now - start) / duration, 1);
+        el.textContent  = Math.ceil(progress * target);
         if (progress < 1) requestAnimationFrame(step);
         else el.textContent = target;
     };
@@ -198,6 +208,7 @@ function initRings() {
                 const circ = 2 * Math.PI * 50;
                 ring.style.strokeDasharray  = circ;
                 ring.style.strokeDashoffset = circ;
+                // Small delay so the animation is visible after entering viewport
                 setTimeout(() => {
                     ring.style.strokeDashoffset = circ - (pct / 100) * circ;
                 }, 300);
@@ -218,9 +229,13 @@ function initFolderTabs() {
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const paneId = tab.getAttribute('data-pane');
+
+            // Deactivate all tabs and panes
             tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
             document.querySelectorAll('.folder-pane').forEach(p => p.classList.remove('active'));
+
+            // Activate clicked tab and its pane
+            tab.classList.add('active');
             document.getElementById(paneId)?.classList.add('active');
         });
     });
@@ -234,15 +249,19 @@ function initFolderTabs() {
 function initSkillBars() {
     const bento = document.getElementById('skillsBento');
     if (!bento) return;
+
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
             entry.target.querySelectorAll('.sk-bar-fill').forEach(bar => {
-                setTimeout(() => { bar.style.width = bar.getAttribute('data-width'); }, 200);
+                setTimeout(() => {
+                    bar.style.width = bar.getAttribute('data-width');
+                }, 200);
             });
             observer.unobserve(entry.target);
         });
     }, { threshold: 0.2 });
+
     observer.observe(bento);
 }
 
@@ -259,6 +278,7 @@ function handleContactForm() {
     const note    = document.getElementById('cfNote');
     const btn     = document.getElementById('cfSubmit');
 
+    // Basic validation
     if (!name || !email || !message) {
         note.textContent = '⚠ Please fill in your name, email, and message.';
         note.style.color = '#e74c3c';
@@ -270,6 +290,7 @@ function handleContactForm() {
         return;
     }
 
+    // Build mailto link and open mail client
     const body       = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
     const mailtoLink = 'mailto:sajidmehmood@outlook.com?subject=' +
                        encodeURIComponent(subject || 'Portfolio Enquiry — ' + name) +
@@ -286,50 +307,61 @@ function handleContactForm() {
 // DATA — EXPERIENCE
 // ════════════════════════════════════════
 
+/*
+ * Each responsibility entry supports inline HTML.
+ * Bold tags are used to highlight:
+ *   - Date ranges / project phases
+ *   - Key role titles / section headings
+ *   - Notable achievements and metrics
+ */
 const experienceData = [
     {
-        date: 'Apr 2025 – Aug 2025',
-        title: 'IT Executive & Business Development Intern',
-        type: 'Internship',
+        date:    'Apr 2025 – Aug 2025',
+        title:   'IT Executive & Business Development Intern',
+        type:    'Internship',
         company: 'Al Tawkel Immigration Center · Dubai, UAE',
         responsibilities: [
-            'Delivered Level 2 IT support including hardware repairs, system reimaging, network troubleshooting, and Office 365 email configurations',
-            'Installed, configured, and maintained enterprise IT infrastructure (servers, networks, printers)',
-            'Created and maintained digital IT asset records, streamlining lifecycle management',
-            'Assisted with immigration business operations including visa applications, cancellations, and Golden Visa processing',
-            'Coordinated with government authorities to resolve absconding employee cases, overstay fines, and lost passports'
+            '<b>L2 IT Support:</b> Delivered Level 2 technical support covering hardware repairs, system reimaging, network troubleshooting, and <b>Office 365</b> email configurations for all company staff.',
+            '<b>Infrastructure Management:</b> Installed, configured, and maintained enterprise IT infrastructure including servers, LAN networks, and multi-function printers across office premises.',
+            '<b>Digital Asset Management:</b> Created and maintained comprehensive digital IT asset records, significantly streamlining lifecycle management and reducing equipment discrepancies.',
+            '<b>Business Operations Support:</b> Assisted with core immigration business operations including visa applications, cancellations, and <b>Golden Visa</b> processing workflows.',
+            '<b>Government Liaison:</b> Coordinated directly with government authorities to resolve complex cases involving absconding employees, overstay fines, and lost passport recovery.'
         ],
-        letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing' }]
+        letters: [
+            { text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing' }
+        ]
     },
     {
-        date: 'Nov 2023 – Feb 2024',
-        title: 'IT Support Engineer',
-        type: 'Short-term Project',
+        date:    'Nov 2023 – Feb 2024',
+        title:   'IT Support Engineer',
+        type:    'Short-term Project',
         company: 'Military Medical City Hospital (MMCH) · Doha, Qatar',
         responsibilities: [
-            'Managed 500+ support tickets across three hospitals, ensuring 95% SLA compliance',
-            'Handled L1 tasks (password resets, software installs, network fixes) and L2 troubleshooting (OS crashes, hardware failures)',
-            'Performed system reimaging, OS deployment, and application configuration for 300+ medical staff',
-            'Supported EMR application troubleshooting for doctors and nurses, reducing downtime',
-            'Conducted preventive maintenance and patching for compliance with IT policies',
-            'Maintained digital asset inventory, improving lifecycle management accuracy'
+            '<b>High-Volume Ticket Management:</b> Managed <b>500+ support tickets</b> across three hospital sites, maintaining <b>95% SLA compliance</b> throughout the project duration.',
+            '<b>L1 & L2 Support:</b> Handled L1 tasks (password resets, software installations, network fixes) and escalated L2 troubleshooting covering OS crashes and critical hardware failures.',
+            '<b>System Deployment:</b> Performed system reimaging, OS deployment, and full application configuration for over <b>300 medical staff</b> across all hospital departments.',
+            '<b>EMR Application Support:</b> Provided dedicated troubleshooting for the Electronic Medical Records (EMR) system used by doctors and nurses, significantly reducing operational downtime.',
+            '<b>Preventive Maintenance & Compliance:</b> Conducted scheduled preventive maintenance and security patching to ensure compliance with hospital IT governance policies.',
+            '<b>Asset Inventory:</b> Maintained accurate digital asset inventory records, improving lifecycle management accuracy across all three hospital facilities.'
         ],
-        letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }]
+        letters: [
+            { text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }
+        ]
     },
     {
-        date: 'Feb 2022 – Nov 2023',
-        title: 'IT Support Engineer',
-        type: 'Full Time',
+        date:    'Feb 2022 – Nov 2023',
+        title:   'IT Support Engineer',
+        type:    'Full Time',
         company: 'Star Link – Power International Holding · Doha, Qatar',
         responsibilities: [
-            'Delivered daily IT support for 200+ staff across retail and corporate offices',
-            'Resolved L1 issues: login errors, email configs, printer problems, software installations',
-            'Handled L2 incidents: hardware replacements, OS troubleshooting, network failures',
-            'Performed imaging, upgrades, and preventive maintenance for desktops, laptops, POS systems',
-            'Monitored and documented IT assets, reducing missing equipment by 20%',
-            'Collaborated with vendors and telecoms for VoIP/connectivity issues',
-            'Supported onboarding (device provisioning, account setup, access control)',
-            'Trained staff on troubleshooting and IT best practices, reducing repeat tickets'
+            '<b>Executive & Head Office Support:</b> Provided dedicated technical support to <b>CEOs, Executives, and Directors</b> at the PIH Head Office, ensuring <b>zero downtime</b> for mission-critical operations and senior management.',
+            '<b>Project Management — HIA Expansion:</b> Led IT support operations for the <b>Hamad International Airport (HIA) Expansion</b> project across two phases (<b>Feb 2022 – Oct 2022</b> & <b>Apr 2023 – Nov 2023</b>), managing full infrastructure readiness and onsite technical requirements.',
+            '<b>Hospitality & Retail Systems:</b> Configured and deployed <b>POS systems</b> for <b>Aura Group</b> restaurants at Al Maha Island, ensuring seamless integration and operational stability for high-traffic dining venues.',
+            '<b>Cross-Subsidiary Support:</b> Delivered specialised onsite IT support for <b>Elegancia Health Care</b>, <b>UCC Holding</b>, and <b>ASSETS Group</b>, conducting frequent site visits to resolve complex hardware and network issues.',
+            '<b>L1/L2 Incident Management:</b> Resolved complex login errors, email configurations, and network failures for <b>200+ staff</b> across retail and corporate environments.',
+            '<b>Infrastructure & Deployment:</b> Managed full-cycle device provisioning including OS imaging, hardware upgrades, and preventive maintenance for desktops, laptops, and specialised POS hardware.',
+            '<b>Asset Optimisation:</b> Monitored and documented IT assets across multiple group companies, implementing tracking protocols that <b>reduced equipment loss by 20%</b>.',
+            '<b>Vendor Coordination:</b> Collaborated with external vendors and telecommunications providers to resolve VoIP and connectivity issues across diverse project sites.'
         ],
         letters: [
             { text: 'Starlink Experience Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
@@ -337,34 +369,40 @@ const experienceData = [
         ]
     },
     {
-        date: 'May 2021 – Feb 2022',
-        title: 'Customer Service Agent',
-        type: 'Full Time',
+        date:    'May 2021 – Feb 2022',
+        title:   'Customer Service Agent',
+        type:    'Full Time',
         company: 'STARLINK (Ooredoo International Telecommunications Company) · Qatar',
         responsibilities: [
-            'Handled inbound/outbound customer calls, resolving service and product issues',
-            'Identified customer needs, researched solutions, and provided appropriate alternatives',
-            'Supported customers with network and technical issues across Ooredoo products',
-            'Maintained accurate call records in database systems',
-            'Engaged customers and built sustainable long-term relationships',
-            'Regularly attended training sessions to improve product knowledge and performance'
+            '<b>Inbound & Outbound Support:</b> Handled high volumes of inbound and outbound customer calls, efficiently resolving service and product issues in a fast-paced telecoms environment.',
+            '<b>Issue Resolution:</b> Identified customer needs, researched suitable solutions, and provided well-informed alternatives to ensure first-call resolution wherever possible.',
+            '<b>Technical Assistance:</b> Supported customers with network and technical issues across <b>Ooredoo</b> product lines, escalating complex cases to the appropriate teams.',
+            '<b>CRM & Record Keeping:</b> Maintained accurate and detailed call records within internal database systems, ensuring data integrity for reporting and follow-ups.',
+            '<b>Relationship Building:</b> Engaged proactively with customers to build sustainable, long-term relationships that improved retention and customer satisfaction scores.',
+            '<b>Continuous Learning:</b> Regularly attended structured training sessions to improve product knowledge, communication skills, and overall performance metrics.'
         ],
-        letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1F1dRuB9Bp3aLm0M2A0RZ_xmzFoYaElKp/view?usp=sharing' }]
+        letters: [
+            { text: 'Experience Letter', url: 'https://drive.google.com/file/d/1F1dRuB9Bp3aLm0M2A0RZ_xmzFoYaElKp/view?usp=sharing' }
+        ]
     }
 ];
 
 function loadExperience() {
     const timeline = document.getElementById('expTimeline');
     if (!timeline) return;
+
     experienceData.forEach((exp, i) => {
         const item = document.createElement('div');
         item.className = 'exp-item';
         item.setAttribute('data-aos', 'fade-up');
         item.setAttribute('data-aos-delay', i * 80);
+
+        // Build "View Letter" button(s)
         const lettersHTML = (exp.letters || []).map(l =>
             '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="exp-btn">' +
             '<i class="fas fa-file-contract"></i>' + l.text + '</a>'
         ).join('');
+
         item.innerHTML =
             '<div class="exp-card">' +
               '<div class="exp-header">' +
@@ -373,7 +411,7 @@ function loadExperience() {
                   (exp.type ? '<span class="exp-type-badge">' + exp.type + '</span>' : '') +
                 '</div>' +
                 '<div class="exp-meta">' +
-                  '<span class="exp-date"><i class="fas fa-calendar-alt"></i> ' + exp.date + '</span>' +
+                  '<span class="exp-date"><i class="fas fa-calendar-alt"></i> <b>' + exp.date + '</b></span>' +
                   '<span class="exp-company-name">' + exp.company + '</span>' +
                 '</div>' +
               '</div>' +
@@ -382,6 +420,7 @@ function loadExperience() {
               '</ul>' +
               '<div class="exp-actions">' + lettersHTML + '</div>' +
             '</div>';
+
         timeline.appendChild(item);
     });
 }
@@ -406,6 +445,7 @@ const skillsData = [
 function loadSkills() {
     const bento = document.getElementById('skillsBento');
     if (!bento) return;
+
     skillsData.forEach((s, i) => {
         const card = document.createElement('div');
         card.className = 'skill-card';
@@ -413,10 +453,10 @@ function loadSkills() {
         card.setAttribute('data-aos-delay', i * 60);
         card.innerHTML =
             '<div class="sk-icon"><i class="fas ' + s.icon + '"></i></div>' +
-            '<div class="sk-name">' + s.name + '</div>' +
+            '<div class="sk-name"><b>' + s.name + '</b></div>' +
             '<div class="sk-cat">' + s.cat + '</div>' +
             '<div class="sk-bar-track"><div class="sk-bar-fill" data-width="' + s.level + '%"></div></div>' +
-            '<div class="sk-pct">' + s.level + '%</div>';
+            '<div class="sk-pct"><b>' + s.level + '%</b></div>';
         bento.appendChild(card);
     });
 }
@@ -437,10 +477,11 @@ const techStack = [
 function loadTechStack() {
     const container = document.getElementById('techPills');
     if (!container) return;
+
     techStack.forEach((t, i) => {
         const pill = document.createElement('span');
-        pill.className = 'tech-pill';
-        pill.textContent = t;
+        pill.className    = 'tech-pill';
+        pill.textContent  = t;
         pill.setAttribute('data-aos', 'zoom-in');
         pill.setAttribute('data-aos-delay', i * 25);
         container.appendChild(pill);
@@ -461,10 +502,13 @@ const languages = [
 function loadLanguages() {
     const grid = document.getElementById('langGrid');
     if (!grid) return;
+
     languages.forEach(l => {
         const card = document.createElement('div');
         card.className = 'lang-card';
-        card.innerHTML = '<span class="lang-name">' + l.name + '</span><span class="lang-level">' + l.level + '</span>';
+        card.innerHTML  =
+            '<span class="lang-name"><b>' + l.name + '</b></span>' +
+            '<span class="lang-level">' + l.level + '</span>';
         grid.appendChild(card);
     });
 }
@@ -478,34 +522,35 @@ const cvLink = 'https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71
 
 const additionalCerts = [
     {
-        icon: 'fa-graduation-cap',
+        icon:  'fa-graduation-cap',
         title: 'Odoo ERP Training',
-        desc: 'Workshop covering business processes, product, vendor, and customer management.',
-        url: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
+        desc:  'Workshop covering business processes, product, vendor, and customer management.',
+        url:   'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
     },
     {
-        icon: 'fa-trophy',
+        icon:  'fa-trophy',
         title: 'Aptech Graduation',
-        desc: 'Advanced Diploma in Software Engineering (ACCP) certification.',
-        url: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
+        desc:  'Advanced Diploma in Software Engineering (ACCP) certification.',
+        url:   'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
     },
     {
-        icon: 'fa-hands-helping',
+        icon:  'fa-hands-helping',
         title: 'MDX Career Fair',
-        desc: 'Certificate of appreciation for volunteering at the Middlesex University Career Fair.',
-        url: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
+        desc:  'Certificate of appreciation for volunteering at the Middlesex University Career Fair.',
+        url:   'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
     },
     {
-        icon: 'fa-award',
+        icon:  'fa-award',
         title: 'Safety Award — HIA',
-        desc: 'Recognition for exemplary safety practices during the Airport Expansion Project.',
-        url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=sharing'
+        desc:  'Recognition for exemplary safety practices during the Airport Expansion Project.',
+        url:   'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=sharing'
     }
 ];
 
 function loadCertifications() {
     const wall = document.getElementById('certsWall');
     if (!wall) return;
+
     additionalCerts.forEach((cert, i) => {
         const frame = document.createElement('div');
         frame.className = 'cw-frame';
@@ -514,9 +559,11 @@ function loadCertifications() {
         frame.innerHTML =
             '<div class="cw-frame-inner">' +
               '<div class="cw-icon"><i class="fas ' + cert.icon + '"></i></div>' +
-              '<div class="cw-title">' + cert.title + '</div>' +
+              '<div class="cw-title"><b>' + cert.title + '</b></div>' +
               '<div class="cw-desc">' + cert.desc + '</div>' +
-              (cert.url ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</a>' : '') +
+              (cert.url
+                ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</a>'
+                : '') +
             '</div>';
         wall.appendChild(frame);
     });
@@ -524,75 +571,89 @@ function loadCertifications() {
 
 
 // ════════════════════════════════════════
-// CONSOLE SIGNATURE
+// SCROLL REVEAL (Intersection Observer)
 // ════════════════════════════════════════
 
-console.log(
-    '%c⚜ Sajid Mehmood — IT Support Engineer Portfolio',
-    'font-size:16px;font-weight:bold;color:#C5A059;background:#2D3436;padding:10px 22px;border-radius:4px;'
-);
-console.log('%cBuilt with precision · sajidmk.com', 'font-size:11px;color:#718096;');
-// ════════════════════════════════════════
-// ANIMATION ENHANCEMENTS
-// ════════════════════════════════════════
-
-document.addEventListener('DOMContentLoaded', () => {
-    initScrollReveal();
-    initHeroEmoji();
-    initMobileEmojiTicker();
-    initHoverParticles();
-});
-
-/* Intersection Observer for scroll-triggered mobile animations */
+/*
+ * Pauses CSS animations on off-screen elements and starts them
+ * only when they scroll into the viewport — improving performance
+ * and creating a clean staggered entrance effect on mobile.
+ */
 function initScrollReveal() {
     if (typeof IntersectionObserver === 'undefined') return;
+
     const els = document.querySelectorAll(
         '.achieve-item, .skill-card, .exp-card, .contact-card, .cw-frame, .lang-card, .tech-pill'
     );
+
     const observer = new IntersectionObserver(entries => {
-        entries.forEach((entry, i) => {
+        entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.animationPlayState = 'running';
-                entry.target.style.opacity = '1';
+                entry.target.style.opacity            = '1';
                 observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.15 });
+
     els.forEach(el => {
         el.style.animationPlayState = 'paused';
         observer.observe(el);
     });
 }
 
-/* Wave emoji on hover of ID card name on mobile */
+
+// ════════════════════════════════════════
+// HERO EMOJI WAVE
+// ════════════════════════════════════════
+
+/*
+ * Appends a waving hand emoji (👋) to the hero ID-card name.
+ * Clicking or tapping replays the CSS wave animation.
+ * On page load an automatic single wave fires after 1.8 s.
+ */
 function initHeroEmoji() {
     const idName = document.querySelector('.id-name');
     if (!idName) return;
-    // Add waving hand emoji that animates
+
     const wave = document.createElement('span');
     wave.textContent = ' 👋';
     wave.style.cssText = 'display:inline-block;animation:none;cursor:pointer;';
     wave.setAttribute('aria-hidden', 'true');
     idName.appendChild(wave);
-    wave.addEventListener('click', () => {
+
+    // Helper: restart the keyframe animation
+    function replayWave() {
         wave.style.animation = 'none';
         requestAnimationFrame(() => {
             wave.style.animation = 'waveEmoji .8s ease';
         });
-        wave.addEventListener('animationend', () => { wave.style.animation = 'none'; }, { once: true });
-    });
-    // auto-wave once on load
-    setTimeout(() => {
-        wave.style.animation = 'waveEmoji .8s ease';
-        wave.addEventListener('animationend', () => { wave.style.animation = 'none'; }, { once: true });
-    }, 1800);
+        wave.addEventListener('animationend', () => {
+            wave.style.animation = 'none';
+        }, { once: true });
+    }
+
+    wave.addEventListener('click', replayWave);
+
+    // Auto-wave once on load
+    setTimeout(replayWave, 1800);
 }
 
-/* Mobile: animated emoji ticker above hero on small screens */
+
+// ════════════════════════════════════════
+// MOBILE EMOJI TICKER
+// ════════════════════════════════════════
+
+/*
+ * On small screens only, inserts an animated emoji strip above
+ * the hero copy to give the section a lively, mobile-friendly feel.
+ */
 function initMobileEmojiTicker() {
     if (window.innerWidth > 768) return;
+
     const hero = document.querySelector('.hero-copy');
     if (!hero) return;
+
     const ticker = document.createElement('div');
     ticker.setAttribute('aria-hidden', 'true');
     ticker.style.cssText = [
@@ -607,40 +668,68 @@ function initMobileEmojiTicker() {
     hero.insertAdjacentElement('afterbegin', ticker);
 }
 
-/* Subtle gold particle burst on .btn-gold click */
+
+// ════════════════════════════════════════
+// GOLD PARTICLE BURST ON BUTTON CLICK
+// ════════════════════════════════════════
+
+/*
+ * Attaches a click handler to every .btn-gold element that spawns
+ * 8 small gold dots radiating outward from the click point.
+ * Each particle fades and scales down over ~550 ms before being removed.
+ */
 function initHoverParticles() {
     document.querySelectorAll('.btn-gold').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             const rect = btn.getBoundingClientRect();
-            const cx = e.clientX - rect.left;
-            const cy = e.clientY - rect.top;
+            const cx   = e.clientX - rect.left;
+            const cy   = e.clientY - rect.top;
+
             for (let i = 0; i < 8; i++) {
-                const dot = document.createElement('span');
+                const dot   = document.createElement('span');
                 const angle = (i / 8) * 2 * Math.PI;
-                const dist = 28 + Math.random() * 20;
+                const dist  = 28 + Math.random() * 20;
+
                 dot.style.cssText = [
                     'position:absolute',
-                    'width:5px', 'height:5px',
+                    'width:5px',
+                    'height:5px',
                     'border-radius:50%',
                     'background:var(--gold-lt)',
                     'pointer-events:none',
                     'z-index:99',
-                    'left:' + (cx - 2.5) + 'px',
-                    'top:' + (cy - 2.5) + 'px',
+                    'left:'  + (cx - 2.5) + 'px',
+                    'top:'   + (cy - 2.5) + 'px',
                     'transition:transform .5s ease,opacity .5s ease',
                     'opacity:1'
                 ].join(';');
+
                 btn.style.position = 'relative';
                 btn.style.overflow = 'visible';
                 btn.appendChild(dot);
+
+                // Trigger transition on next frame
                 requestAnimationFrame(() => {
                     dot.style.transform = 'translate(' +
-                        (Math.cos(angle)*dist) + 'px,' +
-                        (Math.sin(angle)*dist) + 'px) scale(0)';
+                        (Math.cos(angle) * dist) + 'px,' +
+                        (Math.sin(angle) * dist) + 'px) scale(0)';
                     dot.style.opacity = '0';
                 });
+
+                // Clean up particle after animation completes
                 setTimeout(() => dot.remove(), 550);
             }
         });
     });
 }
+
+
+// ════════════════════════════════════════
+// CONSOLE SIGNATURE
+// ════════════════════════════════════════
+
+console.log(
+    '%c⚜ Sajid Mehmood — IT Support Engineer Portfolio',
+    'font-size:16px;font-weight:bold;color:#C5A059;background:#2D3436;padding:10px 22px;border-radius:4px;'
+);
+console.log('%cBuilt with precision · sajidmk.com', 'font-size:11px;color:#718096;');
