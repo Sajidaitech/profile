@@ -429,12 +429,12 @@
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="/cdn-cgi/l/email-protection#db889a91929ff58f9e9e98939b9c969a9297f5989496"><span class="__cf_email__" data-cfemail="82d1c3c8cbc6acd6c7c7c1cac2c5cfc3cbceacc1cdcf">info@sajidmk.com</span></a>
+                            <a href="mailto:info@sajidmk.com">info@sajidmk.com</a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="/cdn-cgi/l/email-protection#80c9cec6cfc0d3c1cac9c4cdcbaec3cfcd"><span class="__cf_email__" data-cfemail="d79e9991989784969d9e939a9cf994989a">sajid.teech@gmail.com</span></a>
+                            <a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-phone"></i></div>
@@ -462,14 +462,70 @@
 
     </main>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="script.js"></script>
+
+    <!-- ============================================
+         TELEGRAM VISITOR NOTIFICATION
+         Notifies Sajid on Telegram when someone
+         visits the portfolio website.
+    ============================================ -->
+    <script>
+    (function () {
+        const TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
+        const CHAT_ID = '8235795754';
+        const COOLDOWN_KEY = 'sajid_tg_notif';
+        const COOLDOWN_MS  = 30 * 60 * 1000; // 30 minutes cooldown per browser
+
+        // Don't spam — only notify once every 30 minutes per visitor
+        try {
+            const last = localStorage.getItem(COOLDOWN_KEY);
+            if (last && (Date.now() - parseInt(last)) < COOLDOWN_MS) return;
+            localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
+        } catch(e) {}
+
+        // Collect visitor info
+        const page     = window.location.href;
+        const referrer = document.referrer ? document.referrer : 'Direct / Bookmark';
+        const device   = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? '📱 Mobile' : '💻 Desktop';
+        const lang     = navigator.language || 'Unknown';
+        const time     = new Date().toLocaleString('en-US', {
+            timeZone: 'Asia/Qatar',
+            weekday: 'short', year: 'numeric',
+            month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+
+        const message =
+            '🔔 *New Portfolio Visitor!*\n' +
+            '━━━━━━━━━━━━━━━━━━━━\n' +
+            '📄 *Page:* ' + page + '\n' +
+            '🔗 *Referrer:* ' + referrer + '\n' +
+            '🖥️ *Device:* ' + device + '\n' +
+            '🌐 *Language:* ' + lang + '\n' +
+            '🕐 *Time (Qatar):* ' + time + '\n' +
+            '━━━━━━━━━━━━━━━━━━━━\n' +
+            '✨ Someone just viewed your portfolio!';
+
+        fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id:    CHAT_ID,
+                text:       message,
+                parse_mode: 'Markdown'
+            })
+        }).catch(function() {
+            // Silent fail — don't affect user experience
+        });
+    })();
+    </script>
 
     <footer class="footer">
         <div class="footer-inner">
             <span class="f-name">Sajid Mehmood</span>
             <span class="f-sep">·</span>
-            <span class="f-sub"IT Support Engineer</span>
+            <span class="f-sub">IT Support Engineer</span>
             <span class="f-sep">&middot;</span>
             <span class="f-copy">&copy; 2025 All Rights Reserved</span>
         </div>
