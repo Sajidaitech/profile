@@ -445,64 +445,58 @@
     </div>
 
     <script>
+    const TG_TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
+    const TG_CHAT_ID = '8235795754';
+
     // ── Show test button if ?test=1 in URL ──
     if (new URLSearchParams(window.location.search).get('test') === '1') {
         document.getElementById('testBtnWrap').style.display = 'block';
     }
 
+    // ── Test button: fires a direct message, shows result on screen ──
     function testTelegram() {
-        const TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
-        const CHAT_ID = '8235795754';
-        const result  = document.getElementById('testResult');
+        const result = document.getElementById('testResult');
         result.textContent = '⏳ Sending test message...';
         result.style.color = '#718096';
-
-        fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+        fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id:    CHAT_ID,
-                text:       '✅ *Test message from your portfolio gate!* Bot is working correctly.',
+                chat_id:    TG_CHAT_ID,
+                text:       '✅ *Test from portfolio gate — bot is working!*',
                 parse_mode: 'Markdown'
             })
         })
         .then(function(r){ return r.json(); })
-        .then(function(data){
-            if (data.ok) {
-                result.textContent = '✅ Message sent! Check your Telegram.';
+        .then(function(d){
+            if (d.ok) {
+                result.textContent = '✅ Sent! Check your Telegram.';
                 result.style.color = '#27ae60';
             } else {
-                result.textContent = '❌ Error: ' + data.description;
+                result.textContent = '❌ Error: ' + d.description;
                 result.style.color = '#e74c3c';
-                console.error('Telegram error details:', data);
             }
         })
-        .catch(function(err){
-            result.textContent = '❌ Network error. Check console.';
-            result.style.color = '#e74c3c';
-            console.error('Fetch error:', err);
-        });
+        .catch(function(){ result.textContent = '❌ Network error.'; result.style.color = '#e74c3c'; });
     }
 
-    // ── Allow Enter key to submit ──
+    // ── Enter key submits ──
     document.getElementById('visitorName').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') handleSubmit();
     });
 
-    // ── Auto-focus input ──
+    // ── Auto-focus ──
     window.addEventListener('load', function() {
-        setTimeout(function() {
-            document.getElementById('visitorName').focus();
-        }, 600);
+        setTimeout(function() { document.getElementById('visitorName').focus(); }, 600);
     });
 
+    // ── Main submit handler ──
     function handleSubmit() {
-        const input   = document.getElementById('visitorName');
-        const name    = input.value.trim();
-        const errorEl = document.getElementById('errorMsg');
-        const btn     = document.getElementById('submitBtn');
+        var input   = document.getElementById('visitorName');
+        var name    = input.value.trim();
+        var errorEl = document.getElementById('errorMsg');
+        var btn     = document.getElementById('submitBtn');
 
-        // Validate
         if (!name) {
             errorEl.classList.add('show');
             input.focus();
@@ -516,121 +510,108 @@
 
         errorEl.classList.remove('show');
 
-        // Show success overlay IMMEDIATELY — don't wait for Telegram
-        const overlay = document.getElementById('successOverlay');
+        // Show welcome overlay immediately
         document.getElementById('successName').textContent = 'Welcome, ' + name + '!';
-        overlay.classList.add('show');
-
-        // Loading state
+        document.getElementById('successOverlay').classList.add('show');
         btn.classList.add('loading');
 
-        // Send Telegram notification in background, redirect after 1.5s no matter what
-        setTimeout(function() {
-            window.location.href = 'index.html?ref=' + encodeURIComponent(name);
-        }, 1500);
+        // Redirect function — only fires once, max wait 5 seconds
+        var didRedirect = false;
+        function doRedirect() {
+            if (!didRedirect) {
+                didRedirect = true;
+                window.location.href = 'index.html?ref=' + encodeURIComponent(name);
+            }
+        }
+        setTimeout(doRedirect, 5000);
 
-        // Send Telegram notification (fire and forget)
-        sendTelegramNotification(name, function() {});
+        // Send Telegram notification, then redirect when done
+        sendTelegramNotification(name, doRedirect);
     }
 
     function skipGate() {
         window.location.href = 'index.html';
     }
 
+    // ── Telegram notification with full visitor info ──
     function sendTelegramNotification(name, callback) {
-        const TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
-        const CHAT_ID = '8235795754'; // Make sure you have sent /start to your bot first!
+        var ua = navigator.userAgent;
 
-        const ua = navigator.userAgent;
+        var deviceType = '💻 Desktop';
+        if      (/iPhone/i.test(ua))               deviceType = '📱 iPhone';
+        else if (/iPad/i.test(ua))                 deviceType = '📱 iPad';
+        else if (/Android.*Mobile/i.test(ua))      deviceType = '📱 Android Phone';
+        else if (/Android/i.test(ua))              deviceType = '📱 Android Tablet';
 
-        // Device
-        let deviceType = '💻 Desktop';
-        if (/iPhone/i.test(ua))               deviceType = '📱 iPhone';
-        else if (/iPad/i.test(ua))            deviceType = '📱 iPad';
-        else if (/Android.*Mobile/i.test(ua)) deviceType = '📱 Android Phone';
-        else if (/Android/i.test(ua))         deviceType = '📱 Android Tablet';
+        var os = 'Unknown OS';
+        if      (/Windows NT 10/i.test(ua))        os = 'Windows 10/11';
+        else if (/Windows NT 6/i.test(ua))         os = 'Windows (older)';
+        else if (/Mac OS X/i.test(ua))             os = 'macOS';
+        else if (/iPhone OS ([\d_]+)/i.test(ua))   os = 'iOS '     + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g,'.');
+        else if (/Android ([\d.]+)/i.test(ua))     os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
+        else if (/Linux/i.test(ua))                os = 'Linux';
 
-        // OS
-        let os = 'Unknown OS';
-        if (/Windows NT 10/i.test(ua))           os = 'Windows 10/11';
-        else if (/Windows NT 6/i.test(ua))       os = 'Windows (older)';
-        else if (/Mac OS X/i.test(ua))           os = 'macOS';
-        else if (/iPhone OS ([\d_]+)/i.test(ua)) os = 'iOS ' + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g,'.');
-        else if (/Android ([\d.]+)/i.test(ua))   os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
-        else if (/Linux/i.test(ua))              os = 'Linux';
+        var browser = 'Unknown';
+        if      (/Edg\//i.test(ua))    browser = 'Microsoft Edge';
+        else if (/OPR\//i.test(ua))    browser = 'Opera';
+        else if (/Chrome\//i.test(ua)) browser = 'Chrome';
+        else if (/Firefox\//i.test(ua))browser = 'Firefox';
+        else if (/Safari\//i.test(ua)) browser = 'Safari';
 
-        // Browser
-        let browser = 'Unknown';
-        if (/Edg\//i.test(ua))          browser = 'Microsoft Edge';
-        else if (/OPR\//i.test(ua))     browser = 'Opera';
-        else if (/Chrome\//i.test(ua))  browser = 'Chrome';
-        else if (/Firefox\//i.test(ua)) browser = 'Firefox';
-        else if (/Safari\//i.test(ua))  browser = 'Safari';
-
-        const screen_res = window.screen.width + 'x' + window.screen.height;
-        const lang       = navigator.language || 'Unknown';
-        const referrer   = document.referrer || 'Direct / Bookmark';
-        const time       = new Date().toLocaleString('en-US', {
-            timeZone: 'Asia/Qatar',
-            weekday: 'short', year: 'numeric',
-            month: 'short', day: 'numeric',
+        var screen_res = window.screen.width + 'x' + window.screen.height;
+        var lang       = navigator.language || 'Unknown';
+        var referrer   = document.referrer  || 'Direct / Bookmark';
+        var time       = new Date().toLocaleString('en-US', {
+            timeZone: 'Asia/Qatar', weekday: 'short',
+            year: 'numeric', month: 'short', day: 'numeric',
             hour: '2-digit', minute: '2-digit'
         });
 
-        // Get IP then location then send Telegram
+        function sendMsg(ip, city, country, isp) {
+            var msg =
+                '🎯 *' + name + ' is viewing your Portfolio!*\n' +
+                '━━━━━━━━━━━━━━━━━━━━\n' +
+                '👤 *Visitor:* ' + name + '\n' +
+                '🔗 *Referrer:* ' + referrer + '\n' +
+                '━━━━━━━━━━━━━━━━━━━━\n' +
+                '📍 *IP:* `' + ip + '`\n' +
+                '🌍 *Location:* ' + city + ', ' + country + '\n' +
+                '🏢 *ISP:* ' + isp + '\n' +
+                '━━━━━━━━━━━━━━━━━━━━\n' +
+                '🖥️ *Device:* ' + deviceType + '\n' +
+                '⚙️ *OS:* ' + os + '\n' +
+                '🌐 *Browser:* ' + browser + '\n' +
+                '📐 *Screen:* ' + screen_res + '\n' +
+                '🗣️ *Language:* ' + lang + '\n' +
+                '━━━━━━━━━━━━━━━━━━━━\n' +
+                '🕐 *Time (Qatar):* ' + time + '\n' +
+                '━━━━━━━━━━━━━━━━━━━━';
+
+            fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'Markdown' })
+            })
+            .then(function(r){ return r.json(); })
+            .then(function(d){ if (!d.ok) console.error('Telegram error:', d.description); })
+            .catch(function(e){ console.error('Telegram fetch error:', e); })
+            .finally(function(){ callback(); });
+        }
+
+        // Step 1: get IP
         fetch('https://api.ipify.org?format=json')
             .then(function(r){ return r.json(); })
-            .then(function(ipData){
-                var ip = ipData.ip || 'Unknown';
-                return fetch('https://ipapi.co/' + ip + '/json/')
+            .then(function(d){
+                var ip = d.ip || 'Unknown';
+                // Step 2: get geo
+                fetch('https://ipapi.co/' + ip + '/json/')
                     .then(function(r){ return r.json(); })
-                    .then(function(geo){
-                        var city    = geo.city         || 'Unknown';
-                        var country = geo.country_name || 'Unknown';
-                        var isp     = geo.org          || 'Unknown ISP';
-
-                        var message =
-                            '🎯 *' + name + ' is viewing your Portfolio!*\n' +
-                            '━━━━━━━━━━━━━━━━━━━━\n' +
-                            '👤 *Visitor:* ' + name + '\n' +
-                            '🔗 *Referrer:* ' + referrer + '\n' +
-                            '━━━━━━━━━━━━━━━━━━━━\n' +
-                            '📍 *IP Address:* `' + ip + '`\n' +
-                            '🌍 *Location:* ' + city + ', ' + country + '\n' +
-                            '🏢 *ISP:* ' + isp + '\n' +
-                            '━━━━━━━━━━━━━━━━━━━━\n' +
-                            '🖥️ *Device:* ' + deviceType + '\n' +
-                            '⚙️ *OS:* ' + os + '\n' +
-                            '🌐 *Browser:* ' + browser + '\n' +
-                            '📐 *Screen:* ' + screen_res + '\n' +
-                            '🗣️ *Language:* ' + lang + '\n' +
-                            '━━━━━━━━━━━━━━━━━━━━\n' +
-                            '🕐 *Time (Qatar):* ' + time + '\n' +
-                            '━━━━━━━━━━━━━━━━━━━━';
-
-                        return fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                chat_id:    CHAT_ID,
-                                text:       message,
-                                parse_mode: 'Markdown'
-                            })
-                        })
-                        .then(function(res){ return res.json(); })
-                        .then(function(result){
-                            if (!result.ok) {
-                                console.error('Telegram API error:', result.description);
-                            }
-                        });
-                    });
+                    .then(function(g){
+                        sendMsg(ip, g.city || 'Unknown', g.country_name || 'Unknown', g.org || 'Unknown ISP');
+                    })
+                    .catch(function(){ sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP'); });
             })
-            .catch(function(err){
-                console.error('Notification error:', err);
-            })
-            .finally(function(){
-                callback();
-            });
+            .catch(function(){ sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP'); });
     }
     </script>
 

@@ -8,15 +8,80 @@
     <title>Sajid Mehmood | IT Support Engineer</title>
     <link rel="icon" href="logo.png" type="image/png">
 
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS animations -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+    <!-- Portfolio styles -->
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Gate overlay styles -->
+    <link rel="stylesheet" href="gate.css">
 </head>
 <body>
 
+    <!-- GATE OVERLAY -->
+    <div id="gateOverlay">
+        <div class="g-deco">
+            <span></span>
+            <span></span>
+            <div class="g-line v1"></div>
+            <div class="g-line v2"></div>
+            <div class="g-line h1"></div>
+        </div>
+        <div class="g-card">
+            <div class="g-stripe"></div>
+            <div class="g-body">
+                <div class="g-logo">
+                    <img src="logo.png" alt="SM Logo">
+                    <div>
+                        <span class="g-logo-name">Sajid Mehmood</span>
+                        <span class="g-logo-sub">IT Support Engineer</span>
+                    </div>
+                </div>
+                <div class="g-divider"></div>
+                <div class="g-welcome">
+                    <span class="g-eyebrow">Welcome</span>
+                    <h1 class="g-headline">Who's <em>visiting</em><br>today?</h1>
+                    <p class="g-sub">Enter your name to view the portfolio. Takes 2 seconds!</p>
+                </div>
+                <div class="g-input-group">
+                    <label class="g-label" for="gVisitorName">Your Name</label>
+                    <div class="g-input-wrap">
+                        <span class="g-icon">👤</span>
+                        <input type="text" id="gVisitorName" class="g-input"
+                            placeholder="e.g. Ahmed, Sarah, HR Team..."
+                            autocomplete="off" maxlength="40">
+                    </div>
+                    <p class="g-error" id="gErrorMsg">⚠ Please enter your name to continue.</p>
+                </div>
+                <button class="g-btn" id="gSubmitBtn" onclick="gateSubmit()">
+                    <span class="g-btn-text">View Portfolio</span>
+                    <span class="g-arrow">&#8594;</span>
+                    <div class="g-spinner"></div>
+                </button>
+                <span class="g-skip" onclick="gateSkip()">Skip — view anonymously</span>
+            </div>
+            <div class="g-footer">
+                <span class="g-footer-left"><span class="g-avail-dot"></span>Open to Opportunities</span>
+                <span class="g-footer-right">CCNA &middot; Doha, Qatar</span>
+            </div>
+            <div class="g-success" id="gSuccess">
+                <div class="g-success-icon">&#10024;</div>
+                <div class="g-success-name" id="gSuccessName">Welcome!</div>
+                <div class="g-success-sub">Loading portfolio...</div>
+            </div>
+        </div>
+    </div>
+    <!-- END GATE OVERLAY -->
+
     <div class="grain-overlay" aria-hidden="true"></div>
-    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-dot"  id="cursorDot"></div>
     <div class="cursor-ring" id="cursorRing"></div>
 
     <!-- NAV -->
@@ -41,9 +106,8 @@
                     <i class="fas fa-file-alt"></i> Resume
                 </a>
             </nav>
-            <!-- DARK MODE TOGGLE (desktop) -->
             <button class="dark-toggle nav-dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
-                <span class="toggle-icon">🌙</span>
+                <span class="toggle-icon">&#127769;</span>
                 <span class="toggle-label">Dark</span>
             </button>
             <button class="hamburger" id="hamburger" aria-label="Toggle menu">
@@ -59,10 +123,9 @@
             <a href="#contact"        class="mob-link">Contact</a>
             <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
                target="_blank" rel="noopener noreferrer" class="mob-link mob-cta">Download Resume</a>
-            <!-- DARK MODE TOGGLE (mobile drawer) -->
             <div class="mob-dark-toggle-wrap">
                 <button class="dark-toggle" id="darkToggleMob" aria-label="Toggle dark mode">
-                    <span class="toggle-icon">🌙</span>
+                    <span class="toggle-icon">&#127769;</span>
                     <span class="toggle-label">Toggle Dark Mode</span>
                 </button>
             </div>
@@ -106,7 +169,6 @@
             </div>
 
             <div class="hero-layout">
-                <!-- ID Card -->
                 <div class="id-card" data-aos="fade-right" data-aos-duration="800">
                     <div class="id-card-top">
                         <div class="id-stripe"></div>
@@ -141,19 +203,18 @@
                     </div>
                 </div>
 
-                <!-- Hero Copy -->
                 <div class="hero-copy" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
                     <div class="hero-eyebrow">
                         <span class="eyebrow-rule"></span>
                         <span>Executive Summary</span>
                     </div>
                     <h1 class="hero-headline">
-                        From Hospitals to Airports —<br>
+                        From Hospitals to Airports &mdash;<br>
                         <em>I Keep IT</em><br>
                         Running.
                     </h1>
                     <p class="hero-brief">
-                        CCNA-certified IT Support Engineer with <strong>4+ years of experience</strong> in healthcare, telecom, and immigration sectors. Skilled in hardware, software, and network troubleshooting — delivering Level 1 &amp; Level 2 support that keeps businesses operational.
+                        CCNA-certified IT Support Engineer with <strong>4+ years of experience</strong> in healthcare, telecom, and immigration sectors. Skilled in hardware, software, and network troubleshooting &mdash; delivering Level 1 &amp; Level 2 support that keeps businesses operational.
                     </p>
                     <div class="hero-kpis">
                         <div class="kpi-block">
@@ -206,7 +267,7 @@
                 <div class="about-layout">
                     <div class="about-text" data-aos="fade-right">
                         <p class="bio-lead">
-                            I'm <strong>Sajid Mehmood</strong>, a CCNA-certified IT Support Engineer with over <strong>4 years of hands-on experience</strong> in healthcare, telecom, and immigration sectors. I specialise in hardware, software, and network troubleshooting — delivering Level 1 and Level 2 support that users can rely on.
+                            I'm <strong>Sajid Mehmood</strong>, a CCNA-certified IT Support Engineer with over <strong>4 years of hands-on experience</strong> in healthcare, telecom, and immigration sectors. I specialise in hardware, software, and network troubleshooting &mdash; delivering Level 1 and Level 2 support that users can rely on.
                         </p>
                         <p class="bio-body">
                             I have proven experience managing IT assets, deploying systems, and training staff. My focus on proactive maintenance and fast resolution has helped me maintain a consistent <strong>95% SLA compliance</strong> record across every role I've held.
@@ -218,7 +279,7 @@
                             <div class="achieve-item">
                                 <span class="achieve-icon"><i class="fas fa-trophy"></i></span>
                                 <div>
-                                    <strong>Safety Award — HIA Airport Project</strong>
+                                    <strong>Safety Award &mdash; HIA Airport Project</strong>
                                     <span>Recognition for exemplary safety practices</span>
                                 </div>
                             </div>
@@ -233,12 +294,11 @@
                                 <span class="achieve-icon"><i class="fas fa-industry"></i></span>
                                 <div>
                                     <strong>Multi-Sector Experience</strong>
-                                    <span>Healthcare · Telecom · Immigration · Aviation</span>
+                                    <span>Healthcare &middot; Telecom &middot; Immigration &middot; Aviation</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="about-panel glass-card" data-aos="fade-left" data-aos-delay="150">
                         <div class="panel-head">
                             <span class="panel-title">Performance Overview</span>
@@ -249,7 +309,7 @@
                                 <svg viewBox="0 0 120 120">
                                     <defs>
                                         <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" style="stop-color:#C5A059"/>
+                                            <stop offset="0%"   style="stop-color:#C5A059"/>
                                             <stop offset="100%" style="stop-color:#E8C97A"/>
                                         </linearGradient>
                                     </defs>
@@ -303,14 +363,14 @@
                 <div class="folder-ui" data-aos="fade-up">
                     <div class="folder-tabs">
                         <button class="ftab active" data-pane="ep0">Middlesex University</button>
-                        <button class="ftab" data-pane="ep1">Aptech Qatar</button>
-                        <button class="ftab" data-pane="ep2">IGCSE</button>
+                        <button class="ftab"         data-pane="ep1">Aptech Qatar</button>
+                        <button class="ftab"         data-pane="ep2">IGCSE</button>
                     </div>
                     <div class="folder-body glass-card">
                         <div class="folder-pane active" id="ep0">
                             <div class="fp-icon"><i class="fas fa-university"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Sep 2024 – Jun 2025</span>
+                                <span class="fp-date">Sep 2024 &ndash; Jun 2025</span>
                                 <h3 class="fp-degree">Bachelor of Science in Information Technology</h3>
                                 <p class="fp-inst">Middlesex University Dubai</p>
                                 <p class="fp-note">Expected Graduation: 2025</p>
@@ -323,7 +383,7 @@
                         <div class="folder-pane" id="ep1">
                             <div class="fp-icon"><i class="fas fa-laptop-code"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Nov 2020 – Nov 2023</span>
+                                <span class="fp-date">Nov 2020 &ndash; Nov 2023</span>
                                 <h3 class="fp-degree">Advanced Diploma in Software Engineering</h3>
                                 <p class="fp-inst">Aptech Qatar</p>
                                 <p class="fp-note">ACCP Certification</p>
@@ -336,7 +396,7 @@
                         <div class="folder-pane" id="ep2">
                             <div class="fp-icon"><i class="fas fa-school"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Sep 2017 – Jul 2018</span>
+                                <span class="fp-date">Sep 2017 &ndash; Jul 2018</span>
                                 <h3 class="fp-degree">IGCSE</h3>
                                 <p class="fp-inst">Bright Future International School</p>
                                 <p class="fp-note">Cambridge International Examination</p>
@@ -388,7 +448,7 @@
                     <div class="sec-rule"></div>
                 </div>
                 <p class="certs-intro" data-aos="fade-up">
-                    Credentials earned through rigorous study and real-world application — displayed as proof of expertise.
+                    Credentials earned through rigorous study and real-world application &mdash; displayed as proof of expertise.
                 </p>
                 <div class="cert-wall-frame featured-cert-frame" data-aos="zoom-in">
                     <div class="cwf-outer">
@@ -429,12 +489,12 @@
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="/cdn-cgi/l/email-protection#db889a91929ff58f9e9e98939b9c969a9297f5989496"><span class="__cf_email__" data-cfemail="82d1c3c8cbc6acd6c7c7c1cac2c5cfc3cbceacc1cdcf">info@sajidmk.com</span></a>
+                            <a href="mailto:info@sajidmk.com">info@sajidmk.com</a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="/cdn-cgi/l/email-protection#80c9cec6cfc0d3c1cac9c4cdcbaec3cfcd"><span class="__cf_email__" data-cfemail="d79e9991989784969d9e939a9cf994989a">sajid.teech@gmail.com</span></a>
+                            <a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-phone"></i></div>
@@ -447,12 +507,13 @@
                             <p>Doha, Qatar</p>
                         </div>
                     </div>
-
                     <div class="social-exec-row">
-                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
+                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                           target="_blank" rel="noopener noreferrer" class="exec-social-btn">
                             <i class="fab fa-linkedin-in"></i> Connect on LinkedIn
                         </a>
-                        <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
+                        <a href="https://www.instagram.com/5aj1d._"
+                           target="_blank" rel="noopener noreferrer" class="exec-social-btn">
                             <i class="fab fa-instagram"></i> Follow on Instagram
                         </a>
                     </div>
@@ -462,23 +523,26 @@
 
     </main>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="script.js"></script>
-
     <footer class="footer">
         <div class="footer-inner">
             <span class="f-name">Sajid Mehmood</span>
-            <span class="f-sep">·</span>
-            <span class="f-sub"IT Support Engineer</span>
+            <span class="f-sep">&middot;</span>
+            <span class="f-sub">IT Support Engineer</span>
             <span class="f-sep">&middot;</span>
             <span class="f-copy">&copy; 2025 All Rights Reserved</span>
-        </div>
-        <div class="footer-admin-row">
-            <a href="admin.html" class="footer-admin-link">
-                <i class="fas fa-lock"></i> Admin
-            </a>
+            <span class="f-sep">&middot;</span>
+            <a href="admin.html" class="f-admin">Admin</a>
         </div>
     </footer>
+
+    <!-- AOS scroll animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <!-- Portfolio logic -->
+    <script src="script.js"></script>
+
+    <!-- Gate overlay logic -->
+    <script src="gate.js"></script>
 
 </body>
 </html>
