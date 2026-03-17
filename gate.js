@@ -74,29 +74,58 @@
     function sendTelegramNotification(name, callback) {
         var ua = navigator.userAgent;
 
-        // Device type
+        // ── Device type ─────────────────────────────
         var device = '💻 Desktop';
-        if      (/iPhone/i.test(ua))           device = '📱 iPhone';
-        else if (/iPad/i.test(ua))             device = '📱 iPad';
-        else if (/Android.*Mobile/i.test(ua))  device = '📱 Android Phone';
-        else if (/Android/i.test(ua))          device = '📱 Android Tablet';
+        if      (/iPhone/i.test(ua))          device = '📱 iPhone';
+        else if (/iPad/i.test(ua))            device = '📱 iPad';
+        else if (/Android.*Mobile/i.test(ua)) device = '📱 Android Phone';
+        else if (/Android/i.test(ua))         device = '📱 Android Tablet';
 
-        // Operating system
+        // ── Operating system (iPhone/iPad MUST come before Mac OS X check) ──
         var os = 'Unknown OS';
-        if      (/Windows NT 10/i.test(ua))        os = 'Windows 10/11';
-        else if (/Windows NT 6/i.test(ua))         os = 'Windows (older)';
-        else if (/Mac OS X/i.test(ua))             os = 'macOS';
-        else if (/iPhone OS ([\d_]+)/i.test(ua))   os = 'iOS '     + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g, '.');
-        else if (/Android ([\d.]+)/i.test(ua))     os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
-        else if (/Linux/i.test(ua))                os = 'Linux';
+        var _iosMatch     = ua.match(/iPhone OS ([\d_]+)/i);
+        var _ipadMatch    = ua.match(/CPU OS ([\d_]+)/i);        // iPad user agent
+        var _androidMatch = ua.match(/Android ([\d.]+)/i);
+        var _winMatch     = ua.match(/Windows NT ([\d.]+)/i);
+        var _macMatch     = ua.match(/Mac OS X ([\d_.]+)/i);
 
-        // Browser
+        if (_iosMatch) {
+            // iPhone — e.g. "iPhone OS 18_0" → "iOS 18.0"
+            os = 'iOS ' + _iosMatch[1].replace(/_/g, '.');
+        } else if (_ipadMatch && /iPad/i.test(ua)) {
+            // iPad — e.g. "CPU OS 17_4" → "iPadOS 17.4"
+            os = 'iPadOS ' + _ipadMatch[1].replace(/_/g, '.');
+        } else if (_androidMatch) {
+            // Android — e.g. "Android 14" → "Android 14"
+            os = 'Android ' + _androidMatch[1];
+        } else if (_winMatch) {
+            // Windows NT version map
+            var _ntVer = parseFloat(_winMatch[1]);
+            if      (_ntVer >= 10)  os = 'Windows 10/11';
+            else if (_ntVer === 6.3) os = 'Windows 8.1';
+            else if (_ntVer === 6.2) os = 'Windows 8';
+            else if (_ntVer === 6.1) os = 'Windows 7';
+            else                     os = 'Windows (older)';
+        } else if (_macMatch) {
+            // macOS — e.g. "Mac OS X 10_15_7" → "macOS 10.15.7"
+            os = 'macOS ' + _macMatch[1].replace(/_/g, '.');
+        } else if (/Linux/i.test(ua)) {
+            os = 'Linux';
+        }
+
+        // ── Browser (with version) ───────────────────
         var browser = 'Unknown';
-        if      (/Edg\//i.test(ua))     browser = 'Microsoft Edge';
-        else if (/OPR\//i.test(ua))     browser = 'Opera';
-        else if (/Chrome\//i.test(ua))  browser = 'Chrome';
-        else if (/Firefox\//i.test(ua)) browser = 'Firefox';
-        else if (/Safari\//i.test(ua))  browser = 'Safari';
+        var _edgeV    = ua.match(/Edg\/([\d.]+)/i);
+        var _operaV   = ua.match(/OPR\/([\d.]+)/i);
+        var _chromeV  = ua.match(/Chrome\/([\d.]+)/i);
+        var _firefoxV = ua.match(/Firefox\/([\d.]+)/i);
+        var _safariV  = ua.match(/Version\/([\d.]+).*Safari/i);
+
+        if      (_edgeV)    browser = 'Microsoft Edge '  + _edgeV[1].split('.')[0];
+        else if (_operaV)   browser = 'Opera '           + _operaV[1].split('.')[0];
+        else if (_chromeV)  browser = 'Chrome '          + _chromeV[1].split('.')[0];
+        else if (_firefoxV) browser = 'Firefox '         + _firefoxV[1].split('.')[0];
+        else if (_safariV)  browser = 'Safari '          + _safariV[1].split('.')[0];
 
         var screen_res = window.screen.width + 'x' + window.screen.height;
         var lang       = navigator.language || 'Unknown';
