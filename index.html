@@ -1,514 +1,509 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sajid Mehmood — IT Support Engineer | CCNA Certified | Portfolio">
-    <meta name="theme-color" content="#F8F9FA">
-    <title>Sajid Mehmood | IT Support Engineer</title>
+    <title>Sajid Mehmood | Portfolio</title>
     <link rel="icon" href="logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+        :root {
+            --offwhite:  #DDD8D0;
+            --paper:     #E8E3DB;
+            --graphite:  #2D3436;
+            --gold:      #C5A059;
+            --gold-lt:   #E8C97A;
+            --gold-dk:   #A07840;
+            --border:    #D4CEC5;
+            --shadow:    0 20px 60px rgba(45,52,54,.12);
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--offwhite);
+            color: var(--graphite);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ── GRAIN OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: .6;
+        }
+
+        /* ── BACKGROUND DECORATION ── */
+        .bg-deco {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .bg-deco-circle {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle, rgba(197,160,89,.08), transparent 70%);
+        }
+        .bg-deco-circle.c1 { width: 600px; height: 600px; top: -200px; right: -150px; }
+        .bg-deco-circle.c2 { width: 400px; height: 400px; bottom: -100px; left: -100px; }
+        .bg-deco-line {
+            position: absolute; background: rgba(197,160,89,.06);
+        }
+        .bg-deco-line.l1 { width: 1px; height: 100vh; left: 12%; top: 0; }
+        .bg-deco-line.l2 { width: 1px; height: 100vh; right: 12%; top: 0; }
+        .bg-deco-line.l3 { width: 100vw; height: 1px; top: 20%; left: 0; }
+
+        /* ── MAIN CARD ── */
+        .gate-card {
+            position: relative; z-index: 10;
+            width: 100%; max-width: 460px;
+            margin: 20px;
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow), 0 0 0 1px rgba(197,160,89,.08);
+            overflow: hidden;
+            animation: cardIn .8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(40px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ── GOLD TOP STRIPE ── */
+        .card-stripe {
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt), var(--gold));
+            background-size: 200% 100%;
+            animation: stripeShimmer 3s ease infinite;
+        }
+        @keyframes stripeShimmer {
+            0%   { background-position: 0% 0%; }
+            50%  { background-position: 100% 0%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* ── CARD BODY ── */
+        .card-body {
+            padding: 44px 44px 40px;
+        }
+
+        /* ── LOGO AREA ── */
+        .card-logo {
+            display: flex; align-items: center; gap: 14px;
+            margin-bottom: 36px;
+            animation: fadeInDown .6s ease both .2s;
+        }
+        .card-logo img {
+            width: 48px; height: 48px; object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(197,160,89,.2));
+        }
+        .card-logo-text { display: flex; flex-direction: column; }
+        .card-logo-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px; font-weight: 700; color: var(--graphite);
+            line-height: 1.2;
+        }
+        .card-logo-sub {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px; color: var(--gold);
+            letter-spacing: 1.5px; text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* ── DIVIDER ── */
+        .card-divider {
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold), rgba(197,160,89,.1));
+            margin-bottom: 32px;
+            animation: lineGrow .8s ease both .3s;
+            transform-origin: left;
+        }
+        @keyframes lineGrow {
+            from { transform: scaleX(0); opacity: 0; }
+            to   { transform: scaleX(1); opacity: 1; }
+        }
+
+        /* ── WELCOME TEXT ── */
+        .card-welcome {
+            margin-bottom: 28px;
+            animation: fadeInUp .6s ease both .35s;
+        }
+        .card-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px; color: var(--gold);
+            letter-spacing: 2.5px; text-transform: uppercase;
+            margin-bottom: 10px; display: block;
+        }
+        .card-headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px; font-weight: 900;
+            color: var(--graphite); line-height: 1.25;
+            margin-bottom: 10px;
+        }
+        .card-headline em {
+            font-style: italic; color: var(--gold);
+        }
+        .card-sub {
+            font-size: 13px; color: #718096; line-height: 1.7;
+        }
+
+        /* ── INPUT GROUP ── */
+        .input-group {
+            margin-bottom: 20px;
+            animation: fadeInUp .6s ease both .45s;
+        }
+        .input-label {
+            display: block;
+            font-size: 11px; font-weight: 700;
+            color: var(--graphite); letter-spacing: .8px;
+            text-transform: uppercase; margin-bottom: 10px;
+        }
+        .input-wrap {
+            position: relative;
+        }
+        .input-icon {
+            position: absolute; left: 16px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold); font-size: 14px;
+            pointer-events: none;
+            transition: color .3s;
+        }
+        .name-input {
+            width: 100%;
+            padding: 15px 16px 15px 44px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px; font-weight: 500;
+            color: var(--graphite);
+            background: var(--offwhite);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color .3s, box-shadow .3s, background .3s;
+            -webkit-appearance: none;
+        }
+        .name-input::placeholder { color: #A0AEC0; font-weight: 400; }
+        .name-input:focus {
+            border-color: var(--gold);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(197,160,89,.12);
+        }
+        .name-input:focus + .input-focus-bar { transform: scaleX(1); }
+
+        /* ── SUBMIT BUTTON ── */
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px; font-weight: 700;
+            letter-spacing: 1px; text-transform: uppercase;
+            color: var(--graphite);
+            background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+            border: none; border-radius: 8px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 4px 20px rgba(197,160,89,.3);
+            transition: all .3s ease;
+            position: relative; overflow: hidden;
+            animation: fadeInUp .6s ease both .55s;
+        }
+        .submit-btn::before {
+            content: '';
+            position: absolute; top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,.3), transparent);
+            transform: skewX(-20deg);
+            transition: left .5s ease;
+        }
+        .submit-btn:hover::before { left: 160%; }
+        .submit-btn:hover {
+            background: linear-gradient(135deg, var(--gold-dk), var(--gold));
+            box-shadow: 0 8px 28px rgba(197,160,89,.4);
+            transform: translateY(-2px);
+        }
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn .btn-arrow {
+            font-size: 16px;
+            transition: transform .3s;
+        }
+        .submit-btn:hover .btn-arrow { transform: translateX(4px); }
+
+        /* ── LOADING STATE ── */
+        .submit-btn.loading {
+            pointer-events: none;
+            opacity: .85;
+        }
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(45,52,54,.2);
+            border-top-color: var(--graphite);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            display: none;
+        }
+        .submit-btn.loading .spinner { display: block; }
+        .submit-btn.loading .btn-text,
+        .submit-btn.loading .btn-arrow { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── ERROR MESSAGE ── */
+        .error-msg {
+            font-size: 12px; color: #e74c3c; font-weight: 600;
+            margin-top: 10px; display: none;
+            animation: shake .4s ease;
+        }
+        .error-msg.show { display: block; }
+        @keyframes shake {
+            0%,100%{ transform: translateX(0); }
+            25%    { transform: translateX(-6px); }
+            75%    { transform: translateX(6px); }
+        }
+
+        /* ── SKIP LINK ── */
+        .skip-link {
+            display: block; text-align: center; margin-top: 18px;
+            font-size: 11px; color: #A0AEC0; font-weight: 500;
+            cursor: pointer; transition: color .3s;
+            text-decoration: underline; text-underline-offset: 3px;
+            animation: fadeInUp .6s ease both .65s;
+        }
+        .skip-link:hover { color: var(--gold); }
+
+        /* ── FOOTER STRIP ── */
+        .card-footer {
+            padding: 14px 44px;
+            background: var(--offwhite);
+            border-top: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            animation: fadeInUp .6s ease both .7s;
+        }
+        .card-footer-left {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px; color: #A0AEC0; letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .avail-dot {
+            display: inline-block;
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #27AE60; margin-right: 6px;
+            animation: pulse 2s ease-in-out infinite;
+            vertical-align: middle;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+        .card-footer-right {
+            font-family: 'DM Mono', monospace;
+            font-size: 9px; color: var(--gold); letter-spacing: 1px;
+        }
+
+        /* ── SUCCESS OVERLAY ── */
+        .success-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: var(--paper);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity .4s ease;
+        }
+        .success-overlay.show {
+            opacity: 1; pointer-events: auto;
+        }
+        .success-icon {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; margin-bottom: 20px;
+            box-shadow: 0 8px 28px rgba(197,160,89,.35);
+            animation: bounceIn .6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+        @keyframes bounceIn {
+            0%  { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            100%{ transform: scale(1); }
+        }
+        .success-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px; font-weight: 900;
+            color: var(--graphite); margin-bottom: 8px;
+        }
+        .success-sub {
+            font-size: 13px; color: #718096;
+            font-family: 'DM Mono', monospace; letter-spacing: 1px;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 500px) {
+            .card-body { padding: 32px 28px 28px; }
+            .card-footer { padding: 14px 28px; }
+            .card-headline { font-size: 24px; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="grain-overlay" aria-hidden="true"></div>
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
+    <!-- Background decoration -->
+    <div class="bg-deco">
+        <div class="bg-deco-circle c1"></div>
+        <div class="bg-deco-circle c2"></div>
+        <div class="bg-deco-line l1"></div>
+        <div class="bg-deco-line l2"></div>
+        <div class="bg-deco-line l3"></div>
+    </div>
 
-    <!-- NAV -->
-    <header class="top-nav" id="topNav">
-        <div class="nav-inner">
-            <a href="#home" class="nav-logo">
-                <img src="logo.png" alt="SM Logo" class="logo-img">
-                <div class="logo-text">
-                    <span class="logo-name">Sajid Mehmood</span>
-                    <span class="logo-sub">IT Support Engineer</span>
+    <!-- Gate Card -->
+    <div class="gate-card">
+        <div class="card-stripe"></div>
+        <div class="card-body">
+
+            <!-- Logo -->
+            <div class="card-logo">
+                <img src="logo.png" alt="SM Logo">
+                <div class="card-logo-text">
+                    <span class="card-logo-name">Sajid Mehmood</span>
+                    <span class="card-logo-sub">IT Support Engineer</span>
                 </div>
-            </a>
-            <nav class="nav-menu">
-                <a href="#about"          class="nav-link">About</a>
-                <a href="#education"      class="nav-link">Education</a>
-                <a href="#experience"     class="nav-link">Experience</a>
-                <a href="#skills"         class="nav-link">Skills</a>
-                <a href="#certifications" class="nav-link">Certifications</a>
-                <a href="#contact"        class="nav-link">Contact</a>
-                <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-                   target="_blank" rel="noopener noreferrer" class="nav-resume-btn">
-                    <i class="fas fa-file-alt"></i> Resume
-                </a>
-            </nav>
-            <!-- DARK MODE TOGGLE (desktop) -->
-            <button class="dark-toggle nav-dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
-                <span class="toggle-icon">🌙</span>
-                <span class="toggle-label">Dark</span>
+            </div>
+
+            <div class="card-divider"></div>
+
+            <!-- Welcome Text -->
+            <div class="card-welcome">
+                <span class="card-eyebrow">Welcome</span>
+                <h1 class="card-headline">Who's <em>visiting</em><br>today?</h1>
+                <p class="card-sub">Enter your name to view the portfolio. Takes 2 seconds!</p>
+            </div>
+
+            <!-- Input -->
+            <div class="input-group">
+                <label class="input-label" for="visitorName">Your Name</label>
+                <div class="input-wrap">
+                    <span class="input-icon">👤</span>
+                    <input
+                        type="text"
+                        id="visitorName"
+                        class="name-input"
+                        placeholder="e.g. Ahmed, Sarah, HR Team..."
+                        autocomplete="off"
+                        maxlength="40"
+                    >
+                </div>
+                <p class="error-msg" id="errorMsg">⚠ Please enter your name to continue.</p>
+            </div>
+
+            <!-- Submit -->
+            <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+                <span class="btn-text">View Portfolio</span>
+                <span class="btn-arrow">→</span>
+                <div class="spinner"></div>
             </button>
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-                <span></span><span></span><span></span>
-            </button>
+
+            <!-- Skip -->
+            <span class="skip-link" onclick="skipGate()">Skip — view anonymously</span>
+
         </div>
-        <div class="mobile-drawer" id="mobileDrawer">
-            <a href="#about"          class="mob-link">About</a>
-            <a href="#education"      class="mob-link">Education</a>
-            <a href="#experience"     class="mob-link">Experience</a>
-            <a href="#skills"         class="mob-link">Skills</a>
-            <a href="#certifications" class="mob-link">Certifications</a>
-            <a href="#contact"        class="mob-link">Contact</a>
-            <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-               target="_blank" rel="noopener noreferrer" class="mob-link mob-cta">Download Resume</a>
-            <!-- DARK MODE TOGGLE (mobile drawer) -->
-            <div class="mob-dark-toggle-wrap">
-                <button class="dark-toggle" id="darkToggleMob" aria-label="Toggle dark mode">
-                    <span class="toggle-icon">🌙</span>
-                    <span class="toggle-label">Toggle Dark Mode</span>
-                </button>
-            </div>
+
+        <!-- Footer -->
+        <div class="card-footer">
+            <span class="card-footer-left">
+                <span class="avail-dot"></span>Open to Opportunities
+            </span>
+            <span class="card-footer-right">CCNA · Doha, Qatar</span>
         </div>
-    </header>
+    </div>
 
-    <main>
+    <!-- Success overlay (briefly shown before redirect) -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-icon">✨</div>
+        <div class="success-name" id="successName">Welcome!</div>
+        <div class="success-sub">Loading portfolio...</div>
+    </div>
 
-        <!-- HERO -->
-        <section id="home" class="hero-section">
-            <div class="desk-scene" aria-hidden="true">
-                <div class="ds-router">
-                    <div class="ds-router-body">
-                        <div class="ds-light dl1"></div>
-                        <div class="ds-light dl2"></div>
-                        <div class="ds-light dl3"></div>
-                        <div class="ds-antenna a1"></div>
-                        <div class="ds-antenna a2"></div>
-                    </div>
-                    <div class="ds-router-label">CISCO</div>
-                </div>
-                <div class="ds-coffee">
-                    <div class="ds-cup">
-                        <div class="ds-steam st1"></div>
-                        <div class="ds-steam st2"></div>
-                        <div class="ds-cup-fill"></div>
-                    </div>
-                    <div class="ds-saucer"></div>
-                </div>
-                <div class="ds-keyboard">
-                    <div class="ds-kr"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                    <div class="ds-kr"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                    <div class="ds-kr"><span class="w"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                    <div class="ds-kr"><span class="sp"></span></div>
-                </div>
-                <div class="ds-notepad">
-                    <div class="ds-np-line"></div>
-                    <div class="ds-np-line"></div>
-                    <div class="ds-np-line short"></div>
-                </div>
-            </div>
-
-            <div class="hero-layout">
-                <!-- ID Card -->
-                <div class="id-card" data-aos="fade-right" data-aos-duration="800">
-                    <div class="id-card-top">
-                        <div class="id-stripe"></div>
-                        <div class="id-company">
-                            <span class="id-company-name">IT PROFESSIONAL</span>
-                            <span class="id-company-year">Est. 2020</span>
-                        </div>
-                    </div>
-                    <div class="id-photo-area">
-                        <img src="photo.jpg" alt="Sajid Mehmood" class="id-photo">
-                        <div class="id-photo-border"></div>
-                    </div>
-                    <div class="id-info">
-                        <h2 class="id-name">Sajid Mehmood</h2>
-                        <p class="id-title">IT Support Engineer</p>
-                        <div class="id-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Doha, Qatar</span>
-                        </div>
-                        <div class="id-availability">
-                            <span class="avail-dot"></span>
-                            <span>Available for Opportunities</span>
-                        </div>
-                        <div class="id-cert-badge">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>CCNA Certified</span>
-                        </div>
-                    </div>
-                    <div class="id-footer-bar">
-                        <div class="id-barcode-lines"></div>
-                        <span class="id-code">SM-IT-2020</span>
-                    </div>
-                </div>
-
-                <!-- Hero Copy -->
-                <div class="hero-copy" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
-                    <div class="hero-eyebrow">
-                        <span class="eyebrow-rule"></span>
-                        <span>Executive Summary</span>
-                    </div>
-                    <h1 class="hero-headline">
-                        From Hospitals to Airports —<br>
-                        <em>I Keep IT</em><br>
-                        Running.
-                    </h1>
-                    <p class="hero-brief">
-                        CCNA-certified IT Support Engineer with <strong>4+ years of experience</strong> in healthcare, telecom, and immigration sectors. Skilled in hardware, software, and network troubleshooting — delivering Level 1 &amp; Level 2 support that keeps businesses operational.
-                    </p>
-                    <div class="hero-kpis">
-                        <div class="kpi-block">
-                            <span class="kpi-num" data-count="4">0</span><span class="kpi-unit">+</span>
-                            <span class="kpi-label">Years</span>
-                        </div>
-                        <div class="kpi-sep"></div>
-                        <div class="kpi-block">
-                            <span class="kpi-num" data-count="500">0</span><span class="kpi-unit">+</span>
-                            <span class="kpi-label">Tickets Resolved</span>
-                        </div>
-                        <div class="kpi-sep"></div>
-                        <div class="kpi-block">
-                            <span class="kpi-num" data-count="95">0</span><span class="kpi-unit">%</span>
-                            <span class="kpi-label">SLA Compliance</span>
-                        </div>
-                    </div>
-                    <div class="hero-ctas">
-                        <a href="#contact" class="btn btn-gold">
-                            Get In Touch <i class="fas fa-arrow-right"></i>
-                        </a>
-                        <a href="#experience" class="btn btn-outline-dark">View My Work</a>
-                    </div>
-                    <div class="cred-tags">
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="500">
-                            <i class="fas fa-network-wired"></i> CCNA 200-301
-                        </span>
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="600">
-                            <i class="fas fa-hospital"></i> Healthcare IT
-                        </span>
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="700">
-                            <i class="fas fa-passport"></i> Immigration Tech
-                        </span>
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="800">
-                            <i class="fas fa-broadcast-tower"></i> Telecom
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ABOUT -->
-        <section id="about" class="section about-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">01</span>
-                    <h2 class="sec-title">About Me</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <div class="about-layout">
-                    <div class="about-text" data-aos="fade-right">
-                        <p class="bio-lead">
-                            I'm <strong>Sajid Mehmood</strong>, a CCNA-certified IT Support Engineer with over <strong>4 years of hands-on experience</strong> in healthcare, telecom, and immigration sectors. I specialise in hardware, software, and network troubleshooting — delivering Level 1 and Level 2 support that users can rely on.
-                        </p>
-                        <p class="bio-body">
-                            I have proven experience managing IT assets, deploying systems, and training staff. My focus on proactive maintenance and fast resolution has helped me maintain a consistent <strong>95% SLA compliance</strong> record across every role I've held.
-                        </p>
-                        <p class="bio-body">
-                            Currently based in <strong>Doha, Qatar</strong>, I'm open to new opportunities where reliability, speed, and technical depth are valued.
-                        </p>
-                        <div class="bio-achieves">
-                            <div class="achieve-item">
-                                <span class="achieve-icon"><i class="fas fa-trophy"></i></span>
-                                <div>
-                                    <strong>Safety Award — HIA Airport Project</strong>
-                                    <span>Recognition for exemplary safety practices</span>
-                                </div>
-                            </div>
-                            <div class="achieve-item">
-                                <span class="achieve-icon"><i class="fas fa-chart-line"></i></span>
-                                <div>
-                                    <strong>Consistent 95% SLA Compliance</strong>
-                                    <span>Maintained across all projects and roles</span>
-                                </div>
-                            </div>
-                            <div class="achieve-item">
-                                <span class="achieve-icon"><i class="fas fa-industry"></i></span>
-                                <div>
-                                    <strong>Multi-Sector Experience</strong>
-                                    <span>Healthcare · Telecom · Immigration · Aviation</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="about-panel glass-card" data-aos="fade-left" data-aos-delay="150">
-                        <div class="panel-head">
-                            <span class="panel-title">Performance Overview</span>
-                            <span class="live-indicator"><span class="live-dot"></span>Live</span>
-                        </div>
-                        <div class="panel-ring">
-                            <div class="ring-wrapper">
-                                <svg viewBox="0 0 120 120">
-                                    <defs>
-                                        <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" style="stop-color:#C5A059"/>
-                                            <stop offset="100%" style="stop-color:#E8C97A"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <circle class="ring-bg" cx="60" cy="60" r="50"/>
-                                    <circle class="ring-fg" cx="60" cy="60" r="50"
-                                        data-percent="95"
-                                        style="stroke-dasharray:314.16;stroke-dashoffset:314.16;"/>
-                                </svg>
-                                <div class="ring-inner">
-                                    <span class="ring-val">95</span>
-                                    <span class="ring-pct">%</span>
-                                    <span class="ring-lbl">SLA Rate</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-metrics">
-                            <div class="pm-row">
-                                <div class="pm-icon"><i class="fas fa-server"></i></div>
-                                <div class="pm-label"><strong>200+</strong><span>Systems Managed</span></div>
-                                <div class="pm-bar-wrap"><div class="pm-bar" style="--bw:80%"></div></div>
-                            </div>
-                            <div class="pm-row">
-                                <div class="pm-icon"><i class="fas fa-network-wired"></i></div>
-                                <div class="pm-label"><strong>50+</strong><span>Networks Configured</span></div>
-                                <div class="pm-bar-wrap"><div class="pm-bar" style="--bw:65%"></div></div>
-                            </div>
-                            <div class="pm-row">
-                                <div class="pm-icon"><i class="fas fa-shield-alt"></i></div>
-                                <div class="pm-label"><strong>100%</strong><span>Security Compliant</span></div>
-                                <div class="pm-bar-wrap"><div class="pm-bar" style="--bw:100%"></div></div>
-                            </div>
-                        </div>
-                        <div class="panel-chips">
-                            <span class="p-chip"><i class="fas fa-map-marker-alt"></i>Doha, Qatar</span>
-                            <span class="p-chip"><i class="fas fa-certificate"></i>CCNA</span>
-                            <span class="p-chip"><i class="fas fa-graduation-cap"></i>BSc IT</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EDUCATION -->
-        <section id="education" class="section edu-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">02</span>
-                    <h2 class="sec-title">Education</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <div class="folder-ui" data-aos="fade-up">
-                    <div class="folder-tabs">
-                        <button class="ftab active" data-pane="ep0">Middlesex University</button>
-                        <button class="ftab" data-pane="ep1">Aptech Qatar</button>
-                        <button class="ftab" data-pane="ep2">IGCSE</button>
-                    </div>
-                    <div class="folder-body glass-card">
-                        <div class="folder-pane active" id="ep0">
-                            <div class="fp-icon"><i class="fas fa-university"></i></div>
-                            <div class="fp-content">
-                                <span class="fp-date">Sep 2024 – Jun 2025</span>
-                                <h3 class="fp-degree">Bachelor of Science in Information Technology</h3>
-                                <p class="fp-inst">Middlesex University Dubai</p>
-                                <p class="fp-note">Expected Graduation: 2025</p>
-                                <a href="https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing"
-                                   target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
-                                    <i class="fas fa-certificate"></i> View Certificate
-                                </a>
-                            </div>
-                        </div>
-                        <div class="folder-pane" id="ep1">
-                            <div class="fp-icon"><i class="fas fa-laptop-code"></i></div>
-                            <div class="fp-content">
-                                <span class="fp-date">Nov 2020 – Nov 2023</span>
-                                <h3 class="fp-degree">Advanced Diploma in Software Engineering</h3>
-                                <p class="fp-inst">Aptech Qatar</p>
-                                <p class="fp-note">ACCP Certification</p>
-                                <a href="https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing"
-                                   target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
-                                    <i class="fas fa-certificate"></i> View Certificate
-                                </a>
-                            </div>
-                        </div>
-                        <div class="folder-pane" id="ep2">
-                            <div class="fp-icon"><i class="fas fa-school"></i></div>
-                            <div class="fp-content">
-                                <span class="fp-date">Sep 2017 – Jul 2018</span>
-                                <h3 class="fp-degree">IGCSE</h3>
-                                <p class="fp-inst">Bright Future International School</p>
-                                <p class="fp-note">Cambridge International Examination</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXPERIENCE -->
-        <section id="experience" class="section exp-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">03</span>
-                    <h2 class="sec-title">Professional Experience</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <div class="exp-timeline" id="expTimeline"></div>
-            </div>
-        </section>
-
-        <!-- SKILLS -->
-        <section id="skills" class="section skills-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">04</span>
-                    <h2 class="sec-title">Skills &amp; Expertise</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <div class="skills-bento" id="skillsBento" data-aos="fade-up"></div>
-                <div class="sub-block" data-aos="fade-up" data-aos-delay="100">
-                    <p class="sub-label">Technical Arsenal</p>
-                    <div class="tech-pills" id="techPills"></div>
-                </div>
-                <div class="sub-block" data-aos="fade-up" data-aos-delay="200">
-                    <p class="sub-label">Languages</p>
-                    <div class="lang-grid" id="langGrid"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CERTIFICATIONS -->
-        <section id="certifications" class="section certs-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">05</span>
-                    <h2 class="sec-title">Certifications Wall</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <p class="certs-intro" data-aos="fade-up">
-                    Credentials earned through rigorous study and real-world application — displayed as proof of expertise.
-                </p>
-                <div class="cert-wall-frame featured-cert-frame" data-aos="zoom-in">
-                    <div class="cwf-outer">
-                        <div class="cwf-inner">
-                            <div class="cwf-ribbon">FEATURED</div>
-                            <div class="cwf-icon"><i class="fas fa-network-wired"></i></div>
-                            <h3 class="cwf-title">CCNA 200-301<br><span>Network Fundamentals</span></h3>
-                            <div class="cwf-rule"></div>
-                            <p class="cwf-issuer">Simplilearn SkillUp</p>
-                            <p class="cwf-date">Issued: January 17, 2026</p>
-                            <p class="cwf-code">Code: 9726449</p>
-                            <p class="cwf-desc">Covering network fundamentals, routing protocols, switching technologies, and enterprise network security principles.</p>
-                            <a href="https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing"
-                               target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
-                                <i class="fas fa-external-link-alt"></i> View Certificate
-                            </a>
-                            <div class="cwf-seal"><i class="fas fa-star"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="certs-wall-grid" id="certsWall" data-aos="fade-up" data-aos-delay="150"></div>
-            </div>
-        </section>
-
-        <!-- CONTACT -->
-        <section id="contact" class="section contact-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">06</span>
-                    <h2 class="sec-title">Let's Connect</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <div class="contact-body" data-aos="fade-up" data-aos-delay="100">
-                    <p class="contact-intro">
-                        Ready to collaborate on innovative IT solutions? Open to discussing new projects, technical challenges, or opportunities to contribute to high-impact technology initiatives.
-                    </p>
-                    <div class="contact-cards">
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
-                            <h4>Email</h4>
-                            <a href="mailto:info@sajidmk.com">info@sajidmk.com</a>
-                        </div>
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
-                            <h4>Email</h4>
-                            <a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
-                        </div>
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-phone"></i></div>
-                            <h4>Phone</h4>
-                            <a href="tel:+97466969598">+974 6696 9598</a>
-                        </div>
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
-                            <h4>Location</h4>
-                            <p>Doha, Qatar</p>
-                        </div>
-                    </div>
-
-                    <div class="social-exec-row">
-                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
-                            <i class="fab fa-linkedin-in"></i> Connect on LinkedIn
-                        </a>
-                        <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
-                            <i class="fab fa-instagram"></i> Follow on Instagram
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="script.js"></script>
-
-    <!-- ============================================
-         TELEGRAM VISITOR NOTIFICATION
-         Notifies Sajid on Telegram when someone
-         visits the portfolio website.
-    ============================================ -->
     <script>
-    (function () {
-        const TOKEN        = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
-        const CHAT_ID      = '8235795754';
+    // ── Allow Enter key to submit ──
+    document.getElementById('visitorName').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') handleSubmit();
+    });
 
-        // ── Check for ?ref=name in URL ──
-        const urlParams  = new URLSearchParams(window.location.search);
-        const refName    = urlParams.get('ref') || urlParams.get('from') || null;
+    // ── Auto-focus input ──
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('visitorName').focus();
+        }, 600);
+    });
 
-        // Cooldown: named visitors always notify, anonymous = 30 min cooldown
-        const COOLDOWN_KEY = 'sajid_tg_notif' + (refName ? '_' + refName : '');
-        const COOLDOWN_MS  = refName ? 0 : 30 * 60 * 1000;
+    function handleSubmit() {
+        const input   = document.getElementById('visitorName');
+        const name    = input.value.trim();
+        const errorEl = document.getElementById('errorMsg');
+        const btn     = document.getElementById('submitBtn');
 
-        try {
-            const last = localStorage.getItem(COOLDOWN_KEY);
-            if (last && (Date.now() - parseInt(last)) < COOLDOWN_MS) return;
-            localStorage.setItem(COOLDOWN_KEY, Date.now().toString());
-        } catch(e) {}
+        // Validate
+        if (!name) {
+            errorEl.classList.add('show');
+            input.focus();
+            input.style.borderColor = '#e74c3c';
+            setTimeout(function() {
+                input.style.borderColor = '';
+                errorEl.classList.remove('show');
+            }, 2500);
+            return;
+        }
 
-        // Collect visitor info
-        const page     = window.location.origin + window.location.pathname;
-        const referrer = document.referrer ? document.referrer : 'Direct / Bookmark';
-        const lang     = navigator.language || 'Unknown';
-        const time     = new Date().toLocaleString('en-US', {
-            timeZone: 'Asia/Qatar',
-            weekday: 'short', year: 'numeric',
-            month: 'short', day: 'numeric',
-            hour: '2-digit', minute: '2-digit'
+        errorEl.classList.remove('show');
+
+        // Loading state
+        btn.classList.add('loading');
+
+        // Send Telegram notification
+        sendTelegramNotification(name, function() {
+            // Show success overlay
+            const overlay = document.getElementById('successOverlay');
+            document.getElementById('successName').textContent = 'Welcome, ' + name + '!';
+            overlay.classList.add('show');
+
+            // Redirect to portfolio with name in URL after short delay
+            setTimeout(function() {
+                window.location.href = 'index.html?ref=' + encodeURIComponent(name);
+            }, 1200);
         });
+    }
 
-        // Detect device type
+    function skipGate() {
+        window.location.href = 'index.html';
+    }
+
+    function sendTelegramNotification(name, callback) {
+        const TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
+        const CHAT_ID = '8235795754';
+
         const ua = navigator.userAgent;
+
+        // Device
         let deviceType = '💻 Desktop';
         if (/iPhone/i.test(ua))               deviceType = '📱 iPhone';
         else if (/iPad/i.test(ua))            deviceType = '📱 iPad';
         else if (/Android.*Mobile/i.test(ua)) deviceType = '📱 Android Phone';
         else if (/Android/i.test(ua))         deviceType = '📱 Android Tablet';
 
-        // Detect OS
+        // OS
         let os = 'Unknown OS';
         if (/Windows NT 10/i.test(ua))           os = 'Windows 10/11';
         else if (/Windows NT 6/i.test(ua))       os = 'Windows (older)';
@@ -517,28 +512,25 @@
         else if (/Android ([\d.]+)/i.test(ua))   os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
         else if (/Linux/i.test(ua))              os = 'Linux';
 
-        // Detect browser
-        let browser = 'Unknown Browser';
+        // Browser
+        let browser = 'Unknown';
         if (/Edg\//i.test(ua))          browser = 'Microsoft Edge';
         else if (/OPR\//i.test(ua))     browser = 'Opera';
         else if (/Chrome\//i.test(ua))  browser = 'Chrome';
         else if (/Firefox\//i.test(ua)) browser = 'Firefox';
         else if (/Safari\//i.test(ua))  browser = 'Safari';
 
-        // Screen resolution
         const screen_res = window.screen.width + 'x' + window.screen.height;
+        const lang       = navigator.language || 'Unknown';
+        const referrer   = document.referrer || 'Direct / Bookmark';
+        const time       = new Date().toLocaleString('en-US', {
+            timeZone: 'Asia/Qatar',
+            weekday: 'short', year: 'numeric',
+            month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
 
-        // Build visitor header — named or anonymous
-        const visitorLine = refName
-            ? '👤 *Visitor:* ' + decodeURIComponent(refName).replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-            : '👤 *Visitor:* Anonymous';
-
-        const alertEmoji = refName ? '🎯' : '🔔';
-        const alertTitle = refName
-            ? alertEmoji + ' *' + decodeURIComponent(refName).replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) + ' viewed your Portfolio!*'
-            : alertEmoji + ' *New Portfolio Visitor!*';
-
-        // Fetch real IP then location, then send message
+        // Get IP then send
         fetch('https://api.ipify.org?format=json')
             .then(function(r){ return r.json(); })
             .then(function(ipData){
@@ -551,10 +543,9 @@
                         const isp     = geo.org          || 'Unknown ISP';
 
                         const message =
-                            alertTitle + '\n' +
+                            '🎯 *' + name + ' is viewing your Portfolio!*\n' +
                             '━━━━━━━━━━━━━━━━━━━━\n' +
-                            visitorLine + '\n' +
-                            '📄 *Page:* ' + page + '\n' +
+                            '👤 *Visitor:* ' + name + '\n' +
                             '🔗 *Referrer:* ' + referrer + '\n' +
                             '━━━━━━━━━━━━━━━━━━━━\n' +
                             '📍 *IP Address:* `' + ip + '`\n' +
@@ -581,26 +572,12 @@
                         });
                     });
             })
-            .catch(function() {
-                // Silent fail — don't affect user experience
+            .catch(function(){})
+            .finally(function(){
+                callback();
             });
-    })();
+    }
     </script>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <span class="f-name">Sajid Mehmood</span>
-            <span class="f-sep">·</span>
-            <span class="f-sub">IT Support Engineer</span>
-            <span class="f-sep">&middot;</span>
-            <span class="f-copy">&copy; 2025 All Rights Reserved</span>
-        </div>
-        <div class="footer-admin-row">
-            <a href="admin.html" class="footer-admin-link">
-                <i class="fas fa-lock"></i> Admin
-            </a>
-        </div>
-    </footer>
 
 </body>
 </html>
