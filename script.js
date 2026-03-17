@@ -3,7 +3,7 @@
 // Sajid Mehmood · IT Support Engineer
 // sajidmk.com
 // ============================================
-
+window.location.href = 'index.html?ref=' + encodeURIComponent(name);
 document.addEventListener('DOMContentLoaded', () => {
 
     // Initialise AOS scroll animations
