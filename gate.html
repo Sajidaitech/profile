@@ -469,25 +469,25 @@
 
         errorEl.classList.remove('show');
 
+        // Show success overlay IMMEDIATELY — don't wait for Telegram
+        const overlay = document.getElementById('successOverlay');
+        document.getElementById('successName').textContent = 'Welcome, ' + name + '!';
+        overlay.classList.add('show');
+
         // Loading state
         btn.classList.add('loading');
 
-        // Send Telegram notification
-        sendTelegramNotification(name, function() {
-            // Show success overlay
-            const overlay = document.getElementById('successOverlay');
-            document.getElementById('successName').textContent = 'Welcome, ' + name + '!';
-            overlay.classList.add('show');
+        // Send Telegram notification in background, redirect after 1.5s no matter what
+        setTimeout(function() {
+            window.location.href = 'index.html?ref=' + encodeURIComponent(name);
+        }, 1500);
 
-            // Redirect to portfolio with name in URL after short delay
-            setTimeout(function() {
-                window.location.href = 'portfolio.html?ref=' + encodeURIComponent(name);
-            }, 1200);
-        });
+        // Send Telegram notification (fire and forget)
+        sendTelegramNotification(name, function() {});
     }
 
     function skipGate() {
-        window.location.href = 'portfolio.html';
+        window.location.href = 'index.html';
     }
 
     function sendTelegramNotification(name, callback) {
@@ -530,19 +530,29 @@
             hour: '2-digit', minute: '2-digit'
         });
 
-        // Get IP then send
+        // Safety net — always redirect after 4 seconds max no matter what
+        var redirected = false;
+        function safeCallback() {
+            if (!redirected) {
+                redirected = true;
+                callback();
+            }
+        }
+        setTimeout(safeCallback, 4000);
+
+        // Get IP then location then send Telegram
         fetch('https://api.ipify.org?format=json')
             .then(function(r){ return r.json(); })
             .then(function(ipData){
-                const ip = ipData.ip || 'Unknown';
+                var ip = ipData.ip || 'Unknown';
                 return fetch('https://ipapi.co/' + ip + '/json/')
                     .then(function(r){ return r.json(); })
                     .then(function(geo){
-                        const city    = geo.city         || 'Unknown';
-                        const country = geo.country_name || 'Unknown';
-                        const isp     = geo.org          || 'Unknown ISP';
+                        var city    = geo.city         || 'Unknown';
+                        var country = geo.country_name || 'Unknown';
+                        var isp     = geo.org          || 'Unknown ISP';
 
-                        const message =
+                        var message =
                             '🎯 *' + name + ' is viewing your Portfolio!*\n' +
                             '━━━━━━━━━━━━━━━━━━━━\n' +
                             '👤 *Visitor:* ' + name + '\n' +
@@ -572,10 +582,8 @@
                         });
                     });
             })
-            .catch(function(){})
-            .finally(function(){
-                callback();
-            });
+            .catch(function(){ safeCallback(); })
+            .then(function(){ safeCallback(); });
     }
     </script>
 

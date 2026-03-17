@@ -3,7 +3,7 @@
 // Sajid Mehmood · IT Support Engineer
 // sajidmk.com
 // ============================================
-window.location.href = 'index.html?ref=' + encodeURIComponent(name);
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Initialise AOS scroll animations
@@ -733,4 +733,3 @@ console.log(
     'font-size:16px;font-weight:bold;color:#C5A059;background:#2D3436;padding:10px 22px;border-radius:4px;'
 );
 console.log('%cBuilt with precision · sajidmk.com', 'font-size:11px;color:#718096;');
-
