@@ -418,6 +418,14 @@
             <!-- Skip -->
             <span class="skip-link" onclick="skipGate()">Skip — view anonymously</span>
 
+            <!-- Hidden test button: visit gate.html?test=1 to reveal it -->
+            <div id="testBtnWrap" style="display:none;margin-top:14px;text-align:center;">
+                <button onclick="testTelegram()" style="background:none;border:1px dashed #C5A059;color:#C5A059;padding:8px 18px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">
+                    🔔 Test Telegram Bot
+                </button>
+                <p id="testResult" style="font-size:11px;margin-top:8px;color:#718096;"></p>
+            </div>
+
         </div>
 
         <!-- Footer -->
@@ -437,6 +445,45 @@
     </div>
 
     <script>
+    // ── Show test button if ?test=1 in URL ──
+    if (new URLSearchParams(window.location.search).get('test') === '1') {
+        document.getElementById('testBtnWrap').style.display = 'block';
+    }
+
+    function testTelegram() {
+        const TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
+        const CHAT_ID = '8235795754';
+        const result  = document.getElementById('testResult');
+        result.textContent = '⏳ Sending test message...';
+        result.style.color = '#718096';
+
+        fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id:    CHAT_ID,
+                text:       '✅ *Test message from your portfolio gate!* Bot is working correctly.',
+                parse_mode: 'Markdown'
+            })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+            if (data.ok) {
+                result.textContent = '✅ Message sent! Check your Telegram.';
+                result.style.color = '#27ae60';
+            } else {
+                result.textContent = '❌ Error: ' + data.description;
+                result.style.color = '#e74c3c';
+                console.error('Telegram error details:', data);
+            }
+        })
+        .catch(function(err){
+            result.textContent = '❌ Network error. Check console.';
+            result.style.color = '#e74c3c';
+            console.error('Fetch error:', err);
+        });
+    }
+
     // ── Allow Enter key to submit ──
     document.getElementById('visitorName').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') handleSubmit();
@@ -492,7 +539,7 @@
 
     function sendTelegramNotification(name, callback) {
         const TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
-        const CHAT_ID = '8235795754';
+        const CHAT_ID = '8235795754'; // Make sure you have sent /start to your bot first!
 
         const ua = navigator.userAgent;
 
@@ -529,16 +576,6 @@
             month: 'short', day: 'numeric',
             hour: '2-digit', minute: '2-digit'
         });
-
-        // Safety net — always redirect after 4 seconds max no matter what
-        var redirected = false;
-        function safeCallback() {
-            if (!redirected) {
-                redirected = true;
-                callback();
-            }
-        }
-        setTimeout(safeCallback, 4000);
 
         // Get IP then location then send Telegram
         fetch('https://api.ipify.org?format=json')
@@ -579,11 +616,21 @@
                                 text:       message,
                                 parse_mode: 'Markdown'
                             })
+                        })
+                        .then(function(res){ return res.json(); })
+                        .then(function(result){
+                            if (!result.ok) {
+                                console.error('Telegram API error:', result.description);
+                            }
                         });
                     });
             })
-            .catch(function(){ safeCallback(); })
-            .then(function(){ safeCallback(); });
+            .catch(function(err){
+                console.error('Notification error:', err);
+            })
+            .finally(function(){
+                callback();
+            });
     }
     </script>
 
