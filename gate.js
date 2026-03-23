@@ -8,6 +8,9 @@
     var TG_TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
     var TG_CHAT_ID = '8235795754';
 
+    // Record page load time to calculate time spent on gate
+    var pageLoadTime = Date.now();
+
     // Lock scroll while gate is visible
     document.body.classList.add('gate-active');
 
@@ -81,33 +84,28 @@
         else if (/Android.*Mobile/i.test(ua)) device = '📱 Android Phone';
         else if (/Android/i.test(ua))         device = '📱 Android Tablet';
 
-        // ── Operating system (iPhone/iPad MUST come before Mac OS X check) ──
+        // ── Operating system ────────────────────────
         var os = 'Unknown OS';
         var _iosMatch     = ua.match(/iPhone OS ([\d_]+)/i);
-        var _ipadMatch    = ua.match(/CPU OS ([\d_]+)/i);        // iPad user agent
+        var _ipadMatch    = ua.match(/CPU OS ([\d_]+)/i);
         var _androidMatch = ua.match(/Android ([\d.]+)/i);
         var _winMatch     = ua.match(/Windows NT ([\d.]+)/i);
         var _macMatch     = ua.match(/Mac OS X ([\d_.]+)/i);
 
         if (_iosMatch) {
-            // iPhone — e.g. "iPhone OS 18_0" → "iOS 18.0"
             os = 'iOS ' + _iosMatch[1].replace(/_/g, '.');
         } else if (_ipadMatch && /iPad/i.test(ua)) {
-            // iPad — e.g. "CPU OS 17_4" → "iPadOS 17.4"
             os = 'iPadOS ' + _ipadMatch[1].replace(/_/g, '.');
         } else if (_androidMatch) {
-            // Android — e.g. "Android 14" → "Android 14"
             os = 'Android ' + _androidMatch[1];
         } else if (_winMatch) {
-            // Windows NT version map
             var _ntVer = parseFloat(_winMatch[1]);
-            if      (_ntVer >= 10)  os = 'Windows 10/11';
+            if      (_ntVer >= 10)   os = 'Windows 10/11';
             else if (_ntVer === 6.3) os = 'Windows 8.1';
             else if (_ntVer === 6.2) os = 'Windows 8';
             else if (_ntVer === 6.1) os = 'Windows 7';
             else                     os = 'Windows (older)';
         } else if (_macMatch) {
-            // macOS — e.g. "Mac OS X 10_15_7" → "macOS 10.15.7"
             os = 'macOS ' + _macMatch[1].replace(/_/g, '.');
         } else if (/Linux/i.test(ua)) {
             os = 'Linux';
@@ -127,10 +125,24 @@
         else if (_firefoxV) browser = 'Firefox '         + _firefoxV[1].split('.')[0];
         else if (_safariV)  browser = 'Safari '          + _safariV[1].split('.')[0];
 
-        var screen_res = window.screen.width + 'x' + window.screen.height;
-        var lang       = navigator.language || 'Unknown';
-        var referrer   = document.referrer  || 'Direct / Bookmark';
-        var time       = new Date().toLocaleString('en-US', {
+        // ── Extra client-side details ────────────────
+        var screen_res  = window.screen.width + 'x' + window.screen.height;
+        var viewport    = window.innerWidth + 'x' + window.innerHeight;
+        var lang        = navigator.language || 'Unknown';
+        var referrer    = document.referrer  || 'Direct / Bookmark';
+        var touchDev    = navigator.maxTouchPoints > 0 ? 'Yes' : 'No';
+        var darkMode    = window.matchMedia('(prefers-color-scheme: dark)').matches ? '🌙 Dark' : '☀️ Light';
+        var connection  = (navigator.connection && navigator.connection.effectiveType)
+                            ? navigator.connection.effectiveType.toUpperCase()
+                            : 'Unknown';
+        var visitSecs   = Math.round((Date.now() - pageLoadTime) / 1000);
+        var visitTime   = visitSecs < 60
+                            ? visitSecs + 's'
+                            : Math.floor(visitSecs / 60) + 'm ' + (visitSecs % 60) + 's';
+        var clientTZ    = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown';
+
+        // Qatar time
+        var time = new Date().toLocaleString('en-US', {
             timeZone:  'Asia/Qatar',
             weekday:   'short',
             year:      'numeric',
@@ -140,25 +152,48 @@
             minute:    '2-digit'
         });
 
-        // Build and send message once IP/geo is resolved
-        function sendMsg(ip, city, country, isp) {
+        // ── Build and send once IP/geo is resolved ───
+        function sendMsg(ip, geoData) {
+            var city     = geoData.city         || 'Unknown';
+            var region   = geoData.region       || '';
+            var postal   = geoData.postal       || '';
+            var country  = geoData.country_name || 'Unknown';
+            var isp      = geoData.org          || 'Unknown ISP';
+            var currency = geoData.currency     || 'Unknown';
+            var geoTZ    = geoData.timezone     || clientTZ;
+            var lat      = geoData.latitude     || null;
+            var lon      = geoData.longitude    || null;
+
+            var locationFull = [city, region, postal, country].filter(Boolean).join(', ');
+            var mapsLink     = (lat && lon)
+                                ? 'https://maps.google.com/?q=' + lat + ',' + lon
+                                : 'N/A';
+
             var msg =
-                '🎯 *' + name + ' is viewing your Portfolio!*\n' +
+                '🎯 *' + name + ' just viewed your Portfolio!*\n' +
                 '━━━━━━━━━━━━━━━━━━━━\n' +
-                '👤 *Visitor:* '         + name     + '\n' +
-                '🔗 *Referrer:* '        + referrer + '\n' +
+                '👤 *Visitor:* '          + name         + '\n' +
+                '🔗 *Referrer:* '         + referrer     + '\n' +
+                '⏱️ *Time on Gate:* '     + visitTime    + '\n' +
                 '━━━━━━━━━━━━━━━━━━━━\n' +
-                '📍 *IP:* `'             + ip       + '`\n' +
-                '🌍 *Location:* '        + city     + ', ' + country + '\n' +
-                '🏢 *ISP:* '             + isp      + '\n' +
+                '📍 *IP Address:* `'      + ip           + '`\n' +
+                '🌍 *Location:* '         + locationFull + '\n' +
+                '🗺️ *Google Maps:* '      + mapsLink     + '\n' +
+                '🏢 *ISP / Org:* '        + isp          + '\n' +
+                '💱 *Currency:* '         + currency     + '\n' +
+                '🕰️ *Visitor Timezone:* ' + geoTZ        + '\n' +
                 '━━━━━━━━━━━━━━━━━━━━\n' +
-                '🖥️ *Device:* '          + device   + '\n' +
-                '⚙️ *OS:* '              + os       + '\n' +
-                '🌐 *Browser:* '         + browser  + '\n' +
-                '📐 *Screen:* '          + screen_res + '\n' +
-                '🗣️ *Language:* '        + lang     + '\n' +
+                '🖥️ *Device:* '           + device       + '\n' +
+                '👆 *Touch Screen:* '     + touchDev     + '\n' +
+                '⚙️ *OS:* '               + os           + '\n' +
+                '🌐 *Browser:* '          + browser      + '\n' +
+                '📐 *Screen Res:* '       + screen_res   + '\n' +
+                '🪟 *Viewport:* '         + viewport     + '\n' +
+                '📶 *Connection:* '       + connection   + '\n' +
+                '🎨 *Theme Pref:* '       + darkMode     + '\n' +
+                '🗣️ *Language:* '         + lang         + '\n' +
                 '━━━━━━━━━━━━━━━━━━━━\n' +
-                '🕐 *Time (Qatar):* '    + time     + '\n' +
+                '🕐 *Time (Qatar):* '     + time         + '\n' +
                 '━━━━━━━━━━━━━━━━━━━━';
 
             fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
@@ -178,25 +213,24 @@
             .finally(function () { callback(); });
         }
 
-        // Step 1 — get visitor IP
+        // ── Step 1: get visitor IP ───────────────────
         fetch('https://api.ipify.org?format=json')
             .then(function (r) { return r.json(); })
             .then(function (d) {
                 var ip = d.ip || 'Unknown';
-                // Step 2 — get geo info
+                // ── Step 2: get full geo info ────────
                 fetch('https://ipapi.co/' + ip + '/json/')
                     .then(function (r) { return r.json(); })
                     .then(function (g) {
-                        sendMsg(
-                            ip,
-                            g.city         || 'Unknown',
-                            g.country_name || 'Unknown',
-                            g.org          || 'Unknown ISP'
-                        );
+                        sendMsg(ip, g);
                     })
-                    .catch(function () { sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP'); });
+                    .catch(function () {
+                        sendMsg(ip, {});
+                    });
             })
-            .catch(function () { sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP'); });
+            .catch(function () {
+                sendMsg('Unknown', {});
+            });
     }
 
 })();
