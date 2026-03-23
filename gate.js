@@ -7,6 +7,7 @@
 
     var TG_TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
     var TG_CHAT_ID = '8235795754';
+    var PB_TOKEN   = 'o.KLUoBeCohDPoYdPVpfrFxp9lwFTVuaXO';
 
     // Record page load time to calculate time spent on gate
     var pageLoadTime = Date.now();
@@ -62,7 +63,7 @@
         }
         setTimeout(revealPortfolio, 5000);
 
-        // Send Telegram, then reveal immediately when done
+        // Send both Telegram + Pushbullet, then reveal
         sendTelegramNotification(name, revealPortfolio);
     };
 
@@ -73,7 +74,39 @@
         window.scrollTo(0, 0);
     };
 
-    // ── Telegram notification ───────────────────
+    // ════════════════════════════════════════
+    // PUSHBULLET — quick glance notification
+    // ════════════════════════════════════════
+    function sendPushbullet(name, locationFull, browser, os, mapsLink) {
+        var body =
+            '👤 Visitor: '  + name         + '\n' +
+            '🌍 Location: ' + locationFull + '\n' +
+            '🌐 Browser: '  + browser      + '\n' +
+            '⚙️ OS: '       + os           + '\n' +
+            '🗺️ Maps: '     + mapsLink;
+
+        fetch('https://api.pushbullet.com/v2/pushes', {
+            method:  'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Token': PB_TOKEN
+            },
+            body: JSON.stringify({
+                type:  'note',
+                title: '🎯 ' + name + ' is viewing sajidmk.com!',
+                body:  body
+            })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+            if (d.error) console.error('Pushbullet error:', d.error.message);
+        })
+        .catch(function (e) { console.error('Pushbullet fetch error:', e); });
+    }
+
+    // ════════════════════════════════════════
+    // TELEGRAM — full detailed notification
+    // ════════════════════════════════════════
     function sendTelegramNotification(name, callback) {
         var ua = navigator.userAgent;
 
@@ -126,30 +159,30 @@
         else if (_safariV)  browser = 'Safari '          + _safariV[1].split('.')[0];
 
         // ── Extra client-side details ────────────────
-        var screen_res  = window.screen.width + 'x' + window.screen.height;
-        var viewport    = window.innerWidth + 'x' + window.innerHeight;
-        var lang        = navigator.language || 'Unknown';
-        var referrer    = document.referrer  || 'Direct / Bookmark';
-        var touchDev    = navigator.maxTouchPoints > 0 ? 'Yes' : 'No';
-        var darkMode    = window.matchMedia('(prefers-color-scheme: dark)').matches ? '🌙 Dark' : '☀️ Light';
-        var connection  = (navigator.connection && navigator.connection.effectiveType)
+        var screen_res = window.screen.width + 'x' + window.screen.height;
+        var viewport   = window.innerWidth + 'x' + window.innerHeight;
+        var lang       = navigator.language || 'Unknown';
+        var referrer   = document.referrer  || 'Direct / Bookmark';
+        var touchDev   = navigator.maxTouchPoints > 0 ? 'Yes' : 'No';
+        var darkMode   = window.matchMedia('(prefers-color-scheme: dark)').matches ? '🌙 Dark' : '☀️ Light';
+        var connection = (navigator.connection && navigator.connection.effectiveType)
                             ? navigator.connection.effectiveType.toUpperCase()
                             : 'Unknown';
-        var visitSecs   = Math.round((Date.now() - pageLoadTime) / 1000);
-        var visitTime   = visitSecs < 60
+        var visitSecs  = Math.round((Date.now() - pageLoadTime) / 1000);
+        var visitTime  = visitSecs < 60
                             ? visitSecs + 's'
                             : Math.floor(visitSecs / 60) + 'm ' + (visitSecs % 60) + 's';
-        var clientTZ    = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown';
+        var clientTZ   = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown';
 
         // Qatar time
         var time = new Date().toLocaleString('en-US', {
-            timeZone:  'Asia/Qatar',
-            weekday:   'short',
-            year:      'numeric',
-            month:     'short',
-            day:       'numeric',
-            hour:      '2-digit',
-            minute:    '2-digit'
+            timeZone: 'Asia/Qatar',
+            weekday:  'short',
+            year:     'numeric',
+            month:    'short',
+            day:      'numeric',
+            hour:     '2-digit',
+            minute:   '2-digit'
         });
 
         // ── Build and send once IP/geo is resolved ───
@@ -169,6 +202,10 @@
                                 ? 'https://maps.google.com/?q=' + lat + ',' + lon
                                 : 'N/A';
 
+            // ── Fire Pushbullet (quick glance) ───────
+            sendPushbullet(name, locationFull, browser, os, mapsLink);
+
+            // ── Build full Telegram message ──────────
             var msg =
                 '🎯 *' + name + ' just viewed your Portfolio!*\n' +
                 '━━━━━━━━━━━━━━━━━━━━\n' +
@@ -196,6 +233,7 @@
                 '🕐 *Time (Qatar):* '     + time         + '\n' +
                 '━━━━━━━━━━━━━━━━━━━━';
 
+            // ── Fire Telegram (full details) ─────────
             fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
