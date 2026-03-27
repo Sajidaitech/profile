@@ -313,11 +313,37 @@ const experienceData = [
         date:    'Nov 2023 – Feb 2024',
         title:   'IT Support Engineer',
         type:    'Short-term Project',
-        company: 'Military Medical City Hospital (MMCH) · Doha, Qatar',
+        company: 'Military Medical City Hospital (MMCH) · Al-Rayyan, Qatar',
+
+        projects: [
+            {
+                icon:   'fa-hospital-alt',
+                label:  'MMCH — Military Medical City Hospital',
+                color:  '#0f6cbf',
+                gradient: 'linear-gradient(135deg,#0f6cbf,#1a8fe8)',
+                detail: 'Main site · Al-Rayyan · Primary deployment hub'
+            },
+            {
+                icon:   'fa-flag',
+                label:  'KMC — Korean Medical Center',
+                color:  '#c0392b',
+                gradient: 'linear-gradient(135deg,#c0392b,#e74c3c)',
+                detail: 'Boulevard Lusail · New system deployment'
+            },
+            {
+                icon:   'fa-eye',
+                label:  'TVH — The View Hospital',
+                color:  '#6c3483',
+                gradient: 'linear-gradient(135deg,#6c3483,#9b59b6)',
+                detail: 'Katara · New system deployment'
+            }
+        ],
+
         responsibilities: [
-            '<b>High-Volume Ticket Management:</b> Managed <b>500+ support tickets</b> across three hospital sites, maintaining <b>95% SLA compliance</b> throughout the project duration.',
+            '<b>High-Volume Ticket Management:</b> Managed <b>500+ support tickets</b> across three hospital sites (MMCH, KMC &amp; TVH), maintaining <b>95% SLA compliance</b> throughout the project duration.',
+            '<b>Multi-Site Deployment:</b> Led full system deployment at <b>MMCH (Al-Rayyan)</b> as the primary hub, while simultaneously supporting new system rollouts at <b>KMC (Korean Medical Center – Boulevard Lusail)</b> and <b>TVH (The View Hospital – Katara)</b>.',
             '<b>L1 & L2 Support:</b> Handled L1 tasks (password resets, software installations, network fixes) and escalated L2 troubleshooting covering OS crashes and critical hardware failures.',
-            '<b>System Deployment:</b> Performed system reimaging, OS deployment, and full application configuration for over <b>300 medical staff</b> across all hospital departments.',
+            '<b>System Deployment:</b> Performed system reimaging, OS deployment, and full application configuration for over <b>300 medical staff</b> across all three hospital departments.',
             '<b>EMR Application Support:</b> Provided dedicated troubleshooting for the Electronic Medical Records (EMR) system used by doctors and nurses, significantly reducing operational downtime.',
             '<b>Preventive Maintenance & Compliance:</b> Conducted scheduled preventive maintenance and security patching to ensure compliance with hospital IT governance policies.',
             '<b>Asset Inventory:</b> Maintained accurate digital asset inventory records, improving lifecycle management accuracy across all three hospital facilities.'
@@ -332,31 +358,41 @@ const experienceData = [
         type:    'Full Time',
         company: 'Star Link – Power International Holding · Doha, Qatar',
 
-        // ─── NEW: highlight project boxes rendered inside this card ───────
         projects: [
             {
                 icon:  'fa-plane',
                 label: 'HIA Airport Expansion',
                 color: '#1a6fbf',
+                gradient: 'linear-gradient(135deg,#1a6fbf,#2196f3)',
                 detail: 'Two phases: Feb 2022 – Oct 2022 & Apr 2023 – Nov 2023'
             },
             {
                 icon:  'fa-utensils',
                 label: 'Aura Group — POS Deployment',
                 color: '#b07d2e',
+                gradient: 'linear-gradient(135deg,#b07d2e,#f0a500)',
                 detail: 'Al Maha Island restaurants & cafés'
             },
             {
                 icon:  'fa-building',
                 label: 'UCC Saudi Arabia Project',
-                color: '#2e7d52',
-                detail: 'Under UCC Holding — workstation & system deployment'
+                color: '#1a7a4a',
+                gradient: 'linear-gradient(135deg,#1a7a4a,#27ae60)',
+                detail: 'Under UCC Holding — 25 machines deployed'
             },
             {
-                icon:  'fa-hospital',
+                icon:  'fa-heartbeat',
                 label: 'Elegancia Health Care',
-                color: '#8e3abf',
+                color: '#7b2fbf',
+                gradient: 'linear-gradient(135deg,#7b2fbf,#a855f7)',
                 detail: 'Cross-subsidiary onsite IT support'
+            },
+            {
+                icon:  'fa-road',
+                label: 'InfraRoad Trading & Contracting',
+                color: '#c0551a',
+                gradient: 'linear-gradient(135deg,#c0551a,#e8793a)',
+                detail: 'On-site IT support & infrastructure services'
             }
         ],
 
@@ -367,7 +403,7 @@ const experienceData = [
 
             '<b>POS Deployment — Aura Group (Al Maha Island & Outlets):</b> Configured, imaged, and deployed <b>POS systems and supporting hardware</b> for multiple <b>Aura Group</b> restaurants and cafés across <b>Al Maha Island</b> and additional dining outlets — ensuring seamless integration with payment gateways and operational stability for high-traffic hospitality venues.',
 
-            '<b>UCC Saudi Arabia Project:</b> Prepared, configured, and deployed <b>workstations, laptops, and peripheral systems</b> for the <b>UCC Saudi Arabia</b> project — a subsidiary initiative under <b>UCC Holding</b> — coordinating hardware readiness, OS imaging, and complete software deployment to meet project-specific requirements and strict handover deadlines.',
+            '<b>UCC Saudi Arabia Project:</b> Prepared, configured, and deployed <b>25 machines</b> (workstations, laptops, and peripheral systems) for the <b>UCC Saudi Arabia</b> project — a subsidiary initiative under <b>UCC Holding</b> — coordinating full hardware readiness, OS imaging, and complete software deployment to meet project-specific requirements and strict handover deadlines.',
 
             '<b>Cross-Subsidiary Support:</b> Delivered specialised onsite IT support for <b>Elegancia Health Care</b>, <b>UCC Holding</b>, and <b>ASSETS Group</b>, conducting frequent site visits to resolve complex hardware and network issues.',
 
@@ -424,18 +460,20 @@ function loadExperience() {
             '<i class="fas fa-file-contract"></i>' + l.text + '</a>'
         ).join('');
 
-        // ── NEW: project highlight boxes (only shown if exp.projects exists) ──
+        // ── Project highlight boxes with gradient colours ──
         let projectsHTML = '';
         if (exp.projects && exp.projects.length) {
             projectsHTML =
                 '<div class="exp-projects-row">' +
-                exp.projects.map(p =>
-                    '<div class="exp-project-box" style="--proj-color:' + p.color + '">' +
+                exp.projects.map((p, pi) =>
+                    '<div class="exp-project-box" style="--proj-color:' + p.color + ';--proj-gradient:' + (p.gradient || 'linear-gradient(135deg,' + p.color + ',' + p.color + 'cc)') + ';animation-delay:' + (pi * 80) + 'ms">' +
+                        '<div class="epb-glow"></div>' +
                         '<div class="epb-icon"><i class="fas ' + p.icon + '"></i></div>' +
                         '<div class="epb-info">' +
                             '<span class="epb-label">' + p.label + '</span>' +
                             '<span class="epb-detail">' + p.detail + '</span>' +
                         '</div>' +
+                        '<div class="epb-shine"></div>' +
                     '</div>'
                 ).join('') +
                 '</div>';
