@@ -315,6 +315,13 @@ const experienceData = [
         type:    'Short-term Project',
         company: 'Military Medical City Hospital (MMCH) · Al-Rayyan, Qatar',
 
+        stats: [
+            { icon: 'fa-hospital',       value: '3',    label: 'Hospital Sites'   },
+            { icon: 'fa-ticket-alt',     value: '500+', label: 'Tickets Managed'  },
+            { icon: 'fa-user-md',        value: '300+', label: 'Staff Supported'  },
+            { icon: 'fa-check-circle',   value: '95%',  label: 'SLA Compliance'   }
+        ],
+
         projects: [
             {
                 icon:   'fa-hospital-alt',
@@ -460,6 +467,23 @@ function loadExperience() {
             '<i class="fas fa-file-contract"></i>' + l.text + '</a>'
         ).join('');
 
+        // ── Stats badge strip (shown if exp.stats exists) ──
+        let statsHTML = '';
+        if (exp.stats && exp.stats.length) {
+            statsHTML =
+                '<div class="exp-stats-strip">' +
+                exp.stats.map((s, si) =>
+                    '<div class="exp-stat-chip" style="animation-delay:' + (si * 90) + 'ms">' +
+                        '<div class="esc-icon"><i class="fas ' + s.icon + '"></i></div>' +
+                        '<div class="esc-body">' +
+                            '<span class="esc-value">' + s.value + '</span>' +
+                            '<span class="esc-label">' + s.label + '</span>' +
+                        '</div>' +
+                    '</div>'
+                ).join('') +
+                '</div>';
+        }
+
         // ── Project highlight boxes with gradient colours ──
         let projectsHTML = '';
         if (exp.projects && exp.projects.length) {
@@ -491,6 +515,7 @@ function loadExperience() {
                   '<span class="exp-company-name">' + exp.company + '</span>' +
                 '</div>' +
               '</div>' +
+              statsHTML +
               projectsHTML +
               '<ul class="exp-list">' +
                 exp.responsibilities.map(r => '<li>' + r + '</li>').join('') +
