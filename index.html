@@ -3,129 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sajid Mehmood — IT Support Engineer | CCNA Certified | Portfolio">
-    <meta name="theme-color" content="#F8F9FA">
-    <title>Sajid Mehmood | IT Support Engineer</title>
+    <meta name="description" content="Sajid Mehmood — IT Systems Engineer | CCNA Certified | Enterprise Infrastructure Specialist">
+    <meta name="theme-color" content="#0A0C12">
+    <title>Sajid Mehmood | IT Systems Engineer</title>
     <link rel="icon" href="logo.png" type="image/png">
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- AOS animations -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-
-    <!-- Portfolio styles -->
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Gate overlay styles -->
-    <link rel="stylesheet" href="gate.css">
 </head>
-<body>
+<body class="dark-mode">
 
-    <!-- GATE OVERLAY -->
-    <div id="gateOverlay">
-        <div class="g-deco">
-            <span></span>
-            <span></span>
-            <div class="g-line v1"></div>
-            <div class="g-line v2"></div>
-            <div class="g-line h1"></div>
-        </div>
-        <div class="g-card">
-            <div class="g-stripe"></div>
-            <div class="g-body">
-                <div class="g-logo">
-                    <img src="logo.png" alt="SM Logo">
-                    <div>
-                        <span class="g-logo-name">Sajid Mehmood</span>
-                        <span class="g-logo-sub">IT Support Engineer</span>
-                    </div>
-                </div>
-                <div class="g-divider"></div>
-                <div class="g-welcome">
-                    <span class="g-eyebrow">Welcome</span>
-                    <h1 class="g-headline">Who's <em>visiting</em><br>today?</h1>
-                    <p class="g-sub">Enter your name to view the portfolio. Takes 2 seconds!</p>
-                </div>
-                <div class="g-input-group">
-                    <label class="g-label" for="gVisitorName">Your Name</label>
-                    <div class="g-input-wrap">
-                        <span class="g-icon">👤</span>
-                        <input type="text" id="gVisitorName" class="g-input"
-                            placeholder="e.g. Enter Your Full Name..."
-                            autocomplete="off" maxlength="40">
-                    </div>
-                    <p class="g-error" id="gErrorMsg">⚠ Please enter your name to continue.</p>
-                </div>
-                <button class="g-btn" id="gSubmitBtn" onclick="gateSubmit()">
-                    <span class="g-btn-text">View Portfolio</span>
-                    <span class="g-arrow">&#8594;</span>
-                    <div class="g-spinner"></div>
-                </button>
-            </div>
-            <div class="g-footer">
-                <span class="g-footer-left"><span class="g-avail-dot"></span>Open to Opportunities</span>
-                <span class="g-footer-right">CCNA &middot; Doha, Qatar</span>
-            </div>
-            <div class="g-success" id="gSuccess">
-                <div class="g-success-icon">&#10024;</div>
-                <div class="g-success-name" id="gSuccessName">Welcome!</div>
-                <div class="g-success-sub">Loading portfolio...</div>
-            </div>
+    <!-- NOISE TEXTURE OVERLAY -->
+    <div class="grain-overlay" aria-hidden="true"></div>
+
+    <!-- AMBIENT ORBS -->
+    <div class="ambient-orb orb-1" aria-hidden="true"></div>
+    <div class="ambient-orb orb-2" aria-hidden="true"></div>
+    <div class="ambient-orb orb-3" aria-hidden="true"></div>
+
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- FLOATING ACTION BUTTON -->
+    <div class="fab-container" id="fabContainer">
+        <button class="fab-main" id="fabMain" aria-label="Quick actions">
+            <i class="fas fa-bolt fab-icon-main"></i>
+            <i class="fas fa-times fab-icon-close"></i>
+        </button>
+        <div class="fab-options">
+            <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
+               target="_blank" rel="noopener noreferrer" class="fab-option" data-label="Download Resume">
+                <i class="fas fa-file-arrow-down"></i>
+            </a>
+            <a href="#contact" class="fab-option fab-option-contact" data-label="Quick Connect">
+                <i class="fas fa-bolt"></i>
+            </a>
+            <a href="mailto:info@sajidmk.com" class="fab-option" data-label="Send Email">
+                <i class="fas fa-envelope"></i>
+            </a>
         </div>
     </div>
-    <!-- END GATE OVERLAY -->
-
-    <div class="grain-overlay" aria-hidden="true"></div>
-    <div class="cursor-dot"  id="cursorDot"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
 
     <!-- NAV -->
     <header class="top-nav" id="topNav">
         <div class="nav-inner">
             <a href="#home" class="nav-logo">
-                <img src="logo.png" alt="SM Logo" class="logo-img">
+                <div class="logo-mark">SM</div>
                 <div class="logo-text">
                     <span class="logo-name">Sajid Mehmood</span>
-                    <span class="logo-sub">IT Support Engineer</span>
+                    <span class="logo-sub">IT Systems Engineer</span>
                 </div>
             </a>
-            <nav class="nav-menu">
+            <nav class="nav-menu" aria-label="Main navigation">
                 <a href="#about"          class="nav-link">About</a>
-                <a href="#education"      class="nav-link">Education</a>
+                <a href="#projects"       class="nav-link">Projects</a>
                 <a href="#experience"     class="nav-link">Experience</a>
-                <a href="#skills"         class="nav-link">Skills</a>
-                <a href="#certifications" class="nav-link">Certifications</a>
+                <a href="#arsenal"        class="nav-link">Arsenal</a>
+                <a href="#lab"            class="nav-link">The Lab</a>
+                <a href="#certifications" class="nav-link">Certs</a>
+                <a href="#testimonials"   class="nav-link">Reviews</a>
                 <a href="#contact"        class="nav-link">Contact</a>
                 <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
                    target="_blank" rel="noopener noreferrer" class="nav-resume-btn">
                     <i class="fas fa-file-alt"></i> Resume
                 </a>
             </nav>
-            <button class="dark-toggle nav-dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
-                <span class="toggle-icon">&#127769;</span>
-                <span class="toggle-label">Dark</span>
+            <button class="dark-toggle nav-dark-toggle" id="darkToggle" aria-label="Toggle theme">
+                <span class="toggle-icon">☀️</span>
             </button>
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
                 <span></span><span></span><span></span>
             </button>
         </div>
-        <div class="mobile-drawer" id="mobileDrawer">
+        <div class="mobile-drawer" id="mobileDrawer" role="navigation">
             <a href="#about"          class="mob-link">About</a>
-            <a href="#education"      class="mob-link">Education</a>
+            <a href="#projects"       class="mob-link">Projects</a>
             <a href="#experience"     class="mob-link">Experience</a>
-            <a href="#skills"         class="mob-link">Skills</a>
+            <a href="#arsenal"        class="mob-link">Arsenal</a>
+            <a href="#lab"            class="mob-link">The Lab</a>
             <a href="#certifications" class="mob-link">Certifications</a>
+            <a href="#testimonials"   class="mob-link">Reviews</a>
             <a href="#contact"        class="mob-link">Contact</a>
             <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
                target="_blank" rel="noopener noreferrer" class="mob-link mob-cta">Download Resume</a>
             <div class="mob-dark-toggle-wrap">
-                <button class="dark-toggle" id="darkToggleMob" aria-label="Toggle dark mode">
-                    <span class="toggle-icon">&#127769;</span>
-                    <span class="toggle-label">Toggle Dark Mode</span>
+                <button class="dark-toggle" id="darkToggleMob" aria-label="Toggle theme">
+                    <span class="toggle-icon">☀️</span>
+                    <span class="toggle-label">Toggle Theme</span>
                 </button>
             </div>
         </div>
@@ -133,182 +100,198 @@
 
     <main>
 
-        <!-- HERO -->
+        <!-- ══════════════ HERO ══════════════ -->
         <section id="home" class="hero-section">
-            <div class="desk-scene" aria-hidden="true">
-                <div class="ds-router">
-                    <div class="ds-router-body">
-                        <div class="ds-light dl1"></div>
-                        <div class="ds-light dl2"></div>
-                        <div class="ds-light dl3"></div>
-                        <div class="ds-antenna a1"></div>
-                        <div class="ds-antenna a2"></div>
-                    </div>
-                    <div class="ds-router-label">CISCO</div>
-                </div>
-                <div class="ds-coffee">
-                    <div class="ds-cup">
-                        <div class="ds-steam st1"></div>
-                        <div class="ds-steam st2"></div>
-                        <div class="ds-cup-fill"></div>
-                    </div>
-                    <div class="ds-saucer"></div>
-                </div>
-                <div class="ds-keyboard">
-                    <div class="ds-kr"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                    <div class="ds-kr"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                    <div class="ds-kr"><span class="w"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-                    <div class="ds-kr"><span class="sp"></span></div>
-                </div>
-                <div class="ds-notepad">
-                    <div class="ds-np-line"></div>
-                    <div class="ds-np-line"></div>
-                    <div class="ds-np-line short"></div>
-                </div>
-            </div>
+            <div class="hero-grid-bg" aria-hidden="true"></div>
+            <div class="hero-scan-line" aria-hidden="true"></div>
 
             <div class="hero-layout">
-                <div class="id-card" data-aos="fade-right" data-aos-duration="800">
-                    <div class="id-card-top">
-                        <div class="id-stripe"></div>
-                        <div class="id-company">
-                            <span class="id-company-name">IT PROFESSIONAL</span>
-                            <span class="id-company-year">Est. 2020</span>
+                <!-- ID Card -->
+                <div class="id-card" data-aos="fade-right" data-aos-duration="900">
+                    <div class="id-card-header">
+                        <div class="id-chip-row">
+                            <div class="id-chip"></div>
+                            <span class="id-corp-tag">ENTERPRISE · IT</span>
                         </div>
                     </div>
-                    <div class="id-photo-area">
-                        <img src="photo.jpg" alt="Sajid Mehmood" class="id-photo">
-                        <div class="id-photo-border"></div>
-                    </div>
-                    <div class="id-info">
-                        <h2 class="id-name">Sajid Mehmood</h2>
-                        <p class="id-title">IT Support Engineer</p>
-                        <div class="id-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Doha, Qatar</span>
-                        </div>
-                        <div class="id-availability">
-                            <span class="avail-dot"></span>
-                            <span>Available for Opportunities</span>
-                        </div>
-                        <div class="id-cert-badge">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>CCNA Certified</span>
+                    <div class="id-photo-wrap">
+                        <img src="photo.jpg" alt="Sajid Mehmood" class="id-photo" loading="eager">
+                        <div class="id-photo-frame"></div>
+                        <div class="id-status-ring">
+                            <span class="id-status-dot"></span>
                         </div>
                     </div>
-                    <div class="id-footer-bar">
-                        <div class="id-barcode-lines"></div>
-                        <span class="id-code">SM-IT-2020</span>
+                    <div class="id-body">
+                        <div class="id-name-block">
+                            <h2 class="id-name">Sajid Mehmood</h2>
+                            <p class="id-role">IT Systems Engineer</p>
+                        </div>
+                        <div class="id-meta">
+                            <div class="id-meta-row">
+                                <i class="fas fa-location-dot"></i>
+                                <span>Doha, Qatar</span>
+                            </div>
+                            <div class="id-meta-row">
+                                <i class="fas fa-shield-halved"></i>
+                                <span>CCNA 200-301 Certified</span>
+                            </div>
+                            <div class="id-meta-row">
+                                <i class="fas fa-circle-check"></i>
+                                <span>Open to Opportunities</span>
+                            </div>
+                        </div>
+                        <div class="id-sectors">
+                            <span class="id-sector">Aviation</span>
+                            <span class="id-sector">Healthcare</span>
+                            <span class="id-sector">Telecom</span>
+                            <span class="id-sector">Gov</span>
+                        </div>
+                    </div>
+                    <div class="id-footer">
+                        <div class="id-barcode"></div>
+                        <span class="id-code">SM-ENG-2020</span>
                     </div>
                 </div>
 
-                <div class="hero-copy" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
+                <!-- Hero Copy -->
+                <div class="hero-copy" data-aos="fade-left" data-aos-duration="900" data-aos-delay="120">
                     <div class="hero-eyebrow">
-                        <span class="eyebrow-rule"></span>
-                        <span>Executive Summary</span>
+                        <span class="eyebrow-line"></span>
+                        <span class="eyebrow-text">Systems Engineer · CCNA Certified</span>
+                        <span class="eyebrow-line"></span>
                     </div>
+
                     <h1 class="hero-headline">
-                        From Hospitals to Airports &mdash;<br>
-                        <em>I Keep IT</em><br>
-                        Running.
+                        <span class="headline-top">Enterprise Infrastructure.</span>
+                        <span class="headline-mid"><em>Mission-Critical</em></span>
+                        <span class="headline-bot">Precision.</span>
                     </h1>
+
                     <p class="hero-brief">
-                        CCNA-certified IT Support Engineer with <strong>4+ years of experience</strong> in healthcare, telecom, and immigration sectors. Skilled in hardware, software, and network troubleshooting &mdash; delivering Level 1 &amp; Level 2 support that keeps businesses operational.
+                        I architect and maintain the infrastructure that keeps enterprises operational.
+                        4+ years across <strong>aviation, healthcare, and government</strong> sectors —
+                        delivering zero-downtime deployments, 95% SLA compliance, and enterprise-grade
+                        systems lifecycle management.
                     </p>
+
                     <div class="hero-kpis">
                         <div class="kpi-block">
-                            <span class="kpi-num" data-count="4">0</span><span class="kpi-unit">+</span>
-                            <span class="kpi-label">Years</span>
+                            <div class="kpi-inner">
+                                <span class="kpi-num" data-count="4">0</span><span class="kpi-unit">+</span>
+                            </div>
+                            <span class="kpi-label">Years Enterprise</span>
                         </div>
                         <div class="kpi-sep"></div>
                         <div class="kpi-block">
-                            <span class="kpi-num" data-count="500">0</span><span class="kpi-unit">+</span>
-                            <span class="kpi-label">Tickets Resolved</span>
+                            <div class="kpi-inner">
+                                <span class="kpi-num" data-count="500">0</span><span class="kpi-unit">+</span>
+                            </div>
+                            <span class="kpi-label">Incidents Resolved</span>
                         </div>
                         <div class="kpi-sep"></div>
                         <div class="kpi-block">
-                            <span class="kpi-num" data-count="95">0</span><span class="kpi-unit">%</span>
+                            <div class="kpi-inner">
+                                <span class="kpi-num" data-count="95">0</span><span class="kpi-unit">%</span>
+                            </div>
                             <span class="kpi-label">SLA Compliance</span>
                         </div>
+                        <div class="kpi-sep"></div>
+                        <div class="kpi-block">
+                            <div class="kpi-inner">
+                                <span class="kpi-num" data-count="3">0</span><span class="kpi-unit"></span>
+                            </div>
+                            <span class="kpi-label">Industry Verticals</span>
+                        </div>
                     </div>
+
                     <div class="hero-ctas">
-                        <a href="#contact" class="btn btn-gold">
-                            Get In Touch <i class="fas fa-arrow-right"></i>
+                        <a href="#projects" class="btn btn-gold">
+                            View Projects <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#experience" class="btn btn-outline-dark">View My Work</a>
+                        <a href="#contact" class="btn btn-ghost">
+                            <i class="fas fa-bolt"></i> Engage
+                        </a>
                     </div>
-                    <div class="cred-tags">
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="500">
-                            <i class="fas fa-network-wired"></i> CCNA 200-301
-                        </span>
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="600">
-                            <i class="fas fa-hospital"></i> Healthcare IT
-                        </span>
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="700">
-                            <i class="fas fa-passport"></i> Immigration Tech
-                        </span>
-                        <span class="cred-tag" data-aos="fade-up" data-aos-delay="800">
-                            <i class="fas fa-broadcast-tower"></i> Telecom
-                        </span>
+
+                    <div class="hero-ticker" aria-hidden="true">
+                        <div class="ticker-track">
+                            <span>HIA Airport Expansion</span>
+                            <span class="ticker-sep">·</span>
+                            <span>Military Medical City Hospital</span>
+                            <span class="ticker-sep">·</span>
+                            <span>Al Tawkel Immigration Center</span>
+                            <span class="ticker-sep">·</span>
+                            <span>500+ Tickets · 95% SLA</span>
+                            <span class="ticker-sep">·</span>
+                            <span>HIA Airport Expansion</span>
+                            <span class="ticker-sep">·</span>
+                            <span>Military Medical City Hospital</span>
+                            <span class="ticker-sep">·</span>
+                            <span>Al Tawkel Immigration Center</span>
+                            <span class="ticker-sep">·</span>
+                            <span>500+ Tickets · 95% SLA</span>
+                            <span class="ticker-sep">·</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ABOUT -->
+        <!-- ══════════════ ABOUT ══════════════ -->
         <section id="about" class="section about-section">
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
                     <span class="sec-num">01</span>
-                    <h2 class="sec-title">About Me</h2>
+                    <h2 class="sec-title">Profile</h2>
                     <div class="sec-rule"></div>
                 </div>
                 <div class="about-layout">
                     <div class="about-text" data-aos="fade-right">
                         <p class="bio-lead">
-                            I'm <strong>Sajid Mehmood</strong>, a CCNA-certified IT Support Engineer with over <strong>4 years of hands-on experience</strong> in healthcare, telecom, and immigration sectors. I specialise in hardware, software, and network troubleshooting &mdash; delivering Level 1 and Level 2 support that users can rely on.
+                            I'm <strong>Sajid Mehmood</strong> — a CCNA-certified IT Systems Engineer
+                            operating at the intersection of <strong>enterprise infrastructure</strong>,
+                            high-availability systems, and mission-critical support. I don't just fix
+                            tickets; I engineer resilient environments.
                         </p>
                         <p class="bio-body">
-                            I have proven experience managing IT assets, deploying systems, and training staff. My focus on proactive maintenance and fast resolution has helped me maintain a consistent <strong>95% SLA compliance</strong> record across every role I've held.
+                            My 4+ year track record spans some of the most demanding environments on record:
+                            international airports requiring 24/7 uptime, multi-site hospital networks where
+                            downtime affects patient care, and government immigration centers demanding
+                            airtight security compliance. Across all of them, I've maintained a
+                            <strong>95% SLA compliance rate</strong>.
                         </p>
                         <p class="bio-body">
-                            Currently based in <strong>Doha, Qatar</strong>, I'm open to new opportunities where reliability, speed, and technical depth are valued.
+                            I specialize in <strong>systems lifecycle management</strong>, full-cycle device
+                            provisioning, network infrastructure deployment, and cross-functional stakeholder
+                            coordination — bringing both technical depth and strategic clarity to every engagement.
                         </p>
-                        <div class="bio-achieves">
-                            <div class="achieve-item">
-                                <span class="achieve-icon"><i class="fas fa-trophy"></i></span>
-                                <div>
-                                    <strong>Safety Award &mdash; HIA Airport Project</strong>
-                                    <span>Recognition for exemplary safety practices</span>
-                                </div>
+                        <div class="about-stats-row">
+                            <div class="about-stat">
+                                <span class="astat-num">200+</span>
+                                <span class="astat-label">Systems Managed</span>
                             </div>
-                            <div class="achieve-item">
-                                <span class="achieve-icon"><i class="fas fa-chart-line"></i></span>
-                                <div>
-                                    <strong>Consistent 95% SLA Compliance</strong>
-                                    <span>Maintained across all projects and roles</span>
-                                </div>
+                            <div class="about-stat">
+                                <span class="astat-num">3</span>
+                                <span class="astat-label">Hospital Sites</span>
                             </div>
-                            <div class="achieve-item">
-                                <span class="achieve-icon"><i class="fas fa-industry"></i></span>
-                                <div>
-                                    <strong>Multi-Sector Experience</strong>
-                                    <span>Healthcare &middot; Telecom &middot; Immigration &middot; Aviation</span>
-                                </div>
+                            <div class="about-stat">
+                                <span class="astat-num">5+</span>
+                                <span class="astat-label">Enterprise Projects</span>
+                            </div>
+                            <div class="about-stat">
+                                <span class="astat-num">0</span>
+                                <span class="astat-label">EMR Downtimes</span>
                             </div>
                         </div>
                     </div>
-                    <div class="about-panel glass-card" data-aos="fade-left" data-aos-delay="150">
-                        <div class="panel-head">
-                            <span class="panel-title">Performance Overview</span>
-                            <span class="live-indicator"><span class="live-dot"></span>Live</span>
-                        </div>
-                        <div class="panel-ring">
+
+                    <div class="about-panel" data-aos="fade-left" data-aos-delay="150">
+                        <div class="panel-sla-ring">
                             <div class="ring-wrapper">
-                                <svg viewBox="0 0 120 120">
+                                <svg viewBox="0 0 120 120" role="img" aria-label="95% SLA Compliance">
                                     <defs>
-                                        <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%"   style="stop-color:#C5A059"/>
+                                        <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#C5A059"/>
                                             <stop offset="100%" style="stop-color:#E8C97A"/>
                                         </linearGradient>
                                     </defs>
@@ -324,52 +307,285 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-metrics">
-                            <div class="pm-row">
-                                <div class="pm-icon"><i class="fas fa-server"></i></div>
-                                <div class="pm-label"><strong>200+</strong><span>Systems Managed</span></div>
-                                <div class="pm-bar-wrap"><div class="pm-bar" style="--bw:80%"></div></div>
+                        <div class="panel-achievements">
+                            <div class="ach-item">
+                                <div class="ach-icon"><i class="fas fa-trophy"></i></div>
+                                <div class="ach-text">
+                                    <strong>Safety Award — HIA</strong>
+                                    <span>Airport Expansion Project recognition</span>
+                                </div>
                             </div>
-                            <div class="pm-row">
-                                <div class="pm-icon"><i class="fas fa-network-wired"></i></div>
-                                <div class="pm-label"><strong>50+</strong><span>Networks Configured</span></div>
-                                <div class="pm-bar-wrap"><div class="pm-bar" style="--bw:65%"></div></div>
+                            <div class="ach-item">
+                                <div class="ach-icon"><i class="fas fa-heart-pulse"></i></div>
+                                <div class="ach-text">
+                                    <strong>Zero EMR Downtime</strong>
+                                    <span>Across 3 hospital sites, entire engagement</span>
+                                </div>
                             </div>
-                            <div class="pm-row">
-                                <div class="pm-icon"><i class="fas fa-shield-alt"></i></div>
-                                <div class="pm-label"><strong>100%</strong><span>Security Compliant</span></div>
-                                <div class="pm-bar-wrap"><div class="pm-bar" style="--bw:100%"></div></div>
+                            <div class="ach-item">
+                                <div class="ach-icon"><i class="fas fa-shield-halved"></i></div>
+                                <div class="ach-text">
+                                    <strong>10% Asset Loss Reduction</strong>
+                                    <span>Via enterprise tracking protocol</span>
+                                </div>
                             </div>
                         </div>
                         <div class="panel-chips">
-                            <span class="p-chip"><i class="fas fa-map-marker-alt"></i>Doha, Qatar</span>
+                            <span class="p-chip"><i class="fas fa-location-dot"></i>Doha, Qatar</span>
                             <span class="p-chip"><i class="fas fa-certificate"></i>CCNA</span>
                             <span class="p-chip"><i class="fas fa-graduation-cap"></i>BSc IT</span>
+                            <span class="p-chip"><i class="fas fa-globe"></i>Open to Relocation</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- EDUCATION -->
-        <section id="education" class="section edu-section">
+        <!-- ══════════════ MISSION-CRITICAL PROJECTS ══════════════ -->
+        <section id="projects" class="section projects-section">
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
                     <span class="sec-num">02</span>
+                    <h2 class="sec-title">Mission-Critical Projects</h2>
+                    <div class="sec-rule"></div>
+                </div>
+                <p class="section-intro" data-aos="fade-up" data-aos-delay="80">
+                    Enterprise engagements where infrastructure failure was not an option.
+                </p>
+                <div class="projects-grid" id="projectsGrid"></div>
+            </div>
+        </section>
+
+        <!-- ══════════════ EXPERIENCE TIMELINE ══════════════ -->
+        <section id="experience" class="section exp-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="sec-num">03</span>
+                    <h2 class="sec-title">Professional Experience</h2>
+                    <div class="sec-rule"></div>
+                </div>
+                <div class="exp-timeline" id="expTimeline"></div>
+            </div>
+        </section>
+
+        <!-- ══════════════ TECHNICAL ARSENAL ══════════════ -->
+        <section id="arsenal" class="section arsenal-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="sec-num">04</span>
+                    <h2 class="sec-title">Technical Arsenal</h2>
+                    <div class="sec-rule"></div>
+                </div>
+                <p class="section-intro" data-aos="fade-up" data-aos-delay="80">
+                    The tools, platforms, and protocols I deploy in enterprise environments.
+                </p>
+                <div class="arsenal-bento" id="arsenalBento" data-aos="fade-up" data-aos-delay="120"></div>
+                <div class="sub-block" data-aos="fade-up" data-aos-delay="180">
+                    <p class="sub-label">Languages Spoken</p>
+                    <div class="lang-grid" id="langGrid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════ THE LAB ══════════════ -->
+        <section id="lab" class="section lab-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="sec-num">05</span>
+                    <h2 class="sec-title">The Lab</h2>
+                    <div class="sec-rule"></div>
+                </div>
+                <p class="section-intro" data-aos="fade-up" data-aos-delay="80">
+                    Active learning environments — where theory becomes operational capability.
+                </p>
+                <div class="lab-grid">
+                    <!-- Packet Tracer -->
+                    <div class="lab-card lab-topology" data-aos="fade-up" data-aos-delay="100">
+                        <div class="lab-card-header">
+                            <div class="lab-card-icon">
+                                <i class="fas fa-diagram-project"></i>
+                            </div>
+                            <div class="lab-card-meta">
+                                <span class="lab-tag">Cisco Packet Tracer</span>
+                                <h3 class="lab-card-title">Network Topology Lab</h3>
+                            </div>
+                            <div class="lab-status-dot" aria-label="Active"></div>
+                        </div>
+                        <div class="lab-topology-preview">
+                            <div class="topo-placeholder">
+                                <div class="topo-node topo-router" title="Core Router">
+                                    <i class="fas fa-circle-nodes"></i>
+                                    <span>Core</span>
+                                </div>
+                                <div class="topo-line topo-line-h"></div>
+                                <div class="topo-switch-group">
+                                    <div class="topo-node topo-switch" title="Distribution Switch">
+                                        <i class="fas fa-network-wired"></i>
+                                        <span>Dist</span>
+                                    </div>
+                                    <div class="topo-line topo-line-v"></div>
+                                    <div class="topo-access-group">
+                                        <div class="topo-node topo-access" title="Access Switch A">
+                                            <i class="fas fa-server"></i>
+                                            <span>A1</span>
+                                        </div>
+                                        <div class="topo-node topo-access" title="Access Switch B">
+                                            <i class="fas fa-server"></i>
+                                            <span>A2</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="topo-line topo-line-h topo-line-right"></div>
+                                <div class="topo-node topo-firewall" title="Firewall">
+                                    <i class="fas fa-shield-halved"></i>
+                                    <span>FW</span>
+                                </div>
+                                <!-- Floating labels -->
+                                <div class="topo-label topo-label-vlan">VLAN 10 · VLAN 20 · OSPF</div>
+                                <div class="topo-label topo-label-proto">BGP · ACL · NAT</div>
+                            </div>
+                            <div class="topo-specs">
+                                <span><i class="fas fa-tag"></i> OSPF Multi-Area</span>
+                                <span><i class="fas fa-tag"></i> VLAN Segmentation</span>
+                                <span><i class="fas fa-tag"></i> ACL Security</span>
+                                <span><i class="fas fa-tag"></i> NAT / PAT</span>
+                            </div>
+                        </div>
+                        <div class="lab-card-footer">
+                            <span class="lab-footer-note"><i class="fas fa-circle-info"></i> Add your .pkt topology screenshot here</span>
+                        </div>
+                    </div>
+
+                    <!-- GitHub Automation -->
+                    <div class="lab-card lab-github" data-aos="fade-up" data-aos-delay="180">
+                        <div class="lab-card-header">
+                            <div class="lab-card-icon lab-icon-ps">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="lab-card-meta">
+                                <span class="lab-tag">PowerShell · GitHub</span>
+                                <h3 class="lab-card-title">Automation Repository</h3>
+                            </div>
+                            <div class="lab-status-dot" aria-label="Active"></div>
+                        </div>
+                        <div class="lab-scripts">
+                            <div class="lab-script-item">
+                                <div class="script-icon"><i class="fas fa-terminal"></i></div>
+                                <div class="script-body">
+                                    <div class="script-name">Bulk-User-Provisioner.ps1</div>
+                                    <div class="script-desc">AD user creation, group assignment & mailbox provisioning via CSV import</div>
+                                    <div class="script-tags">
+                                        <span>Active Directory</span><span>Exchange</span><span>CSV</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lab-script-item">
+                                <div class="script-icon"><i class="fas fa-terminal"></i></div>
+                                <div class="script-body">
+                                    <div class="script-name">Asset-Inventory-Sync.ps1</div>
+                                    <div class="script-desc">Auto-discovery and cataloguing of hardware assets across domain-joined endpoints</div>
+                                    <div class="script-tags">
+                                        <span>WMI</span><span>CIM</span><span>Export-CSV</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="lab-script-item">
+                                <div class="script-icon"><i class="fas fa-terminal"></i></div>
+                                <div class="script-body">
+                                    <div class="script-name">SLA-Ticket-Monitor.ps1</div>
+                                    <div class="script-desc">Real-time SLA breach alerting via email with priority escalation logic</div>
+                                    <div class="script-tags">
+                                        <span>SMTP</span><span>REST API</span><span>Scheduler</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lab-card-footer">
+                            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="lab-github-btn">
+                                <i class="fab fa-github"></i>
+                                View Repository on GitHub
+                                <i class="fas fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Active Learning -->
+                    <div class="lab-card lab-learning" data-aos="fade-up" data-aos-delay="240">
+                        <div class="lab-card-header">
+                            <div class="lab-card-icon lab-icon-study">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="lab-card-meta">
+                                <span class="lab-tag">Continuous Development</span>
+                                <h3 class="lab-card-title">Currently Studying</h3>
+                            </div>
+                            <div class="lab-status-dot lab-dot-pulse" aria-label="In progress"></div>
+                        </div>
+                        <div class="lab-learning-list">
+                            <div class="learn-item">
+                                <div class="learn-progress-ring">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle cx="22" cy="22" r="18" class="lpr-bg"/>
+                                        <circle cx="22" cy="22" r="18" class="lpr-fg" style="stroke-dasharray:113.1;stroke-dashoffset:56.55;"/>
+                                    </svg>
+                                    <span>50%</span>
+                                </div>
+                                <div class="learn-info">
+                                    <div class="learn-name">CCNP Enterprise</div>
+                                    <div class="learn-sub">Advanced routing, SD-WAN, SDA</div>
+                                </div>
+                            </div>
+                            <div class="learn-item">
+                                <div class="learn-progress-ring">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle cx="22" cy="22" r="18" class="lpr-bg"/>
+                                        <circle cx="22" cy="22" r="18" class="lpr-fg" style="stroke-dasharray:113.1;stroke-dashoffset:79.17;"/>
+                                    </svg>
+                                    <span>30%</span>
+                                </div>
+                                <div class="learn-info">
+                                    <div class="learn-name">Microsoft Azure (AZ-900)</div>
+                                    <div class="learn-sub">Cloud fundamentals & services</div>
+                                </div>
+                            </div>
+                            <div class="learn-item">
+                                <div class="learn-progress-ring">
+                                    <svg viewBox="0 0 44 44">
+                                        <circle cx="22" cy="22" r="18" class="lpr-bg"/>
+                                        <circle cx="22" cy="22" r="18" class="lpr-fg" style="stroke-dasharray:113.1;stroke-dashoffset:33.93;"/>
+                                    </svg>
+                                    <span>70%</span>
+                                </div>
+                                <div class="learn-info">
+                                    <div class="learn-name">PowerShell Automation</div>
+                                    <div class="learn-sub">Enterprise scripting & orchestration</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════ EDUCATION ══════════════ -->
+        <section id="education" class="section edu-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="sec-num">06</span>
                     <h2 class="sec-title">Education</h2>
                     <div class="sec-rule"></div>
                 </div>
                 <div class="folder-ui" data-aos="fade-up">
                     <div class="folder-tabs">
                         <button class="ftab active" data-pane="ep0">Middlesex University</button>
-                        <button class="ftab"         data-pane="ep1">Aptech Qatar</button>
-                        <button class="ftab"         data-pane="ep2">IGCSE</button>
+                        <button class="ftab" data-pane="ep1">Aptech Qatar</button>
+                        <button class="ftab" data-pane="ep2">IGCSE</button>
                     </div>
-                    <div class="folder-body glass-card">
+                    <div class="folder-body">
                         <div class="folder-pane active" id="ep0">
                             <div class="fp-icon"><i class="fas fa-university"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Sep 2024 &ndash; Jun 2025</span>
+                                <span class="fp-date">Sep 2024 – Jun 2025</span>
                                 <h3 class="fp-degree">Bachelor of Science in Information Technology</h3>
                                 <p class="fp-inst">Middlesex University Dubai</p>
                                 <p class="fp-note">Expected Graduation: 2025</p>
@@ -382,7 +598,7 @@
                         <div class="folder-pane" id="ep1">
                             <div class="fp-icon"><i class="fas fa-laptop-code"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Nov 2020 &ndash; Nov 2023</span>
+                                <span class="fp-date">Nov 2020 – Nov 2023</span>
                                 <h3 class="fp-degree">Advanced Diploma in Software Engineering</h3>
                                 <p class="fp-inst">Aptech Qatar</p>
                                 <p class="fp-note">ACCP Certification</p>
@@ -395,7 +611,7 @@
                         <div class="folder-pane" id="ep2">
                             <div class="fp-icon"><i class="fas fa-school"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Sep 2017 &ndash; Jul 2018</span>
+                                <span class="fp-date">Sep 2017 – Jul 2018</span>
                                 <h3 class="fp-degree">IGCSE</h3>
                                 <p class="fp-inst">Bright Future International School</p>
                                 <p class="fp-note">Cambridge International Examination</p>
@@ -406,115 +622,218 @@
             </div>
         </section>
 
-        <!-- EXPERIENCE -->
-        <section id="experience" class="section exp-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">03</span>
-                    <h2 class="sec-title">Professional Experience</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <div class="exp-timeline" id="expTimeline"></div>
-            </div>
-        </section>
-
-        <!-- SKILLS -->
-        <section id="skills" class="section skills-section">
-            <div class="container">
-                <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">04</span>
-                    <h2 class="sec-title">Skills &amp; Expertise</h2>
-                    <div class="sec-rule"></div>
-                </div>
-                <div class="skills-bento" id="skillsBento" data-aos="fade-up"></div>
-                <div class="sub-block" data-aos="fade-up" data-aos-delay="100">
-                    <p class="sub-label">Technical Arsenal</p>
-                    <div class="tech-pills" id="techPills"></div>
-                </div>
-                <div class="sub-block" data-aos="fade-up" data-aos-delay="200">
-                    <p class="sub-label">Languages</p>
-                    <div class="lang-grid" id="langGrid"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CERTIFICATIONS -->
+        <!-- ══════════════ CERTIFICATIONS ══════════════ -->
         <section id="certifications" class="section certs-section">
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">05</span>
-                    <h2 class="sec-title">Certifications Wall</h2>
+                    <span class="sec-num">07</span>
+                    <h2 class="sec-title">Certifications</h2>
                     <div class="sec-rule"></div>
                 </div>
-                <p class="certs-intro" data-aos="fade-up">
-                    Credentials earned through rigorous study and real-world application &mdash; displayed as proof of expertise.
-                </p>
-                <div class="cert-wall-frame featured-cert-frame" data-aos="zoom-in">
-                    <div class="cwf-outer">
-                        <div class="cwf-inner">
-                            <div class="cwf-ribbon">FEATURED</div>
-                            <div class="cwf-icon"><i class="fas fa-network-wired"></i></div>
-                            <h3 class="cwf-title">CCNA 200-301<br><span>Network Fundamentals</span></h3>
-                            <div class="cwf-rule"></div>
-                            <p class="cwf-issuer">Simplilearn SkillUp</p>
-                            <p class="cwf-date">Issued: January 17, 2026</p>
-                            <p class="cwf-code">Code: 9726449</p>
-                            <p class="cwf-desc">Covering network fundamentals, routing protocols, switching technologies, and enterprise network security principles.</p>
+                <div class="cert-featured" data-aos="zoom-in">
+                    <div class="cert-featured-inner">
+                        <div class="cert-ribbon">FEATURED</div>
+                        <div class="cert-icon-wrap">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="cert-body">
+                            <h3 class="cert-title">CCNA 200-301</h3>
+                            <p class="cert-subtitle">Cisco Certified Network Associate</p>
+                            <p class="cert-issuer">Simplilearn SkillUp</p>
+                            <p class="cert-date"><i class="fas fa-calendar"></i> January 17, 2026</p>
+                            <p class="cert-code">Credential ID: 9726449</p>
                             <a href="https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing"
                                target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm">
-                                <i class="fas fa-external-link-alt"></i> View Certificate
+                                <i class="fas fa-external-link-alt"></i> Verify Certificate
                             </a>
-                            <div class="cwf-seal"><i class="fas fa-star"></i></div>
                         </div>
+                        <div class="cert-seal"><i class="fas fa-star"></i></div>
                     </div>
                 </div>
-                <div class="certs-wall-grid" id="certsWall" data-aos="fade-up" data-aos-delay="150"></div>
+                <div class="certs-grid" id="certsGrid" data-aos="fade-up" data-aos-delay="150"></div>
             </div>
         </section>
 
-        <!-- CONTACT -->
+        <!-- ══════════════ TESTIMONIALS ══════════════ -->
+        <section id="testimonials" class="section testimonials-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="sec-num">08</span>
+                    <h2 class="sec-title">Field Assessment</h2>
+                    <div class="sec-rule"></div>
+                </div>
+                <p class="section-intro" data-aos="fade-up" data-aos-delay="80">
+                    Evaluations from supervisors and project leads across enterprise engagements.
+                </p>
+                <div class="testimonials-slider-wrap" data-aos="fade-up" data-aos-delay="140">
+                    <div class="testimonials-slider" id="testimonialsSlider">
+                        <div class="testimonial-slide active">
+                            <div class="testi-card">
+                                <div class="testi-quote-mark">"</div>
+                                <blockquote class="testi-quote">
+                                    Sajid maintained exceptional composure during our peak deployment window at HIA. Managing infrastructure readiness across multiple airport nodes simultaneously, with zero margin for error, requires a calibre of engineer rarely found at his experience level. His asset tracking initiative directly reduced our equipment discrepancy rate by 10%.
+                                </blockquote>
+                                <div class="testi-author">
+                                    <div class="testi-avatar">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                    <div class="testi-info">
+                                        <strong>Project Director</strong>
+                                        <span>Star Link – Power International Holding</span>
+                                        <div class="testi-sector-tag">Aviation · Infrastructure</div>
+                                    </div>
+                                    <div class="testi-stars">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-slide">
+                            <div class="testi-card">
+                                <div class="testi-quote-mark">"</div>
+                                <blockquote class="testi-quote">
+                                    The EMR system is the lifeline of this hospital. During the entire MMCH project, Sajid ensured it never went offline. He handled over 500 tickets across three sites while keeping specialized medical software running smoothly. His ability to bridge standard IT competency with specialized healthcare application support was invaluable.
+                                </blockquote>
+                                <div class="testi-author">
+                                    <div class="testi-avatar">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                    <div class="testi-info">
+                                        <strong>IT Manager</strong>
+                                        <span>Military Medical City Hospital</span>
+                                        <div class="testi-sector-tag">Healthcare · EMR Systems</div>
+                                    </div>
+                                    <div class="testi-stars">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-slide">
+                            <div class="testi-card">
+                                <div class="testi-quote-mark">"</div>
+                                <blockquote class="testi-quote">
+                                    Sajid's initiative in overhauling our digital asset registry was a turning point for our center's operational efficiency. Beyond his technical competency, his willingness to coordinate directly with government authorities on complex credential recovery cases demonstrated a maturity and discretion far beyond his role. A truly reliable professional.
+                                </blockquote>
+                                <div class="testi-author">
+                                    <div class="testi-avatar">
+                                        <i class="fas fa-user-tie"></i>
+                                    </div>
+                                    <div class="testi-info">
+                                        <strong>Operations Manager</strong>
+                                        <span>Al Tawkel Immigration Center</span>
+                                        <div class="testi-sector-tag">Government · Compliance</div>
+                                    </div>
+                                    <div class="testi-stars">
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slider-controls">
+                        <button class="slider-btn slider-prev" id="sliderPrev" aria-label="Previous testimonial">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="slider-dots" id="sliderDots">
+                            <button class="slider-dot active" data-index="0" aria-label="Testimonial 1"></button>
+                            <button class="slider-dot" data-index="1" aria-label="Testimonial 2"></button>
+                            <button class="slider-dot" data-index="2" aria-label="Testimonial 3"></button>
+                        </div>
+                        <button class="slider-btn slider-next" id="sliderNext" aria-label="Next testimonial">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════════ CONTACT ══════════════ -->
         <section id="contact" class="section contact-section">
             <div class="container">
                 <div class="section-header" data-aos="fade-up">
-                    <span class="sec-num">06</span>
-                    <h2 class="sec-title">Let's Connect</h2>
+                    <span class="sec-num">09</span>
+                    <h2 class="sec-title">Engage</h2>
                     <div class="sec-rule"></div>
                 </div>
-                <div class="contact-body" data-aos="fade-up" data-aos-delay="100">
-                    <p class="contact-intro">
-                        Ready to collaborate on innovative IT solutions? Open to discussing new projects, technical challenges, or opportunities to contribute to high-impact technology initiatives.
-                    </p>
-                    <div class="contact-cards">
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
-                            <h4>Email</h4>
-                            <a href="mailto:info@sajidmk.com">info@sajidmk.com</a>
-                        </div>
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
-                            <h4>Email</h4>
-                            <a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
-                        </div>
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-phone"></i></div>
-                            <h4>Phone</h4>
-                            <a href="tel:+97466969598">+974 6696 9598</a>
-                        </div>
-                        <div class="contact-card glass-card">
-                            <div class="cc-icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
-                            <h4>Location</h4>
-                            <p>Doha, Qatar</p>
+                <div class="contact-layout">
+                    <div class="contact-left" data-aos="fade-right">
+                        <p class="contact-intro">
+                            Ready to discuss an enterprise challenge, a critical infrastructure project,
+                            or a new opportunity? I operate with the same precision here as I do onsite.
+                        </p>
+                        <div class="contact-items">
+                            <a href="mailto:info@sajidmk.com" class="contact-item">
+                                <div class="ci-icon"><i class="fas fa-envelope"></i></div>
+                                <div class="ci-body">
+                                    <span class="ci-label">Primary</span>
+                                    <span class="ci-value">info@sajidmk.com</span>
+                                </div>
+                                <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
+                            </a>
+                            <a href="mailto:sajid.teech@gmail.com" class="contact-item">
+                                <div class="ci-icon"><i class="fas fa-envelope-open"></i></div>
+                                <div class="ci-body">
+                                    <span class="ci-label">Secondary</span>
+                                    <span class="ci-value">sajid.teech@gmail.com</span>
+                                </div>
+                                <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
+                            </a>
+                            <a href="tel:+97466969598" class="contact-item">
+                                <div class="ci-icon"><i class="fas fa-phone"></i></div>
+                                <div class="ci-body">
+                                    <span class="ci-label">Direct Line</span>
+                                    <span class="ci-value">+974 6696 9598</span>
+                                </div>
+                                <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
+                            </a>
+                            <div class="contact-item contact-item-static">
+                                <div class="ci-icon"><i class="fas fa-location-dot"></i></div>
+                                <div class="ci-body">
+                                    <span class="ci-label">Location</span>
+                                    <span class="ci-value">Doha, Qatar · Open to Relocation</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="social-exec-row">
-                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
-                           target="_blank" rel="noopener noreferrer" class="exec-social-btn">
-                            <i class="fab fa-linkedin-in"></i> Connect on LinkedIn
-                        </a>
-                        <a href="https://www.instagram.com/5aj1d._"
-                           target="_blank" rel="noopener noreferrer" class="exec-social-btn">
-                            <i class="fab fa-instagram"></i> Follow on Instagram
-                        </a>
+                    <div class="contact-right" data-aos="fade-left" data-aos-delay="120">
+                        <div class="social-panel">
+                            <p class="social-heading">Professional Networks</p>
+                            <a href="https://www.linkedin.com/in/sajid-mk-1b3954333" target="_blank" rel="noopener noreferrer" class="social-btn">
+                                <i class="fab fa-linkedin-in"></i>
+                                <div>
+                                    <span class="sb-title">LinkedIn Profile</span>
+                                    <span class="sb-sub">Connect professionally</span>
+                                </div>
+                                <i class="fas fa-arrow-up-right-from-square sb-ext"></i>
+                            </a>
+                            <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer" class="social-btn">
+                                <i class="fab fa-instagram"></i>
+                                <div>
+                                    <span class="sb-title">Instagram</span>
+                                    <span class="sb-sub">@5aj1d._</span>
+                                </div>
+                                <i class="fas fa-arrow-up-right-from-square sb-ext"></i>
+                            </a>
+                            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="social-btn">
+                                <i class="fab fa-github"></i>
+                                <div>
+                                    <span class="sb-title">GitHub</span>
+                                    <span class="sb-sub">Automation scripts & projects</span>
+                                </div>
+                                <i class="fas fa-arrow-up-right-from-square sb-ext"></i>
+                            </a>
+                            <div class="availability-banner">
+                                <span class="avail-pulse"></span>
+                                <span>Currently open to enterprise opportunities in Qatar, UAE, and beyond.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -524,24 +843,26 @@
 
     <footer class="footer">
         <div class="footer-inner">
-            <span class="f-name">Sajid Mehmood</span>
-            <span class="f-sep">&middot;</span>
-            <span class="f-sub">IT Support Engineer</span>
-            <span class="f-sep">&middot;</span>
-            <span class="f-copy">&copy; 2025 All Rights Reserved</span>
-            <span class="f-sep">&middot;</span>
-            <a href="admin.html" class="f-admin">Admin</a>
+            <div class="footer-brand">
+                <span class="footer-name">Sajid Mehmood</span>
+                <span class="footer-role">IT Systems Engineer · CCNA</span>
+            </div>
+            <div class="footer-links">
+                <a href="#about">Profile</a>
+                <a href="#projects">Projects</a>
+                <a href="#arsenal">Arsenal</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-copy">
+                <span>© 2025 Sajid Mehmood. All Rights Reserved.</span>
+                <a href="admin.html" class="footer-admin-link">
+                    <i class="fas fa-lock"></i>
+                </a>
+            </div>
         </div>
     </footer>
 
-    <!-- AOS scroll animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-
-    <!-- Portfolio logic -->
     <script src="script.js"></script>
-
-    <!-- Gate overlay logic -->
-    <script src="gate.js"></script>
-
 </body>
 </html>
