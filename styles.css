@@ -255,6 +255,135 @@ a { color:inherit; text-decoration:none; }
 .exp-company-name{font-size:12px;font-weight:600;color:var(--graphite-md);font-family:'Montserrat',sans-serif;}
 
 /* ── PROJECT HIGHLIGHT BOXES ─────────────────── */
+/* ── EXPERIENCE STATS STRIP ── */
+@keyframes escPop {
+    0%   { opacity: 0; transform: translateY(10px) scale(0.88); }
+    65%  { transform: translateY(-3px) scale(1.04); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes escCountUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes escShine {
+    0%   { transform: translateX(-140%) skewX(-20deg); }
+    100% { transform: translateX(260%) skewX(-20deg); }
+}
+
+.exp-stats-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 24px 4px;
+    border-bottom: 1px solid rgba(197,160,89,.10);
+}
+
+.exp-stat-chip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px 10px 12px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #0f6cbf 0%, #1a8fe8 50%, #0d5da8 100%);
+    flex: 1 1 130px;
+    min-width: 120px;
+    max-width: 180px;
+    overflow: hidden;
+    cursor: default;
+    animation: escPop 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+    box-shadow:
+        0 4px 14px rgba(15,108,191,.35),
+        0 1px 3px rgba(0,0,0,.10),
+        inset 0 1px 0 rgba(255,255,255,.25);
+    border: 1px solid rgba(255,255,255,.20);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+}
+/* Each chip gets a slightly different hue accent */
+.exp-stat-chip:nth-child(1) { background: linear-gradient(135deg,#0a5a9e,#1a8fe8); }
+.exp-stat-chip:nth-child(2) { background: linear-gradient(135deg,#0e7a3e,#17a85a); }
+.exp-stat-chip:nth-child(3) { background: linear-gradient(135deg,#7b2fbf,#a855f7); }
+.exp-stat-chip:nth-child(4) { background: linear-gradient(135deg,#b07d2e,#e8a835); }
+
+/* Shine on hover */
+.exp-stat-chip::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 35%;
+    height: 100%;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.30) 50%, transparent 60%);
+    transform: translateX(-140%) skewX(-20deg);
+    pointer-events: none;
+}
+.exp-stat-chip:hover::after {
+    animation: escShine 0.6s ease forwards;
+}
+.exp-stat-chip:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+        0 10px 26px rgba(15,108,191,.38),
+        0 2px 6px rgba(0,0,0,.12),
+        inset 0 1px 0 rgba(255,255,255,.30);
+}
+
+.esc-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 4px rgba(0,0,0,.12);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.exp-stat-chip:hover .esc-icon {
+    transform: scale(1.18) rotate(-8deg);
+}
+
+.esc-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    position: relative;
+    z-index: 1;
+}
+.esc-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    text-shadow: 0 1px 4px rgba(0,0,0,.20);
+    animation: escCountUp 0.5s ease both;
+}
+.esc-label {
+    font-size: 9.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,.82);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+}
+
+/* Dark mode */
+body.dark-mode .exp-stat-chip {
+    filter: brightness(0.88) saturate(1.1);
+    box-shadow: 0 4px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.18);
+}
+body.dark-mode .exp-stat-chip:hover {
+    filter: brightness(1.0) saturate(1.15);
+}
+
+@media (max-width:600px) {
+    .exp-stats-strip { padding: 12px 16px 4px; gap: 8px; }
+    .exp-stat-chip   { flex: 1 1 calc(50% - 4px); max-width: none; min-width: 0; }
+}
+
 /* ── PROJECT HIGHLIGHT BOXES ── */
 .exp-projects-row {
     display: flex;
