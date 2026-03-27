@@ -12,8 +12,66 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Gate overlay styles -->
+    <link rel="stylesheet" href="gate.css">
 </head>
 <body class="dark-mode">
+
+    <!-- GATE OVERLAY -->
+    <div id="gateOverlay">
+        <div class="g-deco">
+            <span></span>
+            <span></span>
+            <div class="g-line v1"></div>
+            <div class="g-line v2"></div>
+            <div class="g-line h1"></div>
+        </div>
+        <div class="g-card">
+            <div class="g-stripe"></div>
+            <div class="g-body">
+                <div class="g-logo">
+                    <img src="logo.png" alt="SM Logo">
+                    <div>
+                        <span class="g-logo-name">Sajid Mehmood</span>
+                        <span class="g-logo-sub">IT Systems Engineer</span>
+                    </div>
+                </div>
+                <div class="g-divider"></div>
+                <div class="g-welcome">
+                    <span class="g-eyebrow">Welcome</span>
+                    <h1 class="g-headline">Who's <em>visiting</em><br>today?</h1>
+                    <p class="g-sub">Enter your name to view the portfolio. Takes 2 seconds!</p>
+                </div>
+                <div class="g-input-group">
+                    <label class="g-label" for="gVisitorName">Your Name</label>
+                    <div class="g-input-wrap">
+                        <span class="g-icon">👤</span>
+                        <input type="text" id="gVisitorName" class="g-input"
+                            placeholder="e.g. Ahmed, Sarah, HR Team..."
+                            autocomplete="off" maxlength="40">
+                    </div>
+                    <p class="g-error" id="gErrorMsg">⚠ Please enter your name to continue.</p>
+                </div>
+                <button class="g-btn" id="gSubmitBtn" onclick="gateSubmit()">
+                    <span class="g-btn-text">View Portfolio</span>
+                    <span class="g-arrow">&#8594;</span>
+                    <div class="g-spinner"></div>
+                </button>
+                <span class="g-skip" onclick="gateSkip()">Skip — view anonymously</span>
+            </div>
+            <div class="g-footer">
+                <span class="g-footer-left"><span class="g-avail-dot"></span>Open to Opportunities</span>
+                <span class="g-footer-right">CCNA &middot; Doha, Qatar</span>
+            </div>
+            <div class="g-success" id="gSuccess">
+                <div class="g-success-icon">&#10024;</div>
+                <div class="g-success-name" id="gSuccessName">Welcome!</div>
+                <div class="g-success-sub">Loading portfolio...</div>
+            </div>
+        </div>
+    </div>
+    <!-- END GATE OVERLAY -->
 
     <!-- NOISE TEXTURE OVERLAY -->
     <div class="grain-overlay" aria-hidden="true"></div>
