@@ -40,7 +40,6 @@ function initNav() {
     const drawer    = document.getElementById('mobileDrawer');
     const navLinks  = document.querySelectorAll('.nav-link');
 
-    // Scroll: shrink nav + highlight active section
     window.addEventListener('scroll', () => {
         nav?.classList.toggle('scrolled', window.scrollY > 60);
 
@@ -53,13 +52,11 @@ function initNav() {
         });
     });
 
-    // Hamburger toggle
     hamburger?.addEventListener('click', () => {
         hamburger.classList.toggle('open');
         drawer?.classList.toggle('open');
     });
 
-    // Close drawer on link click
     document.querySelectorAll('.mob-link').forEach(l => {
         l.addEventListener('click', () => {
             hamburger?.classList.remove('open');
@@ -67,7 +64,6 @@ function initNav() {
         });
     });
 
-    // Close drawer on outside click
     document.addEventListener('click', e => {
         if (
             drawer?.classList.contains('open') &&
@@ -79,7 +75,6 @@ function initNav() {
         }
     });
 
-    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
@@ -113,7 +108,6 @@ function initDarkMode() {
         });
     }
 
-    // Restore saved preference, fall back to system preference
     const saved       = localStorage.getItem(STORAGE_KEY);
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     applyDark(saved !== null ? saved === '1' : prefersDark);
@@ -140,14 +134,12 @@ function initCursor() {
     document.addEventListener('mousemove', e => {
         dot.style.left = e.clientX + 'px';
         dot.style.top  = e.clientY + 'px';
-        // Ring follows with a slight lag for a trailing effect
         setTimeout(() => {
             ring.style.left = e.clientX + 'px';
             ring.style.top  = e.clientY + 'px';
         }, 70);
     });
 
-    // Expand ring on interactive elements
     document.querySelectorAll('a, button, .skill-card, .exp-card').forEach(el => {
         el.addEventListener('mouseenter', () => {
             ring.style.width   = '44px';
@@ -208,7 +200,6 @@ function initRings() {
                 const circ = 2 * Math.PI * 50;
                 ring.style.strokeDasharray  = circ;
                 ring.style.strokeDashoffset = circ;
-                // Small delay so the animation is visible after entering viewport
                 setTimeout(() => {
                     ring.style.strokeDashoffset = circ - (pct / 100) * circ;
                 }, 300);
@@ -229,12 +220,8 @@ function initFolderTabs() {
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const paneId = tab.getAttribute('data-pane');
-
-            // Deactivate all tabs and panes
             tabs.forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.folder-pane').forEach(p => p.classList.remove('active'));
-
-            // Activate clicked tab and its pane
             tab.classList.add('active');
             document.getElementById(paneId)?.classList.add('active');
         });
@@ -278,7 +265,6 @@ function handleContactForm() {
     const note    = document.getElementById('cfNote');
     const btn     = document.getElementById('cfSubmit');
 
-    // Basic validation
     if (!name || !email || !message) {
         note.textContent = '⚠ Please fill in your name, email, and message.';
         note.style.color = '#e74c3c';
@@ -290,7 +276,6 @@ function handleContactForm() {
         return;
     }
 
-    // Build mailto link and open mail client
     const body       = 'Name: ' + name + '\nEmail: ' + email + '\n\n' + message;
     const mailtoLink = 'mailto:sajidmehmood@outlook.com?subject=' +
                        encodeURIComponent(subject || 'Portfolio Enquiry — ' + name) +
@@ -307,13 +292,6 @@ function handleContactForm() {
 // DATA — EXPERIENCE
 // ════════════════════════════════════════
 
-/*
- * Each responsibility entry supports inline HTML.
- * Bold tags are used to highlight:
- *   - Date ranges / project phases
- *   - Key role titles / section headings
- *   - Notable achievements and metrics
- */
 const experienceData = [
     {
         date:    'Apr 2025 – Aug 2025',
@@ -353,14 +331,52 @@ const experienceData = [
         title:   'IT Support Engineer',
         type:    'Full Time',
         company: 'Star Link – Power International Holding · Doha, Qatar',
+
+        // ─── NEW: highlight project boxes rendered inside this card ───────
+        projects: [
+            {
+                icon:  'fa-plane',
+                label: 'HIA Airport Expansion',
+                color: '#1a6fbf',
+                detail: 'Two phases: Feb 2022 – Oct 2022 & Apr 2023 – Nov 2023'
+            },
+            {
+                icon:  'fa-utensils',
+                label: 'Aura Group — POS Deployment',
+                color: '#b07d2e',
+                detail: 'Al Maha Island restaurants & cafés'
+            },
+            {
+                icon:  'fa-building',
+                label: 'UCC Saudi Arabia Project',
+                color: '#2e7d52',
+                detail: 'Under UCC Holding — workstation & system deployment'
+            },
+            {
+                icon:  'fa-hospital',
+                label: 'Elegancia Health Care',
+                color: '#8e3abf',
+                detail: 'Cross-subsidiary onsite IT support'
+            }
+        ],
+
         responsibilities: [
             '<b>Executive & Head Office Support:</b> Provided dedicated technical support to <b>CEOs, Executives, and Directors</b> at the PIH Head Office, ensuring <b>zero downtime</b> for mission-critical operations and senior management.',
+
             '<b>Project Management — HIA Expansion:</b> Led IT support operations for the <b>Hamad International Airport (HIA) Expansion</b> project across two phases (<b>Feb 2022 – Oct 2022</b> & <b>Apr 2023 – Nov 2023</b>), managing full infrastructure readiness and onsite technical requirements.',
-            '<b>Hospitality & Retail Systems:</b> Configured and deployed <b>POS systems</b> for <b>Aura Group</b> restaurants at Al Maha Island, ensuring seamless integration and operational stability for high-traffic dining venues.',
+
+            '<b>POS Deployment — Aura Group (Al Maha Island & Outlets):</b> Configured, imaged, and deployed <b>POS systems and supporting hardware</b> for multiple <b>Aura Group</b> restaurants and cafés across <b>Al Maha Island</b> and additional dining outlets — ensuring seamless integration with payment gateways and operational stability for high-traffic hospitality venues.',
+
+            '<b>UCC Saudi Arabia Project:</b> Prepared, configured, and deployed <b>workstations, laptops, and peripheral systems</b> for the <b>UCC Saudi Arabia</b> project — a subsidiary initiative under <b>UCC Holding</b> — coordinating hardware readiness, OS imaging, and complete software deployment to meet project-specific requirements and strict handover deadlines.',
+
             '<b>Cross-Subsidiary Support:</b> Delivered specialised onsite IT support for <b>Elegancia Health Care</b>, <b>UCC Holding</b>, and <b>ASSETS Group</b>, conducting frequent site visits to resolve complex hardware and network issues.',
+
             '<b>L1/L2 Incident Management:</b> Resolved complex login errors, email configurations, and network failures for <b>200+ staff</b> across retail and corporate environments.',
+
             '<b>Infrastructure & Deployment:</b> Managed full-cycle device provisioning including OS imaging, hardware upgrades, and preventive maintenance for desktops, laptops, and specialised POS hardware.',
+
             '<b>Asset Optimisation:</b> Monitored and documented IT assets across multiple group companies, implementing tracking protocols that <b>reduced equipment loss by 10%</b>.',
+
             '<b>Vendor Coordination:</b> Collaborated with external vendors and telecommunications providers to resolve VoIP and connectivity issues across diverse project sites.'
         ],
         letters: [
@@ -387,6 +403,11 @@ const experienceData = [
     }
 ];
 
+
+// ════════════════════════════════════════
+// RENDER EXPERIENCE TIMELINE
+// ════════════════════════════════════════
+
 function loadExperience() {
     const timeline = document.getElementById('expTimeline');
     if (!timeline) return;
@@ -397,11 +418,28 @@ function loadExperience() {
         item.setAttribute('data-aos', 'fade-up');
         item.setAttribute('data-aos-delay', i * 80);
 
-        // Build "View Letter" button(s)
+        // Build "View Letter" buttons
         const lettersHTML = (exp.letters || []).map(l =>
             '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="exp-btn">' +
             '<i class="fas fa-file-contract"></i>' + l.text + '</a>'
         ).join('');
+
+        // ── NEW: project highlight boxes (only shown if exp.projects exists) ──
+        let projectsHTML = '';
+        if (exp.projects && exp.projects.length) {
+            projectsHTML =
+                '<div class="exp-projects-row">' +
+                exp.projects.map(p =>
+                    '<div class="exp-project-box" style="--proj-color:' + p.color + '">' +
+                        '<div class="epb-icon"><i class="fas ' + p.icon + '"></i></div>' +
+                        '<div class="epb-info">' +
+                            '<span class="epb-label">' + p.label + '</span>' +
+                            '<span class="epb-detail">' + p.detail + '</span>' +
+                        '</div>' +
+                    '</div>'
+                ).join('') +
+                '</div>';
+        }
 
         item.innerHTML =
             '<div class="exp-card">' +
@@ -415,6 +453,7 @@ function loadExperience() {
                   '<span class="exp-company-name">' + exp.company + '</span>' +
                 '</div>' +
               '</div>' +
+              projectsHTML +
               '<ul class="exp-list">' +
                 exp.responsibilities.map(r => '<li>' + r + '</li>').join('') +
               '</ul>' +
@@ -518,8 +557,6 @@ function loadLanguages() {
 // DATA — CERTIFICATIONS
 // ════════════════════════════════════════
 
-const cvLink = 'https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing';
-
 const additionalCerts = [
     {
         icon:  'fa-graduation-cap',
@@ -574,11 +611,6 @@ function loadCertifications() {
 // SCROLL REVEAL (Intersection Observer)
 // ════════════════════════════════════════
 
-/*
- * Pauses CSS animations on off-screen elements and starts them
- * only when they scroll into the viewport — improving performance
- * and creating a clean staggered entrance effect on mobile.
- */
 function initScrollReveal() {
     if (typeof IntersectionObserver === 'undefined') return;
 
@@ -607,11 +639,6 @@ function initScrollReveal() {
 // HERO EMOJI WAVE
 // ════════════════════════════════════════
 
-/*
- * Appends a waving hand emoji (👋) to the hero ID-card name.
- * Clicking or tapping replays the CSS wave animation.
- * On page load an automatic single wave fires after 1.8 s.
- */
 function initHeroEmoji() {
     const idName = document.querySelector('.id-name');
     if (!idName) return;
@@ -622,7 +649,6 @@ function initHeroEmoji() {
     wave.setAttribute('aria-hidden', 'true');
     idName.appendChild(wave);
 
-    // Helper: restart the keyframe animation
     function replayWave() {
         wave.style.animation = 'none';
         requestAnimationFrame(() => {
@@ -634,8 +660,6 @@ function initHeroEmoji() {
     }
 
     wave.addEventListener('click', replayWave);
-
-    // Auto-wave once on load
     setTimeout(replayWave, 1800);
 }
 
@@ -644,10 +668,6 @@ function initHeroEmoji() {
 // MOBILE EMOJI TICKER
 // ════════════════════════════════════════
 
-/*
- * On small screens only, inserts an animated emoji strip above
- * the hero copy to give the section a lively, mobile-friendly feel.
- */
 function initMobileEmojiTicker() {
     if (window.innerWidth > 768) return;
 
@@ -673,11 +693,6 @@ function initMobileEmojiTicker() {
 // GOLD PARTICLE BURST ON BUTTON CLICK
 // ════════════════════════════════════════
 
-/*
- * Attaches a click handler to every .btn-gold element that spawns
- * 8 small gold dots radiating outward from the click point.
- * Each particle fades and scales down over ~550 ms before being removed.
- */
 function initHoverParticles() {
     document.querySelectorAll('.btn-gold').forEach(btn => {
         btn.addEventListener('click', function (e) {
@@ -708,7 +723,6 @@ function initHoverParticles() {
                 btn.style.overflow = 'visible';
                 btn.appendChild(dot);
 
-                // Trigger transition on next frame
                 requestAnimationFrame(() => {
                     dot.style.transform = 'translate(' +
                         (Math.cos(angle) * dist) + 'px,' +
@@ -716,7 +730,6 @@ function initHoverParticles() {
                     dot.style.opacity = '0';
                 });
 
-                // Clean up particle after animation completes
                 setTimeout(() => dot.remove(), 550);
             }
         });
