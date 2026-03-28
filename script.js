@@ -368,19 +368,33 @@ function initSkillBars() {
 function initScrollReveal() {
     if (typeof IntersectionObserver === 'undefined') return;
 
+    const elements = document.querySelectorAll('.project-card, .exp-card, .lab-card, .ach-item, .lang-card');
+
+    // On mobile/small screens, skip the JS reveal entirely — AOS handles it
+    if (window.innerWidth < 768) return;
+
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
-            entry.target.style.animationPlayState = 'running';
+            entry.target.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
             entry.target.style.opacity = '1';
+            entry.target.style.transform = '';
             observer.unobserve(entry.target);
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08 });
 
-    document.querySelectorAll('.project-card, .exp-card, .lab-card, .ach-item, .lang-card').forEach(el => {
-        el.style.animationPlayState = 'paused';
+    elements.forEach(el => {
+        // Only hide if user hasn't requested reduced motion
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            el.style.opacity = '0';
+        }
         observer.observe(el);
     });
+
+    // Fallback: ensure all items become visible after 2s regardless
+    setTimeout(() => {
+        elements.forEach(el => { el.style.opacity = '1'; });
+    }, 2000);
 }
 
 // ════════════════════════════════════════
