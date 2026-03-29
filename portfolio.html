@@ -2,9 +2,15 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- iOS-safe viewport: no user-scalable=no (bad for a11y), but max-scale=5 prevents layout overflow -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="description" content="Sajid Mehmood — IT Support Engineer | CCNA Certified | Portfolio">
     <meta name="theme-color" content="#F8F9FA">
+    <!-- iOS Safari specific fixes -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Prevent iOS from auto-detecting phone numbers and styling them -->
+    <meta name="format-detection" content="telephone=no">
     <title>Sajid Mehmood | IT Support Engineer</title>
     <link rel="icon" href="logo.png" type="image/png">
 
@@ -12,6 +18,99 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ── PORTFOLIO-PAGE iOS FIXES (scoped to this file) ── */
+
+        /* Global iOS overflow lock */
+        html, body {
+            overflow-x: hidden;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* Prevent auto-zoom on ALL inputs/selects/textareas */
+        input, select, textarea, button {
+            font-size: 16px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        /* Remove iOS tap highlight on interactive elements */
+        a, button, .ftab, .mob-link, .contact-card, .exec-social-btn {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        /* Touch pressed feedback */
+        a:active, button:active, .ftab:active,
+        .mob-link:active, .contact-card:active,
+        .exec-social-btn:active {
+            opacity: 0.75;
+            transform: scale(0.97);
+            transition: opacity 0.08s ease, transform 0.08s ease;
+        }
+
+        /* Smooth drawer scroll on iOS */
+        .mobile-drawer {
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
+        }
+
+        /* Smooth scroll (CSS-level) */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* WhatsApp contact card */
+        .contact-card-whatsapp .cc-icon-wrap {
+            background: rgba(37, 211, 102, 0.12) !important;
+            color: #25D366 !important;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+        }
+        .contact-card-whatsapp:hover {
+            border-color: rgba(37, 211, 102, 0.5) !important;
+            box-shadow: 0 8px 28px rgba(37, 211, 102, 0.15) !important;
+        }
+        .contact-card-whatsapp:hover .cc-icon-wrap {
+            background: #25D366 !important;
+            color: #fff !important;
+        }
+
+        /* WhatsApp social button */
+        .exec-social-btn-whatsapp {
+            border-color: rgba(37, 211, 102, 0.3) !important;
+        }
+        .exec-social-btn-whatsapp i {
+            color: #25D366 !important;
+        }
+        .exec-social-btn-whatsapp:hover {
+            background: rgba(37, 211, 102, 0.08) !important;
+            border-color: rgba(37, 211, 102, 0.6) !important;
+            color: #25D366 !important;
+        }
+
+        /* Ensure contact cards don't overflow on small screens */
+        @media (max-width: 480px) {
+            .contact-cards {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .social-exec-row {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+            .exec-social-btn {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+            /* Safe area for iPhone notch / home indicator */
+            .footer {
+                padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -46,11 +145,11 @@
                 <span class="toggle-icon">🌙</span>
                 <span class="toggle-label">Dark</span>
             </button>
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
                 <span></span><span></span><span></span>
             </button>
         </div>
-        <div class="mobile-drawer" id="mobileDrawer">
+        <div class="mobile-drawer" id="mobileDrawer" role="navigation">
             <a href="#about"          class="mob-link">About</a>
             <a href="#education"      class="mob-link">Education</a>
             <a href="#experience"     class="mob-link">Experience</a>
@@ -441,6 +540,14 @@
                             <h4>Phone</h4>
                             <a href="tel:+97466969598">+974 6696 9598</a>
                         </div>
+                        <!-- WhatsApp contact card -->
+                        <div class="contact-card glass-card contact-card-whatsapp">
+                            <div class="cc-icon-wrap"><i class="fab fa-whatsapp"></i></div>
+                            <h4>WhatsApp</h4>
+                            <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer">
+                                Message directly
+                            </a>
+                        </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
                             <h4>Location</h4>
@@ -449,10 +556,17 @@
                     </div>
 
                     <div class="social-exec-row">
-                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
+                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                           target="_blank" rel="noopener noreferrer" class="exec-social-btn">
                             <i class="fab fa-linkedin-in"></i> Connect on LinkedIn
                         </a>
-                        <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer" class="exec-social-btn">
+                        <!-- WhatsApp social button -->
+                        <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer"
+                           class="exec-social-btn exec-social-btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                        </a>
+                        <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer"
+                           class="exec-social-btn">
                             <i class="fab fa-instagram"></i> Follow on Instagram
                         </a>
                     </div>

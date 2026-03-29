@@ -6,356 +6,7 @@
     <title>Sajid Mehmood | Portfolio</title>
     <link rel="icon" href="logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --offwhite:  #DDD8D0;
-            --paper:     #E8E3DB;
-            --graphite:  #2D3436;
-            --gold:      #C5A059;
-            --gold-lt:   #E8C97A;
-            --gold-dk:   #A07840;
-            --border:    #D4CEC5;
-            --shadow:    0 20px 60px rgba(45,52,54,.12);
-        }
-
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--offwhite);
-            color: var(--graphite);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        /* ── GRAIN OVERLAY ── */
-        body::before {
-            content: '';
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-            opacity: .6;
-        }
-
-        /* ── BACKGROUND DECORATION ── */
-        .bg-deco {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-        }
-        .bg-deco-circle {
-            position: absolute; border-radius: 50%;
-            background: radial-gradient(circle, rgba(197,160,89,.08), transparent 70%);
-        }
-        .bg-deco-circle.c1 { width: 600px; height: 600px; top: -200px; right: -150px; }
-        .bg-deco-circle.c2 { width: 400px; height: 400px; bottom: -100px; left: -100px; }
-        .bg-deco-line {
-            position: absolute; background: rgba(197,160,89,.06);
-        }
-        .bg-deco-line.l1 { width: 1px; height: 100vh; left: 12%; top: 0; }
-        .bg-deco-line.l2 { width: 1px; height: 100vh; right: 12%; top: 0; }
-        .bg-deco-line.l3 { width: 100vw; height: 1px; top: 20%; left: 0; }
-
-        /* ── MAIN CARD ── */
-        .gate-card {
-            position: relative; z-index: 10;
-            width: 100%; max-width: 460px;
-            margin: 20px;
-            background: var(--paper);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: var(--shadow), 0 0 0 1px rgba(197,160,89,.08);
-            overflow: hidden;
-            animation: cardIn .8s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(40px) scale(0.96); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* ── GOLD TOP STRIPE ── */
-        .card-stripe {
-            height: 4px;
-            background: linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt), var(--gold));
-            background-size: 200% 100%;
-            animation: stripeShimmer 3s ease infinite;
-        }
-        @keyframes stripeShimmer {
-            0%   { background-position: 0% 0%; }
-            50%  { background-position: 100% 0%; }
-            100% { background-position: 0% 0%; }
-        }
-
-        /* ── CARD BODY ── */
-        .card-body {
-            padding: 44px 44px 40px;
-        }
-
-        /* ── LOGO AREA ── */
-        .card-logo {
-            display: flex; align-items: center; gap: 14px;
-            margin-bottom: 36px;
-            animation: fadeInDown .6s ease both .2s;
-        }
-        .card-logo img {
-            width: 48px; height: 48px; object-fit: contain;
-            filter: drop-shadow(0 2px 8px rgba(197,160,89,.2));
-        }
-        .card-logo-text { display: flex; flex-direction: column; }
-        .card-logo-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 17px; font-weight: 700; color: var(--graphite);
-            line-height: 1.2;
-        }
-        .card-logo-sub {
-            font-family: 'DM Mono', monospace;
-            font-size: 9px; color: var(--gold);
-            letter-spacing: 1.5px; text-transform: uppercase;
-            margin-top: 2px;
-        }
-
-        /* ── DIVIDER ── */
-        .card-divider {
-            height: 1px;
-            background: linear-gradient(90deg, var(--gold), rgba(197,160,89,.1));
-            margin-bottom: 32px;
-            animation: lineGrow .8s ease both .3s;
-            transform-origin: left;
-        }
-        @keyframes lineGrow {
-            from { transform: scaleX(0); opacity: 0; }
-            to   { transform: scaleX(1); opacity: 1; }
-        }
-
-        /* ── WELCOME TEXT ── */
-        .card-welcome {
-            margin-bottom: 28px;
-            animation: fadeInUp .6s ease both .35s;
-        }
-        .card-eyebrow {
-            font-family: 'DM Mono', monospace;
-            font-size: 10px; color: var(--gold);
-            letter-spacing: 2.5px; text-transform: uppercase;
-            margin-bottom: 10px; display: block;
-        }
-        .card-headline {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px; font-weight: 900;
-            color: var(--graphite); line-height: 1.25;
-            margin-bottom: 10px;
-        }
-        .card-headline em {
-            font-style: italic; color: var(--gold);
-        }
-        .card-sub {
-            font-size: 13px; color: #718096; line-height: 1.7;
-        }
-
-        /* ── INPUT GROUP ── */
-        .input-group {
-            margin-bottom: 20px;
-            animation: fadeInUp .6s ease both .45s;
-        }
-        .input-label {
-            display: block;
-            font-size: 11px; font-weight: 700;
-            color: var(--graphite); letter-spacing: .8px;
-            text-transform: uppercase; margin-bottom: 10px;
-        }
-        .input-wrap {
-            position: relative;
-        }
-        .input-icon {
-            position: absolute; left: 16px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--gold); font-size: 14px;
-            pointer-events: none;
-            transition: color .3s;
-        }
-        .name-input {
-            width: 100%;
-            padding: 15px 16px 15px 44px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px; font-weight: 500;
-            color: var(--graphite);
-            background: var(--offwhite);
-            border: 1.5px solid var(--border);
-            border-radius: 8px;
-            outline: none;
-            transition: border-color .3s, box-shadow .3s, background .3s;
-            -webkit-appearance: none;
-        }
-        .name-input::placeholder { color: #A0AEC0; font-weight: 400; }
-        .name-input:focus {
-            border-color: var(--gold);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(197,160,89,.12);
-        }
-        .name-input:focus + .input-focus-bar { transform: scaleX(1); }
-
-        /* ── SUBMIT BUTTON ── */
-        .submit-btn {
-            width: 100%;
-            padding: 16px 24px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 13px; font-weight: 700;
-            letter-spacing: 1px; text-transform: uppercase;
-            color: var(--graphite);
-            background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-            border: none; border-radius: 8px;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 4px 20px rgba(197,160,89,.3);
-            transition: all .3s ease;
-            position: relative; overflow: hidden;
-            animation: fadeInUp .6s ease both .55s;
-        }
-        .submit-btn::before {
-            content: '';
-            position: absolute; top: 0; left: -100%;
-            width: 60%; height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,.3), transparent);
-            transform: skewX(-20deg);
-            transition: left .5s ease;
-        }
-        .submit-btn:hover::before { left: 160%; }
-        .submit-btn:hover {
-            background: linear-gradient(135deg, var(--gold-dk), var(--gold));
-            box-shadow: 0 8px 28px rgba(197,160,89,.4);
-            transform: translateY(-2px);
-        }
-        .submit-btn:active { transform: translateY(0); }
-        .submit-btn .btn-arrow {
-            font-size: 16px;
-            transition: transform .3s;
-        }
-        .submit-btn:hover .btn-arrow { transform: translateX(4px); }
-
-        /* ── LOADING STATE ── */
-        .submit-btn.loading {
-            pointer-events: none;
-            opacity: .85;
-        }
-        .spinner {
-            width: 16px; height: 16px;
-            border: 2px solid rgba(45,52,54,.2);
-            border-top-color: var(--graphite);
-            border-radius: 50%;
-            animation: spin .7s linear infinite;
-            display: none;
-        }
-        .submit-btn.loading .spinner { display: block; }
-        .submit-btn.loading .btn-text,
-        .submit-btn.loading .btn-arrow { display: none; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── ERROR MESSAGE ── */
-        .error-msg {
-            font-size: 12px; color: #e74c3c; font-weight: 600;
-            margin-top: 10px; display: none;
-            animation: shake .4s ease;
-        }
-        .error-msg.show { display: block; }
-        @keyframes shake {
-            0%,100%{ transform: translateX(0); }
-            25%    { transform: translateX(-6px); }
-            75%    { transform: translateX(6px); }
-        }
-
-        /* ── SKIP LINK ── */
-        .skip-link {
-            display: block; text-align: center; margin-top: 18px;
-            font-size: 11px; color: #A0AEC0; font-weight: 500;
-            cursor: pointer; transition: color .3s;
-            text-decoration: underline; text-underline-offset: 3px;
-            animation: fadeInUp .6s ease both .65s;
-        }
-        .skip-link:hover { color: var(--gold); }
-
-        /* ── FOOTER STRIP ── */
-        .card-footer {
-            padding: 14px 44px;
-            background: var(--offwhite);
-            border-top: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-            animation: fadeInUp .6s ease both .7s;
-        }
-        .card-footer-left {
-            font-family: 'DM Mono', monospace;
-            font-size: 9px; color: #A0AEC0; letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .avail-dot {
-            display: inline-block;
-            width: 6px; height: 6px; border-radius: 50%;
-            background: #27AE60; margin-right: 6px;
-            animation: pulse 2s ease-in-out infinite;
-            vertical-align: middle;
-        }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-        .card-footer-right {
-            font-family: 'DM Mono', monospace;
-            font-size: 9px; color: var(--gold); letter-spacing: 1px;
-        }
-
-        /* ── SUCCESS OVERLAY ── */
-        .success-overlay {
-            position: fixed; inset: 0; z-index: 100;
-            background: var(--paper);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity .4s ease;
-        }
-        .success-overlay.show {
-            opacity: 1; pointer-events: auto;
-        }
-        .success-icon {
-            width: 72px; height: 72px; border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; margin-bottom: 20px;
-            box-shadow: 0 8px 28px rgba(197,160,89,.35);
-            animation: bounceIn .6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-        }
-        @keyframes bounceIn {
-            0%  { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.1); opacity: 1; }
-            100%{ transform: scale(1); }
-        }
-        .success-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px; font-weight: 900;
-            color: var(--graphite); margin-bottom: 8px;
-        }
-        .success-sub {
-            font-size: 13px; color: #718096;
-            font-family: 'DM Mono', monospace; letter-spacing: 1px;
-        }
-
-        /* ── ANIMATIONS ── */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 500px) {
-            .card-body { padding: 32px 28px 28px; }
-            .card-footer { padding: 14px 28px; }
-            .card-headline { font-size: 24px; }
-        }
-    </style>
+    <link rel="stylesheet" href="gate-standalone.css">
 </head>
 <body>
 
@@ -378,7 +29,7 @@
                 <img src="logo.png" alt="SM Logo">
                 <div class="card-logo-text">
                     <span class="card-logo-name">Sajid Mehmood</span>
-                    <span class="card-logo-sub">IT Support Engineer</span>
+                    <span class="card-logo-sub">IT Systems Engineer</span>
                 </div>
             </div>
 
@@ -393,30 +44,30 @@
 
             <!-- Input -->
             <div class="input-group">
-                <label class="input-label" for="visitorName">Your Name</label>
+                <label class="input-label" for="gVisitorName">Your Name</label>
                 <div class="input-wrap">
                     <span class="input-icon">👤</span>
                     <input
                         type="text"
-                        id="visitorName"
+                        id="gVisitorName"
                         class="name-input"
                         placeholder="e.g. Ahmed, Sarah, HR Team..."
                         autocomplete="off"
                         maxlength="40"
                     >
                 </div>
-                <p class="error-msg" id="errorMsg">⚠ Please enter your name to continue.</p>
+                <p class="error-msg" id="gErrorMsg">⚠ Please enter your name to continue.</p>
             </div>
 
             <!-- Submit -->
-            <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+            <button class="submit-btn" id="gSubmitBtn" onclick="gateSubmit()">
                 <span class="btn-text">View Portfolio</span>
                 <span class="btn-arrow">→</span>
                 <div class="spinner"></div>
             </button>
 
             <!-- Skip -->
-            <span class="skip-link" onclick="skipGate()">Skip — view anonymously</span>
+            <span class="skip-link" onclick="gateSkip()">Skip — view anonymously</span>
 
             <!-- Hidden test button: visit gate.html?test=1 to reveal it -->
             <div id="testBtnWrap" style="display:none;margin-top:14px;text-align:center;">
@@ -435,185 +86,15 @@
             </span>
             <span class="card-footer-right">CCNA · Doha, Qatar</span>
         </div>
+
+        <!-- Success state (inside card) -->
+        <div class="success-state" id="gSuccess">
+            <div class="success-icon">✨</div>
+            <div class="success-name" id="gSuccessName">Welcome!</div>
+            <div class="success-sub">Wait its Loading ...</div>
+        </div>
     </div>
 
-    <!-- Success overlay (briefly shown before redirect) -->
-    <div class="success-overlay" id="successOverlay">
-        <div class="success-icon">✨</div>
-        <div class="success-name" id="successName">Welcome!</div>
-        <div class="success-sub">Loading portfolio...</div>
-    </div>
-
-    <script>
-    const TG_TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
-    const TG_CHAT_ID = '8235795754';
-
-    // ── Show test button if ?test=1 in URL ──
-    if (new URLSearchParams(window.location.search).get('test') === '1') {
-        document.getElementById('testBtnWrap').style.display = 'block';
-    }
-
-    // ── Test button: fires a direct message, shows result on screen ──
-    function testTelegram() {
-        const result = document.getElementById('testResult');
-        result.textContent = '⏳ Sending test message...';
-        result.style.color = '#718096';
-        fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id:    TG_CHAT_ID,
-                text:       '✅ *Test from portfolio gate — bot is working!*',
-                parse_mode: 'Markdown'
-            })
-        })
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-            if (d.ok) {
-                result.textContent = '✅ Sent! Check your Telegram.';
-                result.style.color = '#27ae60';
-            } else {
-                result.textContent = '❌ Error: ' + d.description;
-                result.style.color = '#e74c3c';
-            }
-        })
-        .catch(function(){ result.textContent = '❌ Network error.'; result.style.color = '#e74c3c'; });
-    }
-
-    // ── Enter key submits ──
-    document.getElementById('visitorName').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') handleSubmit();
-    });
-
-    // ── Auto-focus ──
-    window.addEventListener('load', function() {
-        setTimeout(function() { document.getElementById('visitorName').focus(); }, 600);
-    });
-
-    // ── Main submit handler ──
-    function handleSubmit() {
-        var input   = document.getElementById('visitorName');
-        var name    = input.value.trim();
-        var errorEl = document.getElementById('errorMsg');
-        var btn     = document.getElementById('submitBtn');
-
-        if (!name) {
-            errorEl.classList.add('show');
-            input.focus();
-            input.style.borderColor = '#e74c3c';
-            setTimeout(function() {
-                input.style.borderColor = '';
-                errorEl.classList.remove('show');
-            }, 2500);
-            return;
-        }
-
-        errorEl.classList.remove('show');
-
-        // Show welcome overlay immediately
-        document.getElementById('successName').textContent = 'Welcome, ' + name + '!';
-        document.getElementById('successOverlay').classList.add('show');
-        btn.classList.add('loading');
-
-        // Redirect function — only fires once, max wait 5 seconds
-        var didRedirect = false;
-        function doRedirect() {
-            if (!didRedirect) {
-                didRedirect = true;
-                window.location.href = 'index.html?ref=' + encodeURIComponent(name);
-            }
-        }
-        setTimeout(doRedirect, 5000);
-
-        // Send Telegram notification, then redirect when done
-        sendTelegramNotification(name, doRedirect);
-    }
-
-    function skipGate() {
-        window.location.href = 'index.html';
-    }
-
-    // ── Telegram notification with full visitor info ──
-    function sendTelegramNotification(name, callback) {
-        var ua = navigator.userAgent;
-
-        var deviceType = '💻 Desktop';
-        if      (/iPhone/i.test(ua))               deviceType = '📱 iPhone';
-        else if (/iPad/i.test(ua))                 deviceType = '📱 iPad';
-        else if (/Android.*Mobile/i.test(ua))      deviceType = '📱 Android Phone';
-        else if (/Android/i.test(ua))              deviceType = '📱 Android Tablet';
-
-        var os = 'Unknown OS';
-        if      (/Windows NT 10/i.test(ua))        os = 'Windows 10/11';
-        else if (/Windows NT 6/i.test(ua))         os = 'Windows (older)';
-        else if (/Mac OS X/i.test(ua))             os = 'macOS';
-        else if (/iPhone OS ([\d_]+)/i.test(ua))   os = 'iOS '     + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g,'.');
-        else if (/Android ([\d.]+)/i.test(ua))     os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
-        else if (/Linux/i.test(ua))                os = 'Linux';
-
-        var browser = 'Unknown';
-        if      (/Edg\//i.test(ua))    browser = 'Microsoft Edge';
-        else if (/OPR\//i.test(ua))    browser = 'Opera';
-        else if (/Chrome\//i.test(ua)) browser = 'Chrome';
-        else if (/Firefox\//i.test(ua))browser = 'Firefox';
-        else if (/Safari\//i.test(ua)) browser = 'Safari';
-
-        var screen_res = window.screen.width + 'x' + window.screen.height;
-        var lang       = navigator.language || 'Unknown';
-        var referrer   = document.referrer  || 'Direct / Bookmark';
-        var time       = new Date().toLocaleString('en-US', {
-            timeZone: 'Asia/Qatar', weekday: 'short',
-            year: 'numeric', month: 'short', day: 'numeric',
-            hour: '2-digit', minute: '2-digit'
-        });
-
-        function sendMsg(ip, city, country, isp) {
-            var msg =
-                '🎯 *' + name + ' is viewing your Portfolio!*\n' +
-                '━━━━━━━━━━━━━━━━━━━━\n' +
-                '👤 *Visitor:* ' + name + '\n' +
-                '🔗 *Referrer:* ' + referrer + '\n' +
-                '━━━━━━━━━━━━━━━━━━━━\n' +
-                '📍 *IP:* `' + ip + '`\n' +
-                '🌍 *Location:* ' + city + ', ' + country + '\n' +
-                '🏢 *ISP:* ' + isp + '\n' +
-                '━━━━━━━━━━━━━━━━━━━━\n' +
-                '🖥️ *Device:* ' + deviceType + '\n' +
-                '⚙️ *OS:* ' + os + '\n' +
-                '🌐 *Browser:* ' + browser + '\n' +
-                '📐 *Screen:* ' + screen_res + '\n' +
-                '🗣️ *Language:* ' + lang + '\n' +
-                '━━━━━━━━━━━━━━━━━━━━\n' +
-                '🕐 *Time (Qatar):* ' + time + '\n' +
-                '━━━━━━━━━━━━━━━━━━━━';
-
-            fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'Markdown' })
-            })
-            .then(function(r){ return r.json(); })
-            .then(function(d){ if (!d.ok) console.error('Telegram error:', d.description); })
-            .catch(function(e){ console.error('Telegram fetch error:', e); })
-            .finally(function(){ callback(); });
-        }
-
-        // Step 1: get IP
-        fetch('https://api.ipify.org?format=json')
-            .then(function(r){ return r.json(); })
-            .then(function(d){
-                var ip = d.ip || 'Unknown';
-                // Step 2: get geo
-                fetch('https://ipapi.co/' + ip + '/json/')
-                    .then(function(r){ return r.json(); })
-                    .then(function(g){
-                        sendMsg(ip, g.city || 'Unknown', g.country_name || 'Unknown', g.org || 'Unknown ISP');
-                    })
-                    .catch(function(){ sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP'); });
-            })
-            .catch(function(){ sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP'); });
-    }
-    </script>
-
+    <script src="gate.js"></script>
 </body>
 </html>

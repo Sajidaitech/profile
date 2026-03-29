@@ -1,6 +1,6 @@
 // ============================================================
 // SAJID MEHMOOD · IT SYSTEMS ENGINEER PORTFOLIO
-// script.js — Clean rewrite
+// script.js — Enhanced with iOS/Mobile fixes & touch states
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initRings();
     initFolderTabs();
     initTestimonialsSlider();
+    initTouchPressStates();   // iOS "pressed" feedback
+    initSectionFadeIn();       // Smooth section reveal
     loadProjects();
     loadExperience();
     loadArsenal();
@@ -36,7 +38,6 @@ function initNav() {
     const drawer    = document.getElementById('mobileDrawer');
     const navLinks  = document.querySelectorAll('.nav-link');
 
-    // Scrolled state + active link highlight
     window.addEventListener('scroll', () => {
         if (!nav) return;
         nav.classList.toggle('scrolled', window.scrollY > 60);
@@ -52,31 +53,30 @@ function initNav() {
         });
     }, { passive: true });
 
-    // Open / close drawer helpers
     function openDrawer() {
         hamburger.classList.add('open');
         drawer.classList.add('open');
         hamburger.setAttribute('aria-expanded', 'true');
+        // Prevent body scroll on iOS while drawer is open
+        document.body.style.overflow = 'hidden';
     }
 
     function closeDrawer() {
         hamburger.classList.remove('open');
         drawer.classList.remove('open');
         hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
     }
 
-    // Hamburger toggle
     hamburger?.addEventListener('click', (e) => {
         e.stopPropagation();
         drawer.classList.contains('open') ? closeDrawer() : openDrawer();
     });
 
-    // Close when a mobile link is clicked
     document.querySelectorAll('.mob-link').forEach(link => {
         link.addEventListener('click', () => closeDrawer());
     });
 
-    // Close on outside click
     document.addEventListener('click', (e) => {
         if (
             drawer?.classList.contains('open') &&
@@ -87,12 +87,11 @@ function initNav() {
         }
     });
 
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeDrawer();
     });
 
-    // Smooth scroll with correct nav offset
+    // Smooth scroll with iOS-safe offset
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
@@ -101,10 +100,8 @@ function initNav() {
             if (!target) return;
             e.preventDefault();
             const navH = nav ? nav.offsetHeight : 68;
-            window.scrollTo({
-                top: target.offsetTop - navH - 16,
-                behavior: 'smooth'
-            });
+            const y = target.getBoundingClientRect().top + window.pageYOffset - navH - 16;
+            window.scrollTo({ top: y, behavior: 'smooth' });
         });
     });
 }
@@ -144,7 +141,7 @@ function initDarkMode() {
 }
 
 // ════════════════════════════════════════
-// CUSTOM CURSOR
+// CUSTOM CURSOR (desktop only)
 // ════════════════════════════════════════
 function initCursor() {
     const dot  = document.getElementById('cursorDot');
@@ -161,7 +158,6 @@ function initCursor() {
         dot.style.top  = mouseY + 'px';
     });
 
-    // Smooth ring follow via rAF
     (function animateRing() {
         ringX += (mouseX - ringX) * 0.15;
         ringY += (mouseY - ringY) * 0.15;
@@ -170,7 +166,7 @@ function initCursor() {
         requestAnimationFrame(animateRing);
     })();
 
-    document.querySelectorAll('a, button, .project-card, .exp-card, .lab-card, .arsenal-category').forEach(el => {
+    document.querySelectorAll('a, button, .project-card, .exp-card, .arsenal-category').forEach(el => {
         el.addEventListener('mouseenter', () => {
             ring.style.width   = '48px';
             ring.style.height  = '48px';
@@ -182,6 +178,68 @@ function initCursor() {
             ring.style.opacity = '0.6';
         });
     });
+}
+
+// ════════════════════════════════════════
+// TOUCH PRESSED STATES (iOS feedback)
+// Adds a .pressed class on touchstart, removes on touchend/cancel
+// ════════════════════════════════════════
+function initTouchPressStates() {
+    const selectors = [
+        '.btn', '.fab-option', '.fab-main', '.mob-link',
+        '.contact-item', '.social-btn', '.exp-btn', '.nav-resume-btn',
+        '.slider-btn', '.slider-dot', '.ftab', '.pc-link',
+        '.contact-item-whatsapp', '.social-btn-whatsapp'
+    ];
+
+    const interactives = document.querySelectorAll(selectors.join(', '));
+
+    interactives.forEach(el => {
+        el.addEventListener('touchstart', () => {
+            el.classList.add('pressed');
+        }, { passive: true });
+
+        el.addEventListener('touchend', () => {
+            setTimeout(() => el.classList.remove('pressed'), 150);
+        }, { passive: true });
+
+        el.addEventListener('touchcancel', () => {
+            el.classList.remove('pressed');
+        }, { passive: true });
+    });
+}
+
+// ════════════════════════════════════════
+// SECTION SMOOTH FADE-IN ON SCROLL
+// ════════════════════════════════════════
+function initSectionFadeIn() {
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const sections = document.querySelectorAll('.section');
+
+    // Set initial state only for sections not yet visible
+    sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        // Don't hide sections already in viewport on load
+        if (rect.top > window.innerHeight) {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(24px)';
+            section.style.transition = 'opacity 0.65s ease, transform 0.65s cubic-bezier(0.4,0,0.2,1)';
+        }
+    });
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+    sections.forEach(section => observer.observe(section));
 }
 
 // ════════════════════════════════════════
@@ -209,7 +267,7 @@ function initFAB() {
         if (!container.contains(e.target)) closeFAB();
     });
 
-    // Fade in/out based on scroll position
+    // Scroll show/hide with iOS-safe passive listener
     Object.assign(container.style, {
         opacity: '0',
         pointerEvents: 'none',
@@ -328,16 +386,25 @@ function initTestimonialsSlider() {
         });
     });
 
-    // Touch / swipe support
+    // Touch / swipe support (passive for iOS performance)
     let touchStartX = 0;
+    let touchStartY = 0;
     const slider = document.getElementById('testimonialsSlider');
+
     slider?.addEventListener('touchstart', e => {
         touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
     }, { passive: true });
+
     slider?.addEventListener('touchend', e => {
-        const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) { goTo(diff > 0 ? current + 1 : current - 1); resetAuto(); }
-    });
+        const dx = touchStartX - e.changedTouches[0].clientX;
+        const dy = Math.abs(touchStartY - e.changedTouches[0].clientY);
+        // Only trigger if horizontal swipe (not vertical scroll)
+        if (Math.abs(dx) > 50 && dy < 40) {
+            goTo(dx > 0 ? current + 1 : current - 1);
+            resetAuto();
+        }
+    }, { passive: true });
 
     startAuto();
 }
@@ -368,10 +435,10 @@ function initSkillBars() {
 function initScrollReveal() {
     if (typeof IntersectionObserver === 'undefined') return;
 
-    const elements = document.querySelectorAll('.project-card, .exp-card, .lab-card, .ach-item, .lang-card');
+    const elements = document.querySelectorAll('.project-card, .exp-card, .ach-item, .lang-card');
 
-    // On mobile/small screens, skip the JS reveal entirely — AOS handles it
     if (window.innerWidth < 768) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
@@ -384,14 +451,10 @@ function initScrollReveal() {
     }, { threshold: 0.08 });
 
     elements.forEach(el => {
-        // Only hide if user hasn't requested reduced motion
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            el.style.opacity = '0';
-        }
+        el.style.opacity = '0';
         observer.observe(el);
     });
 
-    // Fallback: ensure all items become visible after 2s regardless
     setTimeout(() => {
         elements.forEach(el => { el.style.opacity = '1'; });
     }, 2000);
@@ -539,9 +602,9 @@ const experienceData = [
         responsibilities: [
             '<b>Executive-Level Support:</b> Dedicated technical support for CEOs, Executives, and Directors at PIH Head Office — zero downtime for mission-critical operations.',
             '<b>HIA Expansion Lead:</b> Led IT operations for two phases of the Hamad International Airport Expansion. Managed full infrastructure readiness across all airport nodes.',
-            '<b>POS Deployment — Aura Group:</b> Configured and deployed POS systems for multiple Aura Group venues across Al Maha Island, integrating with payment gateways and operational systems.',
+            '<b>POS Deployment — Aura Group:</b> Configured and deployed POS systems for multiple Aura Group venues across Al Maha Island.',
             '<b>UCC Saudi Arabia:</b> Provisioned and deployed 25 workstations and peripheral systems against strict handover deadlines.',
-            '<b>Cross-Subsidiary Coverage:</b> Delivered onsite IT for Elegancia Health Care, UCC Holding, and ASSETS Group — frequent site visits, complex hardware and network resolution.',
+            '<b>Cross-Subsidiary Coverage:</b> Delivered onsite IT for Elegancia Health Care, UCC Holding, and ASSETS Group.',
             '<b>Asset Optimisation:</b> Implemented tracking protocols that reduced equipment loss by 10% across group companies.',
             '<b>Vendor & Telecom Coordination:</b> Managed VoIP and connectivity resolution with external vendors across diverse project sites.'
         ],
@@ -558,7 +621,7 @@ const experienceData = [
         responsibilities: [
             '<b>Technical Inbound Support:</b> High-volume inbound and outbound call handling, resolving service and product issues in a fast-paced telecoms environment.',
             '<b>First-Call Resolution:</b> Identified customer needs and delivered targeted solutions, achieving first-call resolution rates consistently above target.',
-            '<b>Technical Assistance:</b> Supported customers with network and technical issues across Ooredoo product lines, escalating complex cases appropriately.',
+            '<b>Technical Assistance:</b> Supported customers with network and technical issues across Ooredoo product lines.',
             '<b>CRM Record Keeping:</b> Maintained accurate call records within internal database systems for reporting and follow-up accuracy.',
             '<b>Continuous Development:</b> Attended regular structured training to improve product knowledge, communication, and performance metrics.'
         ],
@@ -811,5 +874,5 @@ function printSignature() {
         '%c⚜  SAJID MEHMOOD · IT SYSTEMS ENGINEER',
         'font-size:14px;font-weight:bold;color:#C5A059;background:#0D1017;padding:10px 22px;border-radius:4px;border-left:3px solid #C5A059;'
     );
-    console.log('%cCCNA Certified · Enterprise Infrastructure', 'font-size:11px;color:#4A5470;');
+    console.log('%cCCNA Certified · Enterprise Infrastructure · WhatsApp: wa.me/97466969598', 'font-size:11px;color:#4A5470;');
 }
