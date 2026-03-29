@@ -947,7 +947,7 @@ function showProjectSkeleton() {
         <div class="projects-skeleton" id="projectsSkeleton">
             ${[1,2,3].map(() => `
                 <div class="skeleton skeleton-card">
-                    <div style="padding:24px">
+                    <div style="padding:0px">
                         <div class="skeleton skeleton-line short" style="margin-bottom:16px;height:18px;"></div>
                         <div class="skeleton skeleton-line full"></div>
                         <div class="skeleton skeleton-line medium"></div>

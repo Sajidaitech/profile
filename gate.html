@@ -5,96 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sajid Mehmood | Portfolio</title>
     <link rel="icon" href="logo.png" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="gate-standalone.css">
+    <link rel="stylesheet" href="gate.css">
 </head>
-<body>
+<body class="gate-active">
+
+<!-- Gate Overlay -->
+<div id="gateOverlay">
 
     <!-- Background decoration -->
-    <div class="bg-deco">
-        <div class="bg-deco-circle c1"></div>
-        <div class="bg-deco-circle c2"></div>
-        <div class="bg-deco-line l1"></div>
-        <div class="bg-deco-line l2"></div>
-        <div class="bg-deco-line l3"></div>
+    <div class="g-deco">
+        <span></span>
+        <span></span>
     </div>
+    <div class="g-line v1"></div>
+    <div class="g-line v2"></div>
+    <div class="g-line h1"></div>
+    <div class="g-line h2"></div>
+
+    <!-- Corner markers -->
+    <div class="g-corner tl"></div>
+    <div class="g-corner tr"></div>
+    <div class="g-corner bl"></div>
+    <div class="g-corner br"></div>
 
     <!-- Gate Card -->
-    <div class="gate-card">
-        <div class="card-stripe"></div>
-        <div class="card-body">
+    <div class="g-card">
+        <div class="g-stripe"></div>
+        <div class="g-body">
 
             <!-- Logo -->
-            <div class="card-logo">
+            <div class="g-logo">
                 <img src="logo.png" alt="SM Logo">
-                <div class="card-logo-text">
-                    <span class="card-logo-name">Sajid Mehmood</span>
-                    <span class="card-logo-sub">IT Systems Engineer</span>
+                <div>
+                    <span class="g-logo-name">Sajid Mehmood</span>
+                    <span class="g-logo-sub">IT Systems Engineer</span>
                 </div>
             </div>
 
-            <div class="card-divider"></div>
+            <div class="g-divider"></div>
 
             <!-- Welcome Text -->
-            <div class="card-welcome">
-                <span class="card-eyebrow">Welcome</span>
-                <h1 class="card-headline">Who's <em>visiting</em><br>today?</h1>
-                <p class="card-sub">Enter your name to view the portfolio. Takes 2 seconds!</p>
+            <div class="g-welcome">
+                <span class="g-eyebrow">Welcome</span>
+                <h1 class="g-headline">Who's <em>visiting</em><br>today?</h1>
+                <p class="g-sub">Enter your name to view the portfolio. Takes 2 seconds!</p>
             </div>
 
             <!-- Input -->
-            <div class="input-group">
-                <label class="input-label" for="gVisitorName">Your Name</label>
-                <div class="input-wrap">
-                    <span class="input-icon">👤</span>
+            <div class="g-input-group">
+                <label class="g-label" for="gVisitorName">Your Name</label>
+                <div class="g-input-wrap">
+                    <span class="g-icon">👤</span>
                     <input
                         type="text"
                         id="gVisitorName"
-                        class="name-input"
+                        class="g-input"
                         placeholder="e.g. Ahmed, Sarah, HR Team..."
                         autocomplete="off"
                         maxlength="40"
                     >
                 </div>
-                <p class="error-msg" id="gErrorMsg">⚠ Please enter your name to continue.</p>
+                <p class="g-error" id="gErrorMsg">⚠ Please enter your name to continue.</p>
             </div>
 
             <!-- Submit -->
-            <button class="submit-btn" id="gSubmitBtn" onclick="gateSubmit()">
-                <span class="btn-text">View Portfolio</span>
-                <span class="btn-arrow">→</span>
-                <div class="spinner"></div>
+            <button class="g-btn" id="gSubmitBtn" onclick="gateSubmit()">
+                <span class="g-btn-text">View Portfolio</span>
+                <span class="g-arrow">→</span>
+                <div class="g-spinner"></div>
             </button>
 
             <!-- Skip -->
-            <span class="skip-link" onclick="gateSkip()">Skip — view anonymously</span>
+            <p style="text-align:center; margin-top:16px;">
+                <span
+                    onclick="gateSkip()"
+                    style="font-family:'Space Mono',monospace; font-size:9px; color:#3A3A42; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; transition:color .2s;"
+                    onmouseover="this.style.color='#7C6EF5'"
+                    onmouseout="this.style.color='#3A3A42'"
+                >Skip — view anonymously</span>
+            </p>
 
-            <!-- Hidden test button: visit gate.html?test=1 to reveal it -->
+            <!-- Hidden test button -->
             <div id="testBtnWrap" style="display:none;margin-top:14px;text-align:center;">
-                <button onclick="testTelegram()" style="background:none;border:1px dashed #C5A059;color:#C5A059;padding:8px 18px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;">
+                <button onclick="testTelegram()" style="background:none;border:1px dashed #7C6EF5;color:#7C6EF5;padding:8px 18px;border-radius:3px;font-size:10px;cursor:pointer;font-family:'Space Mono',monospace;letter-spacing:1px;">
                     🔔 Test Telegram Bot
                 </button>
-                <p id="testResult" style="font-size:11px;margin-top:8px;color:#718096;"></p>
+                <p id="testResult" style="font-size:10px;margin-top:8px;color:#6B6B78;font-family:'Space Mono',monospace;"></p>
             </div>
 
         </div>
 
         <!-- Footer -->
-        <div class="card-footer">
-            <span class="card-footer-left">
-                <span class="avail-dot"></span>Open to Opportunities
+        <div class="g-footer">
+            <span class="g-footer-left">
+                <span class="g-avail-dot"></span>Open to Opportunities
             </span>
-            <span class="card-footer-right">CCNA · Doha, Qatar</span>
+            <span class="g-footer-right">CCNA · Doha, Qatar</span>
         </div>
 
-        <!-- Success state (inside card) -->
-        <div class="success-state" id="gSuccess">
-            <div class="success-icon">✨</div>
-            <div class="success-name" id="gSuccessName">Welcome!</div>
-            <div class="success-sub">Wait its Loading ...</div>
+        <!-- Success state -->
+        <div class="g-success" id="gSuccess">
+            <div class="g-success-icon">✦</div>
+            <div class="g-success-name" id="gSuccessName">Welcome!</div>
+            <div class="g-success-sub">Loading portfolio…</div>
         </div>
     </div>
 
-    <script src="gate.js"></script>
+</div>
+
+<script src="gate.js"></script>
 </body>
 </html>
