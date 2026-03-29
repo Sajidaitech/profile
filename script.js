@@ -876,3 +876,184 @@ function printSignature() {
     );
     console.log('%cCCNA Certified · Enterprise Infrastructure · WhatsApp: wa.me/97466969598', 'font-size:11px;color:#4A5470;');
 }
+// ============================================================
+// ENHANCED INTERACTIONS — PHASE 2
+// Staggered Fade-In · Glassmorphism Nav · Magnetic Buttons
+// Active Link Underline · Skeleton Loading · Soft Parallax
+// ============================================================
+
+// ── Staggered Fade-In via IntersectionObserver ──
+function initStaggerFadeIn() {
+    // Mark project cards, cert cards, arsenal items, lang items as stagger children
+    const staggerSelectors = [
+        { parent: '#projectsGrid',   child: '.proj-card' },
+        { parent: '#certsGrid',      child: '.cert-card' },
+        { parent: '#arsenalBento',   child: '.bento-item' },
+        { parent: '#langGrid',       child: '.lang-item' },
+        { parent: '.about-stats-row',child: '.about-stat' },
+        { parent: '.panel-achievements', child: '.ach-item' },
+    ];
+
+    staggerSelectors.forEach(({ parent, child }) => {
+        const parentEl = document.querySelector(parent);
+        if (!parentEl) return;
+        parentEl.classList.add('stagger-parent');
+        parentEl.querySelectorAll(child).forEach(el => el.classList.add('stagger-child'));
+    });
+
+    // Single observer for all stagger children
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('stagger-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.stagger-child, .bento-item, .cert-card, .ach-item, .lang-item').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// ── Magnetic Button Effect ──
+function initMagneticButtons() {
+    // Only on desktop (pointer: fine)
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+
+    document.querySelectorAll('.btn-gold, .btn-ghost, .nav-resume-btn').forEach(btn => {
+        btn.classList.add('btn-magnetic');
+
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dx = (e.clientX - cx) * 0.28;
+            const dy = (e.clientY - cy) * 0.28;
+            btn.style.transform = `translate(${dx}px, ${dy}px) scale(1.04)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = '';
+        });
+    });
+}
+
+// ── Skeleton Loading for Projects Grid ──
+function showProjectSkeleton() {
+    const grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+    const skeletonHTML = `
+        <div class="projects-skeleton" id="projectsSkeleton">
+            ${[1,2,3].map(() => `
+                <div class="skeleton skeleton-card">
+                    <div style="padding:24px">
+                        <div class="skeleton skeleton-line short" style="margin-bottom:16px;height:18px;"></div>
+                        <div class="skeleton skeleton-line full"></div>
+                        <div class="skeleton skeleton-line medium"></div>
+                        <div class="skeleton skeleton-line short" style="margin-top:20px;height:12px;width:40%;"></div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>`;
+    grid.insertAdjacentHTML('beforebegin', skeletonHTML);
+}
+
+function hideProjectSkeleton() {
+    const skel = document.getElementById('projectsSkeleton');
+    if (skel) {
+        skel.style.transition = 'opacity 0.3s ease';
+        skel.style.opacity = '0';
+        setTimeout(() => skel.remove(), 300);
+    }
+}
+
+// ── Soft Parallax ──
+function initSoftParallax() {
+    // Assign parallax classes to ambient orbs and hero grid
+    const slowEls  = document.querySelectorAll('.orb-1, .hero-grid-bg');
+    const midEls   = document.querySelectorAll('.orb-2');
+    const fastEls  = document.querySelectorAll('.orb-3');
+
+    slowEls.forEach(el => el.classList.add('parallax-slow'));
+    midEls.forEach(el  => el.classList.add('parallax-mid'));
+    fastEls.forEach(el => el.classList.add('parallax-fast'));
+
+    // Respect prefers-reduced-motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Disable on touch/mobile
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const sy = window.scrollY;
+                document.querySelectorAll('.parallax-slow').forEach(el => {
+                    el.style.setProperty('--py-slow', `${sy * 0.04}px`);
+                });
+                document.querySelectorAll('.parallax-mid').forEach(el => {
+                    el.style.setProperty('--py-mid', `${sy * 0.07}px`);
+                });
+                document.querySelectorAll('.parallax-fast').forEach(el => {
+                    el.style.setProperty('--py-fast', `${sy * 0.11}px`);
+                });
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+}
+
+// ── Glassmorphism Nav (already handled by .scrolled class in initNav;
+//    here we just ensure the transition is smooth and the active link
+//    underline updates instantly on load) ──
+function initGlassNav() {
+    // Trigger active state check immediately
+    const navLinks = document.querySelectorAll('.nav-link');
+    let current = '';
+    document.querySelectorAll('section[id]').forEach(section => {
+        if (window.scrollY >= section.offsetTop - 120) current = section.id;
+    });
+    navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+}
+
+// ── Hook into existing loadProjects / loadCertifications to run stagger after render ──
+// We wrap with a MutationObserver on the grids so stagger kicks in after JS populates them
+function initDynamicStaggerObserver() {
+    const targets = [
+        document.getElementById('projectsGrid'),
+        document.getElementById('certsGrid'),
+        document.getElementById('arsenalBento'),
+        document.getElementById('langGrid'),
+    ].filter(Boolean);
+
+    const mo = new MutationObserver(() => {
+        // Re-run stagger on newly added children
+        initStaggerFadeIn();
+        // Hide skeleton once projectsGrid has real content
+        const grid = document.getElementById('projectsGrid');
+        if (grid && grid.children.length > 0) {
+            hideProjectSkeleton();
+        }
+    });
+
+    targets.forEach(t => mo.observe(t, { childList: true }));
+}
+
+// ── Boot all Phase-2 enhancements ──
+document.addEventListener('DOMContentLoaded', () => {
+    // Show skeleton immediately before projects load
+    showProjectSkeleton();
+
+    // Small delay so base DOMContentLoaded (existing) runs first
+    setTimeout(() => {
+        initStaggerFadeIn();
+        initMagneticButtons();
+        initSoftParallax();
+        initGlassNav();
+        initDynamicStaggerObserver();
+    }, 50);
+});

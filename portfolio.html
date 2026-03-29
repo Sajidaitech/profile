@@ -2,48 +2,36 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <!-- iOS-safe viewport: no user-scalable=no (bad for a11y), but max-scale=5 prevents layout overflow -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="description" content="Sajid Mehmood — IT Support Engineer | CCNA Certified | Portfolio">
     <meta name="theme-color" content="#F8F9FA">
-    <!-- iOS Safari specific fixes -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- Prevent iOS from auto-detecting phone numbers and styling them -->
     <meta name="format-detection" content="telephone=no">
     <title>Sajid Mehmood | IT Support Engineer</title>
     <link rel="icon" href="logo.png" type="image/png">
-
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        /* ── PORTFOLIO-PAGE iOS FIXES (scoped to this file) ── */
-
-        /* Global iOS overflow lock */
+        /* ── PORTFOLIO-PAGE iOS FIXES ── */
         html, body {
             overflow-x: hidden;
             position: relative;
             -webkit-overflow-scrolling: touch;
             -webkit-text-size-adjust: 100%;
         }
-
-        /* Prevent auto-zoom on ALL inputs/selects/textareas */
         input, select, textarea, button {
             font-size: 16px;
             -webkit-appearance: none;
             appearance: none;
         }
-
-        /* Remove iOS tap highlight on interactive elements */
         a, button, .ftab, .mob-link, .contact-card, .exec-social-btn {
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-
-        /* Touch pressed feedback */
         a:active, button:active, .ftab:active,
         .mob-link:active, .contact-card:active,
         .exec-social-btn:active {
@@ -51,47 +39,35 @@
             transform: scale(0.97);
             transition: opacity 0.08s ease, transform 0.08s ease;
         }
-
-        /* Smooth drawer scroll on iOS */
         .mobile-drawer {
             -webkit-overflow-scrolling: touch;
             overscroll-behavior: contain;
         }
-
-        /* Smooth scroll (CSS-level) */
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         /* WhatsApp contact card */
         .contact-card-whatsapp .cc-icon-wrap {
-            background: rgba(37, 211, 102, 0.12) !important;
+            background: rgba(37,211,102,0.12) !important;
             color: #25D366 !important;
-            border: 1px solid rgba(37, 211, 102, 0.3);
+            border: 1px solid rgba(37,211,102,0.3);
         }
         .contact-card-whatsapp:hover {
-            border-color: rgba(37, 211, 102, 0.5) !important;
-            box-shadow: 0 8px 28px rgba(37, 211, 102, 0.15) !important;
+            border-color: rgba(37,211,102,0.5) !important;
+            box-shadow: 0 8px 28px rgba(37,211,102,0.15) !important;
         }
         .contact-card-whatsapp:hover .cc-icon-wrap {
             background: #25D366 !important;
             color: #fff !important;
         }
-
         /* WhatsApp social button */
-        .exec-social-btn-whatsapp {
-            border-color: rgba(37, 211, 102, 0.3) !important;
-        }
-        .exec-social-btn-whatsapp i {
-            color: #25D366 !important;
-        }
+        .exec-social-btn-whatsapp { border-color: rgba(37,211,102,0.3) !important; }
+        .exec-social-btn-whatsapp i { color: #25D366 !important; }
         .exec-social-btn-whatsapp:hover {
-            background: rgba(37, 211, 102, 0.08) !important;
-            border-color: rgba(37, 211, 102, 0.6) !important;
+            background: rgba(37,211,102,0.08) !important;
+            border-color: rgba(37,211,102,0.6) !important;
             color: #25D366 !important;
         }
 
-        /* Ensure contact cards don't overflow on small screens */
         @media (max-width: 480px) {
             .contact-cards {
                 grid-template-columns: 1fr !important;
@@ -105,7 +81,6 @@
                 width: 100% !important;
                 justify-content: center !important;
             }
-            /* Safe area for iPhone notch / home indicator */
             .footer {
                 padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
             }
@@ -140,9 +115,8 @@
                     <i class="fas fa-file-alt"></i> Resume
                 </a>
             </nav>
-            <!-- DARK MODE TOGGLE (desktop) -->
             <button class="dark-toggle nav-dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
-                <span class="toggle-icon">🌙</span>
+                <span class="toggle-icon">&#127769;</span>
                 <span class="toggle-label">Dark</span>
             </button>
             <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
@@ -158,10 +132,9 @@
             <a href="#contact"        class="mob-link">Contact</a>
             <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
                target="_blank" rel="noopener noreferrer" class="mob-link mob-cta">Download Resume</a>
-            <!-- DARK MODE TOGGLE (mobile drawer) -->
             <div class="mob-dark-toggle-wrap">
                 <button class="dark-toggle" id="darkToggleMob" aria-label="Toggle dark mode">
-                    <span class="toggle-icon">🌙</span>
+                    <span class="toggle-icon">&#127769;</span>
                     <span class="toggle-label">Toggle Dark Mode</span>
                 </button>
             </div>
@@ -247,12 +220,12 @@
                         <span>Executive Summary</span>
                     </div>
                     <h1 class="hero-headline">
-                        From Hospitals to Airports —<br>
+                        From Hospitals to Airports &mdash;<br>
                         <em>I Keep IT</em><br>
                         Running.
                     </h1>
                     <p class="hero-brief">
-                        CCNA-certified IT Support Engineer with <strong>4+ years of experience</strong> in healthcare, telecom, and immigration sectors. Skilled in hardware, software, and network troubleshooting — delivering Level 1 &amp; Level 2 support that keeps businesses operational.
+                        CCNA-certified IT Support Engineer with <strong>4+ years of experience</strong> in healthcare, telecom, and immigration sectors. Skilled in hardware, software, and network troubleshooting &mdash; delivering Level 1 &amp; Level 2 support that keeps businesses operational.
                     </p>
                     <div class="hero-kpis">
                         <div class="kpi-block">
@@ -305,7 +278,7 @@
                 <div class="about-layout">
                     <div class="about-text" data-aos="fade-right">
                         <p class="bio-lead">
-                            I'm <strong>Sajid Mehmood</strong>, a CCNA-certified IT Support Engineer with over <strong>4 years of hands-on experience</strong> in healthcare, telecom, and immigration sectors. I specialise in hardware, software, and network troubleshooting — delivering Level 1 and Level 2 support that users can rely on.
+                            I'm <strong>Sajid Mehmood</strong>, a CCNA-certified IT Support Engineer with over <strong>4 years of hands-on experience</strong> in healthcare, telecom, and immigration sectors. I specialise in hardware, software, and network troubleshooting &mdash; delivering Level 1 and Level 2 support that users can rely on.
                         </p>
                         <p class="bio-body">
                             I have proven experience managing IT assets, deploying systems, and training staff. My focus on proactive maintenance and fast resolution has helped me maintain a consistent <strong>95% SLA compliance</strong> record across every role I've held.
@@ -317,7 +290,7 @@
                             <div class="achieve-item">
                                 <span class="achieve-icon"><i class="fas fa-trophy"></i></span>
                                 <div>
-                                    <strong>Safety Award — HIA Airport Project</strong>
+                                    <strong>Safety Award &mdash; HIA Airport Project</strong>
                                     <span>Recognition for exemplary safety practices</span>
                                 </div>
                             </div>
@@ -332,7 +305,7 @@
                                 <span class="achieve-icon"><i class="fas fa-industry"></i></span>
                                 <div>
                                     <strong>Multi-Sector Experience</strong>
-                                    <span>Healthcare · Telecom · Immigration · Aviation</span>
+                                    <span>Healthcare &middot; Telecom &middot; Immigration &middot; Aviation</span>
                                 </div>
                             </div>
                         </div>
@@ -409,7 +382,7 @@
                         <div class="folder-pane active" id="ep0">
                             <div class="fp-icon"><i class="fas fa-university"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Sep 2024 – Jun 2025</span>
+                                <span class="fp-date">Sep 2024 &ndash; Jun 2025</span>
                                 <h3 class="fp-degree">Bachelor of Science in Information Technology</h3>
                                 <p class="fp-inst">Middlesex University Dubai</p>
                                 <p class="fp-note">Expected Graduation: 2025</p>
@@ -422,7 +395,7 @@
                         <div class="folder-pane" id="ep1">
                             <div class="fp-icon"><i class="fas fa-laptop-code"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Nov 2020 – Nov 2023</span>
+                                <span class="fp-date">Nov 2020 &ndash; Nov 2023</span>
                                 <h3 class="fp-degree">Advanced Diploma in Software Engineering</h3>
                                 <p class="fp-inst">Aptech Qatar</p>
                                 <p class="fp-note">ACCP Certification</p>
@@ -435,7 +408,7 @@
                         <div class="folder-pane" id="ep2">
                             <div class="fp-icon"><i class="fas fa-school"></i></div>
                             <div class="fp-content">
-                                <span class="fp-date">Sep 2017 – Jul 2018</span>
+                                <span class="fp-date">Sep 2017 &ndash; Jul 2018</span>
                                 <h3 class="fp-degree">IGCSE</h3>
                                 <p class="fp-inst">Bright Future International School</p>
                                 <p class="fp-note">Cambridge International Examination</p>
@@ -487,7 +460,7 @@
                     <div class="sec-rule"></div>
                 </div>
                 <p class="certs-intro" data-aos="fade-up">
-                    Credentials earned through rigorous study and real-world application — displayed as proof of expertise.
+                    Credentials earned through rigorous study and real-world application &mdash; displayed as proof of expertise.
                 </p>
                 <div class="cert-wall-frame featured-cert-frame" data-aos="zoom-in">
                     <div class="cwf-outer">
@@ -528,19 +501,18 @@
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="mailto:info@sajidmk.com">info@sajidmk.com</a>
+                            <a href="mailto:sajidmk.work@gmail.com">sajidmk.work@gmail.com</a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="mailto:sajid.teech@gmail.com">sajid.teech@gmail.com</a>
+                            <a href="mailto:sajid.mehmood@outlook.com">sajid.mehmood@outlook.com</a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-phone"></i></div>
                             <h4>Phone</h4>
                             <a href="tel:+97466969598">+974 6696 9598</a>
                         </div>
-                        <!-- WhatsApp contact card -->
                         <div class="contact-card glass-card contact-card-whatsapp">
                             <div class="cc-icon-wrap"><i class="fab fa-whatsapp"></i></div>
                             <h4>WhatsApp</h4>
@@ -556,11 +528,10 @@
                     </div>
 
                     <div class="social-exec-row">
-                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                        <a href="https://www.linkedin.com/in/sajid-mk-1b3954333"
                            target="_blank" rel="noopener noreferrer" class="exec-social-btn">
                             <i class="fab fa-linkedin-in"></i> Connect on LinkedIn
                         </a>
-                        <!-- WhatsApp social button -->
                         <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer"
                            class="exec-social-btn exec-social-btn-whatsapp">
                             <i class="fab fa-whatsapp"></i> Chat on WhatsApp
@@ -576,23 +547,18 @@
 
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="script.js"></script>
-
     <footer class="footer">
         <div class="footer-inner">
             <span class="f-name">Sajid Mehmood</span>
-            <span class="f-sep">·</span>
-            <span class="f-sub">IT Support Engineer</span>
+            <span class="f-sep">&middot;</span>
+            <span class="f-sub">IT Support Engineer &middot; CCNA &middot; Doha, Qatar</span>
             <span class="f-sep">&middot;</span>
             <span class="f-copy">&copy; 2025 All Rights Reserved</span>
         </div>
-        <div class="footer-admin-row">
-            <a href="admin.html" class="footer-admin-link">
-                <i class="fas fa-lock"></i> Admin
-            </a>
-        </div>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>

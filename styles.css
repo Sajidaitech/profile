@@ -380,7 +380,7 @@ input::placeholder {
 /* ════════════════════════════════════════
    PROJECTS GRID
 ════════════════════════════════════════ */
-.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 24px; }
 .project-card { background: var(--paper); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.4s cubic-bezier(0.34,1.2,0.64,1); position: relative; }
 .project-card::before { content: ''; position: absolute; inset: 0; border-radius: 12px; background: linear-gradient(135deg, rgba(197,160,89,.06), transparent); opacity: 0; transition: opacity 0.4s ease; }
 .project-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: var(--shadow-lg), 0 0 0 1px rgba(197,160,89,.3); border-color: rgba(197,160,89,.4); }
@@ -391,7 +391,7 @@ input::placeholder {
 .pc-sector-tag { font-size: 10px; font-weight: 700; color: var(--gold-dk); background: rgba(197,160,89,.1); border: 1px solid rgba(197,160,89,.25); padding: 4px 10px; border-radius: 20px; font-family: 'DM Mono', monospace; letter-spacing: .3px; }
 .pc-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--graphite); padding: 14px 20px 10px; line-height: 1.3; }
 .pc-challenge-solution { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
-.pc-block { padding: 12px 14px; border-radius: 6px; background: #0A0E1A; border: 1px solid var(--border); }
+.pc-block { padding: 12px 14px; border-radius: 6px; background: var(--offwhite); border: 1px solid var(--border-dk); }
 .pc-block-label { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; font-family: 'DM Mono', monospace; }
 .pc-block-label.challenge { color: #E07B39; }
 .pc-block-label.challenge i { color: #E07B39; }
@@ -697,6 +697,14 @@ body.dark-mode .social-btn-whatsapp:hover { background: rgba(37,211,102,.08) !im
     .kpi-label { font-size: 9px; }
     .hero-ctas { flex-direction: column; align-items: stretch; padding: 0 4px; gap: 10px; }
     .hero-ctas .btn { width: 100%; justify-content: center; }
+    .projects-grid { grid-template-columns: 1fr; gap: 16px; padding: 0 16px; }
+    .pc-header { padding: 16px 16px 0; }
+    .pc-title { padding: 12px 16px 8px; font-size: 15px; }
+    .pc-challenge-solution { padding: 0 16px; gap: 10px; }
+    .pc-impact { margin: 12px 16px; }
+    .pc-tools { padding: 0 16px 12px; }
+    .pc-link { padding: 11px 16px; }
+    .section-intro { padding: 0 16px; }
     .about-text { padding: 0 16px; }
     .about-panel { border-radius: 8px; padding: 20px 16px; }
     .about-stats-row { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
@@ -774,4 +782,187 @@ body.dark-mode .social-btn-whatsapp:hover { background: rgba(37,211,102,.08) !im
         transition-duration: .01ms !important;
         scroll-behavior: auto !important;
     }
+}
+/* ============================================================
+   ENHANCED INTERACTIONS — PHASE 2
+   Staggered Fade-In · Glassmorphism Nav · Magnetic Buttons
+   Active Link Underline · Skeleton Loading · Soft Parallax
+   Mobile iOS Fixes
+   ============================================================ */
+
+/* ── MOBILE iOS FIXES (per spec) ── */
+html, body {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Override for nav links that shouldn't stretch */
+.nav-link, .mob-link, .footer-links a {
+  min-width: unset;
+  min-height: unset;
+  display: inline-flex;
+  align-items: center;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+/* ── STAGGERED FADE-IN ── */
+/* Applied via JS to .stagger-child elements inside .stagger-parent */
+.stagger-parent .stagger-child {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stagger-parent .stagger-child.stagger-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Delay each child incrementally (up to 8 items) */
+.stagger-parent .stagger-child:nth-child(1) { transition-delay: 0ms; }
+.stagger-parent .stagger-child:nth-child(2) { transition-delay: 80ms; }
+.stagger-parent .stagger-child:nth-child(3) { transition-delay: 160ms; }
+.stagger-parent .stagger-child:nth-child(4) { transition-delay: 240ms; }
+.stagger-parent .stagger-child:nth-child(5) { transition-delay: 320ms; }
+.stagger-parent .stagger-child:nth-child(6) { transition-delay: 400ms; }
+.stagger-parent .stagger-child:nth-child(7) { transition-delay: 480ms; }
+.stagger-parent .stagger-child:nth-child(8) { transition-delay: 560ms; }
+
+/* ── GLASSMORPHISM NAV — enhanced on scroll ── */
+/* Base nav already has backdrop-filter; we enhance on .scrolled */
+.top-nav.scrolled {
+  background: rgba(10, 14, 26, 0.75) !important;
+  backdrop-filter: blur(28px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.5), 0 1px 0 rgba(197,160,89,0.10) !important;
+  border-bottom-color: rgba(197,160,89,0.12) !important;
+  transition: background 0.4s ease, backdrop-filter 0.4s ease,
+              box-shadow 0.4s ease, border-color 0.4s ease !important;
+}
+
+/* ── ACTIVE LINK UNDERLINE — grows from center ── */
+.nav-link {
+  position: relative;
+  overflow: visible;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 80%;
+}
+
+/* ── MAGNETIC BUTTON — JS adds transform; CSS handles transitions ── */
+.btn-magnetic {
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.2s ease !important;
+  will-change: transform;
+}
+.btn-magnetic:hover {
+  box-shadow: 0 12px 36px rgba(197,160,89,.4) !important;
+}
+
+/* ── SKELETON LOADING ── */
+@keyframes skeletonShimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.10) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 600px 100%;
+  animation: skeletonShimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+.skeleton-card {
+  height: 280px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+.skeleton-line {
+  height: 14px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+.skeleton-line.short { width: 60%; }
+.skeleton-line.medium { width: 80%; }
+.skeleton-line.full { width: 100%; }
+/* Projects grid skeleton shown before JS populates cards */
+.projects-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 8px;
+}
+.projects-skeleton .skeleton-card { opacity: 0; animation: skeletonFadeIn 0.4s ease forwards; }
+.projects-skeleton .skeleton-card:nth-child(1) { animation-delay: 0s; }
+.projects-skeleton .skeleton-card:nth-child(2) { animation-delay: 0.1s; }
+.projects-skeleton .skeleton-card:nth-child(3) { animation-delay: 0.2s; }
+@keyframes skeletonFadeIn { to { opacity: 1; } }
+
+/* ── SOFT PARALLAX ── */
+/* JS moves these via CSS custom properties */
+.parallax-slow  { transform: translateY(var(--py-slow, 0px));  will-change: transform; transition: transform 0.05s linear; }
+.parallax-mid   { transform: translateY(var(--py-mid, 0px));   will-change: transform; transition: transform 0.05s linear; }
+.parallax-fast  { transform: translateY(var(--py-fast, 0px));  will-change: transform; transition: transform 0.05s linear; }
+
+/* Disable parallax on mobile to avoid motion sickness */
+@media (max-width: 768px) {
+  .parallax-slow,
+  .parallax-mid,
+  .parallax-fast {
+    transform: none !important;
+  }
+}
+
+/* ── PROJECT CARD HOVER LIFT (complement to skeleton) ── */
+.proj-card {
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.35s ease !important;
+}
+.proj-card:hover {
+  transform: translateY(-8px) scale(1.015) !important;
+  box-shadow: 0 24px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(197,160,89,0.15) !important;
+}
+
+/* ── TECH STACK TAG STAGGER (arsenal section) ── */
+.arsenal-bento .bento-item,
+.cert-card,
+.ach-item,
+.lang-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.arsenal-bento .bento-item.stagger-visible,
+.cert-card.stagger-visible,
+.ach-item.stagger-visible,
+.lang-item.stagger-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
