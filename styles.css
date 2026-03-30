@@ -236,10 +236,10 @@ input::placeholder { font-size: 14px; }
 .id-chip { width: 32px; height: 24px; background: linear-gradient(135deg, var(--cyan), var(--violet)); border-radius: 4px; position: relative; overflow: hidden; }
 .id-chip::after { content: ''; position: absolute; inset: 4px; border: 1px solid rgba(0,212,255,.4); border-radius: 2px; }
 .id-corp-tag { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--cyan); letter-spacing: 2px; opacity: .8; }
-.id-photo-wrap { position: relative; padding: 20px 18px 0; background: var(--paper); }
-.id-photo { width: 100%; border-radius: 6px; filter: grayscale(20%); transition: filter 0.5s ease; }
+.id-photo-wrap { position: relative; padding: 0; background: var(--paper); overflow: hidden; aspect-ratio: 3/4; }
+.id-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; border-radius: 0; display: block; filter: grayscale(20%); transition: filter 0.5s ease; -webkit-transform: translateZ(0); transform: translateZ(0); }
 .id-card:hover .id-photo { filter: grayscale(0%) brightness(1.05); }
-.id-photo-frame { position: absolute; inset: 20px 18px 0; border: 2px solid var(--cyan); border-radius: 6px; opacity: .25; pointer-events: none; animation: framePulse 3s ease-in-out infinite; }
+.id-photo-frame { position: absolute; inset: 8px; border: 2px solid var(--cyan); border-radius: 6px; opacity: .25; pointer-events: none; animation: framePulse 3s ease-in-out infinite; }
 @keyframes framePulse { 0%,100% { opacity: .25; box-shadow: inset 0 0 10px rgba(0,212,255,.1); } 50% { opacity: .5; box-shadow: inset 0 0 20px rgba(0,212,255,.2); } }
 .id-status-ring { position: absolute; bottom: 6px; right: 26px; width: 16px; height: 16px; border-radius: 50%; background: var(--paper); display: flex; align-items: center; justify-content: center; border: 2px solid var(--paper); }
 .id-status-dot { width: 9px; height: 9px; border-radius: 50%; background: #27AE60; animation: statusPulse 2s ease-in-out infinite; box-shadow: 0 0 6px #27AE60; }
@@ -655,6 +655,7 @@ body.dark-mode .social-btn-whatsapp:hover { background: rgba(37,211,102,.08) !im
     .container { padding: 0; }
     .hero-layout { padding: 32px 16px; gap: 24px; align-items: center; text-align: center; }
     .id-card { max-width: 100%; width: 100%; border-radius: 10px; }
+    .id-photo-wrap { padding: 0; }
     .hero-headline { font-size: 27px; padding: 0 4px; text-align: center; }
     .hero-brief { font-size: 14px; text-align: center; padding: 0 4px; }
     .hero-eyebrow { justify-content: center; font-size: 10px; }
@@ -773,8 +774,33 @@ button, a { min-width: 44px; min-height: 44px; display: inline-flex; align-items
 .btn-magnetic:hover { box-shadow: 0 12px 40px rgba(0,212,255,.4) !important; }
 
 /* ══════════════════════════════════════════════
-   SKELETON LOADING (continued)
+   SKELETON LOADING
 ══════════════════════════════════════════════ */
+.projects-skeleton {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 24px;
+}
+.skeleton-card {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    overflow: hidden;
+    animation: skeletonFadeIn 0.4s ease both;
+}
+.skeleton {
+    background: linear-gradient(90deg, var(--surface) 25%, var(--lift) 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.6s ease-in-out infinite;
+    border-radius: 6px;
+}
+.skeleton-line { height: 14px; margin-bottom: 10px; }
+.skeleton-line:last-child { margin-bottom: 0; }
+.skeleton-line.full   { width: 100%; }
+.skeleton-line.medium { width: 70%; }
+.skeleton-line.short  { width: 45%; }
+@keyframes skeletonShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 .projects-skeleton .skeleton-card:nth-child(1) { animation-delay: 0ms; }
 .projects-skeleton .skeleton-card:nth-child(2) { animation-delay: 80ms; }
 .projects-skeleton .skeleton-card:nth-child(3) { animation-delay: 160ms; }
@@ -1088,7 +1114,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
     from { opacity: 0; transform: translateY(20px) scale(0.9); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-/* Flash when count finishes */
 .kpi-num.counted {
     animation: kpiFlash 0.5s ease;
 }
@@ -1099,9 +1124,6 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── ID CARD HOLOGRAPHIC SHEEN ── */
-.id-card {
-    background: var(--paper);
-}
 .id-card::before {
     content: '';
     position: absolute; inset: 0; z-index: 2; pointer-events: none; border-radius: 14px;
@@ -1163,9 +1185,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── PC ICON — ORBIT RING ── */
-.pc-icon {
-    position: relative;
-}
+.pc-icon { position: relative; }
 .pc-icon::before {
     content: '';
     position: absolute; inset: -5px; border-radius: 14px;
@@ -1183,9 +1203,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── TOOL CHIP WAVE ── */
-.tool-chip {
-    animation: chipWaveIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
-}
+.tool-chip { animation: chipWaveIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
 .arsenal-category .tool-chip:nth-child(1)  { animation-delay: 0.05s; }
 .arsenal-category .tool-chip:nth-child(2)  { animation-delay: 0.10s; }
 .arsenal-category .tool-chip:nth-child(3)  { animation-delay: 0.15s; }
@@ -1200,9 +1218,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── ARSENAL CATEGORY — SLIDE UP ── */
-.arsenal-category {
-    animation: arsenalIn 0.55s cubic-bezier(0.22,1,0.36,1) both;
-}
+.arsenal-category { animation: arsenalIn 0.55s cubic-bezier(0.22,1,0.36,1) both; }
 #arsenalBento .arsenal-category:nth-child(1) { animation-delay: 0.05s; }
 #arsenalBento .arsenal-category:nth-child(2) { animation-delay: 0.12s; }
 #arsenalBento .arsenal-category:nth-child(3) { animation-delay: 0.19s; }
@@ -1215,9 +1231,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── EXP CARD — SLIDE FROM LEFT ── */
-.exp-item {
-    animation: expItemIn 0.6s cubic-bezier(0.22,1,0.36,1) both;
-}
+.exp-item { animation: expItemIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
 .exp-item:nth-child(1) { animation-delay: 0.05s; }
 .exp-item:nth-child(2) { animation-delay: 0.18s; }
 .exp-item:nth-child(3) { animation-delay: 0.31s; }
@@ -1226,15 +1240,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
     to   { opacity: 1; transform: translateX(0); }
 }
 
-/* ── TIMELINE DOT — PULSE ON HOVER ── */
-.exp-item::before {
-    transition: transform .3s cubic-bezier(0.34,1.56,0.64,1), background .3s, box-shadow .3s;
-}
-
 /* ── FOLDER TAB POP ── */
-.ftab {
-    animation: tabSlideIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
-}
+.ftab { animation: tabSlideIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
 .ftab:nth-child(1) { animation-delay: 0.05s; }
 .ftab:nth-child(2) { animation-delay: 0.12s; }
 .ftab:nth-child(3) { animation-delay: 0.19s; }
@@ -1251,24 +1258,16 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
     from { opacity: 0; transform: scale(0.88) translateY(30px); }
     to   { opacity: 1; transform: scale(1) translateY(0); }
 }
-@keyframes certPulse {
-    0%,100% { box-shadow: var(--shadow-lg), var(--shadow-cyan), 0 0 0 0 rgba(0,212,255,.15); }
-    50%     { box-shadow: var(--shadow-lg), var(--shadow-cyan), 0 0 0 12px rgba(0,212,255,.0); }
-}
 
 /* ── CERT ICON WRAP — FLOAT ── */
-.cert-icon-wrap {
-    animation: certIconFloat 3s ease-in-out infinite;
-}
+.cert-icon-wrap { animation: certIconFloat 3s ease-in-out infinite; }
 @keyframes certIconFloat {
     0%,100% { transform: translateY(0) scale(1); }
     50%     { transform: translateY(-8px) scale(1.05); }
 }
 
 /* ── CERT GRID CARDS — STAGGER ── */
-.cert-card {
-    animation: certCardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
-}
+.cert-card { animation: certCardIn 0.5s cubic-bezier(0.22,1,0.36,1) both; }
 #certsGrid .cert-card:nth-child(1) { animation-delay: 0.05s; }
 #certsGrid .cert-card:nth-child(2) { animation-delay: 0.13s; }
 #certsGrid .cert-card:nth-child(3) { animation-delay: 0.21s; }
@@ -1289,20 +1288,15 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── TESTI QUOTE MARK — ROTATE IN ── */
-.testi-quote-mark {
-    animation: quoteMarkIn 0.8s cubic-bezier(0.34,1.56,0.64,1) both 0.2s;
-}
+.testi-quote-mark { animation: quoteMarkIn 0.8s cubic-bezier(0.34,1.56,0.64,1) both 0.2s; }
 @keyframes quoteMarkIn {
     from { opacity: 0; transform: rotate(-20deg) scale(0.5); }
     to   { opacity: 1; transform: rotate(0deg) scale(1); }
 }
 
 /* ── TESTI STARS — SEQUENTIAL LIGHT UP ── */
-.testi-stars i {
-    animation: starLight 0.3s ease both;
-    opacity: 0;
-}
-.testimonial-slide.active .testi-stars i:nth-child(1) { animation-delay: 0.3s; }
+.testi-stars i { animation: starLight 0.3s ease both; opacity: 0; }
+.testimonial-slide.active .testi-stars i:nth-child(1) { animation-delay: 0.30s; }
 .testimonial-slide.active .testi-stars i:nth-child(2) { animation-delay: 0.42s; }
 .testimonial-slide.active .testi-stars i:nth-child(3) { animation-delay: 0.54s; }
 .testimonial-slide.active .testi-stars i:nth-child(4) { animation-delay: 0.66s; }
@@ -1313,9 +1307,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── CONTACT ITEMS — STAGGER SLIDE ── */
-.contact-item {
-    animation: contactSlideIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
-}
+.contact-item { animation: contactSlideIn 0.5s cubic-bezier(0.22,1,0.36,1) both; }
 .contact-items .contact-item:nth-child(1) { animation-delay: 0.05s; }
 .contact-items .contact-item:nth-child(2) { animation-delay: 0.12s; }
 .contact-items .contact-item:nth-child(3) { animation-delay: 0.19s; }
@@ -1327,9 +1319,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── SOCIAL PANEL — FADE UP ── */
-.social-btn {
-    animation: socialBtnIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
-}
+.social-btn { animation: socialBtnIn 0.5s cubic-bezier(0.22,1,0.36,1) both; }
 .social-panel .social-btn:nth-child(2) { animation-delay: 0.08s; }
 .social-panel .social-btn:nth-child(3) { animation-delay: 0.16s; }
 .social-panel .social-btn:nth-child(4) { animation-delay: 0.24s; }
@@ -1339,9 +1329,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── FOOTER LINKS — UNDERLINE WIPE ── */
-.footer-links a {
-    position: relative; overflow: hidden;
-}
+.footer-links a { position: relative; overflow: hidden; }
 .footer-links a::after {
     content: '';
     position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
@@ -1351,19 +1339,14 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 .footer-links a:hover::after { width: 100%; }
 
 /* ── AVAILABILITY BANNER — PULSE BORDER ── */
-.availability-banner {
-    animation: availPulse 3s ease-in-out infinite;
-}
+.availability-banner { animation: availPulse 3s ease-in-out infinite; }
 @keyframes availPulse {
     0%,100% { border-color: rgba(39,174,96,.25); box-shadow: none; }
     50%     { border-color: rgba(39,174,96,.55); box-shadow: 0 0 14px rgba(39,174,96,.12); }
 }
 
 /* ── ABOUT STATS — FLIP IN ── */
-.about-stat {
-    animation: statFlipIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
-    transform-style: preserve-3d;
-}
+.about-stat { animation: statFlipIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both; transform-style: preserve-3d; }
 .about-stats-row .about-stat:nth-child(1) { animation-delay: 0.05s; }
 .about-stats-row .about-stat:nth-child(2) { animation-delay: 0.15s; }
 .about-stats-row .about-stat:nth-child(3) { animation-delay: 0.25s; }
@@ -1374,9 +1357,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── ACHIEVEMENT ITEMS — SLIDE RIGHT ── */
-.ach-item {
-    animation: achItemIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
-}
+.ach-item { animation: achItemIn 0.5s cubic-bezier(0.22,1,0.36,1) both; }
 .panel-achievements .ach-item:nth-child(1) { animation-delay: 0.08s; }
 .panel-achievements .ach-item:nth-child(2) { animation-delay: 0.18s; }
 .panel-achievements .ach-item:nth-child(3) { animation-delay: 0.28s; }
@@ -1386,9 +1367,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── PANEL CHIPS — POP IN ── */
-.p-chip {
-    animation: pChipPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
-}
+.p-chip { animation: pChipPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
 .panel-chips .p-chip:nth-child(1) { animation-delay: 0.10s; }
 .panel-chips .p-chip:nth-child(2) { animation-delay: 0.18s; }
 .panel-chips .p-chip:nth-child(3) { animation-delay: 0.26s; }
@@ -1400,9 +1379,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── NAV LINK — RIPPLE EFFECT ON CLICK ── */
-.nav-link {
-    overflow: hidden;
-}
+.nav-link { overflow: hidden; }
 .nav-link .ripple {
     position: absolute; border-radius: 50%;
     width: 4px; height: 4px;
@@ -1410,9 +1387,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
     transform: scale(0); animation: rippleSpread 0.5s ease-out forwards;
     pointer-events: none;
 }
-@keyframes rippleSpread {
-    to { transform: scale(40); opacity: 0; }
-}
+@keyframes rippleSpread { to { transform: scale(40); opacity: 0; } }
 
 /* ── HERO CTA BUTTONS — ENTRANCE ── */
 .hero-ctas .btn:nth-child(1) { animation: btnSlideIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both 1.35s; opacity: 0; }
@@ -1445,17 +1420,11 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── RING WRAPPER — TICK ANIMATION ── */
-.ring-fg {
-    animation: ringReveal 1.8s cubic-bezier(.4,0,.2,1) both 0.5s;
-}
-@keyframes ringReveal {
-    from { stroke-dashoffset: 879; opacity: 0; }
-}
+.ring-fg { animation: ringReveal 1.8s cubic-bezier(.4,0,.2,1) both 0.5s; }
+@keyframes ringReveal { from { stroke-dashoffset: 879; opacity: 0; } }
 
 /* ── LANG CARD — BOUNCE IN ── */
-.lang-card {
-    animation: langCardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
-}
+.lang-card { animation: langCardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
 #langGrid .lang-card:nth-child(1) { animation-delay: 0.05s; }
 #langGrid .lang-card:nth-child(2) { animation-delay: 0.13s; }
 #langGrid .lang-card:nth-child(3) { animation-delay: 0.21s; }
@@ -1466,13 +1435,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--cyan); outline-
 }
 
 /* ── FOLDER PANE — MORPH IN ── */
-.folder-pane.active {
-    animation: paneReveal .45s cubic-bezier(0.22,1,0.36,1), paneFadeIn .3s ease;
-}
-@keyframes paneFadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
+.folder-pane.active { animation: paneReveal .45s cubic-bezier(0.22,1,0.36,1), paneFadeIn .3s ease; }
+@keyframes paneFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ── SECTION DIVIDER LINE — WIPE IN ── */
 .section + .section::before {
