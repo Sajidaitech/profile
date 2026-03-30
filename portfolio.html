@@ -2,11 +2,13 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="description" content="Sajid Mehmood — IT Support Engineer | CCNA Certified | Portfolio">
     <meta name="theme-color" content="#F8F9FA">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
     <meta name="format-detection" content="telephone=no">
     <title>Sajid Mehmood | IT Support Engineer</title>
     <link rel="icon" href="logo.png" type="image/png">
@@ -16,12 +18,13 @@
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        /* ── PORTFOLIO-PAGE iOS FIXES ── */
+        /* ── PORTFOLIO-PAGE iOS / iPhone 12+ FIXES ── */
         html, body {
             overflow-x: hidden;
             position: relative;
             -webkit-overflow-scrolling: touch;
             -webkit-text-size-adjust: 100%;
+            max-width: 100%;
         }
         input, select, textarea, button {
             font-size: 16px;
@@ -44,6 +47,28 @@
             overscroll-behavior: contain;
         }
         html { scroll-behavior: smooth; }
+
+        /* ── Safe-area / notch support (iPhone 12, 13, 14, 15) ── */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .top-nav {
+                padding-top: env(safe-area-inset-top, 0px);
+                height: calc(var(--nav-h, 64px) + env(safe-area-inset-top, 0px));
+            }
+            .nav-inner {
+                height: calc(var(--nav-h, 64px) + env(safe-area-inset-top, 0px));
+                padding-top: env(safe-area-inset-top, 0px);
+            }
+            .hero-section {
+                padding-top: calc(var(--nav-h, 64px) + env(safe-area-inset-top, 0px));
+                min-height: 100svh;
+            }
+            .mobile-drawer.open {
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            .footer {
+                padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            }
+        }
 
         /* WhatsApp contact card */
         .contact-card-whatsapp .cc-icon-wrap {
@@ -84,6 +109,12 @@
             .footer {
                 padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
             }
+        }
+
+        /* Landscape iPhone 12/13/14 */
+        @media (max-height: 430px) and (orientation: landscape) {
+            .hero-section { min-height: auto; padding-bottom: 40px; }
+            .hero-layout  { padding: 16px 24px; }
         }
     </style>
 </head>
@@ -501,12 +532,12 @@
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="mailto:sajidmk.work@gmail.com">sajidmk.work@gmail.com</a>
+                            <a href="/cdn-cgi/l/email-protection#433022292a272e286d342c312803242e222a2f6d202c2e"><span class="__cf_email__" data-cfemail="ea998b80838e8781c49d859881aa8d878b8386c4898587">[email&#160;protected]</span></a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-envelope"></i></div>
                             <h4>Email</h4>
-                            <a href="mailto:sajid.mehmood@outlook.com">sajid.mehmood@outlook.com</a>
+                            <a href="/cdn-cgi/l/email-protection#7b081a11121f55161e131614141f3b140e0f1714141055181416"><span class="__cf_email__" data-cfemail="d4a7b5bebdb0fab9b1bcb9bbbbb094bba1a0b8bbbbbffab7bbb9">[email&#160;protected]</span></a>
                         </div>
                         <div class="contact-card glass-card">
                             <div class="cc-icon-wrap"><i class="fas fa-phone"></i></div>
@@ -552,13 +583,3 @@
             <span class="f-name">Sajid Mehmood</span>
             <span class="f-sep">&middot;</span>
             <span class="f-sub">IT Support Engineer &middot; CCNA &middot; Doha, Qatar</span>
-            <span class="f-sep">&middot;</span>
-            <span class="f-copy">&copy; 2025 All Rights Reserved</span>
-        </div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="script.js"></script>
-
-</body>
-</html>
