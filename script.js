@@ -305,11 +305,30 @@ function animateCount(el, target) {
         const progress = Math.min((now - start) / duration, 1);
         const ease     = 1 - Math.pow(2, -10 * progress);
         el.textContent = Math.ceil(ease * target);
-        if (progress < 1) requestAnimationFrame(step);
-        else el.textContent = target;
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            el.textContent = target;
+            el.classList.remove('counted');
+            void el.offsetWidth;
+            el.classList.add('counted');
+        }
     };
     requestAnimationFrame(step);
 }
+
+// ── Nav ripple on click ──
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const rect = this.getBoundingClientRect();
+        ripple.style.left = (e.clientX - rect.left - 2) + 'px';
+        ripple.style.top  = (e.clientY - rect.top - 2) + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
+});
 
 // ════════════════════════════════════════
 // SVG RING ANIMATIONS
