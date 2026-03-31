@@ -1265,7 +1265,7 @@ h3, .h3-style {
   background:
     radial-gradient(ellipse 70% 60% at 40% 50%, rgba(200,145,58,0.08) 0%, transparent 70%),
     radial-gradient(ellipse 50% 50% at 80% 80%, rgba(192,132,252,0.06) 0%, transparent 60%),
-    #020617;
+    #0a0804;
 }
 
 /* CSS Walnut wood grain */
@@ -1294,32 +1294,37 @@ h3, .h3-style {
   background: radial-gradient(ellipse 65% 55% at 95% 80%, rgba(220,140,40,0.14) 0%, transparent 60%);
 }
 
-/* Gold pinstripe accents */
+/* Gold pinstripe accents — inset so content stays INSIDE them */
 .gw-accent-top {
-  position: absolute; top: 28px; left: 40px; right: 40px; height: 1px;
+  position: absolute; top: 20px; left: 20px; right: 20px; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(212,175,55,.55) 30%, rgba(212,175,55,.85) 50%, rgba(212,175,55,.55) 70%, transparent);
 }
 .gw-accent-bottom {
-  position: absolute; bottom: 28px; left: 40px; right: 40px; height: 1px;
+  position: absolute; bottom: 20px; left: 20px; right: 20px; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(212,175,55,.55) 30%, rgba(212,175,55,.85) 50%, rgba(212,175,55,.55) 70%, transparent);
 }
 
-/* Corner ornaments */
+/* Corner ornaments — tight to the pinstripes */
 .gw-corner {
-  position: absolute; width: 22px; height: 22px; pointer-events: none;
+  position: absolute; width: 20px; height: 20px; pointer-events: none;
   border-color: rgba(212,175,55,.70); border-style: solid;
 }
-.gw-corner-tl { top: 18px; left: 18px; border-width: 1.5px 0 0 1.5px; }
-.gw-corner-tr { top: 18px; right: 18px; border-width: 1.5px 1.5px 0 0; }
-.gw-corner-bl { bottom: 18px; left: 18px; border-width: 0 0 1.5px 1.5px; }
-.gw-corner-br { bottom: 18px; right: 18px; border-width: 0 1.5px 1.5px 0; }
+.gw-corner-tl { top: 12px; left: 12px; border-width: 1.5px 0 0 1.5px; }
+.gw-corner-tr { top: 12px; right: 12px; border-width: 1.5px 1.5px 0 0; }
+.gw-corner-bl { bottom: 12px; left: 12px; border-width: 0 0 1.5px 1.5px; }
+.gw-corner-br { bottom: 12px; right: 12px; border-width: 0 1.5px 1.5px 0; }
 
-/* Form area */
+/* Form area — padded well inside the frame border */
 .gw-form-area {
   position: relative; z-index: 2;
-  width: 100%; max-width: 420px;
-  padding: 48px 52px;
-  display: flex; flex-direction: column; gap: 28px;
+  width: 100%; max-width: 440px;
+  /* Top/bottom padding ensures content clears the 20px accent lines + breathing room */
+  padding: 52px 52px 48px;
+  /* Keep this strictly within the accent lines by capping max height */
+  margin: 28px 28px;
+  display: flex; flex-direction: column; gap: 24px;
+  /* Subtle inner glow to reinforce "inside the frame" feeling */
+  box-sizing: border-box;
 }
 
 .gw-logo-row { display: flex; align-items: center; gap: 14px; }
@@ -1341,7 +1346,7 @@ h3, .h3-style {
 .gw-eyebrow .gw-eyebrow-line:first-child { background: linear-gradient(270deg, transparent, rgba(212,175,55,.55)); max-width: 30px; }
 .gw-headline {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(28px, 3.2vw, 40px); font-weight: 700;
+  font-size: clamp(26px, 3vw, 38px); font-weight: 700;
   color: var(--cream); line-height: 1.2; letter-spacing: -0.5px; margin: 0;
 }
 .gw-headline em { color: var(--gold); font-style: italic; }
@@ -1380,23 +1385,23 @@ h3, .h3-style {
 .g-error.show { display: flex; animation: errorShake 0.35s ease; }
 @keyframes errorShake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
-/* Submit button — black with gold border */
+/* Submit button */
 .gw-btn {
   position: relative; display: flex; align-items: center; justify-content: center;
   gap: 10px; padding: 15px 28px;
-  background: rgba(255,255,255,.05);
+  background: rgba(200,145,58,.10);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,.20);
+  border: 1px solid rgba(200,145,58,.40);
   border-radius: 100px; cursor: pointer;
   font-family: 'Outfit', 'DM Mono', monospace; font-size: 11px; font-weight: 700;
   letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold);
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 2px 20px rgba(0,0,0,.4), 0 0 0 0 rgba(212,175,55,.0);
+  box-shadow: 0 2px 20px rgba(0,0,0,.4);
 }
 .gw-btn::before {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(212,175,55,.12) 0%, rgba(212,175,55,.04) 100%);
+  background: linear-gradient(135deg, rgba(212,175,55,.14) 0%, rgba(212,175,55,.05) 100%);
   opacity: 0; transition: opacity 0.3s;
 }
 .gw-btn:hover::before { opacity: 1; }
@@ -1443,7 +1448,6 @@ h3, .h3-style {
 /* "Art Frame" style for the Doha skyline image */
 .gw-frame-inner {
   position: relative; width: 100%;
-  /* Dual-border black-gold picture frame */
   border: 1px solid var(--glass-border);
   box-shadow:
     0 0 0 1px rgba(212,175,55,.55),
@@ -1470,7 +1474,7 @@ h3, .h3-style {
   filter: blur(15px); pointer-events: none; z-index: -1;
 }
 
-/* Frame caption — like a museum label */
+/* Frame caption */
 .gw-frame-caption {
   display: flex; align-items: center; gap: 12px;
   font-family: 'Outfit', 'DM Mono', monospace; font-size: 9px;
@@ -1486,10 +1490,19 @@ h3, .h3-style {
   #gateOverlay { flex-direction: column; overflow-y: auto; }
   .gw-left { flex: none; min-height: 100vh; width: 100%; }
   .gw-right { display: none; }
-  .gw-form-area { padding: 48px 28px; max-width: 100%; }
-  .gw-headline { font-size: 30px; }
+  .gw-form-area { padding: 44px 28px 40px; margin: 24px 24px; max-width: 100%; }
+  .gw-headline { font-size: 28px; }
 }
-@media (max-width: 480px) { .gw-form-area { padding: 40px 22px; } }
+@media (max-width: 480px) {
+  .gw-form-area { padding: 36px 20px 32px; margin: 20px 20px; gap: 20px; }
+  .gw-headline { font-size: 24px; }
+  .gw-accent-top { top: 14px; left: 14px; right: 14px; }
+  .gw-accent-bottom { bottom: 14px; left: 14px; right: 14px; }
+  .gw-corner-tl { top: 8px; left: 8px; }
+  .gw-corner-tr { top: 8px; right: 8px; }
+  .gw-corner-bl { bottom: 8px; left: 8px; }
+  .gw-corner-br { bottom: 8px; right: 8px; }
+}
 
 /* Hide old gate card */
 .g-card { display: none !important; }
