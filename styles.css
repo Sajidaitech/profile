@@ -1680,3 +1680,69 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
   .kpi-sep   { display: none; }
   .kpi-block { padding: 8px 12px; flex: 1 1 40%; }
 }
+
+
+/* ============================================================
+   SECTION 32 · EDUCATION GRADE BADGES & YEAR ROWS
+   ============================================================ */
+
+/* Grade badge — shown under degree title */
+.fp-grade-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(126,200,227,.10), rgba(168,157,232,.08));
+  border: 1px solid rgba(126,200,227,.22);
+  font-size: 12.5px; font-weight: 700;
+  color: var(--accent-lt);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .3px;
+  margin: 10px 0 10px;
+  box-shadow: 0 2px 12px rgba(126,200,227,.08);
+}
+.fp-grade-badge i {
+  color: var(--gold-lt); font-size: 13px;
+  filter: drop-shadow(0 0 4px rgba(212,180,131,.4));
+}
+
+/* Distinction variant — warmer gold tone */
+.fp-grade-distinction {
+  background: linear-gradient(135deg, rgba(212,180,131,.10), rgba(168,157,232,.07));
+  border-color: rgba(212,180,131,.28);
+  color: var(--gold-lt);
+  box-shadow: 0 2px 12px rgba(212,180,131,.08);
+}
+.fp-grade-distinction i { color: var(--gold-lt); }
+
+/* Year-by-year grade rows */
+.fp-year-grades {
+  display: flex; flex-direction: column; gap: 8px;
+  margin: 12px 0 18px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.028);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.fp-year-row {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.fp-year-row:last-child { border-bottom: none; padding-bottom: 0; }
+.fp-year-label {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--text-secondary); font-weight: 600;
+}
+.fp-year-score {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  font-weight: 700; white-space: nowrap;
+}
+.fp-year-score.distinction {
+  color: var(--gold-lt);
+  background: rgba(212,180,131,.08);
+  border: 1px solid rgba(212,180,131,.20);
+  padding: 2px 10px; border-radius: 20px;
+  font-size: 10.5px;
+}
