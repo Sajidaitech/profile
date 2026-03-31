@@ -1,7 +1,314 @@
 // ============================================================
 // SAJID MEHMOOD · IT SYSTEMS ENGINEER
-// script.js — Consolidated (gate + portfolio logic)
+// script.js — Complete (all logic, no inline HTML scripts needed)
 // ============================================================
+
+
+// ============================================================
+// SECTION 0 · SMOOTH SCROLL (works after gate dismissed)
+// ============================================================
+
+(function () {
+  var navH = function () {
+    var nav = document.getElementById('topNav');
+    return nav ? nav.offsetHeight : 68;
+  };
+
+  function scrollTo(href) {
+    if (!href || href === '#') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    var target = document.querySelector(href);
+    if (!target) return;
+    var top = target.getBoundingClientRect().top + window.pageYOffset - navH() - 16;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }
+
+  function closeMobileDrawer() {
+    var drawer    = document.getElementById('mobileDrawer');
+    var hamburger = document.getElementById('hamburger');
+    if (drawer && drawer.classList.contains('open')) {
+      drawer.classList.remove('open');
+      if (hamburger) { hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); }
+      document.body.style.overflow = '';
+    }
+  }
+
+  /* Single delegated listener — catches ALL .nav-anchor clicks including future DOM */
+  document.addEventListener('click', function (e) {
+    var anchor = e.target.closest('.nav-anchor');
+    if (!anchor) return;
+    var href = anchor.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    e.preventDefault();
+    closeMobileDrawer();
+    var gate = document.getElementById('gateOverlay');
+    var delay = gate && !gate.classList.contains('hidden') ? 0 : 0;
+    setTimeout(function () { scrollTo(href); }, delay);
+  }, true); /* capture phase */
+})();
+
+
+// ============================================================
+// SECTION 0B · SCROLL PROGRESS BAR
+// ============================================================
+
+(function () {
+  var bar = document.getElementById('scrollProgress');
+  if (!bar) return;
+  window.addEventListener('scroll', function () {
+    var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    bar.style.width = Math.min(pct, 100) + '%';
+  }, { passive: true });
+})();
+
+
+// ============================================================
+// SECTION 0C · INTERACTIVE HERO BACKGROUND — Advanced Canvas
+// ============================================================
+
+(function () {
+  var canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W, H, mouse = { x: -999, y: -999 }, time = 0;
+  var isMobile = window.innerWidth < 768;
+  var COUNT = isMobile ? 55 : 120;
+  var particles = [], waves = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', function () { resize(); isMobile = window.innerWidth < 768; }, { passive: true });
+  window.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+  window.addEventListener('touchmove', function (e) {
+    if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+  }, { passive: true });
+
+  /* ── PARTICLE CLASS ── */
+  function Particle() { this.reset(true); }
+  Particle.prototype.reset = function (randomY) {
+    this.x  = Math.random() * (W || 1200);
+    this.y  = randomY ? Math.random() * (H || 800) : H + 20;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = -(Math.random() * 0.5 + 0.1);
+    this.r  = Math.random() * 2 + 0.5;
+    this.life = Math.random() * 0.5 + 0.2;
+    this.maxLife = this.life;
+    this.hue = [195, 215, 255, 270][Math.floor(Math.random() * 4)];
+    this.sat = Math.floor(Math.random() * 30) + 50;
+    this.lit = Math.floor(Math.random() * 20) + 60;
+    this.twinkle = Math.random() * Math.PI * 2;
+    this.twinkleSpeed = Math.random() * 0.04 + 0.01;
+    this.type = Math.random() > 0.85 ? 'diamond' : 'circle';
+  };
+  Particle.prototype.update = function () {
+    this.twinkle += this.twinkleSpeed;
+    var dx = this.x - mouse.x, dy = this.y - mouse.y;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 160 && dist > 0) {
+      var f = (160 - dist) / 160 * 0.7;
+      this.vx += (dx / dist) * f * 0.08;
+      this.vy += (dy / dist) * f * 0.08;
+    }
+    this.vx *= 0.97; this.vy *= 0.97;
+    this.x += this.vx; this.y += this.vy;
+    this.life -= 0.001;
+    if (this.life <= 0 || this.x < -30 || this.x > W + 30 || this.y < -30) this.reset(false);
+  };
+  Particle.prototype.draw = function () {
+    var twinkleAlpha = (Math.sin(this.twinkle) * 0.3 + 0.7) * (this.life / this.maxLife);
+    ctx.save();
+    if (this.type === 'diamond') {
+      var grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 6);
+      grd.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.4) + ')');
+      grd.addColorStop(1, 'transparent');
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 6, 0, Math.PI * 2); ctx.fill();
+      ctx.translate(this.x, this.y); ctx.rotate(Math.PI / 4 + this.twinkle * 0.1);
+      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + twinkleAlpha + ')';
+      ctx.fillRect(-this.r * 1.2, -this.r * 1.2, this.r * 2.4, this.r * 2.4);
+    } else {
+      var grd2 = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 4);
+      grd2.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.25) + ')');
+      grd2.addColorStop(1, 'transparent');
+      ctx.fillStyle = grd2;
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + twinkleAlpha + ')';
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  };
+
+  /* ── WAVE CLASS ── */
+  function Wave(y, amp, speed, color, opacity) {
+    this.y = y; this.amp = amp; this.speed = speed;
+    this.color = color; this.opacity = opacity; this.offset = Math.random() * Math.PI * 2;
+  }
+  Wave.prototype.draw = function (t) {
+    ctx.beginPath();
+    ctx.moveTo(0, this.y);
+    for (var x = 0; x <= W; x += 4) {
+      var mouseInfluence = 0;
+      if (Math.abs(mouse.y - this.y) < 120) {
+        var mdx = x - mouse.x;
+        mouseInfluence = Math.exp(-mdx * mdx / 20000) * (120 - Math.abs(mouse.y - this.y)) * 0.3;
+      }
+      ctx.lineTo(x, this.y + Math.sin(x * 0.008 + t * this.speed + this.offset) * this.amp
+                    + Math.sin(x * 0.015 + t * this.speed * 0.7 + this.offset) * this.amp * 0.4
+                    + mouseInfluence);
+    }
+    ctx.strokeStyle = this.color.replace('OPACITY', this.opacity);
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  };
+
+  /* ── DATA STREAM CLASS (vertical binary lines) ── */
+  function DataStream() {
+    this.x = Math.random() * (W || 1200);
+    this.y = Math.random() * (H || 800);
+    this.speed = Math.random() * 1.5 + 0.5;
+    this.chars = '01'.split('');
+    this.length = Math.floor(Math.random() * 10) + 5;
+    this.opacity = Math.random() * 0.08 + 0.02;
+    this.hue = Math.random() > 0.5 ? 195 : 255;
+    this.fontSize = Math.floor(Math.random() * 5) + 8;
+  }
+  DataStream.prototype.update = function () {
+    this.y += this.speed;
+    if (this.y > H + this.length * this.fontSize) {
+      this.y = -this.length * this.fontSize;
+      this.x = Math.random() * W;
+    }
+  };
+  DataStream.prototype.draw = function () {
+    ctx.font = this.fontSize + 'px "DM Mono", monospace';
+    for (var i = 0; i < this.length; i++) {
+      var alpha = this.opacity * (1 - i / this.length) * (i === 0 ? 3 : 1);
+      ctx.fillStyle = 'hsla(' + this.hue + ',70%,70%,' + Math.min(alpha, 0.25) + ')';
+      ctx.fillText(this.chars[Math.floor(Math.random() * this.chars.length)], this.x, this.y - i * this.fontSize);
+    }
+  };
+
+  /* ── INIT ── */
+  for (var i = 0; i < COUNT; i++) particles.push(new Particle());
+  var LINK_DIST = isMobile ? 80 : 120;
+
+  var waveColors = [
+    'hsla(195,60%,65%,OPACITY)',
+    'hsla(255,55%,70%,OPACITY)',
+    'hsla(210,65%,65%,OPACITY)'
+  ];
+  waves.push(new Wave(0, 22, 0.25, waveColors[0], 0.06));
+  waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.05));
+  waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.04));
+
+  /* Update wave Y positions after resize */
+  function updateWavePositions() {
+    waves[0].y = H * 0.55;
+    waves[1].y = H * 0.65;
+    waves[2].y = H * 0.72;
+  }
+  updateWavePositions();
+  window.addEventListener('resize', updateWavePositions, { passive: true });
+
+  var streams = [];
+  if (!isMobile) {
+    for (var s = 0; s < 18; s++) streams.push(new DataStream());
+  }
+
+  /* ── CONNECTION GRID ── */
+  function drawConnections() {
+    for (var a = 0; a < particles.length; a++) {
+      for (var b = a + 1; b < particles.length; b++) {
+        var dx = particles[a].x - particles[b].x;
+        var dy = particles[a].y - particles[b].y;
+        var d  = Math.sqrt(dx * dx + dy * dy);
+        if (d < LINK_DIST) {
+          var op = (1 - d / LINK_DIST) * 0.18;
+          var midHue = (particles[a].hue + particles[b].hue) / 2;
+          var life = Math.min(particles[a].life / particles[a].maxLife, particles[b].life / particles[b].maxLife);
+          ctx.beginPath();
+          ctx.moveTo(particles[a].x, particles[a].y);
+          ctx.lineTo(particles[b].x, particles[b].y);
+          ctx.strokeStyle = 'hsla(' + midHue + ',60%,68%,' + (op * life) + ')';
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  /* ── AURORA BACKGROUND ── */
+  function drawAurora(t) {
+    var aurora1 = ctx.createLinearGradient(0, H * 0.2, W, H * 0.8);
+    aurora1.addColorStop(0,   'hsla(195,80%,40%,0)');
+    aurora1.addColorStop(0.3, 'hsla(215,70%,45%,' + (0.035 + 0.02 * Math.sin(t * 0.003)) + ')');
+    aurora1.addColorStop(0.6, 'hsla(255,75%,50%,' + (0.025 + 0.015 * Math.cos(t * 0.004)) + ')');
+    aurora1.addColorStop(1,   'hsla(280,60%,40%,0)');
+    ctx.fillStyle = aurora1;
+    ctx.fillRect(0, 0, W, H);
+
+    if (mouse.x > 0) {
+      var grd = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 280);
+      grd.addColorStop(0, 'hsla(195,70%,60%,0.06)');
+      grd.addColorStop(0.5, 'hsla(255,65%,65%,0.03)');
+      grd.addColorStop(1, 'transparent');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
+
+  /* ── ANIMATED HEXAGON GRID ── */
+  function drawHexGrid(t) {
+    if (isMobile) return;
+    var size = 45, cols = Math.ceil(W / (size * 1.75)) + 1, rows = Math.ceil(H / (size * 1.5)) + 1;
+    ctx.lineWidth = 0.4;
+    for (var row = -1; row < rows; row++) {
+      for (var col = -1; col < cols; col++) {
+        var cx = col * size * 1.73 + (row % 2 === 0 ? 0 : size * 0.865);
+        var cy = row * size * 1.5;
+        var dx = cx - mouse.x, dy = cy - mouse.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var pulse = Math.sin(t * 0.008 + cx * 0.008 + cy * 0.006) * 0.5 + 0.5;
+        var alpha = 0.025 + pulse * 0.02;
+        if (dist < 220) alpha += (1 - dist / 220) * 0.04;
+        ctx.beginPath();
+        for (var k = 0; k < 6; k++) {
+          var angle = (Math.PI / 3) * k;
+          var hx = cx + size * Math.cos(angle), hy = cy + size * Math.sin(angle);
+          k === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = 'hsla(195,60%,65%,' + alpha + ')';
+        ctx.stroke();
+      }
+    }
+  }
+
+  /* ── FRAME LOOP ── */
+  function frame() {
+    time++;
+    ctx.clearRect(0, 0, W, H);
+    drawAurora(time);
+    drawHexGrid(time);
+
+    /* Data streams */
+    if (!isMobile) {
+      streams.forEach(function (s) { s.update(); s.draw(); });
+    }
+
+    /* Waves */
+    waves.forEach(function (w) { w.draw(time); });
+
+    /* Particles & connections */
+    drawConnections();
+    particles.forEach(function (p) { p.update(); p.draw(); });
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
 
 
 // ============================================================
@@ -62,8 +369,15 @@
       if (overlay) overlay.classList.add('hidden');
       document.body.style.overflow = '';
       window.scrollTo(0, 0);
+      setTimeout(function () {
+        if (typeof AOS !== 'undefined') AOS.refresh();
+        initCounters();
+        initRings();
+        initSectionFadeIn();
+        initStaggerFadeIn();
+      }, 600);
     }
-    setTimeout(revealPortfolio, 5000);
+    setTimeout(revealPortfolio, 3000);
 
     sendTelegramNotification(name, revealPortfolio);
   };
@@ -105,13 +419,11 @@
     }
 
     function sendMsg(ip, city, country, isp) {
-      // Determine device category based on screen width
       var screenWidth = window.screen.width;
       var deviceCategory = 'Desktop';
       if      (screenWidth < 480)  deviceCategory = 'Mobile';
       else if (screenWidth < 1024) deviceCategory = 'Tablet / Small Desktop';
 
-      // Self-visit detection
       var isLocal     = referrer.includes('127.0.0.1') || referrer.includes('localhost');
       var statusEmoji = isLocal ? '🛠️' : '🎯';
       var statusTitle = isLocal ? 'Local Test' : 'New Visitor';
@@ -200,6 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initTestimonialsSlider();
   initTouchPressStates();
   initSectionFadeIn();
+  showProjectSkeleton();
   loadProjects();
   loadExperience();
   loadArsenal();
@@ -392,7 +705,10 @@ function initCounters() {
       observer.unobserve(entry.target);
     });
   }, { threshold: 0.6 });
-  document.querySelectorAll('[data-count]').forEach(function (el) { observer.observe(el); });
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    el.textContent = '0';
+    observer.observe(el);
+  });
 }
 
 function animateCount(el, target) {
@@ -412,6 +728,9 @@ function animateCount(el, target) {
 // ============================================================
 
 function initRings() {
+  document.querySelectorAll('.ring-fg').forEach(function (r) {
+    r.style.strokeDashoffset = (2 * Math.PI * 50).toString();
+  });
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
@@ -536,7 +855,13 @@ function initScrollReveal() {
   }, { threshold: 0.08 });
 
   els.forEach(function (el) { el.style.opacity = '0'; observer.observe(el); });
-  setTimeout(function () { els.forEach(function (el) { el.style.opacity = '1'; }); }, 2000);
+  setTimeout(function () {
+    els.forEach(function (el) {
+      if (el.style.opacity === '0') {
+        el.style.cssText = 'transition:opacity 0.5s ease,transform 0.5s ease;opacity:1;transform:none;';
+      }
+    });
+  }, 3500);
 }
 
 
@@ -627,17 +952,10 @@ function initSoftParallax() {
 function showProjectSkeleton() {
   var grid = document.getElementById('projectsGrid');
   if (!grid) return;
+  
+  // The skeleton cards have been removed from the innerHTML string below
   grid.insertAdjacentHTML('beforebegin',
-    '<div class="projects-skeleton" id="projectsSkeleton">' +
-    [1,2,3].map(function () {
-      return '<div class="skeleton skeleton-card">' +
-        '<div class="skeleton skeleton-line" style="height:18px;width:60%;margin-bottom:16px;"></div>' +
-        '<div class="skeleton skeleton-line" style="height:12px;width:100%;margin-bottom:8px;"></div>' +
-        '<div class="skeleton skeleton-line" style="height:12px;width:80%;margin-bottom:20px;"></div>' +
-        '<div class="skeleton skeleton-line" style="height:12px;width:40%;"></div>' +
-        '</div>';
-    }).join('') +
-    '</div>'
+    '<div class="projects-skeleton" id="projectsSkeleton"></div>'
   );
 }
 
@@ -679,9 +997,8 @@ var projectsData = [
     title: 'Hamad International Airport Expansion',
     challenge: 'Deliver a multi-phase IT infrastructure rollout for an operational international airport requiring 24/7 uptime. Zero margin for deployment errors during high-traffic windows.',
     solution:  'Led full-cycle device provisioning across two expansion phases. Deployed POS systems and hospitality networks, integrating retail hubs with core airport infrastructure. Implemented a new asset tracking protocol mid-project.',
-    impact:    '100% infrastructure readiness maintained across both phases. Equipment loss reduced by 10% via the newly introduced asset tracking system.',
+    impact:    'Executed a high-velocity system reimaging and OS deployment strategy. Prioritized L2 troubleshooting for critical hardware failures and provided dedicated EMR support.',
     tools:     ['PXE Booting', 'Cisco IOS', 'Asset Management', 'POS Systems', 'LAN/WAN', 'Windows Imaging'],
-    
   },
   {
     icon: 'fa-hospital', sector: 'Healthcare · EMR Systems',
@@ -690,7 +1007,6 @@ var projectsData = [
     solution:  'Executed a high-velocity system reimaging and OS deployment strategy. Prioritized L2 troubleshooting for critical hardware failures and provided dedicated EMR support.',
     impact:    '95% SLA compliance achieved consistently. Zero EMR downtime recorded. 300+ staff onboarded across MMCH, KMC, and TVH.',
     tools:     ['EMR Systems', 'OS Reimaging', 'Active Directory', 'L2 Troubleshooting', 'SCCM', 'Hardware Repair'],
-    
   },
   {
     icon: 'fa-passport', sector: 'Government · Compliance',
@@ -699,7 +1015,6 @@ var projectsData = [
     solution:  'Overhauled LAN network and server configurations to support secure visa processing. Acted as technical liaison with government authorities to resolve credential recovery cases.',
     impact:    'Digital asset registry created from scratch, eliminating equipment discrepancies. System security hardened. Visa processing workflows streamlined.',
     tools:     ['LAN Configuration', 'Server Admin', 'Office 365', 'Security Compliance', 'Asset Registry', 'Digital Credentials'],
-    
   }
 ];
 
