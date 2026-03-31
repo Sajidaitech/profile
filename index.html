@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <meta name="description" content="Sajid Mehmood — IT Systems Engineer | CCNA Certified | Enterprise Infrastructure Specialist">
-  <meta name="theme-color" content="#020408">
+  <meta name="theme-color" content="#09090e">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="format-detection" content="telephone=no">
-  <title>Sajid Mehmood | IT Systems Engineer</title>
+  <title>Sajid Mehmood | IT Support Engineer</title>
   <link rel="icon" href="logo.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -18,9 +18,7 @@
 </head>
 <body class="dark-mode">
 
-  <!-- ============================================================
-       GATE OVERLAY
-  ============================================================ -->
+  <!-- ============================================================ GATE OVERLAY ============================================================ -->
   <div id="gateOverlay">
     <div class="g-deco">
       <span></span><span></span>
@@ -48,9 +46,7 @@
           <label class="g-label" for="gVisitorName">Your Name</label>
           <div class="g-input-wrap">
             <span class="g-icon">&#128100;</span>
-            <input type="text" id="gVisitorName" class="g-input"
-              placeholder="e.g. Ahmed, Sarah, HR Team..."
-              autocomplete="off" maxlength="40" style="font-size:16px;">
+            <input type="text" id="gVisitorName" class="g-input" placeholder="e.g. Ahmed, Sarah, HR Team..." autocomplete="off" maxlength="40" style="font-size:16px;">
           </div>
           <p class="g-error" id="gErrorMsg">&#9888; Please enter your name to continue.</p>
         </div>
@@ -72,45 +68,41 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       BACKGROUND DECORATIONS
-  ============================================================ -->
+  <!-- ============================================================ BACKGROUND ============================================================ -->
   <div class="grain-overlay" aria-hidden="true"></div>
   <div class="ambient-orb orb-1" aria-hidden="true"></div>
   <div class="ambient-orb orb-2" aria-hidden="true"></div>
   <div class="ambient-orb orb-3" aria-hidden="true"></div>
+
+  <!-- Interactive 3D particle canvas for hero -->
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
   <div class="cursor-dot" id="cursorDot"></div>
   <div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- ============================================================
-       FLOATING ACTION BUTTON
-  ============================================================ -->
+  <!-- ============================================================ FAB ============================================================ -->
   <div class="fab-container" id="fabContainer">
     <button class="fab-main" id="fabMain" aria-label="Quick actions">
       <i class="fas fa-bolt fab-icon-main"></i>
       <i class="fas fa-times fab-icon-close"></i>
     </button>
     <div class="fab-options">
-      <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-         target="_blank" rel="noopener noreferrer" class="fab-option" data-label="Download Resume">
+      <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="fab-option" data-label="Download Resume">
         <i class="fas fa-file-arrow-down"></i>
       </a>
       <a href="#contact" class="fab-option fab-option-contact" data-label="Quick Connect">
         <i class="fas fa-bolt"></i>
       </a>
-      <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer"
-         class="fab-option fab-option-whatsapp" data-label="WhatsApp">
+      <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer" class="fab-option fab-option-whatsapp" data-label="WhatsApp">
         <i class="fab fa-whatsapp"></i>
       </a>
     </div>
   </div>
 
-  <!-- ============================================================
-       TOP NAVIGATION
-  ============================================================ -->
+  <!-- ============================================================ NAVIGATION ============================================================ -->
   <header class="top-nav" id="topNav">
     <div class="nav-inner">
-      <a href="#home" class="nav-logo">
+      <a href="#home" class="nav-logo nav-anchor">
         <div class="logo-mark">
           <img src="logo.png" alt="SM" style="width:28px;height:28px;object-fit:contain;position:relative;z-index:1;">
         </div>
@@ -120,16 +112,15 @@
         </div>
       </a>
       <nav class="nav-menu" aria-label="Main navigation">
-        <a href="#about"          class="nav-link">About</a>
-        <a href="#projects"       class="nav-link">Projects</a>
-        <a href="#experience"     class="nav-link">Experience</a>
-        <a href="#arsenal"        class="nav-link">Arsenal</a>
-        <a href="#education"      class="nav-link">Education</a>
-        <a href="#certifications" class="nav-link">Certifications</a>
-        <a href="#testimonials"   class="nav-link">Reviews</a>
-        <a href="#contact"        class="nav-link">Contact</a>
-        <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-           target="_blank" rel="noopener noreferrer" class="nav-resume-btn">
+        <a href="#about"          class="nav-link nav-anchor">About</a>
+        <a href="#projects"       class="nav-link nav-anchor">Projects</a>
+        <a href="#experience"     class="nav-link nav-anchor">Experience</a>
+        <a href="#arsenal"        class="nav-link nav-anchor">Arsenal</a>
+        <a href="#education"      class="nav-link nav-anchor">Education</a>
+        <a href="#certifications" class="nav-link nav-anchor">Certifications</a>
+        <a href="#testimonials"   class="nav-link nav-anchor">Reviews</a>
+        <a href="#contact"        class="nav-link nav-anchor">Contact</a>
+        <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="nav-resume-btn">
           <i class="fas fa-file-alt"></i> Resume
         </a>
       </nav>
@@ -138,28 +129,54 @@
       </button>
     </div>
     <div class="mobile-drawer" id="mobileDrawer" role="navigation">
-      <a href="#about"          class="mob-link">About</a>
-      <a href="#projects"       class="mob-link">Projects</a>
-      <a href="#experience"     class="mob-link">Experience</a>
-      <a href="#arsenal"        class="mob-link">Arsenal</a>
-      <a href="#education"      class="mob-link">Education</a>
-      <a href="#certifications" class="mob-link">Certifications</a>
-      <a href="#testimonials"   class="mob-link">Reviews</a>
-      <a href="#contact"        class="mob-link">Contact</a>
-      <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-         target="_blank" rel="noopener noreferrer" class="mob-link mob-cta">Download Resume</a>
+      <a href="#about"          class="mob-link nav-anchor">About</a>
+      <a href="#projects"       class="mob-link nav-anchor">Projects</a>
+      <a href="#experience"     class="mob-link nav-anchor">Experience</a>
+      <a href="#arsenal"        class="mob-link nav-anchor">Arsenal</a>
+      <a href="#education"      class="mob-link nav-anchor">Education</a>
+      <a href="#certifications" class="mob-link nav-anchor">Certifications</a>
+      <a href="#testimonials"   class="mob-link nav-anchor">Reviews</a>
+      <a href="#contact"        class="mob-link nav-anchor">Contact</a>
+      <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="mob-link mob-cta">Download Resume</a>
     </div>
   </header>
 
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
   <main>
 
-    <!-- ============================================================
-         HERO SECTION
-    ============================================================ -->
+    <!-- ============================================================ HERO ============================================================ -->
     <section id="home" class="hero-section">
       <div class="hero-grid-bg" aria-hidden="true"></div>
       <div class="hero-scan-line" aria-hidden="true"></div>
+
+      <!-- Morphing background shapes -->
+      <div class="hero-morph-bg" aria-hidden="true">
+        <div class="morph-shape morph-1"></div>
+        <div class="morph-shape morph-2"></div>
+        <div class="morph-shape morph-3"></div>
+      </div>
+
+      <!-- Floating tech icon nodes -->
+      <div class="hero-nodes" aria-hidden="true">
+        <div class="hnode hnode-1"><i class="fas fa-server"></i></div>
+        <div class="hnode hnode-2"><i class="fas fa-network-wired"></i></div>
+        <div class="hnode hnode-3"><i class="fas fa-shield-halved"></i></div>
+        <div class="hnode hnode-4"><i class="fas fa-cloud"></i></div>
+        <div class="hnode hnode-5"><i class="fas fa-database"></i></div>
+        <div class="hnode hnode-6"><i class="fas fa-wifi"></i></div>
+      </div>
+
+      <!-- Glitch lines decoration -->
+      <div class="hero-glitch-lines" aria-hidden="true">
+        <div class="glitch-line gl-1"></div>
+        <div class="glitch-line gl-2"></div>
+        <div class="glitch-line gl-3"></div>
+      </div>
+
       <div class="hero-layout">
+        <!-- ID Card -->
         <div class="id-card" data-aos="fade-right" data-aos-duration="900">
           <div class="id-card-header">
             <div class="id-chip-row">
@@ -195,6 +212,7 @@
           </div>
         </div>
 
+        <!-- Hero copy -->
         <div class="hero-copy" data-aos="fade-left" data-aos-duration="900" data-aos-delay="120">
           <div class="hero-eyebrow">
             <span class="eyebrow-line"></span>
@@ -234,8 +252,8 @@
             </div>
           </div>
           <div class="hero-ctas">
-            <a href="#projects" class="btn btn-gold">View Projects <i class="fas fa-arrow-right"></i></a>
-            <a href="#contact" class="btn btn-ghost"><i class="fas fa-bolt"></i> Engage</a>
+            <a href="#projects" class="btn btn-gold btn-magnetic nav-anchor">View Projects <i class="fas fa-arrow-right"></i></a>
+            <a href="#contact"  class="btn btn-ghost btn-magnetic nav-anchor"><i class="fas fa-bolt"></i> Engage</a>
           </div>
           <div class="hero-ticker" aria-hidden="true">
             <div class="ticker-track">
@@ -251,11 +269,17 @@
           </div>
         </div>
       </div>
+
+      <!-- Scroll indicator -->
+      <div class="hero-scroll-indicator" aria-hidden="true">
+        <div class="scroll-mouse">
+          <div class="scroll-wheel"></div>
+        </div>
+        <span class="scroll-text">Scroll</span>
+      </div>
     </section>
 
-    <!-- ============================================================
-         ABOUT SECTION
-    ============================================================ -->
+    <!-- ============================================================ ABOUT ============================================================ -->
     <section id="about" class="section about-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -281,8 +305,8 @@
                 <svg viewBox="0 0 120 120" role="img" aria-label="95% SLA Compliance">
                   <defs>
                     <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style="stop-color:#C5A059"/>
-                      <stop offset="100%" style="stop-color:#E8C97A"/>
+                      <stop offset="0%" style="stop-color:#7ec8e3"/>
+                      <stop offset="100%" style="stop-color:#a89de8"/>
                     </linearGradient>
                   </defs>
                   <circle class="ring-bg" cx="60" cy="60" r="50"/>
@@ -319,9 +343,7 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         PROJECTS SECTION
-    ============================================================ -->
+    <!-- ============================================================ PROJECTS ============================================================ -->
     <section id="projects" class="section projects-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -334,9 +356,7 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         EXPERIENCE SECTION
-    ============================================================ -->
+    <!-- ============================================================ EXPERIENCE ============================================================ -->
     <section id="experience" class="section exp-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -348,9 +368,7 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         ARSENAL SECTION
-    ============================================================ -->
+    <!-- ============================================================ ARSENAL ============================================================ -->
     <section id="arsenal" class="section arsenal-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -367,9 +385,7 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         EDUCATION SECTION
-    ============================================================ -->
+    <!-- ============================================================ EDUCATION ============================================================ -->
     <section id="education" class="section edu-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -384,26 +400,50 @@
             <button class="ftab" data-pane="ep2">IGCSE</button>
           </div>
           <div class="folder-body">
+            <!-- Middlesex -->
             <div class="folder-pane active" id="ep0">
               <div class="fp-icon"><i class="fas fa-university"></i></div>
               <div class="fp-content">
                 <span class="fp-date">Sep 2024 &ndash; Jun 2025</span>
                 <h3 class="fp-degree">Bachelor of Science in Information Technology</h3>
                 <p class="fp-inst">Middlesex University Dubai</p>
-                <p class="fp-note">Expected Graduation: 2025</p>
+                <div class="fp-grade-badge">
+                  <i class="fas fa-medal"></i>
+                  <span>Merit &mdash; Upper Second Class Honours (2:1)</span>
+                </div>
+                <p class="fp-note">Graduated 2025 &middot; Cambridge Validated Programme</p>
                 <a href="https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-certificate"></i> View Certificate</a>
               </div>
             </div>
+            <!-- Aptech -->
             <div class="folder-pane" id="ep1">
               <div class="fp-icon"><i class="fas fa-laptop-code"></i></div>
               <div class="fp-content">
                 <span class="fp-date">Nov 2020 &ndash; Nov 2023</span>
                 <h3 class="fp-degree">Advanced Diploma in Software Engineering</h3>
-                <p class="fp-inst">Aptech Qatar</p>
-                <p class="fp-note">ACCP Certification</p>
+                <p class="fp-inst">Aptech Qatar &middot; ACCP Programme</p>
+                <div class="fp-grade-badge fp-grade-distinction">
+                  <i class="fas fa-award"></i>
+                  <span>Overall Distinction &mdash; 3 Year Programme</span>
+                </div>
+                <div class="fp-year-grades">
+                  <div class="fp-year-row">
+                    <span class="fp-year-label">Year 1 &middot; CISE-ACCP</span>
+                    <span class="fp-year-score distinction">81% &mdash; Distinction</span>
+                  </div>
+                  <div class="fp-year-row">
+                    <span class="fp-year-label">Year 2 &middot; HCSE-ACCP</span>
+                    <span class="fp-year-score distinction">87% &mdash; Distinction</span>
+                  </div>
+                  <div class="fp-year-row">
+                    <span class="fp-year-label">Year 3 &middot; ACSE-ACCP</span>
+                    <span class="fp-year-score distinction">86% &mdash; Distinction</span>
+                  </div>
+                </div>
                 <a href="https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-certificate"></i> View Certificate</a>
               </div>
             </div>
+            <!-- IGCSE -->
             <div class="folder-pane" id="ep2">
               <div class="fp-icon"><i class="fas fa-school"></i></div>
               <div class="fp-content">
@@ -418,9 +458,7 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         CERTIFICATIONS SECTION
-    ============================================================ -->
+    <!-- ============================================================ CERTIFICATIONS ============================================================ -->
     <section id="certifications" class="section certs-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -447,9 +485,7 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         TESTIMONIALS SECTION
-    ============================================================ -->
+    <!-- ============================================================ TESTIMONIALS ============================================================ -->
     <section id="testimonials" class="section testimonials-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -519,9 +555,7 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         CONTACT SECTION
-    ============================================================ -->
+    <!-- ============================================================ CONTACT ============================================================ -->
     <section id="contact" class="section contact-section">
       <div class="container">
         <div class="section-header" data-aos="fade-up">
@@ -533,14 +567,14 @@
           <div class="contact-left" data-aos="fade-right">
             <p class="contact-intro">Ready to discuss an enterprise challenge, a critical infrastructure project, or a new opportunity? I operate with the same precision here as I do onsite.</p>
             <div class="contact-items">
-              <a href="mailto:sajidmk.work@gmail.com" class="contact-item">
+              <a href="mailto:sajidmehmood.smk@gmail.com" class="contact-item">
                 <div class="ci-icon"><i class="fas fa-envelope"></i></div>
-                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value">sajidmk.work@gmail.com</span></div>
+                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value">sajidmehmood.smk@gmail.com</span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
-              <a href="mailto:sajidmehmood748@gmail.com" class="contact-item">
+              <a href="mailto:sajid.mk007@outlook.com" class="contact-item">
                 <div class="ci-icon"><i class="fas fa-envelope-open"></i></div>
-                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value">sajidmehmood748@gmail.com</span></div>
+                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value">sajid.mk007@outlook.com</span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <a href="tel:+97466969598" class="contact-item">
@@ -589,9 +623,7 @@
 
   </main>
 
-  <!-- ============================================================
-       FOOTER
-  ============================================================ -->
+  <!-- ============================================================ FOOTER ============================================================ -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
@@ -599,10 +631,10 @@
         <span class="footer-role">IT Systems Engineer &middot; CCNA</span>
       </div>
       <div class="footer-links">
-        <a href="#about">Profile</a>
-        <a href="#projects">Projects</a>
-        <a href="#arsenal">Arsenal</a>
-        <a href="#contact">Contact</a>
+        <a href="#about" class="nav-anchor">Profile</a>
+        <a href="#projects" class="nav-anchor">Projects</a>
+        <a href="#arsenal" class="nav-anchor">Arsenal</a>
+        <a href="#contact" class="nav-anchor">Contact</a>
       </div>
       <div class="footer-copy">
         <span>&copy; 2025 Sajid Mehmood. All Rights Reserved.</span>
@@ -610,11 +642,301 @@
     </div>
   </footer>
 
-  <!-- ============================================================
-       SCRIPTS
-  ============================================================ -->
+  <!-- ============================================================ SCRIPTS ============================================================ -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="script.js"></script>
+
+  <script>
+  /* ── Unified smooth scroll — works AFTER gate dismissed ── */
+  (function () {
+    var navH = function () {
+      var nav = document.getElementById('topNav');
+      return nav ? nav.offsetHeight : 68;
+    };
+
+    function scrollTo(href) {
+      if (!href || href === '#') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+      var target = document.querySelector(href);
+      if (!target) return;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navH() - 16;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }
+
+    function closeMobileDrawer() {
+      var drawer    = document.getElementById('mobileDrawer');
+      var hamburger = document.getElementById('hamburger');
+      if (drawer && drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        if (hamburger) { hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); }
+        document.body.style.overflow = '';
+      }
+    }
+
+    /* Single delegated listener — catches ALL .nav-anchor clicks including future DOM */
+    document.addEventListener('click', function (e) {
+      var anchor = e.target.closest('.nav-anchor');
+      if (!anchor) return;
+      var href = anchor.getAttribute('href');
+      if (!href || !href.startsWith('#')) return;
+      e.preventDefault();
+      closeMobileDrawer();
+      /* Small delay if gate is still animating out */
+      var gate = document.getElementById('gateOverlay');
+      var delay = gate && !gate.classList.contains('hidden') ? 0 : 0;
+      setTimeout(function () { scrollTo(href); }, delay);
+    }, true); /* capture phase */
+  })();
+
+  /* ── Scroll progress bar ── */
+  (function () {
+    var bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    window.addEventListener('scroll', function () {
+      var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      bar.style.width = Math.min(pct, 100) + '%';
+    }, { passive: true });
+  })();
+
+  /* ══════════════════════════════════════════════════════════════
+     INTERACTIVE HERO BACKGROUND — Advanced WebGL-style Canvas
+     ══════════════════════════════════════════════════════════════ */
+  (function () {
+    var canvas = document.getElementById('heroCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W, H, mouse = { x: -999, y: -999 }, time = 0;
+    var isMobile = window.innerWidth < 768;
+    var COUNT = isMobile ? 55 : 120;
+    var particles = [], waves = [], hexagons = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', function () { resize(); isMobile = window.innerWidth < 768; }, { passive: true });
+    window.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+    window.addEventListener('touchmove', function (e) {
+      if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+    }, { passive: true });
+
+    /* ── PARTICLE CLASS ── */
+    function Particle() { this.reset(true); }
+    Particle.prototype.reset = function (randomY) {
+      this.x  = Math.random() * (W || 1200);
+      this.y  = randomY ? Math.random() * (H || 800) : H + 20;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = -(Math.random() * 0.5 + 0.1);
+      this.r  = Math.random() * 2 + 0.5;
+      this.life = Math.random() * 0.5 + 0.2;
+      this.maxLife = this.life;
+      this.hue = [195, 215, 255, 270][Math.floor(Math.random() * 4)];
+      this.sat = Math.floor(Math.random() * 30) + 50;
+      this.lit = Math.floor(Math.random() * 20) + 60;
+      this.twinkle = Math.random() * Math.PI * 2;
+      this.twinkleSpeed = Math.random() * 0.04 + 0.01;
+      this.type = Math.random() > 0.85 ? 'diamond' : 'circle';
+    };
+    Particle.prototype.update = function () {
+      this.twinkle += this.twinkleSpeed;
+      var dx = this.x - mouse.x, dy = this.y - mouse.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 160 && dist > 0) {
+        var f = (160 - dist) / 160 * 0.7;
+        this.vx += (dx / dist) * f * 0.08;
+        this.vy += (dy / dist) * f * 0.08;
+      }
+      this.vx *= 0.97; this.vy *= 0.97;
+      this.x += this.vx; this.y += this.vy;
+      this.life -= 0.001;
+      if (this.life <= 0 || this.x < -30 || this.x > W + 30 || this.y < -30) this.reset(false);
+    };
+    Particle.prototype.draw = function () {
+      var twinkleAlpha = (Math.sin(this.twinkle) * 0.3 + 0.7) * (this.life / this.maxLife);
+      ctx.save();
+      if (this.type === 'diamond') {
+        /* Glow */
+        var grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 6);
+        grd.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.4) + ')');
+        grd.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd;
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 6, 0, Math.PI * 2); ctx.fill();
+        /* Diamond */
+        ctx.translate(this.x, this.y); ctx.rotate(Math.PI / 4 + this.twinkle * 0.1);
+        ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + twinkleAlpha + ')';
+        ctx.fillRect(-this.r * 1.2, -this.r * 1.2, this.r * 2.4, this.r * 2.4);
+      } else {
+        var grd2 = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 4);
+        grd2.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.25) + ')');
+        grd2.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd2;
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + twinkleAlpha + ')';
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.restore();
+    };
+
+    /* ── WAVE CLASS ── */
+    function Wave(y, amp, speed, color, opacity) {
+      this.y = y; this.amp = amp; this.speed = speed;
+      this.color = color; this.opacity = opacity; this.offset = Math.random() * Math.PI * 2;
+    }
+    Wave.prototype.draw = function (t) {
+      ctx.beginPath();
+      ctx.moveTo(0, this.y);
+      for (var x = 0; x <= W; x += 4) {
+        var mouseInfluence = 0;
+        if (Math.abs(mouse.y - this.y) < 120) {
+          var mdx = x - mouse.x;
+          mouseInfluence = Math.exp(-mdx * mdx / 20000) * (120 - Math.abs(mouse.y - this.y)) * 0.3;
+        }
+        ctx.lineTo(x, this.y + Math.sin(x * 0.008 + t * this.speed + this.offset) * this.amp
+                      + Math.sin(x * 0.015 + t * this.speed * 0.7 + this.offset) * this.amp * 0.4
+                      + mouseInfluence);
+      }
+      ctx.strokeStyle = this.color.replace('OPACITY', this.opacity);
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    };
+
+    /* ── DATA STREAM CLASS (vertical binary lines) ── */
+    function DataStream() {
+      this.x = Math.random() * (W || 1200);
+      this.y = Math.random() * (H || 800);
+      this.speed = Math.random() * 1.5 + 0.5;
+      this.chars = '01'.split('');
+      this.charIdx = 0;
+      this.length = Math.floor(Math.random() * 10) + 5;
+      this.opacity = Math.random() * 0.08 + 0.02;
+      this.hue = Math.random() > 0.5 ? 195 : 255;
+      this.fontSize = Math.floor(Math.random() * 5) + 8;
+    }
+    DataStream.prototype.update = function () {
+      this.y += this.speed;
+      if (this.y > H + this.length * this.fontSize) {
+        this.y = -this.length * this.fontSize;
+        this.x = Math.random() * W;
+      }
+    };
+    DataStream.prototype.draw = function () {
+      ctx.font = this.fontSize + 'px "DM Mono", monospace';
+      for (var i = 0; i < this.length; i++) {
+        var alpha = this.opacity * (1 - i / this.length) * (i === 0 ? 3 : 1);
+        ctx.fillStyle = 'hsla(' + this.hue + ',70%,70%,' + Math.min(alpha, 0.25) + ')';
+        ctx.fillText(this.chars[Math.floor(Math.random() * this.chars.length)], this.x, this.y - i * this.fontSize);
+      }
+    };
+
+    /* ── INIT ── */
+    for (var i = 0; i < COUNT; i++) particles.push(new Particle());
+    var LINK_DIST = isMobile ? 80 : 120;
+
+    /* Waves */
+    var waveColors = [
+      'hsla(195,60%,65%,OPACITY)',
+      'hsla(255,55%,70%,OPACITY)',
+      'hsla(210,65%,65%,OPACITY)'
+    ];
+    waves.push(new Wave(H * 0.55, 22, 0.25, waveColors[0], 0.06));
+    waves.push(new Wave(H * 0.65, 16, -0.18, waveColors[1], 0.05));
+    waves.push(new Wave(H * 0.72, 12, 0.32, waveColors[2], 0.04));
+
+    /* Data streams — desktop only */
+    var streams = [];
+    if (!isMobile) {
+      for (var s = 0; s < 18; s++) streams.push(new DataStream());
+    }
+
+    /* ── CONNECTION GRID ── */
+    function drawConnections() {
+      for (var a = 0; a < particles.length; a++) {
+        for (var b = a + 1; b < particles.length; b++) {
+          var dx = particles[a].x - particles[b].x;
+          var dy = particles[a].y - particles[b].y;
+          var d  = Math.sqrt(dx * dx + dy * dy);
+          if (d < LINK_DIST) {
+            var op = (1 - d / LINK_DIST) * 0.18;
+            var midHue = (particles[a].hue + particles[b].hue) / 2;
+            var life = Math.min(particles[a].life / particles[a].maxLife, particles[b].life / particles[b].maxLife);
+            ctx.beginPath();
+            ctx.moveTo(particles[a].x, particles[a].y);
+            ctx.lineTo(particles[b].x, particles[b].y);
+            ctx.strokeStyle = 'hsla(' + midHue + ',60%,68%,' + (op * life) + ')';
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    /* ── AURORA BACKGROUND ── */
+    function drawAurora(t) {
+      /* Deep sweeping aurora bands */
+      var aurora1 = ctx.createLinearGradient(0, H * 0.2, W, H * 0.8);
+      aurora1.addColorStop(0,   'hsla(195,80%,40%,0)');
+      aurora1.addColorStop(0.3, 'hsla(215,70%,45%,' + (0.035 + 0.02 * Math.sin(t * 0.003)) + ')');
+      aurora1.addColorStop(0.6, 'hsla(255,75%,50%,' + (0.025 + 0.015 * Math.cos(t * 0.004)) + ')');
+      aurora1.addColorStop(1,   'hsla(280,60%,40%,0)');
+      ctx.fillStyle = aurora1;
+      ctx.fillRect(0, 0, W, H);
+
+      /* Radial mouse glow */
+      if (mouse.x > 0) {
+        var grd = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 280);
+        grd.addColorStop(0, 'hsla(195,70%,60%,0.06)');
+        grd.addColorStop(0.5, 'hsla(255,65%,65%,0.03)');
+        grd.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
+    /* ── ANIMATED HEXAGON GRID (subtle) ── */
+    function drawHexGrid(t) {
+      if (isMobile) return;
+      var size = 45, cols = Math.ceil(W / (size * 1.75)) + 1, rows = Math.ceil(H / (size * 1.5)) + 1;
+      ctx.lineWidth = 0.4;
+      for (var row = -1; row < rows; row++) {
+        for (var col = -1; col < cols; col++) {
+          var cx = col * size * 1.73 + (row % 2 === 0 ? 0 : size * 0.865);
+          var cy = row * size * 1.5;
+          var dx = cx - mouse.x, dy = cy - mouse.y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var pulse = Math.sin(t * 0.008 + cx * 0.008 + cy * 0.006) * 0.5 + 0.5;
+          var alpha = 0.025 + pulse * 0.02;
+          if (dist < 220) alpha += (1 - dist / 220) * 0.04;
+          ctx.beginPath();
+          for (var k = 0; k < 6; k++) {
+            var angle = (Math.PI / 3) * k;
+            var hx = cx + size * Math.cos(angle), hy = cy + size * Math.sin(angle);
+            k === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
+          }
+          ctx.closePath();
+          ctx.strokeStyle = 'hsla(195,60%,65%,' + alpha + ')';
+          ctx.stroke();
+        }
+      }
+    }
+
+    /* ── FRAME LOOP ── */
+    function frame() {
+      time++;
+      ctx.clearRect(0, 0, W, H);
+      drawAurora(time);
+      drawHexGrid(time);
+      /* Data streams */
+      streams.forEach(function (s) { s.update(); s.draw(); });
+      /* Waves */
+      waves.forEach(function (w) { w.draw(time); });
+      /* Connections then particles */
+      drawConnections();
+      particles.forEach(function (p) { p.update(); p.draw(); });
+      requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+  </script>
 
 </body>
 </html>
