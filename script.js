@@ -533,14 +533,17 @@ document.addEventListener('DOMContentLoaded', function () {
 // ============================================================
 
 function initNav() {
-  var nav       = document.getElementById('topNav');
-  var hamburger = document.getElementById('hamburger');
-  var drawer    = document.getElementById('mobileDrawer');
-  var navLinks  = document.querySelectorAll('.nav-link');
+  var nav      = document.getElementById('topNav');
+  var navLinks = document.querySelectorAll('.nav-link');
 
+  /* ── Scrolled state + active-link highlighting ── */
   window.addEventListener('scroll', function () {
     if (!nav) return;
+
+    /* Scrolled class for deeper bg + border glow */
     nav.classList.toggle('scrolled', window.scrollY > 60);
+
+    /* Active section detection */
     var current = '';
     document.querySelectorAll('section[id]').forEach(function (sec) {
       if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
@@ -550,54 +553,7 @@ function initNav() {
     });
   }, { passive: true });
 
-  function openDrawer() {
-    hamburger.classList.add('open');
-    drawer.classList.add('open');
-    hamburger.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeDrawer() {
-    hamburger.classList.remove('open');
-    drawer.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  if (hamburger) {
-    hamburger.addEventListener('click', function (e) {
-      e.stopPropagation();
-      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
-    });
-  }
-
-  document.querySelectorAll('.mob-link').forEach(function (link) {
-    link.addEventListener('click', closeDrawer);
-  });
-
-  document.addEventListener('click', function (e) {
-    if (drawer && drawer.classList.contains('open') &&
-        !drawer.contains(e.target) && hamburger && !hamburger.contains(e.target)) {
-      closeDrawer();
-    }
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeDrawer();
-  });
-
-  document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-    anchor.addEventListener('click', function (e) {
-      var href = this.getAttribute('href');
-      if (href === '#') return;
-      var target = document.querySelector(href);
-      if (!target) return;
-      e.preventDefault();
-      var navH = nav ? nav.offsetHeight : 68;
-      window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - navH - 16, behavior: 'smooth' });
-    });
-  });
-
+  /* ── Ripple on nav-link click ── */
   navLinks.forEach(function (link) {
     link.addEventListener('click', function (e) {
       var ripple = document.createElement('span');
