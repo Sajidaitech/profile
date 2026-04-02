@@ -1599,8 +1599,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
 
 @media(max-width:1000px) {
   .hero-layout { flex-direction: column; align-items: center; padding: 24px 24px 32px; text-align: center; }
-  .id-card { width: 100%; max-width: 340px; animation: none; order: 2; }
-  .hero-copy { max-width: 100%; width: 100%; order: 1; }
+  .id-card { width: 100%; max-width: 340px; animation: none; order: 1; }
+  .hero-copy { max-width: 100%; width: 100%; order: 2; }
   .hero-eyebrow { justify-content: center; }
   .hero-ctas { justify-content: center; }
   .cred-tags { justify-content: center; }
@@ -1620,7 +1620,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
 @media(max-width:680px) {
   .section { padding: 60px 16px; }
   .hero-layout { padding: 20px 16px 28px; gap: 28px; align-items: center; text-align: center; }
-  .id-card { order: 2; }
+  .id-card { order: 1; }
   .hero-headline { font-size: 30px; text-align: center; }
   .hero-brief { text-align: center; }
   .skills-bento { grid-template-columns: 1fr; }
@@ -1781,37 +1781,59 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
 .id-photo-wrap { position: relative; padding: 16px 16px 0; background: rgba(0,0,0,.18); }
 .id-photo-frame { position: absolute; inset: 16px 16px 0; border: 1.5px solid rgba(99,102,241,.3); border-radius: var(--radius-sm); pointer-events: none; animation: framePulse 3s ease-in-out infinite; }
 
-/* ── Mobile photo fix: iOS & Android ────────────────────── */
+/* ── Mobile hero + card + photo fix ────────────────────────────────────── */
 @media (max-width: 1000px) {
-  /* Remove ALL padding so photo fills edge-to-edge */
+
+  /* 1. Hero layout: card on top, text below */
+  .hero-layout {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 28px !important;
+    padding: 20px 16px 36px !important;
+    text-align: center !important;
+    overflow: hidden !important;
+  }
+  .id-card   { order: 1 !important; }
+  .hero-copy { order: 2 !important; }
+
+  /* 2. Card: shrink to screen width, kill float animation */
+  .id-card {
+    flex-shrink: 1 !important;
+    width: calc(100vw - 32px) !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    animation: idCardReveal 0.9s cubic-bezier(0.34,1.56,0.64,1) both 0.3s !important;
+  }
+
+  /* 3. Photo wrap: zero padding, image fills edge-to-edge */
   .id-photo-wrap {
     padding: 0 !important;
     background: transparent !important;
-    overflow: hidden;
+    overflow: hidden !important;
   }
 
-  /* Hide decorative frame — it's offset without padding */
+  /* 4. Photo: full width, fixed height, face centred */
+  .id-photo {
+    width: 100% !important;
+    height: 280px !important;
+    object-fit: cover !important;
+    object-position: center 25% !important;
+    display: block !important;
+    border-radius: 0 !important;
+    border: none !important;
+  }
+
+  /* 5. Hide overlays that depended on old padding */
   .id-photo-frame,
   .id-status-ring {
     display: none !important;
   }
 
-  .id-photo {
+  /* 6. Hero copy full width */
+  .hero-copy {
+    max-width: 100% !important;
     width: 100% !important;
-    height: 320px !important;
-    max-height: 320px !important;
-    object-fit: cover !important;
-    /* 30% from top shows face/shoulders, not just hair */
-    object-position: center 30% !important;
-    display: block !important;
-    border-radius: 0 !important;
-  }
-
-  .id-card {
-    max-width: 380px !important;
-    width: 100% !important;
-    margin: 0 auto !important;
-    overflow: hidden !important;
   }
 }
 .id-status-ring { position: absolute; bottom: 8px; right: 24px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); border: 2px solid var(--paper); display: flex; align-items: center; justify-content: center; }
@@ -2108,8 +2130,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
     display: flex;
     flex-direction: column;
   }
-  .hero-copy { order: 1 !important; }
-  .id-card   { order: 2 !important; }
+  .id-card   { order: 1 !important; }
+  .hero-copy { order: 2 !important; }
 }
 
 @media (max-width: 768px) {
@@ -2221,14 +2243,14 @@ img {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 28px;
-    padding: 20px 16px 36px !important;
+    gap: 32px;
+    padding: 28px 20px 36px !important;
     text-align: center;
   }
 
-  /* Card (profile photo) FIRST, text SECOND */
-  .id-card   { order: 1 !important; }
-  .hero-copy { order: 2 !important; max-width: 100% !important; width: 100% !important; }
+  /* Card (photo) first, text second */
+  .id-card    { order: 1 !important; }
+  .hero-copy  { order: 2 !important; max-width: 100% !important; width: 100% !important; }
 }
 
 /* ── 4. ABOUT SECTION — prevent hidden/cut-off text ─────── */
