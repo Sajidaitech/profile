@@ -2175,26 +2175,8 @@ img {
   height: auto;
 }
 
-/* ID card photo — critical portrait fix */
+/* ID card photo — critical portrait fix (kept for narrowest screens) */
 @media (max-width: 768px) {
-  .id-photo {
-    width: 100% !important;
-    height: auto !important;
-    max-height: 280px !important;
-    object-fit: cover !important;
-    object-position: center top !important;
-    display: block !important;
-    border-radius: var(--radius-sm) !important;
-    /* Force GPU compositing — helps Safari/iOS repaint */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-  }
-
-  .id-photo-wrap {
-    padding: 12px 12px 0 !important;
-    overflow: hidden;     /* prevents iOS clipping artifacts */
-  }
-
   /* Prevent id-card from overflowing viewport */
   .id-card {
     max-width: 100% !important;
@@ -2210,14 +2192,50 @@ img {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 32px;
-    padding: 28px 20px 36px !important;
+    gap: 28px;
+    padding: 20px 16px 36px !important;
     text-align: center;
   }
 
-  /* Text first, card second */
-  .hero-copy  { order: 1 !important; max-width: 100% !important; width: 100% !important; }
-  .id-card    { order: 2 !important; }
+  /* Card (profile photo) first, text second */
+  .id-card    { order: 1 !important; width: 100% !important; max-width: 360px !important; }
+  .hero-copy  { order: 2 !important; max-width: 100% !important; width: 100% !important; }
+}
+
+/* ── 3b. ID CARD PHOTO — full-width, perfectly visible on mobile ── */
+@media (max-width: 1000px) {
+  .id-photo-wrap,
+  .id-photo-area {
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .id-photo {
+    width: 100% !important;
+    height: 300px !important;
+    max-height: 300px !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+    border: none !important;
+    display: block !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  .id-photo-frame,
+  .id-photo-border {
+    display: none !important;
+  }
+
+  .id-card {
+    overflow: hidden !important;
+    border-radius: var(--radius-md) !important;
+  }
+
+  .id-body {
+    padding: 16px !important;
+  }
 }
 
 /* ── 4. ABOUT SECTION — prevent hidden/cut-off text ─────── */
