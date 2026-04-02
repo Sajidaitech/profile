@@ -1599,8 +1599,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
 
 @media(max-width:1000px) {
   .hero-layout { flex-direction: column; align-items: center; padding: 24px 24px 32px; text-align: center; }
-  .id-card { width: 100%; max-width: 340px; animation: none; }
-  .hero-copy { max-width: 100%; width: 100%; }
+  .id-card { width: 100%; max-width: 340px; animation: none; order: 2; }
+  .hero-copy { max-width: 100%; width: 100%; order: 1; }
   .hero-eyebrow { justify-content: center; }
   .hero-ctas { justify-content: center; }
   .cred-tags { justify-content: center; }
@@ -1620,6 +1620,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
 @media(max-width:680px) {
   .section { padding: 60px 16px; }
   .hero-layout { padding: 20px 16px 28px; gap: 28px; align-items: center; text-align: center; }
+  .id-card { order: 2; }
   .hero-headline { font-size: 30px; text-align: center; }
   .hero-brief { text-align: center; }
   .skills-bento { grid-template-columns: 1fr; }
@@ -2086,4 +2087,35 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
   display: none; width: 18px; height: 18px; border-radius: 50%;
   border: 2px solid rgba(255,255,255,.25); border-top-color: #fff;
   animation: gwSpin 0.7s linear infinite; position: absolute; right: 18px;
+}
+/* ============================================================
+   MOBILE FIX: Text first, photo second + image display fix
+   ============================================================ */
+
+@media (max-width: 1000px) {
+  .hero-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-copy { order: 1 !important; }
+  .id-card   { order: 2 !important; }
+}
+
+@media (max-width: 768px) {
+  .id-photo {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 300px !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    display: block !important;
+  }
+  .id-photo-wrap {
+    padding: 12px 12px 0;
+  }
+  .id-card {
+    max-width: 340px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
