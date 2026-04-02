@@ -2119,3 +2119,321 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
     margin: 0 auto;
   }
 }
+
+/* ============================================================
+   SECTION 33 · MOBILE PORTRAIT FIX — Complete Responsive Patch
+   (sajidmk.com — portrait mode on all smartphones)
+   ============================================================ */
+
+/* ── 1. GATE OVERLAY: portrait stacking ─────────────────── */
+@media (max-width: 768px) and (orientation: portrait),
+       (max-width: 480px) {
+
+  /* Gate: full-height single-column, scrollable */
+  #gateOverlay {
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    align-items: stretch !important;
+  }
+
+  /* Left panel fills whole screen */
+  .gw-left {
+    flex: none !important;
+    width: 100% !important;
+    min-height: 100svh !important;  /* svh avoids mobile chrome bar clipping */
+    min-height: 100vh !important;   /* fallback for older browsers */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Right panel hidden on portrait */
+  .gw-right {
+    display: none !important;
+  }
+
+  /* Form area: full-width, comfortable padding */
+  .gw-form-area {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 40px 24px 56px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Headline slightly smaller so it fits 1 line */
+  .gw-headline {
+    font-size: clamp(20px, 6vw, 30px) !important;
+  }
+}
+
+/* ── 2. IMAGE VISIBILITY & SCALING ─────────────────────── */
+/* Global rule: every img on the page */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ID card photo — critical portrait fix */
+@media (max-width: 768px) {
+  .id-photo {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 280px !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    display: block !important;
+    border-radius: var(--radius-sm) !important;
+    /* Force GPU compositing — helps Safari/iOS repaint */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  .id-photo-wrap {
+    padding: 12px 12px 0 !important;
+    overflow: hidden;     /* prevents iOS clipping artifacts */
+  }
+
+  /* Prevent id-card from overflowing viewport */
+  .id-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* ── 3. HERO LAYOUT — portrait single column ────────────── */
+@media (max-width: 1000px), (orientation: portrait) and (max-width: 1100px) {
+  .hero-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 32px;
+    padding: 28px 20px 36px !important;
+    text-align: center;
+  }
+
+  /* Text first, card second */
+  .hero-copy  { order: 1 !important; max-width: 100% !important; width: 100% !important; }
+  .id-card    { order: 2 !important; }
+}
+
+/* ── 4. ABOUT SECTION — prevent hidden/cut-off text ─────── */
+@media (max-width: 1000px) {
+  .about-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  /* Remove sticky — causes clipping on mobile */
+  .about-panel {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  .about-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ── 5. EXPERIENCE SECTION — force visibility ───────────── */
+/* AOS animations can leave opacity:0 on slow mobile */
+.section,
+.section * {
+  /* Don't force visibility here — let AOS run —
+     but ensure no section has overflow:hidden clipping children */
+}
+
+/* Ensure experience/about sections are never clipped */
+#about, #experience, #projects, #arsenal,
+#education, #certifications, #contact {
+  overflow: visible !important;
+}
+
+/* AOS elements: if JS hasn't initialized, show them */
+[data-aos] {
+  /* Fallback: visible before JS fires (overridden by AOS after init) */
+  transition-property: opacity, transform !important;
+}
+
+/* ── 6. SECTION PADDING — tighter on small portrait ─────── */
+@media (max-width: 480px) {
+  .section {
+    padding: 56px 16px !important;
+  }
+
+  .container {
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Hero headline */
+  .hero-headline,
+  .headline-top,
+  .headline-mid,
+  .headline-bot {
+    font-size: clamp(26px, 7vw, 38px) !important;
+  }
+}
+
+/* ── 7. FLEXBOX WRAP FIX — grids that refuse to wrap ────── */
+@media (max-width: 680px) {
+  /* Contact layout */
+  .contact-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* Folder education pane */
+  .folder-pane.active {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+  .folder-tabs {
+    flex-wrap: wrap !important;
+  }
+
+  /* Cert grid */
+  .certs-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Cert featured inner */
+  .cert-featured-inner {
+    flex-direction: column !important;
+    padding: 28px 20px !important;
+    gap: 20px !important;
+  }
+
+  /* Skills bento */
+  .skills-bento {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Testimonials grid */
+  .testi-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* KPIs */
+  .hero-kpis {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  .kpi-sep { display: none !important; }
+  .kpi-block {
+    width: 100% !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 14px 20px !important;
+  }
+  .kpi-block:last-child { border-bottom: none !important; }
+
+  /* CTA buttons full-width */
+  .hero-ctas {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .hero-ctas .btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* About stats: 2-col */
+  .about-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ── 8. OVERFLOW & HORIZONTAL SCROLL PREVENTION ─────────── */
+@media (max-width: 768px) {
+  body, html {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  /* Elements that can cause horizontal overflow */
+  .hero-nodes,
+  .hero-glitch-lines,
+  .hero-morph-bg,
+  .hero-grid-bg {
+    overflow: hidden !important;
+  }
+
+  /* Floating nodes: hide on very small screens to prevent overflow */
+  .hnode {
+    display: none !important;
+  }
+}
+
+/* ── 9. AVAILABILITY BANNER — avoid nav overlap ─────────── */
+@media (max-width: 768px) {
+  .availability-banner {
+    /* Move below nav, don't overlap content */
+    top: calc(var(--nav-h-safe, 76px) + 6px) !important;
+    right: 10px !important;
+    font-size: 9px !important;
+    padding: 5px 10px !important;
+    max-width: calc(100vw - 20px) !important;
+  }
+}
+
+/* ── 10. NAVBAR: prevent overflow on portrait ───────────── */
+@media (max-width: 768px) {
+  #topNav {
+    overflow: hidden !important;
+  }
+
+  /* Collapse center nav links on portrait; show hamburger */
+  #topNav nav {
+    display: none !important;
+  }
+
+  /* Show the hamburger menu if present */
+  #hamburger {
+    display: flex !important;
+  }
+}
+
+/* ── 11. LOGIN PAGE IMAGE in gate ────────────────────────── */
+/* .gw-skyline-img already gets max-width:100% from global img rule */
+.gw-skyline-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* ── 12. TOUCH TARGET SIZES — iOS/Android minimum ───────── */
+@media (max-width: 768px) {
+  .gw-btn,
+  .btn,
+  .fab-main,
+  .fab-option {
+    min-height: 48px !important;
+  }
+
+  .gw-input {
+    min-height: 52px !important;
+    font-size: 16px !important; /* prevents iOS zoom-on-focus */
+  }
+}
+
+/* ── 13. SAFE-AREA INSETS (iPhone notch / Dynamic Island) ── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (max-width: 768px) {
+    .footer {
+      padding-bottom: calc(24px + env(safe-area-inset-bottom)) !important;
+    }
+    .fab-container {
+      bottom: calc(24px + env(safe-area-inset-bottom)) !important;
+    }
+  }
+}
+
+/* END MOBILE PORTRAIT FIX */
