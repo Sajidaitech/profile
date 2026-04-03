@@ -42,7 +42,8 @@ input::placeholder { font-size: 14px; }
 
 html, body { -webkit-tap-highlight-color: transparent; }
 button, a  { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
-.nav-link, .mob-link, .footer-links a { min-width: unset; min-height: unset; display: inline-flex; align-items: center; padding-top: 6px; padding-bottom: 6px; }
+.nav-link, .footer-links a { min-width: unset; min-height: unset; display: inline-flex; align-items: center; padding-top: 6px; padding-bottom: 6px; }
+.mob-link { min-width: unset; min-height: unset; padding-top: 0; padding-bottom: 0; }
 
 
 /* ============================================================
@@ -2829,10 +2830,12 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
   padding: 12px 0;
 }
 .mob-link {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 14px;
   padding: 14px 24px;
+  width: 100%;
+  box-sizing: border-box;
   color: #9aa3b0;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 600;
