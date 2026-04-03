@@ -1027,7 +1027,7 @@ var experienceData = [
   },
   {
     date: 'Nov 2023 – Feb 2024', title: 'IT Support Engineer',
-    type: 'Project Deployment', company: 'Military Medical City Hospital (MMCH) · Al-Rayyan, Qatar',
+    type: 'Short-term Project', company: 'Military Medical City Hospital (MMCH) · Al-Rayyan, Qatar',
     stats: [
       { icon: 'fa-hospital',   value: '3',    label: 'Hospital Sites' },
       { icon: 'fa-ticket',     value: '500+', label: 'Tickets Managed' },
