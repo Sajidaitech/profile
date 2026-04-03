@@ -2731,112 +2731,170 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
    END MOBILE PORTRAIT — sajidmk.com
    ============================================================ */
 
+
 /* ============================================================
-   MOBILE DRAWER — sajidmk.com
+   MOBILE DRAWER — complete rewrite
    ============================================================ */
 
-/* Hamburger — hidden on desktop, flex on mobile via media query above */
-#hamburger { display: none; }
-#hamburger.open .ham-bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+/* ── Hamburger button: hidden by default, shown at ≤768px ── */
+#hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(197,160,89,0.25);
+  border-radius: 8px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  #hamburger { display: flex; }
+}
+.ham-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #C5A059;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+}
+#hamburger.open .ham-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 #hamburger.open .ham-bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-#hamburger.open .ham-bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+#hamburger.open .ham-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* Drawer root — invisible by default */
+/* ── Drawer root wrapper ── */
 #mobileDrawer {
   position: fixed;
-  inset: 0;
-  z-index: 900;
-  pointer-events: none;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1200;
   visibility: hidden;
+  pointer-events: none;
 }
 #mobileDrawer.open {
-  pointer-events: auto;
   visibility: visible;
+  pointer-events: auto;
 }
 
-/* Overlay */
+/* ── Dark overlay behind panel ── */
 #mobileDrawerOverlay {
   position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
 }
-#mobileDrawer.open #mobileDrawerOverlay { opacity: 1; }
+#mobileDrawer.open #mobileDrawerOverlay {
+  opacity: 1;
+}
 
-/* Slide-in panel */
+/* ── Slide-in panel from right ── */
 #mobileDrawerPanel {
   position: absolute;
   top: 0;
   right: 0;
-  width: min(320px, 85vw);
-  height: 100%;
-  background: #0e0e12;
-  border-left: 1px solid rgba(197,160,89,0.22);
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: #0d0d10;
+  border-left: 1px solid rgba(197,160,89,0.2);
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
-#mobileDrawer.open #mobileDrawerPanel { transform: translateX(0); }
+#mobileDrawer.open #mobileDrawerPanel {
+  transform: translateX(0);
+}
 
-/* Header row */
+/* ── Panel header ── */
 .mob-drawer-header {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 10px;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(197,160,89,0.15);
-  background: rgba(197,160,89,0.04);
+  padding: 18px 18px 16px;
+  border-bottom: 1px solid rgba(197,160,89,0.12);
+  background: rgba(197,160,89,0.03);
+  flex-shrink: 0;
 }
 .mob-drawer-logo {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
+  display: block;
   flex-shrink: 0;
 }
 .mob-drawer-name {
   flex: 1;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.12em;
+  font-size: 12px;
+  letter-spacing: 0.14em;
   color: #C5A059;
   text-transform: uppercase;
+  display: block;
+  /* override global a/button inline-flex */
+  min-width: 0;
+  min-height: 0;
 }
 .mob-drawer-close {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: #9aa3b0;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 7px;
+  color: #9aa3b0;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
   transition: background 0.2s, color 0.2s;
 }
-.mob-drawer-close:hover { background: rgba(197,160,89,0.15); color: #C5A059; }
+.mob-drawer-close:hover {
+  background: rgba(197,160,89,0.15);
+  color: #C5A059;
+}
 
-/* Nav links */
+/* ── Nav link list ── */
 .mob-drawer-links {
   flex: 1;
-  padding: 12px 0;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
 }
-.mob-link {
+
+/* The key fix: use a wrapping span trick so the <a> tag global rules don't interfere */
+#mobileDrawerPanel a.mob-link {
+  /* Reset global button/a overrides */
   display: flex !important;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 24px;
-  width: 100%;
-  box-sizing: border-box;
-  color: #9aa3b0;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  /* Actual styles */
+  gap: 0;
+  padding: 13px 20px;
+  color: #8a94a6;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 600;
   font-size: 14px;
@@ -2844,60 +2902,75 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
   text-transform: uppercase;
   text-decoration: none;
   border-left: 3px solid transparent;
-  transition: color 0.2s, background 0.2s, border-color 0.2s;
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+  background: transparent;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
-.mob-link i {
-  width: 18px;
-  text-align: center;
-  font-size: 13px;
-  color: #C5A059;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-.mob-link:hover,
-.mob-link.active {
+#mobileDrawerPanel a.mob-link:hover {
   color: #C5A059;
   background: rgba(197,160,89,0.07);
   border-left-color: #C5A059;
 }
-.mob-link:hover i,
-.mob-link.active i { opacity: 1; }
-
-/* Footer */
-.mob-drawer-footer {
-  padding: 20px 24px;
-  border-top: 1px solid rgba(197,160,89,0.15);
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.mob-drawer-resume {
+.mob-link-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  flex-shrink: 0;
+  font-size: 13px;
+  color: #C5A059;
+  opacity: 0.65;
+}
+#mobileDrawerPanel a.mob-link:hover .mob-link-icon {
+  opacity: 1;
+}
+.mob-link-text {
+  display: block;
+  flex: 1;
+}
+
+/* ── Footer ── */
+.mob-drawer-footer {
+  flex-shrink: 0;
+  padding: 18px 18px 24px;
+  border-top: 1px solid rgba(197,160,89,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mob-drawer-resume {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 12px 16px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #C5A059, #A07840);
-  color: #09090e;
+  background: linear-gradient(135deg, #C5A059 0%, #A07840 100%);
+  color: #09090e !important;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.2s ease;
 }
-.mob-drawer-resume:hover { opacity: 0.9; transform: translateY(-1px); }
+.mob-drawer-resume:hover { opacity: 0.88; }
 
 .mob-drawer-status {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 7px;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  color: #6b7585;
+  font-size: 10px;
+  color: #555e6e;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  justify-content: center;
 }
