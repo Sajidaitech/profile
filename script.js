@@ -1040,6 +1040,12 @@ var experienceData = [
   {
     date: 'Feb 2022 – Nov 2023', title: 'IT Support Engineer',
     type: 'Full-Time', company: 'Star Link – Power International Holding · Doha, Qatar',
+    stats: [
+      { icon: 'fa-building',    value: '10+',   label: 'Enterprise Project Sites' },
+      { icon: 'fa-ticket-alt',  value: '1000+', label: 'Tickets Managed' },
+      { icon: 'fa-users',       value: '300+',  label: 'Staff Supported' },
+      { icon: 'fa-chart-line',  value: '95%',   label: 'SLA Compliance' }
+    ],
     projects: [
       { icon: 'fa-building-columns', label: 'Power International Holding — Main / Head Office', color: '#1a3a6b', gradient: 'linear-gradient(135deg,#1a3a6b,#2c5f9e)', detail: 'Executive & corporate IT support · PIH HQ' },
       { icon: 'fa-plane',      label: 'HIA Airport Expansion',      color: '#1a6fbf', gradient: 'linear-gradient(135deg,#1a6fbf,#2196f3)', detail: 'Phase 1: Feb–Oct 2022 · Phase 2: Apr–Nov 2023' },
@@ -1106,7 +1112,8 @@ function loadExperience() {
           '<div class="exp-title-row"><h3 class="exp-title">' + exp.title + '</h3>' + (exp.type ? '<span class="exp-type-badge">' + exp.type + '</span>' : '') + '</div>' +
           '<div class="exp-meta"><span class="exp-date"><i class="fas fa-calendar-alt"></i> <b>' + exp.date + '</b></span><span class="exp-company-name">' + exp.company + '</span></div>' +
         '</div>' +
-        statsHTML + projectsHTML +
+        statsHTML +
+        projectsHTML +
         '<ul class="exp-list">' + exp.responsibilities.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ul>' +
         '<div class="exp-actions">' + lettersHTML + '</div>' +
       '</div>';
