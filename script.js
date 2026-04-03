@@ -32,6 +32,18 @@
     }
   }
 
+  window.toggleMobileDrawer = function () {
+    var drawer    = document.getElementById('mobileDrawer');
+    var hamburger = document.getElementById('hamburger');
+    if (!drawer) return;
+    var isOpen = drawer.classList.toggle('open');
+    if (hamburger) {
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  };
+
   /* Single delegated listener — catches ALL .nav-anchor clicks including future DOM */
   document.addEventListener('click', function (e) {
     var anchor = e.target.closest('.nav-anchor');
