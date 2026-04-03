@@ -1781,59 +1781,26 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
 .id-photo-wrap { position: relative; padding: 16px 16px 0; background: rgba(0,0,0,.18); }
 .id-photo-frame { position: absolute; inset: 16px 16px 0; border: 1.5px solid rgba(99,102,241,.3); border-radius: var(--radius-sm); pointer-events: none; animation: framePulse 3s ease-in-out infinite; }
 
-/* ── Mobile hero + card + photo fix ────────────────────────────────────── */
-@media (max-width: 1000px) {
-
-  /* 1. Hero layout: card on top, text below */
-  .hero-layout {
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 28px !important;
-    padding: 20px 16px 36px !important;
-    text-align: center !important;
-    overflow: hidden !important;
-  }
-  .id-card   { order: 1 !important; }
-  .hero-copy { order: 2 !important; }
-
-  /* 2. Card: shrink to screen width, kill float animation */
-  .id-card {
-    flex-shrink: 1 !important;
-    width: calc(100vw - 32px) !important;
-    max-width: 400px !important;
-    margin: 0 auto !important;
-    overflow: hidden !important;
-    animation: idCardReveal 0.9s cubic-bezier(0.34,1.56,0.64,1) both 0.3s !important;
-  }
-
-  /* 3. Photo wrap: zero padding, image fills edge-to-edge */
+/* ── Mobile photo fix: iOS & Android ────────────────────── */
+@media (max-width: 768px) {
   .id-photo-wrap {
-    padding: 0 !important;
-    background: transparent !important;
-    overflow: hidden !important;
+    padding: 12px 12px 0;
   }
-
-  /* 4. Photo: full width, fixed height, face centred */
   .id-photo {
-    width: 100% !important;
-    height: 280px !important;
-    object-fit: cover !important;
-    object-position: center 25% !important;
-    display: block !important;
-    border-radius: 0 !important;
-    border: none !important;
+    width: 100%;
+    height: auto;
+    max-height: 260px;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    border-radius: var(--radius-sm);
   }
-
-  /* 5. Hide overlays that depended on old padding */
-  .id-photo-frame,
-  .id-status-ring {
-    display: none !important;
+  .id-photo-frame {
+    inset: 12px 12px 0;
   }
-
-  /* 6. Hero copy full width */
-  .hero-copy {
-    max-width: 100% !important;
-    width: 100% !important;
+  .id-card {
+    max-width: 320px;
+    margin: 0 auto;
   }
 }
 .id-status-ring { position: absolute; bottom: 8px; right: 24px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); border: 2px solid var(--paper); display: flex; align-items: center; justify-content: center; }
@@ -2121,352 +2088,644 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
   border: 2px solid rgba(255,255,255,.25); border-top-color: #fff;
   animation: gwSpin 0.7s linear infinite; position: absolute; right: 18px;
 }
+
 /* ============================================================
-   MOBILE FIX: Text first, photo second + image display fix
+   MOBILE PORTRAIT — Complete Responsive System
+   Breakpoint : max-width 768px (covers 320px to 430px phones)
+   ALL desktop styles above are untouched.
    ============================================================ */
 
-@media (max-width: 1000px) {
-  .hero-layout {
-    display: flex;
-    flex-direction: column;
-  }
-  .id-card   { order: 1 !important; }
-  .hero-copy { order: 2 !important; }
-}
 
+/* ─────────────────────────────────────────────────────────────
+   1 · GLOBAL RESETS
+───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .id-photo {
-    width: 100% !important;
-    height: auto !important;
-    max-height: 300px !important;
-    object-fit: cover !important;
-    object-position: center top !important;
-    display: block !important;
-  }
-  .id-photo-wrap {
-    padding: 12px 12px 0;
-  }
-  .id-card {
-    max-width: 340px;
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
     width: 100%;
-    margin: 0 auto;
-  }
-}
-
-/* ============================================================
-   SECTION 33 · MOBILE PORTRAIT FIX — Complete Responsive Patch
-   (sajidmk.com — portrait mode on all smartphones)
-   ============================================================ */
-
-/* ── 1. GATE OVERLAY: portrait stacking ─────────────────── */
-@media (max-width: 768px) and (orientation: portrait),
-       (max-width: 480px) {
-
-  /* Gate: full-height single-column, scrollable */
-  #gateOverlay {
-    flex-direction: column !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-    align-items: stretch !important;
   }
 
-  /* Left panel fills whole screen */
-  .gw-left {
-    flex: none !important;
-    width: 100% !important;
-    min-height: 100svh !important;  /* svh avoids mobile chrome bar clipping */
-    min-height: 100vh !important;   /* fallback for older browsers */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  /* Kill particle canvas — expensive on mobile */
+  #heroCanvas { display: none; }
+
+  /* Custom cursor irrelevant on touch */
+  .cursor-dot, .cursor-ring { display: none; }
+
+  /* Decorative floating nodes — hide to prevent overflow */
+  .hero-nodes,
+  .hnode,
+  .hero-glitch-lines,
+  .hero-scan-line,
+  .desk-scene { display: none; }
+
+  /* Morphing shapes — keep but clip */
+  .hero-morph-bg, .hero-grid-bg { overflow: hidden; }
+
+  /* AOS stagger items — ensure visible if JS is slow */
+  .stagger-child, .cert-card, .ach-item, .lang-item {
+    opacity: 1;
+    transform: none;
   }
 
-  /* Right panel hidden on portrait */
-  .gw-right {
-    display: none !important;
-  }
-
-  /* Form area: full-width, comfortable padding */
-  .gw-form-area {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 40px 24px 56px !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Headline slightly smaller so it fits 1 line */
-  .gw-headline {
-    font-size: clamp(20px, 6vw, 30px) !important;
-  }
-}
-
-/* ── 2. IMAGE VISIBILITY & SCALING ─────────────────────── */
-/* Global rule: every img on the page */
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-/* ID card photo — critical portrait fix */
-@media (max-width: 768px) {
-  .id-photo {
-    width: 100% !important;
-    height: auto !important;
-    max-height: 280px !important;
-    object-fit: cover !important;
-    object-position: center top !important;
-    display: block !important;
-    border-radius: var(--radius-sm) !important;
-    /* Force GPU compositing — helps Safari/iOS repaint */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-  }
-
-  .id-photo-wrap {
-    padding: 12px 12px 0 !important;
-    overflow: hidden;     /* prevents iOS clipping artifacts */
-  }
-
-  /* Prevent id-card from overflowing viewport */
-  .id-card {
-    max-width: 100% !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    margin: 0 auto !important;
-  }
-}
-
-/* ── 3. HERO LAYOUT — portrait single column ────────────── */
-@media (max-width: 1000px), (orientation: portrait) and (max-width: 1100px) {
-  .hero-layout {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 32px;
-    padding: 28px 20px 36px !important;
-    text-align: center;
-  }
-
-  /* Card (photo) first, text second */
-  .id-card    { order: 1 !important; }
-  .hero-copy  { order: 2 !important; max-width: 100% !important; width: 100% !important; }
-}
-
-/* ── 4. ABOUT SECTION — prevent hidden/cut-off text ─────── */
-@media (max-width: 1000px) {
-  .about-layout {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 32px !important;
-  }
-
-  /* Remove sticky — causes clipping on mobile */
-  .about-panel {
-    position: static !important;
-    width: 100% !important;
-  }
-
-  .about-stats-row {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-}
-
-/* ── 5. EXPERIENCE SECTION — force visibility ───────────── */
-/* AOS animations can leave opacity:0 on slow mobile */
-.section,
-.section * {
-  /* Don't force visibility here — let AOS run —
-     but ensure no section has overflow:hidden clipping children */
-}
-
-/* Ensure experience/about sections are never clipped */
-#about, #experience, #projects, #arsenal,
-#education, #certifications, #contact {
-  overflow: visible !important;
-}
-
-/* AOS elements: if JS hasn't initialized, show them */
-[data-aos] {
-  /* Fallback: visible before JS fires (overridden by AOS after init) */
-  transition-property: opacity, transform !important;
-}
-
-/* ── 6. SECTION PADDING — tighter on small portrait ─────── */
-@media (max-width: 480px) {
-  .section {
-    padding: 56px 16px !important;
-  }
+  /* Section base */
+  .section { padding: 60px 0; overflow: visible; }
 
   .container {
-    width: 100% !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    box-sizing: border-box !important;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
   }
 
-  /* Hero headline */
-  .hero-headline,
-  .headline-top,
-  .headline-mid,
-  .headline-bot {
-    font-size: clamp(26px, 7vw, 38px) !important;
+  /* All sections — never clip child content */
+  #about, #projects, #experience, #arsenal,
+  #education, #certifications, #contact {
+    overflow: visible;
   }
 }
 
-/* ── 7. FLEXBOX WRAP FIX — grids that refuse to wrap ────── */
-@media (max-width: 680px) {
-  /* Contact layout */
-  .contact-layout {
-    grid-template-columns: 1fr !important;
-    gap: 24px !important;
+
+/* ─────────────────────────────────────────────────────────────
+   2 · GATE / LOGIN OVERLAY
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  #gateOverlay {
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
-  /* Folder education pane */
-  .folder-pane.active {
-    flex-direction: column !important;
-    gap: 20px !important;
-  }
-  .folder-tabs {
-    flex-wrap: wrap !important;
-  }
-
-  /* Cert grid */
-  .certs-grid {
-    grid-template-columns: 1fr !important;
+  .gw-left {
+    flex: none;
+    width: 100%;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* Cert featured inner */
-  .cert-featured-inner {
-    flex-direction: column !important;
-    padding: 28px 20px !important;
-    gap: 20px !important;
+  /* Hide right image panel on portrait */
+  .gw-right { display: none; }
+
+  .gw-form-area {
+    width: 100%;
+    max-width: 100%;
+    padding: 52px 28px 44px;
+    box-sizing: border-box;
   }
 
-  /* Skills bento */
-  .skills-bento {
-    grid-template-columns: 1fr !important;
+  .gw-headline { font-size: clamp(22px, 7vw, 30px); }
+  .gw-tagline  { font-size: 13px; line-height: 1.6; }
+
+  /* Touch inputs — 16px stops iOS zoom */
+  .gw-input { height: 54px; font-size: 16px; }
+  .gw-btn   { height: 54px; width: 100%; font-size: 13px; }
+
+  .gw-corner-tr, .gw-corner-br { right: 16px; }
+  .gw-corner-tl, .gw-corner-bl { left: 16px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   3 · NAVIGATION
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  #topNav { overflow: hidden; height: 60px; }
+  #topNav nav  { display: none; }
+  #hamburger   { display: flex; }
+  .nav-logo-divider { display: none; }
+  .nav-resume-btn { padding: 6px 12px; font-size: 10px; }
+  .scroll-progress { height: 2px; }
+
+  .availability-banner {
+    top:       calc(60px + env(safe-area-inset-top, 0px) + 6px);
+    right:     10px;
+    font-size: 9px;
+    padding:   4px 10px;
+    max-width: calc(100vw - 20px);
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   4 · HERO — card first, text second
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-section {
+    padding-top:    60px;
+    padding-bottom: 48px;
+    overflow:       visible;
+    align-items:    flex-start;
   }
 
-  /* Testimonials grid */
-  .testi-grid {
-    grid-template-columns: 1fr !important;
+  /* Hide diagonal accent — looks broken narrow */
+  .hero-section::before { display: none; }
+
+  .hero-layout {
+    display:        flex;
+    flex-direction: column;
+    align-items:    center;
+    gap:            32px;
+    padding:        24px 20px 8px;
+    width:          100%;
+    max-width:      100%;
+    box-sizing:     border-box;
+    overflow:       hidden;
   }
 
-  /* KPIs */
+  /* ID CARD — top */
+  .id-card {
+    order:        1;             /* PHOTO CARD FIRST */
+    flex-shrink:  1;
+    width:        calc(100vw - 40px);
+    max-width:    390px;
+    margin:       0 auto;
+    border-radius: 16px;
+    overflow:     hidden;
+    /* Strip float animation — causes horizontal bleed on mobile */
+    animation: idCardReveal 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  /* Photo wrap — zero padding, image flush to edges */
+  .id-photo-wrap,
+  .id-photo-area {
+    padding:    0;
+    margin:     0;
+    background: transparent;
+    overflow:   hidden;
+    display:    block;
+    width:      100%;
+  }
+
+  /* THE PHOTO */
+  .id-photo {
+    display:           block;
+    width:             100%;
+    height:            340px;
+    min-height:        340px;
+    max-height:        340px;
+    object-fit:        cover;
+    object-position:   center 20%; /* face visible, not just hair */
+    border-radius:     0;
+    border:            none;
+    -webkit-transform: translateZ(0);
+    transform:         translateZ(0);
+  }
+
+  /* Hide overlay decorations that depended on old padding */
+  .id-photo-frame, .id-photo-border, .id-status-ring { display: none; }
+
+  .id-card-header { padding: 10px 16px 8px; }
+  .id-body        { padding: 14px 16px 12px; }
+  .id-footer      { padding: 10px 16px; }
+  .id-name        { font-size: 17px; }
+  .id-role        { font-size: 10px; }
+  .id-sectors     { flex-wrap: wrap; gap: 5px; }
+  .id-sector      { font-size: 8px; padding: 3px 7px; }
+
+  /* HERO COPY — below card */
+  .hero-copy {
+    order:      2;               /* TEXT SECOND */
+    width:      100%;
+    max-width:  100%;
+    text-align: center;
+    padding:    0;
+  }
+
+  .hero-eyebrow {
+    font-size:       9px;
+    gap:             8px;
+    margin-bottom:   14px;
+    justify-content: center;
+  }
+
+  .hero-headline {
+    font-size:      clamp(26px, 7vw, 36px);
+    line-height:    1.1;
+    margin-bottom:  16px;
+    letter-spacing: -0.5px;
+  }
+
+  .headline-top { font-size: clamp(24px, 6vw, 34px); }
+  .headline-mid { font-size: clamp(26px, 7vw, 36px); }
+  .headline-bot { font-size: clamp(24px, 6vw, 34px); }
+
+  .hero-brief {
+    font-size:     13px;
+    line-height:   1.75;
+    margin-bottom: 24px;
+  }
+
+  /* KPIs — 2-col grid */
   .hero-kpis {
-    flex-direction: column !important;
-    width: 100% !important;
+    display:               grid;
+    grid-template-columns: 1fr 1fr;
+    gap:                   1px;
+    margin-bottom:         24px;
+    overflow:              hidden;
+    border-radius:         10px;
   }
-  .kpi-sep { display: none !important; }
-  .kpi-block {
-    width: 100% !important;
-    border-bottom: 1px solid var(--border) !important;
-    padding: 14px 20px !important;
-  }
-  .kpi-block:last-child { border-bottom: none !important; }
+  .kpi-sep   { display: none; }
+  .kpi-block { padding: 16px 12px; width: auto; flex: none; }
+  .kpi-num   { font-size: 26px; }
+  .kpi-unit  { font-size: 14px; }
+  .kpi-label { font-size: 9px; margin-top: 3px; }
 
-  /* CTA buttons full-width */
+  /* CTAs — stacked full-width */
   .hero-ctas {
-    flex-direction: column !important;
-    align-items: center !important;
+    flex-direction: column;
+    gap:            12px;
+    align-items:    stretch;
+    width:          100%;
   }
   .hero-ctas .btn {
-    width: 100% !important;
-    justify-content: center !important;
+    width:           100%;
+    justify-content: center;
+    padding:         14px 20px;
   }
 
-  /* About stats: 2-col */
+  .cred-tags  { justify-content: center; }
+  .hero-ticker { margin-top: 24px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   5 · SECTION HEADERS
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .section-header {
+    margin-bottom:   28px;
+    gap:             10px;
+    flex-direction:  column;
+    align-items:     flex-start;
+  }
+  .sec-num   { font-size: 10px; }
+  .sec-title { font-size: clamp(22px, 6vw, 30px); }
+  .sec-rule  { flex: none; width: 40px; height: 1px; align-self: flex-start; }
+  .section-intro { font-size: 13px; margin-bottom: 20px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   6 · ABOUT SECTION
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .about-layout {
+    display:               grid;
+    grid-template-columns: 1fr;
+    gap:                   28px;
+  }
+
+  /* Remove sticky — clips content on mobile */
+  .about-panel { position: static; width: 100%; }
+
   .about-stats-row {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap:        10px;
+    margin-top: 16px;
   }
+  .about-stat  { padding: 14px 10px; }
+  .astat-num   { font-size: 22px; }
+  .astat-label { font-size: 9px; }
+
+  .bio-lead { font-size: 15px; line-height: 1.7; }
+  .bio-body { font-size: 13px; line-height: 1.75; }
+
+  .bio-achieves { gap: 10px; margin-top: 16px; }
+  .achieve-item { padding: 12px 14px; gap: 10px; }
+
+  .panel-sla-ring { margin-bottom: 14px; }
+  .ring-wrapper   { width: 110px; height: 110px; }
+  .ring-wrapper svg { width: 110px; height: 110px; }
+  .ring-val { font-size: 26px; }
+
+  .panel-achievements { gap: 8px; margin-bottom: 14px; }
+  .ach-item { padding: 10px 12px; }
+  .ach-text strong { font-size: 11px; }
+  .ach-text span   { font-size: 10px; }
+
+  .panel-chips { gap: 6px; flex-wrap: wrap; }
+  .p-chip { font-size: 10px; padding: 4px 10px; }
 }
 
-/* ── 8. OVERFLOW & HORIZONTAL SCROLL PREVENTION ─────────── */
+
+/* ─────────────────────────────────────────────────────────────
+   7 · EXPERIENCE
+───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  body, html {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
-  }
+  .exp-timeline::before { left: 12px; }
+  .exp-item { padding-left: 36px; margin-bottom: 20px; }
+  .exp-item::before { left: 7px; top: 18px; }
 
-  /* Elements that can cause horizontal overflow */
-  .hero-nodes,
-  .hero-glitch-lines,
-  .hero-morph-bg,
-  .hero-grid-bg {
-    overflow: hidden !important;
-  }
+  .exp-header     { padding: 14px 16px 12px; }
+  .exp-title      { font-size: 15px; }
+  .exp-date       { font-size: 11px; padding: 4px 10px; }
+  .exp-type-badge { font-size: 9px; }
+  .exp-company-name { font-size: 11px; }
 
-  /* Floating nodes: hide on very small screens to prevent overflow */
-  .hnode {
-    display: none !important;
-  }
+  .exp-list   { padding: 12px 16px 10px 26px; gap: 6px; }
+  .exp-list li { font-size: 12px; }
+
+  .exp-actions  { padding: 0 16px 14px; gap: 8px; flex-wrap: wrap; }
+  .exp-btn      { font-size: 10px; padding: 6px 12px; }
+
+  .exp-stats-strip  { padding: 12px 16px; gap: 8px; }
+  .exp-stat-chip    { flex: 1 1 calc(50% - 6px); min-width: 0; padding: 8px 12px; }
+  .esc-value        { font-size: 16px; }
+  .esc-label        { font-size: 8px; }
+
+  .exp-projects-row { grid-template-columns: 1fr 1fr; padding: 12px 16px; gap: 8px; }
+  .exp-project-box  { padding: 10px; gap: 8px; }
+  .epb-icon         { width: 30px; height: 30px; font-size: 12px; }
+  .epb-label        { font-size: 10px; }
+  .epb-detail       { font-size: 9px; }
 }
 
-/* ── 9. AVAILABILITY BANNER — avoid nav overlap ─────────── */
+
+/* ─────────────────────────────────────────────────────────────
+   8 · SKILLS / ARSENAL
+───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .availability-banner {
-    /* Move below nav, don't overlap content */
-    top: calc(var(--nav-h-safe, 76px) + 6px) !important;
-    right: 10px !important;
-    font-size: 9px !important;
-    padding: 5px 10px !important;
-    max-width: calc(100vw - 20px) !important;
+  .skills-bento {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
   }
+  .skill-card { padding: 16px 14px 14px; }
+  .sk-icon    { width: 36px; height: 36px; font-size: 14px; margin-bottom: 10px; }
+  .sk-name    { font-size: 12px; }
+  .sk-cat     { font-size: 8px; margin-bottom: 8px; }
+
+  .arsenal-bento {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .arsenal-category        { padding: 16px 14px; }
+  .arsenal-category.span-2 { grid-column: span 1; }
+  .ac-icon     { width: 34px; height: 34px; font-size: 14px; }
+  .ac-title    { font-size: 13px; }
+  .ac-subtitle { font-size: 8px; }
+  .ac-tools    { gap: 6px; }
+  .tool-chip   { font-size: 10px; padding: 4px 8px; }
+
+  .lang-grid  { gap: 8px; }
+  .lang-card  { min-width: calc(50% - 4px); padding: 12px 16px; flex: 1 1 calc(50% - 4px); }
+  .lang-name  { font-size: 13px; }
+  .lang-level { font-size: 9px; }
+
+  .tech-pills { gap: 6px; }
+  .tech-pill  { font-size: 10px; padding: 5px 10px; }
+  .sub-label  { font-size: 13px; margin-bottom: 10px; }
+  .sub-block  { margin-bottom: 20px; }
 }
 
-/* ── 10. NAVBAR: prevent overflow on portrait ───────────── */
+@media (max-width: 400px) {
+  .skills-bento  { grid-template-columns: 1fr; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   9 · PROJECTS
+───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  #topNav {
-    overflow: hidden !important;
-  }
+  .projects-grid,
+  .projects-skeleton { grid-template-columns: 1fr; gap: 18px; }
 
-  /* Collapse center nav links on portrait; show hamburger */
-  #topNav nav {
-    display: none !important;
-  }
-
-  /* Show the hamburger menu if present */
-  #hamburger {
-    display: flex !important;
-  }
+  .project-card  { padding: 18px 16px; }
+  .pc-icon       { width: 40px; height: 40px; font-size: 16px; }
+  .pc-title      { font-size: 15px; margin-bottom: 10px; }
+  .pc-block      { padding: 8px 10px; }
+  .pc-block-text { font-size: 11px; }
+  .pc-impact     { font-size: 11px; }
+  .pc-link       { font-size: 11px; padding: 9px 10px; }
+  .pc-tools      { gap: 4px; }
+  .pc-tool-badge { font-size: 8px; }
 }
 
-/* ── 11. LOGIN PAGE IMAGE in gate ────────────────────────── */
-/* .gw-skyline-img already gets max-width:100% from global img rule */
-.gw-skyline-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 6px;
-  display: block;
-}
 
-/* ── 12. TOUCH TARGET SIZES — iOS/Android minimum ───────── */
+/* ─────────────────────────────────────────────────────────────
+   10 · EDUCATION
+───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .gw-btn,
-  .btn,
-  .fab-main,
-  .fab-option {
-    min-height: 48px !important;
+  /* Tabs become vertical list */
+  .folder-tabs {
+    flex-direction: column;
+    flex-wrap:      nowrap;
+    margin-bottom:  0;
+    border-bottom:  none;
   }
 
-  .gw-input {
-    min-height: 52px !important;
-    font-size: 16px !important; /* prevents iOS zoom-on-focus */
+  .ftab {
+    border-radius:     0;
+    border-bottom:     1px solid var(--border);
+    border-left:       3px solid transparent;
+    border-top:        none;
+    border-right:      none;
+    text-align:        left;
+    padding:           12px 16px;
+    font-size:         10px;
+    margin-right:      0;
+    margin-bottom:     0;
+    flex:              none;
   }
+
+  .ftab.active {
+    border-left-color:   var(--gold);
+    border-bottom-color: var(--border);
+    border-top:          none;
+    box-shadow:          none;
+    color: var(--gold);
+  }
+
+  .folder-body { padding: 24px 18px; border-radius: 0 0 var(--radius-md) var(--radius-md); }
+
+  .folder-pane.active {
+    display:        flex;
+    flex-direction: column;
+    gap:            16px;
+  }
+
+  .fp-icon   { width: 48px; height: 48px; font-size: 20px; align-self: flex-start; border-radius: 10px; }
+  .fp-degree { font-size: 17px; }
+  .fp-inst   { font-size: 12px; }
+  .fp-note   { font-size: 11px; margin-bottom: 8px; }
+
+  .fp-grade-badge { font-size: 11px; padding: 6px 12px; }
+
+  .fp-year-grades { gap: 6px; }
+  .fp-year-row    { padding: 7px 12px; flex-wrap: wrap; gap: 6px; }
+  .fp-year-label  { font-size: 9px; }
+  .fp-year-score  { font-size: 10px; }
 }
 
-/* ── 13. SAFE-AREA INSETS (iPhone notch / Dynamic Island) ── */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
+
+/* ─────────────────────────────────────────────────────────────
+   11 · CERTIFICATIONS
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Featured CCNA cert card */
+  .cert-featured { margin-bottom: 28px; }
+
+  .cert-featured-inner {
+    flex-direction: column;
+    align-items:    flex-start;
+    gap:            20px;
+    padding:        32px 20px 28px;
+  }
+
+  .cert-ribbon {
+    top:       16px;
+    font-size: 8px;
+    padding:   4px 14px;
+  }
+
+  .cert-icon-wrap {
+    width:     64px;
+    height:    64px;
+    font-size: 26px;
+    border-radius: 14px;
+  }
+
+  .cert-body  { width: 100%; }
+  .cert-title { font-size: 20px; }
+  .cert-subtitle { font-size: 13px; }
+  .cert-issuer   { font-size: 11px; }
+  .cert-date     { font-size: 11px; }
+  .cert-code     { font-size: 9px; }
+
+  .cert-seal {
+    width: 44px; height: 44px; font-size: 16px;
+    position: static;
+    align-self: flex-start;
+  }
+
+  /* Other cert cards grid */
+  .certs-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .cert-card-inner { padding: 18px 16px; gap: 8px; }
+  .cc-icon    { width: 38px; height: 38px; font-size: 16px; border-radius: 8px; }
+  .cc-title   { font-size: 14px; }
+  .cc-desc    { font-size: 11px; }
+
+  /* Older cert-wall style (if used) */
+  .certs-wall-grid  { grid-template-columns: 1fr; gap: 12px; }
+  .cwf-outer        { max-width: 100%; }
+  .cwf-inner        { padding: 32px 18px 24px; }
+  .cwf-icon         { width: 54px; height: 54px; font-size: 22px; }
+  .cwf-title        { font-size: 18px; }
+  .cwf-desc         { font-size: 12px; }
+  .cwf-seal         { width: 36px; height: 36px; font-size: 12px; top: 40px; right: 18px; }
+  .certs-intro      { font-size: 13px; text-align: left; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   12 · TESTIMONIALS
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .testi-grid { grid-template-columns: 1fr; gap: 14px; }
+  .testi-card { padding: 22px 18px; }
+  .testi-quote { font-size: 13px; }
+  .testi-quote-mark { font-size: 52px; }
+  .testimonials-slider-wrap { flex-direction: column; }
+  .testimonial-slide { flex: 0 0 100%; }
+  .slider-controls { margin-top: 16px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   13 · CONTACT
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .contact-layout {
+    display:               grid;
+    grid-template-columns: 1fr;
+    gap:                   24px;
+  }
+
+  .contact-intro  { font-size: 13px; text-align: left; }
+  .contact-cards  { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+  .contact-card   { padding: 16px; }
+  .cc-icon-wrap   { width: 40px; height: 40px; font-size: 16px; margin-bottom: 10px; }
+
+  .contact-item   { padding: 14px 16px; gap: 10px; margin-bottom: 10px; }
+  .ci-icon        { width: 38px; height: 38px; font-size: 15px; }
+  .ci-label       { font-size: 9px; }
+  .ci-value       { font-size: 12px; }
+
+  .social-panel   { padding: 20px 18px; gap: 10px; }
+  .social-heading { font-size: 10px; }
+  .social-btn     { padding: 12px 14px; gap: 10px; }
+  .sb-title       { font-size: 12px; }
+  .sb-sub         { font-size: 10px; }
+
+  .social-exec-row  { gap: 8px; flex-direction: column; }
+  .exec-social-btn  { width: 100%; justify-content: flex-start; padding: 12px 16px; font-size: 12px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   14 · FOOTER
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .footer {
+    padding: 24px 20px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+  .footer-inner {
+    flex-direction: column;
+    align-items:    center;
+    text-align:     center;
+    gap:            12px;
+  }
+  .footer-links {
+    display:         flex;
+    flex-wrap:       wrap;
+    justify-content: center;
+    gap:             16px;
+  }
+  .footer-name { font-size: 14px; }
+  .footer-role { font-size: 10px; }
+  .footer-copy { font-size: 10px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   15 · FAB + BUTTONS + TOUCH TARGETS
+───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fab-container {
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right:  18px;
+  }
+  .fab-main   { width: 50px; height: 50px; font-size: 16px; }
+  .fab-option { width: 42px; height: 42px; font-size: 14px; }
+  .fab-option::before { right: 52px; font-size: 9px; }
+
+  .btn    { padding: 12px 22px; font-size: 11px; min-height: 48px; }
+  .btn-sm { padding: 8px 14px;  font-size: 10px; }
+
+  .gw-btn, .btn, .fab-main, .fab-option { min-height: 48px; }
+  .gw-input { min-height: 52px; font-size: 16px; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   16 · SAFE-AREA INSETS
+───────────────────────────────────────────────────────────── */
+@supports (padding: env(safe-area-inset-bottom)) {
   @media (max-width: 768px) {
-    .footer {
-      padding-bottom: calc(24px + env(safe-area-inset-bottom)) !important;
-    }
-    .fab-container {
-      bottom: calc(24px + env(safe-area-inset-bottom)) !important;
-    }
+    #topNav { padding-top: env(safe-area-inset-top, 0px); }
+    .fab-container { bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
+    .footer { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
   }
 }
 
-/* END MOBILE PORTRAIT FIX */
+/* ============================================================
+   END MOBILE PORTRAIT — sajidmk.com
+   ============================================================ */
