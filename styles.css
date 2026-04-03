@@ -2732,245 +2732,455 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
    ============================================================ */
 
 
-/* ============================================================
-   MOBILE DRAWER — complete rewrite
-   ============================================================ */
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE NAVIGATION — Upgraded Styles
+   ═══════════════════════════════════════════════════════════════ */
 
-/* ── Hamburger button: hidden by default, shown at ≤768px ── */
+
+/* ── 1 · HAMBURGER BUTTON ──────────────────────────────────── */
+
 #hamburger {
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 5px;
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 40px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   flex-shrink: 0;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(197,160,89,0.25);
-  border-radius: 8px;
+  background: rgba(197, 160, 89, 0.08);
+  border: 1px solid rgba(197, 160, 89, 0.30);
+  border-radius: 10px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
-@media (max-width: 768px) {
-  #hamburger { display: flex; }
+
+#hamburger::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(197,160,89,0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
+
+#hamburger:hover,
+#hamburger.open {
+  background: rgba(197, 160, 89, 0.14);
+  border-color: rgba(197, 160, 89, 0.55);
+  box-shadow: 0 0 18px rgba(197, 160, 89, 0.18), 0 2px 10px rgba(0,0,0,0.4);
+}
+
+#hamburger:hover::before,
+#hamburger.open::before { opacity: 1; }
+
+/* Bars — morph to X */
 .ham-bar {
   display: block;
-  width: 18px;
+  width: 20px;
   height: 2px;
   background: #C5A059;
   border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
   transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.25s ease,
+              width     0.25s ease;
+  pointer-events: none;
 }
-#hamburger.open .ham-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-#hamburger.open .ham-bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-#hamburger.open .ham-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ── Drawer root wrapper ── */
+/* X transform */
+#hamburger.open .ham-bar--top { transform: translateY(7px) rotate(45deg); }
+#hamburger.open .ham-bar--mid { opacity: 0; width: 0; }
+#hamburger.open .ham-bar--bot { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  #hamburger { display: flex; }
+}
+
+
+/* ── 2 · DRAWER ROOT + OVERLAY ─────────────────────────────── */
+
 #mobileDrawer {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  inset: 0;
   z-index: 1200;
   visibility: hidden;
   pointer-events: none;
 }
+
 #mobileDrawer.open {
   visibility: visible;
   pointer-events: auto;
 }
 
-/* ── Dark overlay behind panel ── */
+/* Backdrop */
 #mobileDrawerOverlay {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
+  inset: 0;
+  background: rgba(5, 6, 9, 0.80);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s ease;
   cursor: pointer;
 }
+
 #mobileDrawer.open #mobileDrawerOverlay {
   opacity: 1;
 }
 
-/* ── Slide-in panel from right ── */
+
+/* ── 3 · SLIDE-IN PANEL ─────────────────────────────────────── */
+
 #mobileDrawerPanel {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 280px;
-  max-width: 85vw;
-  background: #0d0d10;
-  border-left: 1px solid rgba(197,160,89,0.2);
+  width: 300px;
+  max-width: 88vw;
   display: flex;
   flex-direction: column;
+  background: #0b0c10;
+  border-left: 1px solid rgba(197, 160, 89, 0.18);
+  box-shadow: -24px 0 80px rgba(0, 0, 0, 0.75),
+              -1px  0 0 rgba(197, 160, 89, 0.06);
   transform: translateX(100%);
-  transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
 #mobileDrawer.open #mobileDrawerPanel {
   transform: translateX(0);
 }
 
-/* ── Panel header ── */
+/* Subtle vertical gold line on the left edge of panel */
+#mobileDrawerPanel::before {
+  content: '';
+  position: absolute;
+  top: 72px;
+  bottom: 72px;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(197,160,89,0.25) 30%, rgba(197,160,89,0.25) 70%, transparent);
+  pointer-events: none;
+}
+
+
+/* ── 4 · PANEL HEADER ──────────────────────────────────────── */
+
 .mob-drawer-header {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  padding: 18px 18px 16px;
-  border-bottom: 1px solid rgba(197,160,89,0.12);
-  background: rgba(197,160,89,0.03);
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid rgba(197, 160, 89, 0.10);
+  background: rgba(197, 160, 89, 0.025);
   flex-shrink: 0;
 }
+
 .mob-drawer-logo {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
-  display: block;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(197,160,89,0.30));
 }
+
 .mob-drawer-name {
   flex: 1;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  letter-spacing: 0.18em;
   color: #C5A059;
   text-transform: uppercase;
-  display: block;
-  /* override global a/button inline-flex */
   min-width: 0;
   min-height: 0;
 }
+
 .mob-drawer-close {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  min-width: 32px;
-  min-height: 32px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
   flex-shrink: 0;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 7px;
-  color: #9aa3b0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  color: #6b7585;
   font-size: 13px;
   cursor: pointer;
   padding: 0;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
+
 .mob-drawer-close:hover {
-  background: rgba(197,160,89,0.15);
+  background: rgba(197, 160, 89, 0.14);
+  border-color: rgba(197, 160, 89, 0.35);
   color: #C5A059;
 }
 
-/* ── Nav link list ── */
+
+/* ── 5 · STATUS PILL ────────────────────────────────────────── */
+
+.mob-drawer-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 14px 18px 6px;
+  padding: 7px 12px;
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.18);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.mob-status-dot {
+  width: 7px;
+  height: 7px;
+  min-width: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.65);
+  animation: statusPulse 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes statusPulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(74, 222, 128, 0.65); }
+  50%       { box-shadow: 0 0 14px rgba(74, 222, 128, 0.90); }
+}
+
+.mob-status-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  color: #4ade80;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* ── 6 · NAV LINKS LIST ─────────────────────────────────────── */
+
 .mob-drawer-links {
   flex: 1;
-  padding: 10px 0;
+  padding: 10px 0 8px;
   display: flex;
   flex-direction: column;
 }
 
-/* The key fix: use a wrapping span trick so the <a> tag global rules don't interfere */
+/* Staggered reveal animation */
+#mobileDrawer.open .mob-link {
+  animation: linkSlideIn 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+#mobileDrawer.open .mob-link:nth-child(1) { animation-delay: 0.05s; }
+#mobileDrawer.open .mob-link:nth-child(2) { animation-delay: 0.09s; }
+#mobileDrawer.open .mob-link:nth-child(3) { animation-delay: 0.12s; }
+#mobileDrawer.open .mob-link:nth-child(4) { animation-delay: 0.15s; }
+#mobileDrawer.open .mob-link:nth-child(5) { animation-delay: 0.18s; }
+#mobileDrawer.open .mob-link:nth-child(6) { animation-delay: 0.21s; }
+#mobileDrawer.open .mob-link:nth-child(7) { animation-delay: 0.24s; }
+#mobileDrawer.open .mob-link:nth-child(8) { animation-delay: 0.27s; }
+
+@keyframes linkSlideIn {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Individual link */
 #mobileDrawerPanel a.mob-link {
-  /* Reset global button/a overrides */
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
+  display:         flex !important;
+  flex-direction:  row !important;
+  align-items:     center !important;
   justify-content: flex-start !important;
-  min-width: 0 !important;
+  min-width:  0 !important;
   min-height: 0 !important;
   width: 100% !important;
   box-sizing: border-box !important;
-  /* Actual styles */
-  gap: 0;
-  padding: 13px 20px;
-  color: #8a94a6;
+
+  padding: 0 20px;
+  height: 52px;
+
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.09em;
+  font-size: 13px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
+  color: #8a94a6;
+
   border-left: 3px solid transparent;
   border-right: none;
   border-top: none;
   border-bottom: none;
+
   background: transparent;
-  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+  gap: 0;
 }
-#mobileDrawerPanel a.mob-link:hover {
-  color: #C5A059;
-  background: rgba(197,160,89,0.07);
+
+/* Separator line between links */
+#mobileDrawerPanel a.mob-link + a.mob-link {
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Hover & active state */
+#mobileDrawerPanel a.mob-link:hover,
+#mobileDrawerPanel a.mob-link.active {
+  color: #E8C97A;
+  background: rgba(197, 160, 89, 0.07);
   border-left-color: #C5A059;
 }
+
+#mobileDrawerPanel a.mob-link.active {
+  background: rgba(197, 160, 89, 0.10);
+}
+
+/* Icon slot */
 .mob-link-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  width: 36px;
   flex-shrink: 0;
   font-size: 13px;
   color: #C5A059;
-  opacity: 0.65;
-}
-#mobileDrawerPanel a.mob-link:hover .mob-link-icon {
-  opacity: 1;
-}
-.mob-link-text {
-  display: block;
-  flex: 1;
+  opacity: 0.55;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-/* ── Footer ── */
+#mobileDrawerPanel a.mob-link:hover .mob-link-icon,
+#mobileDrawerPanel a.mob-link.active .mob-link-icon {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Label */
+.mob-link-text {
+  flex: 1;
+  display: block;
+}
+
+/* Trailing chevron */
+.mob-link-arrow {
+  font-size: 10px;
+  color: #343c4a;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+#mobileDrawerPanel a.mob-link:hover .mob-link-arrow,
+#mobileDrawerPanel a.mob-link.active .mob-link-arrow {
+  color: rgba(197, 160, 89, 0.55);
+  transform: translateX(3px);
+}
+
+
+/* ── 7 · PANEL FOOTER ──────────────────────────────────────── */
+
 .mob-drawer-footer {
   flex-shrink: 0;
-  padding: 18px 18px 24px;
-  border-top: 1px solid rgba(197,160,89,0.12);
+  padding: 16px 18px calc(20px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(197, 160, 89, 0.10);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  background: rgba(197, 160, 89, 0.015);
 }
+
+/* Resume CTA */
 .mob-drawer-resume {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
+  display:         flex !important;
+  flex-direction:  row !important;
+  align-items:     center !important;
   justify-content: center !important;
-  min-width: 0 !important;
+  min-width:  0 !important;
   min-height: 0 !important;
   gap: 8px;
-  padding: 12px 16px;
-  border-radius: 8px;
+  padding: 14px 18px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #C5A059 0%, #A07840 100%);
-  color: #09090e !important;
+  color: #06070a !important;
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
   font-size: 13px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 20px rgba(197,160,89,0.25);
+  transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.mob-drawer-resume:hover { opacity: 0.88; }
 
-.mob-drawer-status {
+.mob-drawer-resume:hover {
+  opacity: 0.90;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(197,160,89,0.35);
+}
+
+/* Badge row */
+.mob-drawer-badges {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
   justify-content: center;
-  gap: 7px;
+}
+
+.mob-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 10px;
-  color: #555e6e;
-  letter-spacing: 0.07em;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  color: #6b7585;
   text-transform: uppercase;
+  min-height: 0;
+  min-width: 0;
+}
+
+.mob-badge i {
+  font-size: 9px;
+  color: #C5A059;
+  opacity: 0.8;
+}
+
+
+/* ── 8 · BODY SCROLL LOCK ──────────────────────────────────── */
+
+body.drawer-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 0px);
+}
+
+
+/* ── 9 · FOCUS VISIBILITY (accessibility) ─────────────────── */
+
+#hamburger:focus-visible,
+.mob-drawer-close:focus-visible,
+#mobileDrawerPanel a.mob-link:focus-visible {
+  outline: 2px solid #C5A059;
+  outline-offset: 2px;
 }

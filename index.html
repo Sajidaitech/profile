@@ -222,18 +222,17 @@
       <!-- ── ZONE 3: RESUME BUTTON (Right) ── -->
 
       <!-- ── HAMBURGER (mobile only — hidden on desktop) ── -->
-      <button id="hamburger"
-              aria-label="Toggle navigation"
-              aria-expanded="false"
-              aria-controls="mobileDrawer"
-              class="flex-shrink-0 hidden flex-col justify-center items-center gap-[5px]
-                     w-[38px] h-[38px] rounded-md
-                     bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.09)]
-                     transition-all duration-200"
-              onclick="toggleMobileDrawer()">
-        <span class="ham-bar block w-[18px] h-[1.5px] bg-[#C5A059] rounded-full transition-all duration-300 origin-center"></span>
-        <span class="ham-bar block w-[18px] h-[1.5px] bg-[#C5A059] rounded-full transition-all duration-300"></span>
-        <span class="ham-bar block w-[18px] h-[1.5px] bg-[#C5A059] rounded-full transition-all duration-300 origin-center"></span>
+      <button
+        id="hamburger"
+        class="hamburger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobileDrawer"
+        type="button"
+      >
+        <span class="ham-bar ham-bar--top" aria-hidden="true"></span>
+        <span class="ham-bar ham-bar--mid" aria-hidden="true"></span>
+        <span class="ham-bar ham-bar--bot" aria-hidden="true"></span>
       </button>
 
       <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
@@ -253,66 +252,94 @@
   </header>
 
   <!-- ============================================================ MOBILE DRAWER ============================================================ -->
-  <div id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-    <div id="mobileDrawerOverlay" onclick="toggleMobileDrawer()"></div>
-    <nav id="mobileDrawerPanel">
+  <div id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu" aria-hidden="true">
+
+    <!-- Backdrop -->
+    <div id="mobileDrawerOverlay" aria-hidden="true"></div>
+
+    <!-- Slide-in panel -->
+    <div id="mobileDrawerPanel">
 
       <!-- Header -->
       <div class="mob-drawer-header">
-        <img src="logo.png" alt="SM" class="mob-drawer-logo">
-        <span class="mob-drawer-name">Sajid Mehmood</span>
-        <button class="mob-drawer-close" onclick="toggleMobileDrawer()" aria-label="Close menu">
-          <i class="fas fa-times"></i>
+        <img src="logo.png" alt="SM Logo" class="mob-drawer-logo" width="32" height="32">
+        <span class="mob-drawer-name">SAJIDMK.COM</span>
+        <button class="mob-drawer-close" id="mobileDrawerClose" aria-label="Close navigation">
+          <i class="fas fa-times" aria-hidden="true"></i>
         </button>
       </div>
 
-      <!-- Links -->
-      <div class="mob-drawer-links">
-        <a href="#about" class="mob-link nav-anchor">
-          <span class="mob-link-icon"><i class="fas fa-user"></i></span>
-          <span class="mob-link-text">About</span>
-        </a>
-        <a href="#projects" class="mob-link nav-anchor">
-          <span class="mob-link-icon"><i class="fas fa-folder-open"></i></span>
-          <span class="mob-link-text">Projects</span>
-        </a>
-        <a href="#experience" class="mob-link nav-anchor">
-          <span class="mob-link-icon"><i class="fas fa-briefcase"></i></span>
-          <span class="mob-link-text">Experience</span>
-        </a>
-        <a href="#arsenal" class="mob-link nav-anchor">
-          <span class="mob-link-icon"><i class="fas fa-tools"></i></span>
-          <span class="mob-link-text">Arsenal</span>
-        </a>
-        <a href="#education" class="mob-link nav-anchor">
-          <span class="mob-link-icon"><i class="fas fa-graduation-cap"></i></span>
-          <span class="mob-link-text">Education</span>
-        </a>
-        <a href="#certifications" class="mob-link nav-anchor">
-          <span class="mob-link-icon"><i class="fas fa-certificate"></i></span>
-          <span class="mob-link-text">Certifications</span>
-        </a>
-        <a href="#contact" class="mob-link nav-anchor">
-          <span class="mob-link-icon"><i class="fas fa-envelope"></i></span>
-          <span class="mob-link-text">Contact</span>
-        </a>
+      <!-- Status pill -->
+      <div class="mob-drawer-status-pill">
+        <span class="mob-status-dot" aria-hidden="true"></span>
+        <span class="mob-status-label">Open to Opportunities · Doha, Qatar</span>
       </div>
 
-      <!-- Footer -->
-      <div class="mob-drawer-footer">
-        <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-           target="_blank" rel="noopener noreferrer" class="mob-drawer-resume">
-          <i class="fas fa-file-alt"></i>
-          <span>Download Resume</span>
+      <!-- Navigation links -->
+      <nav class="mob-drawer-links" aria-label="Site sections">
+        <a href="#home" class="mob-link nav-anchor" data-section="home">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-house-chimney"></i></span>
+          <span class="mob-link-text">Home</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
         </a>
-        <div class="mob-drawer-status">
-          <span class="avail-pulse"></span>
-          <span>Open to Opportunities &middot; Doha, Qatar</span>
+        <a href="#about" class="mob-link nav-anchor" data-section="about">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
+          <span class="mob-link-text">About</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+        <a href="#projects" class="mob-link nav-anchor" data-section="projects">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-diagram-project"></i></span>
+          <span class="mob-link-text">Projects</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+        <a href="#experience" class="mob-link nav-anchor" data-section="experience">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-briefcase"></i></span>
+          <span class="mob-link-text">Experience</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+        <a href="#arsenal" class="mob-link nav-anchor" data-section="arsenal">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-toolbox"></i></span>
+          <span class="mob-link-text">Arsenal</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+        <a href="#education" class="mob-link nav-anchor" data-section="education">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-graduation-cap"></i></span>
+          <span class="mob-link-text">Education</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+        <a href="#certifications" class="mob-link nav-anchor" data-section="certifications">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-certificate"></i></span>
+          <span class="mob-link-text">Certifications</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+        <a href="#contact" class="mob-link nav-anchor" data-section="contact">
+          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-satellite-dish"></i></span>
+          <span class="mob-link-text">Contact</span>
+          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+        </a>
+      </nav>
+
+      <!-- Footer CTA -->
+      <div class="mob-drawer-footer">
+        <a
+          href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mob-drawer-resume"
+        >
+          <i class="fas fa-file-arrow-down" aria-hidden="true"></i>
+          Download Resume
+        </a>
+
+        <div class="mob-drawer-badges">
+          <span class="mob-badge"><i class="fas fa-network-wired"></i> CCNA</span>
+          <span class="mob-badge"><i class="fas fa-shield-halved"></i> IT Engineer</span>
+          <span class="mob-badge"><i class="fas fa-location-dot"></i> Qatar</span>
         </div>
       </div>
 
-    </nav>
-  </div>
+    </div><!-- /mobileDrawerPanel -->
+  </div><!-- /mobileDrawer -->
 
   <!-- Scroll progress bar -->
   <div class="scroll-progress" id="scrollProgress"></div>
@@ -674,12 +701,12 @@
             <div class="contact-items">
               <a href="/cdn-cgi/l/email-protection#becddfd4d7dad3dbd6d3d1d1da90cdd3d5fed9d3dfd7d290ddd1d3" class="contact-item">
                 <div class="ci-icon"><i class="fas fa-envelope"></i></div>
-                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="bdcedcd7d4d9d0d8d5d0d2d2d993ced0d6fddad0dcd4d193ded2d0"><span class="__cf_email__" data-cfemail="0c65626a634c7f6d6665686167226f6361">sajid.teech@gmail.com</span></span></span></div>
+                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="bdcedcd7d4d9d0d8d5d0d2d2d993ced0d6fddad0dcd4d193ded2d0"><span class="__cf_email__" data-cfemail="0c65626a634c7f6d6665686167226f6361"><span class="__cf_email__" data-cfemail="3645575c5f5218425353555e76515b575f5a1855595b">sajid.teech@gmail.com</span></span></span></span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <a href="/cdn-cgi/l/email-protection#e794868d8e83c98a8cd7d7d0a78892938b88888cc984888a" class="contact-item">
                 <div class="ci-icon"><i class="fas fa-envelope-open"></i></div>
-                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="2f5c4e45464b0142441f1f186f405a5b43404044014c4042"><span class="__cf_email__" data-cfemail="8cffede6e5e8a2f8e9e9efe4ccebe1ffe5e0a2efe3e1">info@sajidmk.com</span></span></span></div>
+                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="2f5c4e45464b0142441f1f186f405a5b43404044014c4042"><span class="__cf_email__" data-cfemail="8cffede6e5e8a2f8e9e9efe4ccebe1ffe5e0a2efe3e1"><span class="__cf_email__" data-cfemail="0d64636b624d7e6c6764696066236e6260">info@sajidmk.com</span></span></span></span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <a href="tel:+97466969598" class="contact-item">
