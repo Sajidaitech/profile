@@ -185,25 +185,58 @@
                 flex flex-row flex-nowrap items-center justify-between gap-x-3">
 
       <!-- ── ZONE 1: LOGO GROUP (Left) ── -->
-      <a href="#home"
-         class="nav-anchor nav-logo-link
-                flex flex-row flex-nowrap items-center gap-x-3
-                flex-shrink-0 no-underline group">
-        <div class="w-[30px] h-[30px] flex-shrink-0 flex items-center justify-center">
-          <img src="logo.png" alt="SM"
-               class="w-full h-full object-contain transition-all duration-300
-                      group-hover:[filter:drop-shadow(0_0_6px_rgba(197,160,89,0.55))]"
-               loading="eager">
+      <!-- Desktop: plain anchor. Mobile: dropdown trigger -->
+      <div class="nav-logo-wrapper flex-shrink-0 relative" id="navLogoWrapper">
+        <a href="#home"
+           class="nav-anchor nav-logo-link
+                  flex flex-row flex-nowrap items-center gap-x-3
+                  no-underline group"
+           id="navLogoAnchor">
+          <!-- Logo image: 30px desktop, 40px mobile -->
+          <div class="nav-logo-img-wrap flex-shrink-0 flex items-center justify-center">
+            <img src="logo.png" alt="SM"
+                 class="w-full h-full object-contain transition-all duration-300
+                        group-hover:[filter:drop-shadow(0_0_6px_rgba(197,160,89,0.55))]"
+                 loading="eager">
+          </div>
+          <!-- Vertical gold divider -->
+          <div class="nav-logo-divider w-px h-8 flex-shrink-0 hidden sm:block"></div>
+          <!-- Name + title stack (desktop only) -->
+          <div class="flex-col leading-none gap-y-[3px] hidden sm:flex">
+            <span class="nav-logo-name font-playfair font-bold text-[15px] tracking-wide whitespace-nowrap"></span>
+            <span class="font-barlow font-semibold text-[10px] tracking-[0.11em] uppercase
+                         text-[#C5A059] whitespace-nowrap">IT Support Engineer</span>
+          </div>
+          <!-- Mobile chevron indicator -->
+          <span class="nav-logo-chevron hidden" id="navLogoChevron" aria-hidden="true">
+            <i class="fas fa-chevron-down text-[#C5A059] text-[9px] transition-transform duration-250"></i>
+          </span>
+        </a>
+
+        <!-- ── LOGO DROPDOWN (mobile only) ── -->
+        <div class="nav-logo-dropdown" id="navLogoDropdown" aria-hidden="true">
+          <div class="nld-header">
+            <img src="logo.png" alt="SM" class="nld-logo">
+            <div class="nld-info">
+              <span class="nld-name">Sajid Mehmood</span>
+              <span class="nld-role">IT Support Engineer · CCNA</span>
+            </div>
+          </div>
+          <div class="nld-links">
+            <a href="#about"          class="nld-link nav-anchor"><i class="fas fa-user-tie"></i><span>About</span></a>
+            <a href="#projects"       class="nld-link nav-anchor"><i class="fas fa-diagram-project"></i><span>Projects</span></a>
+            <a href="#experience"     class="nld-link nav-anchor"><i class="fas fa-briefcase"></i><span>Experience</span></a>
+            <a href="#arsenal"        class="nld-link nav-anchor"><i class="fas fa-toolbox"></i><span>Arsenal</span></a>
+            <a href="#education"      class="nld-link nav-anchor"><i class="fas fa-graduation-cap"></i><span>Education</span></a>
+            <a href="#certifications" class="nld-link nav-anchor"><i class="fas fa-certificate"></i><span>Certifications</span></a>
+            <a href="#contact"        class="nld-link nav-anchor"><i class="fas fa-satellite-dish"></i><span>Contact</span></a>
+          </div>
+          <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
+             target="_blank" rel="noopener noreferrer" class="nld-resume">
+            <i class="fas fa-file-arrow-down"></i> Download Resume
+          </a>
         </div>
-        <!-- Vertical gold divider -->
-        <div class="nav-logo-divider w-px h-8 flex-shrink-0 hidden sm:block"></div>
-        <!-- Name + title stack -->
-        <div class="flex-col leading-none gap-y-[3px] hidden sm:flex">
-          <span class="nav-logo-name font-playfair font-bold text-[15px] tracking-wide whitespace-nowrap"></span>
-          <span class="font-barlow font-semibold text-[10px] tracking-[0.11em] uppercase
-                       text-[#C5A059] whitespace-nowrap">IT Support Engineer</span>
-        </div>
-      </a>
+      </div>
 
       <!-- ── ZONE 2: NAV LINKS (Center) — flex-nowrap enforced ── -->
       <nav aria-label="Main navigation"
@@ -701,12 +734,12 @@
             <div class="contact-items">
               <a href="/cdn-cgi/l/email-protection#becddfd4d7dad3dbd6d3d1d1da90cdd3d5fed9d3dfd7d290ddd1d3" class="contact-item">
                 <div class="ci-icon"><i class="fas fa-envelope"></i></div>
-                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="bdcedcd7d4d9d0d8d5d0d2d2d993ced0d6fddad0dcd4d193ded2d0"><span class="__cf_email__" data-cfemail="0c65626a634c7f6d6665686167226f6361"><span class="__cf_email__" data-cfemail="3645575c5f5218425353555e76515b575f5a1855595b"><span class="__cf_email__" data-cfemail="582b3932313c762c3d3d3b30183f35393134763b3735">SAJID.TEECH@GMAIL.COM</span></span></span></span></span></div>
+                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="bdcedcd7d4d9d0d8d5d0d2d2d993ced0d6fddad0dcd4d193ded2d0"><span class="__cf_email__" data-cfemail="0c65626a634c7f6d6665686167226f6361"><span class="__cf_email__" data-cfemail="3645575c5f5218425353555e76515b575f5a1855595b"><span class="__cf_email__" data-cfemail="582b3932313c762c3d3d3b30183f35393134763b3735"><span class="__cf_email__" data-cfemail="2073616a69640e746565636860676d61696c0e636f6d">SAJID.TEECH@GMAIL.COM</span></span></span></span></span></span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <a href="/cdn-cgi/l/email-protection#e794868d8e83c98a8cd7d7d0a78892938b88888cc984888a" class="contact-item">
                 <div class="ci-icon"><i class="fas fa-envelope-open"></i></div>
-                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="2f5c4e45464b0142441f1f186f405a5b43404044014c4042"><span class="__cf_email__" data-cfemail="8cffede6e5e8a2f8e9e9efe4ccebe1ffe5e0a2efe3e1"><span class="__cf_email__" data-cfemail="0d64636b624d7e6c6764696066236e6260"><span class="__cf_email__" data-cfemail="84edeae2ebc4f7e5eeede0e9efaae7ebe9">INFO@SAJIDMK.COM</span></span></span></span></span></div>
+                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="2f5c4e45464b0142441f1f186f405a5b43404044014c4042"><span class="__cf_email__" data-cfemail="8cffede6e5e8a2f8e9e9efe4ccebe1ffe5e0a2efe3e1"><span class="__cf_email__" data-cfemail="0d64636b624d7e6c6764696066236e6260"><span class="__cf_email__" data-cfemail="84edeae2ebc4f7e5eeede0e9efaae7ebe9"><span class="__cf_email__" data-cfemail="a3eaede5ece3f0e2e9eae7eee88de0ecee">INFO@SAJIDMK.COM</span></span></span></span></span></span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <a href="tel:+97466969598" class="contact-item">
@@ -775,7 +808,9 @@
   </footer>
 
  <!-- ============================================================ SCRIPTS ============================================================ -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" defer></script>
+  <!-- AOS Animation Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <!-- Main site script -->
   <script src="script.js"></script>
 
 </body>

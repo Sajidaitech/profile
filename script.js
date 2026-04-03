@@ -1442,3 +1442,54 @@ function printSignature() {
   window.mobileNav = { open: openDrawer, close: closeDrawer };
 
 })();
+
+// ============================================================
+// LOGO DROPDOWN — Mobile nav quick-menu
+// ============================================================
+(function () {
+  var wrapper  = document.getElementById('navLogoWrapper');
+  var anchor   = document.getElementById('navLogoAnchor');
+  var dropdown = document.getElementById('navLogoDropdown');
+  var chevron  = document.getElementById('navLogoChevron');
+  if (!wrapper || !anchor || !dropdown) return;
+
+  var isOpen = false;
+
+  function isMobile() { return window.innerWidth <= 768; }
+
+  function openDropdown() {
+    isOpen = true;
+    dropdown.classList.add('open');
+    dropdown.setAttribute('aria-hidden', 'false');
+    if (chevron) chevron.classList.add('open');
+  }
+
+  function closeDropdown() {
+    isOpen = false;
+    dropdown.classList.remove('open');
+    dropdown.setAttribute('aria-hidden', 'true');
+    if (chevron) chevron.classList.remove('open');
+  }
+
+  anchor.addEventListener('click', function (e) {
+    if (!isMobile()) return; // desktop: behave normally (href="#home")
+    e.preventDefault();
+    isOpen ? closeDropdown() : openDropdown();
+  });
+
+  // Close when a dropdown link is clicked
+  var dLinks = dropdown.querySelectorAll('.nld-link, .nld-resume');
+  dLinks.forEach(function (link) {
+    link.addEventListener('click', function () { closeDropdown(); });
+  });
+
+  // Close on outside click/tap
+  document.addEventListener('click', function (e) {
+    if (isOpen && !wrapper.contains(e.target)) closeDropdown();
+  }, true);
+
+  // Close on resize to desktop
+  window.addEventListener('resize', function () {
+    if (!isMobile() && isOpen) closeDropdown();
+  });
+})();
