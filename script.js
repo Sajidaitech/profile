@@ -1007,7 +1007,8 @@ var experienceData = [
       '<b>Digital Asset Registry:</b> Architected a comprehensive digital IT asset catalogue, eliminating lifecycle discrepancies.',
       '<b>Government Liaison:</b> Coordinated with authorities on credential recovery, overstay fines, and sensitive documentation.'
     ],
-    },
+    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing' }]
+  },
   {
     date: 'Nov 2023 – Feb 2024', title: 'IT Support Engineer',
     type: 'Project Deployment', company: 'Military Medical City Hospital (MMCH) · Al-Rayyan, Qatar',
@@ -1030,7 +1031,8 @@ var experienceData = [
       '<b>Preventive Maintenance:</b> Scheduled patching aligned with hospital IT governance.',
       '<b>Asset Inventory:</b> Accurate digital asset records across all three facilities.'
     ],
-    },
+    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }]
+  },
   {
     date: 'Feb 2022 – Nov 2023', title: 'IT Support Engineer',
     type: 'Full-Time', company: 'Star Link – Power International Holding · Doha, Qatar',
@@ -1057,7 +1059,11 @@ var experienceData = [
       '<b>Asset Optimisation:</b> Tracking protocols reduced equipment loss by 10% across group companies.',
       '<b>Vendor & Telecom Coordination:</b> Managed VoIP and connectivity with external vendors.'
     ],
-    },
+    letters: [
+      { text: 'Starlink Experience Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
+      { text: 'Airport Project Letter',     url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' }
+    ]
+  },
   {
     date: 'May 2021 – Feb 2022', title: 'Customer Service Agent',
     type: 'Full-Time', company: 'STARLINK (Ooredoo International) · Qatar',
@@ -1068,7 +1074,8 @@ var experienceData = [
       '<b>CRM Record Keeping:</b> Accurate call records maintained in internal database systems.',
       '<b>Continuous Development:</b> Regular training on product knowledge and performance metrics.'
     ],
-    }
+    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1F1dRuB9Bp3aLm0M2A0RZ_xmzFoYaElKp/view?usp=sharing' }]
+  }
 ];
 
 function loadExperience() {
@@ -1092,7 +1099,7 @@ function loadExperience() {
         }).join('') + '</div>' : '';
 
     var lettersHTML = (exp.letters || []).map(function (l) {
-      return '<button onclick="openDocViewer(\'' + l.url + '\', \'' + l.text + '\')" class="exp-btn"><i class="fas fa-file-contract"></i>' + l.text + '</button>';
+      return '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="exp-btn"><i class="fas fa-file-contract"></i>' + l.text + '</a>';
     }).join('');
 
     item.innerHTML =
@@ -1225,19 +1232,23 @@ var certData = [
   {
     icon: 'fa-graduation-cap', title: 'Odoo ERP Training',
     desc: 'Workshop covering business processes, product, vendor, and customer management within enterprise ERP environments.',
+    url: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
   },
   {
     icon: 'fa-trophy', title: 'Aptech ACCP Graduation',
     desc: 'Advanced Diploma in Software Engineering — comprehensive applied computing programme.',
+    url: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
   },
   {
     icon: 'fa-hands-helping', title: 'MDX Career Fair',
     desc: 'Certificate of appreciation for volunteering at the Middlesex University Dubai Career Fair.',
+    url: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
   },
   {
     icon: 'fa-award', title: 'Safety Award — HIA',
     desc: 'Recognition for exemplary safety practices during the Hamad International Airport Expansion Project.',
-    }
+    url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=sharing'
+  }
 ];
 
 function loadCertifications() {
@@ -1253,7 +1264,7 @@ function loadCertifications() {
         '<div class="cc-icon"><i class="fas ' + cert.icon + '"></i></div>' +
         '<div class="cc-title">' + cert.title + '</div>' +
         '<div class="cc-desc">' + cert.desc + '</div>' +
-        (cert.url ? '<button onclick="openDocViewer(\'' + cert.url + '\', \'' + cert.title + '\')" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</button>' : '') +
+        (cert.url ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</a>' : '') +
       '</div>';
     grid.appendChild(frame);
   });
@@ -1481,138 +1492,4 @@ function printSignature() {
   window.addEventListener('resize', function () {
     if (!isMobile() && isOpen) closeDropdown();
   });
-})();
-
-// ============================================================
-// DOC VIEWER MODAL
-// ============================================================
-
-function openDocViewer(url, title) {
-  var modal = document.getElementById('docViewerModal');
-  var frame = document.getElementById('docViewerFrame');
-  var titleEl = document.getElementById('docViewerTitle');
-  var ext = url.split('.').pop().toLowerCase();
-  titleEl.textContent = title || 'Document';
-  if (ext === 'jpg' || ext === 'jpeg' || ext === 'png') {
-    frame.src = url;
-  } else {
-    frame.src = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
-  }
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeDocViewer() {
-  var modal = document.getElementById('docViewerModal');
-  document.getElementById('docViewerFrame').src = '';
-  modal.style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeDocViewer();
-});
-/* ============================================================
-   DOCUMENT GALLERY — Modal Logic
-   ============================================================ */
-
-(function () {
-  'use strict';
-
-  var overlay    = document.getElementById('docViewerModal');
-  var titleEl    = document.getElementById('docViewerTitle');
-  var dlBtn      = document.getElementById('docViewerDownload');
-  var closeBtn   = document.getElementById('docViewerClose');
-  var loadingEl  = document.getElementById('dvLoading');
-  var contentEl  = document.getElementById('dvContent');
-
-  if (!overlay) return;
-
-  function openDoc(src, type, name) {
-    titleEl.textContent = name;
-    dlBtn.href          = src;
-    dlBtn.download      = src.split('/').pop();
-
-    contentEl.innerHTML = '';
-    contentEl.classList.add('dv-hidden');
-    loadingEl.classList.remove('dv-hidden');
-
-    overlay.classList.add('dv-visible');
-    document.body.style.overflow = 'hidden';
-
-    requestAnimationFrame(function () {
-      if (type === 'pdf') {
-        var iframe = document.createElement('iframe');
-        iframe.src   = src + '#toolbar=1&navpanes=0';
-        iframe.title = name;
-        iframe.onload = revealContent;
-        contentEl.appendChild(iframe);
-      } else {
-        var wrap = document.createElement('div');
-        wrap.className = 'dv-img-wrap';
-        var img = document.createElement('img');
-        img.src   = src;
-        img.alt   = name;
-        img.onload  = revealContent;
-        img.onerror = revealContent;
-        wrap.appendChild(img);
-        contentEl.appendChild(wrap);
-      }
-    });
-  }
-
-  function revealContent() {
-    loadingEl.classList.add('dv-hidden');
-    contentEl.classList.remove('dv-hidden');
-  }
-
-  function closeDoc() {
-    overlay.classList.remove('dv-visible');
-    document.body.style.overflow = '';
-
-    setTimeout(function () {
-      contentEl.innerHTML = '';
-      loadingEl.classList.remove('dv-hidden');
-      contentEl.classList.add('dv-hidden');
-    }, 280);
-  }
-
-  closeBtn.addEventListener('click', closeDoc);
-
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) closeDoc();
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && overlay.classList.contains('dv-visible')) {
-      closeDoc();
-    }
-  });
-
-  document.addEventListener('click', function (e) {
-    var item = e.target.closest('.doc-file-item');
-    if (!item) return;
-    var src  = item.dataset.src;
-    var type = item.dataset.type;
-    var name = item.dataset.name;
-    if (src && type && name) openDoc(src, type, name);
-  });
-
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    var item = e.target.closest('.doc-file-item');
-    if (!item) return;
-    e.preventDefault();
-    var src  = item.dataset.src;
-    var type = item.dataset.type;
-    var name = item.dataset.name;
-    if (src && type && name) openDoc(src, type, name);
-  });
-
-  document.querySelectorAll('.doc-file-item').forEach(function (item) {
-    item.setAttribute('tabindex', '0');
-    item.setAttribute('role', 'button');
-    item.setAttribute('aria-label', 'View ' + (item.dataset.name || 'document'));
-  });
-
 })();
