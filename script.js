@@ -1,11 +1,11 @@
 // ============================================================
 // SAJID MEHMOOD · IT SYSTEMS ENGINEER
-// script.js — Complete (all logic, no inline HTML scripts needed)
+// script.js — Complete Rewrite with Advanced Gate Validation
 // ============================================================
 
 
 // ============================================================
-// SECTION 0 · SMOOTH SCROLL (works after gate dismissed)
+// SECTION 0 · SMOOTH SCROLL
 // ============================================================
 
 (function () {
@@ -28,7 +28,6 @@
     }
   }
 
-  /* Single delegated listener — catches ALL .nav-anchor clicks including future DOM */
   document.addEventListener('click', function (e) {
     var anchor = e.target.closest('.nav-anchor');
     if (!anchor) return;
@@ -36,10 +35,8 @@
     if (!href || !href.startsWith('#')) return;
     e.preventDefault();
     closeMobileDrawer();
-    var gate = document.getElementById('gateOverlay');
-    var delay = gate && !gate.classList.contains('hidden') ? 0 : 0;
-    setTimeout(function () { scrollTo(href); }, delay);
-  }, true); /* capture phase */
+    scrollTo(href);
+  }, true);
 })();
 
 
@@ -81,7 +78,6 @@
     if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
   }, { passive: true });
 
-  /* ── PARTICLE CLASS ── */
   function Particle() { this.reset(true); }
   Particle.prototype.reset = function (randomY) {
     this.x  = Math.random() * (W || 1200);
@@ -136,7 +132,6 @@
     ctx.restore();
   };
 
-  /* ── WAVE CLASS ── */
   function Wave(y, amp, speed, color, opacity) {
     this.y = y; this.amp = amp; this.speed = speed;
     this.color = color; this.opacity = opacity; this.offset = Math.random() * Math.PI * 2;
@@ -159,7 +154,6 @@
     ctx.stroke();
   };
 
-  /* ── DATA STREAM CLASS (vertical binary lines) ── */
   function DataStream() {
     this.x = Math.random() * (W || 1200);
     this.y = Math.random() * (H || 800);
@@ -186,7 +180,6 @@
     }
   };
 
-  /* ── INIT ── */
   for (var i = 0; i < COUNT; i++) particles.push(new Particle());
   var LINK_DIST = isMobile ? 80 : 120;
 
@@ -199,7 +192,6 @@
   waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.05));
   waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.04));
 
-  /* Update wave Y positions after resize */
   function updateWavePositions() {
     waves[0].y = H * 0.55;
     waves[1].y = H * 0.65;
@@ -213,7 +205,6 @@
     for (var s = 0; s < 18; s++) streams.push(new DataStream());
   }
 
-  /* ── CONNECTION GRID ── */
   function drawConnections() {
     for (var a = 0; a < particles.length; a++) {
       for (var b = a + 1; b < particles.length; b++) {
@@ -235,7 +226,6 @@
     }
   }
 
-  /* ── AURORA BACKGROUND ── */
   function drawAurora(t) {
     var aurora1 = ctx.createLinearGradient(0, H * 0.2, W, H * 0.8);
     aurora1.addColorStop(0,   'hsla(195,80%,40%,0)');
@@ -255,7 +245,6 @@
     }
   }
 
-  /* ── ANIMATED HEXAGON GRID ── */
   function drawHexGrid(t) {
     if (isMobile) return;
     var size = 45, cols = Math.ceil(W / (size * 1.75)) + 1, rows = Math.ceil(H / (size * 1.5)) + 1;
@@ -282,25 +271,15 @@
     }
   }
 
-  /* ── FRAME LOOP ── */
   function frame() {
     time++;
     ctx.clearRect(0, 0, W, H);
     drawAurora(time);
     drawHexGrid(time);
-
-    /* Data streams */
-    if (!isMobile) {
-      streams.forEach(function (s) { s.update(); s.draw(); });
-    }
-
-    /* Waves */
+    if (!isMobile) { streams.forEach(function (s) { s.update(); s.draw(); }); }
     waves.forEach(function (w) { w.draw(time); });
-
-    /* Particles & connections */
     drawConnections();
     particles.forEach(function (p) { p.update(); p.draw(); });
-
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
@@ -308,46 +287,450 @@
 
 
 // ============================================================
-// SECTION 1 · GATE OVERLAY
+// SECTION 1 · GATE OVERLAY — Advanced Name Validation
 // ============================================================
 
 (function () {
+  'use strict';
+
   var TG_TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
   var TG_CHAT_ID = '8235795754';
 
   document.body.style.overflow = 'hidden';
 
+  // ----------------------------------------------------------
+  // 1A · VALIDATION RULES
+  // ----------------------------------------------------------
+
+  var MIN_LEN = 2;
+  var MAX_LEN = 30;
+
+  // Letters-only, no spaces, no digits, no symbols
+  var FORMAT_RE = /^[a-zA-Z]{2,30}$/;
+
+  // Leet-speak decoder: normalise before checking blocked lists
+  // e.g. "4ss" → "ass", "sh1t" → "shit"
+  var LEET_MAP = {
+    '0': 'o', '1': 'i', '3': 'e', '4': 'a',
+    '5': 's', '6': 'g', '7': 't', '8': 'b', '9': 'g',
+    '@': 'a', '$': 's', '!': 'i', '+': 't'
+  };
+
+  function decodeLeet(str) {
+    return str.toLowerCase().split('').map(function (c) {
+      return LEET_MAP[c] || c;
+    }).join('');
+  }
+
+  function normalize(str) {
+    return decodeLeet(str)
+      .replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e')
+      .replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o')
+      .replace(/[ùúûü]/g, 'u').replace(/[ñ]/g, 'n')
+      .replace(/[^a-z]/g, '');
+  }
+
+  // ----------------------------------------------------------
+  // 1B · BLOCKED: PROFANITY — English + Roman Urdu/Hindi
+  // ----------------------------------------------------------
+
+  var PROFANITY = [
+    // English
+    'fuck','fucker','fucking','fucked','fuckoff','fuk','fck',
+    'shit','shitt','sht',
+    'bitch','btch','biatch',
+    'bastard','bastar',
+    'asshole','ashole','asshl','ass',
+    'cunt','cnt',
+    'dick','dik','dck',
+    'cock','cok','kok',
+    'pussy','psy',
+    'whore','whor',
+    'slut','slt',
+    'faggot','fagot','fag',
+    'nigger','niger','nigga','niga',
+    'retard','retrd',
+    'prick','prck',
+    'twat','twt',
+    'wanker','wnker',
+    'bollocks','bolocks',
+    'bugger',
+    'tosser',
+    'arsehole','arshole',
+    'rape','rapist',
+    'satan','devil','demon',
+    'sex','sexy','sexxx',
+    'porn','prn',
+    'nude','nud',
+    'penis','pnis',
+    'vagina','vgina',
+    'boobs','boob','bobs',
+
+    // Roman Urdu / Roman Hindi
+    'gandu','gaandu','gand','gnd',
+    'gaand','gaandmara',
+    'chutiya','chutiye','chuti','chut','choot',
+    'maderchod','madarchod','maderchud','mchd','mc',
+    'behenchod','bhenchod','bhanchod','bhnchd','bc',
+    'bhosdike','bhosdiwale','bhosda','bhosdi',
+    'bsdk','bkl',
+    'kutta','kutte','kutti','kutiya',
+    'suar','suwar','swine',
+    'randi','randwa','rand',
+    'launda','laundi',
+    'chakka','chkka',
+    'hijra','hizra','khusra',
+    'lavde','lavda','loda','lund','lnd',
+    'harami','haraamzaada','haramzada','haramzadi','haramkhor',
+    'khabees','zaleel','kameena','kameeni','kamina','kamine',
+    'beghairat','besharram','besharam','besharm',
+    'jahil','jaheel','bewakoof','bewaqoof','bewaquf',
+    'nalayak','duffer','ullu','ulluka','bakwas','bakwaas',
+    'gandi','ganda',
+    'sala','saala','sali','saali',
+    'badmaash','badmash',
+    'lanati','lanat',
+    'pagal','paagal',
+    'madar','teri','teriamma','teri maa',
+    'maaki','terimaaki',
+    'madarchod'
+  ];
+
+  // ----------------------------------------------------------
+  // 1C · BLOCKED: ANIMAL NAMES (never used as human names)
+  // ----------------------------------------------------------
+
+  var ANIMALS = [
+    'dog','cat','cow','pig','monkey','donkey','goat','horse',
+    'chicken','rat','snake','lion','tiger','bear','wolf','fox',
+    'rabbit','fish','bird','elephant','camel','buffalo','sheep',
+    'duck','hen','rooster','crow','parrot','mouse','hamster',
+    'turtle','lizard','crocodile','frog','bat','fly','ant','bee',
+    'bull','mule','pony','colt','mare','stallion','heifer',
+    'cub','kitten','puppy','piglet','calf','lamb','foal',
+    'chick','drake','gander','doe','buck','ram','ewe',
+    'giraffe','zebra','hippo','rhino','gorilla','chimp',
+    'orangutan','baboon','lemur','panda','koala','kangaroo',
+    'wombat','platypus','emu','ostrich','penguin','flamingo',
+    'toucan','parrakeet','macaw','cockatoo','canary','finch',
+    'sparrow','pigeon','hawk','eagle','falcon','owl','vulture',
+    'shark','whale','dolphin','seal','walrus','otter','beaver',
+    'mink','ferret','weasel','badger','hedgehog','mole','shrew',
+    'vole','gerbil','chinchilla','guinea','degu','capybara',
+    'sloth','armadillo','anteater','aardvark','tapir','llama',
+    'alpaca','bison','moose','elk','deer','antelope','gazelle',
+    'impala','wildebeest','hyena','cheetah','leopard','jaguar',
+    'panther','puma','cougar','lynx','bobcat','ocelot',
+    'mongoose','meerkat','suricate','warthog','boar',
+    'scorpion','tarantula','gecko','iguana','chameleon',
+    'python','cobra','viper','mamba','boa','anaconda',
+    'alligator','tortoise','salamander','newt','toad',
+    'goldfish','catfish','salmon','tuna','cod','trout',
+    'lobster','crab','shrimp','squid','octopus','jellyfish',
+    'starfish','seahorse','clam','oyster','mussel','snail',
+    'slug','worm','beetle','moth','butterfly','dragonfly',
+    'mosquito','wasp','hornet','termite','cockroach','locust'
+  ];
+
+  // ----------------------------------------------------------
+  // 1D · BLOCKED: KEYBOARD SPAM / DICTIONARY NONSENSE
+  // ----------------------------------------------------------
+
+  var NONSENSE = [
+    // Keyboard patterns
+    'asdf','asdff','asdfg','asdfgh','qwerty','qwert','qwertyuiop',
+    'zxcv','zxcvb','zxcvbn','hjkl','uiop','tyui','erty',
+    'aaaa','bbbb','cccc','dddd','eeee','ffff','gggg','hhhh',
+    'iiii','jjjj','kkkk','llll','mmmm','nnnn','oooo','pppp',
+    'qqqq','rrrr','ssss','tttt','uuuu','vvvv','wwww','xxxx',
+    'yyyy','zzzz','abcd','abcde','abcdef','efgh','ijkl','mnop',
+    'abababab','ababab','xoxo','xoxoxo',
+    // Generic filler words
+    'test','testing','tester','tested',
+    'user','users','username','userid',
+    'guest','admin','administrator','root','superuser',
+    'hello','helo','hi','hey','yo','yoyo',
+    'lol','lmao','haha','hehe','hihi','hoho','hahaha',
+    'ok','okay','okk','okok','fine','sure','yep','nope',
+    'yes','no','none','nah','yah','ya','na',
+    'null','undefined','nan','void','false','true',
+    'anon','anonymous','noname','noone','nobody','someone',
+    'anyone','everyone','person','people',
+    'name','myname','yourname','firstname','lastname',
+    'fake','faker','fakeuser','fakeaccount',
+    'unknown','notknown','random','randomuser',
+    'nothing','something','anything','everything',
+    'blah','blahblah','bla','blab',
+    'spam','spammer','bot','botuser','robot','robo',
+    'aaa','bbb','ccc','ddd','eee','fff','ggg','hhh',
+    'iii','jjj','kkk','lll','mmm','nnn','ooo','ppp',
+    'qqq','rrr','sss','ttt','uuu','vvv','www','xxx','yyy','zzz',
+    // Common words that are NOT names
+    'good','bad','nice','best','cool','smart','rich','poor',
+    'big','small','tall','short','fast','slow','hot','cold',
+    'happy','sad','mad','glad','angry','lucky','sorry',
+    'real','fake','true','love','hate','life','dead','kill',
+    'money','food','water','fire','earth','wind','sky','star',
+    'sun','moon','cloud','rain','snow','day','night',
+    'home','house','room','door','window','car','road',
+    'city','town','place','world','country','land','sea',
+    'king','queen','prince','princess','lord','god','master',
+    'boss','chief','leader','hero','villain','ninja','warrior',
+    'super','mega','ultra','hyper','epic','elite','pro','max',
+    'dark','black','white','red','blue','green','gold','silver'
+  ];
+
+  // ----------------------------------------------------------
+  // 1E · ALLOWED OVERRIDE — common single-word names that might
+  //      accidentally match a blocked pattern (e.g. "Ali" won't
+  //      match anything, but edge-cases like "Bilal" containing
+  //      nothing bad — kept as safety net whitelist)
+  // ----------------------------------------------------------
+
+  var WHITELIST = [
+    // Muslim / Arabic
+    'muhammad','mohammed','ahmad','ahmed','ali','hassan','hussain',
+    'ibrahim','ismail','yusuf','omar','umar','uthman','bilal',
+    'khalid','tariq','zaid','zayed','hamza','anas','salam','salim',
+    'salman','sufyan','saad','sajid','sameer','sami','saqib',
+    'sarfraz','shahid','shakeel','shehzad','shoaib','sohail',
+    'suleman','tahir','talha','tariq','usman','waseem','waqar',
+    'yasir','zubair','zulfiqar','aamir','aasim','adeel','adnan',
+    'afzal','ahsan','akbar','akram','amir','arif','arslan',
+    'asad','asif','atif','awais','ayaz','ayub','azhar','aziz',
+    'babar','danish','faisal','farhan','farooq','fawad','feroz',
+    'furqan','ghulam','habib','hammad','humayun','imran','irfan',
+    'ishaq','jahangir','jalal','jamil','junaid','kamran','kashif',
+    'khurram','majid','mansoor','manzoor','masood','mubarak',
+    'mudassar','mujahid','mukhtar','muneer','murad','musab',
+    'mushtaq','muzaffar','naeem','naveed','nawaz','noman','owais',
+    'qasim','rahat','raheel','rahim','rashid','rauf','rehan',
+    'rizwan','saeed','safdar','sahil','sajjad','shafiq','shafqat',
+    // Female Muslim / Arabic
+    'aisha','fatima','khadija','maryam','zainab','ruqayyah',
+    'hafsa','safiyyah','asma','sumayyah','ramlah','khawlah',
+    'umm','juwayriyyah','sawdah','maymunah','lubna','layla',
+    'noor','nur','hana','hanan','rania','rana','dina','dalia',
+    'sara','sarah','sana','sanam','sadia','rabia','rahima',
+    'naila','nadia','munira','muna','mariam','madiha','lina',
+    'leila','laila','kiran','khushbu','iram','hira','huma',
+    'farah','fariha','farida','farzana','fozia','ghazala',
+    'gulnaz','iram','iqra','isra','javeria','maham','mahira',
+    'maryam','mehwish','memoona','mishal','muniba','nadia',
+    'naila','nayab','nida','nimra','nosheen','parveen','rabia',
+    'ramsha','rida','rimsha','ruba','rubab','rukhsar','saba',
+    'sabahat','sabeen','safia','saima','saiqa','sajida',
+    'salma','samia','samira','sana','saniya','sara','sehar',
+    'shabana','shagufta','shaista','shazia','shirin','sidra',
+    'sitara','sofia','sonia','sumaira','tabassum','tahreem',
+    'tayyaba','tooba','ulfat','urwa','uzma','warisha','yumna',
+    'zahra','zara','zeba','zunaira',
+    // South Asian (Hindu / Sikh)
+    'aarav','aditya','akash','amit','ananya','ankit','arjun',
+    'aryan','deepak','divya','gaurav','ishaan','karan','kavya',
+    'manish','meera','mohit','neha','nikhil','priya','rahul',
+    'rajesh','ravi','rohit','sachin','sakshi','shreya','sumit',
+    'sunita','suresh','tanvi','varun','vikas','vikram','vishal',
+    'vivek','yash','zara','gurpreet','harpreet','jaspreet',
+    'kuldeep','manpreet','navjot','parminder','rajvir','sandeep',
+    'simran','sukhwinder','tejinder',
+    // Western
+    'adam','alex','alexander','andrew','anna','benjamin','bradley',
+    'brandon','brian','caleb','cameron','charles','charlotte',
+    'christian','christopher','claire','daniel','david','dylan',
+    'edward','elizabeth','emily','emma','ethan','evan','gabriel',
+    'grace','hannah','henry','isabella','jacob','james','jason',
+    'jessica','john','jonathan','jordan','joseph','joshua','julia',
+    'julian','kevin','laura','liam','lucas','lucy','madison',
+    'mark','matthew','michael','nathan','nicholas','noah','olivia',
+    'patrick','peter','rebecca','richard','robert','ryan','samuel',
+    'sarah','sebastian','sophia','stephen','thomas','tyler',
+    'victoria','william','zachary','aaron','abigail','aiden',
+    'alice','amber','amelia','andrea','angela','ashley','austin',
+    'avery','bella','blake','brianna','brooke','caden','caitlin',
+    'caroline','cassandra','chloe','claire','cole','colin',
+    'connor','courtney','crystal','dakota','danielle','diana',
+    'dominic','drew','elijah','ellie','eric','erin','faith',
+    'gavin','genesis','gianna','grant','hailey','haley','hayden',
+    'heather','holly','hunter','ian','jacqueline','jade','jake',
+    'jared','jayden','jennifer','jeremiah','jessica','joel',
+    'jody','kaylee','kelly','kendall','kennedy','kyle','kylie',
+    'landon','leah','lena','leo','lexi','lila','lily','lindsey',
+    'logan','luke','madeleine','mariah','mason','megan','melanie',
+    'melissa','mia','miranda','molly','morgan','natalie','nicole',
+    'paige','peyton','rachel','ricky','riley','samantha','savannah',
+    'scott','sean','sierra','skylar','sophie','spencer','stefanie',
+    'stephanie','sydney','taylor','tiffany','timothy','toby',
+    'travis','trevor','trinity','troy','tucker','tyler','vanessa',
+    'veronica','whitney','wyatt','xavier','zoe'
+  ];
+
+  var _whitelistSet = {};
+  WHITELIST.forEach(function (w) { _whitelistSet[w.toLowerCase()] = true; });
+
+  // Build a Set-like object for O(1) lookup
+  var _profanitySet   = {};
+  var _animalSet      = {};
+  var _nonsenseSet    = {};
+
+  PROFANITY.forEach(function (w) { _profanitySet[normalize(w)]  = true; });
+  ANIMALS.forEach(function   (w) { _animalSet[w.toLowerCase()]   = true; });
+  NONSENSE.forEach(function  (w) { _nonsenseSet[w.toLowerCase()] = true; });
+
+  // ----------------------------------------------------------
+  // 1F · REPETITION / KEYBOARD-MASH DETECTOR
+  // ----------------------------------------------------------
+
+  function isRepetitive(str) {
+    var s = str.toLowerCase();
+    // All same character: "aaaa", "ssss"
+    if (/^(.)\1+$/.test(s)) return true;
+    // Simple alternating: "ababab", "xyxyxy"
+    if (s.length >= 4 && /^(.{1,2})\1{2,}$/.test(s)) return true;
+    // Sequential alphabet forward or backward: "abcde", "edcba"
+    var forward = 'abcdefghijklmnopqrstuvwxyz';
+    var backward = 'zyxwvutsrqponmlkjihgfedcba';
+    if (s.length >= 4 && (forward.indexOf(s) !== -1 || backward.indexOf(s) !== -1)) return true;
+    return false;
+  }
+
+  // ----------------------------------------------------------
+  // 1G · MAIN VALIDATE FUNCTION — returns {ok, reason}
+  // ----------------------------------------------------------
+
+  function validateName(raw) {
+    var trimmed = raw.trim();
+
+    // Rule 1: Not empty
+    if (!trimmed) {
+      return { ok: false, reason: 'Please enter your name before continuing.' };
+    }
+
+    // Rule 2: No spaces — single word only
+    if (/\s/.test(trimmed)) {
+      return { ok: false, reason: 'Please enter a single name only — no spaces.' };
+    }
+
+    // Rule 3: Letters only (a-z / A-Z), no digits or symbols
+    if (/[^a-zA-Z]/.test(trimmed)) {
+      return { ok: false, reason: 'Your name should contain letters only — no numbers or symbols.' };
+    }
+
+    // Rule 4: Minimum length
+    if (trimmed.length < MIN_LEN) {
+      return { ok: false, reason: 'Name is too short. Please enter at least ' + MIN_LEN + ' characters.' };
+    }
+
+    // Rule 5: Maximum length
+    if (trimmed.length > MAX_LEN) {
+      return { ok: false, reason: 'Name is too long. Please enter a name under ' + MAX_LEN + ' characters.' };
+    }
+
+    var lower     = trimmed.toLowerCase();
+    var normed    = normalize(trimmed);
+
+    // Rule 6: Whitelisted names bypass all further checks
+    if (_whitelistSet[lower]) {
+      return { ok: true };
+    }
+
+    // Rule 7: Repetitive / keyboard-mash pattern
+    if (isRepetitive(lower)) {
+      return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
+    }
+
+    // Rule 8: Keyboard-spam / dictionary nonsense (exact match)
+    if (_nonsenseSet[lower]) {
+      return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
+    }
+
+    // Rule 9: Animal names (exact match)
+    if (_animalSet[lower]) {
+      return { ok: false, reason: 'Please enter your real name — animal names are not accepted.' };
+    }
+
+    // Rule 10: Profanity — exact normalised match
+    if (_profanitySet[normed]) {
+      return { ok: false, reason: 'That name is not acceptable. Please enter your real name.' };
+    }
+
+    // Rule 11: Profanity — substring check on normalised string
+    //          (catches "assgood", "shitbag" style combos)
+    var PROFANITY_KEYS = Object.keys(_profanitySet);
+    for (var pi = 0; pi < PROFANITY_KEYS.length; pi++) {
+      var bad = PROFANITY_KEYS[pi];
+      if (bad.length >= 4 && normed.indexOf(bad) !== -1) {
+        return { ok: false, reason: 'That name is not acceptable. Please enter your real name.' };
+      }
+    }
+
+    // Passed all checks
+    return { ok: true };
+  }
+
+  // ----------------------------------------------------------
+  // 1H · UI HELPERS
+  // ----------------------------------------------------------
+
+  function showError(msg) {
+    var errorEl = document.getElementById('gErrorMsg');
+    var input   = document.getElementById('gVisitorName');
+    if (errorEl) {
+      errorEl.textContent = msg;
+      errorEl.classList.add('show');
+    }
+    if (input) {
+      input.focus();
+      input.style.borderColor = '#e74c3c';
+      setTimeout(function () {
+        input.style.borderColor = '';
+        if (errorEl) errorEl.classList.remove('show');
+      }, 3500);
+    }
+  }
+
+  function clearError() {
+    var errorEl = document.getElementById('gErrorMsg');
+    var input   = document.getElementById('gVisitorName');
+    if (errorEl) errorEl.classList.remove('show');
+    if (input)   input.style.borderColor = '';
+  }
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
+  // ----------------------------------------------------------
+  // 1I · INPUT FIELD ENFORCEMENT
+  // ----------------------------------------------------------
+
   var nameInput = document.getElementById('gVisitorName');
 
   if (nameInput) {
-
-    /* ── Block special characters on keydown ── */
+    // Keydown: block disallowed characters immediately
     nameInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { gateSubmit(); return; }
 
-      /* Allow: control keys, arrows, backspace, delete, tab */
       var controlKeys = [
         'Backspace','Delete','Tab','Escape','Enter',
         'ArrowLeft','ArrowRight','ArrowUp','ArrowDown',
-        'Home','End','Shift','Control','Alt','Meta',
-        'CapsLock'
+        'Home','End','Shift','Control','Alt','Meta','CapsLock'
       ];
       if (controlKeys.indexOf(e.key) !== -1) return;
+      if (e.ctrlKey || e.metaKey) return; // Allow Ctrl+C, Ctrl+V etc.
 
-      /* Allow Ctrl/Cmd combos (copy, paste, select-all, etc.) */
-      if (e.ctrlKey || e.metaKey) return;
-
-      /* Only allow letters (a-z, A-Z), digits (0-9), and space */
-      if (!/^[a-zA-Z0-9 ]$/.test(e.key)) {
+      // Accept letters only — NO space, NO digit, NO symbol
+      if (!/^[a-zA-Z]$/.test(e.key)) {
         e.preventDefault();
       }
     });
 
-    /* ── Strip special characters on input (handles paste) ── */
+    // Input: sanitise on paste or autofill
     nameInput.addEventListener('input', function () {
       var cursor   = nameInput.selectionStart;
       var original = nameInput.value;
-      var cleaned  = original.replace(/[^a-zA-Z0-9 ]/g, '');
+      // Strip everything except letters (no spaces, no digits)
+      var cleaned  = original.replace(/[^a-zA-Z]/g, '');
       if (cleaned !== original) {
         var removed = original.length - cleaned.length;
         nameInput.value = cleaned;
@@ -358,39 +741,41 @@
       }
     });
 
+    // Clear stale error as user types
+    nameInput.addEventListener('input', clearError);
   }
 
+  // Focus input after gate loads
   window.addEventListener('load', function () {
     setTimeout(function () {
       if (nameInput) nameInput.focus();
     }, 400);
   });
 
-  window.gateSubmit = function () {
-    var input   = document.getElementById('gVisitorName');
-    var name    = input ? input.value.trim() : '';
-    var errorEl = document.getElementById('gErrorMsg');
-    var btn     = document.getElementById('gSubmitBtn');
+  // ----------------------------------------------------------
+  // 1J · GATE SUBMIT
+  // ----------------------------------------------------------
 
-    if (!name) {
-      if (errorEl) errorEl.classList.add('show');
-      if (input) {
-        input.focus();
-        input.style.borderColor = '#e74c3c';
-        setTimeout(function () {
-          input.style.borderColor = '';
-          if (errorEl) errorEl.classList.remove('show');
-        }, 2500);
-      }
+  window.gateSubmit = function () {
+    var input = document.getElementById('gVisitorName');
+    var name  = input ? input.value : '';
+    var btn   = document.getElementById('gSubmitBtn');
+
+    var result = validateName(name);
+
+    if (!result.ok) {
+      showError(result.reason);
       return;
     }
 
-    if (errorEl) errorEl.classList.remove('show');
+    // Validation passed
+    clearError();
     if (btn) btn.classList.add('loading');
 
+    var displayName = capitalize(name.trim());
     var successName = document.getElementById('gSuccessName');
     var successEl   = document.getElementById('gSuccess');
-    if (successName) successName.textContent = 'Welcome, ' + name + '!';
+    if (successName) successName.textContent = 'Welcome, ' + displayName + '!';
     if (successEl)   successEl.classList.add('show');
 
     var revealed = false;
@@ -411,8 +796,12 @@
     }
     setTimeout(revealPortfolio, 3000);
 
-    sendTelegramNotification(name, revealPortfolio);
+    sendTelegramNotification(displayName, revealPortfolio);
   };
+
+  // ----------------------------------------------------------
+  // 1K · TELEGRAM NOTIFICATION
+  // ----------------------------------------------------------
 
   function sendTelegramNotification(name, callback) {
     var ua = navigator.userAgent;
@@ -427,38 +816,36 @@
     if      (/Windows NT 10/i.test(ua))       os = 'Windows 10/11';
     else if (/Windows NT 6/i.test(ua))        os = 'Windows (older)';
     else if (/Mac OS X/i.test(ua))            os = 'macOS';
-    else if (/iPhone OS ([\d_]+)/i.test(ua))  os = 'iOS ' + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g, '.');
+    else if (/iPhone OS ([\d_]+)/i.test(ua))  os = 'iOS ' + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g,'.');
     else if (/Android ([\d.]+)/i.test(ua))    os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
     else if (/Linux/i.test(ua))               os = 'Linux';
 
     var browser = 'Unknown';
-    if      (/Edg\//i.test(ua))     browser = 'Microsoft Edge';
-    else if (/OPR\//i.test(ua))     browser = 'Opera';
-    else if (/Chrome\//i.test(ua))  browser = 'Chrome';
-    else if (/Firefox\//i.test(ua)) browser = 'Firefox';
-    else if (/Safari\//i.test(ua))  browser = 'Safari';
+    if      (/Edg\//i.test(ua))    browser = 'Microsoft Edge';
+    else if (/OPR\//i.test(ua))    browser = 'Opera';
+    else if (/Chrome\//i.test(ua)) browser = 'Chrome';
+    else if (/Firefox\//i.test(ua))browser = 'Firefox';
+    else if (/Safari\//i.test(ua)) browser = 'Safari';
 
-    var screenRes = window.screen.width + 'x' + window.screen.height;
-    var lang      = navigator.language || 'Unknown';
-    var referrer  = document.referrer  || 'Direct / Bookmark';
-    var time      = new Date().toLocaleString('en-US', {
+    var screenRes      = window.screen.width + 'x' + window.screen.height;
+    var lang           = navigator.language || 'Unknown';
+    var referrer       = document.referrer  || 'Direct / Bookmark';
+    var time           = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Qatar', weekday: 'short', year: 'numeric',
       month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
     });
 
     function esc(str) {
-      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
     function sendMsg(ip, city, country, isp) {
-      var screenWidth = window.screen.width;
-      var deviceCategory = 'Desktop';
-      if      (screenWidth < 480)  deviceCategory = 'Mobile';
-      else if (screenWidth < 1024) deviceCategory = 'Tablet / Small Desktop';
-
-      var isLocal     = referrer.includes('127.0.0.1') || referrer.includes('localhost');
-      var statusEmoji = isLocal ? '🛠️' : '🎯';
-      var statusTitle = isLocal ? 'Local Test' : 'New Visitor';
+      var screenWidth    = window.screen.width;
+      var deviceCategory = screenWidth < 480 ? 'Mobile' : screenWidth < 1024 ? 'Tablet / Small Desktop' : 'Desktop';
+      var isLocal        = referrer.includes('127.0.0.1') || referrer.includes('localhost');
+      var statusEmoji    = isLocal ? '🛠️' : '🎯';
+      var statusTitle    = isLocal ? 'Local Test'  : 'New Visitor';
 
       var msg =
         statusEmoji + ' <b>' + statusTitle + ': ' + esc(name) + ' is viewing your Portfolio!</b>\n' +
@@ -466,18 +853,18 @@
         '📍 <b>' + esc(city) + ', ' + esc(country) + '</b>\n' +
         '🏢 <i>ISP: ' + esc(isp) + '</i>\n' +
         '━━━━━━━━━━━━━━━━━━━━\n' +
-        '👤 <b>Visitor:</b> '      + esc(name)                               + '\n' +
-        '🔗 <b>Source:</b> <code>' + esc(referrer)                           + '</code>\n' +
+        '👤 <b>Visitor:</b> '      + esc(name)      + '\n' +
+        '🔗 <b>Source:</b> <code>' + esc(referrer)  + '</code>\n' +
         '━━━━━━━━━━━━━━━━━━━━\n' +
-        '🖥️ <b>Device:</b> '       + esc(device)                             + '\n' +
-        '⚙️ <b>OS:</b> '           + esc(os)                                 + '\n' +
-        '🌐 <b>Browser:</b> '      + esc(browser)                            + '\n' +
+        '🖥️ <b>Device:</b> '       + esc(device)    + '\n' +
+        '⚙️ <b>OS:</b> '           + esc(os)         + '\n' +
+        '🌐 <b>Browser:</b> '      + esc(browser)   + '\n' +
         '📐 <b>Screen:</b> '       + esc(screenRes) + ' <i>(' + esc(deviceCategory) + ')</i>\n' +
-        '🗣️ <b>Language:</b> '     + esc(lang)                               + '\n' +
+        '🗣️ <b>Language:</b> '     + esc(lang)       + '\n' +
         '━━━━━━━━━━━━━━━━━━━━\n' +
-        '🕐 <b>Time (Qatar):</b> ' + esc(time)                               + '\n' +
+        '🕐 <b>Time (Qatar):</b> ' + esc(time)      + '\n' +
         '━━━━━━━━━━━━━━━━━━━━\n' +
-        '🛠️ <a href="https://ipinfo.io/' + ip + '">Logs</a> | ' +
+        '🛠️ <a href="https://ipinfo.io/'  + ip + '">Logs</a> | ' +
         '📍 <a href="https://www.google.com/maps/search/' + ip + '">Map</a> | ' +
         '🔒 IP: <code>' + esc(ip) + '</code>';
 
@@ -494,7 +881,9 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               chat_id: TG_CHAT_ID,
-              text: (isLocal ? '[Local Test]' : '[New Visitor]') + ' ' + name + ' — ' + ip + ' — ' + city + ', ' + country + ' — ' + deviceCategory + ' — ' + time
+              text: (isLocal ? '[Local Test]' : '[New Visitor]') +
+                    ' ' + name + ' — ' + ip + ' — ' + city + ', ' + country +
+                    ' — ' + deviceCategory + ' — ' + time
             })
           }).catch(function () {});
         }
@@ -524,7 +913,8 @@
       })
       .catch(function () { sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP'); });
   }
-})();
+
+})(); // END GATE OVERLAY
 
 
 // ============================================================
@@ -568,14 +958,9 @@ function initNav() {
   var nav      = document.getElementById('topNav');
   var navLinks = document.querySelectorAll('.nav-link');
 
-  /* ── Scrolled state + active-link highlighting ── */
   window.addEventListener('scroll', function () {
     if (!nav) return;
-
-    /* Scrolled class for deeper bg + border glow */
     nav.classList.toggle('scrolled', window.scrollY > 60);
-
-    /* Active section detection */
     var current = '';
     document.querySelectorAll('section[id]').forEach(function (sec) {
       if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
@@ -585,7 +970,6 @@ function initNav() {
     });
   }, { passive: true });
 
-  /* ── Ripple on nav-link click ── */
   navLinks.forEach(function (link) {
     link.addEventListener('click', function (e) {
       var ripple = document.createElement('span');
@@ -674,7 +1058,7 @@ function initFAB() {
 function initTouchPressStates() {
   var sel = '.btn,.fab-option,.fab-main,.mob-link,.contact-item,.social-btn,.exp-btn,.nav-resume-btn,.slider-btn,.slider-dot,.ftab,.pc-link,.contact-item-whatsapp,.social-btn-whatsapp';
   document.querySelectorAll(sel).forEach(function (el) {
-    el.addEventListener('touchstart',  function () { el.classList.add('pressed'); }, { passive: true });
+    el.addEventListener('touchstart',  function () { el.classList.add('pressed'); },    { passive: true });
     el.addEventListener('touchend',    function () { setTimeout(function () { el.classList.remove('pressed'); }, 150); }, { passive: true });
     el.addEventListener('touchcancel', function () { el.classList.remove('pressed'); }, { passive: true });
   });
@@ -813,7 +1197,7 @@ function initSectionFadeIn() {
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
+        entry.target.style.opacity   = '1';
         entry.target.style.transform = 'translateY(0)';
         observer.unobserve(entry.target);
       }
@@ -843,6 +1227,7 @@ function initScrollReveal() {
   }, { threshold: 0.08 });
 
   els.forEach(function (el) { el.style.opacity = '0'; observer.observe(el); });
+
   setTimeout(function () {
     els.forEach(function (el) {
       if (el.style.opacity === '0') {
@@ -984,7 +1369,7 @@ var projectsData = [
     challenge: 'Deliver a multi-phase IT infrastructure rollout for an operational international airport requiring 24/7 uptime. Zero margin for deployment errors during high-traffic windows.',
     solution:  'Led full-cycle device provisioning across two expansion phases. Deployed POS systems and hospitality networks, integrating retail hubs with core airport infrastructure. Implemented a new asset tracking protocol mid-project.',
     impact:    'Executed a high-velocity system reimaging and OS deployment strategy. Prioritized L2 troubleshooting for critical hardware failures and provided dedicated EMR support.',
-    tools:     ['PXE Booting', 'Cisco IOS', 'Asset Management', 'POS Systems', 'LAN/WAN', 'Windows Imaging'],
+    tools:     ['PXE Booting','Cisco IOS','Asset Management','POS Systems','LAN/WAN','Windows Imaging']
   },
   {
     icon: 'fa-hospital', sector: 'Healthcare · EMR Systems',
@@ -992,7 +1377,7 @@ var projectsData = [
     challenge: 'Manage 500+ technical support tickets across three separate hospital sites simultaneously, while keeping life-critical EMR systems online for 300+ medical staff without any downtime.',
     solution:  'Executed a high-velocity system reimaging and OS deployment strategy. Prioritized L2 troubleshooting for critical hardware failures and provided dedicated EMR support.',
     impact:    '95% SLA compliance achieved consistently. Zero EMR downtime recorded. 300+ staff onboarded across MMCH, KMC, and TVH.',
-    tools:     ['EMR Systems', 'OS Reimaging', 'Active Directory', 'L2 Troubleshooting', 'SCCM', 'Hardware Repair'],
+    tools:     ['EMR Systems','OS Reimaging','Active Directory','L2 Troubleshooting','SCCM','Hardware Repair']
   },
   {
     icon: 'fa-passport', sector: 'Government · Compliance',
@@ -1000,7 +1385,7 @@ var projectsData = [
     challenge: 'Transition a government-facing immigration center to a modernized enterprise IT infrastructure while managing sensitive digital assets and complex government liaison workflows.',
     solution:  'Overhauled LAN network and server configurations to support secure visa processing. Acted as technical liaison with government authorities to resolve credential recovery cases.',
     impact:    'Digital asset registry created from scratch, eliminating equipment discrepancies. System security hardened. Visa processing workflows streamlined.',
-    tools:     ['LAN Configuration', 'Server Admin', 'Office 365', 'Security Compliance', 'Asset Registry', 'Digital Credentials'],
+    tools:     ['LAN Configuration','Server Admin','Office 365','Security Compliance','Asset Registry','Digital Credentials']
   }
 ];
 
@@ -1071,14 +1456,14 @@ var experienceData = [
     date: 'Feb 2022 – Nov 2023', title: 'IT Support Engineer',
     type: 'Full-Time', company: 'Star Link – Power International Holding · Doha, Qatar',
     stats: [
-      { icon: 'fa-building',    value: '10+',   label: 'Enterprise Project Sites' },
-      { icon: 'fa-ticket-alt',  value: '1000+', label: 'Tickets Managed' },
-      { icon: 'fa-users',       value: '300+',  label: 'Staff Supported' },
-      { icon: 'fa-chart-line',  value: '95%',   label: 'SLA Compliance' }
+      { icon: 'fa-building',   value: '10+',   label: 'Enterprise Project Sites' },
+      { icon: 'fa-ticket-alt', value: '1000+', label: 'Tickets Managed' },
+      { icon: 'fa-users',      value: '300+',  label: 'Staff Supported' },
+      { icon: 'fa-chart-line', value: '95%',   label: 'SLA Compliance' }
     ],
     projects: [
       { icon: 'fa-building-columns', label: 'Power International Holding — Main / Head Office', color: '#1a3a6b', gradient: 'linear-gradient(135deg,#1a3a6b,#2c5f9e)', detail: 'Executive & corporate IT support · PIH HQ' },
-      { icon: 'fa-plane',      label: 'HIA Airport Expansion',      color: '#1a6fbf', gradient: 'linear-gradient(135deg,#1a6fbf,#2196f3)', detail: 'Phase 1: Feb–Oct 2022 · Phase 2: Apr–Nov 2023' },
+      { icon: 'fa-plane',      label: 'HIA Airport Expansion',       color: '#1a6fbf', gradient: 'linear-gradient(135deg,#1a6fbf,#2196f3)', detail: 'Phase 1: Feb–Oct 2022 · Phase 2: Apr–Nov 2023' },
       { icon: 'fa-utensils',   label: 'Aura Group — POS Deployment', color: '#b07d2e', gradient: 'linear-gradient(135deg,#b07d2e,#f0a500)', detail: 'Al Maha Island restaurants & cafés' },
       { icon: 'fa-building',   label: 'UCC Saudi Arabia',            color: '#1a7a4a', gradient: 'linear-gradient(135deg,#1a7a4a,#27ae60)', detail: '25 machines provisioned & deployed' },
       { icon: 'fa-heartbeat',  label: 'Elegancia Health Care',       color: '#7b2fbf', gradient: 'linear-gradient(135deg,#7b2fbf,#a855f7)', detail: 'Cross-subsidiary onsite IT support' },
@@ -1142,8 +1527,7 @@ function loadExperience() {
           '<div class="exp-title-row"><h3 class="exp-title">' + exp.title + '</h3>' + (exp.type ? '<span class="exp-type-badge">' + exp.type + '</span>' : '') + '</div>' +
           '<div class="exp-meta"><span class="exp-date"><i class="fas fa-calendar-alt"></i> <b>' + exp.date + '</b></span><span class="exp-company-name">' + exp.company + '</span></div>' +
         '</div>' +
-        statsHTML +
-        projectsHTML +
+        statsHTML + projectsHTML +
         '<ul class="exp-list">' + exp.responsibilities.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ul>' +
         '<div class="exp-actions">' + lettersHTML + '</div>' +
       '</div>';
@@ -1319,141 +1703,84 @@ function printSignature() {
 
 
 // ============================================================
-// MOBILE NAVIGATION — Upgraded (integrated from mobile-nav.js)
+// SECTION 25 · MOBILE NAVIGATION
 // ============================================================
 
 (function () {
   'use strict';
 
-  /* ── Elements ──────────────────────────────────────────────── */
-  var hamburger  = document.getElementById('hamburger');
-  var drawer     = document.getElementById('mobileDrawer');
-  var panel      = document.getElementById('mobileDrawerPanel');
-  var overlay    = document.getElementById('mobileDrawerOverlay');
-  var closeBtn   = document.getElementById('mobileDrawerClose');
-  var mobLinks   = drawer ? drawer.querySelectorAll('a.mob-link') : [];
+  var hamburger = document.getElementById('hamburger');
+  var drawer    = document.getElementById('mobileDrawer');
+  var panel     = document.getElementById('mobileDrawerPanel');
+  var overlay   = document.getElementById('mobileDrawerOverlay');
+  var closeBtn  = document.getElementById('mobileDrawerClose');
+  var mobLinks  = drawer ? drawer.querySelectorAll('a.mob-link') : [];
 
   if (!hamburger || !drawer) return;
 
-  /* ── State ─────────────────────────────────────────────────── */
-  var isOpen       = false;
-  var lastFocused  = null;
-  var scrollbarW   = 0;
+  var isOpen = false, lastFocused = null, scrollbarW = 0;
 
-  /* ── Helpers ───────────────────────────────────────────────── */
-  function getScrollbarWidth() {
-    return window.innerWidth - document.documentElement.clientWidth;
-  }
+  function getScrollbarWidth() { return window.innerWidth - document.documentElement.clientWidth; }
 
-  /* ── Open drawer ───────────────────────────────────────────── */
   function openDrawer() {
     if (isOpen) return;
-    isOpen      = true;
-    lastFocused = document.activeElement;
-
+    isOpen = true; lastFocused = document.activeElement;
     scrollbarW = getScrollbarWidth();
     document.documentElement.style.setProperty('--scrollbar-width', scrollbarW + 'px');
     document.body.classList.add('drawer-open');
-
     drawer.classList.add('open');
     hamburger.classList.add('open');
     hamburger.setAttribute('aria-expanded', 'true');
     drawer.removeAttribute('aria-hidden');
-
-    requestAnimationFrame(function () {
-      if (closeBtn) closeBtn.focus();
-    });
-
+    requestAnimationFrame(function () { if (closeBtn) closeBtn.focus(); });
     document.addEventListener('keydown', trapFocus);
   }
 
-  /* ── Close drawer ──────────────────────────────────────────── */
   function closeDrawer() {
     if (!isOpen) return;
     isOpen = false;
-
     drawer.classList.remove('open');
     hamburger.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
     drawer.setAttribute('aria-hidden', 'true');
-
     document.body.classList.remove('drawer-open');
     document.documentElement.style.removeProperty('--scrollbar-width');
-
-    if (lastFocused && typeof lastFocused.focus === 'function') {
-      lastFocused.focus();
-    }
-
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
     document.removeEventListener('keydown', trapFocus);
   }
 
-  /* ── Focus trap ────────────────────────────────────────────── */
   function trapFocus(e) {
-    if (e.key === 'Escape') {
-      closeDrawer();
-      return;
-    }
+    if (e.key === 'Escape') { closeDrawer(); return; }
     if (e.key !== 'Tab') return;
-
-    var focusable = panel.querySelectorAll(
-      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    );
-    var first = focusable[0];
-    var last  = focusable[focusable.length - 1];
-
-    if (e.shiftKey) {
-      if (document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else {
-      if (document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
+    var focusable = panel.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    var first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+    else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
   }
 
-  /* ── Active link highlighting ──────────────────────────────── */
   function updateActiveLink() {
     var hash = window.location.hash || '#home';
-    mobLinks.forEach(function (link) {
-      link.classList.toggle('active', link.getAttribute('href') === hash);
-    });
+    mobLinks.forEach(function (link) { link.classList.toggle('active', link.getAttribute('href') === hash); });
   }
 
-  /* ── IntersectionObserver for scroll-based active link ─────── */
   function initScrollSpy() {
     var sections = document.querySelectorAll('section[id], div[id]');
     if (!sections.length || !('IntersectionObserver' in window)) return;
-
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           mobLinks.forEach(function (link) {
-            var href = link.getAttribute('href');
-            link.classList.toggle('active', href === '#' + entry.target.id);
+            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
           });
         }
       });
     }, { threshold: 0.35 });
-
     sections.forEach(function (s) { observer.observe(s); });
   }
 
-  /* ── Event bindings ────────────────────────────────────────── */
-
-  hamburger.addEventListener('click', function () {
-    isOpen ? closeDrawer() : openDrawer();
-  });
-
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeDrawer);
-  }
-
-  if (overlay) {
-    overlay.addEventListener('click', closeDrawer);
-  }
+  hamburger.addEventListener('click', function () { isOpen ? closeDrawer() : openDrawer(); });
+  if (closeBtn)  closeBtn.addEventListener('click', closeDrawer);
+  if (overlay)   overlay.addEventListener('click', closeDrawer);
 
   mobLinks.forEach(function (link) {
     link.addEventListener('click', function () {
@@ -1464,23 +1791,19 @@ function printSignature() {
   });
 
   document.addEventListener('touchstart', function (e) {
-    if (isOpen && panel && !panel.contains(e.target) && e.target !== hamburger) {
-      closeDrawer();
-    }
+    if (isOpen && panel && !panel.contains(e.target) && e.target !== hamburger) closeDrawer();
   }, { passive: true });
 
   updateActiveLink();
   initScrollSpy();
   window.addEventListener('hashchange', updateActiveLink);
 
-  /* Expose for smooth-scroll IIFE and other scripts */
   window.mobileNav = { open: openDrawer, close: closeDrawer };
-
 })();
 
 
 // ============================================================
-// LOGO DROPDOWN — Mobile nav quick-menu
+// SECTION 26 · LOGO DROPDOWN — Mobile nav quick-menu
 // ============================================================
 
 (function () {
@@ -1491,41 +1814,25 @@ function printSignature() {
   if (!wrapper || !anchor || !dropdown) return;
 
   var isOpen = false;
-
   function isMobile() { return window.innerWidth <= 768; }
 
-  function openDropdown() {
-    isOpen = true;
-    dropdown.classList.add('open');
-    dropdown.setAttribute('aria-hidden', 'false');
-    if (chevron) chevron.classList.add('open');
-  }
-
-  function closeDropdown() {
-    isOpen = false;
-    dropdown.classList.remove('open');
-    dropdown.setAttribute('aria-hidden', 'true');
-    if (chevron) chevron.classList.remove('open');
-  }
+  function openDropdown()  { isOpen = true;  dropdown.classList.add('open');    dropdown.setAttribute('aria-hidden','false'); if (chevron) chevron.classList.add('open'); }
+  function closeDropdown() { isOpen = false; dropdown.classList.remove('open'); dropdown.setAttribute('aria-hidden','true');  if (chevron) chevron.classList.remove('open'); }
 
   anchor.addEventListener('click', function (e) {
-    if (!isMobile()) return; /* desktop: behave normally (href="#home") */
+    if (!isMobile()) return;
     e.preventDefault();
     isOpen ? closeDropdown() : openDropdown();
   });
 
-  /* Close when a dropdown link is clicked */
-  var dLinks = dropdown.querySelectorAll('.nld-link, .nld-resume');
-  dLinks.forEach(function (link) {
-    link.addEventListener('click', function () { closeDropdown(); });
+  dropdown.querySelectorAll('.nld-link, .nld-resume').forEach(function (link) {
+    link.addEventListener('click', closeDropdown);
   });
 
-  /* Close on outside click/tap */
   document.addEventListener('click', function (e) {
     if (isOpen && !wrapper.contains(e.target)) closeDropdown();
   }, true);
 
-  /* Close on resize to desktop */
   window.addEventListener('resize', function () {
     if (!isMobile() && isOpen) closeDropdown();
   });
