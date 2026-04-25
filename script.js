@@ -1,6 +1,6 @@
 // ============================================================
 // SAJID MEHMOOD · IT SYSTEMS ENGINEER
-// script.js — Complete Rewrite with Advanced Gate Validation
+// script.js — Full Rewrite v2.0
 // ============================================================
 
 
@@ -287,33 +287,43 @@
 
 
 // ============================================================
-// SECTION 1 · GATE OVERLAY — Advanced Name Validation
+// SECTION 1 · GATE OVERLAY — Professional Name Validation v2.0
 // ============================================================
 
 (function () {
   'use strict';
 
+  // ----------------------------------------------------------
+  // TELEGRAM — proxy endpoint pattern
+  // NOTE: For production security, replace TG_TOKEN and TG_CHAT_ID
+  // with a server-side proxy URL (Cloudflare Worker / Vercel function).
+  // Keeping client-side here for portability — rotate token regularly.
+  // ----------------------------------------------------------
   var TG_TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
   var TG_CHAT_ID = '8235795754';
+
+  // Rate limit: max 5 attempts per session, 3s cooldown between submits
+  var _submitCount   = 0;
+  var _lastSubmitMs  = 0;
+  var MAX_ATTEMPTS   = 5;
+  var SUBMIT_COOLDOWN_MS = 3000;
 
   document.body.style.overflow = 'hidden';
 
   // ----------------------------------------------------------
-  // 1A · VALIDATION RULES
+  // 1A · CONSTANTS
   // ----------------------------------------------------------
 
   var MIN_LEN = 2;
   var MAX_LEN = 30;
 
-  // Letters-only, no spaces, no digits, no symbols
-  var FORMAT_RE = /^[a-zA-Z]{2,30}$/;
+  // ----------------------------------------------------------
+  // 1B · LEET-SPEAK + UNICODE NORMALIZER
+  // ----------------------------------------------------------
 
-  // Leet-speak decoder: normalise before checking blocked lists
-  // e.g. "4ss" → "ass", "sh1t" → "shit"
   var LEET_MAP = {
-    '0': 'o', '1': 'i', '3': 'e', '4': 'a',
-    '5': 's', '6': 'g', '7': 't', '8': 'b', '9': 'g',
-    '@': 'a', '$': 's', '!': 'i', '+': 't'
+    '0':'o','1':'i','3':'e','4':'a','5':'s','6':'g',
+    '7':'t','8':'b','9':'g','@':'a','$':'s','!':'i','+':'t'
   };
 
   function decodeLeet(str) {
@@ -324,14 +334,15 @@
 
   function normalize(str) {
     return decodeLeet(str)
-      .replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e')
-      .replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o')
-      .replace(/[ùúûü]/g, 'u').replace(/[ñ]/g, 'n')
+      .replace(/[àáâãäåā]/g, 'a').replace(/[èéêëē]/g, 'e')
+      .replace(/[ìíîïī]/g, 'i').replace(/[òóôõöō]/g, 'o')
+      .replace(/[ùúûüū]/g, 'u').replace(/[ñ]/g, 'n')
+      .replace(/[ç]/g, 'c').replace(/[ß]/g, 'ss')
       .replace(/[^a-z]/g, '');
   }
 
   // ----------------------------------------------------------
-  // 1B · BLOCKED: PROFANITY — English + Roman Urdu/Hindi
+  // 1C · BLOCKED: PROFANITY — English + Roman Urdu/Hindi
   // ----------------------------------------------------------
 
   var PROFANITY = [
@@ -365,7 +376,6 @@
     'penis','pnis',
     'vagina','vgina',
     'boobs','boob','bobs',
-
     // Roman Urdu / Roman Hindi
     'gandu','gaandu','gand','gnd',
     'gaand','gaandmara',
@@ -375,7 +385,7 @@
     'bhosdike','bhosdiwale','bhosda','bhosdi',
     'bsdk','bkl',
     'kutta','kutte','kutti','kutiya',
-    'suar','suwar','swine',
+    'suar','suwar',
     'randi','randwa','rand',
     'launda','laundi',
     'chakka','chkka',
@@ -391,13 +401,76 @@
     'badmaash','badmash',
     'lanati','lanat',
     'pagal','paagal',
-    'madar','teri','teriamma','teri maa',
+    'madar','teriamma',
     'maaki','terimaaki',
     'madarchod'
   ];
 
   // ----------------------------------------------------------
-  // 1C · BLOCKED: ANIMAL NAMES (never used as human names)
+  // 1D · BLOCKED: ROMANTIC / ENDEARMENT TERMS  ← NEW
+  // ----------------------------------------------------------
+
+  var ROMANTIC = [
+    // English endearments / pet names
+    'sweet','sweety','sweetie','sweetheart','sweetzz','sweetness',
+    'honey','honeybee','honeybun','honeypie','honeykins',
+    'babe','baby','babygirl','babyboy','babydoll','babyface','babykins',
+    'darling','darlingg',
+    'lover','loverboy','lovergirl','lovebird','lovebug','loveydovey',
+    'lovey','lovie','loveable','lovemaster',
+    'cutie','cutiepie','cuteness','cutiecutie',
+    'angel','angelface','angelbaby','angelgirl','angelboy',
+    'pretty','prettygirl','prettyone','prettyboy','prettyface',
+    'gorgeous','gorgeousgirl','gorgeousboy',
+    'flirt','flirty','flirter','flirtybabe',
+    'romeo','juliet','casanova','lothario','charmer',
+    'charm','charming',
+    'dreamy','dreamboat','dreamgirl','dreamboy',
+    'heartthrob','hearthrob',
+    'sugar','sugarplum','sugarbabe','sugarbabes','sugarpie',
+    'candy','candygirl','candyboy','candycane',
+    'kiss','kissy','kisses','kissme','smooch','smoochy',
+    'hugs','hugsy','huggie','hugsandkisses',
+    'snuggle','snuggles','snuggly','snugglekins','snugglebear',
+    'cuddle','cuddles','cuddly','cuddlebug','cuddlekins',
+    'pookie','pookiebear','pookiekins','poohbear','teddybear','teddyboo',
+    'wifey','hubby','beau',
+    'stud','hunk',
+    'seductive','seductress',
+    'temptress','tempting',
+    'irresistible',
+    'myqueen','myking','myprincess','myprince',
+    'myangel','myhoney','mybaby','mybabe','mydarling','mysweetheart',
+    'mysweetie','mylife','myheart','mysoul','mylove','myworld',
+    'dreamlover','secretlover','closetlover',
+    'romantic','romance','romantica',
+    'passion','passionate',
+    'beloved','adored','adore','adorable',
+    'flirtatious','crush','crushie',
+    'wink','winky','blush','blushy',
+    'xoxo','xoxoxo','muah','mwah',
+    'heartbeat','butterflies',
+    // Roman Urdu romantic terms
+    'jaan','jaanu','jaaneman','jaanijaan',
+    'pyar','pyari','pyaari','pyaruu',
+    'mehboob','mehbooba','mehboobaa',
+    'aashiq','aashiqa','aashiqui',
+    'dilbar','dilruba','dildaar','dilnasheen',
+    'chaand','chand','chandni','chandaa',
+    'gul','gulzar','gulabo',
+    'shona','shonaaa','shunaaa',
+    'babujaan','babujan','babujii',
+    'raja','rani',
+    'sajna','sajni',
+    'hasina','husnpari',
+    'paro','devdas',
+    'laila','majnu',
+    'mishti','misti',
+    'mishty'
+  ];
+
+  // ----------------------------------------------------------
+  // 1E · BLOCKED: ANIMALS
   // ----------------------------------------------------------
 
   var ANIMALS = [
@@ -412,16 +485,16 @@
     'giraffe','zebra','hippo','rhino','gorilla','chimp',
     'orangutan','baboon','lemur','panda','koala','kangaroo',
     'wombat','platypus','emu','ostrich','penguin','flamingo',
-    'toucan','parrakeet','macaw','cockatoo','canary','finch',
+    'toucan','parakeet','macaw','cockatoo','canary','finch',
     'sparrow','pigeon','hawk','eagle','falcon','owl','vulture',
     'shark','whale','dolphin','seal','walrus','otter','beaver',
     'mink','ferret','weasel','badger','hedgehog','mole','shrew',
-    'vole','gerbil','chinchilla','guinea','degu','capybara',
+    'vole','gerbil','chinchilla','capybara',
     'sloth','armadillo','anteater','aardvark','tapir','llama',
     'alpaca','bison','moose','elk','deer','antelope','gazelle',
     'impala','wildebeest','hyena','cheetah','leopard','jaguar',
     'panther','puma','cougar','lynx','bobcat','ocelot',
-    'mongoose','meerkat','suricate','warthog','boar',
+    'mongoose','meerkat','warthog','boar',
     'scorpion','tarantula','gecko','iguana','chameleon',
     'python','cobra','viper','mamba','boa','anaconda',
     'alligator','tortoise','salamander','newt','toad',
@@ -433,11 +506,10 @@
   ];
 
   // ----------------------------------------------------------
-  // 1D · BLOCKED: KEYBOARD SPAM / DICTIONARY NONSENSE
+  // 1F · BLOCKED: KEYBOARD SPAM / FILLER WORDS
   // ----------------------------------------------------------
 
   var NONSENSE = [
-    // Keyboard patterns
     'asdf','asdff','asdfg','asdfgh','qwerty','qwert','qwertyuiop',
     'zxcv','zxcvb','zxcvbn','hjkl','uiop','tyui','erty',
     'aaaa','bbbb','cccc','dddd','eeee','ffff','gggg','hhhh',
@@ -445,10 +517,9 @@
     'qqqq','rrrr','ssss','tttt','uuuu','vvvv','wwww','xxxx',
     'yyyy','zzzz','abcd','abcde','abcdef','efgh','ijkl','mnop',
     'abababab','ababab','xoxo','xoxoxo',
-    // Generic filler words
-    'test','testing','tester','tested',
-    'user','users','username','userid',
-    'guest','admin','administrator','root','superuser',
+    'test','testing','tester','tested','testuser',
+    'user','users','username','userid','usertest',
+    'guest','guestuser','admin','administrator','root','superuser',
     'hello','helo','hi','hey','yo','yoyo',
     'lol','lmao','haha','hehe','hihi','hoho','hahaha',
     'ok','okay','okk','okok','fine','sure','yep','nope',
@@ -465,7 +536,6 @@
     'aaa','bbb','ccc','ddd','eee','fff','ggg','hhh',
     'iii','jjj','kkk','lll','mmm','nnn','ooo','ppp',
     'qqq','rrr','sss','ttt','uuu','vvv','www','xxx','yyy','zzz',
-    // Common words that are NOT names
     'good','bad','nice','best','cool','smart','rich','poor',
     'big','small','tall','short','fast','slow','hot','cold',
     'happy','sad','mad','glad','angry','lucky','sorry',
@@ -474,27 +544,93 @@
     'sun','moon','cloud','rain','snow','day','night',
     'home','house','room','door','window','car','road',
     'city','town','place','world','country','land','sea',
-    'king','queen','prince','princess','lord','god','master',
-    'boss','chief','leader','hero','villain','ninja','warrior',
+    'king','queen','lord','god','master',
     'super','mega','ultra','hyper','epic','elite','pro','max',
     'dark','black','white','red','blue','green','gold','silver'
   ];
 
   // ----------------------------------------------------------
-  // 1E · ALLOWED OVERRIDE — common single-word names that might
-  //      accidentally match a blocked pattern (e.g. "Ali" won't
-  //      match anything, but edge-cases like "Bilal" containing
-  //      nothing bad — kept as safety net whitelist)
+  // 1G · BLOCKED: JOB TITLES & ROLES  ← NEW
+  // ----------------------------------------------------------
+
+  var TITLES = [
+    'doctor','dr','nurse','engineer','manager','officer',
+    'director','supervisor','coordinator','administrator',
+    'teacher','professor','lecturer','principal','dean',
+    'ceo','cto','cfo','coo','vp','svp','evp','gm',
+    'president','chairman','chairperson','chairwoman',
+    'intern','trainee','assistant','associate',
+    'analyst','consultant','advisor','specialist',
+    'technician','mechanic','operator','agent',
+    'sir','maam','madam','miss','mister','mr','mrs','ms',
+    'boss','chief','head','lead','senior','junior',
+    'captain','general','colonel','major','lieutenant',
+    'sergeant','corporal','admiral','commander',
+    'clerk','receptionist','secretary','staff',
+    'owner','founder','cofounder','partner',
+    'volunteer','freelancer','contractor','vendor',
+    'developer','programmer','coder','designer',
+    'accountant','auditor','lawyer','attorney','barrister',
+    'doctor','dentist','surgeon','pharmacist','therapist',
+    'pilot','driver','operator','guard','security',
+    'inspector','detective','investigator','officer'
+  ];
+
+  // ----------------------------------------------------------
+  // 1H · BLOCKED: FICTIONAL & CELEBRITY CHARACTERS  ← NEW
+  // ----------------------------------------------------------
+
+  var FICTIONAL = [
+    // Superheroes / comics
+    'batman','superman','spiderman','ironman','hulk','thor',
+    'deadpool','wolverine','venom','aquaman','flash','cyborg',
+    'captainamerica','wonderwoman','blackwidow','hawkeye',
+    'antman','blackpanther','doctorstrange','greenlantern',
+    'nightwing','robinn','catwoman','penguin','riddler',
+    // Anime / manga
+    'naruto','goku','vegeta','luffy','sasuke','itachi',
+    'zoro','ichigo','eren','levi','mikasa','hinata',
+    'deku','bakugo','todoroki','allmight','nezuko',
+    'tanjiro','zenitsu','inosuke','gintoki','rukia',
+    // Gaming
+    'mario','luigi','link','zelda','samus','pikachu',
+    'masterchief','kratos','geralt','ezio','altair',
+    'cloud','tifa','aerith','noctis','lightning',
+    'arthur','trevor','michael','niko','cj','tommy',
+    'lara','croft','nathan','drake','joel','ellie',
+    // Movies / TV / Books
+    'joker','batman','dracula','frankenstein','sherlock',
+    'hamlet','tarzan','hercules','achilles','leonidas',
+    'thanos','loki','magneto','mystique','xavier',
+    'yoda','skywalker','darthvader','chewbacca','gandalf',
+    'frodo','bilbo','aragorn','legolas','gimli','sauron',
+    'voldemort','dumbledore','hermione','snape',
+    'james','bond','ethan','hunt','jason','bourne',
+    'tony','stark','steve','rogers','peter','parker',
+    'bruce','wayne','clark','kent','diana','prince',
+    'jack','sparrow','davy','jones',
+    // Generic tropes
+    'villain','antihero','sidekick','protagonist','antagonist',
+    'superhero','supervillain','mastermind',
+    // Local pop culture
+    'meeraali','bhola','chacha','nawabzada',
+    'sultan','sikandar','badshah','zulfiqarali',
+    'laila','majnu','heer','ranjha','sohni','mahiwal',
+    'romeo','juliet'  // also covered in romantic but explicit here
+  ];
+
+  // ----------------------------------------------------------
+  // 1I · WHITELIST — real names that may partially match blocklists
   // ----------------------------------------------------------
 
   var WHITELIST = [
-    // Muslim / Arabic
+    // Muslim / Arabic male
     'muhammad','mohammed','ahmad','ahmed','ali','hassan','hussain',
     'ibrahim','ismail','yusuf','omar','umar','uthman','bilal',
     'khalid','tariq','zaid','zayed','hamza','anas','salam','salim',
     'salman','sufyan','saad','sajid','sameer','sami','saqib',
     'sarfraz','shahid','shakeel','shehzad','shoaib','sohail',
-    'suleman','tahir','talha','tariq','usman','waseem','waqar',
+    'suleman','tahir','talha','usman','waseem','waqar',
     'yasir','zubair','zulfiqar','aamir','aasim','adeel','adnan',
     'afzal','ahsan','akbar','akram','amir','arif','arslan',
     'asad','asif','atif','awais','ayaz','ayub','azhar','aziz',
@@ -506,96 +642,113 @@
     'mushtaq','muzaffar','naeem','naveed','nawaz','noman','owais',
     'qasim','rahat','raheel','rahim','rashid','rauf','rehan',
     'rizwan','saeed','safdar','sahil','sajjad','shafiq','shafqat',
-    // Female Muslim / Arabic
+    'tahir','talal','tanveer','tayyab','touseef','umair','usman',
+    'waqas','yasin','zain','zeeshan','zohaib','zubair',
+    // Muslim / Arabic female
     'aisha','fatima','khadija','maryam','zainab','ruqayyah',
     'hafsa','safiyyah','asma','sumayyah','ramlah','khawlah',
-    'umm','juwayriyyah','sawdah','maymunah','lubna','layla',
+    'juwayriyyah','sawdah','maymunah','lubna',
     'noor','nur','hana','hanan','rania','rana','dina','dalia',
     'sara','sarah','sana','sanam','sadia','rabia','rahima',
     'naila','nadia','munira','muna','mariam','madiha','lina',
     'leila','laila','kiran','khushbu','iram','hira','huma',
     'farah','fariha','farida','farzana','fozia','ghazala',
-    'gulnaz','iram','iqra','isra','javeria','maham','mahira',
-    'maryam','mehwish','memoona','mishal','muniba','nadia',
-    'naila','nayab','nida','nimra','nosheen','parveen','rabia',
+    'gulnaz','iqra','isra','javeria','maham','mahira',
+    'mehwish','memoona','mishal','muniba',
+    'naila','nayab','nida','nimra','nosheen','parveen',
     'ramsha','rida','rimsha','ruba','rubab','rukhsar','saba',
     'sabahat','sabeen','safia','saima','saiqa','sajida',
-    'salma','samia','samira','sana','saniya','sara','sehar',
-    'shabana','shagufta','shaista','shazia','shirin','sidra',
-    'sitara','sofia','sonia','sumaira','tabassum','tahreem',
-    'tayyaba','tooba','ulfat','urwa','uzma','warisha','yumna',
-    'zahra','zara','zeba','zunaira',
-    // South Asian (Hindu / Sikh)
+    'salma','samia','samira','sehar','shabana','shagufta',
+    'shaista','shazia','shirin','sidra','sitara','sofia',
+    'sonia','sumaira','tabassum','tahreem','tayyaba','tooba',
+    'ulfat','urwa','uzma','warisha','yumna','zahra','zara',
+    'zeba','zunaira',
+    // South Asian Hindu / Sikh
     'aarav','aditya','akash','amit','ananya','ankit','arjun',
     'aryan','deepak','divya','gaurav','ishaan','karan','kavya',
     'manish','meera','mohit','neha','nikhil','priya','rahul',
     'rajesh','ravi','rohit','sachin','sakshi','shreya','sumit',
     'sunita','suresh','tanvi','varun','vikas','vikram','vishal',
-    'vivek','yash','zara','gurpreet','harpreet','jaspreet',
+    'vivek','yash','gurpreet','harpreet','jaspreet',
     'kuldeep','manpreet','navjot','parminder','rajvir','sandeep',
-    'simran','sukhwinder','tejinder',
-    // Western
-    'adam','alex','alexander','andrew','anna','benjamin','bradley',
-    'brandon','brian','caleb','cameron','charles','charlotte',
-    'christian','christopher','claire','daniel','david','dylan',
-    'edward','elizabeth','emily','emma','ethan','evan','gabriel',
-    'grace','hannah','henry','isabella','jacob','james','jason',
-    'jessica','john','jonathan','jordan','joseph','joshua','julia',
-    'julian','kevin','laura','liam','lucas','lucy','madison',
-    'mark','matthew','michael','nathan','nicholas','noah','olivia',
-    'patrick','peter','rebecca','richard','robert','ryan','samuel',
-    'sarah','sebastian','sophia','stephen','thomas','tyler',
-    'victoria','william','zachary','aaron','abigail','aiden',
-    'alice','amber','amelia','andrea','angela','ashley','austin',
-    'avery','bella','blake','brianna','brooke','caden','caitlin',
-    'caroline','cassandra','chloe','claire','cole','colin',
-    'connor','courtney','crystal','dakota','danielle','diana',
-    'dominic','drew','elijah','ellie','eric','erin','faith',
-    'gavin','genesis','gianna','grant','hailey','haley','hayden',
-    'heather','holly','hunter','ian','jacqueline','jade','jake',
-    'jared','jayden','jennifer','jeremiah','jessica','joel',
-    'jody','kaylee','kelly','kendall','kennedy','kyle','kylie',
-    'landon','leah','lena','leo','lexi','lila','lily','lindsey',
-    'logan','luke','madeleine','mariah','mason','megan','melanie',
-    'melissa','mia','miranda','molly','morgan','natalie','nicole',
-    'paige','peyton','rachel','ricky','riley','samantha','savannah',
-    'scott','sean','sierra','skylar','sophie','spencer','stefanie',
-    'stephanie','sydney','taylor','tiffany','timothy','toby',
-    'travis','trevor','trinity','troy','tucker','tyler','vanessa',
-    'veronica','whitney','wyatt','xavier','zoe'
+    'simran','sukhwinder','tejinder','amitabh','abhishek',
+    'priyanka','shilpa','aishwarya','kareena','katrina',
+    'aamir','shahrukh','salman','hrithik',
+    // Western male
+    'adam','alex','alexander','andrew','benjamin','bradley',
+    'brandon','brian','caleb','cameron','charles','christian',
+    'christopher','daniel','david','dylan','edward','ethan',
+    'evan','gabriel','henry','jacob','james','jason','john',
+    'jonathan','jordan','joseph','joshua','julian','kevin',
+    'liam','lucas','mark','matthew','michael','nathan',
+    'nicholas','noah','patrick','peter','richard','robert',
+    'ryan','samuel','sebastian','stephen','thomas','tyler',
+    'william','zachary','aaron','aiden','austin','avery',
+    'blake','caden','cole','colin','connor','dominic','drew',
+    'elijah','eric','gavin','grant','hayden','hunter','ian',
+    'jacob','jared','jayden','jeremiah','joel','kyle','landon',
+    'leo','logan','luke','mason','morgan','oliver','owen',
+    'parker','peyton','ricky','riley','scott','sean','spencer',
+    'travis','trevor','troy','tucker','wyatt','xavier',
+    // Western female
+    'abigail','alice','amber','amelia','andrea','angela',
+    'anna','ashley','avery','bella','brianna','brooke',
+    'caitlin','caroline','cassandra','charlotte','chloe',
+    'claire','courtney','crystal','dakota','danielle','diana',
+    'ellie','elizabeth','emily','emma','erin','faith','genesis',
+    'gianna','grace','hailey','haley','hannah','heather',
+    'holly','isabella','jacqueline','jade','jennifer',
+    'jessica','julia','kaylee','kelly','kendall','kennedy',
+    'kylie','laura','leah','lena','lexi','lila','lily',
+    'lindsey','lucy','madeleine','madison','mariah','megan',
+    'melanie','melissa','mia','miranda','molly','natalie',
+    'nicole','olivia','paige','rachel','rebecca','sierra',
+    'skylar','sophia','sophie','stefanie','stephanie','sydney',
+    'taylor','tiffany','timothy','toby','trinity','vanessa',
+    'veronica','victoria','whitney','zoe',
+    // HR / recruiter common entries
+    'hr','hrteam','hiring','recruitment','recruiter',
+    'talent','talentteam'
   ];
 
-  var _whitelistSet = {};
-  WHITELIST.forEach(function (w) { _whitelistSet[w.toLowerCase()] = true; });
+  // Build lookup sets
+  var _whitelistSet  = {};
+  var _profanitySet  = {};
+  var _romanticSet   = {};
+  var _animalSet     = {};
+  var _nonsenseSet   = {};
+  var _titlesSet     = {};
+  var _fictionalSet  = {};
 
-  // Build a Set-like object for O(1) lookup
-  var _profanitySet   = {};
-  var _animalSet      = {};
-  var _nonsenseSet    = {};
-
-  PROFANITY.forEach(function (w) { _profanitySet[normalize(w)]  = true; });
-  ANIMALS.forEach(function   (w) { _animalSet[w.toLowerCase()]   = true; });
-  NONSENSE.forEach(function  (w) { _nonsenseSet[w.toLowerCase()] = true; });
+  WHITELIST.forEach(function (w)  { _whitelistSet[w.toLowerCase()]  = true; });
+  PROFANITY.forEach(function (w)  { _profanitySet[normalize(w)]     = true; });
+  ROMANTIC.forEach(function (w)   { _romanticSet[normalize(w)]      = true; });
+  ANIMALS.forEach(function (w)    { _animalSet[w.toLowerCase()]      = true; });
+  NONSENSE.forEach(function (w)   { _nonsenseSet[w.toLowerCase()]    = true; });
+  TITLES.forEach(function (w)     { _titlesSet[normalize(w)]         = true; });
+  FICTIONAL.forEach(function (w)  { _fictionalSet[normalize(w)]      = true; });
 
   // ----------------------------------------------------------
-  // 1F · REPETITION / KEYBOARD-MASH DETECTOR
+  // 1J · REPETITION / KEYBOARD-MASH DETECTOR
   // ----------------------------------------------------------
 
   function isRepetitive(str) {
     var s = str.toLowerCase();
-    // All same character: "aaaa", "ssss"
     if (/^(.)\1+$/.test(s)) return true;
-    // Simple alternating: "ababab", "xyxyxy"
     if (s.length >= 4 && /^(.{1,2})\1{2,}$/.test(s)) return true;
-    // Sequential alphabet forward or backward: "abcde", "edcba"
-    var forward = 'abcdefghijklmnopqrstuvwxyz';
+    var forward  = 'abcdefghijklmnopqrstuvwxyz';
     var backward = 'zyxwvutsrqponmlkjihgfedcba';
     if (s.length >= 4 && (forward.indexOf(s) !== -1 || backward.indexOf(s) !== -1)) return true;
+    // Detects things like "asdfgh", "qwerty" etc.
+    var rows = ['qwertyuiop','asdfghjkl','zxcvbnm'];
+    for (var r = 0; r < rows.length; r++) {
+      if (rows[r].indexOf(s) !== -1 && s.length >= 4) return true;
+    }
     return false;
   }
 
   // ----------------------------------------------------------
-  // 1G · MAIN VALIDATE FUNCTION — returns {ok, reason}
+  // 1K · MAIN VALIDATE FUNCTION — returns {ok, reason}
   // ----------------------------------------------------------
 
   function validateName(raw) {
@@ -611,7 +764,7 @@
       return { ok: false, reason: 'Please enter a single name only — no spaces.' };
     }
 
-    // Rule 3: Letters only (a-z / A-Z), no digits or symbols
+    // Rule 3: Letters only, no digits or symbols
     if (/[^a-zA-Z]/.test(trimmed)) {
       return { ok: false, reason: 'Your name should contain letters only — no numbers or symbols.' };
     }
@@ -623,13 +776,13 @@
 
     // Rule 5: Maximum length
     if (trimmed.length > MAX_LEN) {
-      return { ok: false, reason: 'Name is too long. Please enter a name under ' + MAX_LEN + ' characters.' };
+      return { ok: false, reason: 'Name is too long. Please keep it under ' + MAX_LEN + ' characters.' };
     }
 
-    var lower     = trimmed.toLowerCase();
-    var normed    = normalize(trimmed);
+    var lower  = trimmed.toLowerCase();
+    var normed = normalize(trimmed);
 
-    // Rule 6: Whitelisted names bypass all further checks
+    // Rule 6: Whitelist bypass — known real names skip further checks
     if (_whitelistSet[lower]) {
       return { ok: true };
     }
@@ -639,12 +792,12 @@
       return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
     }
 
-    // Rule 8: Keyboard-spam / dictionary nonsense (exact match)
+    // Rule 8: Keyboard spam / filler words (exact)
     if (_nonsenseSet[lower]) {
       return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
     }
 
-    // Rule 9: Animal names (exact match)
+    // Rule 9: Animal names (exact)
     if (_animalSet[lower]) {
       return { ok: false, reason: 'Please enter your real name — animal names are not accepted.' };
     }
@@ -654,13 +807,36 @@
       return { ok: false, reason: 'That name is not acceptable. Please enter your real name.' };
     }
 
-    // Rule 11: Profanity — substring check on normalised string
-    //          (catches "assgood", "shitbag" style combos)
-    var PROFANITY_KEYS = Object.keys(_profanitySet);
-    for (var pi = 0; pi < PROFANITY_KEYS.length; pi++) {
-      var bad = PROFANITY_KEYS[pi];
+    // Rule 11: Romantic / endearment names (exact normalised match)
+    if (_romanticSet[normed]) {
+      return { ok: false, reason: 'Please enter your professional name to continue.' };
+    }
+
+    // Rule 12: Job titles / role words (exact normalised)
+    if (_titlesSet[normed]) {
+      return { ok: false, reason: 'Please enter your name, not a job title.' };
+    }
+
+    // Rule 13: Fictional / celebrity characters (exact normalised)
+    if (_fictionalSet[normed]) {
+      return { ok: false, reason: 'Please enter your real name to continue.' };
+    }
+
+    // Rule 14: Profanity — substring check (catches combos like "assgood", "shitbag")
+    var profanityKeys = Object.keys(_profanitySet);
+    for (var pi = 0; pi < profanityKeys.length; pi++) {
+      var bad = profanityKeys[pi];
       if (bad.length >= 4 && normed.indexOf(bad) !== -1) {
         return { ok: false, reason: 'That name is not acceptable. Please enter your real name.' };
+      }
+    }
+
+    // Rule 15: Romantic — substring check (catches "mybabydoll", "sweetiepie" etc.)
+    var romanticKeys = Object.keys(_romanticSet);
+    for (var ri = 0; ri < romanticKeys.length; ri++) {
+      var rterm = romanticKeys[ri];
+      if (rterm.length >= 5 && normed.indexOf(rterm) !== -1) {
+        return { ok: false, reason: 'Please enter your professional name to continue.' };
       }
     }
 
@@ -669,21 +845,21 @@
   }
 
   // ----------------------------------------------------------
-  // 1H · UI HELPERS
+  // 1L · UI HELPERS
   // ----------------------------------------------------------
 
   function showError(msg) {
     var errorEl = document.getElementById('gErrorMsg');
     var input   = document.getElementById('gVisitorName');
     if (errorEl) {
-      errorEl.textContent = msg;
+      errorEl.textContent = '\u26A0 ' + msg;
       errorEl.classList.add('show');
     }
     if (input) {
       input.focus();
-      input.style.borderColor = '#e74c3c';
+      input.classList.add('input-error');
       setTimeout(function () {
-        input.style.borderColor = '';
+        input.classList.remove('input-error');
         if (errorEl) errorEl.classList.remove('show');
       }, 3500);
     }
@@ -693,7 +869,7 @@
     var errorEl = document.getElementById('gErrorMsg');
     var input   = document.getElementById('gVisitorName');
     if (errorEl) errorEl.classList.remove('show');
-    if (input)   input.style.borderColor = '';
+    if (input)   input.classList.remove('input-error');
   }
 
   function capitalize(str) {
@@ -701,13 +877,12 @@
   }
 
   // ----------------------------------------------------------
-  // 1I · INPUT FIELD ENFORCEMENT
+  // 1M · INPUT FIELD ENFORCEMENT
   // ----------------------------------------------------------
 
   var nameInput = document.getElementById('gVisitorName');
 
   if (nameInput) {
-    // Keydown: block disallowed characters immediately
     nameInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { gateSubmit(); return; }
 
@@ -717,19 +892,16 @@
         'Home','End','Shift','Control','Alt','Meta','CapsLock'
       ];
       if (controlKeys.indexOf(e.key) !== -1) return;
-      if (e.ctrlKey || e.metaKey) return; // Allow Ctrl+C, Ctrl+V etc.
+      if (e.ctrlKey || e.metaKey) return;
 
-      // Accept letters only — NO space, NO digit, NO symbol
       if (!/^[a-zA-Z]$/.test(e.key)) {
         e.preventDefault();
       }
     });
 
-    // Input: sanitise on paste or autofill
     nameInput.addEventListener('input', function () {
       var cursor   = nameInput.selectionStart;
       var original = nameInput.value;
-      // Strip everything except letters (no spaces, no digits)
       var cleaned  = original.replace(/[^a-zA-Z]/g, '');
       if (cleaned !== original) {
         var removed = original.length - cleaned.length;
@@ -739,13 +911,10 @@
           Math.max(0, cursor - removed)
         );
       }
+      clearError();
     });
-
-    // Clear stale error as user types
-    nameInput.addEventListener('input', clearError);
   }
 
-  // Focus input after gate loads
   window.addEventListener('load', function () {
     setTimeout(function () {
       if (nameInput) nameInput.focus();
@@ -753,10 +922,23 @@
   });
 
   // ----------------------------------------------------------
-  // 1J · GATE SUBMIT
+  // 1N · GATE SUBMIT — with rate limiting
   // ----------------------------------------------------------
 
   window.gateSubmit = function () {
+    // Rate limit check
+    var now = Date.now();
+    if (_submitCount >= MAX_ATTEMPTS) {
+      showError('Too many attempts. Please refresh the page and try again.');
+      return;
+    }
+    if (now - _lastSubmitMs < SUBMIT_COOLDOWN_MS) {
+      showError('Please wait a moment before trying again.');
+      return;
+    }
+    _submitCount++;
+    _lastSubmitMs = now;
+
     var input = document.getElementById('gVisitorName');
     var name  = input ? input.value : '';
     var btn   = document.getElementById('gSubmitBtn');
@@ -765,12 +947,15 @@
 
     if (!result.ok) {
       showError(result.reason);
+      _submitCount--; // don't penalize invalid names against rate limit
       return;
     }
 
-    // Validation passed
     clearError();
-    if (btn) btn.classList.add('loading');
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('loading');
+    }
 
     var displayName = capitalize(name.trim());
     var successName = document.getElementById('gSuccessName');
@@ -794,23 +979,23 @@
         initStaggerFadeIn();
       }, 600);
     }
-    setTimeout(revealPortfolio, 3000);
 
+    setTimeout(revealPortfolio, 2800);
     sendTelegramNotification(displayName, revealPortfolio);
   };
 
   // ----------------------------------------------------------
-  // 1K · TELEGRAM NOTIFICATION
+  // 1O · TELEGRAM NOTIFICATION
   // ----------------------------------------------------------
 
   function sendTelegramNotification(name, callback) {
     var ua = navigator.userAgent;
 
-    var device = '💻 Desktop';
-    if      (/iPhone/i.test(ua))          device = '📱 iPhone';
-    else if (/iPad/i.test(ua))            device = '📱 iPad';
-    else if (/Android.*Mobile/i.test(ua)) device = '📱 Android Phone';
-    else if (/Android/i.test(ua))         device = '📱 Android Tablet';
+    var device = '\uD83D\uDCBB Desktop';
+    if      (/iPhone/i.test(ua))          device = '\uD83D\uDCF1 iPhone';
+    else if (/iPad/i.test(ua))            device = '\uD83D\uDCF1 iPad';
+    else if (/Android.*Mobile/i.test(ua)) device = '\uD83D\uDCF1 Android Phone';
+    else if (/Android/i.test(ua))         device = '\uD83D\uDCF1 Android Tablet';
 
     var os = 'Unknown OS';
     if      (/Windows NT 10/i.test(ua))       os = 'Windows 10/11';
@@ -821,11 +1006,11 @@
     else if (/Linux/i.test(ua))               os = 'Linux';
 
     var browser = 'Unknown';
-    if      (/Edg\//i.test(ua))    browser = 'Microsoft Edge';
-    else if (/OPR\//i.test(ua))    browser = 'Opera';
-    else if (/Chrome\//i.test(ua)) browser = 'Chrome';
-    else if (/Firefox\//i.test(ua))browser = 'Firefox';
-    else if (/Safari\//i.test(ua)) browser = 'Safari';
+    if      (/Edg\//i.test(ua))     browser = 'Microsoft Edge';
+    else if (/OPR\//i.test(ua))     browser = 'Opera';
+    else if (/Chrome\//i.test(ua))  browser = 'Chrome';
+    else if (/Firefox\//i.test(ua)) browser = 'Firefox';
+    else if (/Safari\//i.test(ua))  browser = 'Safari';
 
     var screenRes      = window.screen.width + 'x' + window.screen.height;
     var lang           = navigator.language || 'Unknown';
@@ -842,31 +1027,31 @@
 
     function sendMsg(ip, city, country, isp) {
       var screenWidth    = window.screen.width;
-      var deviceCategory = screenWidth < 480 ? 'Mobile' : screenWidth < 1024 ? 'Tablet / Small Desktop' : 'Desktop';
+      var deviceCategory = screenWidth < 480 ? 'Mobile' : screenWidth < 1024 ? 'Tablet' : 'Desktop';
       var isLocal        = referrer.includes('127.0.0.1') || referrer.includes('localhost');
-      var statusEmoji    = isLocal ? '🛠️' : '🎯';
+      var statusEmoji    = isLocal ? '\uD83D\uDEE0\uFE0F' : '\uD83C\uDFAF';
       var statusTitle    = isLocal ? 'Local Test'  : 'New Visitor';
 
       var msg =
         statusEmoji + ' <b>' + statusTitle + ': ' + esc(name) + ' is viewing your Portfolio!</b>\n' +
-        '━━━━━━━━━━━━━━━━━━━━\n' +
-        '📍 <b>' + esc(city) + ', ' + esc(country) + '</b>\n' +
-        '🏢 <i>ISP: ' + esc(isp) + '</i>\n' +
-        '━━━━━━━━━━━━━━━━━━━━\n' +
-        '👤 <b>Visitor:</b> '      + esc(name)      + '\n' +
-        '🔗 <b>Source:</b> <code>' + esc(referrer)  + '</code>\n' +
-        '━━━━━━━━━━━━━━━━━━━━\n' +
-        '🖥️ <b>Device:</b> '       + esc(device)    + '\n' +
-        '⚙️ <b>OS:</b> '           + esc(os)         + '\n' +
-        '🌐 <b>Browser:</b> '      + esc(browser)   + '\n' +
-        '📐 <b>Screen:</b> '       + esc(screenRes) + ' <i>(' + esc(deviceCategory) + ')</i>\n' +
-        '🗣️ <b>Language:</b> '     + esc(lang)       + '\n' +
-        '━━━━━━━━━━━━━━━━━━━━\n' +
-        '🕐 <b>Time (Qatar):</b> ' + esc(time)      + '\n' +
-        '━━━━━━━━━━━━━━━━━━━━\n' +
-        '🛠️ <a href="https://ipinfo.io/'  + ip + '">Logs</a> | ' +
-        '📍 <a href="https://www.google.com/maps/search/' + ip + '">Map</a> | ' +
-        '🔒 IP: <code>' + esc(ip) + '</code>';
+        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
+        '\uD83D\uDCCD <b>' + esc(city) + ', ' + esc(country) + '</b>\n' +
+        '\uD83C\uDFE2 <i>ISP: ' + esc(isp) + '</i>\n' +
+        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
+        '\uD83D\uDC64 <b>Visitor:</b> '      + esc(name)      + '\n' +
+        '\uD83D\uDD17 <b>Source:</b> <code>' + esc(referrer)  + '</code>\n' +
+        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
+        '\uD83D\uDDA5\uFE0F <b>Device:</b> '   + esc(device)    + '\n' +
+        '\u2699\uFE0F <b>OS:</b> '             + esc(os)        + '\n' +
+        '\uD83C\uDF10 <b>Browser:</b> '        + esc(browser)   + '\n' +
+        '\uD83D\uDCD0 <b>Screen:</b> '         + esc(screenRes) + ' <i>(' + esc(deviceCategory) + ')</i>\n' +
+        '\uD83D\uDDE3\uFE0F <b>Language:</b> ' + esc(lang)      + '\n' +
+        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
+        '\uD83D\uDD50 <b>Time (Qatar):</b> '   + esc(time)      + '\n' +
+        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
+        '\uD83D\uDEE0\uFE0F <a href="https://ipinfo.io/' + ip + '">Lookup</a> | ' +
+        '\uD83D\uDCCD <a href="https://www.google.com/maps/search/' + ip + '">Map</a> | ' +
+        '\uD83D\uDD12 IP: <code>' + esc(ip) + '</code>';
 
       fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
         method: 'POST',
@@ -876,6 +1061,7 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok) {
+          // Fallback: plain text
           fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -892,6 +1078,7 @@
       .finally(function () { callback(); });
     }
 
+    // IP resolution chain: ipify → ipapi.co → ip-api.com fallback
     fetch('https://api.ipify.org?format=json')
       .then(function (r) { return r.json(); })
       .then(function (d) {
@@ -1695,10 +1882,10 @@ function loadCertifications() {
 
 function printSignature() {
   console.log(
-    '%c⚜  SAJID MEHMOOD · IT SYSTEMS ENGINEER',
+    '%c\u2628  SAJID MEHMOOD \u00B7 IT SYSTEMS ENGINEER',
     'font-size:14px;font-weight:bold;color:#C5A059;background:#0D1017;padding:10px 22px;border-radius:4px;border-left:3px solid #C5A059;'
   );
-  console.log('%cCCNA Certified · Enterprise Infrastructure · WhatsApp: wa.me/97466969598', 'font-size:11px;color:#4A5470;');
+  console.log('%cCCNA Certified \u00B7 Enterprise Infrastructure \u00B7 WhatsApp: wa.me/97466969598', 'font-size:11px;color:#4A5470;');
 }
 
 
