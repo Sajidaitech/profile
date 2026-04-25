@@ -318,10 +318,46 @@
   document.body.style.overflow = 'hidden';
 
   var nameInput = document.getElementById('gVisitorName');
+
   if (nameInput) {
+
+    /* ── Block special characters on keydown ── */
     nameInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') gateSubmit();
+      if (e.key === 'Enter') { gateSubmit(); return; }
+
+      /* Allow: control keys, arrows, backspace, delete, tab */
+      var controlKeys = [
+        'Backspace','Delete','Tab','Escape','Enter',
+        'ArrowLeft','ArrowRight','ArrowUp','ArrowDown',
+        'Home','End','Shift','Control','Alt','Meta',
+        'CapsLock'
+      ];
+      if (controlKeys.indexOf(e.key) !== -1) return;
+
+      /* Allow Ctrl/Cmd combos (copy, paste, select-all, etc.) */
+      if (e.ctrlKey || e.metaKey) return;
+
+      /* Only allow letters (a-z, A-Z), digits (0-9), and space */
+      if (!/^[a-zA-Z0-9 ]$/.test(e.key)) {
+        e.preventDefault();
+      }
     });
+
+    /* ── Strip special characters on input (handles paste) ── */
+    nameInput.addEventListener('input', function () {
+      var cursor   = nameInput.selectionStart;
+      var original = nameInput.value;
+      var cleaned  = original.replace(/[^a-zA-Z0-9 ]/g, '');
+      if (cleaned !== original) {
+        var removed = original.length - cleaned.length;
+        nameInput.value = cleaned;
+        nameInput.setSelectionRange(
+          Math.max(0, cursor - removed),
+          Math.max(0, cursor - removed)
+        );
+      }
+    });
+
   }
 
   window.addEventListener('load', function () {
@@ -904,8 +940,6 @@ function initSoftParallax() {
 function showProjectSkeleton() {
   var grid = document.getElementById('projectsGrid');
   if (!grid) return;
-  
-  // The skeleton cards have been removed from the innerHTML string below
   grid.insertAdjacentHTML('beforebegin',
     '<div class="projects-skeleton" id="projectsSkeleton"></div>'
   );
@@ -1283,6 +1317,7 @@ function printSignature() {
   console.log('%cCCNA Certified · Enterprise Infrastructure · WhatsApp: wa.me/97466969598', 'font-size:11px;color:#4A5470;');
 }
 
+
 // ============================================================
 // MOBILE NAVIGATION — Upgraded (integrated from mobile-nav.js)
 // ============================================================
@@ -1443,9 +1478,11 @@ function printSignature() {
 
 })();
 
+
 // ============================================================
 // LOGO DROPDOWN — Mobile nav quick-menu
 // ============================================================
+
 (function () {
   var wrapper  = document.getElementById('navLogoWrapper');
   var anchor   = document.getElementById('navLogoAnchor');
@@ -1472,23 +1509,23 @@ function printSignature() {
   }
 
   anchor.addEventListener('click', function (e) {
-    if (!isMobile()) return; // desktop: behave normally (href="#home")
+    if (!isMobile()) return; /* desktop: behave normally (href="#home") */
     e.preventDefault();
     isOpen ? closeDropdown() : openDropdown();
   });
 
-  // Close when a dropdown link is clicked
+  /* Close when a dropdown link is clicked */
   var dLinks = dropdown.querySelectorAll('.nld-link, .nld-resume');
   dLinks.forEach(function (link) {
     link.addEventListener('click', function () { closeDropdown(); });
   });
 
-  // Close on outside click/tap
+  /* Close on outside click/tap */
   document.addEventListener('click', function (e) {
     if (isOpen && !wrapper.contains(e.target)) closeDropdown();
   }, true);
 
-  // Close on resize to desktop
+  /* Close on resize to desktop */
   window.addEventListener('resize', function () {
     if (!isMobile() && isOpen) closeDropdown();
   });
