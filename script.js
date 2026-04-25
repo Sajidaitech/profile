@@ -1,6 +1,6 @@
 // ============================================================
 // SAJID MEHMOOD · IT SYSTEMS ENGINEER
-// script.js — Full Rewrite v2.0
+// script.js — Full Rewrite v2.1
 // ============================================================
 
 
@@ -287,7 +287,7 @@
 
 
 // ============================================================
-// SECTION 1 · GATE OVERLAY — Professional Name Validation v2.0
+// SECTION 1 · GATE OVERLAY — Professional Name Validation v2.1
 // ============================================================
 
 (function () {
@@ -303,9 +303,9 @@
   var TG_CHAT_ID = '8235795754';
 
   // Rate limit: max 5 attempts per session, 3s cooldown between submits
-  var _submitCount   = 0;
-  var _lastSubmitMs  = 0;
-  var MAX_ATTEMPTS   = 5;
+  var _submitCount      = 0;
+  var _lastSubmitMs     = 0;
+  var MAX_ATTEMPTS      = 5;
   var SUBMIT_COOLDOWN_MS = 3000;
 
   document.body.style.overflow = 'hidden';
@@ -407,7 +407,7 @@
   ];
 
   // ----------------------------------------------------------
-  // 1D · BLOCKED: ROMANTIC / ENDEARMENT TERMS  ← NEW
+  // 1D · BLOCKED: ROMANTIC / ENDEARMENT TERMS
   // ----------------------------------------------------------
 
   var ROMANTIC = [
@@ -550,7 +550,7 @@
   ];
 
   // ----------------------------------------------------------
-  // 1G · BLOCKED: JOB TITLES & ROLES  ← NEW
+  // 1G · BLOCKED: JOB TITLES & ROLES
   // ----------------------------------------------------------
 
   var TITLES = [
@@ -571,13 +571,13 @@
     'volunteer','freelancer','contractor','vendor',
     'developer','programmer','coder','designer',
     'accountant','auditor','lawyer','attorney','barrister',
-    'doctor','dentist','surgeon','pharmacist','therapist',
-    'pilot','driver','operator','guard','security',
-    'inspector','detective','investigator','officer'
+    'dentist','surgeon','pharmacist','therapist',
+    'pilot','driver','guard','security',
+    'inspector','detective','investigator'
   ];
 
   // ----------------------------------------------------------
-  // 1H · BLOCKED: FICTIONAL & CELEBRITY CHARACTERS  ← NEW
+  // 1H · BLOCKED: FICTIONAL & CELEBRITY CHARACTERS
   // ----------------------------------------------------------
 
   var FICTIONAL = [
@@ -599,28 +599,76 @@
     'arthur','trevor','michael','niko','cj','tommy',
     'lara','croft','nathan','drake','joel','ellie',
     // Movies / TV / Books
-    'joker','batman','dracula','frankenstein','sherlock',
+    'joker','dracula','frankenstein','sherlock',
     'hamlet','tarzan','hercules','achilles','leonidas',
     'thanos','loki','magneto','mystique','xavier',
     'yoda','skywalker','darthvader','chewbacca','gandalf',
     'frodo','bilbo','aragorn','legolas','gimli','sauron',
     'voldemort','dumbledore','hermione','snape',
-    'james','bond','ethan','hunt','jason','bourne',
-    'tony','stark','steve','rogers','peter','parker',
-    'bruce','wayne','clark','kent','diana','prince',
-    'jack','sparrow','davy','jones',
+    'jamesbond','ethan','hunt','jasonbourne',
+    'tonystark','steverogers','peterparker',
+    'brucewane','clarkkent','dianaprince',
+    'jacksparrow',
     // Generic tropes
     'villain','antihero','sidekick','protagonist','antagonist',
     'superhero','supervillain','mastermind',
     // Local pop culture
-    'meeraali','bhola','chacha','nawabzada',
-    'sultan','sikandar','badshah','zulfiqarali',
-    'laila','majnu','heer','ranjha','sohni','mahiwal',
-    'romeo','juliet'  // also covered in romantic but explicit here
+    'meeraali','bhola','nawabzada',
+    'sultan','sikandar','badshah',
+    'heer','ranjha','sohni','mahiwal',
+    'romeo','juliet'
   ];
 
   // ----------------------------------------------------------
-  // 1I · WHITELIST — real names that may partially match blocklists
+  // 1I · BLOCKED: FAMILY / RELATION TERMS
+  // ----------------------------------------------------------
+
+  var RELATIONS = [
+    // English family terms
+    'father','dad','daddy','dada','papa','pop','pops',
+    'mother','mom','mommy','mama','mum','mummy',
+    'son','daughter','sibling',
+    'brother','bro','sister','sis',
+    'uncle','aunt','auntie','aunty',
+    'grandfather','grandpa','grandmother','grandma',
+    'grandson','granddaughter',
+    'nephew','niece',
+    'cousin','cousins',
+    'husband','wife',
+    'fiance','fiancee',
+    // Roman Urdu / Hindi family terms
+    'beta','beti','betu','betaa','betaji',
+    'bhai','bhaia','bhaijaan','bhaisaab',
+    'behan','behna','aapa','apa','didi',
+    'chacha','chachajaan','kaka','taya','taaya','chachoo',
+    'chachi','mami','khala','phupho','phuppi','mamani',
+    'nana','daada','nanajaan','dadajaan',
+    'nani','daadi','nanijaan','dadijaan',
+    'pota','poti','nwasa','nawasa',
+    'bhanja','bhanji',
+    'abu','abbu','abba','abujaan','walid',
+    'ammi','amma','amijan','walidain',
+    'baap','maa','bap','pitaji','pitah','maaji','maata',
+    'chachu','mamujaan','maamu','mamu',
+    'phuppa','phuppajaan',
+    'jija','jijaji','bhabhi','bhabhijaan',
+    'shohar','biwi',
+    'dulha','dulhan',
+    'sasur','saas','devar','devrani','jethani','jeth',
+    'nanad','nanand','nandoi',
+    // Arabic / Islamic family terms
+    'abi','ummi','umm','ibn','bint','akhi','ukhti',
+    'khalid','walida','zawj','zawja',
+    // Generic relation words
+    'inlaw','stepson','stepdad','stepmom','stepdaughter',
+    'stepbrother','stepsister','halfbrother','halfsister',
+    'godfather','godmother','godson','goddaughter',
+    'guardian','ward','relative','relation','family',
+    'ancestor','descendant','offspring','sibling'
+  ];
+
+  // ----------------------------------------------------------
+  // 1J · WHITELIST — real names that may partially match blocklists
   // ----------------------------------------------------------
 
   var WHITELIST = [
@@ -651,11 +699,11 @@
     'noor','nur','hana','hanan','rania','rana','dina','dalia',
     'sara','sarah','sana','sanam','sadia','rabia','rahima',
     'naila','nadia','munira','muna','mariam','madiha','lina',
-    'leila','laila','kiran','khushbu','iram','hira','huma',
+    'leila','kiran','khushbu','iram','hira','huma',
     'farah','fariha','farida','farzana','fozia','ghazala',
     'gulnaz','iqra','isra','javeria','maham','mahira',
     'mehwish','memoona','mishal','muniba',
-    'naila','nayab','nida','nimra','nosheen','parveen',
+    'nayab','nida','nimra','nosheen','parveen',
     'ramsha','rida','rimsha','ruba','rubab','rukhsar','saba',
     'sabahat','sabeen','safia','saima','saiqa','sajida',
     'salma','samia','samira','sehar','shabana','shagufta',
@@ -673,7 +721,7 @@
     'kuldeep','manpreet','navjot','parminder','rajvir','sandeep',
     'simran','sukhwinder','tejinder','amitabh','abhishek',
     'priyanka','shilpa','aishwarya','kareena','katrina',
-    'aamir','shahrukh','salman','hrithik',
+    'hrithik',
     // Western male
     'adam','alex','alexander','andrew','benjamin','bradley',
     'brandon','brian','caleb','cameron','charles','christian',
@@ -686,13 +734,13 @@
     'william','zachary','aaron','aiden','austin','avery',
     'blake','caden','cole','colin','connor','dominic','drew',
     'elijah','eric','gavin','grant','hayden','hunter','ian',
-    'jacob','jared','jayden','jeremiah','joel','kyle','landon',
+    'jared','jayden','jeremiah','joel','kyle','landon',
     'leo','logan','luke','mason','morgan','oliver','owen',
     'parker','peyton','ricky','riley','scott','sean','spencer',
     'travis','trevor','troy','tucker','wyatt','xavier',
     // Western female
     'abigail','alice','amber','amelia','andrea','angela',
-    'anna','ashley','avery','bella','brianna','brooke',
+    'anna','ashley','bella','brianna','brooke',
     'caitlin','caroline','cassandra','charlotte','chloe',
     'claire','courtney','crystal','dakota','danielle','diana',
     'ellie','elizabeth','emily','emma','erin','faith','genesis',
@@ -704,7 +752,7 @@
     'melanie','melissa','mia','miranda','molly','natalie',
     'nicole','olivia','paige','rachel','rebecca','sierra',
     'skylar','sophia','sophie','stefanie','stephanie','sydney',
-    'taylor','tiffany','timothy','toby','trinity','vanessa',
+    'taylor','tiffany','trinity','vanessa',
     'veronica','victoria','whitney','zoe',
     // HR / recruiter common entries
     'hr','hrteam','hiring','recruitment','recruiter',
@@ -719,6 +767,7 @@
   var _nonsenseSet   = {};
   var _titlesSet     = {};
   var _fictionalSet  = {};
+  var _relationsSet  = {};
 
   WHITELIST.forEach(function (w)  { _whitelistSet[w.toLowerCase()]  = true; });
   PROFANITY.forEach(function (w)  { _profanitySet[normalize(w)]     = true; });
@@ -727,9 +776,10 @@
   NONSENSE.forEach(function (w)   { _nonsenseSet[w.toLowerCase()]    = true; });
   TITLES.forEach(function (w)     { _titlesSet[normalize(w)]         = true; });
   FICTIONAL.forEach(function (w)  { _fictionalSet[normalize(w)]      = true; });
+  RELATIONS.forEach(function (w)  { _relationsSet[normalize(w)]      = true; });
 
   // ----------------------------------------------------------
-  // 1J · REPETITION / KEYBOARD-MASH DETECTOR
+  // 1K · REPETITION / KEYBOARD-MASH DETECTOR
   // ----------------------------------------------------------
 
   function isRepetitive(str) {
@@ -739,7 +789,6 @@
     var forward  = 'abcdefghijklmnopqrstuvwxyz';
     var backward = 'zyxwvutsrqponmlkjihgfedcba';
     if (s.length >= 4 && (forward.indexOf(s) !== -1 || backward.indexOf(s) !== -1)) return true;
-    // Detects things like "asdfgh", "qwerty" etc.
     var rows = ['qwertyuiop','asdfghjkl','zxcvbnm'];
     for (var r = 0; r < rows.length; r++) {
       if (rows[r].indexOf(s) !== -1 && s.length >= 4) return true;
@@ -748,7 +797,7 @@
   }
 
   // ----------------------------------------------------------
-  // 1K · MAIN VALIDATE FUNCTION — returns {ok, reason}
+  // 1L · MAIN VALIDATE FUNCTION — returns {ok, reason}
   // ----------------------------------------------------------
 
   function validateName(raw) {
@@ -822,7 +871,12 @@
       return { ok: false, reason: 'Please enter your real name to continue.' };
     }
 
-    // Rule 14: Profanity — substring check (catches combos like "assgood", "shitbag")
+    // Rule 14: Family / relation terms (exact normalised)
+    if (_relationsSet[normed]) {
+      return { ok: false, reason: 'Please enter your personal name, not a family title.' };
+    }
+
+    // Rule 15: Profanity — substring check (catches combos like "assgood", "shitbag")
     var profanityKeys = Object.keys(_profanitySet);
     for (var pi = 0; pi < profanityKeys.length; pi++) {
       var bad = profanityKeys[pi];
@@ -831,7 +885,7 @@
       }
     }
 
-    // Rule 15: Romantic — substring check (catches "mybabydoll", "sweetiepie" etc.)
+    // Rule 16: Romantic — substring check (catches "mybabydoll", "sweetiepie" etc.)
     var romanticKeys = Object.keys(_romanticSet);
     for (var ri = 0; ri < romanticKeys.length; ri++) {
       var rterm = romanticKeys[ri];
@@ -840,12 +894,21 @@
       }
     }
 
+    // Rule 17: Relation terms — substring check (catches "mybeta", "abbujan" variants etc.)
+    var relationKeys = Object.keys(_relationsSet);
+    for (var ki = 0; ki < relationKeys.length; ki++) {
+      var rel = relationKeys[ki];
+      if (rel.length >= 4 && normed.indexOf(rel) !== -1) {
+        return { ok: false, reason: 'Please enter your personal name, not a family title.' };
+      }
+    }
+
     // Passed all checks
     return { ok: true };
   }
 
   // ----------------------------------------------------------
-  // 1L · UI HELPERS
+  // 1M · UI HELPERS
   // ----------------------------------------------------------
 
   function showError(msg) {
@@ -877,7 +940,7 @@
   }
 
   // ----------------------------------------------------------
-  // 1M · INPUT FIELD ENFORCEMENT
+  // 1N · INPUT FIELD ENFORCEMENT
   // ----------------------------------------------------------
 
   var nameInput = document.getElementById('gVisitorName');
@@ -922,11 +985,10 @@
   });
 
   // ----------------------------------------------------------
-  // 1N · GATE SUBMIT — with rate limiting
+  // 1O · GATE SUBMIT — with rate limiting
   // ----------------------------------------------------------
 
   window.gateSubmit = function () {
-    // Rate limit check
     var now = Date.now();
     if (_submitCount >= MAX_ATTEMPTS) {
       showError('Too many attempts. Please refresh the page and try again.');
@@ -947,7 +1009,7 @@
 
     if (!result.ok) {
       showError(result.reason);
-      _submitCount--; // don't penalize invalid names against rate limit
+      _submitCount--;
       return;
     }
 
@@ -985,7 +1047,7 @@
   };
 
   // ----------------------------------------------------------
-  // 1O · TELEGRAM NOTIFICATION
+  // 1P · TELEGRAM NOTIFICATION
   // ----------------------------------------------------------
 
   function sendTelegramNotification(name, callback) {
@@ -1061,7 +1123,6 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok) {
-          // Fallback: plain text
           fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1078,7 +1139,6 @@
       .finally(function () { callback(); });
     }
 
-    // IP resolution chain: ipify → ipapi.co → ip-api.com fallback
     fetch('https://api.ipify.org?format=json')
       .then(function (r) { return r.json(); })
       .then(function (d) {
