@@ -637,7 +637,7 @@
     'husband','wife',
     'fiance','fiancee',
     // Roman Urdu / Hindi family terms
-    'beta','beti','betu','betaa','betaji',
+    'beta','beti','betu','betaa','betaji','uraba','urbab','aba',
     'bhai','bhaia','bhaijaan','bhaisaab',
     'behan','behna','aapa','apa','didi',
     'chacha','chachajaan','kaka','taya','taaya','chachoo',
