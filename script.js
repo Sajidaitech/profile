@@ -1,6 +1,6 @@
 // ============================================================
 // SAJID MEHMOOD · IT SYSTEMS ENGINEER
-// script.js — Full Rewrite v2.1
+// script.js — Full Rewrite v2.2
 // ============================================================
 
 
@@ -287,7 +287,7 @@
 
 
 // ============================================================
-// SECTION 1 · GATE OVERLAY — Professional Name Validation v2.1
+// SECTION 1 · GATE OVERLAY — Professional Name Validation v2.2
 // ============================================================
 
 (function () {
@@ -546,7 +546,12 @@
     'city','town','place','world','country','land','sea',
     'king','queen','lord','god','master',
     'super','mega','ultra','hyper','epic','elite','pro','max',
-    'dark','black','white','red','blue','green','gold','silver'
+    'dark','black','white','red','blue','green','gold','silver',
+    // Onomatopoeia / toy words not caught by pattern rules
+    'blinky','plinky','winky','dinky','zinky','slinky',
+    'bubbly','gubbly','wubbly','dubby','lubby','subby','zubby',
+    'splishsplash','snipsnap','skrisbkrab','flipflap','glimglam',
+    'flipadoo','bloopa','blapa','gripgrab','glubglub'
   ];
 
   // ----------------------------------------------------------
@@ -677,8 +682,8 @@
     'ibrahim','ismail','yusuf','omar','umar','uthman','bilal',
     'khalid','tariq','zaid','zayed','hamza','anas','salam','salim',
     'salman','sufyan','saad','sajid','sameer','sami','saqib',
-    'sarfraz','shahid','shakeel','shehzad','shoaib','sohail','ammar','rumaisa',
-    'suleman','tahir','talha','usman','waseem','waqar',
+    'sarfraz','shahid','shakeel','shehzad','shoaib','sohail',
+    'suleman','tahir','talha','usman','waseem','waqar','ammar',
     'yasir','zubair','zulfiqar','aamir','aasim','adeel','adnan',
     'afzal','ahsan','akbar','akram','amir','arif','arslan',
     'asad','asif','atif','awais','ayaz','ayub','azhar','aziz',
@@ -697,7 +702,7 @@
     'hafsa','safiyyah','asma','sumayyah','ramlah','khawlah',
     'juwayriyyah','sawdah','maymunah','lubna',
     'noor','nur','hana','hanan','rania','rana','dina','dalia',
-    'sara','sarah','sana','sanam','sadia','rabia','rahima',
+    'sara','sarah','sana','sanam','sadia','rabia','rahima','rumaisa',
     'naila','nadia','munira','muna','mariam','madiha','lina',
     'leila','kiran','khushbu','iram','hira','huma',
     'farah','fariha','farida','farzana','fozia','ghazala',
@@ -797,6 +802,55 @@
   }
 
   // ----------------------------------------------------------
+  // 1K-B · SYLLABLE SPAM / BABY-TALK DETECTOR
+  // Catches: Baba, Dodo, Hahaha, MooMoo, Wuwu, ZipZip,
+  //          Ababa, Adada, Lalala, Boing, Tiktok, etc.
+  // ----------------------------------------------------------
+
+  function isSyllableSpam(str) {
+    var s = str.toLowerCase().replace(/[-\s]/g, '');
+
+    // Rule A: Entire string is one short chunk repeated (wuwu, bobo, zaza, lulu)
+    if (/^([a-z]{1,3})\1{1,}$/.test(s)) return true;
+
+    // Rule B: Two-syllable ping-pong, doubled exactly once (zipzip, blahblah, tiptip)
+    if (/^([a-z]{2,4})\1$/.test(s)) return true;
+
+    // Rule C: Three-part repeating syllable (hahaha, lalala, mamama, tototo)
+    if (/^([a-z]{1,3})\1\1$/.test(s)) return true;
+
+    // Rule D: Alternating two-syllable pairs, max 8 chars (moomoo, booboo, googoo)
+    if (/^([a-z]{1,2})([a-z]{1,2})\1\2$/.test(s) && s.length <= 8) return true;
+
+    // Rule E: CVC baby syllable pairs with shared vowel core, max 8 chars
+    var cvcPair = /^([bcdfghjklmnpqrstvwxyz]?)([aeiou]+)([bcdfghjklmnpqrstvwxyz]+)\1?\2\3?$/.test(s);
+    if (cvcPair && s.length <= 8) return true;
+
+    // Rule F: Known onomatopoeia and sound-effect words (and their doubled form)
+    var soundWords = [
+      'boing','boop','beep','bleep','blip','bloop','blub','blap','blop',
+      'zap','zip','zim','zam','zom','zoom','zing','ping','pong','plink',
+      'bonk','clunk','clonk','plonk','thud','thump','whomp','chomp',
+      'moo','baa','oink','woof','meow','mew','neigh','honk','hoot',
+      'snip','snap','crackle','pop','fizz','buzz','hiss','whirr',
+      'tik','tok','tuk','bip','pip','pik','puk','mup','mop','yip','yap',
+      'heehaw','yoohoo','wahwah','wuhwuh','nahnah','nohnoh','meemee',
+      'gackgack','gickgick','gockgock','guckguck','ehehehe','uhahu'
+    ];
+    for (var si = 0; si < soundWords.length; si++) {
+      if (s === soundWords[si] || s === soundWords[si] + soundWords[si]) return true;
+    }
+
+    // Rule G: "A-prefix" reduplication pattern (Ababa, Adada, Akoko, Alala, Amama)
+    if (/^a([bcdfghjklmnpqrstvwxyz][aeiou])\1$/.test(s)) return true;
+
+    // Rule H: Extended runs of a repeated 1-2 char chunk (bububu, nananana)
+    if (/^([a-z]{1,2})\1{2,}$/.test(s)) return true;
+
+    return false;
+  }
+
+  // ----------------------------------------------------------
   // 1L · MAIN VALIDATE FUNCTION — returns {ok, reason}
   // ----------------------------------------------------------
 
@@ -838,6 +892,11 @@
 
     // Rule 7: Repetitive / keyboard-mash pattern
     if (isRepetitive(lower)) {
+      return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
+    }
+
+    // Rule 7B: Syllable spam / baby-talk / onomatopoeia pattern
+    if (isSyllableSpam(lower)) {
       return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
     }
 
