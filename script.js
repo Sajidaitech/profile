@@ -677,7 +677,7 @@
     'ibrahim','ismail','yusuf','omar','umar','uthman','bilal',
     'khalid','tariq','zaid','zayed','hamza','anas','salam','salim',
     'salman','sufyan','saad','sajid','sameer','sami','saqib',
-    'sarfraz','shahid','shakeel','shehzad','shoaib','sohail',
+    'sarfraz','shahid','shakeel','shehzad','shoaib','sohail','ammar','rumaisa',
     'suleman','tahir','talha','usman','waseem','waqar',
     'yasir','zubair','zulfiqar','aamir','aasim','adeel','adnan',
     'afzal','ahsan','akbar','akram','amir','arif','arslan',
