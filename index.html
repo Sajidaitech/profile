@@ -4,157 +4,113 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <meta name="description" content="Sajid Mehmood — IT Support Engineer | CCNA Certified | Enterprise Infrastructure Specialist">
-  <meta name="theme-color" content="#1E2A3A">
+  <meta name="theme-color" content="#F7F4EF">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="format-detection" content="telephone=no">
-  <title>Sajid Mehmood | IT Support Engineer</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Sajid Mehmood — Systems Engineer</title>
   <link rel="icon" href="logo.png" type="image/png">
-  <!-- Preconnect to external origins -->
+
+  <!-- Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <!-- Only 2 font families actually used (stripped Syne, DM Mono, Plus Jakarta) -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" as="style" onload="this.rel='stylesheet'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
+
+  <!-- Fonts: Playfair Display + Cormorant Garamond + DM Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+  <!-- Tailwind (utilities only) -->
   <script src="https://cdn.tailwindcss.com" defer></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            gold: {
-              DEFAULT: '#8B2232',
-              light:   '#E8C97A',
-              dark:    '#A07840',
-              faint:   'rgba(197,160,89,0.07)',
-              border:  'rgba(197,160,89,0.28)',
-              glow:    'rgba(197,160,89,0.20)',
-            },
-          },
-          fontFamily: {
-            barlow:   ['"Barlow Condensed"', 'sans-serif'],
-            playfair: ['"Playfair Display"', 'serif'],
-          },
-          height: { nav: '100px' },
-        },
-      },
-    };
-  </script>
-  <!-- FontAwesome async — non-blocking -->
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" onload="this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
-  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" as="style" onload="this.rel='stylesheet'">
-  <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet"></noscript>
+
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="dark-mode">
+<body>
 
-  <!-- ============================================================ GATE OVERLAY — EXECUTIVE WALNUT SPLIT ============================================================ -->
-  <div id="gateOverlay">
+  <!-- ================================================================
+       GATE OVERLAY — LUXURY GLASS ENTRY
+  ================================================================ -->
+  <div id="gateOverlay" class="gate-overlay">
+    <!-- Doha skyline full-screen background -->
+    <div class="gate-bg">
+      <img src="login page.png" alt="" class="gate-bg-img" aria-hidden="true">
+      <div class="gate-vignette" aria-hidden="true"></div>
+    </div>
 
-    <!-- LEFT PANEL: Dark Walnut Form -->
-    <div class="gw-left">
-      <!-- Walnut wood grain texture (CSS-generated) -->
-      <div class="gw-wood-grain" aria-hidden="true"></div>
-      <!-- Ambient warm light wash -->
-      <div class="gw-light-wash" aria-hidden="true"></div>
-
-      <!-- Corner ornaments -->
-      <div class="gw-corner gw-corner-tl" aria-hidden="true"></div>
-      <div class="gw-corner gw-corner-tr" aria-hidden="true"></div>
-      <div class="gw-corner gw-corner-bl" aria-hidden="true"></div>
-      <div class="gw-corner gw-corner-br" aria-hidden="true"></div>
-
-      <!-- Gold pinstripe accent lines -->
-      <div class="gw-accent-top" aria-hidden="true"></div>
-      <div class="gw-accent-bottom" aria-hidden="true"></div>
-
-      <div class="gw-form-area">
-        <!-- Logo row -->
-        <div class="gw-logo-row">
-          <img src="logo.png" alt="SM" class="gw-logo-img">
-          <div class="gw-logo-text">
-            <span class="gw-site-name">SAJIDMK.COM</span>
-            <span class="gw-site-sub">Executive Portfolio</span>
-          </div>
-        </div>
-
-        <!-- Welcome copy -->
-        <div class="gw-copy">
-          <p class="gw-eyebrow"><span class="gw-eyebrow-line"></span>WELCOME<span class="gw-eyebrow-line"></span></p>
-          <h1 class="gw-headline">Who's visiting today?</h1>
-          <p class="gw-tagline">Enter your name to access the portfolio.</p>
-        </div>
-
-        <!-- Input -->
-        <div class="gw-field-group">
-          <label class="gw-field-label" for="gVisitorName">YOUR NAME</label>
-          <div class="gw-input-shell">
-            <i class="fas fa-user gw-input-icon"></i>
-            <input
-              type="text"
-              id="gVisitorName"
-              class="gw-input"
-              placeholder="e.g. Ahmed, Sarah, HR Team..."
-              autocomplete="off"
-              maxlength="40"
-              style="font-size:16px;"
-            >
-          </div>
-          <p class="g-error" id="gErrorMsg">&#9888; Please enter your name to continue.</p>
-        </div>
-
-        <!-- Submit button -->
-        <button class="gw-btn" id="gSubmitBtn" onclick="gateSubmit()">
-          <span class="gw-btn-label">View Portfolio</span>
-          <span class="gw-btn-arrow"><i class="fas fa-arrow-right"></i></span>
-          <div class="g-spinner gw-spinner"></div>
-        </button>
-
-        <!-- Footer status -->
-        <div class="gw-status-row">
-          <span class="gw-status-dot"></span>
-          <span class="gw-status-text">Open to Opportunities &nbsp;&middot;&nbsp; CCNA &nbsp;&middot;&nbsp; Doha, Qatar</span>
+    <!-- Glass card centred over the image -->
+    <div class="gate-glass-card">
+      <!-- Top bar -->
+      <div class="gate-topbar">
+        <img src="logo.png" alt="SM Logo" class="gate-logo">
+        <div class="gate-brand">
+          <span class="gate-brand-name">SAJIDMK.COM</span>
+          <span class="gate-brand-sub">Executive Portfolio</span>
         </div>
       </div>
 
-      
-    </div>
+      <!-- Divider -->
+      <div class="gate-rule"></div>
 
-    <!-- RIGHT PANEL: Doha Skyline in Gold Frame -->
-    <div class="gw-right">
-      <div class="gw-frame-outer">
-        <div class="gw-frame-inner">
-          <img src="login page.png" alt="Sajid Mehmood — Doha Skyline" class="gw-skyline-img">
-          <!-- Light glow from image spilling out -->
-          <div class="gw-img-glow" aria-hidden="true"></div>
+      <!-- Heading copy -->
+      <div class="gate-copy">
+        <p class="gate-eyebrow"><span class="gate-eyebrow-line"></span>WELCOME<span class="gate-eyebrow-line"></span></p>
+        <h1 class="gate-headline">Who's visiting?</h1>
+        <p class="gate-sub">Enter your name to access the portfolio.</p>
+      </div>
+
+      <!-- Input -->
+      <div class="gate-field">
+        <label class="gate-label" for="gVisitorName">YOUR NAME</label>
+        <div class="gate-input-wrap">
+          <i class="fas fa-user gate-input-icon"></i>
+          <input
+            type="text"
+            id="gVisitorName"
+            class="gate-input"
+            placeholder="e.g. Ahmed, Sarah, HR Team…"
+            autocomplete="off"
+            maxlength="40"
+            style="font-size:16px;"
+          >
         </div>
-        <!-- Frame label -->
-        <div class="gw-frame-caption">
-          <span class="gw-frame-cap-line"></span>
-          <span class="gw-frame-cap-text">DOHA &nbsp;&middot;&nbsp; QATAR</span>
-          <span class="gw-frame-cap-line"></span>
-        </div>
+        <p class="g-error" id="gErrorMsg">⚠️ Please enter your name to continue.</p>
+      </div>
+
+      <!-- Submit -->
+      <button class="gate-submit-btn" id="gSubmitBtn" onclick="gateSubmit()">
+        <span class="gsb-label">View Portfolio</span>
+        <i class="fas fa-arrow-right gsb-arrow"></i>
+        <div class="g-spinner gw-spinner"></div>
+      </button>
+
+      <!-- Status row -->
+      <div class="gate-status-row">
+        <span class="gate-status-pulse"></span>
+        <span class="gate-status-text">Open to Opportunities &nbsp;·&nbsp; CCNA &nbsp;·&nbsp; 📍 Doha, Qatar</span>
+      </div>
+
+      <!-- Success overlay -->
+      <div class="gate-success" id="gSuccess">
+        <div class="gate-success-icon">✨</div>
+        <p class="gate-success-name" id="gSuccessName">Welcome!</p>
+        <p class="gate-success-sub">Loading portfolio…</p>
       </div>
     </div>
-
   </div>
 
-  <!-- ============================================================ BACKGROUND ============================================================ -->
-  <div class="grain-overlay" aria-hidden="true"></div>
-  
-  
-  
+  <!-- ================================================================
+       GALLERY SPOTLIGHT — cursor glow
+  ================================================================ -->
+  <div class="gallery-spotlight" id="gallerySpotlight" aria-hidden="true"></div>
 
-  <!-- Interactive 3D particle canvas for hero -->
-  <canvas id="heroCanvas" aria-hidden="true"></canvas>
-
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
-
-  <!-- ============================================================ FAB ============================================================ -->
+  <!-- ================================================================
+       FLOATING ACTION BUTTON
+  ================================================================ -->
   <div class="fab-container" id="fabContainer">
     <button class="fab-main" id="fabMain" aria-label="Quick actions">
       <i class="fas fa-bolt fab-icon-main"></i>
@@ -164,7 +120,7 @@
       <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="fab-option" data-label="Download Resume">
         <i class="fas fa-file-arrow-down"></i>
       </a>
-      <a href="#contact" class="fab-option fab-option-contact" data-label="Quick Connect">
+      <a href="#contact" class="fab-option fab-option-contact nav-anchor" data-label="Quick Connect">
         <i class="fas fa-bolt"></i>
       </a>
       <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer" class="fab-option fab-option-whatsapp" data-label="WhatsApp">
@@ -173,47 +129,27 @@
     </div>
   </div>
 
-  <!-- ============================================================ NAVIGATION ============================================================ -->
-  <header id="topNav"
-    class="fixed top-0 left-0 right-0 z-[800] h-nav
-           bg-[#1E2A3A]/90
-           border-b border-[rgba(59,130,246,0.20)]
-           transition-all duration-300 nav-header">
+  <!-- ================================================================
+       NAVIGATION — Minimal Editorial
+  ================================================================ -->
+  <header id="topNav" class="top-nav">
+    <div class="nav-inner">
 
-    <!-- THREE-ZONE FLEX ROW: Logo | Links | Resume -->
-    <div class="max-w-[1380px] mx-auto px-5 xl:px-8 h-full
-                flex flex-row flex-nowrap items-center justify-between gap-x-3">
-
-      <!-- ── ZONE 1: LOGO GROUP (Left) ── -->
-      <!-- Desktop: plain anchor. Mobile: dropdown trigger -->
-      <div class="nav-logo-wrapper flex-shrink-0 relative" id="navLogoWrapper">
-        <a href="#home"
-           class="nav-anchor nav-logo-link
-                  flex flex-row flex-nowrap items-center gap-x-3
-                  no-underline group"
-           id="navLogoAnchor">
-          <!-- Logo image: 30px desktop, 40px mobile -->
-          <div class="nav-logo-img-wrap flex-shrink-0 flex items-center justify-center">
-            <img src="logo.png" alt="SM"
-                 class="w-full h-full object-contain transition-all duration-300
-                        group-hover:[filter:drop-shadow(0_0_6px_rgba(197,160,89,0.55))]"
-                 loading="eager">
+      <!-- Logo -->
+      <div class="nav-logo-wrapper" id="navLogoWrapper">
+        <a href="#home" class="nav-logo-link nav-anchor" id="navLogoAnchor">
+          <div class="nav-logo-img-wrap">
+            <img src="logo.png" alt="SM" loading="eager">
           </div>
-          <!-- Vertical gold divider -->
-          <div class="nav-logo-divider w-px h-8 flex-shrink-0 hidden sm:block"></div>
-          <!-- Name + title stack (desktop only) -->
-          <div class="flex-col leading-none gap-y-[3px] hidden sm:flex">
-            <span class="nav-logo-name font-playfair font-bold text-[15px] tracking-wide whitespace-nowrap scribble-wrap"></span>
-            <span class="font-barlow font-semibold text-[10px] tracking-[0.11em] uppercase
-                         text-[#60A5FA] whitespace-nowrap">IT Support Engineer</span>
+          <div class="nav-logo-divider"></div>
+          <div class="nav-logo-text">
+            <span class="nav-logo-name scribble-wrap"></span>
+            <span class="nav-logo-role">IT Support Engineer</span>
           </div>
-          <!-- Mobile chevron indicator -->
-          <span class="nav-logo-chevron hidden" id="navLogoChevron" aria-hidden="true">
-            <i class="fas fa-chevron-down text-[#60A5FA] text-[9px] transition-transform duration-250"></i>
-          </span>
+          <span class="nav-logo-chevron hidden" id="navLogoChevron"><i class="fas fa-chevron-down"></i></span>
         </a>
 
-        <!-- ── LOGO DROPDOWN (mobile only) ── -->
+        <!-- Logo dropdown (mobile) -->
         <div class="nav-logo-dropdown" id="navLogoDropdown" aria-hidden="true">
           <div class="nld-header">
             <img src="logo.png" alt="SM" class="nld-logo">
@@ -231,150 +167,81 @@
             <a href="#certifications" class="nld-link nav-anchor"><i class="fas fa-certificate"></i><span>Certifications</span></a>
             <a href="#contact"        class="nld-link nav-anchor"><i class="fas fa-satellite-dish"></i><span>Contact</span></a>
           </div>
-          <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-             target="_blank" rel="noopener noreferrer" class="nld-resume">
+          <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="nld-resume">
             <i class="fas fa-file-arrow-down"></i> Download Resume
           </a>
         </div>
       </div>
 
-      <!-- ── ZONE 2: NAV LINKS (Center) — flex-nowrap enforced ── -->
-      <nav aria-label="Main navigation"
-           class="flex flex-row flex-nowrap items-center gap-x-0
-                  overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none]
-                  [&::-webkit-scrollbar]:hidden flex-1 justify-center px-2">
-        <a href="#about"          class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">About</a>
-        <a href="#projects"       class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Projects</a>
-        <a href="#experience"     class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Experience</a>
-        <a href="#arsenal"        class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Arsenal</a>
-        <a href="#education"      class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Education</a>
-        <a href="#certifications" class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Certifications</a>
-        <a href="#contact"        class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Contact</a>
+      <!-- Nav links -->
+      <nav aria-label="Main navigation" class="nav-links-center">
+        <a href="#about"          class="nav-link nav-anchor">About</a>
+        <a href="#projects"       class="nav-link nav-anchor">Projects</a>
+        <a href="#experience"     class="nav-link nav-anchor">Experience</a>
+        <a href="#arsenal"        class="nav-link nav-anchor">Arsenal</a>
+        <a href="#education"      class="nav-link nav-anchor">Education</a>
+        <a href="#certifications" class="nav-link nav-anchor">Certs</a>
+        <a href="#contact"        class="nav-link nav-anchor">Contact</a>
       </nav>
 
-      <!-- ── ZONE 3: RESUME BUTTON (Right) ── -->
-
-      <!-- ── HAMBURGER (mobile only — hidden on desktop) ── -->
-      <button
-        id="hamburger"
-        class="hamburger"
-        aria-label="Open navigation menu"
-        aria-expanded="false"
-        aria-controls="mobileDrawer"
-        type="button"
-      >
-        <span class="ham-bar ham-bar--top" aria-hidden="true"></span>
-        <span class="ham-bar ham-bar--mid" aria-hidden="true"></span>
-        <span class="ham-bar ham-bar--bot" aria-hidden="true"></span>
+      <!-- Hamburger (mobile) -->
+      <button id="hamburger" class="hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileDrawer" type="button">
+        <span class="ham-bar ham-bar--top"></span>
+        <span class="ham-bar ham-bar--mid"></span>
+        <span class="ham-bar ham-bar--bot"></span>
       </button>
 
-      <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-         target="_blank" rel="noopener noreferrer"
-         class="nav-resume-btn flex-shrink-0
-                flex flex-row flex-nowrap items-center gap-x-[6px]
-                px-4 py-[7px] rounded-[6px]
-                bg-[rgba(59,130,246,0.12)] border border-[rgba(59,130,246,0.50)]
-                text-[#F1F5F9] font-barlow font-semibold
-                text-[11px] tracking-[0.11em] uppercase whitespace-nowrap
-                ml-1">
-        <i class="fas fa-file-alt text-[#60A5FA] text-[10px]"></i>
+      <!-- Resume CTA -->
+      <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="nav-resume-btn">
+        <i class="fas fa-file-alt"></i>
         <span>Resume</span>
       </a>
-
     </div>
   </header>
 
-  <!-- ============================================================ MOBILE DRAWER ============================================================ -->
+  <!-- ================================================================
+       MOBILE DRAWER
+  ================================================================ -->
   <div id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu" aria-hidden="true">
-
-    <!-- Backdrop -->
     <div id="mobileDrawerOverlay" aria-hidden="true"></div>
-
-    <!-- Slide-in panel -->
     <div id="mobileDrawerPanel">
-
-      <!-- Header -->
       <div class="mob-drawer-header">
         <img src="logo.png" alt="SM Logo" class="mob-drawer-logo" width="32" height="32">
         <span class="mob-drawer-name">SAJIDMK.COM</span>
         <button class="mob-drawer-close" id="mobileDrawerClose" aria-label="Close navigation">
-          <i class="fas fa-times" aria-hidden="true"></i>
+          <i class="fas fa-times"></i>
         </button>
       </div>
-
-      <!-- Status pill -->
       <div class="mob-drawer-status-pill">
-        <span class="mob-status-dot" aria-hidden="true"></span>
+        <span class="mob-status-dot"></span>
         <span class="mob-status-label">Open to Opportunities · Doha, Qatar</span>
       </div>
-
-      <!-- Navigation links -->
       <nav class="mob-drawer-links" aria-label="Site sections">
-        <a href="#home" class="mob-link nav-anchor" data-section="home">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-house-chimney"></i></span>
-          <span class="mob-link-text">Home</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
-        <a href="#about" class="mob-link nav-anchor" data-section="about">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-user-tie"></i></span>
-          <span class="mob-link-text">About</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
-        <a href="#projects" class="mob-link nav-anchor" data-section="projects">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-diagram-project"></i></span>
-          <span class="mob-link-text">Projects</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
-        <a href="#experience" class="mob-link nav-anchor" data-section="experience">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-briefcase"></i></span>
-          <span class="mob-link-text">Experience</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
-        <a href="#arsenal" class="mob-link nav-anchor" data-section="arsenal">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-toolbox"></i></span>
-          <span class="mob-link-text">Arsenal</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
-        <a href="#education" class="mob-link nav-anchor" data-section="education">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-graduation-cap"></i></span>
-          <span class="mob-link-text">Education</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
-        <a href="#certifications" class="mob-link nav-anchor" data-section="certifications">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-certificate"></i></span>
-          <span class="mob-link-text">Certifications</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
-        <a href="#contact" class="mob-link nav-anchor" data-section="contact">
-          <span class="mob-link-icon" aria-hidden="true"><i class="fas fa-satellite-dish"></i></span>
-          <span class="mob-link-text">Contact</span>
-          <span class="mob-link-arrow" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-        </a>
+        <a href="#home"           class="mob-link nav-anchor" data-section="home"><span class="mob-link-icon"><i class="fas fa-house-chimney"></i></span><span class="mob-link-text">Home</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
+        <a href="#about"          class="mob-link nav-anchor" data-section="about"><span class="mob-link-icon"><i class="fas fa-user-tie"></i></span><span class="mob-link-text">About</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
+        <a href="#projects"       class="mob-link nav-anchor" data-section="projects"><span class="mob-link-icon"><i class="fas fa-diagram-project"></i></span><span class="mob-link-text">Projects</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
+        <a href="#experience"     class="mob-link nav-anchor" data-section="experience"><span class="mob-link-icon"><i class="fas fa-briefcase"></i></span><span class="mob-link-text">Experience</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
+        <a href="#arsenal"        class="mob-link nav-anchor" data-section="arsenal"><span class="mob-link-icon"><i class="fas fa-toolbox"></i></span><span class="mob-link-text">Arsenal</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
+        <a href="#education"      class="mob-link nav-anchor" data-section="education"><span class="mob-link-icon"><i class="fas fa-graduation-cap"></i></span><span class="mob-link-text">Education</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
+        <a href="#certifications" class="mob-link nav-anchor" data-section="certifications"><span class="mob-link-icon"><i class="fas fa-certificate"></i></span><span class="mob-link-text">Certifications</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
+        <a href="#contact"        class="mob-link nav-anchor" data-section="contact"><span class="mob-link-icon"><i class="fas fa-satellite-dish"></i></span><span class="mob-link-text">Contact</span><span class="mob-link-arrow"><i class="fas fa-chevron-right"></i></span></a>
       </nav>
-
-      <!-- Footer CTA -->
       <div class="mob-drawer-footer">
-        <a
-          href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mob-drawer-resume"
-        >
-          <i class="fas fa-file-arrow-down" aria-hidden="true"></i>
-          Download Resume
+        <a href="https://drive.google.com/file/d/1wdY06c35F-FkQEh53MEjuYQFbIfOn71g/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="mob-drawer-resume">
+          <i class="fas fa-file-arrow-down"></i> Download Resume
         </a>
-
         <div class="mob-drawer-badges">
-          <span class="mob-badge"><i class="fas fa-network-wired"></i> CCNA</span>
-          <span class="mob-badge"><i class="fas fa-shield-halved"></i> IT Engineer</span>
-          <span class="mob-badge"><i class="fas fa-location-dot"></i> Qatar</span>
+          <span class="mob-badge">🌐 CCNA</span>
+          <span class="mob-badge">⚙️ IT Engineer</span>
+          <span class="mob-badge">📍 Qatar</span>
         </div>
       </div>
+    </div>
+  </div>
 
-    </div><!-- /mobileDrawerPanel -->
-  </div><!-- /mobileDrawer -->
-
-  <!-- ============================================================ WEATHER BAR ============================================================ -->
+  <!-- ================================================================
+       WEATHER BAR
+  ================================================================ -->
   <div id="weatherBar" class="weather-bar">
     <div class="wb-left">
       <i class="fas fa-clock wb-icon"></i>
@@ -396,98 +263,78 @@
 
   <main>
 
-    <!-- ============================================================ HERO ============================================================ -->
+    <!-- ================================================================
+         HERO — Split Editorial
+    ================================================================ -->
     <section id="home" class="hero-section">
-      <div class="hero-grid-bg" aria-hidden="true"></div>
-      <div class="hero-scan-line" aria-hidden="true"></div>
+      <!-- Subtle canvas bg -->
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <!-- Decorative architectural grid lines -->
+      <div class="hero-arch-grid" aria-hidden="true"></div>
 
-      <!-- Morphing background shapes -->
-      <div class="hero-morph-bg" aria-hidden="true">
-        <div class="morph-shape morph-1"></div>
-        <div class="morph-shape morph-2"></div>
-        <div class="morph-shape morph-3"></div>
-      </div>
+      <div class="hero-editorial-layout">
 
-      <!-- Floating tech icon nodes -->
-      <div class="hero-nodes" aria-hidden="true">
-        <div class="hnode hnode-1"><i class="fas fa-server"></i></div>
-        <div class="hnode hnode-2"><i class="fas fa-network-wired"></i></div>
-        <div class="hnode hnode-3"><i class="fas fa-shield-halved"></i></div>
-        <div class="hnode hnode-4"><i class="fas fa-cloud"></i></div>
-        <div class="hnode hnode-5"><i class="fas fa-database"></i></div>
-        <div class="hnode hnode-6"><i class="fas fa-wifi"></i></div>
-      </div>
-
-      <!-- Glitch lines decoration -->
-      <div class="hero-glitch-lines" aria-hidden="true">
-        <div class="glitch-line gl-1"></div>
-        <div class="glitch-line gl-2"></div>
-        <div class="glitch-line gl-3"></div>
-      </div>
-
-      <div class="hero-layout">
-        <!-- ID Card -->
-        <div class="id-card" data-aos="fade-right" data-aos-duration="900">
-          <div class="id-card-header">
-            <div class="id-chip-row">
-              <div class="id-chip"></div>
-              <span class="id-corp-tag">ENTERPRISE &middot; IT</span>
-            </div>
+        <!-- LEFT: Portrait column -->
+        <div class="hero-portrait-col" data-aos="fade-right" data-aos-duration="1100">
+          <div class="hero-portrait-frame">
+            <!-- Corner ornaments -->
+            <span class="hpf-corner hpf-tl" aria-hidden="true"></span>
+            <span class="hpf-corner hpf-tr" aria-hidden="true"></span>
+            <span class="hpf-corner hpf-bl" aria-hidden="true"></span>
+            <span class="hpf-corner hpf-br" aria-hidden="true"></span>
+            <img src="photo.jpg" alt="Sajid Mehmood — Systems Engineer" class="hero-portrait-img" loading="eager">
           </div>
-          <div class="id-photo-wrap">
-            <img src="photo.jpg" alt="Sajid Mehmood" class="id-photo" loading="eager">
-            <div class="id-photo-frame"></div>
-            <div class="id-status-ring"><span class="id-status-dot"></span></div>
-          </div>
-          <div class="id-body">
-            <div class="id-name-block">
-              <h2 class="id-name scribble-wrap">Sajid Mehmood
-  <svg class="scribble-svg" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
-    <path class="scribble-path" d="M2,8 Q20,3 40,7 Q60,11 80,6 Q100,2 120,7 Q140,11 160,5 Q180,2 198,8"/>
-  </svg>
-</h2>
-              <p class="id-role">IT Support Engineer</p>
-            </div>
-            <div class="id-meta">
-              <div class="id-meta-row"><i class="fas fa-location-dot"></i><span>Doha, Qatar</span></div>
-              <div class="id-meta-row"><i class="fas fa-shield-halved"></i><span>CCNA 200-301 Certified</span></div>
-              <div class="id-meta-row"><i class="fas fa-circle-check"></i><span>Open to Opportunities</span></div>
-            </div>
-            <div class="id-sectors">
-              <span class="id-sector">Aviation</span>
-              <span class="id-sector">Healthcare</span>
-              <span class="id-sector">Telecom</span>
-              <span class="id-sector">Gov</span>
-            </div>
-          </div>
-          <div class="id-footer">
-            <div class="id-barcode"></div>
-            <span class="id-code">SM-ENG-2020</span>
+
+          <!-- SM watermark -->
+          <div class="hero-brand-watermark">
+            <img src="logo.png" alt="SM" class="hbw-img">
           </div>
         </div>
 
-        <!-- Hero copy -->
-        <div class="hero-copy" data-aos="fade-left" data-aos-duration="900" data-aos-delay="120">
-          <div class="hero-eyebrow">
-            <span class="eyebrow-line"></span>
-            <span class="eyebrow-text">Systems Engineer &middot; CCNA Certified</span>
-            <span class="eyebrow-line"></span>
+        <!-- MIDDLE: Vertical stat chips -->
+        <div class="hero-vertical-chips" data-aos="fade-up" data-aos-delay="500">
+          <div class="hero-vchip">
+            <span class="hvc-val">95%</span>
+            <span class="hvc-lbl">SLA Compliance 📊</span>
           </div>
-          <h1 class="hero-headline">
-            <span class="headline-top scribble-wrap">Enterprise Infrastructure.
-  <svg class="scribble-svg" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true">
-    <path class="scribble-path" d="M2,9 Q30,4 60,8 Q90,12 120,6 Q150,2 180,8 Q210,12 240,5 Q270,2 298,8"/>
-  </svg>
-</span>
-            <span class="headline-mid"><em>Mission-Critical</em></span>
-            <span class="headline-bot">Precision.</span>
+          <div class="hvc-connector"></div>
+          <div class="hero-vchip">
+            <i class="fas fa-network-wired hvc-icon"></i>
+            <span class="hvc-lbl">CCNA Certified 🏆</span>
+          </div>
+          <div class="hvc-connector"></div>
+          <div class="hero-vchip">
+            <span class="hvc-val">600+</span>
+            <span class="hvc-lbl">Systems Managed 🖥️</span>
+          </div>
+        </div>
+
+        <!-- RIGHT: Typography column -->
+        <div class="hero-type-col" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="200">
+
+          <div class="hero-eyebrow-row">
+            <span class="hero-eyebrow-pulse"></span>
+            <span class="hero-eyebrow-text">📍 Doha, Qatar &nbsp;&middot;&nbsp; Systems Engineer &nbsp;&middot;&nbsp; CCNA Certified</span>
+          </div>
+
+          <!-- Massive editorial name -->
+          <h1 class="hero-display-name">
+            <span class="hero-name-first">Sajid</span>
+            <span class="hero-name-last">Mehmood</span>
           </h1>
-          <p class="hero-brief">
-            I architect and maintain the infrastructure that keeps enterprises operational.
-            4+ years across <strong>aviation, healthcare, and government</strong> sectors —
-            delivering zero-downtime deployments, 95% SLA compliance, and enterprise-grade
-            systems lifecycle management.
+
+          <div class="hero-name-rule">
+            <div class="hnr-line"></div>
+            <span class="hnr-tag">IT Infrastructure Specialist</span>
+            <div class="hnr-line"></div>
+          </div>
+
+          <p class="hero-statement">
+            Four years architecting enterprise infrastructure that powers
+            <strong>aviation, healthcare, and government</strong> operations in Qatar —
+            zero-downtime deployments, 95% SLA, mission-critical precision.
           </p>
+
           <div class="hero-kpis">
             <div class="kpi-block">
               <div class="kpi-inner"><span class="kpi-num" data-count="4">0</span><span class="kpi-unit">+</span></div>
@@ -505,66 +352,67 @@
             </div>
             <div class="kpi-sep"></div>
             <div class="kpi-block">
-              <div class="kpi-inner"><span class="kpi-num" data-count="3">0</span><span class="kpi-unit"></span></div>
+              <div class="kpi-inner"><span class="kpi-num" data-count="3">0</span></div>
               <span class="kpi-label">Industry Verticals</span>
             </div>
           </div>
+
           <div class="hero-ctas">
-            <a href="#projects" class="btn btn-gold btn-magnetic nav-anchor">View Projects <i class="fas fa-arrow-right"></i></a>
-            <a href="#contact"  class="btn btn-ghost btn-magnetic nav-anchor"><i class="fas fa-bolt"></i> Engage</a>
+            <a href="#projects" class="btn-primary nav-anchor">Case Studies <i class="fas fa-arrow-right"></i></a>
+            <a href="#contact"  class="btn-ghost nav-anchor">⚡ Engage</a>
           </div>
-          <div class="hero-ticker" aria-hidden="true">
-            <div class="ticker-track">
-              <span>HIA Airport Expansion</span><span class="ticker-sep">&middot;</span>
-              <span>Military Medical City Hospital</span><span class="ticker-sep">&middot;</span>
-              <span>Al Tawkel Immigration Center</span><span class="ticker-sep">&middot;</span>
-              <span>500+ Tickets &middot; 95% SLA</span><span class="ticker-sep">&middot;</span>
-              <span>HIA Airport Expansion</span><span class="ticker-sep">&middot;</span>
-              <span>Military Medical City Hospital</span><span class="ticker-sep">&middot;</span>
-              <span>Al Tawkel Immigration Center</span><span class="ticker-sep">&middot;</span>
-              <span>500+ Tickets &middot; 95% SLA</span><span class="ticker-sep">&middot;</span>
-            </div>
+
+          <div class="hero-sector-tags hero-sector-tags--vertical">
+            <span class="sector-tag">✈️ Aviation</span>
+            <span class="sector-tag">🏥 Healthcare</span>
+            <span class="sector-tag">🏛️ Government</span>
+            <span class="sector-tag">📡 Telecom</span>
           </div>
         </div>
+
       </div>
 
       <!-- Scroll indicator -->
-      <div class="hero-scroll-indicator" aria-hidden="true">
-        <div class="scroll-mouse">
-          <div class="scroll-wheel"></div>
-        </div>
-        <span class="scroll-text">Scroll</span>
+      <div class="hero-scroll-cue" aria-hidden="true">
+        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+        <span>Scroll</span>
       </div>
     </section>
 
-    <!-- ============================================================ ABOUT ============================================================ -->
+    <!-- ================================================================
+         ABOUT — Editorial Profile
+    ================================================================ -->
     <section id="about" class="section about-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <header class="section-header" data-aos="fade-up">
           <span class="sec-num">01</span>
           <h2 class="sec-title">Profile</h2>
           <div class="sec-rule"></div>
-        </div>
+        </header>
+
         <div class="about-layout">
-          <div class="about-text" data-aos="fade-right">
-            <p class="bio-lead">I'm <strong>Sajid Mehmood</strong> — a CCNA-certified IT Support Engineer operating at the intersection of <strong>enterprise infrastructure</strong>, high-availability systems, and mission-critical support.</p>
-            <p class="bio-body">My 4+ year track record spans some of the most demanding environments: international airports requiring 24/7 uptime, multi-site hospital networks where downtime affects patient care, and government immigration centers demanding airtight security compliance. Across all of them, I've maintained a <strong>95% SLA compliance rate</strong>.</p>
-            <p class="bio-body">I specialize in <strong>systems lifecycle management</strong>, full-cycle device provisioning, network infrastructure deployment, and cross-functional stakeholder coordination.</p>
+          <div class="about-text-col" data-aos="fade-right">
+            <p class="bio-lead">I'm <strong>Sajid Mehmood</strong> — a CCNA-certified IT Support Engineer operating at the intersection of <strong>enterprise infrastructure</strong>, high-availability systems, and mission-critical support. 💼</p>
+            <p class="bio-body">My 4+ year track record spans some of the most demanding environments: international airports requiring 24/7 uptime, multi-site hospital networks where downtime affects patient care, and government immigration centers demanding airtight security compliance. Across all of them, I've maintained a <strong>95% SLA compliance rate</strong>. 🏆</p>
+            <p class="bio-body">I specialise in <strong>systems lifecycle management</strong>, full-cycle device provisioning, network infrastructure deployment, and cross-functional stakeholder coordination. My work has contributed to the Hamad International Airport expansion and a zero-downtime record across three hospital sites.</p>
+
             <div class="about-stats-row">
-              <div class="about-stat"><span class="astat-num">600+</span><span class="astat-label">Systems Managed</span></div>
-              <div class="about-stat"><span class="astat-num">3</span><span class="astat-label">Hospital Sites</span></div>
-              <div class="about-stat"><span class="astat-num">10+</span><span class="astat-label">Enterprise Projects</span></div>
-              <div class="about-stat"><span class="astat-num">0</span><span class="astat-label">EMR Downtimes</span></div>
+              <div class="about-stat"><span class="astat-num">600+</span><span class="astat-label">Systems Managed 🖥️</span></div>
+              <div class="about-stat"><span class="astat-num">3</span><span class="astat-label">Hospital Sites 🏥</span></div>
+              <div class="about-stat"><span class="astat-num">10+</span><span class="astat-label">Enterprise Projects 🏗️</span></div>
+              <div class="about-stat"><span class="astat-num">0</span><span class="astat-label">EMR Downtimes ⚡</span></div>
             </div>
           </div>
-          <div class="about-panel" data-aos="fade-left" data-aos-delay="150">
+
+          <div class="about-panel-col" data-aos="fade-left" data-aos-delay="150">
+            <!-- SLA Ring -->
             <div class="panel-sla-ring">
               <div class="ring-wrapper">
                 <svg viewBox="0 0 120 120" role="img" aria-label="95% SLA Compliance">
                   <defs>
                     <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" style="stop-color:#C8A96E"/>
-                      <stop offset="100%" style="stop-color:#6B7C45"/>
+                      <stop offset="100%" style="stop-color:#8B7355"/>
                     </linearGradient>
                   </defs>
                   <circle class="ring-bg" cx="60" cy="60" r="50"/>
@@ -576,101 +424,108 @@
                 </div>
               </div>
             </div>
+
+            <!-- Achievements -->
             <div class="panel-achievements">
               <div class="ach-item">
-                <div class="ach-icon icon-neu">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#C8A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M8 21h8M12 17v4M7 4H5a2 2 0 000 4c0 3 2 5 4 6M17 4h2a2 2 0 010 4c0 3-2 5-4 6M12 17c-3.3 0-6-2.7-6-6V4h12v7c0 3.3-2.7 6-6 6z"/>
-  </svg>
-</div>
+                <div class="ach-icon">🏆</div>
                 <div class="ach-text"><strong>Safety Award — HIA</strong><span>Airport Expansion Project recognition</span></div>
               </div>
               <div class="ach-item">
-                <div class="ach-icon icon-neu">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#8FA05A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="2,12 6,12 8,5 10,19 12,9 14,15 16,12 22,12"/>
-  </svg>
-</div>
+                <div class="ach-icon">⚡</div>
                 <div class="ach-text"><strong>Zero EMR Downtime</strong><span>Across 3 hospital sites, entire engagement</span></div>
               </div>
               <div class="ach-item">
-                <div class="ach-icon icon-neu">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#C8A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-    <polyline points="9,12 11,14 15,10"/>
-  </svg>
-</div>
+                <div class="ach-icon">🛡️</div>
                 <div class="ach-text"><strong>95% Asset Loss Reduction</strong><span>Via enterprise tracking protocol</span></div>
               </div>
             </div>
+
+            <!-- Profile chips -->
             <div class="panel-chips">
-              <span class="p-chip"><i class="fas fa-location-dot"></i>Doha, Qatar</span>
-              <span class="p-chip"><i class="fas fa-certificate"></i>CCNA</span>
-              <span class="p-chip"><i class="fas fa-graduation-cap"></i>BSc IT</span>
-              <span class="p-chip"><i class="fas fa-globe"></i>Open to Relocation</span>
+              <span class="p-chip">📍 Doha, Qatar</span>
+              <span class="p-chip">🌐 CCNA</span>
+              <span class="p-chip">🎓 BSc IT</span>
+              <span class="p-chip">✈️ Open to Relocation</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ PROJECTS ============================================================ -->
+    <!-- ================================================================
+         PROJECTS — Museum Case Studies
+    ================================================================ -->
     <section id="projects" class="section projects-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <header class="section-header" data-aos="fade-up">
           <span class="sec-num">02</span>
-          <h2 class="sec-title">Mission-Critical Projects</h2>
+          <h2 class="sec-title">Case Studies</h2>
           <div class="sec-rule"></div>
-        </div>
-        <p class="section-intro" data-aos="fade-up" data-aos-delay="80">Enterprise engagements where infrastructure failure was not an option.</p>
-        <div class="projects-grid" id="projectsGrid" class="neu-grid"></div>
+        </header>
+        <p class="section-intro" data-aos="fade-up" data-aos-delay="80">
+          Enterprise engagements where infrastructure failure was not an option. 🏗️
+        </p>
+        <!-- JS renders .museum-case entries here -->
+        <div class="projects-grid" id="projectsGrid"></div>
       </div>
     </section>
 
-    <!-- ============================================================ EXPERIENCE ============================================================ -->
+    <!-- ================================================================
+         EXPERIENCE — Editorial Timeline
+    ================================================================ -->
     <section id="experience" class="section exp-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <header class="section-header" data-aos="fade-up">
           <span class="sec-num">03</span>
           <h2 class="sec-title">Professional Experience</h2>
           <div class="sec-rule"></div>
-        </div>
-        <div class="exp-timeline" id="expTimeline">
-
-        </div>
+        </header>
+        <!-- JS renders .exp-item entries here -->
+        <div class="exp-timeline" id="expTimeline"></div>
       </div>
     </section>
 
-    <!-- ============================================================ ARSENAL ============================================================ -->
+    <!-- ================================================================
+         ARSENAL — Executive Index
+    ================================================================ -->
     <section id="arsenal" class="section arsenal-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <header class="section-header" data-aos="fade-up">
           <span class="sec-num">04</span>
           <h2 class="sec-title">Technical Arsenal</h2>
           <div class="sec-rule"></div>
-        </div>
-        <p class="section-intro" data-aos="fade-up" data-aos-delay="80">The tools, platforms, and protocols I deploy in enterprise environments.</p>
-        <div class="arsenal-bento" id="arsenalBento" data-aos="fade-up" data-aos-delay="120"></div>
+        </header>
+        <p class="section-intro" data-aos="fade-up" data-aos-delay="80">
+          The tools, platforms, and protocols deployed in enterprise environments. ⚙️
+        </p>
+        <!-- JS renders executive index entries here -->
+        <div class="arsenal-bento" id="arsenalBento"></div>
+
+        <!-- Languages -->
         <div class="sub-block" data-aos="fade-up" data-aos-delay="180">
-          <p class="sub-label">Languages Spoken</p>
+          <p class="sub-label">🗣️ Languages Spoken</p>
           <div class="lang-grid" id="langGrid"></div>
         </div>
       </div>
     </section>
 
-    <!-- ============================================================ EDUCATION ============================================================ -->
+    <!-- ================================================================
+         EDUCATION — Refined Tabs
+    ================================================================ -->
     <section id="education" class="section edu-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <header class="section-header" data-aos="fade-up">
           <span class="sec-num">05</span>
           <h2 class="sec-title">Education</h2>
           <div class="sec-rule"></div>
-        </div>
+        </header>
+
         <div class="folder-ui" data-aos="fade-up">
           <div class="folder-tabs">
-            <button class="ftab active" data-pane="ep0">Middlesex University</button>
-            <button class="ftab" data-pane="ep1">Aptech Qatar</button>
-            <button class="ftab" data-pane="ep2">IGCSE</button>
+            <button class="ftab active" data-pane="ep0">🎓 Middlesex University</button>
+            <button class="ftab" data-pane="ep1">💻 Aptech Qatar</button>
+            <button class="ftab" data-pane="ep2">📚 IGCSE</button>
           </div>
           <div class="folder-body">
             <!-- Middlesex -->
@@ -682,10 +537,10 @@
                 <p class="fp-inst">Middlesex University Dubai</p>
                 <div class="fp-grade-badge">
                   <i class="fas fa-medal"></i>
-                  <span>Merit &mdash; Upper Second Class Honours (2:1)</span>
+                  <span>Merit &mdash; Upper Second Class Honours (2:1) 🏅</span>
                 </div>
                 <p class="fp-note">Graduated 2025 &middot; Cambridge Validated Programme</p>
-                <a href="https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-certificate"></i> View Certificate</a>
+                <a href="https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-sm-gold"><i class="fas fa-certificate"></i> View Certificate</a>
               </div>
             </div>
             <!-- Aptech -->
@@ -697,23 +552,14 @@
                 <p class="fp-inst">Aptech Qatar &middot; ACCP Programme</p>
                 <div class="fp-grade-badge fp-grade-distinction">
                   <i class="fas fa-award"></i>
-                  <span>Overall Distinction &mdash; 3 Year Programme</span>
+                  <span>Overall Distinction &mdash; 3 Year Programme 🥇</span>
                 </div>
                 <div class="fp-year-grades">
-                  <div class="fp-year-row">
-                    <span class="fp-year-label">Year 1 &middot; CISE-ACCP</span>
-                    <span class="fp-year-score distinction">81% &mdash; Distinction</span>
-                  </div>
-                  <div class="fp-year-row">
-                    <span class="fp-year-label">Year 2 &middot; HCSE-ACCP</span>
-                    <span class="fp-year-score distinction">87% &mdash; Distinction</span>
-                  </div>
-                  <div class="fp-year-row">
-                    <span class="fp-year-label">Year 3 &middot; ACSE-ACCP</span>
-                    <span class="fp-year-score distinction">86% &mdash; Distinction</span>
-                  </div>
+                  <div class="fp-year-row"><span class="fp-year-label">Year 1 &middot; CISE-ACCP</span><span class="fp-year-score distinction">81% &mdash; Distinction</span></div>
+                  <div class="fp-year-row"><span class="fp-year-label">Year 2 &middot; HCSE-ACCP</span><span class="fp-year-score distinction">87% &mdash; Distinction</span></div>
+                  <div class="fp-year-row"><span class="fp-year-label">Year 3 &middot; ACSE-ACCP</span><span class="fp-year-score distinction">86% &mdash; Distinction</span></div>
                 </div>
-                <a href="https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-certificate"></i> View Certificate</a>
+                <a href="https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-sm-gold"><i class="fas fa-certificate"></i> View Certificate</a>
               </div>
             </div>
             <!-- IGCSE -->
@@ -723,7 +569,7 @@
                 <span class="fp-date">Sep 2017 &ndash; Jul 2018</span>
                 <h3 class="fp-degree">IGCSE</h3>
                 <p class="fp-inst">Bright Future International School</p>
-                <p class="fp-note">Cambridge International Examination</p>
+                <p class="fp-note">Cambridge International Examination 📜</p>
               </div>
             </div>
           </div>
@@ -731,74 +577,84 @@
       </div>
     </section>
 
-    <!-- ============================================================ CERTIFICATIONS ============================================================ -->
+    <!-- ================================================================
+         CERTIFICATIONS — Premium Cards
+    ================================================================ -->
     <section id="certifications" class="section certs-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <header class="section-header" data-aos="fade-up">
           <span class="sec-num">06</span>
           <h2 class="sec-title">Certifications</h2>
           <div class="sec-rule"></div>
-        </div>
+        </header>
+
+        <!-- Featured CCNA -->
         <div class="cert-featured" data-aos="zoom-in">
           <div class="cert-featured-inner">
-            <div class="cert-ribbon">FEATURED</div>
+            <div class="cert-ribbon">⭐ FEATURED</div>
             <div class="cert-icon-wrap"><i class="fas fa-network-wired"></i></div>
             <div class="cert-body">
-              <h3 class="cert-title">CCNA 200-301</h3>
+              <h3 class="cert-title">CCNA 200-301 🌐</h3>
               <p class="cert-subtitle">Cisco Certified Network Associate</p>
               <p class="cert-issuer">Simplilearn SkillUp</p>
               <p class="cert-date"><i class="fas fa-calendar"></i> January 17, 2026</p>
               <p class="cert-code">Credential ID: 9726449</p>
-              <a href="https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-external-link-alt"></i> Verify Certificate</a>
+              <a href="https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-sm-gold"><i class="fas fa-external-link-alt"></i> Verify Certificate</a>
             </div>
-            <div class="cert-seal"><i class="fas fa-star"></i></div>
+            <div class="cert-seal">🏆</div>
           </div>
         </div>
+
+        <!-- Dynamic cert grid -->
         <div class="certs-grid" id="certsGrid" data-aos="fade-up" data-aos-delay="150"></div>
       </div>
     </section>
 
-    <!-- ============================================================ CONTACT ============================================================ -->
+    <!-- ================================================================
+         CONTACT — Minimal Luxury
+    ================================================================ -->
     <section id="contact" class="section contact-section">
       <div class="container">
-        <div class="section-header" data-aos="fade-up">
+        <header class="section-header" data-aos="fade-up">
           <span class="sec-num">07</span>
           <h2 class="sec-title">Engage</h2>
           <div class="sec-rule"></div>
-        </div>
+        </header>
+
         <div class="contact-layout">
           <div class="contact-left" data-aos="fade-right">
-            <p class="contact-intro">Ready to discuss an enterprise challenge, a critical infrastructure project, or a new opportunity? I operate with the same precision here as I do onsite.</p>
+            <p class="contact-intro">Ready to discuss an enterprise challenge, a critical infrastructure project, or a new opportunity? I operate with the same precision here as I do onsite. 📡</p>
             <div class="contact-items">
-              <a href="/cdn-cgi/l/email-protection#becddfd4d7dad3dbd6d3d1d1da90cdd3d5fed9d3dfd7d290ddd1d3" class="contact-item">
-                <div class="ci-icon"><i class="fas fa-envelope"></i></div>
-                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="bdcedcd7d4d9d0d8d5d0d2d2d993ced0d6fddad0dcd4d193ded2d0"><span class="__cf_email__" data-cfemail="0c65626a634c7f6d6665686167226f6361"><span class="__cf_email__" data-cfemail="3645575c5f5218425353555e76515b575f5a1855595b"><span class="__cf_email__" data-cfemail="582b3932313c762c3d3d3b30183f35393134763b3735"><span class="__cf_email__" data-cfemail="2073616a69640e746565636860676d61696c0e636f6d">SAJID.TEECH@GMAIL.COM</span></span></span></span></span></span></div>
+              <a href="mailto:SAJID.TEECH@GMAIL.COM" class="contact-item">
+                <div class="ci-icon">📧</div>
+                <div class="ci-body"><span class="ci-label">Primary</span><span class="ci-value">SAJID.TEECH@GMAIL.COM</span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
-              <a href="/cdn-cgi/l/email-protection#e794868d8e83c98a8cd7d7d0a78892938b88888cc984888a" class="contact-item">
-                <div class="ci-icon"><i class="fas fa-envelope-open"></i></div>
-                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value"><span class="__cf_email__" data-cfemail="2f5c4e45464b0142441f1f186f405a5b43404044014c4042"><span class="__cf_email__" data-cfemail="8cffede6e5e8a2f8e9e9efe4ccebe1ffe5e0a2efe3e1"><span class="__cf_email__" data-cfemail="0d64636b624d7e6c6764696066236e6260"><span class="__cf_email__" data-cfemail="84edeae2ebc4f7e5eeede0e9efaae7ebe9"><span class="__cf_email__" data-cfemail="a3eaede5ece3f0e2e9eae7eee88de0ecee">INFO@SAJIDMK.COM</span></span></span></span></span></span></div>
+              <a href="mailto:INFO@SAJIDMK.COM" class="contact-item">
+                <div class="ci-icon">✉️</div>
+                <div class="ci-body"><span class="ci-label">Secondary</span><span class="ci-value">INFO@SAJIDMK.COM</span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <a href="tel:+97466969598" class="contact-item">
-                <div class="ci-icon"><i class="fas fa-phone"></i></div>
+                <div class="ci-icon">📞</div>
                 <div class="ci-body"><span class="ci-label">Direct Line</span><span class="ci-value">+974 6696 9598</span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer" class="contact-item contact-item-whatsapp">
-                <div class="ci-icon ci-icon-whatsapp"><i class="fab fa-whatsapp"></i></div>
+                <div class="ci-icon ci-icon-wa">💬</div>
                 <div class="ci-body"><span class="ci-label">WhatsApp</span><span class="ci-value">Message me directly</span></div>
                 <i class="fas fa-arrow-up-right-from-square ci-ext"></i>
               </a>
               <div class="contact-item contact-item-static">
-                <div class="ci-icon"><i class="fas fa-location-dot"></i></div>
-                <div class="ci-body"><span class="ci-label">Location</span><span class="ci-value">Doha, Qatar &middot; Open to Relocation</span></div>
+                <div class="ci-icon">📍</div>
+                <div class="ci-body"><span class="ci-label">Location</span><span class="ci-value">Doha, Qatar · Open to Relocation</span></div>
               </div>
             </div>
           </div>
+
           <div class="contact-right" data-aos="fade-left" data-aos-delay="120">
             <div class="social-panel">
-              <p class="social-heading">Professional Networks</p>
+              <p class="social-heading">Professional Networks 🌐</p>
               <a href="https://www.linkedin.com/in/sajid-mk-1b3954333" target="_blank" rel="noopener noreferrer" class="social-btn">
                 <i class="fab fa-linkedin-in"></i>
                 <div><span class="sb-title">LinkedIn Profile</span><span class="sb-sub">Connect professionally</span></div>
@@ -816,7 +672,7 @@
               </a>
               <div class="availability-banner">
                 <span class="avail-pulse"></span>
-                <span>Currently open to enterprise opportunities in Qatar.</span>
+                <span>Currently open to enterprise opportunities in Qatar. 🤝</span>
               </div>
             </div>
           </div>
@@ -826,30 +682,32 @@
 
   </main>
 
-  <!-- ============================================================ FOOTER ============================================================ -->
+  <!-- ================================================================
+       FOOTER
+  ================================================================ -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <span class="footer-name">Sajid Mehmood</span>
-        <span class="footer-role">IT Support Engineer &middot; CCNA</span>
+        <img src="logo.png" alt="SM" class="footer-logo">
+        <div>
+          <span class="footer-name">Sajid Mehmood</span>
+          <span class="footer-role">IT Support Engineer · CCNA</span>
+        </div>
       </div>
       <div class="footer-links">
-        <a href="#about" class="nav-anchor">Profile</a>
-        <a href="#projects" class="nav-anchor">Projects</a>
-        <a href="#arsenal" class="nav-anchor">Arsenal</a>
-        <a href="#contact" class="nav-anchor">Contact</a>
+        <a href="#about"          class="nav-anchor">Profile</a>
+        <a href="#projects"       class="nav-anchor">Projects</a>
+        <a href="#arsenal"        class="nav-anchor">Arsenal</a>
+        <a href="#contact"        class="nav-anchor">Contact</a>
       </div>
       <div class="footer-copy">
-        <span>&copy; 2025 Sajid Mehmood. All Rights Reserved.</span>
+        <span>&copy; 2025 Sajid Mehmood. All Rights Reserved. 🌙</span>
       </div>
     </div>
   </footer>
 
- <!-- ============================================================ SCRIPTS ============================================================ -->
-  <!-- AOS Animation Library -->
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-  <!-- Main site script -->
   <script src="script.js"></script>
-
 </body>
 </html>

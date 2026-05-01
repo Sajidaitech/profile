@@ -309,6 +309,7 @@
   var SUBMIT_COOLDOWN_MS = 3000;
 
   document.body.style.overflow = 'hidden';
+  document.body.classList.add('gate-active');
 
   // ----------------------------------------------------------
   // 1A · CONSTANTS
@@ -1091,6 +1092,7 @@
       var overlay = document.getElementById('gateOverlay');
       if (overlay) overlay.classList.add('hidden');
       document.body.style.overflow = '';
+      document.body.classList.remove('gate-active');
       window.scrollTo(0, 0);
       setTimeout(function () {
         if (typeof AOS !== 'undefined') AOS.refresh();
@@ -1138,7 +1140,7 @@
     var referrer       = document.referrer  || 'Direct / Bookmark';
     var time           = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Qatar', weekday: 'short', year: 'numeric',
-      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      month: 'short', day: 'numeric', hour: '1-digit', minute: '2-digit'
     });
 
     function esc(str) {
