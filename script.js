@@ -87,9 +87,10 @@
     this.r  = Math.random() * 2 + 0.5;
     this.life = Math.random() * 0.5 + 0.2;
     this.maxLife = this.life;
-    this.hue = [195, 215, 255, 270][Math.floor(Math.random() * 4)];
-    this.sat = Math.floor(Math.random() * 30) + 50;
-    this.lit = Math.floor(Math.random() * 20) + 60;
+    // Unified blue palette — no purple/violet noise
+    this.hue = [210, 212, 215][Math.floor(Math.random() * 3)];
+    this.sat = Math.floor(Math.random() * 15) + 30;  // 30–45% subtle
+    this.lit = Math.floor(Math.random() * 10) + 55;  // 55–65% mid
     this.twinkle = Math.random() * Math.PI * 2;
     this.twinkleSpeed = Math.random() * 0.04 + 0.01;
     this.type = Math.random() > 0.85 ? 'diamond' : 'circle';
@@ -109,24 +110,24 @@
     if (this.life <= 0 || this.x < -30 || this.x > W + 30 || this.y < -30) this.reset(false);
   };
   Particle.prototype.draw = function () {
-    var twinkleAlpha = (Math.sin(this.twinkle) * 0.3 + 0.7) * (this.life / this.maxLife);
+    var twinkleAlpha = (Math.sin(this.twinkle) * 0.2 + 0.6) * (this.life / this.maxLife);
     ctx.save();
     if (this.type === 'diamond') {
       var grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 6);
-      grd.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.4) + ')');
+      grd.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.25) + ')');
       grd.addColorStop(1, 'transparent');
       ctx.fillStyle = grd;
       ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 6, 0, Math.PI * 2); ctx.fill();
       ctx.translate(this.x, this.y); ctx.rotate(Math.PI / 4 + this.twinkle * 0.1);
-      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + twinkleAlpha + ')';
+      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.65) + ')';
       ctx.fillRect(-this.r * 1.2, -this.r * 1.2, this.r * 2.4, this.r * 2.4);
     } else {
       var grd2 = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 4);
-      grd2.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.25) + ')');
+      grd2.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.15) + ')');
       grd2.addColorStop(1, 'transparent');
       ctx.fillStyle = grd2;
       ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + twinkleAlpha + ')';
+      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.7) + ')';
       ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fill();
     }
     ctx.restore();
@@ -160,8 +161,8 @@
     this.speed = Math.random() * 1.5 + 0.5;
     this.chars = '01'.split('');
     this.length = Math.floor(Math.random() * 10) + 5;
-    this.opacity = Math.random() * 0.08 + 0.02;
-    this.hue = Math.random() > 0.5 ? 195 : 255;
+    this.opacity = Math.random() * 0.04 + 0.01; // halved — barely visible texture
+    this.hue = 210; // single unified blue, no teal/purple split
     this.fontSize = Math.floor(Math.random() * 5) + 8;
   }
   DataStream.prototype.update = function () {
@@ -184,13 +185,13 @@
   var LINK_DIST = isMobile ? 80 : 120;
 
   var waveColors = [
-    'hsla(195,60%,65%,OPACITY)',
-    'hsla(255,55%,70%,OPACITY)',
-    'hsla(210,65%,65%,OPACITY)'
+    'hsla(210, 20%, 80%, OPACITY)', // Soft Grey-Blue
+    'hsla(0, 0%, 90%, OPACITY)',    // Soft White
+    'hsla(210, 30%, 85%, OPACITY)'  // Muted Silver
   ];
-  waves.push(new Wave(0, 22, 0.25, waveColors[0], 0.06));
-  waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.05));
-  waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.04));
+  waves.push(new Wave(0, 22, 0.25, waveColors[0], 0.035)); // was 0.06
+  waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.028)); // was 0.05
+  waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.022)); // was 0.04
 
   function updateWavePositions() {
     waves[0].y = H * 0.55;
@@ -212,14 +213,13 @@
         var dy = particles[a].y - particles[b].y;
         var d  = Math.sqrt(dx * dx + dy * dy);
         if (d < LINK_DIST) {
-          var op = (1 - d / LINK_DIST) * 0.18;
-          var midHue = (particles[a].hue + particles[b].hue) / 2;
+          var op = (1 - d / LINK_DIST) * 0.10; // was 0.18 — much subtler
           var life = Math.min(particles[a].life / particles[a].maxLife, particles[b].life / particles[b].maxLife);
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
           ctx.lineTo(particles[b].x, particles[b].y);
-          ctx.strokeStyle = 'hsla(' + midHue + ',60%,68%,' + (op * life) + ')';
-          ctx.lineWidth = 0.6;
+          ctx.strokeStyle = 'hsla(212, 40%, 65%,' + (op * life) + ')'; // unified blue
+          ctx.lineWidth = 0.5;
           ctx.stroke();
         }
       }
@@ -228,17 +228,17 @@
 
   function drawAurora(t) {
     var aurora1 = ctx.createLinearGradient(0, H * 0.2, W, H * 0.8);
-    aurora1.addColorStop(0,   'hsla(195,80%,40%,0)');
-    aurora1.addColorStop(0.3, 'hsla(215,70%,45%,' + (0.035 + 0.02 * Math.sin(t * 0.003)) + ')');
-    aurora1.addColorStop(0.6, 'hsla(255,75%,50%,' + (0.025 + 0.015 * Math.cos(t * 0.004)) + ')');
-    aurora1.addColorStop(1,   'hsla(280,60%,40%,0)');
+    aurora1.addColorStop(0,   'hsla(210,40%,70%,0)');
+    aurora1.addColorStop(0.3, 'hsla(212,35%,72%,' + (0.018 + 0.008 * Math.sin(t * 0.003)) + ')');
+    aurora1.addColorStop(0.6, 'hsla(215,30%,75%,' + (0.012 + 0.006 * Math.cos(t * 0.004)) + ')');
+    aurora1.addColorStop(1,   'hsla(210,25%,78%,0)');
     ctx.fillStyle = aurora1;
     ctx.fillRect(0, 0, W, H);
 
     if (mouse.x > 0) {
-      var grd = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 280);
-      grd.addColorStop(0, 'hsla(195,70%,60%,0.06)');
-      grd.addColorStop(0.5, 'hsla(255,65%,65%,0.03)');
+      var grd = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 240);
+      grd.addColorStop(0, 'hsla(212,40%,68%,0.03)');
+      grd.addColorStop(0.5, 'hsla(210,30%,72%,0.015)');
       grd.addColorStop(1, 'transparent');
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, W, H);
@@ -256,8 +256,8 @@
         var dx = cx - mouse.x, dy = cy - mouse.y;
         var dist = Math.sqrt(dx * dx + dy * dy);
         var pulse = Math.sin(t * 0.008 + cx * 0.008 + cy * 0.006) * 0.5 + 0.5;
-        var alpha = 0.025 + pulse * 0.02;
-        if (dist < 220) alpha += (1 - dist / 220) * 0.04;
+        var alpha = 0.015 + pulse * 0.012; // was 0.025 + 0.02
+        if (dist < 220) alpha += (1 - dist / 220) * 0.025; // was 0.04
         ctx.beginPath();
         for (var k = 0; k < 6; k++) {
           var angle = (Math.PI / 3) * k;
@@ -265,7 +265,7 @@
           k === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
         }
         ctx.closePath();
-        ctx.strokeStyle = 'hsla(195,60%,65%,' + alpha + ')';
+        ctx.strokeStyle = 'hsla(212,35%,68%,' + alpha + ')'; // was 195,60%,65%
         ctx.stroke();
       }
     }
@@ -1850,59 +1850,59 @@ function loadExperience() {
 var arsenalData = [
   {
     id: 'infrastructure', icon: 'fa-server', title: 'Infrastructure', subtitle: 'Core Systems · Deployment · Lifecycle',
-    color: '#C5A059', span: false,
+    color: '#2c5f9e', span: false,
     tools: [
-      { icon: 'fa-windows',      name: 'Windows 10 / 11',     color: '#0078D7' },
-      { icon: 'fa-apple',        name: 'macOS',               color: '#888' },
-      { icon: 'fa-compact-disc', name: 'OS Reimaging',        color: '#C5A059' },
-      { icon: 'fa-tools',        name: 'Hardware Repair',     color: '#E07B39' },
-      { icon: 'fa-database',     name: 'Asset Management',    color: '#27AE60' },
-      { icon: 'fa-desktop',      name: 'Device Provisioning', color: '#3B82F6' }
+      { icon: 'fa-windows',      name: 'Windows 10 / 11',     color: '#2c5f9e' },
+      { icon: 'fa-apple',        name: 'macOS',               color: '#5a6a85' },
+      { icon: 'fa-compact-disc', name: 'OS Reimaging',        color: '#3a7bd5' },
+      { icon: 'fa-tools',        name: 'Hardware Repair',     color: '#2c5f9e' },
+      { icon: 'fa-database',     name: 'Asset Management',    color: '#3a7bd5' },
+      { icon: 'fa-desktop',      name: 'Device Provisioning', color: '#5a6a85' }
     ]
   },
   {
     id: 'networking', icon: 'fa-network-wired', title: 'Networking', subtitle: 'CCNA · LAN/WAN · Cisco IOS',
-    color: '#3B82F6', span: false,
+    color: '#2c5f9e', span: false,
     tools: [
-      { icon: 'fa-circle-nodes',             name: 'Cisco IOS',         color: '#1D4ED8' },
-      { icon: 'fa-wifi',                     name: 'WLAN Config',       color: '#06B6D4' },
-      { icon: 'fa-arrows-split-up-and-left', name: 'TCP/IP / OSPF',     color: '#3B82F6' },
-      { icon: 'fa-phone-volume',             name: 'VoIP',              color: '#8B5CF6' },
-      { icon: 'fa-shield-halved',            name: 'Firewall / ACL',    color: '#EF4444' },
-      { icon: 'fa-diagram-project',          name: 'VLAN Segmentation', color: '#F59E0B' }
+      { icon: 'fa-circle-nodes',             name: 'Cisco IOS',         color: '#1a3f6f' },
+      { icon: 'fa-wifi',                     name: 'WLAN Config',       color: '#2c5f9e' },
+      { icon: 'fa-arrows-split-up-and-left', name: 'TCP/IP / OSPF',     color: '#3a7bd5' },
+      { icon: 'fa-phone-volume',             name: 'VoIP',              color: '#5a6a85' },
+      { icon: 'fa-shield-halved',            name: 'Firewall / ACL',    color: '#2c5f9e' },
+      { icon: 'fa-diagram-project',          name: 'VLAN Segmentation', color: '#3a7bd5' }
     ]
   },
   {
     id: 'productivity', icon: 'fa-cloud', title: 'Cloud & Productivity', subtitle: 'Microsoft 365 · SharePoint · Azure',
-    color: '#06B6D4', span: false,
+    color: '#3a7bd5', span: false,
     tools: [
-      { icon: 'fa-envelope',    name: 'Office 365',       color: '#D93F00' },
-      { icon: 'fa-share-nodes', name: 'SharePoint',       color: '#038387' },
-      { icon: 'fa-users-gear',  name: 'Active Directory', color: '#0078D7' },
-      { icon: 'fa-comments',    name: 'Microsoft Teams',  color: '#6264A7' },
-      { icon: 'fa-cloud',       name: 'Azure (AZ-900)',   color: '#0072C6' }
+      { icon: 'fa-envelope',    name: 'Office 365',       color: '#2c5f9e' },
+      { icon: 'fa-share-nodes', name: 'SharePoint',       color: '#3a7bd5' },
+      { icon: 'fa-users-gear',  name: 'Active Directory', color: '#1a3f6f' },
+      { icon: 'fa-comments',    name: 'Microsoft Teams',  color: '#5a6a85' },
+      { icon: 'fa-cloud',       name: 'Azure (AZ-900)',   color: '#2c5f9e' }
     ]
   },
   {
     id: 'security', icon: 'fa-shield-halved', title: 'Security & Compliance', subtitle: 'Governance · Patching · Hardening',
-    color: '#EF4444', span: false,
+    color: '#1a3f6f', span: false,
     tools: [
-      { icon: 'fa-lock',            name: 'Security Patching',    color: '#EF4444' },
-      { icon: 'fa-user-lock',       name: 'Access Control',       color: '#F59E0B' },
-      { icon: 'fa-clipboard-check', name: 'IT Governance',        color: '#27AE60' },
-      { icon: 'fa-bug',             name: 'Vulnerability Triage', color: '#EC4899' }
+      { icon: 'fa-lock',            name: 'Security Patching',    color: '#1a3f6f' },
+      { icon: 'fa-user-lock',       name: 'Access Control',       color: '#2c5f9e' },
+      { icon: 'fa-clipboard-check', name: 'IT Governance',        color: '#3a7bd5' },
+      { icon: 'fa-bug',             name: 'Vulnerability Triage', color: '#5a6a85' }
     ]
   },
   {
     id: 'specialty', icon: 'fa-stethoscope', title: 'Specialist Platforms', subtitle: 'EMR · POS · ERP · Immigration Systems',
-    color: '#8B5CF6', span: true,
+    color: '#2c5f9e', span: true,
     tools: [
-      { icon: 'fa-heart-pulse',   name: 'EMR Systems',         color: '#EC4899' },
-      { icon: 'fa-cash-register', name: 'POS Systems',         color: '#F59E0B' },
-      { icon: 'fa-cubes',         name: 'Odoo ERP',            color: '#714B67' },
-      { icon: 'fa-passport',      name: 'Immigration Systems', color: '#3B82F6' },
-      { icon: 'fa-terminal',      name: 'PowerShell',          color: '#2563EB' },
-      { icon: 'fa-table',         name: 'SQL Basics',          color: '#F97316' }
+      { icon: 'fa-heart-pulse',   name: 'EMR Systems',         color: '#2c5f9e' },
+      { icon: 'fa-cash-register', name: 'POS Systems',         color: '#3a7bd5' },
+      { icon: 'fa-cubes',         name: 'Odoo ERP',            color: '#5a6a85' },
+      { icon: 'fa-passport',      name: 'Immigration Systems', color: '#1a3f6f' },
+      { icon: 'fa-terminal',      name: 'PowerShell',          color: '#2c5f9e' },
+      { icon: 'fa-table',         name: 'SQL Basics',          color: '#3a7bd5' }
     ]
   }
 ];
@@ -2142,4 +2142,187 @@ function printSignature() {
   window.addEventListener('resize', function () {
     if (!isMobile() && isOpen) closeDropdown();
   });
+})();
+
+
+// ============================================================
+// NEUBRUTALISM · CARTOON BOUNCE OBSERVER
+// ============================================================
+
+(function () {
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry, i) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        el.style.animationDelay = (i * 0.08) + 's';
+        el.classList.add('neu-bounce-in');
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.proj-card, .cert-card, .exp-item, .kpi-block, .ach-item').forEach(function (el) {
+    observer.observe(el);
+  });
+})();
+
+// ============================================================
+// NEUBRUTALISM · CARD TILT ON HOVER
+// ============================================================
+
+(function () {
+  document.addEventListener('mousemove', function (e) {
+    var cards = document.querySelectorAll('.proj-card, .cert-card');
+    cards.forEach(function (card) {
+      var rect = card.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) / rect.width;
+      var dy = (e.clientY - cy) / rect.height;
+      if (Math.abs(dx) < 1.2 && Math.abs(dy) < 1.2) {
+        card.style.transform = 'translate(-4px,-4px) rotate(' + (dx * 1.5) + 'deg)';
+      }
+    });
+  });
+  document.addEventListener('mouseleave', function () {
+    document.querySelectorAll('.proj-card, .cert-card').forEach(function (card) {
+      card.style.transform = '';
+    });
+  });
+})();
+
+
+// ============================================================
+// WEATHER BAR — Clock + Live Doha Weather
+// ============================================================
+
+(function () {
+  'use strict';
+
+  var elTime    = document.getElementById('wbTime');
+  var elDate    = document.getElementById('wbDate');
+  var elWeather = document.getElementById('wbWeather');
+
+  if (!elTime && !elDate && !elWeather) return;
+
+  // ── 1. CLOCK (Qatar timezone, updates every second) ──────────
+  function tickClock() {
+    var now = new Date();
+
+    // Time — Qatar is UTC+3, no DST
+    var t = now.toLocaleTimeString('en-GB', {
+      timeZone: 'Asia/Qatar',
+      hour:     '2-digit',
+      minute:   '2-digit',
+      second:   '2-digit',
+      hour12:   false
+    });
+
+    // Date — "Mon, 01 May 2026"
+    var d = now.toLocaleDateString('en-GB', {
+      timeZone: 'Asia/Qatar',
+      weekday:  'short',
+      day:      '2-digit',
+      month:    'short',
+      year:     'numeric'
+    });
+
+    if (elTime) elTime.textContent = t;
+    if (elDate) elDate.textContent = d;
+  }
+
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  // ── 2. WEATHER (Open-Meteo — free, no API key needed) ────────
+  // Doha, Qatar: lat 25.2854, lon 51.5310
+  var DOHA_LAT = 25.2854;
+  var DOHA_LON = 51.5310;
+
+  var WMO_CODES = {
+    0:  { label: 'Clear',          icon: 'fa-sun' },
+    1:  { label: 'Mostly Clear',   icon: 'fa-sun' },
+    2:  { label: 'Partly Cloudy',  icon: 'fa-cloud-sun' },
+    3:  { label: 'Overcast',       icon: 'fa-cloud' },
+    45: { label: 'Fog',            icon: 'fa-smog' },
+    48: { label: 'Icy Fog',        icon: 'fa-smog' },
+    51: { label: 'Light Drizzle',  icon: 'fa-cloud-drizzle' },
+    53: { label: 'Drizzle',        icon: 'fa-cloud-drizzle' },
+    55: { label: 'Heavy Drizzle',  icon: 'fa-cloud-drizzle' },
+    61: { label: 'Light Rain',     icon: 'fa-cloud-rain' },
+    63: { label: 'Rain',           icon: 'fa-cloud-rain' },
+    65: { label: 'Heavy Rain',     icon: 'fa-cloud-showers-heavy' },
+    71: { label: 'Light Snow',     icon: 'fa-snowflake' },
+    73: { label: 'Snow',           icon: 'fa-snowflake' },
+    75: { label: 'Heavy Snow',     icon: 'fa-snowflake' },
+    80: { label: 'Showers',        icon: 'fa-cloud-sun-rain' },
+    81: { label: 'Showers',        icon: 'fa-cloud-rain' },
+    82: { label: 'Heavy Showers',  icon: 'fa-cloud-showers-heavy' },
+    95: { label: 'Thunderstorm',   icon: 'fa-bolt-lightning' },
+    96: { label: 'Thunderstorm',   icon: 'fa-bolt-lightning' },
+    99: { label: 'Thunderstorm',   icon: 'fa-bolt-lightning' }
+  };
+
+  function setWeather(html) {
+    if (elWeather) elWeather.innerHTML = html;
+  }
+
+  function fetchWeather() {
+    setWeather(
+      '<i class="fas fa-location-crosshairs wb-icon wb-spin"></i>' +
+      '<span class="wb-weather-text">Fetching weather…</span>'
+    );
+
+    var url =
+      'https://api.open-meteo.com/v1/forecast' +
+      '?latitude='  + DOHA_LAT +
+      '&longitude=' + DOHA_LON +
+      '&current=temperature_2m,apparent_temperature,weathercode,windspeed_10m,relativehumidity_2m' +
+      '&temperature_unit=celsius' +
+      '&windspeed_unit=kmh' +
+      '&timezone=Asia%2FQatar';
+
+    fetch(url)
+      .then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        var c    = data.current;
+        var code = c.weathercode;
+        var info = WMO_CODES[code] || { label: 'Unknown', icon: 'fa-cloud' };
+        var temp = Math.round(c.temperature_2m);
+        var feel = Math.round(c.apparent_temperature);
+        var wind = Math.round(c.windspeed_10m);
+        var hum  = Math.round(c.relativehumidity_2m);
+
+        setWeather(
+          '<i class="fas ' + info.icon + ' wb-icon"></i>' +
+          '<span class="wb-weather-text">' +
+            '<strong style="color:var(--text-primary,#F1F5F9)">' + temp + '°C</strong>' +
+            ' · ' + info.label +
+            ' · Feels ' + feel + '°C' +
+            ' · ' + hum + '% RH' +
+            ' · ' + wind + ' km/h' +
+            ' <span style="opacity:.55;font-size:9px;">Doha, QA</span>' +
+          '</span>'
+        );
+
+        // Refresh every 10 minutes
+        setTimeout(fetchWeather, 10 * 60 * 1000);
+      })
+      .catch(function (err) {
+        setWeather(
+          '<i class="fas fa-triangle-exclamation wb-icon" style="color:#F59E0B"></i>' +
+          '<span class="wb-weather-text">Weather unavailable</span>'
+        );
+        // Retry in 2 minutes on error
+        setTimeout(fetchWeather, 2 * 60 * 1000);
+        console.warn('[WeatherBar] fetch failed:', err);
+      });
+  }
+
+  // Fetch immediately, but give the page 800ms to settle first
+  setTimeout(fetchWeather, 800);
+
 })();

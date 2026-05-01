@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <meta name="description" content="Sajid Mehmood — IT Support Engineer | CCNA Certified | Enterprise Infrastructure Specialist">
-  <meta name="theme-color" content="#09090e">
+  <meta name="theme-color" content="#1E2A3A">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -25,7 +25,7 @@
         extend: {
           colors: {
             gold: {
-              DEFAULT: '#C5A059',
+              DEFAULT: '#8B2232',
               light:   '#E8C97A',
               dark:    '#A07840',
               faint:   'rgba(197,160,89,0.07)',
@@ -37,7 +37,7 @@
             barlow:   ['"Barlow Condensed"', 'sans-serif'],
             playfair: ['"Playfair Display"', 'serif'],
           },
-          height: { nav: '68px' },
+          height: { nav: '100px' },
         },
       },
     };
@@ -144,9 +144,9 @@
 
   <!-- ============================================================ BACKGROUND ============================================================ -->
   <div class="grain-overlay" aria-hidden="true"></div>
-  <div class="ambient-orb orb-1" aria-hidden="true"></div>
-  <div class="ambient-orb orb-2" aria-hidden="true"></div>
-  <div class="ambient-orb orb-3" aria-hidden="true"></div>
+  
+  
+  
 
   <!-- Interactive 3D particle canvas for hero -->
   <canvas id="heroCanvas" aria-hidden="true"></canvas>
@@ -176,8 +176,8 @@
   <!-- ============================================================ NAVIGATION ============================================================ -->
   <header id="topNav"
     class="fixed top-0 left-0 right-0 z-[800] h-nav
-           bg-[rgba(10,10,10,0.88)] backdrop-blur-2xl
-           border-b border-[rgba(255,255,255,0.07)]
+           bg-[#1E2A3A]/90
+           border-b border-[rgba(59,130,246,0.20)]
            transition-all duration-300 nav-header">
 
     <!-- THREE-ZONE FLEX ROW: Logo | Links | Resume -->
@@ -203,13 +203,13 @@
           <div class="nav-logo-divider w-px h-8 flex-shrink-0 hidden sm:block"></div>
           <!-- Name + title stack (desktop only) -->
           <div class="flex-col leading-none gap-y-[3px] hidden sm:flex">
-            <span class="nav-logo-name font-playfair font-bold text-[15px] tracking-wide whitespace-nowrap"></span>
+            <span class="nav-logo-name font-playfair font-bold text-[15px] tracking-wide whitespace-nowrap scribble-wrap"></span>
             <span class="font-barlow font-semibold text-[10px] tracking-[0.11em] uppercase
-                         text-[#C5A059] whitespace-nowrap">IT Support Engineer</span>
+                         text-[#60A5FA] whitespace-nowrap">IT Support Engineer</span>
           </div>
           <!-- Mobile chevron indicator -->
           <span class="nav-logo-chevron hidden" id="navLogoChevron" aria-hidden="true">
-            <i class="fas fa-chevron-down text-[#C5A059] text-[9px] transition-transform duration-250"></i>
+            <i class="fas fa-chevron-down text-[#60A5FA] text-[9px] transition-transform duration-250"></i>
           </span>
         </a>
 
@@ -243,13 +243,13 @@
            class="flex flex-row flex-nowrap items-center gap-x-0
                   overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none]
                   [&::-webkit-scrollbar]:hidden flex-1 justify-center px-2">
-        <a href="#about"          class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#6b7585] px-[10px] py-2 whitespace-nowrap rounded-sm">About</a>
-        <a href="#projects"       class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#6b7585] px-[10px] py-2 whitespace-nowrap rounded-sm">Projects</a>
-        <a href="#experience"     class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#6b7585] px-[10px] py-2 whitespace-nowrap rounded-sm">Experience</a>
-        <a href="#arsenal"        class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#6b7585] px-[10px] py-2 whitespace-nowrap rounded-sm">Arsenal</a>
-        <a href="#education"      class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#6b7585] px-[10px] py-2 whitespace-nowrap rounded-sm">Education</a>
-        <a href="#certifications" class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#6b7585] px-[10px] py-2 whitespace-nowrap rounded-sm">Certifications</a>
-        <a href="#contact"        class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#6b7585] px-[10px] py-2 whitespace-nowrap rounded-sm">Contact</a>
+        <a href="#about"          class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">About</a>
+        <a href="#projects"       class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Projects</a>
+        <a href="#experience"     class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Experience</a>
+        <a href="#arsenal"        class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Arsenal</a>
+        <a href="#education"      class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Education</a>
+        <a href="#certifications" class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Certifications</a>
+        <a href="#contact"        class="nav-link nav-anchor font-barlow font-semibold text-[11.5px] tracking-[0.09em] uppercase text-[#60A5FA] px-[10px] py-2 whitespace-nowrap rounded-sm">Contact</a>
       </nav>
 
       <!-- ── ZONE 3: RESUME BUTTON (Right) ── -->
@@ -273,11 +273,11 @@
          class="nav-resume-btn flex-shrink-0
                 flex flex-row flex-nowrap items-center gap-x-[6px]
                 px-4 py-[7px] rounded-[6px]
-                bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.09)]
-                text-[#f0f2f5] font-barlow font-semibold
+                bg-[rgba(59,130,246,0.12)] border border-[rgba(59,130,246,0.50)]
+                text-[#F1F5F9] font-barlow font-semibold
                 text-[11px] tracking-[0.11em] uppercase whitespace-nowrap
-                backdrop-blur-md ml-1">
-        <i class="fas fa-file-alt text-[#C5A059] text-[10px]"></i>
+                ml-1">
+        <i class="fas fa-file-alt text-[#60A5FA] text-[10px]"></i>
         <span>Resume</span>
       </a>
 
@@ -374,6 +374,23 @@
     </div><!-- /mobileDrawerPanel -->
   </div><!-- /mobileDrawer -->
 
+  <!-- ============================================================ WEATHER BAR ============================================================ -->
+  <div id="weatherBar" class="weather-bar">
+    <div class="wb-left">
+      <i class="fas fa-clock wb-icon"></i>
+      <span id="wbTime" class="wb-time">--:--:--</span>
+      <span class="wb-sep">·</span>
+      <span id="wbDate" class="wb-date">--- -- ----</span>
+    </div>
+    <div class="wb-center-rule"></div>
+    <div class="wb-right">
+      <span id="wbWeather" class="wb-weather">
+        <i class="fas fa-location-crosshairs wb-icon wb-spin"></i>
+        <span class="wb-weather-text">Detecting location…</span>
+      </span>
+    </div>
+  </div>
+
   <!-- Scroll progress bar -->
   <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -424,7 +441,11 @@
           </div>
           <div class="id-body">
             <div class="id-name-block">
-              <h2 class="id-name">Sajid Mehmood</h2>
+              <h2 class="id-name scribble-wrap">Sajid Mehmood
+  <svg class="scribble-svg" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+    <path class="scribble-path" d="M2,8 Q20,3 40,7 Q60,11 80,6 Q100,2 120,7 Q140,11 160,5 Q180,2 198,8"/>
+  </svg>
+</h2>
               <p class="id-role">IT Support Engineer</p>
             </div>
             <div class="id-meta">
@@ -453,7 +474,11 @@
             <span class="eyebrow-line"></span>
           </div>
           <h1 class="hero-headline">
-            <span class="headline-top">Enterprise Infrastructure.</span>
+            <span class="headline-top scribble-wrap">Enterprise Infrastructure.
+  <svg class="scribble-svg" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true">
+    <path class="scribble-path" d="M2,9 Q30,4 60,8 Q90,12 120,6 Q150,2 180,8 Q210,12 240,5 Q270,2 298,8"/>
+  </svg>
+</span>
             <span class="headline-mid"><em>Mission-Critical</em></span>
             <span class="headline-bot">Precision.</span>
           </h1>
@@ -538,8 +563,8 @@
                 <svg viewBox="0 0 120 120" role="img" aria-label="95% SLA Compliance">
                   <defs>
                     <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style="stop-color:#7ec8e3"/>
-                      <stop offset="100%" style="stop-color:#a89de8"/>
+                      <stop offset="0%" style="stop-color:#C8A96E"/>
+                      <stop offset="100%" style="stop-color:#6B7C45"/>
                     </linearGradient>
                   </defs>
                   <circle class="ring-bg" cx="60" cy="60" r="50"/>
@@ -553,15 +578,28 @@
             </div>
             <div class="panel-achievements">
               <div class="ach-item">
-                <div class="ach-icon"><i class="fas fa-trophy"></i></div>
+                <div class="ach-icon icon-neu">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#C8A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 21h8M12 17v4M7 4H5a2 2 0 000 4c0 3 2 5 4 6M17 4h2a2 2 0 010 4c0 3-2 5-4 6M12 17c-3.3 0-6-2.7-6-6V4h12v7c0 3.3-2.7 6-6 6z"/>
+  </svg>
+</div>
                 <div class="ach-text"><strong>Safety Award — HIA</strong><span>Airport Expansion Project recognition</span></div>
               </div>
               <div class="ach-item">
-                <div class="ach-icon"><i class="fas fa-heart-pulse"></i></div>
+                <div class="ach-icon icon-neu">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#8FA05A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="2,12 6,12 8,5 10,19 12,9 14,15 16,12 22,12"/>
+  </svg>
+</div>
                 <div class="ach-text"><strong>Zero EMR Downtime</strong><span>Across 3 hospital sites, entire engagement</span></div>
               </div>
               <div class="ach-item">
-                <div class="ach-icon"><i class="fas fa-shield-halved"></i></div>
+                <div class="ach-icon icon-neu">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#C8A96E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    <polyline points="9,12 11,14 15,10"/>
+  </svg>
+</div>
                 <div class="ach-text"><strong>95% Asset Loss Reduction</strong><span>Via enterprise tracking protocol</span></div>
               </div>
             </div>
@@ -585,7 +623,7 @@
           <div class="sec-rule"></div>
         </div>
         <p class="section-intro" data-aos="fade-up" data-aos-delay="80">Enterprise engagements where infrastructure failure was not an option.</p>
-        <div class="projects-grid" id="projectsGrid"></div>
+        <div class="projects-grid" id="projectsGrid" class="neu-grid"></div>
       </div>
     </section>
 
