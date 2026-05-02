@@ -340,6 +340,9 @@ body.gate-active {
   overflow: hidden;
   background: linear-gradient(160deg, var(--parchment) 0%, var(--parchment-mid) 50%, var(--parchment-deep) 100%);
 }
+@media (max-width:900px) {
+  .hero-section { overflow: visible; }
+}
 
 #heroCanvas {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -374,7 +377,27 @@ body.gate-active {
 @media (max-width:900px) {
   .hero-editorial-layout {
     grid-template-columns: 1fr;
-    gap: 28px;
+    gap: 24px;
+  }
+  /* Portrait must show clearly on mobile */
+  .hero-portrait-col {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .hero-portrait-frame {
+    width: min(300px, 75vw) !important;
+    max-width: 300px !important;
+    aspect-ratio: 3/4 !important;
+    margin: 0 auto;
+    display: block;
+  }
+  .hero-portrait-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 4px !important;
   }
   .hero-vertical-chips { flex-direction: row; justify-content: center; gap: 8px; }
   .hvc-connector { width: 24px; height: 1px; }
@@ -1133,9 +1156,11 @@ body.gate-active {
   .cert-featured-inner { flex-direction: column; }
   .cert-seal { display: none; }
 
-  /* On mobile, stack portrait + chips + text vertically */
+  /* Portrait on small phones — full width centred */
   .hero-portrait-frame {
-    width: min(280px, 80vw);
+    width: min(300px, 80vw) !important;
+    max-width: 300px !important;
+    aspect-ratio: 3/4 !important;
   }
 
   /* Vertical chips compact on mobile */
