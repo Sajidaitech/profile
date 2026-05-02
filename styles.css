@@ -1185,3 +1185,92 @@ body.gate-active {
 
 /* ─── TOUCH STATES ──────────────────────────────────────────── */
 .pressed { opacity: 0.75 !important; transform: scale(0.97) !important; }
+
+/* ─── MOBILE PHOTO FIX ──────────────────────────────────────── */
+/* Ensure hero portrait is always visible on mobile */
+@media (max-width: 900px) {
+  .hero-section {
+    overflow: visible !important;
+    min-height: unset !important;
+    padding-top: calc(var(--nav-h) + var(--weather-h) + 32px) !important;
+  }
+
+  .hero-editorial-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 28px !important;
+    padding-bottom: 40px;
+  }
+
+  .hero-portrait-col {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    order: 1;
+  }
+
+  .hero-portrait-frame {
+    width: min(280px, 72vw) !important;
+    max-width: 280px !important;
+    aspect-ratio: 3/4 !important;
+    margin: 0 auto !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: hidden !important;
+  }
+
+  .hero-portrait-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: top center !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* AOS override — prevent portrait from staying invisible */
+  .hero-portrait-col[data-aos],
+  .hero-portrait-frame[data-aos],
+  .hero-portrait-img[data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-vertical-chips {
+    order: 2;
+    flex-direction: row !important;
+    justify-content: center !important;
+    flex-wrap: wrap;
+    gap: 10px !important;
+    width: 100%;
+  }
+
+  .hero-type-col {
+    order: 3;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Make sure canvas/grid don't cover content */
+  #heroCanvas,
+  .hero-arch-grid {
+    z-index: 0 !important;
+  }
+
+  .hero-editorial-layout {
+    z-index: 3 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-portrait-frame {
+    width: min(240px, 78vw) !important;
+    max-width: 240px !important;
+  }
+}
