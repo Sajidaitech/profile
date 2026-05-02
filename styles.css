@@ -1274,3 +1274,267 @@ body.gate-active {
     max-width: 240px !important;
   }
 }
+
+
+/* ============================================================
+   RECOMMENDATION — Glassmorphism Card
+   ============================================================ */
+
+.rec-glass-card {
+  position: relative;
+  margin-top: 2rem;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(135deg,
+    rgba(var(--rec-accent, 200, 169, 110), 0.55) 0%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(var(--rec-accent, 200, 169, 110), 0.3) 100%
+  );
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Gold border glow using accent colour */
+.rec-glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1.5px;
+  background: linear-gradient(135deg, var(--rec-accent, #C8A96E), transparent 60%, var(--rec-accent, #C8A96E));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.rec-glass-inner {
+  position: relative;
+  background: rgba(20, 22, 30, 0.72);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-radius: 15px;
+  padding: 1.75rem 1.75rem 1.5rem;
+  z-index: 1;
+}
+
+/* Subtle shimmer sweep */
+.rec-glass-shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(110deg,
+    transparent 30%,
+    rgba(255,255,255,0.04) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: recShimmer 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes recShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Opening quotation mark */
+.rec-quote-mark {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 4.5rem;
+  line-height: 0.6;
+  color: var(--rec-accent, #C8A96E);
+  opacity: 0.55;
+  margin-bottom: 0.5rem;
+  display: block;
+  user-select: none;
+}
+
+/* Quote body */
+.rec-quote-text {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.75;
+  color: rgba(245,240,230,0.92);
+  margin: 0 0 1.5rem;
+}
+
+/* Footer row */
+.rec-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+/* Avatar circle */
+.rec-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--rec-accent, #C8A96E);
+  background: linear-gradient(135deg, rgba(var(--rec-accent,200,169,110),0.2), rgba(20,22,30,0.8));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--rec-accent, #C8A96E);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(200,169,110,0.2);
+}
+
+.rec-author {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 120px;
+}
+
+.rec-author-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(245,240,230,0.95);
+  letter-spacing: 0.01em;
+}
+
+.rec-author-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  color: rgba(200,190,175,0.65);
+  letter-spacing: 0.02em;
+}
+
+/* Actions: verified badge + LinkedIn link */
+.rec-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.rec-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--rec-accent, #C8A96E);
+  background: rgba(200,169,110,0.1);
+  border: 1px solid rgba(200,169,110,0.25);
+  border-radius: 20px;
+  padding: 0.25rem 0.65rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rec-verified-badge i {
+  font-size: 0.65rem;
+}
+
+.rec-linkedin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  background: #0A66C2;
+  border-radius: 20px;
+  padding: 0.3rem 0.85rem;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 2px 12px rgba(10,102,194,0.35);
+}
+
+.rec-linkedin-btn:hover {
+  background: #094fa3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(10,102,194,0.5);
+}
+
+.rec-linkedin-btn i {
+  font-size: 0.85rem;
+}
+
+/* LinkedIn CTA notice inside card */
+.rec-cta-note {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(200,169,110,0.06);
+  border-left: 2px solid var(--rec-accent, #C8A96E);
+  border-radius: 0 8px 8px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.73rem;
+  color: rgba(200,190,175,0.7);
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .rec-glass-inner {
+    padding: 1.25rem;
+  }
+  .rec-quote-text {
+    font-size: 0.95rem;
+  }
+  .rec-actions {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   EDU RECOMMENDATION — compact overrides inside folder pane
+   ============================================================ */
+
+.edu-rec-card .rec-quote-text {
+  font-size: 0.97rem;
+  line-height: 1.7;
+}
+
+.edu-rec-card .rec-quote-mark {
+  font-size: 3.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* "View Letter" button — same pill style, file icon variant */
+.rec-letter-btn {
+  background: linear-gradient(135deg, #8B7355, #C8A96E) !important;
+  box-shadow: 0 2px 12px rgba(200,169,110,0.3) !important;
+}
+
+.rec-letter-btn:hover {
+  background: linear-gradient(135deg, #C8A96E, #E5C98A) !important;
+  box-shadow: 0 4px 18px rgba(200,169,110,0.5) !important;
+}
+
+@media (max-width: 700px) {
+  .edu-rec-card .rec-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .edu-rec-card .rec-actions {
+    margin-left: 0;
+  }
+}
+
+/* Aptech letter button — blue accent variant */
+.aptech-letter-btn {
+  background: linear-gradient(135deg, #1a5bbf, #3a7bd5) !important;
+  box-shadow: 0 2px 12px rgba(58,123,213,0.3) !important;
+}
+.aptech-letter-btn:hover {
+  background: linear-gradient(135deg, #3a7bd5, #5a9bf0) !important;
+  box-shadow: 0 4px 18px rgba(58,123,213,0.5) !important;
+}

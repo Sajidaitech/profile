@@ -1738,7 +1738,15 @@ var experienceData = [
       '<b>Digital Asset Registry:</b> Architected a comprehensive digital IT asset catalogue, eliminating lifecycle discrepancies.',
       '<b>Government Liaison:</b> Coordinated with authorities on credential recovery, overstay fines, and sensitive documentation.'
     ],
-    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing' }]
+    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing' }],
+    recommendation: {
+      quote: "Sajid brought an exceptional level of initiative and technical clarity to Al Tawkel. He overhauled our entire IT infrastructure and asset registry in weeks — the kind of transformation we'd planned for years. His professionalism and precision set a new standard for our team.",
+      name: 'Director, Al Tawkel Immigration Center',
+      title: 'Operations Director',
+      linkedinUrl: 'https://www.linkedin.com/company/al-tawkel',
+      initials: 'AT',
+      accentColor: '#C8A96E'
+    }
   },
   {
     date: 'Nov 2023 – Feb 2024', title: 'IT Support Engineer',
@@ -1762,7 +1770,15 @@ var experienceData = [
       '<b>Preventive Maintenance:</b> Scheduled patching aligned with hospital IT governance.',
       '<b>Asset Inventory:</b> Accurate digital asset records across all three facilities.'
     ],
-    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }]
+    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }],
+    recommendation: {
+      quote: "Sajid maintained zero EMR downtime across all three hospital sites throughout the entire project engagement — a truly extraordinary achievement in a high-stakes healthcare environment. His systematic approach to incident resolution and cross-site coordination under pressure was exceptional.",
+      name: 'IT Project Manager, MMCH',
+      title: 'Infrastructure Manager · Military Medical City',
+      linkedinUrl: 'https://www.linkedin.com/company/military-medical-city-hospital',
+      initials: 'MM',
+      accentColor: '#3a7bd5'
+    }
   },
   {
     date: 'Feb 2022 – Nov 2023', title: 'IT Support Engineer',
@@ -1793,7 +1809,15 @@ var experienceData = [
     letters: [
       { text: 'Starlink Experience Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
       { text: 'Airport Project Letter',     url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' }
-    ]
+    ],
+    recommendation: {
+      quote: "Sajid was instrumental across multiple high-profile projects — from the HIA Airport Expansion to executive-level support at PIH headquarters. He is technically sharp, exceptionally reliable, and handles enterprise pressure with composure. One of the strongest engineers to come through our division.",
+      name: 'IT Manager, Star Link – Power International Holding',
+      title: 'IT Manager · Power International Holding Group',
+      linkedinUrl: 'https://www.linkedin.com/company/power-international-holding',
+      initials: 'SL',
+      accentColor: '#C8A96E'
+    }
   },
   {
     date: 'May 2021 – Feb 2022', title: 'Customer Service Agent',
@@ -1833,6 +1857,29 @@ function loadExperience() {
       return '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="exp-btn"><i class="fas fa-file-contract"></i>' + l.text + '</a>';
     }).join('');
 
+    var recHTML = '';
+    if (exp.recommendation) {
+      var rec = exp.recommendation;
+      recHTML =
+        '<div class="rec-glass-card" style="--rec-accent:' + rec.accentColor + '">' +
+          '<div class="rec-glass-inner">' +
+            '<div class="rec-quote-mark" aria-hidden="true">“</div>' +
+            '<p class="rec-quote-text">' + rec.quote + '</p>' +
+            '<div class="rec-footer">' +
+              '<div class="rec-avatar" style="border-color:' + rec.accentColor + '">' + rec.initials + '</div>' +
+              '<div class="rec-author">' +
+                '<span class="rec-author-name">' + rec.name + '</span>' +
+                '<span class="rec-author-title">' + rec.title + '</span>' +
+              '</div>' +
+              '<div class="rec-actions">' +
+                '<span class="rec-verified-badge"><i class="fas fa-shield-check"></i> Verified</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="rec-glass-shimmer"></div>' +
+        '</div>';
+    }
+
     item.innerHTML =
       '<div class="exp-card">' +
         '<div class="exp-header">' +
@@ -1842,6 +1889,7 @@ function loadExperience() {
         statsHTML + projectsHTML +
         '<ul class="exp-list">' + exp.responsibilities.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ul>' +
         '<div class="exp-actions">' + lettersHTML + '</div>' +
+        recHTML +
       '</div>';
 
     timeline.appendChild(item);
