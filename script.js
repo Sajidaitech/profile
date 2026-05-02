@@ -22,19 +22,12 @@
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   }
 
-  function closeMobileDrawer() {
-    if (window.mobileNav && typeof window.mobileNav.close === 'function') {
-      window.mobileNav.close();
-    }
-  }
-
   document.addEventListener('click', function (e) {
     var anchor = e.target.closest('.nav-anchor');
     if (!anchor) return;
     var href = anchor.getAttribute('href');
     if (!href || !href.startsWith('#')) return;
     e.preventDefault();
-    closeMobileDrawer();
     scrollTo(href);
   }, true);
 })();
@@ -1276,6 +1269,17 @@ function initNav() {
     navLinks.forEach(function (link) {
       link.classList.toggle('active', link.getAttribute('href') === '#' + current);
     });
+    // Auto-scroll active nav link into view on mobile
+    var activeLink = document.querySelector('.nav-link.active');
+    if (activeLink) {
+      var navLinksCenter = document.querySelector('.nav-links-center');
+      if (navLinksCenter) {
+        var linkLeft = activeLink.offsetLeft;
+        var linkWidth = activeLink.offsetWidth;
+        var containerWidth = navLinksCenter.offsetWidth;
+        navLinksCenter.scrollTo({ left: linkLeft - (containerWidth / 2) + (linkWidth / 2), behavior: 'smooth' });
+      }
+    }
   }, { passive: true });
 
   navLinks.forEach(function (link) {
@@ -2011,143 +2015,6 @@ function printSignature() {
 
 
 // ============================================================
-// SECTION 25 · MOBILE NAVIGATION
-// ============================================================
-
-(function () {
-  'use strict';
-
-  var hamburger = document.getElementById('hamburger');
-  var drawer    = document.getElementById('mobileDrawer');
-  var panel     = document.getElementById('mobileDrawerPanel');
-  var overlay   = document.getElementById('mobileDrawerOverlay');
-  var closeBtn  = document.getElementById('mobileDrawerClose');
-  var mobLinks  = drawer ? drawer.querySelectorAll('a.mob-link') : [];
-
-  if (!hamburger || !drawer) return;
-
-  var isOpen = false, lastFocused = null, scrollbarW = 0;
-
-  function getScrollbarWidth() { return window.innerWidth - document.documentElement.clientWidth; }
-
-  function openDrawer() {
-    if (isOpen) return;
-    isOpen = true; lastFocused = document.activeElement;
-    scrollbarW = getScrollbarWidth();
-    document.documentElement.style.setProperty('--scrollbar-width', scrollbarW + 'px');
-    document.body.classList.add('drawer-open');
-    drawer.classList.add('open');
-    hamburger.classList.add('open');
-    hamburger.setAttribute('aria-expanded', 'true');
-    drawer.removeAttribute('aria-hidden');
-    requestAnimationFrame(function () { if (closeBtn) closeBtn.focus(); });
-    document.addEventListener('keydown', trapFocus);
-  }
-
-  function closeDrawer() {
-    if (!isOpen) return;
-    isOpen = false;
-    drawer.classList.remove('open');
-    hamburger.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    drawer.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('drawer-open');
-    document.documentElement.style.removeProperty('--scrollbar-width');
-    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
-    document.removeEventListener('keydown', trapFocus);
-  }
-
-  function trapFocus(e) {
-    if (e.key === 'Escape') { closeDrawer(); return; }
-    if (e.key !== 'Tab') return;
-    var focusable = panel.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
-    var first = focusable[0], last = focusable[focusable.length - 1];
-    if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
-    else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
-  }
-
-  function updateActiveLink() {
-    var hash = window.location.hash || '#home';
-    mobLinks.forEach(function (link) { link.classList.toggle('active', link.getAttribute('href') === hash); });
-  }
-
-  function initScrollSpy() {
-    var sections = document.querySelectorAll('section[id], div[id]');
-    if (!sections.length || !('IntersectionObserver' in window)) return;
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          mobLinks.forEach(function (link) {
-            link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
-          });
-        }
-      });
-    }, { threshold: 0.35 });
-    sections.forEach(function (s) { observer.observe(s); });
-  }
-
-  hamburger.addEventListener('click', function () { isOpen ? closeDrawer() : openDrawer(); });
-  if (closeBtn)  closeBtn.addEventListener('click', closeDrawer);
-  if (overlay)   overlay.addEventListener('click', closeDrawer);
-
-  mobLinks.forEach(function (link) {
-    link.addEventListener('click', function () {
-      closeDrawer();
-      mobLinks.forEach(function (l) { l.classList.remove('active'); });
-      link.classList.add('active');
-    });
-  });
-
-  document.addEventListener('touchstart', function (e) {
-    if (isOpen && panel && !panel.contains(e.target) && e.target !== hamburger) closeDrawer();
-  }, { passive: true });
-
-  updateActiveLink();
-  initScrollSpy();
-  window.addEventListener('hashchange', updateActiveLink);
-
-  window.mobileNav = { open: openDrawer, close: closeDrawer };
-})();
-
-
-// ============================================================
-// SECTION 26 · LOGO DROPDOWN — Mobile nav quick-menu
-// ============================================================
-
-(function () {
-  var wrapper  = document.getElementById('navLogoWrapper');
-  var anchor   = document.getElementById('navLogoAnchor');
-  var dropdown = document.getElementById('navLogoDropdown');
-  var chevron  = document.getElementById('navLogoChevron');
-  if (!wrapper || !anchor || !dropdown) return;
-
-  var isOpen = false;
-  function isMobile() { return window.innerWidth <= 768; }
-
-  function openDropdown()  { isOpen = true;  dropdown.classList.add('open');    dropdown.setAttribute('aria-hidden','false'); if (chevron) chevron.classList.add('open'); }
-  function closeDropdown() { isOpen = false; dropdown.classList.remove('open'); dropdown.setAttribute('aria-hidden','true');  if (chevron) chevron.classList.remove('open'); }
-
-  anchor.addEventListener('click', function (e) {
-    if (!isMobile()) return;
-    e.preventDefault();
-    isOpen ? closeDropdown() : openDropdown();
-  });
-
-  dropdown.querySelectorAll('.nld-link, .nld-resume').forEach(function (link) {
-    link.addEventListener('click', closeDropdown);
-  });
-
-  document.addEventListener('click', function (e) {
-    if (isOpen && !wrapper.contains(e.target)) closeDropdown();
-  }, true);
-
-  window.addEventListener('resize', function () {
-    if (!isMobile() && isOpen) closeDropdown();
-  });
-})();
-
-
-// ============================================================
 // NEUBRUTALISM · CARTOON BOUNCE OBSERVER
 // ============================================================
 
@@ -2212,12 +2079,12 @@ function printSignature() {
     var now = new Date();
 
     // Time — Qatar is UTC+3, no DST
-    var t = now.toLocaleTimeString('en-GB', {
+    var t = now.toLocaleTimeString('en-US', {
       timeZone: 'Asia/Qatar',
-      hour:     '2-digit',
+      hour:     'numeric',
       minute:   '2-digit',
       second:   '2-digit',
-      hour12:   false
+      hour12:   true
     });
 
     // Date — "Mon, 01 May 2026"
