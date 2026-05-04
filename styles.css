@@ -1538,3 +1538,90 @@ body.gate-active {
   background: linear-gradient(135deg, #3a7bd5, #5a9bf0) !important;
   box-shadow: 0 4px 18px rgba(58,123,213,0.5) !important;
 }
+
+/* ================================================================
+   ADDITIONS — Nationality/Visa chips, Achievements section
+================================================================ */
+
+/* Nationality & Visa chips */
+.p-chip--nationality {
+  background: linear-gradient(135deg, rgba(0,100,0,0.10), rgba(0,150,0,0.06));
+  border-color: rgba(0,128,0,0.25);
+  color: #2d7a2d;
+}
+.p-chip--visa {
+  background: linear-gradient(135deg, rgba(139,100,0,0.12), rgba(200,169,110,0.08));
+  border-color: var(--gold-border);
+  color: var(--gold-deep);
+}
+
+/* Achievements & Awards Grid */
+.achievements-section { background: var(--parchment); }
+
+.ach-awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.ach-award-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  background: var(--glass-heavy);
+  backdrop-filter: var(--blur-light);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.ach-award-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-gold);
+}
+
+.aac-icon-wrap {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--gold-faint);
+  border: 1.5px solid var(--gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.aac-icon { font-size: 1.6rem; line-height: 1; }
+
+.aac-body { flex: 1; }
+
+.aac-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+.aac-org {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.aac-desc {
+  font-size: 0.88rem;
+  color: var(--ink-light);
+  line-height: 1.6;
+}
+
+/* LinkedIn contact item tint */
+.contact-item-linkedin { border-left: 3px solid #0077b5; }
+.contact-item-linkedin .ci-icon { background: rgba(0,119,181,0.08); }
+
+@media (max-width: 600px) {
+  .ach-awards-grid { grid-template-columns: 1fr; }
+}
