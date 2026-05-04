@@ -215,8 +215,8 @@ body.gate-active {
 
 .nav-inner {
   max-width: var(--container); margin: 0 auto;
-  padding: 0 clamp(20px,4vw,56px);
-  height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 0 clamp(12px,3vw,40px);
+  height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
 
 .nav-logo-wrapper { position: relative; flex-shrink: 0; }
@@ -231,13 +231,13 @@ body.gate-active {
 .nav-logo-role { font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
 
 .nav-links-center {
-  display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center;
+  display: flex; align-items: center; gap: 2px; flex: 1; justify-content: center;
   overflow-x: auto; scrollbar-width: none;
 }
 .nav-links-center::-webkit-scrollbar { display: none; }
 .nav-link {
-  font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
-  font-weight: 600; color: var(--ink-light); padding: 8px 16px; white-space: nowrap;
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  font-weight: 600; color: var(--ink-light); padding: 8px 10px; white-space: nowrap;
   position: relative; transition: color 0.22s ease, background 0.22s ease; border-radius: 20px;
 }
 .nav-link:hover { color: var(--ink); }
@@ -262,15 +262,15 @@ body.gate-active {
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   flex: 1;
-  /* fade edges on mobile to hint scrollability */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  /* mask removed — it was fading and hiding the first (About) and last (Contact) links */
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 .nav-links-center::-webkit-scrollbar { display: none; }
 
 /* On very small screens, reduce link padding */
 @media (max-width:480px) {
-  .nav-link { padding: 8px 10px; font-size: 10px; letter-spacing: 0.07em; }
+  .nav-link { padding: 7px 7px; font-size: 10px; letter-spacing: 0.05em; }
 }
 
 /* Resume btn always visible */
@@ -1545,14 +1545,18 @@ body.gate-active {
 
 /* Nationality & Visa chips */
 .p-chip--nationality {
-  background: linear-gradient(135deg, rgba(0,100,0,0.10), rgba(0,150,0,0.06));
-  border-color: rgba(0,128,0,0.25);
-  color: #2d7a2d;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 40%, #01411C 40%, #01411C 100%);
+  border-color: #01411C;
+  color: #000000;
+  font-weight: 600;
+  text-shadow: none;
 }
 .p-chip--visa {
-  background: linear-gradient(135deg, rgba(139,100,0,0.12), rgba(200,169,110,0.08));
-  border-color: var(--gold-border);
-  color: var(--gold-deep);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 40%, #8D1B3D 40%, #8D1B3D 100%);
+  border-color: #6b1530;
+  color: #000000;
+  font-weight: 600;
+  text-shadow: none;
 }
 
 /* Achievements & Awards Grid */

@@ -1691,10 +1691,10 @@ var projectsData = [
   {
     icon: 'fa-hospital', sector: 'Healthcare · EMR Systems',
     title: 'Military Medical City Hospital',
-    challenge: 'Manage 500+ technical support tickets across three separate hospital sites simultaneously, while keeping life-critical EMR systems online for 300+ medical staff without any downtime.',
-    solution:  'Executed a high-velocity system reimaging and OS deployment strategy. Prioritized L2 troubleshooting for critical hardware failures and provided dedicated EMR support.',
-    impact:    '95% SLA compliance achieved consistently. Zero EMR downtime recorded. 300+ staff onboarded across MMCH, KMC, and TVH.',
-    tools:     ['EMR Systems','OS Reimaging','Active Directory','L2 Troubleshooting','SCCM','Hardware Repair']
+    challenge: 'Deploy and support IT infrastructure across three separate hospital sites simultaneously — MMCH, KMC, and TVH — each with different requirements, while keeping life-critical EMR systems online for 300+ medical staff without any downtime.',
+    solution:  'At MMCH (primary site), deployed new workstations and created temporary user accounts for medical staff. At KMC (Lusail), handled full system and network device deployment and built a structured server room inventory from scratch. At TVH, delivered user support and conducted a full serial number audit to verify every deployed asset against existing records. All coordination was managed from PIH Elegancia HQ at Tower 18.',
+    impact:    'Zero EMR downtime recorded across all three sites. 300+ staff successfully onboarded and supported. Complete server room inventory established at KMC. Full asset serial number verification completed at TVH.',
+    tools:     ['System Deployment', 'Network Devices', 'EMR Systems', 'Active Directory', 'Asset Inventory', 'Serial Number Audit', 'User Account Management', 'L2 Troubleshooting']
   },
   {
     icon: 'fa-passport', sector: 'Government · Compliance',
@@ -1757,23 +1757,25 @@ var experienceData = [
     date: 'Nov 2023 – Feb 2024', title: 'IT Support Engineer',
     type: 'Project Deployment', company: 'Military Medical City Hospital (MMCH) · Al-Rayyan, Qatar',
     stats: [
-      { icon: 'fa-hospital',   value: '3',    label: 'Hospital Sites' },
-      { icon: 'fa-ticket',     value: '500+', label: 'Tickets Managed' },
-      { icon: 'fa-user-md',    value: '300+', label: 'Staff Supported' },
-      { icon: 'fa-gauge-high', value: '95%',  label: 'SLA Compliance' }
+      { icon: 'fa-hospital',         value: '3',    label: 'Hospital Sites' },
+      { icon: 'fa-desktop',          value: '300+', label: 'Systems Deployed' },
+      { icon: 'fa-user-md',          value: '300+', label: 'Staff Supported' },
+      { icon: 'fa-building-columns', value: 'PIH',  label: 'Tower 18 HQ' }
     ],
     projects: [
-      { icon: 'fa-hospital-alt', label: 'MMCH — Military Medical City', color: '#0f6cbf', gradient: 'linear-gradient(135deg,#0f6cbf,#1a8fe8)', detail: 'Main site · Al-Rayyan · Primary hub' },
-      { icon: 'fa-flag',         label: 'KMC — Korean Medical Center',  color: '#c0392b', gradient: 'linear-gradient(135deg,#c0392b,#e74c3c)', detail: 'Lusail Boulevard · New deployment' },
-      { icon: 'fa-eye',          label: 'TVH — The View Hospital',      color: '#6c3483', gradient: 'linear-gradient(135deg,#6c3483,#9b59b6)', detail: 'Katara · New system rollout' }
+      { icon: 'fa-hospital-alt',     label: 'MMCH — Military Medical City', color: '#0f6cbf', gradient: 'linear-gradient(135deg,#0f6cbf,#1a8fe8)', detail: 'Main site · Al-Rayyan · System deployment & user support' },
+      { icon: 'fa-flag',             label: 'KMC — Korean Medical Center',  color: '#c0392b', gradient: 'linear-gradient(135deg,#c0392b,#e74c3c)', detail: 'Lusail Boulevard · Systems & network devices · Server room inventory' },
+      { icon: 'fa-eye',              label: 'TVH — The View Hospital',      color: '#6c3483', gradient: 'linear-gradient(135deg,#6c3483,#9b59b6)', detail: 'User support · Serial number audit & asset verification' },
+      { icon: 'fa-building-columns', label: 'PIH Elegancia HQ — Tower 18', color: '#1a5c3a', gradient: 'linear-gradient(135deg,#1a5c3a,#27ae60)',  detail: 'Head Office · Project base · Elegancia — PIH sister company' }
     ],
     responsibilities: [
-      '<b>High-Volume Incident Management:</b> Managed 500+ support tickets, maintaining 95% SLA compliance.',
-      '<b>EMR Application Support:</b> Zero downtime on Electronic Medical Records systems.',
-      '<b>Multi-Site OS Deployment:</b> System reimaging and application configuration for 300+ staff.',
-      '<b>L1 & L2 Escalation:</b> Password resets, software installs, OS crashes, and hardware failures.',
-      '<b>Preventive Maintenance:</b> Scheduled patching aligned with hospital IT governance.',
-      '<b>Asset Inventory:</b> Accurate digital asset records across all three facilities.'
+      '<b>MMCH (Primary Site — Al-Rayyan):</b> Deployed new workstations and supported end users. Created temporary user accounts and configured access for medical staff across the main hospital site.',
+      '<b>KMC (Korean Medical Center — Lusail):</b> Led new system deployments and installed network devices. Collected and catalogued all server room equipment into a structured inventory register.',
+      '<b>TVH (The View Hospital):</b> Delivered end-user support and conducted a full serial number audit — cross-referencing all deployed system serial numbers against existing asset records to ensure accuracy.',
+      '<b>EMR Application Support:</b> Maintained zero downtime on Electronic Medical Records systems across all three sites throughout the entire project engagement.',
+      '<b>Head Office Coordination:</b> All three hospital sites were managed from PIH Elegancia Tower 18 — the Power International Holding Group head office. Elegancia Healthcare operates as a sister company of PIH.',
+      '<b>L1 & L2 Escalation:</b> Handled password resets, software installs, OS crashes, and hardware failures across all sites.',
+      '<b>Preventive Maintenance:</b> Scheduled patching and system checks aligned with hospital IT governance policies.'
     ],
     letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }],
     recommendation: {
@@ -1809,7 +1811,9 @@ var experienceData = [
       '<b>UCC Saudi Arabia:</b> Provisioned and deployed 25 workstations against strict handover deadlines.',
       '<b>Cross-Subsidiary Coverage:</b> Delivered onsite IT for Elegancia Health Care, UCC Holding, and ASSETS Group.',
       '<b>Asset Optimisation:</b> Tracking protocols reduced equipment loss by 10% across group companies.',
-      '<b>Vendor & Telecom Coordination:</b> Managed VoIP and connectivity with external vendors.'
+      '<b>Vendor & Telecom Coordination:</b> Managed VoIP and connectivity with external vendors.',
+      '<b>Cyber Attack Response — FIFA 2022:</b> Led 4-day incident response to an active server attack during the FIFA World Cup. Coordinated with Network and IT Support teams to contain the breach and restored systems by deploying Kaspersky Endpoint Security with centralized server-side activation — zero permanent data loss.',
+      '<b>Emergency UPS Recovery — HIA:</b> After heavy rainfall caused a 10kVA UPS failure, sourced and installed a 5kVA interim unit alone to sustain live operations, arranged repair, then reinstalled the 10kVA — zero infrastructure downtime, zero support.'
     ],
     letters: [
       { text: 'Starlink Experience Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
@@ -1949,19 +1953,23 @@ var arsenalData = [
       { icon: 'fa-lock',            name: 'Security Patching',    color: '#1a3f6f' },
       { icon: 'fa-user-lock',       name: 'Access Control',       color: '#2c5f9e' },
       { icon: 'fa-clipboard-check', name: 'IT Governance',        color: '#3a7bd5' },
-      { icon: 'fa-bug',             name: 'Vulnerability Triage', color: '#5a6a85' }
+      { icon: 'fa-bug',             name: 'Vulnerability Triage', color: '#5a6a85' },
+      { icon: 'fa-shield-virus',    name: 'Endpoint Security',    color: '#1a3f6f' },
+      { icon: 'fa-circle-check',    name: 'ITIL Framework',       color: '#2c5f9e' },
+      { icon: 'fa-fire-extinguisher', name: 'Incident Response',  color: '#3a7bd5' }
     ]
   },
   {
     id: 'specialty', icon: 'fa-stethoscope', title: 'Specialist Platforms', subtitle: 'EMR · POS · ERP · Immigration Systems',
     color: '#2c5f9e', span: true,
     tools: [
-      { icon: 'fa-heart-pulse',   name: 'EMR Systems',         color: '#2c5f9e' },
-      { icon: 'fa-cash-register', name: 'POS Systems',         color: '#3a7bd5' },
-      { icon: 'fa-cubes',         name: 'Odoo ERP',            color: '#5a6a85' },
-      { icon: 'fa-passport',      name: 'Immigration Systems', color: '#1a3f6f' },
-      { icon: 'fa-terminal',      name: 'PowerShell',          color: '#2c5f9e' },
-      { icon: 'fa-table',         name: 'SQL Basics',          color: '#3a7bd5' }
+      { icon: 'fa-heart-pulse',   name: 'EMR Systems',          color: '#2c5f9e' },
+      { icon: 'fa-cash-register', name: 'POS Systems',          color: '#3a7bd5' },
+      { icon: 'fa-cubes',         name: 'Odoo ERP',             color: '#5a6a85' },
+      { icon: 'fa-passport',      name: 'Immigration Systems',  color: '#1a3f6f' },
+      { icon: 'fa-terminal',      name: 'PowerShell',           color: '#2c5f9e' },
+      { icon: 'fa-table',         name: 'SQL Basics',           color: '#3a7bd5' },
+      { icon: 'fa-shield-virus',  name: 'Kaspersky Endpoint',   color: '#1a3f6f' }
     ]
   }
 ];
@@ -2012,6 +2020,11 @@ function loadLanguages() {
 // ============================================================
 
 var certData = [
+  {
+    icon: 'fa-circle-check', title: 'ITIL Foundation — In Progress',
+    desc: 'Pursuing ITIL 4 Foundation certification to formalise hands-on ITSM experience across incident management, change control, and service lifecycle — fast-track path targeted.',
+    url: ''
+  },
   {
     icon: 'fa-graduation-cap', title: 'Odoo ERP Training',
     desc: 'Workshop covering business processes, product, vendor, and customer management within enterprise ERP environments.',
