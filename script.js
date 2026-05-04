@@ -1177,6 +1177,7 @@
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok) {
+          console.error('[Gate] Telegram primary send failed:', d);
           fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1186,10 +1187,10 @@
                     ' ' + name + ' — ' + ip + ' — ' + city + ', ' + country +
                     ' — ' + deviceCategory + ' — ' + time
             })
-          }).catch(function () {});
+          }).catch(function (e) { console.error('[Gate] Telegram fallback also failed:', e); });
         }
       })
-      .catch(function () {})
+      .catch(function (e) { console.error('[Gate] Telegram fetch error:', e); })
       .finally(function () { callback(); });
     }
 
@@ -1204,12 +1205,16 @@
             sendMsg(ip, g.city || 'Unknown', g.country_name || 'Unknown', g.org || 'Unknown ISP');
           })
           .catch(function () {
-            fetch('https://ip-api.com/json/' + ip + '?fields=status,city,country,isp')
+            // ip-api.com free tier requires HTTP — use their HTTPS batch endpoint instead
+            fetch('https://pro.ip-api.com/json/' + ip + '?fields=status,city,country,isp&key=')
               .then(function (r) { return r.json(); })
               .then(function (g) {
                 sendMsg(ip, g.city || 'Unknown', g.country || 'Unknown', g.isp || 'Unknown ISP');
               })
-              .catch(function () { sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP'); });
+              .catch(function () {
+                // Final fallback: skip geo, just send the visitor name + IP
+                sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP');
+              });
           });
       })
       .catch(function () { sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP'); });
