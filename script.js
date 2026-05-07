@@ -287,13 +287,11 @@
   'use strict';
 
   // ----------------------------------------------------------
-  // TELEGRAM — proxy endpoint pattern
-  // NOTE: For production security, replace TG_TOKEN and TG_CHAT_ID
-  // with a server-side proxy URL (Cloudflare Worker / Vercel function).
-  // Keeping client-side here for portability — rotate token regularly.
+  // NTFY.SH — Push notification endpoint
+  // Subscribe to this topic in the ntfy app on your phone.
+  // Keep this topic name private — anyone who knows it can publish.
   // ----------------------------------------------------------
-  var TG_TOKEN   = '8716049751:AAGInSyDf0cwRJW95nc-9YlLc6dBTzrx6AU';
-  var TG_CHAT_ID = '8235795754';
+  var NTFY_TOPIC = 'sajidmk_portfolio_786';
 
   // Rate limit: max 5 attempts per session, 3s cooldown between submits
   var _submitCount      = 0;
@@ -1097,21 +1095,22 @@
     }
 
     setTimeout(revealPortfolio, 2800);
-    sendTelegramNotification(displayName, revealPortfolio);
+    sendNtfyNotification(displayName, revealPortfolio);
   };
 
   // ----------------------------------------------------------
-  // 1P · TELEGRAM NOTIFICATION
+  // 1P · NTFY.SH NOTIFICATION
+  // Subscribe to topic "sajidmk_portfolio_786" in the ntfy app.
   // ----------------------------------------------------------
 
-  function sendTelegramNotification(name, callback) {
+  function sendNtfyNotification(name, callback) {
     var ua = navigator.userAgent;
 
-    var device = '\uD83D\uDCBB Desktop';
-    if      (/iPhone/i.test(ua))          device = '\uD83D\uDCF1 iPhone';
-    else if (/iPad/i.test(ua))            device = '\uD83D\uDCF1 iPad';
-    else if (/Android.*Mobile/i.test(ua)) device = '\uD83D\uDCF1 Android Phone';
-    else if (/Android/i.test(ua))         device = '\uD83D\uDCF1 Android Tablet';
+    var device = 'Desktop';
+    if      (/iPhone/i.test(ua))          device = 'iPhone';
+    else if (/iPad/i.test(ua))            device = 'iPad';
+    else if (/Android.*Mobile/i.test(ua)) device = 'Android Phone';
+    else if (/Android/i.test(ua))         device = 'Android Tablet';
 
     var os = 'Unknown OS';
     if      (/Windows NT 10/i.test(ua))       os = 'Windows 10/11';
@@ -1122,7 +1121,7 @@
     else if (/Linux/i.test(ua))               os = 'Linux';
 
     var browser = 'Unknown';
-    if      (/Edg\//i.test(ua))     browser = 'Microsoft Edge';
+    if      (/Edg\//i.test(ua))     browser = 'Edge';
     else if (/OPR\//i.test(ua))     browser = 'Opera';
     else if (/Chrome\//i.test(ua))  browser = 'Chrome';
     else if (/Firefox\//i.test(ua)) browser = 'Firefox';
@@ -1130,70 +1129,64 @@
 
     var screenRes      = window.screen.width + 'x' + window.screen.height;
     var lang           = navigator.language || 'Unknown';
-    var referrer       = document.referrer  || 'Direct / Bookmark';
+    var referrer       = document.referrer || 'Direct / Bookmark';
+    var screenWidth    = window.screen.width;
+    var deviceCategory = screenWidth < 480 ? 'Mobile' : screenWidth < 1024 ? 'Tablet' : 'Desktop';
+    var isLocal        = referrer.indexOf('127.0.0.1') !== -1 || referrer.indexOf('localhost') !== -1;
     var time           = new Date().toLocaleString('en-US', {
       timeZone: 'Asia/Qatar', weekday: 'short', year: 'numeric',
-      month: 'short', day: 'numeric', hour: '1-digit', minute: '2-digit'
+      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
     });
 
-    function esc(str) {
-      return String(str)
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
-
     function sendMsg(ip, city, country, isp) {
-      var screenWidth    = window.screen.width;
-      var deviceCategory = screenWidth < 480 ? 'Mobile' : screenWidth < 1024 ? 'Tablet' : 'Desktop';
-      var isLocal        = referrer.includes('127.0.0.1') || referrer.includes('localhost');
-      var statusEmoji    = isLocal ? '\uD83D\uDEE0\uFE0F' : '\uD83C\uDFAF';
-      var statusTitle    = isLocal ? 'Local Test'  : 'New Visitor';
+      var title = isLocal
+        ? '[Local Test] ' + name + ' opened your portfolio'
+        : '\uD83D\uDC40 ' + name + ' is viewing your portfolio!';
 
-      var msg =
-        statusEmoji + ' <b>' + statusTitle + ': ' + esc(name) + ' is viewing your Portfolio!</b>\n' +
-        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
-        '\uD83D\uDCCD <b>' + esc(city) + ', ' + esc(country) + '</b>\n' +
-        '\uD83C\uDFE2 <i>ISP: ' + esc(isp) + '</i>\n' +
-        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
-        '\uD83D\uDC64 <b>Visitor:</b> '      + esc(name)      + '\n' +
-        '\uD83D\uDD17 <b>Source:</b> <code>' + esc(referrer)  + '</code>\n' +
-        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
-        '\uD83D\uDDA5\uFE0F <b>Device:</b> '   + esc(device)    + '\n' +
-        '\u2699\uFE0F <b>OS:</b> '             + esc(os)        + '\n' +
-        '\uD83C\uDF10 <b>Browser:</b> '        + esc(browser)   + '\n' +
-        '\uD83D\uDCD0 <b>Screen:</b> '         + esc(screenRes) + ' <i>(' + esc(deviceCategory) + ')</i>\n' +
-        '\uD83D\uDDE3\uFE0F <b>Language:</b> ' + esc(lang)      + '\n' +
-        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
-        '\uD83D\uDD50 <b>Time (Qatar):</b> '   + esc(time)      + '\n' +
-        '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
-        '\uD83D\uDEE0\uFE0F <a href="https://ipinfo.io/' + ip + '">Lookup</a> | ' +
-        '\uD83D\uDCCD <a href="https://www.google.com/maps/search/' + ip + '">Map</a> | ' +
-        '\uD83D\uDD12 IP: <code>' + esc(ip) + '</code>';
+      var body = [
+        'Visitor : ' + name,
+        'Location: ' + city + ', ' + country,
+        'ISP     : ' + isp,
+        'IP      : ' + ip,
+        '',
+        'Device  : ' + device + ' (' + deviceCategory + ')',
+        'OS      : ' + os,
+        'Browser : ' + browser,
+        'Screen  : ' + screenRes,
+        'Language: ' + lang,
+        '',
+        'Source  : ' + referrer,
+        'Time(QA): ' + time,
+        '',
+        'Map    : https://www.google.com/maps/search/' + ip,
+        'Lookup : https://ipinfo.io/' + ip
+      ].join('\n');
 
-      fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      console.log('[Gate] Sending ntfy notification for: ' + name);
+
+      fetch('https://ntfy.sh/' + NTFY_TOPIC, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'HTML' })
+        headers: {
+          'Title'       : title,
+          'Priority'    : isLocal ? 'default' : 'high',
+          'Tags'        : isLocal ? 'wrench' : 'bust_in_silhouette,bell',
+          'Click'       : 'https://sajidmk.com',
+          'Content-Type': 'text/plain'
+        },
+        body: body
       })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (!d.ok) {
-          console.error('[Gate] Telegram primary send failed:', d);
-          fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: TG_CHAT_ID,
-              text: (isLocal ? '[Local Test]' : '[New Visitor]') +
-                    ' ' + name + ' — ' + ip + ' — ' + city + ', ' + country +
-                    ' — ' + deviceCategory + ' — ' + time
-            })
-          }).catch(function (e) { console.error('[Gate] Telegram fallback also failed:', e); });
+      .then(function (r) {
+        if (r.ok) {
+          console.log('[Gate] \u2705 ntfy notification sent for: ' + name);
+        } else {
+          console.error('[Gate] \u274C ntfy returned HTTP ' + r.status);
         }
       })
-      .catch(function (e) { console.error('[Gate] Telegram fetch error:', e); })
+      .catch(function (e) { console.error('[Gate] \u274C ntfy fetch error:', e); })
       .finally(function () { callback(); });
     }
 
+    // Geo-lookup: ipify → ipapi.co → fallback
     fetch('https://api.ipify.org?format=json')
       .then(function (r) { return r.json(); })
       .then(function (d) {
@@ -1205,16 +1198,7 @@
             sendMsg(ip, g.city || 'Unknown', g.country_name || 'Unknown', g.org || 'Unknown ISP');
           })
           .catch(function () {
-            // ip-api.com free tier requires HTTP — use their HTTPS batch endpoint instead
-            fetch('https://pro.ip-api.com/json/' + ip + '?fields=status,city,country,isp&key=')
-              .then(function (r) { return r.json(); })
-              .then(function (g) {
-                sendMsg(ip, g.city || 'Unknown', g.country || 'Unknown', g.isp || 'Unknown ISP');
-              })
-              .catch(function () {
-                // Final fallback: skip geo, just send the visitor name + IP
-                sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP');
-              });
+            sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP');
           });
       })
       .catch(function () { sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP'); });
