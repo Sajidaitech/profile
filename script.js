@@ -1097,47 +1097,47 @@
   };
 
   // ----------------------------------------------------------
-  // 1P · VISITOR TRACKING & TELEGRAM NOTIFICATION v3.0
-  // Modular · async/await · Full intelligence · Duplicate guard
+  // 1P · VISITOR TRACKING & TELEGRAM NOTIFICATION v3.1
+  // Modular · async/await · VPN detection · Duplicate guard
   // ----------------------------------------------------------
 
-  var TG_BOT_TOKEN  = '8781804826:AAFQxp3TgA5WJb3tLVyTbToxa-Lafm1ndz0';
-  var TG_CHAT_ID    = '8235795754';
-  var TG_API_URL    = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
-  var TG_MAX_RETRY  = 3;
-  var _notifSent    = false; // duplicate-send guard
+  var TG_BOT_TOKEN = '8781804826:AAFQxp3TgA5WJb3tLVyTbToxa-Lafm1ndz0';
+  var TG_CHAT_ID   = '8235795754';
+  var TG_API_URL   = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
+  var TG_MAX_RETRY = 3;
+  var _notifSent   = false; // duplicate-send guard
 
-  // ── HELPER · safe value with fallback ──────────────────────
+  // ── HELPER · safe string with fallback ─────────────────────
   function safeVal(v, fallback) {
     var f = (fallback !== undefined) ? fallback : 'Unknown';
     if (v === null || v === undefined) return f;
     var s = String(v).trim();
-    return s !== '' && s !== 'null' && s !== 'undefined' ? s : f;
+    return (s !== '' && s !== 'null' && s !== 'undefined') ? s : f;
   }
 
   // ── HELPER · detect preferred color scheme ─────────────────
   function getThemeMode() {
     try {
-      return (window.matchMedia('(prefers-color-scheme: dark)').matches)
+      return window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'Dark Mode' : 'Light Mode';
     } catch (e) { return 'Unknown'; }
   }
 
-  // ── HELPER · traffic source from referrer ──────────────────
+  // ── HELPER · traffic source label from referrer ────────────
   function getTrafficSource() {
-    var src = document.referrer || '';
-    if (!src) return 'Direct / Bookmark';
-    if (src.indexOf('linkedin')  !== -1) return 'LinkedIn';
-    if (src.indexOf('github')    !== -1) return 'GitHub';
-    if (src.indexOf('google')    !== -1) return 'Google Search';
-    if (src.indexOf('bing')      !== -1) return 'Bing Search';
-    if (src.indexOf('instagram') !== -1) return 'Instagram';
-    if (src.indexOf('twitter')   !== -1 || src.indexOf('t.co') !== -1) return 'Twitter / X';
-    if (src.indexOf('whatsapp')  !== -1) return 'WhatsApp';
-    if (src.indexOf('facebook')  !== -1) return 'Facebook';
-    if (src.indexOf('youtube')   !== -1) return 'YouTube';
-    if (src.indexOf('tiktok')    !== -1) return 'TikTok';
-    return src.replace(/https?:\/\/(www\.)?/, '').split('/')[0] || 'Referral';
+    var s = document.referrer || '';
+    if (!s) return 'Direct / Bookmark';
+    if (s.indexOf('linkedin')  !== -1) return 'LinkedIn';
+    if (s.indexOf('github')    !== -1) return 'GitHub';
+    if (s.indexOf('google')    !== -1) return 'Google Search';
+    if (s.indexOf('bing')      !== -1) return 'Bing Search';
+    if (s.indexOf('instagram') !== -1) return 'Instagram';
+    if (s.indexOf('twitter')   !== -1 || s.indexOf('t.co') !== -1) return 'Twitter / X';
+    if (s.indexOf('whatsapp')  !== -1) return 'WhatsApp';
+    if (s.indexOf('facebook')  !== -1) return 'Facebook';
+    if (s.indexOf('youtube')   !== -1) return 'YouTube';
+    if (s.indexOf('tiktok')    !== -1) return 'TikTok';
+    return s.replace(/https?:\/\/(www\.)?/, '').split('/')[0] || 'Referral';
   }
 
   // ── HELPER · session type (new vs returning) ───────────────
@@ -1145,20 +1145,32 @@
     try {
       if (sessionStorage.getItem('_smVisit')) return 'Returning (Session)';
       sessionStorage.setItem('_smVisit', '1');
-      var count = parseInt(localStorage.getItem('_smVisitCount') || '0', 10);
-      localStorage.setItem('_smVisitCount', String(count + 1));
-      return count > 0 ? 'Returning Visitor' : 'New Visitor';
+      var n = parseInt(localStorage.getItem('_smVisitCount') || '0', 10);
+      localStorage.setItem('_smVisitCount', String(n + 1));
+      return n > 0 ? 'Returning Visitor' : 'New Visitor';
     } catch (e) { return 'New Visitor'; }
   }
 
   // ── HELPER · parse browser name + major version ────────────
+  // FIX: improved Safari/WebKit detection for iOS betas & in-app browsers
   function parseBrowserUA(ua) {
     var m;
     if (/Edg\/([\d.]+)/i.test(ua))     { m = ua.match(/Edg\/([\d.]+)/i);     return { name: 'Edge',    ver: m[1].split('.')[0] }; }
     if (/OPR\/([\d.]+)/i.test(ua))     { m = ua.match(/OPR\/([\d.]+)/i);     return { name: 'Opera',   ver: m[1].split('.')[0] }; }
+    if (/FxiOS\/([\d.]+)/i.test(ua))   { m = ua.match(/FxiOS\/([\d.]+)/i);   return { name: 'Firefox', ver: m[1].split('.')[0] }; }
     if (/Firefox\/([\d.]+)/i.test(ua)) { m = ua.match(/Firefox\/([\d.]+)/i); return { name: 'Firefox', ver: m[1].split('.')[0] }; }
+    if (/CriOS\/([\d.]+)/i.test(ua))   { m = ua.match(/CriOS\/([\d.]+)/i);   return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
     if (/Chrome\/([\d.]+)/i.test(ua))  { m = ua.match(/Chrome\/([\d.]+)/i);  return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
-    if (/Version\/([\d.]+).*Safari/i.test(ua)) { m = ua.match(/Version\/([\d.]+)/i); return { name: 'Safari', ver: m[1].split('.')[0] }; }
+    // Safari: match Version/ for the real version number; fall back to Safari/ build
+    if (/Safari/i.test(ua)) {
+      m = ua.match(/Version\/([\d.]+)/i);
+      if (m) return { name: 'Safari', ver: m[1].split('.')[0] };
+      // iOS betas / in-app browsers may lack Version/ — use Safari/ build as hint
+      m = ua.match(/Safari\/([\d.]+)/i);
+      return { name: 'Safari', ver: m ? m[1].split('.')[0] : '' };
+    }
+    // Generic WebKit fallback (covers obscure iOS browsers)
+    if (/AppleWebKit/i.test(ua)) return { name: 'WebKit Browser', ver: '' };
     return { name: 'Unknown', ver: '' };
   }
 
@@ -1175,12 +1187,12 @@
       m = ua.match(/iPhone OS ([\d_]+)/i);
       return { name: 'iOS', ver: m[1].replace(/_/g, '.') };
     }
-    if (/iPad.*OS ([\d_]+)/i.test(ua)) {
+    if (/iPad.*OS ([\d_]+)/i.test(ua) || /CPU OS ([\d_]+)/i.test(ua)) {
       m = ua.match(/OS ([\d_]+)/i);
-      return { name: 'iPadOS', ver: m[1].replace(/_/g, '.') };
+      return { name: 'iPadOS', ver: m ? m[1].replace(/_/g, '.') : '' };
     }
-    if (/Mac OS X ([\d_]+)/i.test(ua)) {
-      m = ua.match(/Mac OS X ([\d_]+)/i);
+    if (/Mac OS X ([\d_.]+)/i.test(ua)) {
+      m = ua.match(/Mac OS X ([\d_.]+)/i);
       return { name: 'macOS', ver: m[1].replace(/_/g, '.') };
     }
     if (/Android ([\d.]+)/i.test(ua)) {
@@ -1191,34 +1203,212 @@
     return { name: 'Unknown', ver: '' };
   }
 
-  // ── HELPER · device type + model ──────────────────────────
-  function parseDeviceUA(ua) {
+  // ── HELPER · deep device detection — brand, model, type ──────
+  // Returns { brand, model, type } with maximum accuracy
+  function parseDeviceInfo(ua) {
+    // ── iPhone model map (hardware identifier → marketing name) ──
     if (/iPhone/i.test(ua)) {
-      if (/iPhone16,2|iPhone17/i.test(ua))   return 'iPhone 16 Pro';
-      if (/iPhone16,1/i.test(ua))            return 'iPhone 16';
-      if (/iPhone15,3|iPhone15,4/i.test(ua)) return 'iPhone 15 Pro';
-      if (/iPhone15,2/i.test(ua))            return 'iPhone 15';
-      if (/iPhone14,/i.test(ua))             return 'iPhone 14';
-      if (/iPhone13,/i.test(ua))             return 'iPhone 13';
-      if (/iPhone12,/i.test(ua))             return 'iPhone 12';
-      return 'iPhone';
+      var iPhoneMap = {
+        'iPhone18,1': 'iPhone 16',        'iPhone18,2': 'iPhone 16 Plus',
+        'iPhone18,3': 'iPhone 16 Pro',    'iPhone18,4': 'iPhone 16 Pro Max',
+        'iPhone17,1': 'iPhone 15 Pro',    'iPhone17,2': 'iPhone 15 Pro Max',
+        'iPhone17,3': 'iPhone 15',        'iPhone17,4': 'iPhone 15 Plus',
+        'iPhone16,1': 'iPhone 15 Pro',    'iPhone16,2': 'iPhone 15 Pro Max',
+        'iPhone15,4': 'iPhone 15',        'iPhone15,5': 'iPhone 15 Plus',
+        'iPhone15,2': 'iPhone 14 Pro',    'iPhone15,3': 'iPhone 14 Pro Max',
+        'iPhone14,7': 'iPhone 14',        'iPhone14,8': 'iPhone 14 Plus',
+        'iPhone14,4': 'iPhone 13 Mini',   'iPhone14,5': 'iPhone 13',
+        'iPhone14,2': 'iPhone 13 Pro',    'iPhone14,3': 'iPhone 13 Pro Max',
+        'iPhone13,1': 'iPhone 12 Mini',   'iPhone13,2': 'iPhone 12',
+        'iPhone13,3': 'iPhone 12 Pro',    'iPhone13,4': 'iPhone 12 Pro Max',
+        'iPhone12,1': 'iPhone 11',        'iPhone12,3': 'iPhone 11 Pro',
+        'iPhone12,5': 'iPhone 11 Pro Max','iPhone12,8': 'iPhone SE (2nd Gen)',
+        'iPhone11,8': 'iPhone XR',        'iPhone11,2': 'iPhone XS',
+        'iPhone11,4': 'iPhone XS Max',    'iPhone11,6': 'iPhone XS Max',
+        'iPhone10,1': 'iPhone 8',         'iPhone10,4': 'iPhone 8',
+        'iPhone10,2': 'iPhone 8 Plus',    'iPhone10,5': 'iPhone 8 Plus',
+        'iPhone10,3': 'iPhone X',         'iPhone10,6': 'iPhone X'
+      };
+      var hwKeys = Object.keys(iPhoneMap);
+      for (var k = 0; k < hwKeys.length; k++) {
+        if (ua.indexOf(hwKeys[k]) !== -1) {
+          return { brand: 'Apple', model: iPhoneMap[hwKeys[k]], type: 'Mobile' };
+        }
+      }
+      // Heuristic: try to infer generation from iOS version when hw id missing
+      var iosMatch = ua.match(/iPhone OS (\d+)_/i);
+      if (iosMatch) {
+        var iosV = parseInt(iosMatch[1], 10);
+        var hinted = iosV >= 18 ? 'iPhone 16' : iosV >= 17 ? 'iPhone 15' : iosV >= 16 ? 'iPhone 14' : 'iPhone';
+        return { brand: 'Apple', model: hinted, type: 'Mobile' };
+      }
+      return { brand: 'Apple', model: 'iPhone', type: 'Mobile' };
     }
-    if (/iPad/i.test(ua))            return 'iPad';
-    if (/Samsung/i.test(ua))         { var sm = ua.match(/Samsung[- ]([\w]+)/i); return sm ? 'Samsung ' + sm[1] : 'Samsung Android'; }
-    if (/Pixel[ _]([\w]+)/i.test(ua)){ var px = ua.match(/Pixel[ _]([\w]+)/i);  return px ? 'Google Pixel ' + px[1] : 'Google Pixel'; }
-    if (/Huawei/i.test(ua))          return 'Huawei';
-    if (/OnePlus/i.test(ua))         return 'OnePlus';
-    if (/Android.*Mobile/i.test(ua)) return 'Android Phone';
-    if (/Android/i.test(ua))         return 'Android Tablet';
-    return 'Desktop';
+
+    // ── iPad ─────────────────────────────────────────────────
+    if (/iPad/i.test(ua)) {
+      var iPadMap = {
+        'iPad14,3': 'iPad Pro 11" (M2)', 'iPad14,4': 'iPad Pro 11" (M2)',
+        'iPad14,5': 'iPad Pro 12.9" (M2)','iPad14,6': 'iPad Pro 12.9" (M2)',
+        'iPad13,4': 'iPad Pro 11" (M1)', 'iPad13,5': 'iPad Pro 11" (M1)',
+        'iPad13,16':'iPad Air (M1)',      'iPad13,17':'iPad Air (M1)',
+        'iPad13,18':'iPad (10th Gen)',    'iPad13,19':'iPad (10th Gen)',
+        'iPad12,1': 'iPad (9th Gen)',     'iPad12,2': 'iPad (9th Gen)',
+        'iPad11,6': 'iPad (8th Gen)',     'iPad11,7': 'iPad (8th Gen)',
+        'iPad11,3': 'iPad Air (3rd Gen)','iPad11,4': 'iPad Air (3rd Gen)',
+        'iPad8,11': 'iPad Pro 12.9" (4th Gen)','iPad8,12':'iPad Pro 12.9" (4th Gen)',
+        'iPad8,9':  'iPad Pro 11" (2nd Gen)','iPad8,10':'iPad Pro 11" (2nd Gen)'
+      };
+      var iPadKeys = Object.keys(iPadMap);
+      for (var ki = 0; ki < iPadKeys.length; ki++) {
+        if (ua.indexOf(iPadKeys[ki]) !== -1) {
+          return { brand: 'Apple', model: iPadMap[iPadKeys[ki]], type: 'Tablet' };
+        }
+      }
+      return { brand: 'Apple', model: 'iPad', type: 'Tablet' };
+    }
+
+    // ── Samsung ───────────────────────────────────────────────
+    if (/Samsung/i.test(ua)) {
+      // Galaxy model from Build/ or SM- identifier
+      var smMatch = ua.match(/\bSM-([\w]+)\b/i);
+      if (smMatch) {
+        var smCode = smMatch[1].toUpperCase();
+        // Map common SM codes → marketing names
+        var smMap = {
+          'S928': 'Galaxy S24 Ultra', 'S926': 'Galaxy S24+', 'S921': 'Galaxy S24',
+          'S918': 'Galaxy S23 Ultra', 'S916': 'Galaxy S23+', 'S911': 'Galaxy S23',
+          'S908': 'Galaxy S22 Ultra', 'S906': 'Galaxy S22+', 'S901': 'Galaxy S22',
+          'S908E':'Galaxy S22 Ultra', 'S901B':'Galaxy S22',
+          'F946': 'Galaxy Z Fold 5',  'F731': 'Galaxy Z Flip 5',
+          'F936': 'Galaxy Z Fold 4',  'F721': 'Galaxy Z Flip 4',
+          'A546': 'Galaxy A54',       'A336': 'Galaxy A33',
+          'A135': 'Galaxy A13',       'A515': 'Galaxy A51',
+          'A525': 'Galaxy A52',       'A536': 'Galaxy A53',
+          'A715': 'Galaxy A71',       'A725': 'Galaxy A72',
+          'A325': 'Galaxy A32',
+          'N975': 'Galaxy Note 10+',  'N986': 'Galaxy Note 20 Ultra',
+          'T875': 'Galaxy Tab S7',    'X910': 'Galaxy Tab S9 Ultra'
+        };
+        // Try prefix match first (SM-S928B → S928)
+        var mapped = null;
+        var smKeys2 = Object.keys(smMap);
+        for (var si = 0; si < smKeys2.length; si++) {
+          if (smCode.indexOf(smKeys2[si]) === 0) { mapped = smMap[smKeys2[si]]; break; }
+        }
+        var modelName = mapped || ('Galaxy ' + smCode);
+        var devType = /Tab/i.test(modelName) ? 'Tablet' : 'Mobile';
+        return { brand: 'Samsung', model: modelName, type: devType };
+      }
+      return { brand: 'Samsung', model: 'Galaxy', type: 'Mobile' };
+    }
+
+    // ── Google Pixel ──────────────────────────────────────────
+    if (/Pixel[ _]([\w]+)/i.test(ua)) {
+      var pxMatch = ua.match(/Pixel[ _]([\w]+)/i);
+      var pxMap = {
+        '9': 'Pixel 9', '9 Pro': 'Pixel 9 Pro', '9 Pro XL': 'Pixel 9 Pro XL', '9a': 'Pixel 9a',
+        '8': 'Pixel 8', '8 Pro': 'Pixel 8 Pro', '8a': 'Pixel 8a',
+        '7': 'Pixel 7', '7 Pro': 'Pixel 7 Pro', '7a': 'Pixel 7a',
+        '6': 'Pixel 6', '6 Pro': 'Pixel 6 Pro', '6a': 'Pixel 6a',
+        'Fold': 'Pixel Fold', 'Tablet': 'Pixel Tablet'
+      };
+      var pxId   = pxMatch[1];
+      var pxName = pxMap[pxId] || ('Pixel ' + pxId);
+      var pxType = pxName.indexOf('Tablet') !== -1 ? 'Tablet' : 'Mobile';
+      return { brand: 'Google', model: pxName, type: pxType };
+    }
+
+    // ── OnePlus ───────────────────────────────────────────────
+    if (/OnePlus/i.test(ua)) {
+      var opMatch = ua.match(/OnePlus[ _]?([\w\s]+)/i);
+      var opModel = opMatch ? ('OnePlus ' + opMatch[1].trim()) : 'OnePlus';
+      return { brand: 'OnePlus', model: opModel, type: 'Mobile' };
+    }
+
+    // ── Xiaomi / MIUI ─────────────────────────────────────────
+    if (/Xiaomi|MIUI|Redmi|Mi[ _]/i.test(ua)) {
+      var xiMatch = ua.match(/(?:Xiaomi|Redmi|Mi)[ _]?([\w\s]+?)(?:\s+Build|;|\))/i);
+      var xiModel = xiMatch ? xiMatch[1].trim() : 'Xiaomi';
+      if (!/^(?:xiaomi|redmi|mi)/i.test(xiModel)) xiModel = 'Xiaomi ' + xiModel;
+      return { brand: 'Xiaomi', model: xiModel, type: 'Mobile' };
+    }
+
+    // ── Huawei ────────────────────────────────────────────────
+    if (/Huawei/i.test(ua)) {
+      var hwMatch = ua.match(/Huawei[ _]?([\w\s]+?)(?:\s+Build|;|\))/i);
+      var hwModel = hwMatch ? ('Huawei ' + hwMatch[1].trim()) : 'Huawei';
+      return { brand: 'Huawei', model: hwModel, type: 'Mobile' };
+    }
+
+    // ── OPPO / realme ─────────────────────────────────────────
+    if (/OPPO|CPH\d+/i.test(ua)) {
+      var oppoMatch = ua.match(/(?:OPPO[ _])?(CPH[\w]+|OPPO[\w ]+)/i);
+      return { brand: 'OPPO', model: oppoMatch ? oppoMatch[1] : 'OPPO', type: 'Mobile' };
+    }
+    if (/realme/i.test(ua)) {
+      var rmMatch = ua.match(/realme[ _]?([\w\s]+?)(?:\s+Build|;|\))/i);
+      return { brand: 'realme', model: rmMatch ? ('realme ' + rmMatch[1].trim()) : 'realme', type: 'Mobile' };
+    }
+
+    // ── Motorola ──────────────────────────────────────────────
+    if (/Motorola|moto[ _]/i.test(ua)) {
+      var motoMatch = ua.match(/moto[ _]([\w]+)/i);
+      var motoModel = motoMatch ? ('Moto ' + motoMatch[1]) : 'Motorola';
+      return { brand: 'Motorola', model: motoModel, type: 'Mobile' };
+    }
+
+    // ── Nokia ─────────────────────────────────────────────────
+    if (/Nokia/i.test(ua)) {
+      return { brand: 'Nokia', model: 'Nokia', type: 'Mobile' };
+    }
+
+    // ── Generic Android fallback ──────────────────────────────
+    if (/Android.*Mobile/i.test(ua)) {
+      return { brand: 'Android', model: 'Android Phone', type: 'Mobile' };
+    }
+    if (/Android/i.test(ua)) {
+      return { brand: 'Android', model: 'Android Tablet', type: 'Tablet' };
+    }
+
+    // ── Mac (Apple Silicon detection heuristic) ───────────────
+    if (/Mac OS X/i.test(ua)) {
+      var isSilicon = /Mac OS X 10_15_[789]|Mac OS X 1[1-9]/i.test(ua) || !/Intel/i.test(ua);
+      var macModel  = isSilicon ? 'Mac (Apple Silicon)' : 'Mac (Intel)';
+      return { brand: 'Apple', model: macModel, type: 'Desktop' };
+    }
+
+    if (/Windows/i.test(ua)) return { brand: 'PC', model: 'Windows PC', type: 'Desktop' };
+    if (/Linux/i.test(ua))   return { brand: 'Linux', model: 'Linux PC', type: 'Desktop' };
+
+    return { brand: 'Unknown', model: 'Unknown', type: 'Desktop' };
+  }
+
+  // ── HELPER · touch + foldable heuristics ─────────────────
+  function getDeviceExtras() {
+    var hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    // Foldable hint: very large maxTouchPoints (fold displays) or matching UA hints
+    var ua = navigator.userAgent;
+    var isFoldable = /Galaxy Z Fold|Galaxy Z Flip|Pixel Fold|Surface Duo/i.test(ua) ||
+                     (navigator.maxTouchPoints >= 10 && window.screen.width >= 768 && hasTouch);
+    return { hasTouch: hasTouch, isFoldable: isFoldable };
+  }
+
+  // ── HELPER · device type + model (backwards-compat shim) ──
+  function parseDeviceUA(ua) {
+    return parseDeviceInfo(ua).model;
   }
 
   // ── HELPER · CPU architecture ─────────────────────────────
+  // FIX: iPhone/iPad → always ARM64; Android modern → ARM64 inference
   function parseCPUUA(ua) {
-    if (/aarch64|arm64/i.test(ua))         return 'ARM64';
-    if (/armv\d/i.test(ua))                return 'ARM';
+    if (/iPhone|iPad|iPod/i.test(ua))        return 'arm64';  // all modern Apple mobile
+    if (/aarch64|arm64/i.test(ua))           return 'arm64';
+    if (/armv\d/i.test(ua))                  return 'arm';
     if (/x86_64|x64|Win64|WOW64/i.test(ua)) return 'amd64';
-    if (/i[36]86/i.test(ua))               return 'x86';
+    if (/i[36]86/i.test(ua))                 return 'x86';
+    if (/Android/i.test(ua))                 return 'arm64';  // safe assumption for modern Android
+    if (/Mac OS X/i.test(ua))                return 'arm64';  // Apple Silicon default (M1+)
     return 'Unknown';
   }
 
@@ -1251,9 +1441,9 @@
     }
   }
 
-  // ── CORE · fetch rich IP/geo intelligence ─────────────────
-  async function fetchGeoIntel() {
-    // Attempt 1: ipwho.is — free, no key, rich data
+  // ── CORE · fetch geo data (ipwho.is → ipapi.co fallback) ──
+  async function _fetchGeo() {
+    // Primary: ipwho.is
     try {
       var r1 = await fetch('https://ipwho.is/');
       if (!r1.ok) throw new Error('HTTP ' + r1.status);
@@ -1269,18 +1459,12 @@
         isp:            safeVal(d1.connection && d1.connection.isp),
         asnOrg:         safeVal(d1.connection && d1.connection.org),
         asnNumber:      safeVal(d1.connection && d1.connection.asn),
-        connectionType: safeVal(d1.connection && d1.connection.domain, 'Cable/DSL'),
-        isVpn:          false,
-        isTor:          false,
-        threatLevel:    'low',
-        timezone:       safeVal(d1.timezone && d1.timezone.id),
-        localTime:      safeVal(d1.timezone && d1.timezone.current_time)
+        timezone:       safeVal(d1.timezone  && d1.timezone.id),
+        localTime:      safeVal(d1.timezone  && d1.timezone.current_time)
       };
-    } catch (e1) {
-      console.warn('[Gate] ipwho.is failed:', e1);
-    }
+    } catch (e1) { console.warn('[Gate] ipwho.is failed:', e1); }
 
-    // Attempt 2: ipify + ipapi.co fallback
+    // Fallback: ipify + ipapi.co
     try {
       var r2  = await fetch('https://api.ipify.org?format=json');
       var d2  = await r2.json();
@@ -1289,62 +1473,117 @@
       var d3  = await r3.json();
       if (d3.error) throw new Error(d3.reason);
       return {
-        ip:             ip2,
-        country:        safeVal(d3.country_name),
-        city:           safeVal(d3.city),
-        region:         safeVal(d3.region),
-        latitude:       safeVal(d3.latitude),
-        longitude:      safeVal(d3.longitude),
-        isp:            safeVal(d3.org),
-        asnOrg:         safeVal(d3.org),
-        asnNumber:      safeVal(d3.asn),
-        connectionType: 'Unknown',
-        isVpn:          false,
-        isTor:          false,
-        threatLevel:    'Unknown',
-        timezone:       safeVal(d3.timezone),
-        localTime:      ''
+        ip:        ip2,
+        country:   safeVal(d3.country_name),
+        city:      safeVal(d3.city),
+        region:    safeVal(d3.region),
+        latitude:  safeVal(d3.latitude),
+        longitude: safeVal(d3.longitude),
+        isp:       safeVal(d3.org),
+        asnOrg:    safeVal(d3.org),
+        asnNumber: safeVal(d3.asn),
+        timezone:  safeVal(d3.timezone),
+        localTime: ''
       };
-    } catch (e2) {
-      console.warn('[Gate] ipapi.co fallback failed:', e2);
-    }
+    } catch (e2) { console.warn('[Gate] ipapi.co fallback failed:', e2); }
 
-    // All failed — return blank geo object
-    return {
-      ip: 'Unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown',
-      latitude: 'Unknown', longitude: 'Unknown', isp: 'Unknown', asnOrg: 'Unknown',
-      asnNumber: 'Unknown', connectionType: 'Unknown', isVpn: false, isTor: false,
-      threatLevel: 'Unknown', timezone: 'Unknown', localTime: ''
-    };
+    return null; // both failed
   }
 
-  // ── CORE · build the premium Telegram alert message ───────
-  function buildVisitorAlert(name, geo, client) {
-    var isLocal   = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
-    var maskedIp  = geo.ip !== 'Unknown'
+  // ── CORE · VPN/proxy/threat check via proxycheck.io ───────
+  // FIX: This is what was completely missing before.
+  // proxycheck.io is free (no API key), detects VPN, Tor, proxy, and returns
+  // a risk score 0-100 that maps cleanly to Low / Medium / High threat.
+  async function _fetchSecurity(ip) {
+    if (!ip || ip === 'Unknown') {
+      return { isVpn: false, isTor: false, threatLevel: 'Unknown', connectionType: 'Unknown' };
+    }
+    try {
+      var r = await fetch(
+        'https://proxycheck.io/v2/' + ip + '?vpn=1&asn=1&risk=1&port=1&seen=1',
+        { signal: AbortSignal.timeout ? AbortSignal.timeout(4000) : undefined }
+      );
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+
+      if (d.status !== 'ok' && d.status !== 'warning') throw new Error('proxycheck status: ' + d.status);
+
+      var ipData = d[ip] || {};
+      var proxy  = String(ipData.proxy  || '').toLowerCase() === 'yes';
+      var type   = String(ipData.type   || '').toLowerCase();
+      var risk   = parseInt(ipData.risk || '0', 10);
+
+      // type values from proxycheck: VPN, TOR, SOCKS4, SOCKS5, HTTPS, HTTP, etc.
+      var isVpn = proxy && (type === 'vpn' || type.indexOf('vpn') !== -1);
+      var isTor = type === 'tor' || type.indexOf('tor') !== -1;
+
+      var threatLevel = risk >= 67 ? 'high' : risk >= 34 ? 'medium' : 'low';
+
+      // Map proxycheck type → human-readable connection type
+      var connMap = {
+        'vpn': 'VPN', 'tor': 'TOR Exit Node', 'socks4': 'SOCKS4 Proxy',
+        'socks5': 'SOCKS5 Proxy', 'https': 'HTTPS Proxy', 'http': 'HTTP Proxy',
+        'residential': 'Residential', 'business': 'Business', 'hosting': 'Hosting / Datacenter',
+        'corporate': 'Corporate', 'cellular': 'Cellular', 'education': 'Education'
+      };
+      var connectionType = connMap[type] || (proxy ? 'Proxy / Tunnel' : 'Residential');
+
+      console.log('[Gate] proxycheck \u2014 VPN:', isVpn, '| TOR:', isTor, '| Risk:', risk, '| Type:', type);
+      return { isVpn: isVpn, isTor: isTor, threatLevel: threatLevel, connectionType: connectionType };
+
+    } catch (e) {
+      console.warn('[Gate] proxycheck.io failed:', e);
+      return { isVpn: false, isTor: false, threatLevel: 'Unknown', connectionType: 'Unknown' };
+    }
+  }
+
+  // ── CORE · build premium Telegram alert ───────────────────
+  function buildVisitorAlert(name, geo, sec, client, timeData) {
+    var isLocal  = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
+
+    var maskedIp = geo.ip !== 'Unknown'
       ? geo.ip.split('.').map(function(o, i) { return i >= 2 ? 'xxx' : o; }).join('.')
       : 'Unknown';
 
-    var vpnStr    = geo.isVpn ? '\u26A0\uFE0F Yes'  : '\u2705 No';
-    var torStr    = geo.isTor ? '\u26A0\uFE0F Yes'  : '\u2705 No';
-    var threat    = String(safeVal(geo.threatLevel, 'Unknown')).toLowerCase();
-    var threatStr = threat === 'low'    ? '\uD83D\uDFE2 Low'
+    var vpnStr = sec.isVpn ? '\u26A0\uFE0F Yes \u2014 VPN Detected' : '\u2705 No';
+    var torStr = sec.isTor ? '\u26A0\uFE0F Yes \u2014 TOR Exit Node' : '\u2705 No';
+
+    var threat    = String(safeVal(sec.threatLevel, 'Unknown')).toLowerCase();
+    var threatStr = threat === 'high'   ? '\uD83D\uDD34 High'
                   : threat === 'medium' ? '\uD83D\uDFE1 Medium'
-                  : threat === 'high'   ? '\uD83D\uDD34 High'
-                  : '\u26AA ' + safeVal(geo.threatLevel);
+                  : threat === 'low'    ? '\uD83D\uDFE2 Low'
+                  : '\u26AA ' + safeVal(sec.threatLevel);
 
-    var coords    = (geo.latitude !== 'Unknown' && geo.longitude !== 'Unknown')
-      ? safeVal(geo.latitude) + ', ' + safeVal(geo.longitude)
-      : 'Unknown';
+    var coords = (geo.latitude !== 'Unknown' && geo.longitude !== 'Unknown')
+      ? safeVal(geo.latitude) + ', ' + safeVal(geo.longitude) : 'Unknown';
 
-    var localTime = safeVal(geo.localTime) !== 'Unknown' ? safeVal(geo.localTime) : client.localTime;
+    var localTime = (safeVal(geo.localTime) !== 'Unknown') ? safeVal(geo.localTime) : client.localTime;
     var mapQuery  = coords !== 'Unknown' ? coords.replace(', ', ',') : geo.ip;
 
     var header = isLocal
       ? '\uD83D\uDD27 <b>[Local Test]</b> \u2014 ' + name + ' opened your portfolio'
       : '\u256D\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 \u2726 LIVE VISITOR \u2726 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256E';
 
-    return [
+    // ── Device block with brand / model / type ──────────────
+    var devInfo    = client.deviceInfo || { brand: 'Unknown', model: safeVal(client.device), type: 'Desktop' };
+    var devExtras  = client.deviceExtras || { hasTouch: false, isFoldable: false };
+    var touchStr   = devExtras.hasTouch ? '\uD83D\uDC46 Yes' : '\uD83D\uDDA5\uFE0F No';
+    var foldStr    = devExtras.isFoldable ? '\uD83D\uDCF1 Foldable / Dual-screen' : '';
+
+    // ── Time-spent block ────────────────────────────────────
+    var timeLines = [];
+    if (timeData && timeData.totalSecs >= 0) {
+      timeLines = [
+        '',
+        '\u23F1 <b>Time Spent</b>    : ' + safeVal(timeData.totalStr,  '\u2014'),
+        '\uD83D\uDC40 <b>Active Time</b>  : ' + safeVal(timeData.activeStr, '\u2014'),
+        '\uD83D\uDCA4 <b>Idle Time</b>    : ' + safeVal(timeData.idleStr,   '\u2014'),
+        '\uD83D\uDEAA <b>Exit Status</b>  : ' + safeVal(timeData.exitStatus,'\u2014'),
+        '\uD83D\uDCC4 <b>Last Page</b>    : ' + safeVal(timeData.lastPage,  '/')
+      ];
+    }
+
+    var lines = [
       header,
       '',
       '\uD83D\uDC64 <b>Visitor</b>       : ' + name,
@@ -1355,7 +1594,7 @@
       '\uD83D\uDCCD <b>Coordinates</b>   : ' + coords,
       '',
       '\uD83D\uDD0C <b>IP Address</b>    : <code>' + maskedIp + '</code>',
-      '\uD83D\uDEF0 <b>Connection</b>    : ' + safeVal(geo.connectionType),
+      '\uD83D\uDEF0 <b>Connection</b>    : ' + safeVal(sec.connectionType),
       '\uD83C\uDFE2 <b>ISP</b>           : ' + safeVal(geo.isp),
       '\uD83C\uDFDB <b>ASN Org</b>       : ' + safeVal(geo.asnOrg),
       '',
@@ -1363,10 +1602,18 @@
       '\uD83E\uDDC5 <b>TOR</b>           : ' + torStr,
       '\u26A0\uFE0F <b>Threat Level</b>  : ' + threatStr,
       '',
-      '\uD83D\uDCF1 <b>Device</b>        : ' + safeVal(client.device),
-      '\uD83E\uDEDF <b>OS</b>            : ' + safeVal(client.osName) + ' ' + safeVal(client.osVer, ''),
-      '\uD83C\uDF10 <b>Browser</b>       : ' + safeVal(client.browserName) + ' ' + safeVal(client.browserVer, ''),
+      '\uD83D\uDCF1 <b>Device Type</b>   : ' + safeVal(devInfo.type),
+      '\uD83C\uDFF7 <b>Brand</b>         : ' + safeVal(devInfo.brand),
+      '\uD83D\uDCF2 <b>Model</b>         : ' + safeVal(devInfo.model),
+      '\uD83E\uDEDF <b>OS</b>            : ' + safeVal(client.osName) + (client.osVer ? ' ' + client.osVer : ''),
+      '\uD83C\uDF10 <b>Browser</b>       : ' + safeVal(client.browserName) + (client.browserVer ? ' ' + client.browserVer : ''),
       '\uD83E\uDDE0 <b>CPU</b>           : ' + safeVal(client.cpu),
+      '\uD83D\uDC46 <b>Touch</b>         : ' + touchStr
+    ];
+
+    if (foldStr) lines.push('\uD83D\uDCF1 <b>Form Factor</b>  : ' + foldStr);
+
+    lines = lines.concat([
       '',
       '\uD83D\uDCCF <b>Resolution</b>    : ' + client.screenW + ' \u00D7 ' + client.screenH,
       '\uD83C\uDF19 <b>Theme</b>         : ' + safeVal(client.theme),
@@ -1377,16 +1624,23 @@
       '',
       '\uD83D\uDD17 <b>Source</b>        : ' + safeVal(client.source),
       '\uD83D\uDCC4 <b>Landing Page</b>  : ' + safeVal(client.pathname),
-      '\u23F1 <b>Session Type</b>  : ' + safeVal(client.sessionType),
+      '\u23F1 <b>Session Type</b>  : ' + safeVal(client.sessionType)
+    ]);
+
+    lines = lines.concat(timeLines);
+
+    lines = lines.concat([
       '',
       '\u2728 <i>Portfolio viewed successfully</i>',
       '',
       '\u2570\u2500\u2500 <a href="https://www.google.com/maps/search/?api=1&query=' + mapQuery + '">\uD83D\uDDFA Map</a>  \u00B7  <a href="https://ipinfo.io/' + geo.ip + '">\uD83D\uDD0D IP Lookup</a>  \u00B7  <a href="https://sajidmk.com">\uD83D\uDCCA Analytics</a> \u2500\u2500\u256F'
-    ].join('\n');
+    ]);
+
+    return lines.join('\n');
   }
 
-  // ── MAIN · orchestrate tracking + notification ─────────────
-  async function sendNtfyNotification(name, callback) {
+  // ── MAIN · orchestrate everything ─────────────────────────
+  async function sendNtfyNotification(name, callback, timeData) {
     if (_notifSent) {
       console.log('[Gate] Duplicate notification blocked for: ' + name);
       if (callback) callback();
@@ -1394,47 +1648,72 @@
     }
     _notifSent = true;
 
-    // Collect all client-side signals immediately (no network needed)
-    var ua     = navigator.userAgent;
-    var br     = parseBrowserUA(ua);
-    var os     = parseOSUA(ua);
+    // Collect all client-side signals synchronously (no network)
+    var ua  = navigator.userAgent;
+    var br  = parseBrowserUA(ua);
+    var os  = parseOSUA(ua);
+    var dev = parseDeviceInfo(ua);
+    var ext = getDeviceExtras();
+
     var client = {
-      browserName : br.name,
-      browserVer  : br.ver,
-      osName      : os.name,
-      osVer       : os.ver,
-      device      : parseDeviceUA(ua),
-      cpu         : parseCPUUA(ua),
-      screenW     : window.screen.width,
-      screenH     : window.screen.height,
-      theme       : getThemeMode(),
-      lang        : navigator.language || 'Unknown',
-      source      : getTrafficSource(),
-      pathname    : window.location.pathname || '/',
-      sessionType : getSessionType(),
-      localTime   : new Date().toLocaleString('en-US', {
+      browserName  : br.name,
+      browserVer   : br.ver,
+      osName       : os.name,
+      osVer        : os.ver,
+      device       : dev.model,
+      deviceInfo   : dev,
+      deviceExtras : ext,
+      cpu          : parseCPUUA(ua),
+      screenW      : window.screen.width,
+      screenH      : window.screen.height,
+      theme        : getThemeMode(),
+      lang         : navigator.language || 'Unknown',
+      source       : getTrafficSource(),
+      pathname     : window.location.pathname || '/',
+      sessionType  : getSessionType(),
+      localTime    : new Date().toLocaleString('en-US', {
         timeZone: 'Asia/Qatar', weekday: 'short', month: 'short',
         day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit'
       })
     };
 
-    // Geo fetch with 6-second hard timeout
-    var geo = await Promise.race([
-      fetchGeoIntel(),
-      new Promise(function(resolve) {
+    // Run geo + security fetches in parallel, both with hard timeouts
+    var GEO_TIMEOUT = 5000;  // 5 s for geo
+    var SEC_TIMEOUT = 4000;  // 4 s for proxycheck
+
+    var geoRace = Promise.race([
+      _fetchGeo(),
+      new Promise(function(res) {
         setTimeout(function() {
-          console.warn('[Gate] Geo lookup timed out — sending without geo data');
-          resolve({
-            ip: 'Unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown',
-            latitude: 'Unknown', longitude: 'Unknown', isp: 'Unknown', asnOrg: 'Unknown',
-            asnNumber: 'Unknown', connectionType: 'Unknown', isVpn: false, isTor: false,
-            threatLevel: 'Unknown', timezone: 'Unknown', localTime: ''
-          });
-        }, 6000);
+          console.warn('[Gate] Geo lookup timed out');
+          res(null);
+        }, GEO_TIMEOUT);
       })
     ]);
 
-    var text = buildVisitorAlert(name, geo, client);
+    var geo = await geoRace;
+
+    // Blank geo object if everything failed / timed out
+    if (!geo) {
+      geo = {
+        ip: 'Unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown',
+        latitude: 'Unknown', longitude: 'Unknown', isp: 'Unknown', asnOrg: 'Unknown',
+        asnNumber: 'Unknown', timezone: 'Unknown', localTime: ''
+      };
+    }
+
+    // Security check runs after we have the IP (needs the real IP from geo)
+    var sec = await Promise.race([
+      _fetchSecurity(geo.ip),
+      new Promise(function(res) {
+        setTimeout(function() {
+          console.warn('[Gate] Security lookup timed out');
+          res({ isVpn: false, isTor: false, threatLevel: 'Unknown', connectionType: 'Unknown' });
+        }, SEC_TIMEOUT);
+      })
+    ]);
+
+    var text = buildVisitorAlert(name, geo, sec, client, timeData || null);
     console.log('[Gate] Sending Telegram notification for: ' + name);
 
     await _tgSend({
@@ -1446,6 +1725,226 @@
 
     if (callback) callback();
   }
+
+
+  // ============================================================
+  // TIME TRACKING SYSTEM v1.0
+  // Tracks total, active, and idle time; sends exit summary once.
+  // Works on desktop + mobile Safari via Beacon API fallback.
+  // ============================================================
+
+  // ── Constants ────────────────────────────────────────────────
+  var IDLE_THRESHOLD_MS = 30 * 1000;   // 30 s inactive → considered idle
+  var TIME_KEY          = '_smTimeData'; // sessionStorage key
+
+  // ── State ────────────────────────────────────────────────────
+  var _session = (function () {
+    try {
+      var saved = sessionStorage.getItem(TIME_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) { /* ignore */ }
+    return null;
+  }());
+
+  // Initialise fresh if no saved session
+  if (!_session) {
+    _session = {
+      startMs     : Date.now(),
+      activeMs    : 0,
+      idleMs      : 0,
+      segStart    : Date.now(),   // start of current active segment
+      isActive    : true,         // tab currently visible?
+      idleStart   : null,         // when idle started (null if not idle)
+      exitSent    : false,        // exit notification sent?
+      lastPage    : window.location.pathname || '/'
+    };
+  }
+
+  // ── Persist session state (lightweight, called on changes) ───
+  function _saveSession() {
+    try { sessionStorage.setItem(TIME_KEY, JSON.stringify(_session)); } catch (e) { /* ignore */ }
+  }
+
+  // ── Duration formatter → "2m 34s" ───────────────────────────
+  function _fmtDuration(ms) {
+    if (ms < 0) ms = 0;
+    var totalSecs = Math.floor(ms / 1000);
+    var h = Math.floor(totalSecs / 3600);
+    var m = Math.floor((totalSecs % 3600) / 60);
+    var s = totalSecs % 60;
+    if (h > 0) return h + 'h ' + m + 'm ' + s + 's';
+    if (m > 0) return m + 'm ' + s + 's';
+    return s + 's';
+  }
+
+  // ── Flush active segment into activeMs ───────────────────────
+  function _flushSegment() {
+    if (_session.isActive && _session.segStart !== null) {
+      var elapsed = Date.now() - _session.segStart;
+      if (elapsed > 0) _session.activeMs += elapsed;
+      _session.segStart = null;
+    }
+  }
+
+  // ── Flush idle segment into idleMs ───────────────────────────
+  function _flushIdle() {
+    if (_session.idleStart !== null) {
+      var elapsed = Date.now() - _session.idleStart;
+      if (elapsed > 0) _session.idleMs += elapsed;
+      _session.idleStart = null;
+    }
+  }
+
+  // ── Build time summary object for Telegram ───────────────────
+  function _buildTimeSummary(exitReason) {
+    _flushSegment();
+    _flushIdle();
+    var totalMs  = Date.now() - _session.startMs;
+    var activeMs = _session.activeMs;
+    var idleMs   = _session.idleMs;
+    // Sanity clamp — active + idle should not exceed total
+    if (activeMs + idleMs > totalMs) {
+      activeMs = Math.max(0, totalMs - idleMs);
+    }
+    return {
+      totalSecs  : Math.floor(totalMs  / 1000),
+      totalStr   : _fmtDuration(totalMs),
+      activeStr  : _fmtDuration(activeMs),
+      idleStr    : _fmtDuration(idleMs),
+      exitStatus : exitReason || 'Page Closed',
+      lastPage   : _session.lastPage || window.location.pathname || '/'
+    };
+  }
+
+  // ── Idle detection ───────────────────────────────────────────
+  var _idleTimer = null;
+
+  function _resetIdleTimer() {
+    if (_idleTimer) clearTimeout(_idleTimer);
+    // If user was idle, resume active segment
+    if (_session.idleStart !== null) {
+      _flushIdle();
+      _session.segStart = Date.now();
+      _session.isActive = true;
+    }
+    _idleTimer = setTimeout(function () {
+      // Mark as idle: flush current active segment
+      _flushSegment();
+      _session.idleStart = Date.now();
+      _session.isActive  = false;
+      _saveSession();
+    }, IDLE_THRESHOLD_MS);
+  }
+
+  // Listen for user activity signals
+  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'pointerdown'].forEach(function (evt) {
+    document.addEventListener(evt, _resetIdleTimer, { passive: true });
+  });
+  _resetIdleTimer(); // kick off timer
+
+  // ── Visibility change — pause/resume timer ───────────────────
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      // Tab hidden → flush active segment, stop counting
+      _flushSegment();
+      if (_idleTimer) { clearTimeout(_idleTimer); _idleTimer = null; }
+      _session.isActive = false;
+      _saveSession();
+      _maybeSendExitNotification('Tab Hidden');
+    } else {
+      // Tab visible again → start new active segment
+      _session.isActive = true;
+      _session.segStart = Date.now();
+      _session.exitSent = false; // allow a fresh exit notification next time
+      _saveSession();
+      _resetIdleTimer();
+    }
+  });
+
+  // ── Focus / blur as supplementary signals ────────────────────
+  window.addEventListener('blur', function () {
+    if (!document.hidden) {
+      _flushSegment();
+      _session.isActive = false;
+      _saveSession();
+    }
+  });
+  window.addEventListener('focus', function () {
+    if (!_session.isActive) {
+      _session.isActive = true;
+      _session.segStart = Date.now();
+      _saveSession();
+      _resetIdleTimer();
+    }
+  });
+
+  // ── Exit notification — send once ────────────────────────────
+  var _exitGuard = false;
+
+  function _maybeSendExitNotification(exitReason) {
+    if (_exitGuard || _session.exitSent) return;
+    _exitGuard         = true;
+    _session.exitSent  = true;
+    _saveSession();
+
+    var summary  = _buildTimeSummary(exitReason);
+    // Only notify if visitor spent at least 5 seconds
+    if (summary.totalSecs < 5) return;
+
+    var visitorName = sessionStorage.getItem('_smVisitorName') || 'Unknown';
+    var tgText = [
+      '\u23F1 <b>Session Summary — ' + visitorName + '</b>',
+      '',
+      '\u23F1 <b>Time Spent</b>    : ' + summary.totalStr,
+      '\uD83D\uDC40 <b>Active Time</b>  : ' + summary.activeStr,
+      '\uD83D\uDCA4 <b>Idle Time</b>    : ' + summary.idleStr,
+      '\uD83D\uDEAA <b>Exit Status</b>  : ' + summary.exitStatus,
+      '\uD83D\uDCC4 <b>Last Page</b>    : ' + summary.lastPage
+    ].join('\n');
+
+    var payload = JSON.stringify({
+      chat_id                  : TG_CHAT_ID,
+      text                     : tgText,
+      parse_mode               : 'HTML',
+      disable_web_page_preview : true
+    });
+
+    // Prefer Beacon API (works on mobile Safari during pagehide)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([payload], { type: 'application/json' });
+      navigator.sendBeacon(TG_API_URL, blob);
+    } else {
+      // Synchronous XHR fallback (old browsers)
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', TG_API_URL, false); // sync
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(payload);
+      } catch (e) { /* silent fail on exit */ }
+    }
+  }
+
+  // ── pagehide — most reliable cross-browser exit event ────────
+  window.addEventListener('pagehide', function (e) {
+    var reason = e.persisted ? 'Tab Switched (BF Cache)' : 'Page / Browser Closed';
+    _maybeSendExitNotification(reason);
+  });
+
+  // ── beforeunload — extra safety net ──────────────────────────
+  window.addEventListener('beforeunload', function () {
+    _maybeSendExitNotification('Page Closed');
+  });
+
+  // ── Store visitor name when gate passes ──────────────────────
+  // (hooked into gateSubmit — we patch the original callback)
+  var _origGateSubmit = window.gateSubmit;
+  window.gateSubmit   = function () {
+    var input = document.getElementById('gVisitorName');
+    if (input && input.value) {
+      try { sessionStorage.setItem('_smVisitorName', input.value.trim()); } catch (e) { /* ignore */ }
+    }
+    _origGateSubmit.apply(this, arguments);
+  };
 
 })(); // END GATE OVERLAY
 
