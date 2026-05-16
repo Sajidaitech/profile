@@ -11,20 +11,20 @@
 :root {
   /* ── Palette ── */
   --white:            #ffffff;
-  --surface-base:     #eef0f5;          /* iOS 26 cool blue-tinted system background */
-  --surface-primary:  #f5f6fa;
-  --surface-secondary:#eef0f5;
-  --surface-tertiary: #e2e4ec;
+  --surface-base:     #dde2ee;          /* iOS 26 cool blue-tinted system background — deeper */
+  --surface-primary:  #dde2ee;          /* unified — no two-tone banding */
+  --surface-secondary:#d6dcea;
+  --surface-tertiary: #ccd3e4;
 
   /* Glass surfaces — iOS 26 Liquid Glass (reduced white, richer depth) */
-  --glass-ultra:      rgba(255,255,255,0.42);
-  --glass-heavy:      rgba(255,255,255,0.30);
-  --glass-mid:        rgba(255,255,255,0.20);
-  --glass-light:      rgba(255,255,255,0.12);
-  --glass-border:     rgba(255,255,255,0.48);
-  --glass-border-dim: rgba(180,185,210,0.28);
-  --glass-inner-hi:   rgba(255,255,255,0.70);
-  --glass-shimmer:    rgba(255,255,255,0.35);
+  --glass-ultra:      rgba(255,255,255,0.28);
+  --glass-heavy:      rgba(255,255,255,0.18);
+  --glass-mid:        rgba(255,255,255,0.13);
+  --glass-light:      rgba(255,255,255,0.08);
+  --glass-border:     rgba(255,255,255,0.38);
+  --glass-border-dim: rgba(150,165,200,0.22);
+  --glass-inner-hi:   rgba(255,255,255,0.55);
+  --glass-shimmer:    rgba(255,255,255,0.22);
 
   /* Ink */
   --ink:              #1c1c1e;          /* iOS label */
@@ -117,10 +117,11 @@ body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 80% 55% at 8%  2%,  rgba(0,122,255,0.10) 0%, transparent 55%),
-    radial-gradient(ellipse 55% 50% at 92% 98%,  rgba(88,86,214,0.09) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 50% 48%,  rgba(52,199,89,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 35% at 75% 15%,  rgba(255,159,10,0.04) 0%, transparent 55%);
+    radial-gradient(ellipse 80% 55% at 8%  2%,  rgba(0,122,255,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 50% at 92% 98%,  rgba(88,86,214,0.16) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 48%,  rgba(52,199,89,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 75% 15%,  rgba(255,159,10,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 25% 80%,  rgba(0,80,200,0.10) 0%, transparent 60%);
   pointer-events: none; z-index: 0;
 }
 
@@ -895,9 +896,8 @@ body.gate-active { overflow: hidden !important; }
 .section-intro { font-size: 15px; color: var(--ink-tertiary); margin-bottom: 48px; max-width: 600px; margin-top: -32px; line-height: 1.7; }
 
 /* Section backgrounds */
-.about-section, .arsenal-section, .certifications-section, .certs-section, .achievements-section { background: var(--surface-base); }
-.projects-section, .experience-section, .edu-section, .contact-section { background: var(--surface-primary); }
-.exp-section { background: var(--surface-primary); }
+.about-section, .arsenal-section, .certifications-section, .certs-section, .achievements-section,
+.projects-section, .experience-section, .edu-section, .contact-section, .exp-section { background: transparent !important; }
 
 /* ─── GLASS CARD BASE ────────────────────────────────────────── */
 .museum-case,
@@ -3705,25 +3705,25 @@ body { background: var(--surface-base) !important; color: var(--ink) !important;
 .hero-vchip,
 .cert-card,
 .rec-glass-card {
-  background: rgba(255,255,255,0.22) !important;
-  backdrop-filter: blur(48px) saturate(220%) brightness(1.04) !important;
-  -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.04) !important;
-  border: 1px solid rgba(255,255,255,0.46) !important;
+  background: rgba(200,215,245,0.18) !important;
+  backdrop-filter: blur(52px) saturate(240%) brightness(1.06) !important;
+  -webkit-backdrop-filter: blur(52px) saturate(240%) brightness(1.06) !important;
+  border: 1px solid rgba(255,255,255,0.36) !important;
   box-shadow:
-    0 4px 24px rgba(0,0,0,0.07),
-    0 1px 4px rgba(0,0,0,0.04),
-    inset 0 1px 0 rgba(255,255,255,0.70),
-    inset 0 0 0 0.5px rgba(255,255,255,0.20) !important;
+    0 4px 24px rgba(0,0,0,0.10),
+    0 1px 4px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    inset 0 0 0 0.5px rgba(255,255,255,0.14) !important;
 }
 .museum-case:hover,
 .project-card:hover,
 .exp-card:hover {
-  background: rgba(255,255,255,0.30) !important;
+  background: rgba(200,215,245,0.26) !important;
   box-shadow:
-    0 12px 48px rgba(0,0,0,0.10),
-    0 4px 14px rgba(0,0,0,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.80),
-    inset 0 0 0 0.5px rgba(255,255,255,0.28) !important;
+    0 12px 48px rgba(0,0,0,0.14),
+    0 4px 14px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    inset 0 0 0 0.5px rgba(255,255,255,0.20) !important;
 }
 
 /* ── Chips, tags, tool badges ──────────────────────────────── */
@@ -3890,4 +3890,142 @@ body { background: var(--surface-base) !important; color: var(--ink) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.65),
     0 4px 20px rgba(0,0,0,0.06) !important;
+}
+
+/* ================================================================
+   MOBILE GLASS FIX — Unified Background, No Two-Tone Sections
+   Reduces white, adds glass depth, dark readable text on mobile
+================================================================ */
+
+@media (max-width: 768px) {
+
+  /* ── Unified body background — no section banding ─────────── */
+  body {
+    background: #d8deea !important;
+  }
+
+  /* ── All sections fully transparent — body bg shows through ── */
+  section,
+  .hero-section,
+  .about-section,
+  .arsenal-section,
+  .certifications-section,
+  .certs-section,
+  .achievements-section,
+  .projects-section,
+  .experience-section,
+  .edu-section,
+  .contact-section,
+  .exp-section,
+  .recommendations-section,
+  [class*="-section"] {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  /* ── Cards — tinted glass, not white ─────────────────────── */
+  .museum-case,
+  .project-card,
+  .exp-card,
+  .ach-item,
+  .arsenal-category,
+  .exec-category,
+  .cert-card,
+  .rec-glass-card,
+  .edu-card,
+  [class*="-card"]:not(.gate-glass-card) {
+    background: rgba(190,210,240,0.20) !important;
+    backdrop-filter: blur(40px) saturate(220%) brightness(1.05) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(220%) brightness(1.05) !important;
+    border: 1px solid rgba(255,255,255,0.32) !important;
+    box-shadow:
+      0 4px 20px rgba(0,30,100,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.50) !important;
+  }
+
+  /* ── Text — dark and readable ──────────────────────────────── */
+  h1, h2, h3, h4, h5, h6,
+  .hero-name-first, .hero-name-last,
+  .sec-title, .sec-label, .section-title,
+  p, span, li, label,
+  .ink, [class*="-title"], [class*="-name"],
+  [class*="-label"], [class*="-text"], [class*="-sub"] {
+    color: var(--ink) !important;
+  }
+
+  /* ── Chips / tags — tinted glass not white ─────────────────── */
+  .mc-tool-tag,
+  .pc-tool-badge,
+  .hero-tag,
+  .p-chip,
+  .exp-stat-chip,
+  .exp-btn,
+  .sector-ticker-item,
+  [class*="-chip"], [class*="-tag"], [class*="-badge"] {
+    background: rgba(0,80,200,0.10) !important;
+    backdrop-filter: blur(16px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(200%) !important;
+    border: 1px solid rgba(0,100,220,0.22) !important;
+    color: var(--ink-secondary) !important;
+  }
+
+  /* ── Bullet rows / list items ──────────────────────────────── */
+  .lge-bullet-row {
+    background: rgba(190,210,245,0.22) !important;
+    border: 1px solid rgba(255,255,255,0.36) !important;
+    color: var(--ink) !important;
+  }
+
+  /* ── Contact & social ─────────────────────────────────────── */
+  .contact-item,
+  .social-btn {
+    background: rgba(190,210,245,0.18) !important;
+    backdrop-filter: blur(28px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+    border: 1px solid rgba(255,255,255,0.32) !important;
+    color: var(--ink) !important;
+  }
+
+  /* ── Nav — deeper glass ───────────────────────────────────── */
+  .top-nav {
+    background: rgba(210,222,240,0.82) !important;
+    backdrop-filter: blur(60px) saturate(250%) brightness(1.03) !important;
+    -webkit-backdrop-filter: blur(60px) saturate(250%) brightness(1.03) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.40) !important;
+  }
+
+  /* ── Footer ───────────────────────────────────────────────── */
+  .footer {
+    background: rgba(210,222,240,0.85) !important;
+    backdrop-filter: blur(40px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  }
+
+  /* ── Ghost / secondary buttons ────────────────────────────── */
+  .btn-ghost,
+  .btn-secondary,
+  .lge-action-btn {
+    background: rgba(200,215,245,0.30) !important;
+    border: 1px solid rgba(255,255,255,0.48) !important;
+    color: var(--ink) !important;
+  }
+
+  /* ── Cert featured card ────────────────────────────────────── */
+  .cert-featured-inner {
+    background: linear-gradient(135deg,
+      rgba(190,210,250,0.22) 0%,
+      rgba(160,185,240,0.16) 100%) !important;
+    backdrop-filter: blur(40px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
+  }
+
+  /* ── Arsenal category ──────────────────────────────────────── */
+  .arsenal-category,
+  .exec-category {
+    background: rgba(185,205,240,0.18) !important;
+  }
+
+  /* ── Sector ticker ─────────────────────────────────────────── */
+  .sector-ticker-wrap::before { background: linear-gradient(90deg, #d8deea, transparent) !important; }
+  .sector-ticker-wrap::after  { background: linear-gradient(-90deg, #d8deea, transparent) !important; }
 }
