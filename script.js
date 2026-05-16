@@ -1119,11 +1119,7 @@
     if      (/Windows NT 10/i.test(ua))       os = 'Windows 10/11';
     else if (/Windows NT 6/i.test(ua))        os = 'Windows (older)';
     else if (/Mac OS X/i.test(ua))            os = 'macOS';
-    else if (/iPhone OS ([\d_]+)/i.test(ua)) {
-      var iosRaw = ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g,'.');
-      var iosMajor = parseInt(iosRaw);
-      os = 'iOS ' + (iosMajor >= 26 ? '26' : iosRaw);
-    }
+    else if (/iPhone OS ([\d_]+)/i.test(ua))  os = 'iOS ' + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g,'.');
     else if (/Android ([\d.]+)/i.test(ua))    os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
     else if (/Linux/i.test(ua))               os = 'Linux';
 
@@ -1185,64 +1181,29 @@
       var isLocalTest = isLocal;
 
       // ── Detect device model name ──────────────────────────
-      // iOS Safari hides hardware model — we use screen resolution + iOS version
       var deviceModel = device;
       if (/iPhone/i.test(ua)) {
-        var iosV = ua.match(/OS (\d+)_/);
-        var iosVer = iosV ? parseInt(iosV[1]) : 0;
-        var sw = Math.min(window.screen.width, window.screen.height);
-        var sh = Math.max(window.screen.width, window.screen.height);
-        if      (sw === 440)                   deviceModel = 'iPhone 17 Pro Max';
-        else if (sw === 430 && iosVer >= 26)   deviceModel = 'iPhone 17 Plus';
-        else if (sw === 430)                   deviceModel = 'iPhone 16 Plus / 15 Pro Max';
-        else if (sw === 428)                   deviceModel = 'iPhone 14 Plus / 13 Pro Max';
-        else if (sw === 414 && sh === 896)     deviceModel = 'iPhone 11 Pro Max / XR / XS Max';
-        else if (sw === 414 && sh === 736)     deviceModel = 'iPhone 8 Plus / 7 Plus';
-        else if (sw === 393 && iosVer >= 26)   deviceModel = 'iPhone 17 Pro';
-        else if (sw === 393)                   deviceModel = 'iPhone 16 Pro / 15 Pro';
-        else if (sw === 390 && iosVer >= 26)   deviceModel = 'iPhone 17';
-        else if (sw === 390)                   deviceModel = 'iPhone 16 / 15 / 14 / 13 Pro';
-        else if (sw === 375 && sh === 812)     deviceModel = 'iPhone X / XS / 11 Pro / 12 mini / 13 mini';
-        else if (sw === 375 && sh === 667)     deviceModel = 'iPhone SE (2nd/3rd) / 8 / 7 / 6S';
-        else if (sw === 360)                   deviceModel = 'iPhone SE (3rd gen)';
-        else if (sw === 320)                   deviceModel = 'iPhone SE (1st gen)';
-        else                                    deviceModel = 'iPhone (iOS ' + iosVer + ')';
+        if      (/iPhone16,2|iPhone17/i.test(ua))  deviceModel = 'iPhone 16 Pro';
+        else if (/iPhone16,1/i.test(ua))           deviceModel = 'iPhone 16';
+        else if (/iPhone15,3|iPhone15,4/i.test(ua))deviceModel = 'iPhone 15 Pro';
+        else if (/iPhone15,2/i.test(ua))           deviceModel = 'iPhone 15';
+        else if (/iPhone14,/i.test(ua))            deviceModel = 'iPhone 14 Series';
+        else if (/iPhone13,/i.test(ua))            deviceModel = 'iPhone 13 Series';
+        else if (/iPhone12,/i.test(ua))            deviceModel = 'iPhone 12 Series';
+        else                                        deviceModel = 'iPhone';
       } else if (/iPad/i.test(ua)) {
-        var ipMax = Math.max(window.screen.width, window.screen.height);
-        if      (ipMax >= 1366) deviceModel = 'iPad Pro 12.9"';
-        else if (ipMax >= 1194) deviceModel = 'iPad Pro 11"';
-        else if (ipMax >= 1180) deviceModel = 'iPad Air 11"';
-        else if (ipMax >= 1112) deviceModel = 'iPad Air 10.5"';
-        else if (ipMax >= 1024) deviceModel = 'iPad (9th/10th gen)';
-        else                    deviceModel = 'iPad mini';
-      } else if (/SM-S9[0-9]{2}/i.test(ua)) {
-        var sS = ua.match(/SM-S(9\d{2})/i);
-        deviceModel = sS ? 'Samsung Galaxy S' + sS[1].charAt(0) + sS[1].charAt(1) : 'Samsung Galaxy S Series';
-      } else if (/SM-A[0-9]{3}/i.test(ua)) {
-        var sA = ua.match(/SM-A(\d{3})/i);
-        deviceModel = sA ? 'Samsung Galaxy A' + sA[1].charAt(0) + sA[1].charAt(1) : 'Samsung Galaxy A Series';
-      } else if (/SM-F[0-9]/i.test(ua)) {
-        deviceModel = 'Samsung Galaxy Z Fold / Flip';
-      } else if (/SM-/i.test(ua)) {
-        var smM = ua.match(/SM-([\w]+)/i);
-        deviceModel = smM ? 'Samsung ' + smM[1] : 'Samsung Galaxy';
-      } else if (/Pixel[ _](\d+\s*[A-Za-z]*)/i.test(ua)) {
-        var pxM = ua.match(/Pixel[ _](\d+\s*[A-Za-z]*)/i);
-        deviceModel = pxM ? 'Google Pixel ' + pxM[1].trim() : 'Google Pixel';
-      } else if (/OnePlus([\w ]+)?/i.test(ua)) {
-        var opM = ua.match(/OnePlus[_ \-]?([\w]+)?/i);
-        deviceModel = opM && opM[1] ? 'OnePlus ' + opM[1] : 'OnePlus';
-      } else if (/(?:HUAWEI|Huawei)[- ]([\w-]+)/i.test(ua)) {
-        var hwM = ua.match(/(?:HUAWEI|Huawei)[- ]([\w-]+)/i);
-        deviceModel = hwM ? 'Huawei ' + hwM[1] : 'Huawei';
-      } else if (/Xiaomi|MIUI/i.test(ua)) {
-        var xiM = ua.match(/Xiaomi[_ \-]?([\w]+)?/i);
-        deviceModel = xiM && xiM[1] ? 'Xiaomi ' + xiM[1] : 'Xiaomi';
-      } else if (/OPPO/i.test(ua))   { deviceModel = 'OPPO'; }
-      else if (/vivo/i.test(ua))     { deviceModel = 'Vivo'; }
-      else if (/Macintosh/i.test(ua)){ deviceModel = 'MacBook / iMac'; }
-      else if (/Windows/i.test(ua))  { deviceModel = 'Windows PC'; }
-      else if (/Linux/i.test(ua))    { deviceModel = 'Linux PC'; }
+        deviceModel = 'iPad';
+      } else if (/Samsung/i.test(ua)) {
+        var sm = ua.match(/Samsung[- ]([\w]+)/i);
+        deviceModel = sm ? 'Samsung ' + sm[1] : 'Samsung Android';
+      } else if (/Pixel/i.test(ua)) {
+        var px = ua.match(/Pixel[ _]([\w]+)/i);
+        deviceModel = px ? 'Google Pixel ' + px[1] : 'Google Pixel';
+      } else if (/Huawei/i.test(ua)) {
+        deviceModel = 'Huawei';
+      } else if (/OnePlus/i.test(ua)) {
+        deviceModel = 'OnePlus';
+      }
 
       // ── Detect browser with mobile suffix ────────────────
       var browserFull = browser;
@@ -1251,56 +1212,35 @@
       }
 
       // ── Source / campaign detection ───────────────────────
-      // Check referrer AND URL params (?ref=linkedin, ?utm_source=github etc.)
-      var source    = document.referrer || '';
-      var urlParams = new URLSearchParams(window.location.search);
-      var utmSrc    = (urlParams.get('utm_source') || urlParams.get('ref') || urlParams.get('from') || '').toLowerCase();
-      var combined  = (source + ' ' + utmSrc).toLowerCase();
-
-      var srcLabel  = 'Direct / Bookmark';
-      var campaign  = 'Direct Visit';
+      var source   = document.referrer || '';
+      var srcLabel = 'Direct / Bookmark';
+      var campaign = 'Direct Visit';
       var visitType = 'Direct Traffic';
 
-      if (combined.indexOf('linkedin') !== -1) {
+      if (source.indexOf('linkedin') !== -1) {
         srcLabel  = 'LinkedIn';
-        campaign  = utmSrc ? 'UTM Campaign' : 'Profile Link';
+        campaign  = 'Profile Link';
         visitType = 'Social Traffic';
-      } else if (combined.indexOf('github') !== -1) {
+      } else if (source.indexOf('github') !== -1) {
         srcLabel  = 'GitHub';
         campaign  = 'GitHub Profile';
         visitType = 'Developer Traffic';
-      } else if (combined.indexOf('google') !== -1) {
+      } else if (source.indexOf('google') !== -1) {
         srcLabel  = 'Google Search';
         campaign  = 'Organic Search';
         visitType = 'Search Traffic';
-      } else if (combined.indexOf('instagram') !== -1) {
+      } else if (source.indexOf('instagram') !== -1) {
         srcLabel  = 'Instagram';
         campaign  = 'Bio Link';
         visitType = 'Social Traffic';
-      } else if (combined.indexOf('twitter') !== -1 || combined.indexOf('t.co') !== -1 || combined.indexOf('x.com') !== -1) {
+      } else if (source.indexOf('twitter') !== -1 || source.indexOf('t.co') !== -1) {
         srcLabel  = 'Twitter / X';
         campaign  = 'Profile Link';
         visitType = 'Social Traffic';
-      } else if (combined.indexOf('whatsapp') !== -1) {
+      } else if (source.indexOf('whatsapp') !== -1) {
         srcLabel  = 'WhatsApp';
         campaign  = 'Shared Link';
         visitType = 'Referral Traffic';
-      } else if (combined.indexOf('facebook') !== -1 || combined.indexOf('fb.com') !== -1) {
-        srcLabel  = 'Facebook';
-        campaign  = 'Shared Link';
-        visitType = 'Social Traffic';
-      } else if (combined.indexOf('tiktok') !== -1) {
-        srcLabel  = 'TikTok';
-        campaign  = 'Bio Link';
-        visitType = 'Social Traffic';
-      } else if (combined.indexOf('bing') !== -1) {
-        srcLabel  = 'Bing Search';
-        campaign  = 'Organic Search';
-        visitType = 'Search Traffic';
-      } else if (utmSrc !== '') {
-        srcLabel  = utmSrc.charAt(0).toUpperCase() + utmSrc.slice(1);
-        campaign  = urlParams.get('utm_campaign') || 'UTM Campaign';
-        visitType = 'Campaign Traffic';
       } else if (source !== '') {
         srcLabel  = source.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
         campaign  = 'Referral Link';
@@ -1321,15 +1261,8 @@
       else if (/Windows/i.test(ua))         osEmoji = '\uD83E\uDEDF'; // 🪟
       else if (/Linux/i.test(ua))           osEmoji = '\uD83D\uDC27'; // 🐧
 
-      // Show first 3 octets, mask only last octet for privacy
       var maskedIp = ip !== 'Unknown'
-        ? (function() {
-            var parts = ip.split('.');
-            if (parts.length === 4) {
-              return parts[0] + '.' + parts[1] + '.' + parts[2] + '.xxx';
-            }
-            return ip; // IPv6 or unusual format — show as-is
-          })()
+        ? ip.split('.').map(function (o, idx) { return idx >= 2 ? 'xxx' : o; }).join('.')
         : 'Unknown';
 
       var header = isLocalTest
