@@ -1097,243 +1097,354 @@
   };
 
   // ----------------------------------------------------------
-  // 1P · TELEGRAM NOTIFICATION
-  // Sends a visitor alert to your Telegram via Bot API.
+  // 1P · VISITOR TRACKING & TELEGRAM NOTIFICATION v3.0
+  // Modular · async/await · Full intelligence · Duplicate guard
   // ----------------------------------------------------------
 
-  var TG_BOT_TOKEN = '8781804826:AAFQxp3TgA5WJb3tLVyTbToxa-Lafm1ndz0';
-  var TG_CHAT_ID   = '8235795754';
-  var TG_API_URL   = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
-  var TG_MAX_RETRY = 3;
+  var TG_BOT_TOKEN  = '8781804826:AAFQxp3TgA5WJb3tLVyTbToxa-Lafm1ndz0';
+  var TG_CHAT_ID    = '8235795754';
+  var TG_API_URL    = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
+  var TG_MAX_RETRY  = 3;
+  var _notifSent    = false; // duplicate-send guard
 
-  function sendNtfyNotification(name, callback) {
-    var ua = navigator.userAgent;
+  // ── HELPER · safe value with fallback ──────────────────────
+  function safeVal(v, fallback) {
+    var f = (fallback !== undefined) ? fallback : 'Unknown';
+    if (v === null || v === undefined) return f;
+    var s = String(v).trim();
+    return s !== '' && s !== 'null' && s !== 'undefined' ? s : f;
+  }
 
-    var device = 'Desktop';
-    if      (/iPhone/i.test(ua))          device = 'iPhone';
-    else if (/iPad/i.test(ua))            device = 'iPad';
-    else if (/Android.*Mobile/i.test(ua)) device = 'Android Phone';
-    else if (/Android/i.test(ua))         device = 'Android Tablet';
+  // ── HELPER · detect preferred color scheme ─────────────────
+  function getThemeMode() {
+    try {
+      return (window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ? 'Dark Mode' : 'Light Mode';
+    } catch (e) { return 'Unknown'; }
+  }
 
-    var os = 'Unknown OS';
-    if      (/Windows NT 10/i.test(ua))       os = 'Windows 10/11';
-    else if (/Windows NT 6/i.test(ua))        os = 'Windows (older)';
-    else if (/Mac OS X/i.test(ua))            os = 'macOS';
-    else if (/iPhone OS ([\d_]+)/i.test(ua))  os = 'iOS ' + ua.match(/iPhone OS ([\d_]+)/i)[1].replace(/_/g,'.');
-    else if (/Android ([\d.]+)/i.test(ua))    os = 'Android ' + ua.match(/Android ([\d.]+)/i)[1];
-    else if (/Linux/i.test(ua))               os = 'Linux';
+  // ── HELPER · traffic source from referrer ──────────────────
+  function getTrafficSource() {
+    var src = document.referrer || '';
+    if (!src) return 'Direct / Bookmark';
+    if (src.indexOf('linkedin')  !== -1) return 'LinkedIn';
+    if (src.indexOf('github')    !== -1) return 'GitHub';
+    if (src.indexOf('google')    !== -1) return 'Google Search';
+    if (src.indexOf('bing')      !== -1) return 'Bing Search';
+    if (src.indexOf('instagram') !== -1) return 'Instagram';
+    if (src.indexOf('twitter')   !== -1 || src.indexOf('t.co') !== -1) return 'Twitter / X';
+    if (src.indexOf('whatsapp')  !== -1) return 'WhatsApp';
+    if (src.indexOf('facebook')  !== -1) return 'Facebook';
+    if (src.indexOf('youtube')   !== -1) return 'YouTube';
+    if (src.indexOf('tiktok')    !== -1) return 'TikTok';
+    return src.replace(/https?:\/\/(www\.)?/, '').split('/')[0] || 'Referral';
+  }
 
-    var browser = 'Unknown';
-    if      (/Edg\//i.test(ua))     browser = 'Edge';
-    else if (/OPR\//i.test(ua))     browser = 'Opera';
-    else if (/Chrome\//i.test(ua))  browser = 'Chrome';
-    else if (/Firefox\//i.test(ua)) browser = 'Firefox';
-    else if (/Safari\//i.test(ua))  browser = 'Safari';
+  // ── HELPER · session type (new vs returning) ───────────────
+  function getSessionType() {
+    try {
+      if (sessionStorage.getItem('_smVisit')) return 'Returning (Session)';
+      sessionStorage.setItem('_smVisit', '1');
+      var count = parseInt(localStorage.getItem('_smVisitCount') || '0', 10);
+      localStorage.setItem('_smVisitCount', String(count + 1));
+      return count > 0 ? 'Returning Visitor' : 'New Visitor';
+    } catch (e) { return 'New Visitor'; }
+  }
 
-    var screenRes      = window.screen.width + 'x' + window.screen.height;
-    var lang           = navigator.language || 'Unknown';
-    var referrer       = document.referrer || 'Direct / Bookmark';
-    var screenWidth    = window.screen.width;
-    var deviceCategory = screenWidth < 480 ? 'Mobile' : screenWidth < 1024 ? 'Tablet' : 'Desktop';
-    var isLocal        = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
-    var time           = new Date().toLocaleString('en-US', {
-      timeZone: 'Asia/Qatar', weekday: 'short', year: 'numeric',
-      month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
-    });
+  // ── HELPER · parse browser name + major version ────────────
+  function parseBrowserUA(ua) {
+    var m;
+    if (/Edg\/([\d.]+)/i.test(ua))     { m = ua.match(/Edg\/([\d.]+)/i);     return { name: 'Edge',    ver: m[1].split('.')[0] }; }
+    if (/OPR\/([\d.]+)/i.test(ua))     { m = ua.match(/OPR\/([\d.]+)/i);     return { name: 'Opera',   ver: m[1].split('.')[0] }; }
+    if (/Firefox\/([\d.]+)/i.test(ua)) { m = ua.match(/Firefox\/([\d.]+)/i); return { name: 'Firefox', ver: m[1].split('.')[0] }; }
+    if (/Chrome\/([\d.]+)/i.test(ua))  { m = ua.match(/Chrome\/([\d.]+)/i);  return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
+    if (/Version\/([\d.]+).*Safari/i.test(ua)) { m = ua.match(/Version\/([\d.]+)/i); return { name: 'Safari', ver: m[1].split('.')[0] }; }
+    return { name: 'Unknown', ver: '' };
+  }
 
-    // ── Core send with retry ──────────────────────────────────
-    function sendToTelegram(payload, attempt, onDone) {
-      attempt = attempt || 1;
-      fetch(TG_API_URL, {
+  // ── HELPER · parse OS name + version ──────────────────────
+  function parseOSUA(ua) {
+    var m;
+    if (/Windows NT ([\d.]+)/i.test(ua)) {
+      m = ua.match(/Windows NT ([\d.]+)/i);
+      var nt = m[1];
+      var ver = nt === '10.0' ? '10 / 11' : nt === '6.3' ? '8.1' : nt === '6.2' ? '8' : nt === '6.1' ? '7' : nt;
+      return { name: 'Windows', ver: ver };
+    }
+    if (/iPhone OS ([\d_]+)/i.test(ua)) {
+      m = ua.match(/iPhone OS ([\d_]+)/i);
+      return { name: 'iOS', ver: m[1].replace(/_/g, '.') };
+    }
+    if (/iPad.*OS ([\d_]+)/i.test(ua)) {
+      m = ua.match(/OS ([\d_]+)/i);
+      return { name: 'iPadOS', ver: m[1].replace(/_/g, '.') };
+    }
+    if (/Mac OS X ([\d_]+)/i.test(ua)) {
+      m = ua.match(/Mac OS X ([\d_]+)/i);
+      return { name: 'macOS', ver: m[1].replace(/_/g, '.') };
+    }
+    if (/Android ([\d.]+)/i.test(ua)) {
+      m = ua.match(/Android ([\d.]+)/i);
+      return { name: 'Android', ver: m[1] };
+    }
+    if (/Linux/i.test(ua)) return { name: 'Linux', ver: '' };
+    return { name: 'Unknown', ver: '' };
+  }
+
+  // ── HELPER · device type + model ──────────────────────────
+  function parseDeviceUA(ua) {
+    if (/iPhone/i.test(ua)) {
+      if (/iPhone16,2|iPhone17/i.test(ua))   return 'iPhone 16 Pro';
+      if (/iPhone16,1/i.test(ua))            return 'iPhone 16';
+      if (/iPhone15,3|iPhone15,4/i.test(ua)) return 'iPhone 15 Pro';
+      if (/iPhone15,2/i.test(ua))            return 'iPhone 15';
+      if (/iPhone14,/i.test(ua))             return 'iPhone 14';
+      if (/iPhone13,/i.test(ua))             return 'iPhone 13';
+      if (/iPhone12,/i.test(ua))             return 'iPhone 12';
+      return 'iPhone';
+    }
+    if (/iPad/i.test(ua))            return 'iPad';
+    if (/Samsung/i.test(ua))         { var sm = ua.match(/Samsung[- ]([\w]+)/i); return sm ? 'Samsung ' + sm[1] : 'Samsung Android'; }
+    if (/Pixel[ _]([\w]+)/i.test(ua)){ var px = ua.match(/Pixel[ _]([\w]+)/i);  return px ? 'Google Pixel ' + px[1] : 'Google Pixel'; }
+    if (/Huawei/i.test(ua))          return 'Huawei';
+    if (/OnePlus/i.test(ua))         return 'OnePlus';
+    if (/Android.*Mobile/i.test(ua)) return 'Android Phone';
+    if (/Android/i.test(ua))         return 'Android Tablet';
+    return 'Desktop';
+  }
+
+  // ── HELPER · CPU architecture ─────────────────────────────
+  function parseCPUUA(ua) {
+    if (/aarch64|arm64/i.test(ua))         return 'ARM64';
+    if (/armv\d/i.test(ua))                return 'ARM';
+    if (/x86_64|x64|Win64|WOW64/i.test(ua)) return 'amd64';
+    if (/i[36]86/i.test(ua))               return 'x86';
+    return 'Unknown';
+  }
+
+  // ── CORE · send Telegram with exponential-backoff retry ───
+  async function _tgSend(payload, attempt) {
+    attempt = attempt || 1;
+    try {
+      var r = await fetch(TG_API_URL, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload)
-      })
-      .then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.json();
-      })
-      .then(function (d) {
-        if (d.ok) {
-          console.log('[Gate] \u2705 Telegram sent (attempt ' + attempt + ') for: ' + name);
-        } else {
-          // Telegram returned ok:false — log full response so we can debug
-          console.error('[Gate] \u274C Telegram rejected (attempt ' + attempt + '):', JSON.stringify(d));
-          if (attempt < TG_MAX_RETRY) {
-            setTimeout(function () { sendToTelegram(payload, attempt + 1, onDone); }, 1500 * attempt);
-            return;
-          }
-        }
-        if (onDone) onDone();
-      })
-      .catch(function (e) {
-        console.error('[Gate] \u274C Telegram fetch error (attempt ' + attempt + '):', e);
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      var d = await r.json();
+      if (d.ok) {
+        console.log('[Gate] \u2705 Telegram sent (attempt ' + attempt + ')');
+      } else {
+        console.error('[Gate] \u274C Telegram rejected:', JSON.stringify(d));
         if (attempt < TG_MAX_RETRY) {
-          setTimeout(function () { sendToTelegram(payload, attempt + 1, onDone); }, 1500 * attempt);
-        } else {
-          if (onDone) onDone();
+          await new Promise(function(res) { setTimeout(res, 1500 * attempt); });
+          return _tgSend(payload, attempt + 1);
         }
-      });
+      }
+    } catch (e) {
+      console.error('[Gate] \u274C Telegram error (attempt ' + attempt + '):', e);
+      if (attempt < TG_MAX_RETRY) {
+        await new Promise(function(res) { setTimeout(res, 1500 * attempt); });
+        return _tgSend(payload, attempt + 1);
+      }
+    }
+  }
+
+  // ── CORE · fetch rich IP/geo intelligence ─────────────────
+  async function fetchGeoIntel() {
+    // Attempt 1: ipwho.is — free, no key, rich data
+    try {
+      var r1 = await fetch('https://ipwho.is/');
+      if (!r1.ok) throw new Error('HTTP ' + r1.status);
+      var d1 = await r1.json();
+      if (!d1.success) throw new Error('ipwho returned success:false');
+      return {
+        ip:             safeVal(d1.ip),
+        country:        safeVal(d1.country),
+        city:           safeVal(d1.city),
+        region:         safeVal(d1.region),
+        latitude:       safeVal(d1.latitude),
+        longitude:      safeVal(d1.longitude),
+        isp:            safeVal(d1.connection && d1.connection.isp),
+        asnOrg:         safeVal(d1.connection && d1.connection.org),
+        asnNumber:      safeVal(d1.connection && d1.connection.asn),
+        connectionType: safeVal(d1.connection && d1.connection.domain, 'Cable/DSL'),
+        isVpn:          false,
+        isTor:          false,
+        threatLevel:    'low',
+        timezone:       safeVal(d1.timezone && d1.timezone.id),
+        localTime:      safeVal(d1.timezone && d1.timezone.current_time)
+      };
+    } catch (e1) {
+      console.warn('[Gate] ipwho.is failed:', e1);
     }
 
-    // ── Build message and dispatch ────────────────────────────
-    function sendMsg(ip, city, country, isp) {
-      var isLocalTest = isLocal;
-
-      // ── Detect device model name ──────────────────────────
-      var deviceModel = device;
-      if (/iPhone/i.test(ua)) {
-        if      (/iPhone16,2|iPhone17/i.test(ua))  deviceModel = 'iPhone 16 Pro';
-        else if (/iPhone16,1/i.test(ua))           deviceModel = 'iPhone 16';
-        else if (/iPhone15,3|iPhone15,4/i.test(ua))deviceModel = 'iPhone 15 Pro';
-        else if (/iPhone15,2/i.test(ua))           deviceModel = 'iPhone 15';
-        else if (/iPhone14,/i.test(ua))            deviceModel = 'iPhone 14 Series';
-        else if (/iPhone13,/i.test(ua))            deviceModel = 'iPhone 13 Series';
-        else if (/iPhone12,/i.test(ua))            deviceModel = 'iPhone 12 Series';
-        else                                        deviceModel = 'iPhone';
-      } else if (/iPad/i.test(ua)) {
-        deviceModel = 'iPad';
-      } else if (/Samsung/i.test(ua)) {
-        var sm = ua.match(/Samsung[- ]([\w]+)/i);
-        deviceModel = sm ? 'Samsung ' + sm[1] : 'Samsung Android';
-      } else if (/Pixel/i.test(ua)) {
-        var px = ua.match(/Pixel[ _]([\w]+)/i);
-        deviceModel = px ? 'Google Pixel ' + px[1] : 'Google Pixel';
-      } else if (/Huawei/i.test(ua)) {
-        deviceModel = 'Huawei';
-      } else if (/OnePlus/i.test(ua)) {
-        deviceModel = 'OnePlus';
-      }
-
-      // ── Detect browser with mobile suffix ────────────────
-      var browserFull = browser;
-      if (deviceCategory === 'Mobile' || device === 'iPhone' || device === 'Android Phone') {
-        browserFull = browser + ' Mobile';
-      }
-
-      // ── Source / campaign detection ───────────────────────
-      var source   = document.referrer || '';
-      var srcLabel = 'Direct / Bookmark';
-      var campaign = 'Direct Visit';
-      var visitType = 'Direct Traffic';
-
-      if (source.indexOf('linkedin') !== -1) {
-        srcLabel  = 'LinkedIn';
-        campaign  = 'Profile Link';
-        visitType = 'Social Traffic';
-      } else if (source.indexOf('github') !== -1) {
-        srcLabel  = 'GitHub';
-        campaign  = 'GitHub Profile';
-        visitType = 'Developer Traffic';
-      } else if (source.indexOf('google') !== -1) {
-        srcLabel  = 'Google Search';
-        campaign  = 'Organic Search';
-        visitType = 'Search Traffic';
-      } else if (source.indexOf('instagram') !== -1) {
-        srcLabel  = 'Instagram';
-        campaign  = 'Bio Link';
-        visitType = 'Social Traffic';
-      } else if (source.indexOf('twitter') !== -1 || source.indexOf('t.co') !== -1) {
-        srcLabel  = 'Twitter / X';
-        campaign  = 'Profile Link';
-        visitType = 'Social Traffic';
-      } else if (source.indexOf('whatsapp') !== -1) {
-        srcLabel  = 'WhatsApp';
-        campaign  = 'Shared Link';
-        visitType = 'Referral Traffic';
-      } else if (source !== '') {
-        srcLabel  = source.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
-        campaign  = 'Referral Link';
-        visitType = 'Referral Traffic';
-      }
-
-      // ── Device emoji ─────────────────────────────────────
-      var deviceEmoji = '\uD83D\uDCBB'; // 💻 desktop default
-      if      (/iPhone/i.test(ua))          deviceEmoji = '\uD83D\uDCF1'; // 📱
-      else if (/iPad/i.test(ua))            deviceEmoji = '\uD83D\uDCF1'; // 📱
-      else if (/Android.*Mobile/i.test(ua)) deviceEmoji = '\uD83D\uDCF1'; // 📱
-      else if (/Android/i.test(ua))         deviceEmoji = '\uD83D\uDCF1'; // 📱
-
-      // ── OS emoji ─────────────────────────────────────────
-      var osEmoji = '\uD83D\uDCBB'; // 💻
-      if      (/iPhone|iPad|Mac/i.test(ua)) osEmoji = '\uD83C\uDF4E'; // 🍎
-      else if (/Android/i.test(ua))         osEmoji = '\uD83E\uDD16'; // 🤖
-      else if (/Windows/i.test(ua))         osEmoji = '\uD83E\uDEDF'; // 🪟
-      else if (/Linux/i.test(ua))           osEmoji = '\uD83D\uDC27'; // 🐧
-
-      var maskedIp = ip !== 'Unknown'
-        ? ip.split('.').map(function (o, idx) { return idx >= 2 ? 'xxx' : o; }).join('.')
-        : 'Unknown';
-
-      var header = isLocalTest
-        ? '\uD83D\uDD27 <b>[Local Test]</b> ' + name + ' opened your portfolio'
-        : '\uD83D\uDE80 <b>New Portfolio Visitor</b>';
-
-      var text = [
-        header,
-        '',
-        '\uD83D\uDC64 <b>Visitor :</b> ' + name,
-        '\uD83C\uDF0D <b>Location :</b> ' + city + ', ' + country,
-        '\uD83D\uDD0C <b>IP :</b> <code>' + maskedIp + '</code>',
-        '\uD83D\uDCE1 <b>ISP :</b> ' + isp,
-        '',
-        deviceEmoji + ' <b>Device :</b> ' + deviceModel,
-        osEmoji     + ' <b>OS :</b> ' + os,
-        '\uD83C\uDF10 <b>Browser :</b> ' + browserFull,
-        '\uD83D\uDCCF <b>Screen :</b> ' + screenRes,
-        '\uD83D\uDDE3 <b>Language :</b> ' + lang,
-        '',
-        '\uD83D\uDD17 <b>Source :</b> ' + srcLabel,
-        '\uD83D\uDCF2 <b>Campaign :</b> ' + campaign,
-        '\uD83D\uDCCD <b>Visit Type:</b> ' + visitType,
-        '\u23F1 <b>Session :</b> New Visitor',
-        '',
-        '\uD83D\uDD52 <b>Time(QA) :</b> ' + time,
-        '',
-        '\u2728 <i>Portfolio viewed successfully</i>',
-        '',
-        '\uD83D\uDDFA <a href="https://www.google.com/maps/search/' + ip + '">Map</a>  \u00B7  <a href="https://ipinfo.io/' + ip + '">IP Info</a>  \u00B7  <a href="https://sajidmk.com">Portfolio</a>'
-      ].join('\n');
-
-      console.log('[Gate] Sending Telegram notification for: ' + name);
-
-      sendToTelegram({
-        chat_id                  : TG_CHAT_ID,
-        text                     : text,
-        parse_mode               : 'HTML',
-        disable_web_page_preview : true
-      }, 1, callback);
+    // Attempt 2: ipify + ipapi.co fallback
+    try {
+      var r2  = await fetch('https://api.ipify.org?format=json');
+      var d2  = await r2.json();
+      var ip2 = safeVal(d2.ip);
+      var r3  = await fetch('https://ipapi.co/' + ip2 + '/json/');
+      var d3  = await r3.json();
+      if (d3.error) throw new Error(d3.reason);
+      return {
+        ip:             ip2,
+        country:        safeVal(d3.country_name),
+        city:           safeVal(d3.city),
+        region:         safeVal(d3.region),
+        latitude:       safeVal(d3.latitude),
+        longitude:      safeVal(d3.longitude),
+        isp:            safeVal(d3.org),
+        asnOrg:         safeVal(d3.org),
+        asnNumber:      safeVal(d3.asn),
+        connectionType: 'Unknown',
+        isVpn:          false,
+        isTor:          false,
+        threatLevel:    'Unknown',
+        timezone:       safeVal(d3.timezone),
+        localTime:      ''
+      };
+    } catch (e2) {
+      console.warn('[Gate] ipapi.co fallback failed:', e2);
     }
 
-    // ── Geo-lookup: ipify → ipapi.co → fallback ───────────────
-    var geoTimeout = setTimeout(function () {
-      // Safety net: if geo takes too long, send without it
-      console.warn('[Gate] Geo lookup timed out — sending without geo data');
-      sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP');
-    }, 6000);
+    // All failed — return blank geo object
+    return {
+      ip: 'Unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown',
+      latitude: 'Unknown', longitude: 'Unknown', isp: 'Unknown', asnOrg: 'Unknown',
+      asnNumber: 'Unknown', connectionType: 'Unknown', isVpn: false, isTor: false,
+      threatLevel: 'Unknown', timezone: 'Unknown', localTime: ''
+    };
+  }
 
-    fetch('https://api.ipify.org?format=json')
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        var ip = d.ip || 'Unknown';
-        fetch('https://ipapi.co/' + ip + '/json/')
-          .then(function (r) { return r.json(); })
-          .then(function (g) {
-            clearTimeout(geoTimeout);
-            if (g.error) throw new Error('ipapi error: ' + g.reason);
-            sendMsg(ip, g.city || 'Unknown', g.country_name || 'Unknown', g.org || 'Unknown ISP');
-          })
-          .catch(function (e) {
-            clearTimeout(geoTimeout);
-            console.warn('[Gate] ipapi failed:', e);
-            sendMsg(ip, 'Unknown', 'Unknown', 'Unknown ISP');
-          });
+  // ── CORE · build the premium Telegram alert message ───────
+  function buildVisitorAlert(name, geo, client) {
+    var isLocal   = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
+    var maskedIp  = geo.ip !== 'Unknown'
+      ? geo.ip.split('.').map(function(o, i) { return i >= 2 ? 'xxx' : o; }).join('.')
+      : 'Unknown';
+
+    var vpnStr    = geo.isVpn ? '\u26A0\uFE0F Yes'  : '\u2705 No';
+    var torStr    = geo.isTor ? '\u26A0\uFE0F Yes'  : '\u2705 No';
+    var threat    = String(safeVal(geo.threatLevel, 'Unknown')).toLowerCase();
+    var threatStr = threat === 'low'    ? '\uD83D\uDFE2 Low'
+                  : threat === 'medium' ? '\uD83D\uDFE1 Medium'
+                  : threat === 'high'   ? '\uD83D\uDD34 High'
+                  : '\u26AA ' + safeVal(geo.threatLevel);
+
+    var coords    = (geo.latitude !== 'Unknown' && geo.longitude !== 'Unknown')
+      ? safeVal(geo.latitude) + ', ' + safeVal(geo.longitude)
+      : 'Unknown';
+
+    var localTime = safeVal(geo.localTime) !== 'Unknown' ? safeVal(geo.localTime) : client.localTime;
+    var mapQuery  = coords !== 'Unknown' ? coords.replace(', ', ',') : geo.ip;
+
+    var header = isLocal
+      ? '\uD83D\uDD27 <b>[Local Test]</b> \u2014 ' + name + ' opened your portfolio'
+      : '\u256D\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 \u2726 LIVE VISITOR \u2726 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256E';
+
+    return [
+      header,
+      '',
+      '\uD83D\uDC64 <b>Visitor</b>       : ' + name,
+      '',
+      '\uD83C\uDF0D <b>Country</b>       : ' + safeVal(geo.country),
+      '\uD83C\uDFD9 <b>City</b>          : ' + safeVal(geo.city),
+      '\uD83D\uDDFA <b>Region</b>        : ' + safeVal(geo.region),
+      '\uD83D\uDCCD <b>Coordinates</b>   : ' + coords,
+      '',
+      '\uD83D\uDD0C <b>IP Address</b>    : <code>' + maskedIp + '</code>',
+      '\uD83D\uDEF0 <b>Connection</b>    : ' + safeVal(geo.connectionType),
+      '\uD83C\uDFE2 <b>ISP</b>           : ' + safeVal(geo.isp),
+      '\uD83C\uDFDB <b>ASN Org</b>       : ' + safeVal(geo.asnOrg),
+      '',
+      '\uD83D\uDD12 <b>VPN</b>           : ' + vpnStr,
+      '\uD83E\uDDC5 <b>TOR</b>           : ' + torStr,
+      '\u26A0\uFE0F <b>Threat Level</b>  : ' + threatStr,
+      '',
+      '\uD83D\uDCF1 <b>Device</b>        : ' + safeVal(client.device),
+      '\uD83E\uDEDF <b>OS</b>            : ' + safeVal(client.osName) + ' ' + safeVal(client.osVer, ''),
+      '\uD83C\uDF10 <b>Browser</b>       : ' + safeVal(client.browserName) + ' ' + safeVal(client.browserVer, ''),
+      '\uD83E\uDDE0 <b>CPU</b>           : ' + safeVal(client.cpu),
+      '',
+      '\uD83D\uDCCF <b>Resolution</b>    : ' + client.screenW + ' \u00D7 ' + client.screenH,
+      '\uD83C\uDF19 <b>Theme</b>         : ' + safeVal(client.theme),
+      '\uD83D\uDDE3 <b>Language</b>      : ' + safeVal(client.lang),
+      '',
+      '\uD83D\uDD53 <b>Timezone</b>      : ' + safeVal(geo.timezone),
+      '\uD83D\uDD52 <b>Local Time</b>    : ' + safeVal(localTime),
+      '',
+      '\uD83D\uDD17 <b>Source</b>        : ' + safeVal(client.source),
+      '\uD83D\uDCC4 <b>Landing Page</b>  : ' + safeVal(client.pathname),
+      '\u23F1 <b>Session Type</b>  : ' + safeVal(client.sessionType),
+      '',
+      '\u2728 <i>Portfolio viewed successfully</i>',
+      '',
+      '\u2570\u2500\u2500 <a href="https://www.google.com/maps/search/?api=1&query=' + mapQuery + '">\uD83D\uDDFA Map</a>  \u00B7  <a href="https://ipinfo.io/' + geo.ip + '">\uD83D\uDD0D IP Lookup</a>  \u00B7  <a href="https://sajidmk.com">\uD83D\uDCCA Analytics</a> \u2500\u2500\u256F'
+    ].join('\n');
+  }
+
+  // ── MAIN · orchestrate tracking + notification ─────────────
+  async function sendNtfyNotification(name, callback) {
+    if (_notifSent) {
+      console.log('[Gate] Duplicate notification blocked for: ' + name);
+      if (callback) callback();
+      return;
+    }
+    _notifSent = true;
+
+    // Collect all client-side signals immediately (no network needed)
+    var ua     = navigator.userAgent;
+    var br     = parseBrowserUA(ua);
+    var os     = parseOSUA(ua);
+    var client = {
+      browserName : br.name,
+      browserVer  : br.ver,
+      osName      : os.name,
+      osVer       : os.ver,
+      device      : parseDeviceUA(ua),
+      cpu         : parseCPUUA(ua),
+      screenW     : window.screen.width,
+      screenH     : window.screen.height,
+      theme       : getThemeMode(),
+      lang        : navigator.language || 'Unknown',
+      source      : getTrafficSource(),
+      pathname    : window.location.pathname || '/',
+      sessionType : getSessionType(),
+      localTime   : new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Qatar', weekday: 'short', month: 'short',
+        day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit'
       })
-      .catch(function (e) {
-        clearTimeout(geoTimeout);
-        console.warn('[Gate] ipify failed:', e);
-        sendMsg('Unknown', 'Unknown', 'Unknown', 'Unknown ISP');
-      });
+    };
+
+    // Geo fetch with 6-second hard timeout
+    var geo = await Promise.race([
+      fetchGeoIntel(),
+      new Promise(function(resolve) {
+        setTimeout(function() {
+          console.warn('[Gate] Geo lookup timed out — sending without geo data');
+          resolve({
+            ip: 'Unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown',
+            latitude: 'Unknown', longitude: 'Unknown', isp: 'Unknown', asnOrg: 'Unknown',
+            asnNumber: 'Unknown', connectionType: 'Unknown', isVpn: false, isTor: false,
+            threatLevel: 'Unknown', timezone: 'Unknown', localTime: ''
+          });
+        }, 6000);
+      })
+    ]);
+
+    var text = buildVisitorAlert(name, geo, client);
+    console.log('[Gate] Sending Telegram notification for: ' + name);
+
+    await _tgSend({
+      chat_id                  : TG_CHAT_ID,
+      text                     : text,
+      parse_mode               : 'HTML',
+      disable_web_page_preview : true
+    });
+
+    if (callback) callback();
   }
 
 })(); // END GATE OVERLAY
