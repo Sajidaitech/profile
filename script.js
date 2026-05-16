@@ -2568,67 +2568,156 @@ var experienceData = [
   }
 ];
 
+// ── EXPERIENCE TAB LABEL HELPERS ──────────────────────────────
+var expTabIcons = ['fa-building', 'fa-hospital', 'fa-plane-up', 'fa-headset'];
+var expTabLabels = ['Al Tawkel', 'Elegancia · PIH', 'PIH Group', 'Ooredoo'];
+
 function loadExperience() {
   var timeline = document.getElementById('expTimeline');
   if (!timeline) return;
 
+  // Section eyebrow label
+  var eyebrow = document.createElement('p');
+  eyebrow.className = 'lge-section-eyebrow';
+  eyebrow.setAttribute('data-aos', 'fade-up');
+  timeline.appendChild(eyebrow);
+
+  // Tab pill nav
+  var tabNav = document.createElement('div');
+  tabNav.className = 'lge-tabs-nav';
+  tabNav.setAttribute('data-aos', 'fade-up');
+  tabNav.setAttribute('data-aos-delay', '80');
+
   experienceData.forEach(function (exp, i) {
-    var item = document.createElement('div');
-    item.className = 'exp-item';
-    item.setAttribute('data-aos', 'fade-up');
-    item.setAttribute('data-aos-delay', i * 80);
+    var tabBtn = document.createElement('button');
+    tabBtn.className = 'lge-tab-pill' + (i === 0 ? ' lge-tab-active' : '');
+    tabBtn.setAttribute('data-tab', i);
+    tabBtn.innerHTML = '<i class="fas ' + expTabIcons[i] + ' lge-tab-icon"></i>' + expTabLabels[i];
+    tabBtn.addEventListener('click', function () {
+      document.querySelectorAll('.lge-tab-pill').forEach(function (t) { t.classList.remove('lge-tab-active'); });
+      document.querySelectorAll('.lge-panel').forEach(function (p) { p.classList.remove('lge-panel-active'); });
+      tabBtn.classList.add('lge-tab-active');
+      var panel = document.getElementById('lge-panel-' + i);
+      if (panel) {
+        panel.classList.add('lge-panel-active');
+        panel.querySelectorAll('.lge-bullet-row').forEach(function (row, ri) {
+          row.style.opacity = '0';
+          row.style.transform = 'translateX(-12px)';
+          setTimeout(function () {
+            row.style.transition = 'opacity 0.32s ease ' + (ri * 55) + 'ms, transform 0.32s ease ' + (ri * 55) + 'ms';
+            row.style.opacity = '1';
+            row.style.transform = 'translateX(0)';
+          }, 20);
+        });
+      }
+    });
+    tabNav.appendChild(tabBtn);
+  });
+  timeline.appendChild(tabNav);
 
-    var statsHTML = exp.stats && exp.stats.length
-      ? '<div class="exp-stats-strip">' + exp.stats.map(function (s, si) {
-          return '<div class="exp-stat-chip" style="animation-delay:' + (si*80) + 'ms"><div class="esc-icon"><i class="fas ' + s.icon + '"></i></div><div class="esc-body"><span class="esc-value">' + s.value + '</span><span class="esc-label">' + s.label + '</span></div></div>';
-        }).join('') + '</div>' : '';
+  // Panels wrapper
+  var panelWrap = document.createElement('div');
+  panelWrap.className = 'lge-panels-wrap';
 
-    var projectsHTML = exp.projects && exp.projects.length
-      ? '<div class="exp-projects-row">' + exp.projects.map(function (p, pi) {
-          return '<div class="exp-project-box" style="--proj-color:' + p.color + ';background:' + (p.gradient||p.color) + ';animation-delay:' + (pi*80) + 'ms"><div class="epb-glow"></div><div class="epb-icon"><i class="fas ' + p.icon + '"></i></div><div class="epb-info"><span class="epb-label">' + p.label + '</span><span class="epb-detail">' + p.detail + '</span></div><div class="epb-shine"></div></div>';
-        }).join('') + '</div>' : '';
+  var headerIconsMap = ['fa-building', 'fa-hospital-alt', 'fa-network-wired', 'fa-phone-volume'];
+
+  experienceData.forEach(function (exp, i) {
+    var panel = document.createElement('div');
+    panel.className = 'lge-panel' + (i === 0 ? ' lge-panel-active' : '');
+    panel.id = 'lge-panel-' + i;
+
+    var card = document.createElement('div');
+    card.className = 'lge-card';
+
+    var headerHTML =
+      '<div class="lge-card-header">' +
+        '<div class="lge-card-icon-wrap"><i class="fas ' + headerIconsMap[i] + '"></i></div>' +
+        '<div class="lge-card-title-block">' +
+          '<h3 class="lge-card-title">' + exp.title + '</h3>' +
+          '<div class="lge-card-tags">' + exp.company.split('·').map(function(t){ return '<span class="lge-tag">' + t.trim().toUpperCase() + '</span>'; }).join('') + '</div>' +
+        '</div>' +
+      '</div>';
+
+    var statsHTML = '';
+    if (exp.stats && exp.stats.length) {
+      statsHTML = '<div class="lge-stats-strip">' +
+        exp.stats.map(function (s) {
+          return '<div class="lge-stat-chip">' +
+            '<span class="lge-stat-val">' + s.value + '</span>' +
+            '<span class="lge-stat-lbl">' + s.label + '</span>' +
+          '</div>';
+        }).join('') + '</div>';
+    }
+
+    var projectsHTML = '';
+    if (exp.projects && exp.projects.length) {
+      projectsHTML = '<div class="lge-projects-row">' +
+        exp.projects.map(function (p) {
+          return '<div class="lge-proj-chip" style="background:' + (p.gradient || p.color) + '">' +
+            '<i class="fas ' + p.icon + '"></i>' +
+            '<span>' + p.label + '</span>' +
+          '</div>';
+        }).join('') + '</div>';
+    }
+
+    var bulletsHTML = '<ul class="lge-bullet-list">' +
+      exp.responsibilities.map(function (r) {
+        var match = r.match(/<b>(.*?)<\/b>(.*)/);
+        var label = match ? match[1] : '';
+        var desc  = match ? match[2].replace(/^:\s*/, '').replace(/^—\s*/, '') : r;
+        return '<li class="lge-bullet-row">' +
+          '<span class="lge-bullet-dot"><span class="lge-dot-inner"></span></span>' +
+          '<span class="lge-bullet-text"><span class="lge-bullet-label">' + label + '</span>' +
+          (label && desc ? ' — ' : '') + '<span class="lge-bullet-desc">' + desc.trim() + '</span></span>' +
+        '</li>';
+      }).join('') + '</ul>';
 
     var lettersHTML = (exp.letters || []).map(function (l) {
-      return '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="exp-btn"><i class="fas fa-file-contract"></i>' + l.text + '</a>';
+      return '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="lge-action-btn">' +
+        '<i class="fas fa-file-contract"></i>' + l.text + '</a>';
     }).join('');
 
     var recHTML = '';
     if (exp.recommendation) {
       var rec = exp.recommendation;
       recHTML =
-        '<div class="rec-glass-card" style="--rec-accent:' + rec.accentColor + '">' +
-          '<div class="rec-glass-inner">' +
-            '<div class="rec-quote-mark" aria-hidden="true">“</div>' +
-            '<p class="rec-quote-text">' + rec.quote + '</p>' +
-            '<div class="rec-footer">' +
-              '<div class="rec-avatar" style="border-color:' + rec.accentColor + '">' + rec.initials + '</div>' +
-              '<div class="rec-author">' +
-                '<span class="rec-author-name">' + rec.name + '</span>' +
-                '<span class="rec-author-title">' + rec.title + '</span>' +
-              '</div>' +
-              '<div class="rec-actions">' +
-                '<span class="rec-verified-badge"><i class="fas fa-shield-check"></i> Verified</span>' +
-              '</div>' +
+        '<div class="lge-rec-card" style="--rec-accent:' + rec.accentColor + '">' +
+          '<span class="lge-rec-quote-mark">"</span>' +
+          '<p class="lge-rec-text">' + rec.quote + '</p>' +
+          '<div class="lge-rec-footer">' +
+            '<div class="lge-rec-avatar" style="background:' + rec.accentColor + '">' + rec.initials + '</div>' +
+            '<div class="lge-rec-author">' +
+              '<span class="lge-rec-name">' + rec.name + '</span>' +
+              '<span class="lge-rec-role">' + rec.title + '</span>' +
             '</div>' +
+            '<span class="lge-rec-verified"><i class="fas fa-shield-check"></i> Verified</span>' +
           '</div>' +
-          '<div class="rec-glass-shimmer"></div>' +
         '</div>';
     }
 
-    item.innerHTML =
-      '<div class="exp-card">' +
-        '<div class="exp-header">' +
-          '<div class="exp-title-row"><h3 class="exp-title">' + exp.title + '</h3>' + (exp.type ? '<span class="exp-type-badge">' + exp.type + '</span>' : '') + '</div>' +
-          '<div class="exp-meta"><span class="exp-date"><i class="fas fa-calendar-alt"></i> <b>' + exp.date + '</b></span><span class="exp-company-name">' + exp.company + '</span></div>' +
-        '</div>' +
-        statsHTML + projectsHTML +
-        '<ul class="exp-list">' + exp.responsibilities.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ul>' +
-        '<div class="exp-actions">' + lettersHTML + '</div>' +
-        recHTML +
-      '</div>';
+    card.innerHTML = headerHTML + statsHTML + projectsHTML + bulletsHTML +
+      '<div class="lge-card-footer">' + lettersHTML + '</div>' + recHTML;
 
-    timeline.appendChild(item);
+    panel.appendChild(card);
+    panelWrap.appendChild(panel);
   });
+
+  timeline.appendChild(panelWrap);
+
+  // Animate first panel on load
+  setTimeout(function () {
+    var firstPanel = document.getElementById('lge-panel-0');
+    if (!firstPanel) return;
+    firstPanel.querySelectorAll('.lge-bullet-row').forEach(function (row, ri) {
+      row.style.opacity = '0';
+      row.style.transform = 'translateX(-12px)';
+      setTimeout(function () {
+        row.style.transition = 'opacity 0.34s ease ' + (ri * 50) + 'ms, transform 0.34s ease ' + (ri * 50) + 'ms';
+        row.style.opacity = '1';
+        row.style.transform = 'translateX(0)';
+      }, 120);
+    });
+  }, 400);
 }
 
 
