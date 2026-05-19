@@ -477,7 +477,7 @@ body.gate-active { overflow: hidden !important; }
   padding-top: calc(var(--nav-top) + var(--nav-h) + 46px + clamp(24px, 4vw, 56px));
   padding-bottom: clamp(48px, 6vw, 80px);
   display: flex; flex-direction: column; justify-content: center;
-  position: relative; overflow: hidden; z-index: 10;
+  position: relative; overflow: clip; z-index: 10;
 }
 
 /* Editorial grid: portrait | chips | text */
@@ -546,18 +546,26 @@ body.gate-active { overflow: hidden !important; }
   display: flex; align-items: stretch; gap: 0; margin-bottom: 18px;
   background: rgba(255,255,255,.18);
   backdrop-filter: blur(20px) saturate(155%); -webkit-backdrop-filter: blur(20px) saturate(155%);
-  border: var(--glass-border); border-radius: var(--r-lg); overflow: hidden;
+  border: var(--glass-border); border-radius: var(--r-lg);
+  overflow: visible;
   box-shadow: var(--shadow-glass);
+  min-width: 0;
+  width: 100%;
 }
+/* Separator divs in HTML are hidden — dividers come from ::after on kpi-block */
+.kpi-sep { display: none !important; }
 .kpi-block {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; align-items: center;
   padding: 10px 8px; gap: 2px; position: relative;
 }
+.kpi-block:first-of-type { border-radius: var(--r-lg) 0 0 var(--r-lg); }
+.kpi-block:last-of-type  { border-radius: 0 var(--r-lg) var(--r-lg) 0; }
 .kpi-block::after {
   content: ''; position: absolute; right: 0; top: 18%; bottom: 18%;
   width: 1px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.09), transparent);
 }
-.kpi-block:last-child::after { display: none; }
+.kpi-block:last-of-type::after { display: none; }
 .kpi-inner { display: flex; align-items: baseline; gap: 1px; }
 .kpi-num   { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); }
 .kpi-unit  { font-size: 12px; font-weight: 600; color: var(--ink); }
@@ -1410,15 +1418,50 @@ main, .container, section { max-width: 100%; }
   .nav-mob-toggle   { display: flex; }
   .nav-resume-btn span { display: none; }
 
-  /* Hero */
+  /* Hero — portrait + chips side-by-side on top row, text below */
   .hero-editorial-layout {
-    grid-template-columns: 1fr; gap: 20px;
+    grid-template-columns: 150px 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px 12px;
   }
-  .hero-portrait-col  { max-width: 220px; margin: 0 auto; }
+  .hero-portrait-col {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 150px;
+    width: 150px;
+    align-self: start;
+    margin: 0;
+  }
+  .hero-portrait-frame {
+    border-radius: 28px;
+  }
   .hero-vertical-chips {
-    flex-direction: row; justify-content: center;
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+    align-self: center;
   }
-  .hvc-connector { width: 12px; height: 1px; }
+  .hvc-connector { width: 1px; height: 8px; margin-left: 28px; }
+  .hero-vchip {
+    min-width: 0;
+    width: 100%;
+    flex-direction: row;
+    gap: 8px;
+    padding: 7px 10px;
+    text-align: left;
+    align-items: center;
+  }
+  .hvc-val  { font-size: 13px; }
+  .hvc-lbl  { font-size: 9px; }
+
+  /* Row 2: text column spans full width */
+  .hero-type-col {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
 
   /* Sections */
   .museum-grid  { grid-template-columns: 1fr; }
@@ -1427,10 +1470,26 @@ main, .container, section { max-width: 100%; }
   .about-stats-row { grid-template-columns: repeat(2, 1fr); }
   .contact-layout  { grid-template-columns: 1fr; }
 
-  /* KPIs */
-  .hero-kpis  { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 100%; overflow: hidden; }
-  .kpi-sep    { display: none; }
-  .kpi-block  { min-width: 0; flex: unset; }
+  /* KPIs — show all 3 in a single scrollable row */
+  .hero-kpis  {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    max-width: 100%;
+    border-radius: var(--r);
+  }
+  .hero-kpis::-webkit-scrollbar { display: none; }
+  .kpi-block  {
+    min-width: 80px;
+    flex: 1 0 80px;
+    scroll-snap-align: start;
+    padding: 10px 8px;
+  }
+  .kpi-block::after {
+    display: block;
+  }
 
   /* Experience */
   .exp-card        { padding: 14px; }
@@ -1451,16 +1510,30 @@ main, .container, section { max-width: 100%; }
   .museum-grid   { grid-template-columns: 1fr; }
   .about-stats-row { grid-template-columns: repeat(2, 1fr); }
   .certs-grid    { grid-template-columns: 1fr; }
-  .hero-editorial-layout { gap: 14px; }
 
-  /* KPIs — 2×2 grid on very small screens */
-  .hero-kpis  { grid-template-columns: repeat(2, 1fr); }
-  .kpi-num    { font-size: 16px; }
-  .kpi-label  { font-size: 8.5px; }
-  .kpi-block  { padding: 10px 6px; }
-  /* Restore divider line between left/right columns */
-  .kpi-block:nth-child(1)::after,
-  .kpi-block:nth-child(3)::after { display: block; }
+  /* Smaller portrait on very small screens */
+  .hero-editorial-layout {
+    grid-template-columns: 120px 1fr;
+    gap: 12px 10px;
+  }
+  .hero-portrait-col { max-width: 120px; width: 120px; }
+  .hero-vchip { padding: 6px 8px; }
+  .hvc-val  { font-size: 12px; }
+  .hvc-lbl  { font-size: 8px; }
+
+  /* KPIs — keep scrollable row */
+  .hero-kpis {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--r);
+  }
+  .hero-kpis::-webkit-scrollbar { display: none; }
+  .kpi-num    { font-size: 15px; }
+  .kpi-label  { font-size: 8px; }
+  .kpi-block  { padding: 9px 6px; min-width: 72px; flex: 1 0 72px; }
+  .kpi-block::after { display: block; }
 }
 
 /* ================================================================
@@ -1519,10 +1592,10 @@ main, .container, section { max-width: 100%; }
 .kpi-block {
   animation: kpiPop .5s cubic-bezier(.34, 1.4, .64, 1) var(--delay, .7s) both;
 }
-.kpi-block:nth-child(1) { --delay: .68s; }
-.kpi-block:nth-child(2) { --delay: .76s; }
-.kpi-block:nth-child(3) { --delay: .84s; }
-.kpi-block:nth-child(4) { --delay: .92s; }
+.kpi-block:nth-of-type(1) { --delay: .68s; }
+.kpi-block:nth-of-type(2) { --delay: .76s; }
+.kpi-block:nth-of-type(3) { --delay: .84s; }
+.kpi-block:nth-of-type(4) { --delay: .92s; }
 @keyframes kpiPop {
   from { opacity: 0; transform: scale(.88); }
   to   { opacity: 1; transform: scale(1); }
