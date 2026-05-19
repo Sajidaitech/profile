@@ -182,9 +182,9 @@
     'hsla(0, 0%, 90%, OPACITY)',    // Soft White
     'hsla(210, 30%, 85%, OPACITY)'  // Muted Silver
   ];
-  waves.push(new Wave(0, 22, 0.25, waveColors[0], 0.035)); // was 0.06
-  waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.028)); // was 0.05
-  waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.022)); // was 0.04
+  waves.push(new Wave(0, 22, 0.25, waveColors[0], 0.035));
+  waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.028));
+  waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.022));
 
   function updateWavePositions() {
     waves[0].y = H * 0.55;
@@ -206,12 +206,12 @@
         var dy = particles[a].y - particles[b].y;
         var d  = Math.sqrt(dx * dx + dy * dy);
         if (d < LINK_DIST) {
-          var op = (1 - d / LINK_DIST) * 0.10; // was 0.18 — much subtler
+          var op = (1 - d / LINK_DIST) * 0.10;
           var life = Math.min(particles[a].life / particles[a].maxLife, particles[b].life / particles[b].maxLife);
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
           ctx.lineTo(particles[b].x, particles[b].y);
-          ctx.strokeStyle = 'hsla(212, 40%, 65%,' + (op * life) + ')'; // unified blue
+          ctx.strokeStyle = 'hsla(212, 40%, 65%,' + (op * life) + ')';
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -227,7 +227,6 @@
     aurora1.addColorStop(1,   'hsla(210,25%,78%,0)');
     ctx.fillStyle = aurora1;
     ctx.fillRect(0, 0, W, H);
-
     if (mouse.x > 0) {
       var grd = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 240);
       grd.addColorStop(0, 'hsla(212,40%,68%,0.03)');
@@ -249,8 +248,8 @@
         var dx = cx - mouse.x, dy = cy - mouse.y;
         var dist = Math.sqrt(dx * dx + dy * dy);
         var pulse = Math.sin(t * 0.008 + cx * 0.008 + cy * 0.006) * 0.5 + 0.5;
-        var alpha = 0.015 + pulse * 0.012; // was 0.025 + 0.02
-        if (dist < 220) alpha += (1 - dist / 220) * 0.025; // was 0.04
+        var alpha = 0.015 + pulse * 0.012;
+        if (dist < 220) alpha += (1 - dist / 220) * 0.025;
         ctx.beginPath();
         for (var k = 0; k < 6; k++) {
           var angle = (Math.PI / 3) * k;
@@ -258,7 +257,7 @@
           k === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
         }
         ctx.closePath();
-        ctx.strokeStyle = 'hsla(212,35%,68%,' + alpha + ')'; // was 195,60%,65%
+        ctx.strokeStyle = 'hsla(212,35%,68%,' + alpha + ')';
         ctx.stroke();
       }
     }
@@ -2165,17 +2164,27 @@ function initRings() {
 // SECTION 9 · EDUCATION FOLDER TABS
 // ============================================================
 
-function initFolderTabs() {
-  document.querySelectorAll('.ftab').forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      document.querySelectorAll('.ftab').forEach(function (t) { t.classList.remove('active'); });
-      document.querySelectorAll('.folder-pane').forEach(function (p) { p.classList.remove('active'); });
-      tab.classList.add('active');
-      var pane = document.getElementById(tab.getAttribute('data-pane'));
-      if (pane) pane.classList.add('active');
-    });
+
+const eduTabs = document.querySelectorAll('.edu-tab');
+const eduPanels = document.querySelectorAll('.edu-panel');
+
+eduTabs.forEach(tab => {
+
+  tab.addEventListener('click', () => {
+
+    const target = tab.dataset.edu;
+
+    eduTabs.forEach(t => t.classList.remove('active'));
+    eduPanels.forEach(p => p.classList.remove('active'));
+
+    tab.classList.add('active');
+
+    document.getElementById(target)
+      .classList.add('active');
+
   });
-}
+
+});
 
 
 // ============================================================
@@ -2836,29 +2845,70 @@ function loadLanguages() {
 
 var certData = [
   {
-    icon: 'fa-circle-check', title: 'ITIL Foundation — In Progress',
-    desc: 'Pursuing ITIL 4 Foundation certification to formalise hands-on ITSM experience across incident management, change control, and service lifecycle — fast-track path targeted.',
+    icon: 'fa-circle-half-stroke',
+    badge: '🔄 IN PROGRESS',
+    badgeClass: 'cc-badge--progress',
+    title: 'ITIL 4 Foundation',
+    issuer: 'Axelos / PeopleCert',
+    date: 'Targeted 2025',
+    category: 'ITSM',
+    desc: 'Formalising hands-on ITSM experience across incident management, change control, and service lifecycle management — fast-track path in progress.',
     url: ''
   },
   {
-    icon: 'fa-graduation-cap', title: 'Odoo ERP Training',
-    desc: 'Workshop covering business processes, product, vendor, and customer management within enterprise ERP environments.',
+    icon: 'fa-cubes',
+    badge: '✅ CERTIFIED',
+    badgeClass: 'cc-badge--verified',
+    title: 'Odoo ERP Training',
+    issuer: 'Odoo Official',
+    date: '2024',
+    category: 'ERP',
+    desc: 'Enterprise resource planning — business processes, product management, vendor & customer modules within live ERP environments.',
     url: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
   },
   {
-    icon: 'fa-trophy', title: 'Aptech ACCP Graduation',
-    desc: 'Advanced Diploma in Software Engineering — comprehensive applied computing programme.',
+    icon: 'fa-graduation-cap',
+    badge: '🎓 DISTINCTION',
+    badgeClass: 'cc-badge--gold',
+    title: 'Advanced Diploma — ACCP',
+    issuer: 'Aptech Qatar',
+    date: 'Nov 2020 – Nov 2023',
+    category: 'Software Engineering',
+    desc: 'Overall Distinction across all three years (81%, 87%, 86%) of the Advanced Computer Career Programme in Software Engineering.',
     url: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
   },
   {
-    icon: 'fa-hands-helping', title: 'MDX Career Fair',
-    desc: 'Certificate of appreciation for volunteering at the Middlesex University Dubai Career Fair.',
-    url: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
+    icon: 'fa-university',
+    badge: '🏅 HONOURS',
+    badgeClass: 'cc-badge--gold',
+    title: 'BSc Information Technology',
+    issuer: 'Middlesex University Dubai',
+    date: 'Sep 2024 – Jun 2025',
+    category: 'Degree',
+    desc: 'Merit — Upper Second Class Honours (2:1). Specialised in enterprise systems, networking, cybersecurity, and IT operations.',
+    url: 'https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing'
   },
   {
-    icon: 'fa-award', title: 'Safety Award — HIA',
-    desc: 'Recognition for exemplary safety practices during the Hamad International Airport Expansion Project.',
+    icon: 'fa-shield-halved',
+    badge: '🏆 AWARD',
+    badgeClass: 'cc-badge--award',
+    title: 'Safety Excellence Award',
+    issuer: 'Hamad International Airport',
+    date: '2023–2024',
+    category: 'Recognition',
+    desc: 'Formally recognised for exceptional dedication, safety compliance, and technical performance during the HIA Expansion Project.',
     url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=sharing'
+  },
+  {
+    icon: 'fa-hands-helping',
+    badge: '🤝 VOLUNTEER',
+    badgeClass: 'cc-badge--volunteer',
+    title: 'MDX Career Fair Certificate',
+    issuer: 'Middlesex University Dubai',
+    date: '2025',
+    category: 'Community',
+    desc: 'Certificate of appreciation for volunteering at the Middlesex University Dubai Annual Career Fair — supporting student-employer engagement.',
+    url: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
   }
 ];
 
@@ -2867,15 +2917,24 @@ function loadCertifications() {
   if (!grid) return;
   certData.forEach(function (cert, i) {
     var frame = document.createElement('div');
-    frame.className = 'cert-card';
+    frame.className = 'cert-card stagger-child';
     frame.setAttribute('data-aos', 'fade-up');
     frame.setAttribute('data-aos-delay', i * 80);
     frame.innerHTML =
       '<div class="cert-card-inner">' +
-        '<div class="cc-icon"><i class="fas ' + cert.icon + '"></i></div>' +
+        '<div class="cc-top-row">' +
+          '<div class="cc-icon-wrap"><i class="fas ' + cert.icon + '"></i></div>' +
+          '<span class="cc-badge ' + cert.badgeClass + '">' + cert.badge + '</span>' +
+        '</div>' +
+        '<div class="cc-category">' + cert.category + '</div>' +
         '<div class="cc-title">' + cert.title + '</div>' +
+        '<div class="cc-issuer"><i class="fas fa-building"></i> ' + cert.issuer + '</div>' +
+        '<div class="cc-date"><i class="fas fa-calendar-alt"></i> ' + cert.date + '</div>' +
         '<div class="cc-desc">' + cert.desc + '</div>' +
-        (cert.url ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</a>' : '') +
+        (cert.url
+          ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</a>'
+          : '<span class="cc-in-progress"><i class="fas fa-clock"></i> In Progress</span>'
+        ) +
       '</div>';
     grid.appendChild(frame);
   });
@@ -3076,3 +3135,24 @@ function printSignature() {
   setTimeout(fetchWeather, 800);
 
 })();
+
+const tabs = document.querySelectorAll('.exp-tab');
+const panels = document.querySelectorAll('.exp-panel');
+
+tabs.forEach(tab => {
+
+  tab.addEventListener('click', () => {
+
+    const target = tab.dataset.tab;
+
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+
+    tab.classList.add('active');
+
+    document.getElementById(target)
+      .classList.add('active');
+
+  });
+
+});
