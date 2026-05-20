@@ -2301,7 +2301,10 @@ function initStaggerFadeIn() {
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-  document.querySelectorAll('.stagger-child, .bento-item, .cert-card, .ach-item, .lang-item')
+  // cert-card is excluded: loadCertifications() renders cards after AOS has already
+  // initialised, so stagger-observer would leave them invisible.  Each cert card
+  // instead gets its own inline certReveal animation with a staggered delay.
+  document.querySelectorAll('.stagger-child, .bento-item, .ach-item, .lang-item')
     .forEach(function (el) { observer.observe(el); });
 }
 
@@ -2478,7 +2481,7 @@ var experienceData = [
       '<b>Digital Asset Registry:</b> Architected a comprehensive digital IT asset catalogue, eliminating lifecycle discrepancies.',
       '<b>Government Liaison:</b> Coordinated with authorities on credential recovery, overstay fines, and sensitive documentation.'
     ],
-    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing' }],
+    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=drive_link' }],
     recommendation: {
       quote: "Sajid brought an exceptional level of initiative and technical clarity to Al Tawkel. He overhauled our entire IT infrastructure and asset registry in weeks — the kind of transformation we'd planned for years. His professionalism and precision set a new standard for our team.",
       name: 'Director, Al Tawkel Immigration Center',
@@ -2512,7 +2515,7 @@ var experienceData = [
       '<b>L1 & L2 Escalation:</b> Handled password resets, software installs, OS crashes, and hardware failures across all sites.',
       '<b>Preventive Maintenance:</b> Scheduled patching and system checks aligned with hospital IT governance policies.'
     ],
-    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=sharing' }],
+    letters: [{ text: 'Experience Letter', url: 'https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=drive_link' }],
     recommendation: {
       quote: "Sajid maintained zero EMR downtime across all three hospital sites throughout the entire project engagement — a truly extraordinary achievement in a high-stakes healthcare environment. His systematic approach to incident resolution and cross-site coordination under pressure was exceptional.",
       name: 'IT Project Manager, MMCH',
@@ -2551,7 +2554,7 @@ var experienceData = [
       '<b>Emergency UPS Recovery — HIA:</b> After heavy rainfall caused a 10kVA UPS failure, sourced and installed a 5kVA interim unit alone to sustain live operations, arranged repair, then reinstalled the 10kVA — zero infrastructure downtime, zero support.'
     ],
     letters: [
-      { text: 'Starlink Experience Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=sharing' },
+      { text: 'Starlink Experience Letter', url: 'https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=drive_link' },
       { text: 'Airport Project Letter',     url: 'https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing' }
     ],
     recommendation: {
@@ -2681,9 +2684,11 @@ function loadExperience() {
         '</li>';
       }).join('') + '</ul>';
 
-    var lettersHTML = (exp.letters || []).map(function (l) {
-      return '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="lge-action-btn">' +
-        '<i class="fas fa-file-contract"></i>' + l.text + '</a>';
+    var _btnColors = ['#e85d04','#7209b7','#1d7aed','#16a34a','#b5179e','#d97706','#0077b6','#c1121f','#2563eb','#059669'];
+    var lettersHTML = (exp.letters || []).map(function (l, li) {
+      var col = _btnColors[(i * 3 + li) % _btnColors.length];
+      return '<a href="' + l.url + '" target="_blank" rel="noopener noreferrer" class="lge-action-btn" style="color:' + col + ';border-color:' + col + '20;--btn-text-color:' + col + '">' +
+        '<i class="fas fa-file-contract" style="color:' + col + '"></i>' + l.text + '</a>';
     }).join('');
 
     var recHTML = '';
@@ -2845,15 +2850,26 @@ function loadLanguages() {
 
 var certData = [
   {
-    icon: 'fa-circle-half-stroke',
-    badge: '🔄 IN PROGRESS',
-    badgeClass: 'cc-badge--progress',
-    title: 'ITIL 4 Foundation',
-    issuer: 'Axelos / PeopleCert',
-    date: 'Targeted 2025',
-    category: 'ITSM',
-    desc: 'Formalising hands-on ITSM experience across incident management, change control, and service lifecycle management — fast-track path in progress.',
-    url: ''
+    icon: 'fa-network-wired',
+    badge: '⭐ FEATURED',
+    badgeClass: 'cc-badge--verified',
+    title: 'CCNA 200-301',
+    issuer: 'Simplilearn SkillUp',
+    date: 'January 17, 2026',
+    category: 'Networking',
+    desc: 'Cisco Certified Network Associate — enterprise routing & switching, TCP/IP, OSPF, VLANs, network security, and automation. Credential ID: 9726449.',
+    url: 'https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing'
+  },
+  {
+    icon: 'fa-certificate',
+    badge: '✅ CERTIFIED',
+    badgeClass: 'cc-badge--verified',
+    title: 'Professional Certificate',
+    issuer: 'Certified Authority',
+    date: '2024',
+    category: 'Professional',
+    desc: 'Professional certification demonstrating validated competency and applied expertise in a specialist domain.',
+    url: 'https://drive.google.com/file/d/12sPuwNrd2uWZfszUXMKbOVUFOGgzD0Uo/view?usp=drive_link'
   },
   {
     icon: 'fa-cubes',
@@ -2864,7 +2880,18 @@ var certData = [
     date: '2024',
     category: 'ERP',
     desc: 'Enterprise resource planning — business processes, product management, vendor & customer modules within live ERP environments.',
-    url: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=sharing'
+    url: 'https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=drive_link'
+  },
+  {
+    icon: 'fa-shield-halved',
+    badge: '🏆 AWARD',
+    badgeClass: 'cc-badge--award',
+    title: 'Safety Excellence Award',
+    issuer: 'Hamad International Airport',
+    date: '2023–2024',
+    category: 'Recognition',
+    desc: 'Formally recognised for exceptional dedication, safety compliance, and technical performance during the HIA Expansion Project.',
+    url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=drive_link'
   },
   {
     icon: 'fa-graduation-cap',
@@ -2878,6 +2905,28 @@ var certData = [
     url: 'https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link'
   },
   {
+    icon: 'fa-hands-helping',
+    badge: '🤝 VOLUNTEER',
+    badgeClass: 'cc-badge--volunteer',
+    title: 'MDX Career Fair Certificate',
+    issuer: 'Middlesex University Dubai',
+    date: '2025',
+    category: 'Community',
+    desc: 'Certificate of appreciation for volunteering at the Middlesex University Dubai Annual Career Fair — supporting student-employer engagement.',
+    url: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=drive_link'
+  },
+  {
+    icon: 'fa-circle-half-stroke',
+    badge: '🔄 IN PROGRESS',
+    badgeClass: 'cc-badge--progress',
+    title: 'ITIL 4 Foundation',
+    issuer: 'Axelos / PeopleCert',
+    date: 'Targeted 2025',
+    category: 'ITSM',
+    desc: 'Formalising hands-on ITSM experience across incident management, change control, and service lifecycle management — fast-track path in progress.',
+    url: ''
+  },
+  {
     icon: 'fa-university',
     badge: '🏅 HONOURS',
     badgeClass: 'cc-badge--gold',
@@ -2887,39 +2936,36 @@ var certData = [
     category: 'Degree',
     desc: 'Merit — Upper Second Class Honours (2:1). Specialised in enterprise systems, networking, cybersecurity, and IT operations.',
     url: 'https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing'
-  },
-  {
-    icon: 'fa-shield-halved',
-    badge: '🏆 AWARD',
-    badgeClass: 'cc-badge--award',
-    title: 'Safety Excellence Award',
-    issuer: 'Hamad International Airport',
-    date: '2023–2024',
-    category: 'Recognition',
-    desc: 'Formally recognised for exceptional dedication, safety compliance, and technical performance during the HIA Expansion Project.',
-    url: 'https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=sharing'
-  },
-  {
-    icon: 'fa-hands-helping',
-    badge: '🤝 VOLUNTEER',
-    badgeClass: 'cc-badge--volunteer',
-    title: 'MDX Career Fair Certificate',
-    issuer: 'Middlesex University Dubai',
-    date: '2025',
-    category: 'Community',
-    desc: 'Certificate of appreciation for volunteering at the Middlesex University Dubai Annual Career Fair — supporting student-employer engagement.',
-    url: 'https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=sharing'
   }
 ];
 
 function loadCertifications() {
   var grid = document.getElementById('certsGrid');
   if (!grid) return;
+  var _certBtnColors = ['#7c3aed','#ea580c','#0284c7','#16a34a','#c026d3','#d97706','#dc2626','#059669'];
+
+  // Cert-specific IntersectionObserver: cards are injected after AOS initialises,
+  // so we must NOT rely on AOS data-aos attributes or the global stagger observer.
+  // Instead we observe each card independently and add the reveal class ourselves.
+  var certObserver = (typeof IntersectionObserver !== 'undefined')
+    ? new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('stagger-visible');
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.08 })
+    : null;
+
   certData.forEach(function (cert, i) {
     var frame = document.createElement('div');
-    frame.className = 'cert-card stagger-child';
-    frame.setAttribute('data-aos', 'fade-up');
-    frame.setAttribute('data-aos-delay', i * 80);
+    frame.className = 'cert-card';
+    // Force visibility: do NOT use data-aos (AOS ran before these cards existed).
+    // The certReveal keyframe provides the entrance animation; opacity:1 ensures
+    // no AO observer can hide the card after it is appended.
+    frame.style.cssText = 'opacity:1 !important;visibility:visible !important;' +
+      'animation:certReveal .55s cubic-bezier(.22,1,.36,1) ' + (i * 90) + 'ms both;';
+    var btnColor = _certBtnColors[i % _certBtnColors.length];
     frame.innerHTML =
       '<div class="cert-card-inner">' +
         '<div class="cc-top-row">' +
@@ -2932,13 +2978,18 @@ function loadCertifications() {
         '<div class="cc-date"><i class="fas fa-calendar-alt"></i> ' + cert.date + '</div>' +
         '<div class="cc-desc">' + cert.desc + '</div>' +
         (cert.url
-          ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-sm"><i class="fas fa-eye"></i> View Certificate</a>'
+          ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" ' +
+            'class="cc-cert-btn" style="--ba:' + btnColor + '">' +
+            '<i class="fas fa-eye"></i> View Certificate</a>'
           : '<span class="cc-in-progress"><i class="fas fa-clock"></i> In Progress</span>'
         ) +
       '</div>';
     grid.appendChild(frame);
+    // Register with cert-specific observer (fallback: already visible via inline style)
+    if (certObserver) certObserver.observe(frame);
   });
 }
+
 
 
 // ============================================================
@@ -2970,7 +3021,7 @@ function printSignature() {
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.proj-card, .cert-card, .exp-item, .kpi-block, .ach-item').forEach(function (el) {
+  document.querySelectorAll('.proj-card, .exp-item, .kpi-block, .ach-item').forEach(function (el) {
     observer.observe(el);
   });
 })();
@@ -2983,6 +3034,8 @@ function printSignature() {
   document.addEventListener('mousemove', function (e) {
     var cards = document.querySelectorAll('.proj-card, .cert-card');
     cards.forEach(function (card) {
+      // Only apply tilt to cards that are visible (not blocked by AO)
+      if (card.style.opacity === '0') return;
       var rect = card.getBoundingClientRect();
       var cx = rect.left + rect.width / 2;
       var cy = rect.top + rect.height / 2;
