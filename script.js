@@ -3209,3 +3209,338 @@ tabs.forEach(tab => {
   });
 
 });
+
+
+// ============================================================
+// SECTOR ORBIT — Draggable 3D glass ellipse carousel
+// Smooth JS-driven orbit with mouse/touch drag support
+// ============================================================
+(function () {
+  'use strict';
+
+  var ORBIT_RX   = 138;   // ellipse x-radius (px) — overridden by getRadii()
+  var ORBIT_RY   = 34;    // ellipse y-radius (px, flattened for perspective)
+  var SPEED      = 0.35;  // degrees per frame (auto-rotation)
+  var DRAG_SCALE = 0.5;   // drag sensitivity
+
+  function initOrbit() {
+    var wrap  = document.querySelector('.sector-ticker-wrap');
+    var track = document.querySelector('.sector-ticker-track');
+    if (!wrap || !track) return;
+
+    // Collect only the first 5 items
+    var allItems = track.querySelectorAll('.sector-ticker-item');
+    var items = [];
+    for (var i = 0; i < Math.min(5, allItems.length); i++) {
+      items.push(allItems[i]);
+    }
+    if (!items.length) return;
+
+    var N       = items.length;
+    var angle   = 0;      // global rotation angle (degrees)
+    var raf     = null;
+    var paused  = false;
+    var dragging = false;
+    var lastX   = 0;
+    var velX    = 0;
+
+    // Responsive radii — always derived from actual container width
+    function getRadii() {
+      var w = wrap.offsetWidth || 300;
+      var rx = Math.max(60, (w / 2) - 24);  // fill width with padding
+      var ry = Math.max(20, Math.round(rx * 0.25));
+      return { rx: rx, ry: ry };
+    }
+
+    function positionItems(deg) {
+      var r = getRadii();
+      var baseAngles = [];
+      for (var i = 0; i < N; i++) {
+        baseAngles.push(deg + i * (360 / N));
+      }
+
+      // Find which item is "front" (closest to 90° = bottom of ellipse in 3D)
+      var frontIdx = 0;
+      var maxZ = -Infinity;
+
+      items.forEach(function (el, i) {
+        var rad = (baseAngles[i] % 360) * Math.PI / 180;
+        var x = r.rx * Math.cos(rad);
+        var y = r.ry * Math.sin(rad);
+        // Z depth: sin gives depth perception — sin(90°)=1 is front, sin(270°)=-1 is back
+        var z = Math.sin(rad);
+        var scale = 0.75 + 0.25 * ((z + 1) / 2);  // 0.75..1.0
+        var opacity = 0.45 + 0.55 * ((z + 1) / 2); // 0.45..1.0
+
+        el.style.transform = 'translate(calc(-50% + ' + x + 'px), calc(-50% + ' + y + 'px)) scale(' + scale.toFixed(3) + ')';
+        el.style.opacity   = opacity.toFixed(3);
+        el.style.zIndex    = Math.round(z * 10 + 10);
+
+        if (z > maxZ) { maxZ = z; frontIdx = i; }
+      });
+
+      // Mark front item
+      items.forEach(function (el, i) {
+        if (i === frontIdx) el.classList.add('sti-active');
+        else el.classList.remove('sti-active');
+      });
+    }
+
+    function tick() {
+      if (!dragging && !paused) {
+        // Apply momentum decay when not dragging
+        if (Math.abs(velX) > 0.01) {
+          angle += velX;
+          velX *= 0.96;
+        } else {
+          velX = 0;
+          angle += SPEED;
+        }
+      }
+      angle = ((angle % 360) + 360) % 360;
+      positionItems(angle);
+      raf = requestAnimationFrame(tick);
+    }
+
+    // ── Mouse drag ──
+    wrap.addEventListener('mousedown', function (e) {
+      dragging = true;
+      lastX = e.clientX;
+      velX = 0;
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - lastX;
+      velX = dx * DRAG_SCALE;
+      angle += velX;
+      lastX = e.clientX;
+    });
+    document.addEventListener('mouseup', function () {
+      dragging = false;
+    });
+
+    // ── Touch drag ──
+    wrap.addEventListener('touchstart', function (e) {
+      dragging = true;
+      lastX = e.touches[0].clientX;
+      velX = 0;
+    }, { passive: true });
+    wrap.addEventListener('touchmove', function (e) {
+      if (!dragging) return;
+      var dx = e.touches[0].clientX - lastX;
+      velX = dx * DRAG_SCALE;
+      angle += velX;
+      lastX = e.touches[0].clientX;
+    }, { passive: true });
+    wrap.addEventListener('touchend', function () {
+      dragging = false;
+    });
+
+    // ── Pause on hover (non-drag) ──
+    wrap.addEventListener('mouseenter', function () { if (!dragging) paused = true; });
+    wrap.addEventListener('mouseleave', function () { paused = false; velX = 0; });
+
+    // Kick off
+    positionItems(0);
+    tick();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initOrbit);
+  } else {
+    initOrbit();
+  }
+})();
+
+
+// ============================================================
+// NAV LOGO NAME — Floating draggable with magnetic snap-back
+// ============================================================
+(function () {
+  'use strict';
+
+  function initFloatingName() {
+    var el = document.querySelector('.nav-logo-name');
+    if (!el) return;
+
+    var dragging  = false;
+    var startX    = 0, startY    = 0;
+    var currentX  = 0, currentY  = 0;
+    var velX      = 0, velY      = 0;
+    var raf       = null;
+    var resting   = true;   // idle float active?
+
+    // ── Physics constants ──
+    var FRICTION   = 0.88;   // momentum decay
+    var SPRING     = 0.12;   // snap-back spring strength
+    var DAMPING    = 0.72;   // snap-back damping
+    var MAX_DRAG   = 60;     // max drag distance (px)
+
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+    function applyTransform(x, y) {
+      el.style.transform = 'translate(' + x.toFixed(2) + 'px, ' + y.toFixed(2) + 'px)';
+    }
+
+    function snapBack() {
+      if (Math.abs(currentX) < 0.15 && Math.abs(currentY) < 0.15 &&
+          Math.abs(velX) < 0.15 && Math.abs(velY) < 0.15) {
+        currentX = 0; currentY = 0; velX = 0; velY = 0;
+        applyTransform(0, 0);
+        resting = true;
+        // Re-enable CSS float animation
+        el.style.animation = '';
+        cancelAnimationFrame(raf);
+        return;
+      }
+      // Spring toward origin
+      var ax = -SPRING * currentX;
+      var ay = -SPRING * currentY;
+      velX = (velX + ax) * DAMPING;
+      velY = (velY + ay) * DAMPING;
+      currentX += velX;
+      currentY += velY;
+      applyTransform(currentX, currentY);
+      raf = requestAnimationFrame(snapBack);
+    }
+
+    // ── Mouse drag ──
+    el.addEventListener('mousedown', function (e) {
+      dragging = true;
+      resting  = false;
+      cancelAnimationFrame(raf);
+      el.style.animation = 'none';   // pause CSS float
+      startX = e.clientX - currentX;
+      startY = e.clientY - currentY;
+      velX = 0; velY = 0;
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      var nx = e.clientX - startX;
+      var ny = e.clientY - startY;
+      // Clamp + elastic resistance near edges
+      nx = clamp(nx, -MAX_DRAG, MAX_DRAG);
+      ny = clamp(ny, -MAX_DRAG, MAX_DRAG);
+      velX = nx - currentX;
+      velY = ny - currentY;
+      currentX = nx;
+      currentY = ny;
+      applyTransform(currentX, currentY);
+    });
+
+    document.addEventListener('mouseup', function () {
+      if (!dragging) return;
+      dragging = false;
+      // Apply momentum then spring back
+      raf = requestAnimationFrame(snapBack);
+    });
+
+    // ── Touch drag ──
+    el.addEventListener('touchstart', function (e) {
+      dragging = true;
+      resting  = false;
+      cancelAnimationFrame(raf);
+      el.style.animation = 'none';
+      startX = e.touches[0].clientX - currentX;
+      startY = e.touches[0].clientY - currentY;
+      velX = 0; velY = 0;
+    }, { passive: true });
+
+    el.addEventListener('touchmove', function (e) {
+      if (!dragging) return;
+      var nx = e.touches[0].clientX - startX;
+      var ny = e.touches[0].clientY - startY;
+      nx = clamp(nx, -MAX_DRAG, MAX_DRAG);
+      ny = clamp(ny, -MAX_DRAG, MAX_DRAG);
+      velX = nx - currentX;
+      velY = ny - currentY;
+      currentX = nx;
+      currentY = ny;
+      applyTransform(currentX, currentY);
+    }, { passive: true });
+
+    el.addEventListener('touchend', function () {
+      dragging = false;
+      raf = requestAnimationFrame(snapBack);
+    });
+
+    // ── Magnetic mouse-follow (subtle, non-drag) ──
+    var navEl = document.querySelector('.top-nav');
+    if (navEl) {
+      navEl.addEventListener('mousemove', function (e) {
+        if (dragging || !resting) return;
+        var rect = el.getBoundingClientRect();
+        var cx   = rect.left + rect.width  / 2;
+        var cy   = rect.top  + rect.height / 2;
+        var dx   = e.clientX - cx;
+        var dy   = e.clientY - cy;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          var pull = (1 - dist / 120) * 6;  // max 6px pull
+          applyTransform(dx / dist * pull || 0, dy / dist * pull || 0);
+        } else {
+          applyTransform(0, 0);
+        }
+      });
+      navEl.addEventListener('mouseleave', function () {
+        if (!dragging) applyTransform(0, 0);
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFloatingName);
+  } else {
+    initFloatingName();
+  }
+})();
+
+
+
+
+
+// ============================================================
+// NAV LOGO NAME — Click navigates to homepage / main website
+// ============================================================
+(function () {
+  'use strict';
+
+  function initNavNameLink() {
+    var el = document.getElementById('navLogoName');
+    if (!el) return;
+
+    var _wasDragging = false;
+
+    // Set the name text
+    if (!el.textContent.trim()) {
+      el.textContent = 'Sajid Mehmood';
+    }
+
+    // Detect if drag just happened so we don't navigate on drag-release
+    el.addEventListener('mousedown', function () { _wasDragging = false; });
+    el.addEventListener('mousemove', function () { _wasDragging = true; });
+    el.addEventListener('touchstart', function () { _wasDragging = false; }, { passive: true });
+    el.addEventListener('touchmove',  function () { _wasDragging = true;  }, { passive: true });
+
+    el.addEventListener('click', function (e) {
+      if (_wasDragging) { _wasDragging = false; return; }
+      // If gate is still visible, do nothing
+      var gate = document.getElementById('gateOverlay');
+      if (gate && !gate.classList.contains('hidden')) return;
+      // Navigate to top of main website
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Update URL to root without reload
+      if (history.pushState) history.pushState(null, '', '/');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavNameLink);
+  } else {
+    initNavNameLink();
+  }
+})();
