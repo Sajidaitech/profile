@@ -1058,6 +1058,7 @@
     if (!result.ok) {
       showError(result.reason);
       _submitCount--;
+      _notifSent = false; // allow retry on next valid submission
       return;
     }
 
@@ -1091,7 +1092,9 @@
       }, 600);
     }
 
-    setTimeout(revealPortfolio, 2800);
+    // Notification drives the reveal; timer is a safety fallback only
+    // (long enough to let geo + security fetches finish for international visitors)
+    setTimeout(revealPortfolio, 10000);
     sendNtfyNotification(displayName, revealPortfolio);
   };
 
@@ -1670,10 +1673,16 @@
       source       : getTrafficSource(),
       pathname     : window.location.pathname || '/',
       sessionType  : getSessionType(),
-      localTime    : new Date().toLocaleString('en-US', {
-        timeZone: 'Asia/Qatar', weekday: 'short', month: 'short',
-        day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit'
-      })
+      localTime    : (function() {
+        try {
+          // Use the visitor's own local time, not hardcoded Qatar timezone
+          return new Date().toLocaleString('en-US', {
+            weekday: 'short', month: 'short',
+            day: 'numeric', year: 'numeric',
+            hour: 'numeric', minute: '2-digit'
+          });
+        } catch(e) { return new Date().toString(); }
+      }())
     };
 
     // Run geo + security fetches in parallel, both with hard timeouts
