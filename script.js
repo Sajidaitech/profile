@@ -1584,9 +1584,7 @@
   function buildVisitorAlert(name, geo, sec, client, timeData) {
     var isLocal  = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
 
-    var maskedIp = geo.ip !== 'Unknown'
-      ? geo.ip.split('.').map(function(o, i) { return i >= 2 ? 'xxx' : o; }).join('.')
-      : 'Unknown';
+    var maskedIp = safeVal(geo.ip);
 
     var vpnStr = sec.isVpn ? '\u26A0\uFE0F Yes \u2014 VPN Detected' : '\u2705 No';
     var torStr = sec.isTor ? '\u26A0\uFE0F Yes \u2014 TOR Exit Node' : '\u2705 No';
