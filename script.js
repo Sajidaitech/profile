@@ -40,9 +40,15 @@
 (function () {
   var bar = document.getElementById('scrollProgress');
   if (!bar) return;
+  var _raf = false;
   window.addEventListener('scroll', function () {
-    var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
-    bar.style.width = Math.min(pct, 100) + '%';
+    if (_raf) return;
+    _raf = true;
+    requestAnimationFrame(function () {
+      _raf = false;
+      var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+      bar.style.width = Math.min(pct, 100) + '%';
+    });
   }, { passive: true });
 })();
 
@@ -1032,6 +1038,25 @@
     }, 400);
   });
 
+  // ── Keyboard focus trap: keep Tab focus inside gate while open ──
+  var gateCard = document.querySelector('.gate-glass-card');
+  document.addEventListener('keydown', function (e) {
+    var gate = document.getElementById('gateOverlay');
+    if (!gate || gate.classList.contains('hidden')) return;
+    if (e.key !== 'Tab') return;
+    if (!gateCard) return;
+    var focusable = gateCard.querySelectorAll(
+      'button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+    );
+    var first = focusable[0];
+    var last  = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); if (last) last.focus(); }
+    } else {
+      if (document.activeElement === last)  { e.preventDefault(); if (first) first.focus(); }
+    }
+  });
+
   // ----------------------------------------------------------
   // 1O · GATE SUBMIT — with rate limiting
   // ----------------------------------------------------------
@@ -1057,8 +1082,7 @@
 
     if (!result.ok) {
       showError(result.reason);
-      _submitCount--;
-      _notifSent = false; // allow retry on next valid submission
+      _submitCount--; // restore attempt count on invalid input
       return;
     }
 
@@ -1079,22 +1103,35 @@
       if (revealed) return;
       revealed = true;
       var overlay = document.getElementById('gateOverlay');
-      if (overlay) overlay.classList.add('hidden');
+      if (overlay) {
+        overlay.classList.add('hidden');
+        // After fade transition, fully remove from paint tree and stop animations
+        setTimeout(function () {
+          overlay.style.display = 'none';
+          // Stop orb animations to free GPU compositing layers
+          var orbs = overlay.querySelectorAll('.gate-orb');
+          orbs.forEach(function (orb) {
+            orb.style.animationPlayState = 'paused';
+            orb.style.willChange = 'auto';
+          });
+        }, 700);
+      }
       document.body.style.overflow = '';
+      document.body.style.overflowX = 'hidden';
       document.body.classList.remove('gate-active');
       window.scrollTo(0, 0);
       setTimeout(function () {
         if (typeof AOS !== 'undefined') AOS.refresh();
-        initCounters();
-        initRings();
-        initSectionFadeIn();
-        initStaggerFadeIn();
+        // Only call these if they haven't already been called by DOMContentLoaded
+        if (typeof initCounters === 'function') initCounters();
+        if (typeof initRings    === 'function') initRings();
+        if (typeof initSectionFadeIn  === 'function') initSectionFadeIn();
+        if (typeof initStaggerFadeIn  === 'function') initStaggerFadeIn();
       }, 600);
     }
 
-    // Notification drives the reveal; timer is a safety fallback only
-    // (long enough to let geo + security fetches finish for international visitors)
-    setTimeout(revealPortfolio, 10000);
+    // Safety net: 3s max wait — notification is async but user shouldn't wait longer
+    setTimeout(revealPortfolio, 3000);
     sendNtfyNotification(displayName, revealPortfolio);
   };
 
@@ -1980,6 +2017,7 @@ document.addEventListener('DOMContentLoaded', function () {
   loadArsenal();
   loadLanguages();
   loadCertifications();
+  // loadExperience() disabled — experience is rendered statically in HTML with full content
   initSkillBars();
   initScrollReveal();
   initMagneticButtons();
@@ -1998,27 +2036,89 @@ function initNav() {
   var nav      = document.getElementById('topNav');
   var navLinks = document.querySelectorAll('.nav-link');
 
-  window.addEventListener('scroll', function () {
-    if (!nav) return;
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-    var current = '';
-    document.querySelectorAll('section[id]').forEach(function (sec) {
-      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
-    });
-    navLinks.forEach(function (link) {
-      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
-    });
-    // Auto-scroll active nav link into view on mobile
-    var activeLink = document.querySelector('.nav-link.active');
-    if (activeLink) {
-      var navLinksCenter = document.querySelector('.nav-links-center');
-      if (navLinksCenter) {
-        var linkLeft = activeLink.offsetLeft;
-        var linkWidth = activeLink.offsetWidth;
-        var containerWidth = navLinksCenter.offsetWidth;
-        navLinksCenter.scrollTo({ left: linkLeft - (containerWidth / 2) + (linkWidth / 2), behavior: 'smooth' });
+  // ── Mobile nav toggle (hamburger) ──
+  var navToggle  = document.getElementById('navToggle');
+  var navDrawer  = document.getElementById('navMobDrawer');
+
+  if (navToggle && navDrawer) {
+    navToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = navDrawer.classList.toggle('open');
+      navToggle.classList.toggle('active', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      // Only lock body scroll when gate isn't active
+      if (!document.body.classList.contains('gate-active')) {
+        document.body.style.overflow = isOpen ? 'hidden' : '';
       }
-    }
+    });
+
+    // Close drawer when a nav link is clicked
+    navDrawer.querySelectorAll('.nav-mob-link').forEach(function (link) {
+      link.addEventListener('click', function () {
+        navDrawer.classList.remove('open');
+        navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        if (!document.body.classList.contains('gate-active')) {
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (navDrawer.classList.contains('open') &&
+          !navDrawer.contains(e.target) &&
+          !navToggle.contains(e.target)) {
+        navDrawer.classList.remove('open');
+        navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        if (!document.body.classList.contains('gate-active')) {
+          document.body.style.overflow = '';
+        }
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        navToggle.classList.remove('active');
+        navToggle.setAttribute('aria-expanded', 'false');
+        if (!document.body.classList.contains('gate-active')) {
+          document.body.style.overflow = '';
+        }
+        navToggle.focus();
+      }
+    });
+  }
+
+  var _scrollRafPending = false;
+  window.addEventListener('scroll', function () {
+    if (_scrollRafPending) return;
+    _scrollRafPending = true;
+    requestAnimationFrame(function () {
+      _scrollRafPending = false;
+      if (!nav) return;
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+      var current = '';
+      document.querySelectorAll('section[id]').forEach(function (sec) {
+        if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+      });
+      navLinks.forEach(function (link) {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+      // Auto-scroll active nav link into view on mobile
+      var activeLink = document.querySelector('.nav-link.active');
+      if (activeLink) {
+        var navLinksCenter = document.querySelector('.nav-links-center');
+        if (navLinksCenter) {
+          var linkLeft = activeLink.offsetLeft;
+          var linkWidth = activeLink.offsetWidth;
+          var containerWidth = navLinksCenter.offsetWidth;
+          navLinksCenter.scrollTo({ left: linkLeft - (containerWidth / 2) + (linkWidth / 2), behavior: 'smooth' });
+        }
+      }
+    });
   }, { passive: true });
 
   navLinks.forEach(function (link) {
@@ -2121,6 +2221,7 @@ function initTouchPressStates() {
 // ============================================================
 
 function initCounters() {
+  // Don't animate while gate is visible — re-triggered after gate closes
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
@@ -2173,27 +2274,22 @@ function initRings() {
 // SECTION 9 · EDUCATION FOLDER TABS
 // ============================================================
 
+function initFolderTabs() {
+  var eduTabs   = document.querySelectorAll('.edu-tab');
+  var eduPanels = document.querySelectorAll('.edu-panel');
+  if (!eduTabs.length) return;
 
-const eduTabs = document.querySelectorAll('.edu-tab');
-const eduPanels = document.querySelectorAll('.edu-panel');
-
-eduTabs.forEach(tab => {
-
-  tab.addEventListener('click', () => {
-
-    const target = tab.dataset.edu;
-
-    eduTabs.forEach(t => t.classList.remove('active'));
-    eduPanels.forEach(p => p.classList.remove('active'));
-
-    tab.classList.add('active');
-
-    document.getElementById(target)
-      .classList.add('active');
-
+  eduTabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var target = tab.getAttribute('data-edu');
+      eduTabs.forEach(function (t)   { t.classList.remove('active'); });
+      eduPanels.forEach(function (p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      var panel = target ? document.getElementById(target) : null;
+      if (panel) panel.classList.add('active');
+    });
   });
-
-});
+}
 
 
 // ============================================================
@@ -2389,8 +2485,9 @@ function initSoftParallax() {
 function showProjectSkeleton() {
   var grid = document.getElementById('projectsGrid');
   if (!grid) return;
+  var skCards = '<div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>';
   grid.insertAdjacentHTML('beforebegin',
-    '<div class="projects-skeleton" id="projectsSkeleton"></div>'
+    '<div class="projects-skeleton" id="projectsSkeleton">' + skCards + '</div>'
   );
 }
 
@@ -2949,13 +3046,49 @@ var certData = [
 ];
 
 function loadCertifications() {
-  var grid = document.getElementById('certsGrid');
+  var heroWrap = document.getElementById('certHero');
+  var grid     = document.getElementById('certsGrid');
   if (!grid) return;
-  var _certBtnColors = ['#7c3aed','#ea580c','#0284c7','#16a34a','#c026d3','#d97706','#dc2626','#059669'];
 
-  // Cert-specific IntersectionObserver: cards are injected after AOS initialises,
-  // so we must NOT rely on AOS data-aos attributes or the global stagger observer.
-  // Instead we observe each card independently and add the reveal class ourselves.
+  // Accent palette — one unique colour per card slot
+  var accentPalette = [
+    '#0a84ff', // blue   — Professional Certificate
+    '#8e44ad', // violet — Odoo ERP
+    '#e67e22', // amber  — Safety Award
+    '#27ae60', // green  — Advanced Diploma
+    '#c0392b', // crimson— MDX Career Fair
+    '#2980b9', // steel  — ITIL
+    '#d4a017'  // gold   — BSc IT
+  ];
+
+  // ── 1. HERO CARD — CCNA (index 0) ──────────────────────────────────
+  var hero = certData[0];
+  if (heroWrap && hero) {
+    heroWrap.innerHTML =
+      '<div class="cert-hero-card" style="animation:certReveal .7s cubic-bezier(.22,1,.36,1) 0ms both;">' +
+        '<div class="chc-shimmer" aria-hidden="true"></div>' +
+        '<div class="chc-left">' +
+          '<div class="chc-icon-ring"><i class="fas ' + hero.icon + '"></i></div>' +
+        '</div>' +
+        '<div class="chc-body">' +
+          '<span class="chc-eyebrow">⭐ Featured Certification</span>' +
+          '<h3 class="chc-title">' + hero.title + ' 🌐</h3>' +
+          '<p class="chc-subtitle">Cisco Certified Network Associate</p>' +
+          '<div class="chc-meta-row">' +
+            '<span class="chc-meta-pill"><i class="fas fa-building"></i>' + hero.issuer + '</span>' +
+            '<span class="chc-meta-pill"><i class="fas fa-calendar-alt"></i>' + hero.date + '</span>' +
+            '<span class="chc-meta-pill chc-cred"><i class="fas fa-fingerprint"></i>Credential ID: 9726449</span>' +
+          '</div>' +
+          '<p class="chc-desc">' + hero.desc + '</p>' +
+          '<a href="' + hero.url + '" target="_blank" rel="noopener noreferrer" class="chc-verify-btn">' +
+            '<i class="fas fa-shield-check"></i> Verify Certificate' +
+          '</a>' +
+        '</div>' +
+        '<div class="chc-seal" aria-hidden="true">🏆</div>' +
+      '</div>';
+  }
+
+  // ── 2. GRID CARDS — certData[1..] (no CCNA repeat) ─────────────────
   var certObserver = (typeof IntersectionObserver !== 'undefined')
     ? new IntersectionObserver(function (entries, obs) {
         entries.forEach(function (entry) {
@@ -2966,35 +3099,37 @@ function loadCertifications() {
       }, { threshold: 0.08 })
     : null;
 
-  certData.forEach(function (cert, i) {
-    var frame = document.createElement('div');
+  certData.slice(1).forEach(function (cert, i) {
+    var accent = accentPalette[i % accentPalette.length];
+    var frame  = document.createElement('div');
     frame.className = 'cert-card';
-    // Force visibility: do NOT use data-aos (AOS ran before these cards existed).
-    // The certReveal keyframe provides the entrance animation; opacity:1 ensures
-    // no AO observer can hide the card after it is appended.
-    frame.style.cssText = 'opacity:1 !important;visibility:visible !important;' +
-      'animation:certReveal .55s cubic-bezier(.22,1,.36,1) ' + (i * 90) + 'ms both;';
-    var btnColor = _certBtnColors[i % _certBtnColors.length];
+    frame.style.cssText =
+      'opacity:1 !important;visibility:visible !important;' +
+      '--cert-accent:' + accent + ';' +
+      'animation:certReveal .55s cubic-bezier(.22,1,.36,1) ' + (i * 80 + 120) + 'ms both;';
+
     frame.innerHTML =
       '<div class="cert-card-inner">' +
         '<div class="cc-top-row">' +
-          '<div class="cc-icon-wrap"><i class="fas ' + cert.icon + '"></i></div>' +
+          '<div class="cc-icon-wrap" style="background:' + accent + '22;color:' + accent + ';">' +
+            '<i class="fas ' + cert.icon + '"></i>' +
+          '</div>' +
           '<span class="cc-badge ' + cert.badgeClass + '">' + cert.badge + '</span>' +
         '</div>' +
-        '<div class="cc-category">' + cert.category + '</div>' +
+        '<div class="cc-category" style="color:' + accent + ';">' + cert.category + '</div>' +
         '<div class="cc-title">' + cert.title + '</div>' +
         '<div class="cc-issuer"><i class="fas fa-building"></i> ' + cert.issuer + '</div>' +
         '<div class="cc-date"><i class="fas fa-calendar-alt"></i> ' + cert.date + '</div>' +
         '<div class="cc-desc">' + cert.desc + '</div>' +
         (cert.url
           ? '<a href="' + cert.url + '" target="_blank" rel="noopener noreferrer" ' +
-            'class="cc-cert-btn" style="--ba:' + btnColor + '">' +
+            'class="cc-cert-btn" style="--ba:' + accent + ';border-color:' + accent + '44;color:' + accent + ';">' +
             '<i class="fas fa-eye"></i> View Certificate</a>'
           : '<span class="cc-in-progress"><i class="fas fa-clock"></i> In Progress</span>'
         ) +
       '</div>';
+
     grid.appendChild(frame);
-    // Register with cert-specific observer (fallback: already visible via inline style)
     if (certObserver) certObserver.observe(frame);
   });
 }
@@ -3198,26 +3333,23 @@ function printSignature() {
 
 })();
 
-const tabs = document.querySelectorAll('.exp-tab');
-const panels = document.querySelectorAll('.exp-panel');
+// Experience tab system — static HTML panels
+(function() {
+  var tabs = document.querySelectorAll('.exp-tab');
+  var panels = document.querySelectorAll('.exp-panel');
+  if (!tabs.length) return;
 
-tabs.forEach(tab => {
-
-  tab.addEventListener('click', () => {
-
-    const target = tab.dataset.tab;
-
-    tabs.forEach(t => t.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-
-    tab.classList.add('active');
-
-    document.getElementById(target)
-      .classList.add('active');
-
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = tab.dataset.tab;
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      panels.forEach(function(p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      var panel = document.getElementById(target);
+      if (panel) panel.classList.add('active');
+    });
   });
-
-});
+})();
 
 
 // ============================================================

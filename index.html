@@ -11,6 +11,25 @@
   <title>Sajid Mehmood — Systems Engineer</title>
   <link rel="icon" href="logo.png" type="image/png">
 
+  <!-- Open Graph -->
+  <meta property="og:title" content="Sajid Mehmood — IT Systems Engineer">
+  <meta property="og:description" content="CCNA Certified IT Support Engineer specialising in enterprise infrastructure, EMR systems, and network deployment in Qatar.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="photo.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sajid Mehmood — IT Systems Engineer">
+  <meta name="twitter:description" content="CCNA Certified IT Support Engineer | Enterprise Infrastructure | Qatar">
+
+  <!-- Critical resource preloads -->
+  <link rel="preload" href="logo.png" as="image">
+  <link rel="preload" href="photo.jpg" as="image">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" as="style">
+
+  <!-- DNS prefetch for external APIs used at runtime -->
+  <link rel="dns-prefetch" href="https://api.telegram.org">
+  <link rel="dns-prefetch" href="https://ipapi.co">
+  <link rel="dns-prefetch" href="https://api.openweathermap.org">
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -307,10 +326,7 @@
         </div>
       </div>
 
-      <div class="hero-scroll-cue" aria-hidden="true">
-        <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
-        <span>Scroll</span>
-      </div>
+      
     </section>
 
     <!-- ================================================================
@@ -555,20 +571,17 @@
 
     <!-- Tabs -->
     <div class="exp-tabs-wrap">
-      <button class="exp-tab active" data-tab="tawkel">
-        Al Tawkel
+      <button class="exp-tab active" data-tab="tawkel" style="display:inline-flex;align-items:center;gap:7px;">
+        <img src="ALTAWKEL.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Al Tawkel
       </button>
-
-      <button class="exp-tab" data-tab="elegancia">
-        Elegancia / MMCH
+      <button class="exp-tab" data-tab="elegancia" style="display:inline-flex;align-items:center;gap:7px;">
+        <img src="mmch.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Elegancia / MMCH
       </button>
-
-      <button class="exp-tab" data-tab="starlink">
-        PIH Group
+      <button class="exp-tab" data-tab="starlink" style="display:inline-flex;align-items:center;gap:7px;">
+        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> PIH Group
       </button>
-
-      <button class="exp-tab" data-tab="ooredoo">
-        Ooredoo
+      <button class="exp-tab" data-tab="ooredoo" style="display:inline-flex;align-items:center;gap:7px;">
+        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Ooredoo
       </button>
     </div>
 
@@ -583,8 +596,8 @@
         <div class="exp-card">
           <div class="exp-card-header">
 
-            <div class="exp-logo-wrap">
-              <i class="fas fa-building"></i>
+            <div class="exp-logo-wrap exp-logo-img-wrap">
+              <img src="ALTAWKEL.jpg" alt="Al Tawkel Immigration Center" class="exp-logo-img">
             </div>
 
             <div class="exp-title-group">
@@ -651,88 +664,101 @@
         </div>
       </div>
 
-      <!-- =========================
+            <!-- =========================
        ELEGANCIA / MMCH
       ========================= -->
       <div class="exp-panel" id="elegancia">
-
         <div class="exp-card">
-
           <div class="exp-card-header">
-
-            <div class="exp-logo-wrap">
-              <i class="fas fa-hospital"></i>
+            <div class="exp-logo-wrap exp-logo-img-wrap">
+              <img src="mmch.jpg" alt="Military Medical City Hospital" class="exp-logo-img">
             </div>
-
             <div class="exp-title-group">
-              <h3 class="exp-role">
-                IT Support Engineer
-              </h3>
-
-              <div class="exp-company">
-                Military Medical City Hospital
-              </div>
-
+              <h3 class="exp-role">IT Support Engineer</h3>
+              <div class="exp-company">Elegancia Healthcare &middot; Military Medical City Hospital (MMCH)</div>
               <div class="exp-meta-wrap">
-                <span class="exp-meta-chip">
-                  Al-Rayyan, Qatar
-                </span>
-
-                <span class="exp-meta-chip exp-current">
-                  Verified
-                </span>
+                <span class="exp-meta-chip">Nov 2023 &ndash; Feb 2024</span>
+                <span class="exp-meta-chip">Al-Rayyan, Qatar</span>
+                <span class="exp-meta-chip exp-current">Verified</span>
               </div>
             </div>
-
           </div>
 
           <div class="exp-stats">
+            <div class="exp-stat-chip">3 Hospital Sites</div>
+            <div class="exp-stat-chip">300+ Systems Deployed</div>
+            <div class="exp-stat-chip">300+ Staff Supported</div>
+            <div class="exp-stat-chip">PIH Tower 18 HQ</div>
+          </div>
 
-            <div class="exp-stat-chip">
-              3 Hospital Sites
+          <!-- Hospital logos strip -->
+          <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.55);border:0.5px solid rgba(255,255,255,.80);border-radius:14px;backdrop-filter:blur(12px);">
+            <div class="exp-site-logo-item" title="Military Medical City Hospital">
+              <img src="mmch.jpg" alt="MMCH" style="height:36px;width:auto;object-fit:contain;border-radius:6px;">
             </div>
-
-            <div class="exp-stat-chip">
-              300+ Systems
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="Korean Medical Center">
+              <img src="kmc.png" alt="KMC" style="height:36px;width:auto;object-fit:contain;border-radius:6px;">
             </div>
-
-            <div class="exp-stat-chip">
-              300+ Staff
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="The View Hospital">
+              <img src="tvh.png" alt="TVH" style="height:28px;width:auto;object-fit:contain;border-radius:6px;">
             </div>
-
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="Power International Holding">
+              <img src="PIH.png" alt="PIH" style="height:36px;width:auto;object-fit:contain;border-radius:6px;">
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#0f6cbf,#1a8fe8);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-hospital-alt"></i> MMCH &mdash; Military Medical City
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-flag"></i> KMC &mdash; Korean Medical Center (Lusail)
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#6c3483,#9b59b6);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-eye"></i> TVH &mdash; The View Hospital
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#1a5c3a,#27ae60);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-building-columns"></i> PIH Elegancia HQ &mdash; Tower 18
+            </span>
           </div>
 
           <div class="exp-bullets">
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Maintained zero downtime across EMR systems
+              <span><strong>MMCH (Primary Site &mdash; Al-Rayyan):</strong> Deployed new workstations and supported end users. Created temporary user accounts and configured access for medical staff across the main hospital site.</span>
             </div>
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Managed deployments across MMCH, KMC, and TVH
+              <span><strong>KMC (Korean Medical Center &mdash; Lusail):</strong> Led new system deployments and installed network devices. Collected and catalogued all server room equipment into a structured inventory register.</span>
             </div>
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Conducted serial audits and infrastructure inventory management
+              <span><strong>TVH (The View Hospital):</strong> Delivered end-user support and conducted a full serial number audit &mdash; cross-referencing all deployed system serial numbers against existing asset records.</span>
             </div>
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Handled L1 & L2 escalation support across hospital sites
+              <span><strong>EMR Application Support:</strong> Maintained zero downtime on Electronic Medical Records systems across all three sites throughout the entire project engagement.</span>
             </div>
-
+            <div class="exp-bullet">
+              <i class="fas fa-circle"></i>
+              <span><strong>Head Office Coordination:</strong> All hospital sites managed from PIH Elegancia Tower 18 &mdash; the Power International Holding Group head office. Elegancia Healthcare is a PIH sister company.</span>
+            </div>
+            <div class="exp-bullet">
+              <i class="fas fa-circle"></i>
+              <span><strong>L1 &amp; L2 Escalation:</strong> Password resets, software installs, OS crashes, and hardware failures across all sites with rapid SLA compliance.</span>
+            </div>
+            <div class="exp-bullet">
+              <i class="fas fa-circle"></i>
+              <span><strong>Preventive Maintenance:</strong> Scheduled patching and system checks aligned with hospital IT governance and healthcare compliance policies.</span>
+            </div>
           </div>
 
           <div class="exp-quote">
-            “Sajid maintained zero EMR downtime across all three hospital sites.”
+            "Sajid maintained zero EMR downtime across all three hospital sites throughout the entire project engagement &mdash; a truly extraordinary achievement in a high-stakes healthcare environment."
           </div>
-
-          <div class="exp-quote-author">
-            — IT Project Manager, MMCH
-          </div>
+          <div class="exp-quote-author">&mdash; IT Project Manager, Military Medical City Hospital</div>
 
           <div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;">
             <a href="https://drive.google.com/file/d/161PTtyekepRwmq8FS3T45V5R6VXDTSya/view?usp=drive_link"
@@ -741,92 +767,123 @@
               <i class="fas fa-file-contract" style="color:#e85d04;"></i> Experience Letter
             </a>
           </div>
-
         </div>
       </div>
 
-      <!-- =========================
+            <!-- =========================
        STARLINK / PIH
       ========================= -->
       <div class="exp-panel" id="starlink">
-
         <div class="exp-card">
-
           <div class="exp-card-header">
-
-            <div class="exp-logo-wrap">
-              <i class="fas fa-server"></i>
+            <div class="exp-logo-wrap exp-logo-img-wrap" style="background:#fff;">
+              <img src="sartlink_Ooredoo.png" alt="Starlink - Power International Holding" class="exp-logo-img">
             </div>
-
             <div class="exp-title-group">
-              <h3 class="exp-role">
-                IT Support Engineer
-              </h3>
-
-              <div class="exp-company">
-                Star Link – Power International Holding
-              </div>
-
+              <h3 class="exp-role">IT Support Engineer</h3>
+              <div class="exp-company">Star Link &mdash; Power International Holding (PIH Group)</div>
               <div class="exp-meta-wrap">
-                <span class="exp-meta-chip">
-                  Doha, Qatar
-                </span>
-
-                <span class="exp-meta-chip exp-current">
-                  Verified
-                </span>
+                <span class="exp-meta-chip">Feb 2022 &ndash; Nov 2023</span>
+                <span class="exp-meta-chip">Doha, Qatar</span>
+                <span class="exp-meta-chip exp-current">Verified</span>
               </div>
             </div>
-
           </div>
 
           <div class="exp-stats">
+            <div class="exp-stat-chip">10+ Enterprise Sites</div>
+            <div class="exp-stat-chip">1000+ Tickets Managed</div>
+            <div class="exp-stat-chip">300+ Staff Supported</div>
+            <div class="exp-stat-chip">95% SLA Compliance</div>
+          </div>
 
-            <div class="exp-stat-chip">
-              10+ Enterprise Sites
+          <!-- PIH logos strip -->
+          <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.55);border:0.5px solid rgba(255,255,255,.80);border-radius:14px;backdrop-filter:blur(12px);">
+            <div class="exp-site-logo-item" title="Power International Holding">
+              <img src="PIH.png" alt="PIH" style="height:38px;width:auto;object-fit:contain;">
             </div>
-
-            <div class="exp-stat-chip">
-              1000+ Tickets
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="Aura Group">
+              <img src="aura.png" alt="Aura Group" style="height:36px;width:auto;object-fit:contain;">
             </div>
-
-            <div class="exp-stat-chip">
-              95% SLA
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="UCC UrbaCon Trading & Contracting">
+              <img src="ucc.png" alt="UCC" style="height:32px;width:auto;object-fit:contain;">
             </div>
-
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="InfraRoad Trading">
+              <img src="infraroad.png" alt="InfraRoad" style="height:28px;width:auto;object-fit:contain;">
+            </div>
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="Elegancia Health Care">
+              <img src="elegancia.png" alt="UBT JV" style="height:32px;width:auto;object-fit:contain;">
+            </div>
+            <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
+            <div class="exp-site-logo-item" title="UBT JV">
+              <img src="ubtjv.png" alt="UBT JV" style="height:32px;width:auto;object-fit:contain;">
+            </div>
+          </div>
+          <!-- PIH Project chips -->
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#1a3a6b,#2c5f9e);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-building-columns"></i> PIH HQ &mdash; Main Head Office
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#1a6fbf,#2196f3);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-plane"></i> HIA Airport Expansion
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#b07d2e,#f0a500);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-utensils"></i> Aura Group &mdash; POS Deployment
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#1a7a4a,#27ae60);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-building"></i> UCC Saudi Arabia
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#7b2fbf,#a855f7);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-heartbeat"></i> Elegancia Health Care
+            </span>
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:linear-gradient(135deg,#c0551a,#e8793a);color:#fff;font-size:11px;font-weight:600;">
+              <i class="fas fa-road"></i> InfraRoad Trading
+            </span>
           </div>
 
           <div class="exp-bullets">
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Executive-level support for CEOs and Directors
+              <span><strong>Executive-Level Support:</strong> Dedicated technical support for CEOs, Executives, and Directors at Power International Holding Head Office &mdash; highest priority, zero tolerance for delay.</span>
             </div>
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Led HIA Airport Expansion IT operations
+              <span><strong>HIA Expansion Lead:</strong> Led IT operations across two phases of the Hamad International Airport Expansion (Feb&ndash;Oct 2022 &amp; Apr&ndash;Nov 2023). Received formal Safety Excellence Award.</span>
             </div>
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Responded to FIFA 2022 cyber attack incident
+              <span><strong>POS Deployment &mdash; Aura Group:</strong> Configured and deployed POS systems across Al Maha Island venues and restaurants under strict operational timelines.</span>
             </div>
-
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
-              Delivered emergency UPS recovery with zero downtime
+              <span><strong>UCC Saudi Arabia:</strong> Provisioned and deployed 25 workstations against strict handover deadlines for the UCC Holding Saudi branch.</span>
             </div>
-
+            <div class="exp-bullet">
+              <i class="fas fa-circle"></i>
+              <span><strong>Cross-Subsidiary Coverage:</strong> Delivered onsite IT support for Elegancia Health Care, UCC Holding, InfraRoad Trading, and ASSETS Group companies.</span>
+            </div>
+            <div class="exp-bullet">
+              <i class="fas fa-circle"></i>
+              <span><strong>Asset Optimisation:</strong> Implemented asset tracking protocols that reduced equipment loss by 10% across all group companies.</span>
+            </div>
+            <div class="exp-bullet">
+              <i class="fas fa-circle"></i>
+              <span><strong>Cyber Attack Response &mdash; FIFA 2022:</strong> Led a 4-day live incident response to an active server attack during the FIFA World Cup. Coordinated threat isolation and deployed Kaspersky Endpoint Security with centralised server-side activation &mdash; zero permanent data loss.</span>
+            </div>
+            <div class="exp-bullet">
+              <i class="fas fa-circle"></i>
+              <span><strong>Emergency UPS Recovery &mdash; HIA:</strong> After heavy rainfall caused a 10kVA UPS failure at a live HIA site, sourced and installed a 5kVA interim unit solo, arranged repair, then reinstalled the 10kVA &mdash; zero infrastructure downtime.</span>
+            </div>
           </div>
 
           <div class="exp-quote">
-            “One of the strongest engineers to come through our division.”
+            "Sajid was instrumental across multiple high-profile projects &mdash; from the HIA Airport Expansion to executive-level support at PIH headquarters. He is technically sharp, exceptionally reliable, and handles enterprise pressure with composure. One of the strongest engineers to come through our division."
           </div>
-
-          <div class="exp-quote-author">
-            — IT Manager, PIH Group
-          </div>
+          <div class="exp-quote-author">&mdash; IT Manager, Star Link &ndash; Power International Holding</div>
 
           <div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;">
             <a href="https://drive.google.com/file/d/16Sm6njPJ4bA2mw7NlzwJW1Xa1I_Dpdnd/view?usp=drive_link"
@@ -834,8 +891,12 @@
                class="btn-sm-gold" style="display:inline-flex;gap:.4rem;align-items:center;color:#0077b6;">
               <i class="fas fa-file-contract" style="color:#0077b6;"></i> Starlink Experience Letter
             </a>
+            <a href="https://drive.google.com/file/d/1e6qP1l1uAWGbfgaWT-PoCHeu5PA3BZeI/view?usp=sharing"
+               target="_blank" rel="noopener noreferrer"
+               class="btn-sm-gold" style="display:inline-flex;gap:.4rem;align-items:center;color:#1a6fbf;">
+              <i class="fas fa-file-contract" style="color:#1a6fbf;"></i> Airport Project Letter
+            </a>
           </div>
-
         </div>
       </div>
 
@@ -848,8 +909,8 @@
 
           <div class="exp-card-header">
 
-            <div class="exp-logo-wrap">
-              <i class="fas fa-headset"></i>
+            <div class="exp-logo-wrap exp-logo-img-wrap" style="background:#fff;">
+              <img src="sartlink_Ooredoo.png" alt="Starlink Ooredoo International" class="exp-logo-img">
             </div>
 
             <div class="exp-title-group">
@@ -1013,25 +1074,21 @@
   <div class="container">
 
     <div class="section-header">
-      <span class="sec-eyebrow">Education</span>
+      <span class="sec-eyebrow">05</span>
       <h2 class="sec-title">Academic Foundation</h2>
     </div>
 
     <!-- EDUCATION TABS -->
     <div class="edu-tabs-wrap">
-
-      <button class="edu-tab active" data-edu="middlesex">
-        Middlesex University
+      <button class="edu-tab active" data-edu="middlesex" style="display:inline-flex;align-items:center;gap:7px;">
+        <img src="middlesex.png" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:4px;background:#000;"> Middlesex University
       </button>
-
-      <button class="edu-tab" data-edu="aptech">
-        Aptech Qatar
+      <button class="edu-tab" data-edu="aptech" style="display:inline-flex;align-items:center;gap:7px;">
+        <img src="aptech.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Aptech Qatar
       </button>
-
-      <button class="edu-tab" data-edu="igcse">
-        IGCSE
+      <button class="edu-tab" data-edu="igcse" style="display:inline-flex;align-items:center;gap:7px;">
+        <img src="brighfuture.jpg" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:50%;"> IGCSE
       </button>
-
     </div>
 
     <!-- =========================
@@ -1042,8 +1099,8 @@
 
       <div class="edu-card">
 
-        <div class="edu-icon">
-          <i class="fas fa-graduation-cap"></i>
+        <div class="edu-icon edu-icon-img">
+          <img src="middlesex.png" alt="Middlesex University Dubai" class="edu-logo-img">
         </div>
 
         <div class="edu-content">
@@ -1129,8 +1186,8 @@
 
       <div class="edu-card">
 
-        <div class="edu-icon">
-          <i class="fas fa-laptop-code"></i>
+        <div class="edu-icon edu-icon-img">
+          <img src="aptech.jpg" alt="Aptech Qatar" class="edu-logo-img">
         </div>
 
         <div class="edu-content">
@@ -1227,8 +1284,8 @@
 
       <div class="edu-card">
 
-        <div class="edu-icon">
-          <i class="fas fa-school"></i>
+        <div class="edu-icon edu-icon-img">
+          <img src="brighfuture.jpg" alt="Bright Future International School" class="edu-logo-img">
         </div>
 
         <div class="edu-content">
@@ -1332,125 +1389,8 @@
           <div class="sec-rule"></div>
         </header>
 
-        <div class="cert-featured" data-aos="zoom-in">
-          <div class="cert-featured-inner">
-            <div class="cert-ribbon">⭐ FEATURED</div>
-            <div class="cert-icon-wrap"><i class="fas fa-network-wired"></i></div>
-            <div class="cert-body">
-              <h3 class="cert-title">CCNA 200-301 🌐</h3>
-              <p class="cert-subtitle">Cisco Certified Network Associate</p>
-              <p class="cert-issuer">Simplilearn SkillUp</p>
-              <p class="cert-date"><i class="fas fa-calendar"></i> January 17, 2026</p>
-              <p class="cert-code">Credential ID: 9726449</p>
-              <a href="https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing"
-                 target="_blank" rel="noopener noreferrer" class="btn-sm-gold">
-                <i class="fas fa-external-link-alt"></i> Verify Certificate
-              </a>
-            </div>
-            <div class="cert-seal">🏆</div>
-          </div>
-        </div>
-
-        <!-- ── Professional Certificate ── -->
-        <div class="cert-featured" data-aos="fade-up" data-aos-delay="80">
-          <div class="cert-featured-inner">
-            <div class="cert-ribbon cc-badge--verified">✅ CERTIFIED</div>
-            <div class="cert-icon-wrap"><i class="fas fa-certificate"></i></div>
-            <div class="cert-body">
-              <h3 class="cert-title">Professional Certificate</h3>
-              <p class="cert-subtitle">Validated Specialist Competency</p>
-              <p class="cert-issuer">Certified Authority</p>
-              <p class="cert-date"><i class="fas fa-calendar"></i> 2024</p>
-              <p class="cert-code">Applied expertise in a specialist domain</p>
-              <a href="https://drive.google.com/file/d/12sPuwNrd2uWZfszUXMKbOVUFOGgzD0Uo/view?usp=drive_link"
-                 target="_blank" rel="noopener noreferrer" class="btn-sm-gold">
-                <i class="fas fa-external-link-alt"></i> View Certificate
-              </a>
-            </div>
-            <div class="cert-seal">📜</div>
-          </div>
-        </div>
-
-        <!-- ── Odoo ERP Training ── -->
-        <div class="cert-featured" data-aos="fade-up" data-aos-delay="160">
-          <div class="cert-featured-inner">
-            <div class="cert-ribbon cc-badge--verified">✅ CERTIFIED</div>
-            <div class="cert-icon-wrap"><i class="fas fa-cubes"></i></div>
-            <div class="cert-body">
-              <h3 class="cert-title">Odoo ERP Training</h3>
-              <p class="cert-subtitle">Enterprise Resource Planning</p>
-              <p class="cert-issuer">Odoo Official</p>
-              <p class="cert-date"><i class="fas fa-calendar"></i> 2024</p>
-              <p class="cert-code">Business processes, product & vendor modules in live ERP environments</p>
-              <a href="https://drive.google.com/file/d/1o6rcKtNQfHl7pH0Hyj0UqEkvFrloo18l/view?usp=drive_link"
-                 target="_blank" rel="noopener noreferrer" class="btn-sm-gold">
-                <i class="fas fa-external-link-alt"></i> View Certificate
-              </a>
-            </div>
-            <div class="cert-seal">🔷</div>
-          </div>
-        </div>
-
-        <!-- ── Safety Excellence Award ── -->
-        <div class="cert-featured" data-aos="fade-up" data-aos-delay="240">
-          <div class="cert-featured-inner">
-            <div class="cert-ribbon cc-badge--award">🏆 AWARD</div>
-            <div class="cert-icon-wrap"><i class="fas fa-shield-halved"></i></div>
-            <div class="cert-body">
-              <h3 class="cert-title">Safety Excellence Award</h3>
-              <p class="cert-subtitle">Outstanding Technical Performance</p>
-              <p class="cert-issuer">Hamad International Airport</p>
-              <p class="cert-date"><i class="fas fa-calendar"></i> 2023–2024</p>
-              <p class="cert-code">Formally recognised for safety compliance during the HIA Expansion Project</p>
-              <a href="https://drive.google.com/file/d/1fJPZr1Ju_TOxwXkYcVMbGi5HcFh4lrN9/view?usp=drive_link"
-                 target="_blank" rel="noopener noreferrer" class="btn-sm-gold">
-                <i class="fas fa-external-link-alt"></i> View Certificate
-              </a>
-            </div>
-            <div class="cert-seal">🥇</div>
-          </div>
-        </div>
-
-        <!-- ── Advanced Diploma ACCP ── -->
-        <div class="cert-featured" data-aos="fade-up" data-aos-delay="320">
-          <div class="cert-featured-inner">
-            <div class="cert-ribbon cc-badge--gold">🎓 DISTINCTION</div>
-            <div class="cert-icon-wrap"><i class="fas fa-graduation-cap"></i></div>
-            <div class="cert-body">
-              <h3 class="cert-title">Advanced Diploma — ACCP</h3>
-              <p class="cert-subtitle">Software Engineering · 3-Year Programme</p>
-              <p class="cert-issuer">Aptech Qatar</p>
-              <p class="cert-date"><i class="fas fa-calendar"></i> Nov 2020 – Nov 2023</p>
-              <p class="cert-code">Overall Distinction · 81%, 87%, 86% across all three years</p>
-              <a href="https://drive.google.com/file/d/1lOtZX9l8Gd1d_H60vcFm4SQUgHyQ5UAx/view?usp=drive_link"
-                 target="_blank" rel="noopener noreferrer" class="btn-sm-gold">
-                <i class="fas fa-external-link-alt"></i> View Certificate
-              </a>
-            </div>
-            <div class="cert-seal">🎖️</div>
-          </div>
-        </div>
-
-        <!-- ── MDX Career Fair Certificate ── -->
-        <div class="cert-featured" data-aos="fade-up" data-aos-delay="400">
-          <div class="cert-featured-inner">
-            <div class="cert-ribbon cc-badge--volunteer">🤝 VOLUNTEER</div>
-            <div class="cert-icon-wrap"><i class="fas fa-hands-helping"></i></div>
-            <div class="cert-body">
-              <h3 class="cert-title">MDX Career Fair Certificate</h3>
-              <p class="cert-subtitle">Certificate of Appreciation</p>
-              <p class="cert-issuer">Middlesex University Dubai</p>
-              <p class="cert-date"><i class="fas fa-calendar"></i> 2025</p>
-              <p class="cert-code">Volunteering at the Annual Career Fair — student-employer engagement</p>
-              <a href="https://drive.google.com/file/d/1xMiN9VHdOAJg4D7CowQnaCYCyejLmay8/view?usp=drive_link"
-                 target="_blank" rel="noopener noreferrer" class="btn-sm-gold">
-                <i class="fas fa-external-link-alt"></i> View Certificate
-              </a>
-            </div>
-            <div class="cert-seal">🤝</div>
-          </div>
-        </div>
-
+        <!-- Hero cert + all cards rendered by JS — no static duplicates -->
+        <div id="certHero" class="cert-hero-wrap"></div>
         <div class="certs-grid" id="certsGrid"></div>
       </div>
     </section>
@@ -1544,7 +1484,7 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <img src="logo.png" alt="SM" class="footer-logo">
+        <img src="logo.png" alt="SM" class="footer-logo" loading="lazy">
         <div>
           <span class="footer-name">Sajid Mehmood</span>
           <span class="footer-role">IT Support Engineer · CCNA</span>
@@ -1563,9 +1503,10 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" defer></script>
   <!-- ONE script file only -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
+  <noscript><style>.gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
 
 </body>
 </html>
