@@ -857,28 +857,30 @@
       return { ok: false, reason: 'Please enter your name before continuing.' };
     }
 
-    // Rule 2: No spaces — single word only
-    if (/\s/.test(trimmed)) {
-      return { ok: false, reason: 'Please enter a single name only — no spaces.' };
-    }
+    // Rule 2: (spaces allowed — full name supported)
 
-    // Rule 3: Letters only, no digits or symbols
-    if (/[^a-zA-Z]/.test(trimmed)) {
+    // Rule 3: Letters and spaces only, no digits or symbols
+    if (/[^a-zA-Z\s]/.test(trimmed)) {
       return { ok: false, reason: 'Your name should contain letters only — no numbers or symbols.' };
     }
 
-    // Rule 4: Minimum length
-    if (trimmed.length < MIN_LEN) {
-      return { ok: false, reason: 'Name is too short. Please enter at least ' + MIN_LEN + ' characters.' };
+    // Rule 4: Minimum length (check each word individually)
+    var words = trimmed.split(/\s+/).filter(Boolean);
+    for (var wi = 0; wi < words.length; wi++) {
+      if (words[wi].length < MIN_LEN) {
+        return { ok: false, reason: 'Each part of your name must be at least ' + MIN_LEN + ' characters.' };
+      }
     }
 
-    // Rule 5: Maximum length
+    // Rule 5: Maximum total length
     if (trimmed.length > MAX_LEN) {
       return { ok: false, reason: 'Name is too long. Please keep it under ' + MAX_LEN + ' characters.' };
     }
 
-    var lower  = trimmed.toLowerCase();
-    var normed = normalize(trimmed);
+    // Use first word for blocklist checks
+    var firstWord = words[0];
+    var lower  = firstWord.toLowerCase();
+    var normed = normalize(firstWord);
 
     // Rule 6: Whitelist bypass — known real names skip further checks
     if (_whitelistSet[lower]) {
@@ -990,7 +992,9 @@
   }
 
   function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    return str.trim().split(/\s+/).map(function(w) {
+      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+    }).join(' ');
   }
 
   // ----------------------------------------------------------
@@ -1011,7 +1015,7 @@
       if (controlKeys.indexOf(e.key) !== -1) return;
       if (e.ctrlKey || e.metaKey) return;
 
-      if (!/^[a-zA-Z]$/.test(e.key)) {
+      if (!/^[a-zA-Z ]$/.test(e.key)) {
         e.preventDefault();
       }
     });
@@ -1019,7 +1023,7 @@
     nameInput.addEventListener('input', function () {
       var cursor   = nameInput.selectionStart;
       var original = nameInput.value;
-      var cleaned  = original.replace(/[^a-zA-Z]/g, '');
+      var cleaned  = original.replace(/[^a-zA-Z ]/g, '').replace(/  +/g, ' ');
       if (cleaned !== original) {
         var removed = original.length - cleaned.length;
         nameInput.value = cleaned;
@@ -1130,8 +1134,8 @@
       }, 600);
     }
 
-    // Safety net: 3s max wait — notification is async but user shouldn't wait longer
-    setTimeout(revealPortfolio, 3000);
+    // Safety net: 1.2s max wait
+    setTimeout(revealPortfolio, 1200);
     sendNtfyNotification(displayName, revealPortfolio);
   };
 
