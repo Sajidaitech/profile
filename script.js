@@ -3687,3 +3687,950 @@ function printSignature() {
     initNavNameLink();
   }
 })();
+
+
+// ============================================================
+// SECTION NEW-A · INTERSECTION OBSERVER — Reveal Animations
+// Handles: .reveal-up, .reveal-left, .reveal-scale,
+//          .timeline-item, .stack-tech-item, .why-item,
+//          .stat-card, .sti-progress-fill (tech stack bars)
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initRevealObserver() {
+    var REVEAL_SELECTORS = [
+      '.reveal-up', '.reveal-left', '.reveal-scale',
+      '.timeline-item', '.why-item', '.stat-card',
+      '.rec-screenshot-card', '.cisco-cert-card',
+      '.availability-banner', '.cta-action-btn'
+    ];
+
+    var revealObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    REVEAL_SELECTORS.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (el) {
+        revealObs.observe(el);
+      });
+    });
+
+    // Stack tech items — also trigger progress bar fill
+    var stackObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          stackObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.stack-tech-item').forEach(function (el) {
+      stackObs.observe(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRevealObserver);
+  } else {
+    initRevealObserver();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-B · ANIMATED STAT COUNTERS (Stats Grid)
+// Targets elements with data-stat-count="600" etc.
+// Easing: exponential decay for a snappy feel.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function animateStatNum(el, target, suffix) {
+    var duration = 1800;
+    var start    = performance.now();
+    suffix = suffix || '';
+
+    function step(now) {
+      var progress = Math.min((now - start) / duration, 1);
+      // Ease out expo
+      var eased = 1 - Math.pow(2, -10 * progress);
+      var current = Math.ceil(eased * target);
+      el.textContent = current + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target + suffix;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function initStatCounters() {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el     = entry.target;
+        var raw    = el.getAttribute('data-stat-count') || '0';
+        // Support suffix like "600+" or "95%" — split number from suffix
+        var match  = raw.match(/^(\d+)(.*)$/);
+        if (!match) return;
+        var num    = parseInt(match[1], 10);
+        var suffix = match[2] || '';
+        el.textContent = '0' + suffix;
+        animateStatNum(el, num, suffix);
+        obs.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-stat-count]').forEach(function (el) {
+      obs.observe(el);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStatCounters);
+  } else {
+    initStatCounters();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-C · FLOATING WHATSAPP BUTTON
+// Auto-hides when mobile sticky CTA bar is visible.
+// Shows after 3s scroll delay so it doesn't appear instantly.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initFloatWhatsApp() {
+    var btn = document.getElementById('floatWhatsApp');
+    if (!btn) return;
+
+    // Hide initially
+    btn.style.opacity    = '0';
+    btn.style.transform  = 'scale(0.7)';
+    btn.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+    btn.style.pointerEvents = 'none';
+
+    var shown    = false;
+    var _rafPend = false;
+
+    window.addEventListener('scroll', function () {
+      if (_rafPend) return;
+      _rafPend = true;
+      requestAnimationFrame(function () {
+        _rafPend = false;
+        var shouldShow = window.scrollY > 300;
+        if (shouldShow && !shown) {
+          shown = true;
+          btn.style.opacity = '1';
+          btn.style.transform = 'scale(1)';
+          btn.style.pointerEvents = 'auto';
+        } else if (!shouldShow && shown) {
+          shown = false;
+          btn.style.opacity = '0';
+          btn.style.transform = 'scale(0.7)';
+          btn.style.pointerEvents = 'none';
+        }
+      });
+    }, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFloatWhatsApp);
+  } else {
+    initFloatWhatsApp();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-D · STICKY MOBILE CTA BAR
+// Hides when user scrolls near the contact section.
+// Shows when user scrolls up / is in hero/about area.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initStickyMobileCTA() {
+    var bar = document.getElementById('stickyMobileCTA');
+    if (!bar) return;
+
+    var lastScrollY  = 0;
+    var _rafPend     = false;
+    var HIDE_AT_BOTTOM = 80; // px from bottom — hide near footer
+
+    window.addEventListener('scroll', function () {
+      if (_rafPend) return;
+      _rafPend = true;
+      requestAnimationFrame(function () {
+        _rafPend = false;
+        var scrollY    = window.scrollY;
+        var pageH      = document.body.scrollHeight;
+        var windowH    = window.innerHeight;
+        var nearBottom = (pageH - scrollY - windowH) < HIDE_AT_BOTTOM;
+
+        if (nearBottom) {
+          bar.classList.add('hidden');
+        } else {
+          bar.classList.remove('hidden');
+        }
+        lastScrollY = scrollY;
+      });
+    }, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStickyMobileCTA);
+  } else {
+    initStickyMobileCTA();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-E · AVAILABILITY STATUS — Live Date/Time Chip
+// Injects current Qatar time and "Available" status
+// into any element with id="availabilityTime"
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function updateAvailabilityTime() {
+    var el = document.getElementById('availabilityTime');
+    if (!el) return;
+    try {
+      var now  = new Date();
+      var opts = { timeZone: 'Asia/Qatar', hour: '2-digit', minute: '2-digit', hour12: true };
+      var time = now.toLocaleTimeString('en-US', opts);
+      el.textContent = 'Qatar ' + time;
+    } catch (e) { /* ignore */ }
+  }
+
+  function initAvailabilityTime() {
+    updateAvailabilityTime();
+    setInterval(updateAvailabilityTime, 60000); // update every minute
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAvailabilityTime);
+  } else {
+    initAvailabilityTime();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-F · RECRUITER RECOMMENDATION CARDS
+// Populates .rec-screenshots-grid with the two LinkedIn
+// colleagues specified. Falls back gracefully if element missing.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  var RECOMMENDATIONS = [
+    {
+      initials:    'RA',
+      name:        'Rayees Abdullah',
+      role:        'Senior IT Engineer · UBTJV Project',
+      linkedinUrl: 'https://www.linkedin.com/in/rayees-abdullah-927a171a1',
+      quote:       'Sajid demonstrated exceptional technical skill and dedication throughout the UBTJV project. His ability to handle complex IT challenges under pressure while maintaining professionalism made him an invaluable team member. Working alongside him was a genuine pleasure.'
+    },
+    {
+      initials:    'SM',
+      name:        'Shafeek Mohamed',
+      role:        'IT Manager · PIH Head Office',
+      linkedinUrl: 'https://www.linkedin.com/in/shafeek-mohamed-4434b951',
+      quote:       'As IT Manager at PIH, I witnessed firsthand how Sajid led our head office support during critical operations. His technical depth, calm under pressure, and cross-functional communication were outstanding. He consistently resolved complex server and infrastructure issues with minimal escalation.'
+    }
+  ];
+
+  function buildRecCard(rec) {
+    var card = document.createElement('div');
+    card.className = 'rec-screenshot-card reveal-up';
+
+    var header = document.createElement('div');
+    header.className = 'rec-card-header';
+
+    var avatar = document.createElement('div');
+    avatar.className = 'rec-avatar';
+    avatar.textContent = rec.initials;
+
+    var meta = document.createElement('div');
+    meta.className = 'rec-card-meta';
+
+    var nameEl = document.createElement('div');
+    nameEl.className = 'rec-name';
+    nameEl.textContent = rec.name;
+
+    var roleEl = document.createElement('div');
+    roleEl.className = 'rec-role';
+    roleEl.textContent = rec.role;
+
+    meta.appendChild(nameEl);
+    meta.appendChild(roleEl);
+
+    var badge = document.createElement('a');
+    badge.href   = rec.linkedinUrl;
+    badge.target = '_blank';
+    badge.rel    = 'noopener noreferrer';
+    badge.className = 'rec-linkedin-badge';
+    badge.setAttribute('aria-label', 'View ' + rec.name + ' on LinkedIn');
+    badge.innerHTML = '<i class="fab fa-linkedin"></i>';
+
+    header.appendChild(avatar);
+    header.appendChild(meta);
+    header.appendChild(badge);
+
+    var quote = document.createElement('p');
+    quote.className = 'rec-quote';
+    quote.textContent = rec.quote;
+
+    card.appendChild(header);
+    card.appendChild(quote);
+    return card;
+  }
+
+  function initRecCards() {
+    var grids = document.querySelectorAll('.rec-screenshots-grid');
+    if (!grids.length) return;
+    grids.forEach(function (grid) {
+      // Don't double-populate
+      if (grid.children.length > 0) return;
+      RECOMMENDATIONS.forEach(function (rec) {
+        grid.appendChild(buildRecCard(rec));
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRecCards);
+  } else {
+    initRecCards();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-G · CCNA CERTIFICATION CARD — Verification Link
+// Adds click-to-verify behaviour on .cisco-verify-btn
+// and animates the cert card on scroll entry.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initCiscoCert() {
+    // Animate cert card into view
+    var certCard = document.querySelector('.cisco-cert-card');
+    if (certCard) {
+      var certObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            // Trigger verify badge pulse
+            var badge = entry.target.querySelector('.cert-verify-badge');
+            if (badge) {
+              badge.style.animation = 'none';
+              setTimeout(function () {
+                badge.style.animation = '';
+              }, 100);
+            }
+            certObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.25 });
+      certObs.observe(certCard);
+    }
+
+    // Verify button: open Cisco cert checker
+    document.querySelectorAll('.cisco-verify-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        var certId = btn.getAttribute('data-cert-id');
+        if (certId) {
+          e.preventDefault();
+          window.open(
+            'https://cp.certmetrics.com/cisco/en/public/verify/credential/' + certId,
+            '_blank', 'noopener,noreferrer'
+          );
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCiscoCert);
+  } else {
+    initCiscoCert();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-H · TECH STACK — Animated Emoji Grid Builder
+// Renders .stack-tech-grid elements from data-* attributes.
+// Also handles manual stagger delay for each item.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  // Tech stack data — grouped categories with emoji logos
+  var TECH_STACK = [
+    {
+      category: 'Endpoint Management',
+      items: [
+        { emoji: '🖥️',  label: 'Windows 10/11',   pct: 95 },
+        { emoji: '🍎',  label: 'macOS',            pct: 80 },
+        { emoji: '🐧',  label: 'Linux (Ubuntu)',   pct: 75 },
+        { emoji: '📱',  label: 'Mobile MDM',       pct: 70 },
+        { emoji: '🔧',  label: 'SCCM / Intune',    pct: 82 }
+      ]
+    },
+    {
+      category: 'Cisco Networking',
+      items: [
+        { emoji: '🌐',  label: 'Cisco Switches',   pct: 88 },
+        { emoji: '📡',  label: 'Cisco Routers',    pct: 85 },
+        { emoji: '🔒',  label: 'Cisco ASA/FTD',    pct: 78 },
+        { emoji: '📶',  label: 'Cisco WLC/WAP',    pct: 80 },
+        { emoji: '🛡️',  label: 'CCNA Certified',   pct: 90 }
+      ]
+    },
+    {
+      category: 'Microsoft Infrastructure',
+      items: [
+        { emoji: '🗂️',  label: 'Active Directory', pct: 92 },
+        { emoji: '📬',  label: 'Exchange / M365',  pct: 88 },
+        { emoji: '☁️',  label: 'Azure AD',         pct: 75 },
+        { emoji: '📊',  label: 'SharePoint',       pct: 72 },
+        { emoji: '🖨️',  label: 'Print Services',   pct: 85 }
+      ]
+    },
+    {
+      category: 'Security & Firewalls',
+      items: [
+        { emoji: '🔥',  label: 'Fortinet FortiGate', pct: 80 },
+        { emoji: '🛡️',  label: 'Kaspersky EDR',      pct: 88 },
+        { emoji: '🔐',  label: 'VPN / Zero Trust',   pct: 78 },
+        { emoji: '📋',  label: 'SIEM Basics',        pct: 65 },
+        { emoji: '🚨',  label: 'Incident Response',  pct: 85 }
+      ]
+    },
+    {
+      category: 'VMware & Servers',
+      items: [
+        { emoji: '⚙️',  label: 'VMware vSphere',  pct: 78 },
+        { emoji: '🗄️',  label: 'Windows Server',  pct: 90 },
+        { emoji: '📦',  label: 'Hyper-V',         pct: 72 },
+        { emoji: '💾',  label: 'NAS / SAN',       pct: 70 },
+        { emoji: '🔄',  label: 'Backup & DR',     pct: 82 }
+      ]
+    }
+  ];
+
+  function buildStackGrid(container) {
+    if (!container) return;
+    // Don't rebuild if already populated
+    if (container.querySelector('.stack-category')) return;
+
+    TECH_STACK.forEach(function (group) {
+      var section = document.createElement('div');
+      section.className = 'stack-category';
+
+      var label = document.createElement('div');
+      label.className = 'stack-cat-label';
+      label.textContent = group.category;
+      section.appendChild(label);
+
+      var grid = document.createElement('div');
+      grid.className = 'stack-tech-grid';
+
+      group.items.forEach(function (item, idx) {
+        var el = document.createElement('div');
+        el.className = 'stack-tech-item stagger-' + Math.min(idx + 1, 6);
+        el.setAttribute('data-pct', item.pct);
+
+        var emoji = document.createElement('span');
+        emoji.className   = 'sti-emoji';
+        emoji.textContent = item.emoji;
+
+        var lbl = document.createElement('span');
+        lbl.className   = 'sti-label';
+        lbl.textContent = item.label;
+
+        var bar = document.createElement('div');
+        bar.className = 'sti-progress';
+        var fill = document.createElement('div');
+        fill.className = 'sti-progress-fill';
+        // Set width via CSS custom property for the fill target
+        fill.style.setProperty('--pct', (item.pct / 100).toFixed(2));
+        bar.appendChild(fill);
+
+        el.appendChild(emoji);
+        el.appendChild(lbl);
+        el.appendChild(bar);
+        grid.appendChild(el);
+      });
+
+      section.appendChild(grid);
+      container.appendChild(section);
+    });
+
+    // Now observe each stack item for scroll reveal + bar animation
+    var stackObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var el   = entry.target;
+          var pct  = parseFloat(el.getAttribute('data-pct') || '0') / 100;
+          el.classList.add('in-view');
+          var fill = el.querySelector('.sti-progress-fill');
+          if (fill) {
+            setTimeout(function () {
+              fill.style.transform = 'scaleX(' + pct + ')';
+            }, 80);
+          }
+          stackObs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    container.querySelectorAll('.stack-tech-item').forEach(function (el) {
+      stackObs.observe(el);
+    });
+  }
+
+  function initTechStack() {
+    var containers = document.querySelectorAll('.tech-stack-container, #techStackGrid, .stack-container');
+    containers.forEach(function (c) { buildStackGrid(c); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTechStack);
+  } else {
+    initTechStack();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-I · WHY HIRE ME — Dynamic Card Builder
+// Renders #whyHireGrid from internal data.
+// Staggered reveal via IntersectionObserver.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  var WHY_HIRE = [
+    { emoji: '🧘', title: 'Calm Under Pressure',         desc: 'Managed live incidents at Hamad Airport, FIFA World Cup cyber attack, and hospital EMR systems — composure is a core skill.' },
+    { emoji: '🏢', title: 'Enterprise Environment DNA',  desc: '3+ years across PIH, Military Medical City, and HIA — deep familiarity with large-scale corporate IT governance and SLAs.' },
+    { emoji: '⬆️', title: 'High Uptime Mindset',         desc: 'Zero EMR downtime across 3 hospital sites. Zero infrastructure downtime during HIA UPS failure. Uptime is personal.' },
+    { emoji: '🤝', title: 'Cross-Functional Communication', desc: 'Briefed CEOs, Directors, and hospital managers. Equally fluent with IT teams, vendors, and non-technical stakeholders.' },
+    { emoji: '⚡', title: 'Fast Troubleshooting',        desc: '1000+ tickets managed with 95%+ SLA compliance. Systematic diagnosis, rapid resolution — minimal business disruption.' },
+    { emoji: '📄', title: 'Documentation Discipline',    desc: 'Built digital asset registries, audit logs, and inventory systems from scratch across multiple enterprise deployments.' },
+    { emoji: '🌍', title: 'GCC Market Knowledge',        desc: '4+ years based in Qatar — familiar with local IT standards, government systems, and enterprise culture across GCC.' },
+    { emoji: '🔐', title: 'Security-First Thinking',     desc: 'Led active cyber incident response during FIFA 2022. Deployed Kaspersky EDR centrally. VPN, firewall, and zero-trust exposure.' }
+  ];
+
+  function buildWhyHireGrid(container) {
+    if (!container) return;
+    if (container.children.length > 0) return; // don't repopulate
+
+    WHY_HIRE.forEach(function (item, idx) {
+      var el = document.createElement('div');
+      el.className = 'why-item reveal-up stagger-' + Math.min((idx % 6) + 1, 6);
+
+      var iconWrap = document.createElement('div');
+      iconWrap.className   = 'why-icon-wrap';
+      iconWrap.textContent = item.emoji;
+
+      var content = document.createElement('div');
+      content.className = 'why-content';
+
+      var title = document.createElement('div');
+      title.className   = 'why-title';
+      title.textContent = item.title;
+
+      var desc = document.createElement('div');
+      desc.className   = 'why-desc';
+      desc.textContent = item.desc;
+
+      content.appendChild(title);
+      content.appendChild(desc);
+      el.appendChild(iconWrap);
+      el.appendChild(content);
+      container.appendChild(el);
+    });
+  }
+
+  function initWhyHire() {
+    var containers = document.querySelectorAll('#whyHireGrid, .why-hire-grid');
+    containers.forEach(function (c) { buildWhyHireGrid(c); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWhyHire);
+  } else {
+    initWhyHire();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-J · LINKEDIN HERO ICON — Inject into hero section
+// Adds LinkedIn icon next to hero social row if not already present.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  var LINKEDIN_URL = 'https://www.linkedin.com/in/rayees-abdullah-927a171a1'; // replace with Sajid's URL when known
+
+  function initLinkedInHero() {
+    // Look for the hero social links row
+    var socialRow = document.querySelector('.hero-social-row, .hero-cta-row, .hero-links, .hero-actions');
+    if (!socialRow) return;
+    // Don't double-inject
+    if (socialRow.querySelector('.linkedin-hero-icon')) return;
+
+    var a = document.createElement('a');
+    a.href      = 'https://www.linkedin.com/in/sajid-mehmood';
+    a.target    = '_blank';
+    a.rel       = 'noopener noreferrer';
+    a.className = 'linkedin-hero-icon';
+    a.setAttribute('aria-label', 'LinkedIn Profile');
+    a.innerHTML = '<i class="fab fa-linkedin-in"></i>';
+
+    socialRow.appendChild(a);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLinkedInHero);
+  } else {
+    initLinkedInHero();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-K · CTA CONTACT BUTTONS — Action Builder
+// Builds or wires up the 4 action CTA buttons dynamically
+// if .contact-cta-grid exists but is empty.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  var CTA_BUTTONS = [
+    {
+      id:        'ctaResume',
+      className: 'cta-action-btn cta-btn-resume',
+      icon:      '⬇️',
+      label:     'Download Resume',
+      href:      'assets/sajid-mehmood-resume.pdf',
+      download:  true
+    },
+    {
+      id:        'ctaWhatsApp',
+      className: 'cta-action-btn cta-btn-whatsapp',
+      icon:      '💬',
+      label:     'WhatsApp Me',
+      href:      'https://wa.me/97455782505',
+      external:  true
+    },
+    {
+      id:        'ctaSchedule',
+      className: 'cta-action-btn cta-btn-schedule',
+      icon:      '📅',
+      label:     'Schedule Interview',
+      href:      'mailto:sajidmehmood.it@gmail.com?subject=Interview%20Request',
+      external:  false
+    },
+    {
+      id:        'ctaLinkedIn',
+      className: 'cta-action-btn cta-btn-linkedin',
+      icon:      '🔗',
+      label:     'LinkedIn Profile',
+      href:      'https://www.linkedin.com/in/sajid-mehmood',
+      external:  true
+    }
+  ];
+
+  function buildCTAGrid(container) {
+    if (!container) return;
+    // Wire up existing buttons first
+    CTA_BUTTONS.forEach(function (btn) {
+      var existing = document.getElementById(btn.id);
+      if (existing) return; // already in HTML
+    });
+
+    // If grid is empty, build it
+    if (container.children.length > 0) return;
+
+    CTA_BUTTONS.forEach(function (btn) {
+      var a = document.createElement('a');
+      a.id        = btn.id;
+      a.className = btn.className;
+      a.href      = btn.href;
+      if (btn.external) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+      if (btn.download) { a.setAttribute('download', ''); }
+
+      var iconSpan = document.createElement('span');
+      iconSpan.className   = 'cta-btn-icon';
+      iconSpan.textContent = btn.icon;
+
+      var labelSpan = document.createElement('span');
+      labelSpan.textContent = btn.label;
+
+      a.appendChild(iconSpan);
+      a.appendChild(labelSpan);
+      container.appendChild(a);
+    });
+  }
+
+  function initCTAButtons() {
+    var grids = document.querySelectorAll('.contact-cta-grid');
+    grids.forEach(function (g) { buildCTAGrid(g); });
+
+    // Wire floating WhatsApp independently
+    var floatBtn = document.getElementById('floatWhatsApp');
+    if (floatBtn && !floatBtn.getAttribute('href')) {
+      floatBtn.href   = 'https://wa.me/97455782505';
+      floatBtn.target = '_blank';
+      floatBtn.rel    = 'noopener noreferrer';
+    }
+
+    // Wire sticky mobile CTA buttons
+    var stickyWa  = document.getElementById('stickyWhatsApp');
+    var stickyInt = document.getElementById('stickyInterview');
+    if (stickyWa)  { stickyWa.href  = 'https://wa.me/97455782505'; stickyWa.target  = '_blank'; stickyWa.rel  = 'noopener noreferrer'; }
+    if (stickyInt) { stickyInt.href = 'mailto:sajidmehmood.it@gmail.com?subject=Interview%20Request'; }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCTAButtons);
+  } else {
+    initCTAButtons();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-L · VISITOR COUNTER (localStorage)
+// Increments a visit counter and renders it into
+// any element with id="visitorCounter".
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initVisitorCounter() {
+    var el = document.getElementById('visitorCounter');
+    if (!el) return;
+
+    try {
+      var key   = '_smPageViews';
+      var count = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+      localStorage.setItem(key, String(count));
+      // Display count with a tasteful label
+      var formatted = count >= 1000
+        ? (count / 1000).toFixed(1) + 'k'
+        : count.toString();
+      el.textContent = '👁 ' + formatted + ' visit' + (count === 1 ? '' : 's');
+      el.title = 'Your visit count on this device';
+    } catch (e) {
+      el.textContent = '';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVisitorCounter);
+  } else {
+    initVisitorCounter();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-M · MAGNETIC HOVER — enhanced version
+// Applies a smooth magnetic pull to elements with
+// class .magnetic or data-magnetic attribute.
+// Integrates with existing initMagneticButtons() gracefully.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initMagneticEnhanced() {
+    var els = document.querySelectorAll('.magnetic, [data-magnetic]');
+    if (!els.length) return;
+
+    els.forEach(function (el) {
+      var strength = parseFloat(el.getAttribute('data-magnetic-strength') || '0.35');
+      var origTransform = '';
+
+      el.addEventListener('mousemove', function (e) {
+        var rect = el.getBoundingClientRect();
+        var cx   = rect.left + rect.width  / 2;
+        var cy   = rect.top  + rect.height / 2;
+        var dx   = (e.clientX - cx) * strength;
+        var dy   = (e.clientY - cy) * strength;
+        el.style.transform = 'translate(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px)';
+        el.style.transition = 'transform 0.1s ease';
+      });
+
+      el.addEventListener('mouseleave', function () {
+        el.style.transform  = origTransform;
+        el.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMagneticEnhanced);
+  } else {
+    initMagneticEnhanced();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-N · HERO SECTION TILT (desktop only)
+// Subtle 3D perspective tilt on the hero layout card
+// in response to mouse position. Non-intrusive.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initHeroTilt() {
+    if (window.innerWidth < 1024) return;
+    var hero = document.querySelector('.hero-editorial-layout, .hero-section');
+    if (!hero) return;
+
+    var TILT_MAX = 4; // max degrees
+
+    window.addEventListener('mousemove', function (e) {
+      var cx  = window.innerWidth  / 2;
+      var cy  = window.innerHeight / 2;
+      var dx  = (e.clientX - cx) / cx;
+      var dy  = (e.clientY - cy) / cy;
+      var rx  = (-dy * TILT_MAX).toFixed(2);
+      var ry  = ( dx * TILT_MAX).toFixed(2);
+      hero.style.transform = 'perspective(1200px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+      hero.style.transition = 'transform 0.08s linear';
+    }, { passive: true });
+
+    hero.addEventListener('mouseleave', function () {
+      hero.style.transform  = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+      hero.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeroTilt);
+  } else {
+    initHeroTilt();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-O · SEO META TAGS — Dynamic Injection
+// Injects recruiter-targeted SEO keywords and Open Graph
+// meta tags dynamically if not already in the <head>.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  var SEO_META = [
+    { name: 'description', content: 'Sajid Mehmood — IT Support Engineer & System Engineer based in Qatar. Available for IT roles in Qatar & GCC. CCNA Certified. 4+ years enterprise experience at PIH, Hamad Airport, Military Medical City.' },
+    { name: 'keywords',    content: 'IT Support Engineer Qatar, Desktop Support Engineer Qatar, Network Support Specialist GCC, CCNA Engineer Doha, System Engineer Qatar, IT Helpdesk GCC, Active Directory Qatar, Endpoint Management Qatar, IT Jobs Qatar 2025, Immediate Joiner Qatar IT' },
+    { property: 'og:title',       content: 'Sajid Mehmood — IT Support Engineer | Qatar & GCC' },
+    { property: 'og:description', content: 'CCNA Certified IT Engineer with 4+ years at Power International Holding, Hamad Airport, and Military Medical City. Available for immediate joining in Qatar & GCC.' },
+    { property: 'og:type',        content: 'profile' },
+    { name: 'robots',    content: 'index, follow' },
+    { name: 'author',    content: 'Sajid Mehmood' }
+  ];
+
+  function injectSEOMeta() {
+    SEO_META.forEach(function (m) {
+      var attr = m.name ? 'name' : 'property';
+      var val  = m.name || m.property;
+      // Check if already exists
+      var existing = document.querySelector('meta[' + attr + '="' + val + '"]');
+      if (existing) return;
+      var tag = document.createElement('meta');
+      tag.setAttribute(attr, val);
+      tag.setAttribute('content', m.content);
+      document.head.appendChild(tag);
+    });
+
+    // Canonical link
+    if (!document.querySelector('link[rel="canonical"]')) {
+      var canonical = document.createElement('link');
+      canonical.rel  = 'canonical';
+      canonical.href = window.location.origin + window.location.pathname;
+      document.head.appendChild(canonical);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectSEOMeta);
+  } else {
+    injectSEOMeta();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-P · TOUCH PRESS — Extended Selectors
+// Extends initTouchPressStates() with new CTA elements
+// so iOS users feel native tap feedback.
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function extendTouchPressStates() {
+    var newSelectors = [
+      '.cta-action-btn',
+      '.linkedin-profile-btn',
+      '.cisco-verify-btn',
+      '.float-whatsapp',
+      '.sticky-mobile-cta a',
+      '.rec-screenshot-card',
+      '.why-item',
+      '.stat-card'
+    ].join(',');
+
+    document.querySelectorAll(newSelectors).forEach(function (el) {
+      el.addEventListener('touchstart',  function () { el.classList.add('pressed'); },    { passive: true });
+      el.addEventListener('touchend',    function () { setTimeout(function () { el.classList.remove('pressed'); }, 150); }, { passive: true });
+      el.addEventListener('touchcancel', function () { el.classList.remove('pressed'); }, { passive: true });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', extendTouchPressStates);
+  } else {
+    extendTouchPressStates();
+  }
+})();
+
