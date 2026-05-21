@@ -3213,3 +3213,126 @@ a, button, [role="button"] {
   width: fit-content;
   box-shadow: var(--sh-xs);
 }
+
+/* ================================================================
+   CTA BUTTONS — PILL REDESIGN (mobile-first horizontal layout)
+================================================================ */
+
+/* Grid: single column on all screens for pill style */
+.contact-cta-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin-top: 22px;
+}
+
+/* Base pill button — horizontal row */
+.cta-action-btn {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  padding: 14px 20px !important;
+  border-radius: var(--r-pill) !important;
+  width: 100% !important;
+  min-height: 0 !important;
+}
+
+/* Keep icon small and circular */
+.cta-btn-icon {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  flex-shrink: 0 !important;
+  background: rgba(255,255,255,.22) !important;
+}
+
+/* Text block — left aligned */
+.cta-btn-text {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 1px !important;
+  flex: 1 !important;
+}
+.cta-btn-label {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  opacity: .80 !important;
+  letter-spacing: .04em !important;
+  text-transform: uppercase !important;
+  line-height: 1 !important;
+}
+.cta-btn-title {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Arrow always right */
+.cta-btn-arrow {
+  margin-left: auto !important;
+  font-size: 13px !important;
+  opacity: .75 !important;
+}
+
+/* ── RESUME — Maroon / deep red ── */
+.cta-resume {
+  background: linear-gradient(135deg, #8B0000 0%, #a31515 50%, #7a0000 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  box-shadow: 0 6px 24px rgba(139,0,0,.40),
+              inset 0 1.5px 0 rgba(255,255,255,.22) !important;
+}
+.cta-resume .cta-btn-icon {
+  background: rgba(255,255,255,.18) !important;
+  color: #fff !important;
+}
+.cta-resume:hover {
+  box-shadow: 0 10px 32px rgba(139,0,0,.55),
+              inset 0 1.5px 0 rgba(255,255,255,.28) !important;
+}
+
+/* ── WHATSAPP — WhatsApp green ── */
+.cta-whatsapp {
+  background: linear-gradient(135deg, #128C7E 0%, #25D366 60%, #075E54 100%) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  box-shadow: 0 6px 24px rgba(37,211,102,.38),
+              inset 0 1.5px 0 rgba(255,255,255,.22) !important;
+}
+.cta-whatsapp .cta-btn-icon {
+  background: rgba(255,255,255,.18) !important;
+  color: #fff !important;
+}
+.cta-whatsapp:hover {
+  box-shadow: 0 10px 32px rgba(37,211,102,.52),
+              inset 0 1.5px 0 rgba(255,255,255,.28) !important;
+}
+
+/* ── LINKEDIN — White with LinkedIn blue accents ── */
+.cta-linkedin {
+  background: #fff !important;
+  color: #0077b5 !important;
+  border: 1.5px solid rgba(0,119,181,.25) !important;
+  box-shadow: 0 4px 18px rgba(0,119,181,.18),
+              inset 0 1px 0 rgba(255,255,255,.90) !important;
+}
+.cta-linkedin .cta-btn-icon {
+  background: #0077b5 !important;
+  color: #fff !important;
+}
+.cta-linkedin .cta-btn-label,
+.cta-linkedin .cta-btn-title  { color: #0077b5 !important; }
+.cta-linkedin .cta-btn-arrow  { color: #0077b5 !important; }
+.cta-linkedin:hover {
+  background: #f0f8ff !important;
+  box-shadow: 0 8px 28px rgba(0,119,181,.28),
+              0 0 0 2px rgba(0,119,181,.15) !important;
+}
