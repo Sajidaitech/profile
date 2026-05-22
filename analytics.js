@@ -32,25 +32,40 @@ const ANALYTICS_CONFIG = {
 (function () {
   'use strict';
 
-  // Load Supabase from CDN, call cb(client) when ready
+  // Get or create Supabase client, call cb(client) when ready
+  function createClient() {
+    return window.supabase.createClient(
+      ANALYTICS_CONFIG.supabaseUrl,
+      ANALYTICS_CONFIG.supabaseKey,
+      { realtime: { params: { eventsPerSecond: 10 } }, auth: { persistSession: false } }
+    );
+  }
+
   function loadSupabase(cb) {
+    // Already have a client — use it immediately
     if (window.__supabaseClient) { cb(window.__supabaseClient); return; }
+
+    // Supabase JS already loaded from <head> script tag
+    if (window.supabase && window.supabase.createClient) {
+      window.__supabaseClient = createClient();
+      cb(window.__supabaseClient);
+      return;
+    }
+
+    // Queue callback if already loading
     if (window.__supabaseLoading) {
-      // Already loading — queue the callback
       window.__supabaseCbs = window.__supabaseCbs || [];
       window.__supabaseCbs.push(cb);
       return;
     }
+
+    // Fallback: inject script dynamically (if head script failed)
     window.__supabaseLoading = true;
     window.__supabaseCbs = [cb];
     const s = document.createElement('script');
     s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
     s.onload = function () {
-      window.__supabaseClient = window.supabase.createClient(
-        ANALYTICS_CONFIG.supabaseUrl,
-        ANALYTICS_CONFIG.supabaseKey,
-        { realtime: { params: { eventsPerSecond: 10 } }, auth: { persistSession: false } }
-      );
+      window.__supabaseClient = createClient();
       window.__supabaseLoading = false;
       (window.__supabaseCbs || []).forEach(function(fn) { fn(window.__supabaseClient); });
     };
@@ -92,10 +107,30 @@ const ANALYTICS_CONFIG = {
     });
   }
 
-  // Step 2: Full analytics (tracking, realtime, heartbeat) after DOM ready
+  // Step 2: Full analytics (tracking, realtime, heartbeat)
+  // Waits up to 3s for the async Supabase script from <head> to finish
   function boot() {
-    quickCountFetch();            // show numbers immediately
-    loadSupabase(startAnalytics); // full tracking in parallel
+    if (window.supabase && window.supabase.createClient) {
+      // Supabase already ready — go immediately
+      quickCountFetch();
+      loadSupabase(startAnalytics);
+    } else {
+      // Supabase <head> script still loading — poll every 100ms (max 3s)
+      let attempts = 0;
+      const poll = setInterval(function () {
+        attempts++;
+        if (window.supabase && window.supabase.createClient) {
+          clearInterval(poll);
+          quickCountFetch();
+          loadSupabase(startAnalytics);
+        } else if (attempts >= 30) {
+          // 3s timeout — fall back to dynamic inject
+          clearInterval(poll);
+          quickCountFetch();
+          loadSupabase(startAnalytics);
+        }
+      }, 100);
+    }
   }
 
   if (document.readyState === 'loading') {
