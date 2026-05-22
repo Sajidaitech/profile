@@ -1988,7 +1988,12 @@
   window.gateSubmit   = function () {
     var input = document.getElementById('gVisitorName');
     if (input && input.value) {
-      try { sessionStorage.setItem('_smVisitorName', input.value.trim()); } catch (e) { /* ignore */ }
+      var cleanName = input.value.trim();
+      try { sessionStorage.setItem('_smVisitorName', cleanName); } catch (e) { /* ignore */ }
+      // Push name to analytics engine (saves to Supabase)
+      if (typeof window.analyticsSetVisitorName === 'function') {
+        window.analyticsSetVisitorName(cleanName);
+      }
     }
     _origGateSubmit.apply(this, arguments);
   };

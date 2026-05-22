@@ -448,6 +448,7 @@
         <table>
           <thead>
             <tr>
+              <th>Name</th>
               <th>Location</th>
               <th>Source</th>
               <th>Device</th>
@@ -559,7 +560,7 @@ async function updateOnlineBadge() {
 async function loadRecentVisitors() {
   const { data, error } = await db
     .from('visitors')
-    .select('country,city,source,device,browser,os,duration,is_returning,created_at')
+    .select('visitor_name,country,city,source,device,device_model,browser,os,duration,is_returning,created_at')
     .order('created_at', { ascending: false })
     .limit(50);
 
@@ -578,10 +579,14 @@ async function loadRecentVisitors() {
     const dur    = v.duration > 0 ? v.duration + 's' : '—';
     const source = v.source || 'Direct';
 
+    const nameCell = v.visitor_name
+      ? `<td style="font-weight:600;color:var(--ink);">${esc(v.visitor_name)}</td>`
+      : `<td style="color:var(--ink-3);">—</td>`;
     return `<tr>
+      ${nameCell}
       <td class="td-country">${esc(loc)}${isGCC ? ' 🇶🇦' : ''}</td>
       <td><span class="tag tag-source">${esc(source)}</span>${isGCC ? ' <span class="tag tag-gcc">GCC</span>' : ''}</td>
-      <td><span class="tag">${esc(v.device || '—')}</span></td>
+      <td><span class="tag">${esc(v.device || '—')}</span><br><span style="font-size:11px;color:var(--ink-3);">${esc(v.device_model || '')}</span></td>
       <td>${esc(v.browser || '—')}</td>
       <td>${esc(v.os || '—')}</td>
       <td style="font-family:var(--ff-mono);font-size:12px;">${dur}</td>

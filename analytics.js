@@ -270,17 +270,24 @@ async function startAnalytics(db) {
 
   const [geo] = await Promise.all([fetchGeoData()]);
 
+  // Pick up name if already entered (gate submitted before geo finished)
+  const _earlyName = (function() {
+    try { return sessionStorage.getItem('_smVisitorName') || null; } catch(e) { return null; }
+  })();
+
   _session = {
     session_id:   sessionId,
     country:      geo.country_name || 'Unknown',
     city:         geo.city         || 'Unknown',
     device:       detectDevice(ua),
+    device_model: detectDeviceModel(ua),
     browser:      detectBrowser(ua),
     os:           detectOS(ua),
     source:       detectSource(document.referrer),
     is_returning: returning,
     is_online:    true,
     page_views:   1,
+    visitor_name: _earlyName,
   };
 
   // ── Insert visitor row (once per session) ─────────────────
@@ -318,6 +325,29 @@ async function insertVisitor(session) {
   const { error } = await _db.from('visitors').insert([session]);
   if (error) console.warn('[Analytics] Insert error:', error.message);
 }
+
+/**
+ * Called by script.js when the gate form is submitted with a name.
+ * Saves name to sessionStorage AND immediately updates the Supabase row.
+ * Works whether the row was already inserted or not yet (race condition safe).
+ */
+window.analyticsSetVisitorName = async function(name) {
+  if (!name) return;
+  const clean = name.trim();
+  try { sessionStorage.setItem('_smVisitorName', clean); } catch(e) {}
+
+  // Update in-memory session
+  if (_session) _session.visitor_name = clean;
+
+  // Update the Supabase row with the name (and device_model while we are at it)
+  if (_db) {
+    const sid = getSessionId();
+    await _db.from('visitors')
+      .update({ visitor_name: clean })
+      .eq('session_id', sid)
+      .catch(() => {});
+  }
+};
 
 /** Upsert heartbeat via RPC */
 async function heartbeat(db, sessionId, country, device) {
@@ -394,12 +424,14 @@ async function sendTelegramAlert(session) {
   const isGCC = ANALYTICS_CONFIG.gccCountries.includes(session.country);
   const flag  = isGCC ? '🚨 GCC RECRUITER ALERT!\n\n' : '';
 
-  const msg = `${flag}📊 *New Portfolio Visitor*\n\n` +
-    `🌍 *Location:* ${session.city}, ${session.country}\n` +
-    `📱 *Device:* ${session.device} · ${session.browser} on ${session.os}\n` +
-    `🔗 *Source:* ${session.source}\n` +
-    `↩️ *Returning:* ${session.is_returning ? 'Yes' : 'No'}\n` +
-    `🕒 *Time:* ${new Date().toUTCString()}\n` +
+  const visitorName = session.visitor_name ? `👤 *Name:* ${session.visitor_name}\\n` : '';
+  const msg = `${flag}📊 *New Portfolio Visitor*\\n\\n` +
+    visitorName +
+    `🌍 *Location:* ${session.city}, ${session.country}\\n` +
+    `📱 *Device:* ${session.device_model || session.device} · ${session.browser} on ${session.os}\\n` +
+    `🔗 *Source:* ${session.source}\\n` +
+    `↩️ *Returning:* ${session.is_returning ? 'Yes' : 'No'}\\n` +
+    `🕒 *Time:* ${new Date().toUTCString()}\\n` +
     `🌐 *Site:* https://sajidmk.com`;
 
   try {
