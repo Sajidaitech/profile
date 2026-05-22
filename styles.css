@@ -197,9 +197,7 @@ body.gate-active { overflow: hidden !important; }
 /* Gate Glass Card — transparent glass */
 .gate-glass-card {
   position: relative; z-index: 2;
-  /* FIX: removed isolation:isolate — breaks backdrop-filter */
-  backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
-  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
+  /* No blur on gate card */
   background: linear-gradient(160deg,
     rgba(255,255,255,.18) 0%,
     rgba(255,255,255,.14) 40%,
@@ -1714,8 +1712,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
       rgba(255,255,255,.14) 40%,
       rgba(220,232,255,.12) 70%,
       rgba(255,255,255,.16) 100%);
-    backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
-    -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.08);
     border-top: 1.5px solid rgba(255,255,255,.92);
     border-left: 1px solid rgba(255,255,255,.70);
     border-right: 1px solid rgba(255,255,255,.55);
