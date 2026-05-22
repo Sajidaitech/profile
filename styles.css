@@ -196,15 +196,15 @@ body.gate-active { overflow: hidden !important; }
   background: radial-gradient(circle, rgba(180,120,255,.10) 0%, transparent 70%);
 }
 
-/* Gate Glass Card — solid & readable */
+/* Gate Glass Card — transparent glass */
 .gate-glass-card {
   position: relative; z-index: 2;
-  isolation: isolate;
+  /* ✅ FIX: removed isolation:isolate — it broke backdrop-filter on live domains */
   background: linear-gradient(160deg,
-    rgba(255,255,255,.88) 0%,
-    rgba(255,255,255,.82) 40%,
-    rgba(220,232,255,.78) 70%,
-    rgba(255,255,255,.86) 100%);
+    rgba(255,255,255,.18) 0%,
+    rgba(255,255,255,.14) 40%,
+    rgba(180,210,255,.12) 70%,
+    rgba(255,255,255,.16) 100%);
   border-radius: 26px;
   padding: clamp(20px, 3.2vw, 36px);
   width: min(420px, calc(100vw - 24px));
@@ -222,14 +222,23 @@ body.gate-active { overflow: hidden !important; }
     0 4px 10px rgba(0,0,0,.16);
   animation: gateCardIn .70s var(--ease-out) .10s both;
 }
-/* Backdrop blur on non-animating pseudo — no flicker */
+/* ✅ FIX: backdrop-filter directly on card — no isolation means it sees through to bg image */
+/* ::before used only for subtle inner glow, not for blur */
 .gate-glass-card::before {
   content: '';
   position: absolute; inset: 0;
   border-radius: inherit;
-  backdrop-filter: blur(8px) saturate(160%) brightness(1.08);
-  -webkit-backdrop-filter: blur(8px) saturate(160%) brightness(1.08);
-  z-index: -1;
+  background: linear-gradient(160deg,
+    rgba(255,255,255,.22) 0%,
+    rgba(255,255,255,.06) 50%,
+    rgba(180,210,255,.10) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+/* Apply blur on the card element itself */
+.gate-glass-card {
+  backdrop-filter: blur(22px) saturate(200%) brightness(1.10);
+  -webkit-backdrop-filter: blur(22px) saturate(200%) brightness(1.10);
 }
 @keyframes gateCardIn {
   from { opacity: 0; }
@@ -1705,7 +1714,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     max-height: 90vh;
     border-radius: 24px;
     padding: 22px 18px 18px;
-    background: rgba(235,240,255,.72);
+    background: rgba(235,240,255,.18);
+    backdrop-filter: blur(22px) saturate(200%) brightness(1.10);
+    -webkit-backdrop-filter: blur(22px) saturate(200%) brightness(1.10);
     border-top: 1.5px solid rgba(255,255,255,.88);
     border-left: 1px solid rgba(255,255,255,.65);
     border-right: 1px solid rgba(255,255,255,.50);
