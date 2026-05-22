@@ -32,35 +32,76 @@ const ANALYTICS_CONFIG = {
 (function () {
   'use strict';
 
-  // Lazy-load Supabase JS v2 from CDN, then start everything
+  // Load Supabase from CDN, call cb(client) when ready
   function loadSupabase(cb) {
     if (window.__supabaseClient) { cb(window.__supabaseClient); return; }
+    if (window.__supabaseLoading) {
+      // Already loading — queue the callback
+      window.__supabaseCbs = window.__supabaseCbs || [];
+      window.__supabaseCbs.push(cb);
+      return;
+    }
+    window.__supabaseLoading = true;
+    window.__supabaseCbs = [cb];
     const s = document.createElement('script');
     s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
     s.onload = function () {
       window.__supabaseClient = window.supabase.createClient(
         ANALYTICS_CONFIG.supabaseUrl,
         ANALYTICS_CONFIG.supabaseKey,
-        {
-          realtime: { params: { eventsPerSecond: 10 } },
-          auth:     { persistSession: false },
-        }
+        { realtime: { params: { eventsPerSecond: 10 } }, auth: { persistSession: false } }
       );
-      cb(window.__supabaseClient);
+      window.__supabaseLoading = false;
+      (window.__supabaseCbs || []).forEach(function(fn) { fn(window.__supabaseClient); });
     };
     s.onerror = function () { console.warn('[Analytics] Supabase CDN load failed'); };
     document.head.appendChild(s);
   }
 
-  // Wait for DOM then inject UI widget before starting tracker
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-
-      loadSupabase(startAnalytics);
+  // Step 1: Fetch & display counts IMMEDIATELY (even before gate interaction)
+  function quickCountFetch() {
+    loadSupabase(async function(db) {
+      try {
+        const [{ data: total }, { data: online }] = await Promise.all([
+          db.rpc('get_visitor_count'),
+          db.rpc('get_online_count'),
+        ]);
+        const t = total  || 0;
+        const o = online || 0;
+        // Update all counter elements right away
+        ['gate-total-count','footer-total-count','smk-total-count'].forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el) el.textContent = t.toLocaleString();
+        });
+        ['gate-online-count','footer-online-count','smk-online-count'].forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el) el.textContent = o.toLocaleString();
+        });
+        // Pulse dots
+        ['gate-online-dot'].forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el) el.className = 'gvs-dot' + (o > 0 ? ' gvs-dot--live' : '');
+        });
+        ['footer-online-dot'].forEach(function(id) {
+          const el = document.getElementById(id);
+          if (el) el.className = 'fvb-dot' + (o > 0 ? ' fvb-dot--live' : '');
+        });
+      } catch(e) {
+        console.warn('[Analytics] Quick count failed:', e.message);
+      }
     });
-  } else {
+  }
 
-    loadSupabase(startAnalytics);
+  // Step 2: Full analytics (tracking, realtime, heartbeat) after DOM ready
+  function boot() {
+    quickCountFetch();            // show numbers immediately
+    loadSupabase(startAnalytics); // full tracking in parallel
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();
 
