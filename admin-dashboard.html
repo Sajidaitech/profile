@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard · sajidmk.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ──────────────────────────────────── */
+    :root {
+      --bg:        #0B0F1A;
+      --bg-card:   rgba(255,255,255,.04);
+      --bg-card-h: rgba(255,255,255,.07);
+      --border:    rgba(255,255,255,.08);
+      --border-h:  rgba(255,255,255,.16);
+      --ink:       rgba(255,255,255,.92);
+      --ink-2:     rgba(255,255,255,.55);
+      --ink-3:     rgba(255,255,255,.30);
+      --accent:    #0066FF;
+      --accent-g:  linear-gradient(135deg, #0066FF 0%, #00C2FF 100%);
+      --green:     #10B981;
+      --amber:     #F59E0B;
+      --red:       #EF4444;
+      --r:         14px;
+      --ff:        'DM Sans', system-ui, sans-serif;
+      --ff-mono:   'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--ff);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Auth overlay ─────────────────────────────────── */
+    #auth-overlay {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .auth-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 40px;
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .auth-logo {
+      width: 52px; height: 52px;
+      background: var(--accent-g);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 24px;
+    }
+
+    .auth-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .auth-sub   { font-size: 13px; color: var(--ink-2); margin-bottom: 24px; }
+
+    .auth-input {
+      width: 100%;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: var(--ff);
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .auth-input:focus { border-color: var(--accent); }
+
+    .auth-btn {
+      width: 100%;
+      margin-top: 12px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: var(--ff);
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: opacity .2s, transform .15s;
+    }
+    .auth-btn:hover   { opacity: .9; }
+    .auth-btn:active  { transform: scale(.98); }
+
+    .auth-error {
+      font-size: 12px;
+      color: var(--red);
+      margin-top: 8px;
+      display: none;
+    }
+
+    /* ── Layout ───────────────────────────────────────── */
+    #dashboard { display: none; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(11,15,26,.9);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+    }
+
+    .header-left  { display: flex; align-items: center; gap: 12px; }
+    .h-logo       { width: 36px; height: 36px; background: var(--accent-g); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .h-title      { font-size: 15px; font-weight: 700; }
+    .h-sub        { font-size: 12px; color: var(--ink-2); }
+
+    .live-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(16,185,129,.12);
+      border: 1px solid rgba(16,185,129,.25);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .pulse {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
+      70%  { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+
+    main { padding: 32px; max-width: 1400px; margin: 0 auto; }
+
+    /* ── KPI Cards ────────────────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .kpi {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px;
+      transition: background .2s, border-color .2s;
+    }
+    .kpi:hover { background: var(--bg-card-h); border-color: var(--border-h); }
+
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-2);
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .kpi-sub {
+      font-size: 11.5px;
+      color: var(--ink-3);
+    }
+
+    /* ── Charts Grid ──────────────────────────────────── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 22px;
+    }
+
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-2);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    /* Bar chart */
+    .bar-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-label {
+      font-size: 12.5px;
+      color: var(--ink-2);
+      width: 110px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--accent-g);
+      transition: width .8s cubic-bezier(.22,1,.36,1);
+    }
+
+    .bar-count {
+      font-size: 12px;
+      font-family: var(--ff-mono);
+      color: var(--ink);
+      min-width: 28px;
+      text-align: right;
+    }
+
+    /* ── Recent Visitors Table ────────────────────────── */
+    .table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .table-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-2);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .refresh-btn {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-family: var(--ff);
+      font-size: 12px;
+      color: var(--ink-2);
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .refresh-btn:hover { background: rgba(255,255,255,.1); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 10px 22px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,.04);
+      transition: background .15s;
+    }
+    tbody tr:hover { background: rgba(255,255,255,.03); }
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody td {
+      padding: 12px 22px;
+      font-size: 13px;
+      color: var(--ink-2);
+      white-space: nowrap;
+    }
+
+    td.td-country { color: var(--ink); font-weight: 500; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(255,255,255,.06);
+      color: var(--ink-2);
+    }
+
+    .tag-source { background: rgba(0,102,255,.14); color: #60A5FA; }
+    .tag-gcc    { background: rgba(245,158,11,.14); color: #FCD34D; }
+
+    /* ── Loading ──────────────────────────────────────── */
+    .skeleton {
+      display: inline-block;
+      border-radius: 6px;
+      background: linear-gradient(90deg,
+        rgba(255,255,255,.06) 25%,
+        rgba(255,255,255,.10) 50%,
+        rgba(255,255,255,.06) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── Responsive ───────────────────────────────────── */
+    @media (max-width: 640px) {
+      main { padding: 16px; }
+      header { padding: 14px 16px; }
+      .kpi-value { font-size: 26px; }
+      .charts-grid { grid-template-columns: 1fr; }
+      table { font-size: 12px; }
+      thead th, tbody td { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Auth Gate ─────────────────────────────────────────── -->
+<div id="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">📊</div>
+    <div class="auth-title">Analytics Dashboard</div>
+    <div class="auth-sub">sajidmk.com · Enter admin password to continue</div>
+    <input class="auth-input" type="password" id="auth-input"
+           placeholder="Password" autocomplete="current-password">
+    <button class="auth-btn" id="auth-btn">Access Dashboard</button>
+    <div class="auth-error" id="auth-error">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- ── Dashboard ─────────────────────────────────────────── -->
+<div id="dashboard">
+
+  <header>
+    <div class="header-left">
+      <div class="h-logo">📊</div>
+      <div>
+        <div class="h-title">Visitor Analytics</div>
+        <div class="h-sub">sajidmk.com · Real-time</div>
+      </div>
+    </div>
+    <div class="live-badge">
+      <span class="pulse"></span>
+      <span id="online-badge">— online now</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- KPIs -->
+    <div class="kpi-grid" id="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Total Visits</div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub">All time</div></div>
+      <div class="kpi"><div class="kpi-label">Today</div><div class="kpi-value" id="kpi-today">—</div><div class="kpi-sub">Since midnight UTC</div></div>
+      <div class="kpi"><div class="kpi-label">This Week</div><div class="kpi-value" id="kpi-week">—</div><div class="kpi-sub">Last 7 days</div></div>
+      <div class="kpi"><div class="kpi-label">This Month</div><div class="kpi-value" id="kpi-month">—</div><div class="kpi-sub">Last 30 days</div></div>
+      <div class="kpi"><div class="kpi-label">Returning</div><div class="kpi-value" id="kpi-returning">—</div><div class="kpi-sub">Repeat visitors</div></div>
+      <div class="kpi"><div class="kpi-label">Avg Session</div><div class="kpi-value" id="kpi-duration">—</div><div class="kpi-sub">Seconds on site</div></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">🌍 Countries</div>
+        <div class="bar-list" id="chart-country"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">🔗 Traffic Sources</div>
+        <div class="bar-list" id="chart-source"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">📱 Devices</div>
+        <div class="bar-list" id="chart-device"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">🌐 Browsers</div>
+        <div class="bar-list" id="chart-browser"></div>
+      </div>
+    </div>
+
+    <!-- Recent visitors -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="table-title">🕐 Recent Visitors</div>
+        <button class="refresh-btn" id="refresh-btn">↻ Refresh</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Location</th>
+              <th>Source</th>
+              <th>Device</th>
+              <th>Browser</th>
+              <th>OS</th>
+              <th>Duration</th>
+              <th>When</th>
+            </tr>
+          </thead>
+          <tbody id="visitors-tbody">
+            <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--ink-3);">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Supabase JS v2 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+// ============================================================
+// CONFIG — fill in your values
+// ============================================================
+const SUPABASE_URL     = 'https://tbdgrhekycgfdeatxjnq.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZGdyaGVreWNnZmRlYXR4am5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5MzEsImV4cCI6MjA5NDk2NzkzMX0.HP48nehewf5HajLukSkLdJwuqiUTmbnfdcAk6x8_UEU';
+
+// ⚠️  This password is checked client-side only — it is NOT
+//    secure against a determined attacker. For real security,
+//    use Supabase Auth (magic link / email+password) instead.
+//    For a personal portfolio this is fine.
+const ADMIN_PASSWORD = 'sajid';  // ← change this
+
+const GCC_COUNTRIES = ['Qatar','UAE','Saudi Arabia','Kuwait','Bahrain','Oman'];
+
+// ============================================================
+// AUTH
+// ============================================================
+const authInput = document.getElementById('auth-input');
+const authBtn   = document.getElementById('auth-btn');
+const authError = document.getElementById('auth-error');
+
+function tryAuth() {
+  if (authInput.value === ADMIN_PASSWORD) {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    initDashboard();
+  } else {
+    authError.style.display = 'block';
+    authInput.value = '';
+    authInput.focus();
+  }
+}
+
+authBtn.addEventListener('click', tryAuth);
+authInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); });
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+let db;
+
+function initDashboard() {
+  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: false }
+  });
+
+  loadAll();
+  document.getElementById('refresh-btn').addEventListener('click', loadAll);
+
+  // Realtime subscription for live updates
+  db.channel('dash-live')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, loadAll)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'online_visitors' }, updateOnlineBadge)
+    .subscribe();
+}
+
+async function loadAll() {
+  await Promise.all([loadSummary(), loadRecentVisitors(), updateOnlineBadge()]);
+}
+
+// ── Summary via RPC ─────────────────────────────────────────
+async function loadSummary() {
+  const { data, error } = await db.rpc('get_analytics_summary');
+  if (error) { console.error(error); return; }
+
+  setText('kpi-total',     fmt(data.total));
+  setText('kpi-today',     fmt(data.today));
+  setText('kpi-week',      fmt(data.this_week));
+  setText('kpi-month',     fmt(data.this_month));
+  setText('kpi-returning', fmt(data.returning));
+  setText('kpi-duration',  data.avg_duration ? data.avg_duration + 's' : '—');
+
+  renderBarChart('chart-country', data.by_country,  '#0066FF');
+  renderBarChart('chart-source',  data.by_source,   '#8B5CF6');
+  renderBarChart('chart-device',  data.by_device,   '#10B981');
+  renderBarChart('chart-browser', data.by_browser,  '#F59E0B');
+}
+
+// ── Online badge ────────────────────────────────────────────
+async function updateOnlineBadge() {
+  const { data } = await db.rpc('get_online_count');
+  document.getElementById('online-badge').textContent =
+    `${data || 0} online now`;
+}
+
+// ── Recent visitors table ───────────────────────────────────
+async function loadRecentVisitors() {
+  const { data, error } = await db
+    .from('visitors')
+    .select('country,city,source,device,browser,os,duration,is_returning,created_at')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (error) return;
+
+  const tbody = document.getElementById('visitors-tbody');
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--ink-3);">No visitors yet</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map(v => {
+    const isGCC  = GCC_COUNTRIES.includes(v.country);
+    const loc    = [v.city, v.country].filter(Boolean).join(', ') || '—';
+    const when   = timeAgo(new Date(v.created_at));
+    const dur    = v.duration > 0 ? v.duration + 's' : '—';
+    const source = v.source || 'Direct';
+
+    return `<tr>
+      <td class="td-country">${esc(loc)}${isGCC ? ' 🇶🇦' : ''}</td>
+      <td><span class="tag tag-source">${esc(source)}</span>${isGCC ? ' <span class="tag tag-gcc">GCC</span>' : ''}</td>
+      <td><span class="tag">${esc(v.device || '—')}</span></td>
+      <td>${esc(v.browser || '—')}</td>
+      <td>${esc(v.os || '—')}</td>
+      <td style="font-family:var(--ff-mono);font-size:12px;">${dur}</td>
+      <td style="color:var(--ink-3);font-size:12px;">${when}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Bar chart renderer ──────────────────────────────────────
+function renderBarChart(containerId, items, color) {
+  const el = document.getElementById(containerId);
+  if (!el || !items) return;
+
+  const max = Math.max(...items.map(i => i.cnt), 1);
+  el.innerHTML = items.map(item => `
+    <div class="bar-row">
+      <span class="bar-label" title="${esc(item.country || item.source || item.device || item.browser || item.os || '?')}">
+        ${esc(item.country || item.source || item.device || item.browser || item.os || '?')}
+      </span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${(item.cnt / max * 100).toFixed(1)}%;background:${color};"></div>
+      </div>
+      <span class="bar-count">${item.cnt}</span>
+    </div>
+  `).join('');
+}
+
+// ── Helpers ─────────────────────────────────────────────────
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function fmt(n) { return (n || 0).toLocaleString(); }
+
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function timeAgo(date) {
+  const diff = Math.floor((Date.now() - date) / 1000);
+  if (diff < 60)     return diff + 's ago';
+  if (diff < 3600)   return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400)  return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+</script>
+</body>
+</html>
