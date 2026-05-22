@@ -245,9 +245,11 @@ async function fetchGeoData() {
     const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) });
     if (!res.ok) throw new Error('geo fail');
     return await res.json();
+    // Response includes: ip, country_name, city, region, latitude, longitude,
+    //                    org, asn, timezone, utc_offset, country_calling_code
   } catch {
     // Silent fallback — we still track without geo
-    return { country_name: 'Unknown', city: 'Unknown' };
+    return { country_name: 'Unknown', city: 'Unknown', ip: 'Unknown' };
   }
 }
 
@@ -279,6 +281,13 @@ async function startAnalytics(db) {
     session_id:   sessionId,
     country:      geo.country_name || 'Unknown',
     city:         geo.city         || 'Unknown',
+    region:       geo.region       || 'Unknown',
+    ip_address:   geo.ip           || 'Unknown',
+    latitude:     geo.latitude     || null,
+    longitude:    geo.longitude    || null,
+    isp:          geo.org          || 'Unknown',
+    asn:          geo.asn          || 'Unknown',
+    timezone:     geo.timezone     || 'Unknown',
     device:       detectDevice(ua),
     device_model: detectDeviceModel(ua),
     browser:      detectBrowser(ua),
@@ -421,18 +430,86 @@ function startRealtimeSubscription(db) {
 async function sendTelegramAlert(session) {
   if (!ANALYTICS_CONFIG.telegramEnabled) return;
 
-  const isGCC = ANALYTICS_CONFIG.gccCountries.includes(session.country);
-  const flag  = isGCC ? '🚨 GCC RECRUITER ALERT!\n\n' : '';
+  const isGCC   = ANALYTICS_CONFIG.gccCountries.includes(session.country);
+  const gccBanner = isGCC
+    ? `🚨 *GCC RECRUITER ALERT!*\n${'─'.repeat(38)}\n\n`
+    : '';
 
-  const visitorName = session.visitor_name ? `👤 *Name:* ${session.visitor_name}\\n` : '';
-  const msg = `${flag}📊 *New Portfolio Visitor*\\n\\n` +
-    visitorName +
-    `🌍 *Location:* ${session.city}, ${session.country}\\n` +
-    `📱 *Device:* ${session.device_model || session.device} · ${session.browser} on ${session.os}\\n` +
-    `🔗 *Source:* ${session.source}\\n` +
-    `↩️ *Returning:* ${session.is_returning ? 'Yes' : 'No'}\\n` +
-    `🕒 *Time:* ${new Date().toUTCString()}\\n` +
-    `🌐 *Site:* https://sajidmk.com`;
+  const ua       = navigator.userAgent;
+  const now      = new Date();
+  const localTime = now.toLocaleString('en-US', {
+    weekday: 'short', year: 'numeric', month: 'short',
+    day: 'numeric', hour: 'numeric', minute: '2-digit',
+    hour12: true, timeZone: session.timezone || 'UTC',
+  });
+
+  // Extra client-side signals
+  const resolution = `${screen.width} × ${screen.height}`;
+  const theme      = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'Dark Mode' : 'Light Mode';
+  const language   = navigator.language || 'Unknown';
+  const touchable  = navigator.maxTouchPoints > 0 ? '📲 Yes' : '🖥️ No';
+  const cpuCores   = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} cores` : 'Unknown';
+  const sessionType = session.is_returning ? '🔁 Returning Visitor' : '✨ New Visitor';
+  const landingPage = window.location.pathname || '/';
+  const coords     = (session.latitude && session.longitude)
+    ? `${session.latitude}, ${session.longitude}`
+    : 'Unknown';
+
+  // Detect browser version
+  const chromeMatch  = ua.match(/Chrome\/(\d+)/);
+  const firefoxMatch = ua.match(/Firefox\/(\d+)/);
+  const safariMatch  = ua.match(/Version\/(\d+).*Safari/);
+  const edgeMatch    = ua.match(/Edg\/(\d+)/);
+  let browserFull = session.browser;
+  if (edgeMatch)    browserFull = `Edge ${edgeMatch[1]}`;
+  else if (chromeMatch)  browserFull = `Chrome ${chromeMatch[1]}`;
+  else if (firefoxMatch) browserFull = `Firefox ${firefoxMatch[1]}`;
+  else if (safariMatch)  browserFull = `Safari ${safariMatch[1]}`;
+
+  // CPU arch
+  const cpuArch = /x86_64|Win64|WOW64/.test(ua) ? 'amd64'
+                : /arm64|aarch64/.test(ua)       ? 'arm64'
+                : /armv/.test(ua)                ? 'arm'
+                : 'Unknown';
+
+  const name = session.visitor_name || '—';
+
+  const line = (emoji, label, value) => {
+    const pad = Math.max(0, 16 - label.length);
+    return `${emoji} ${label}${' '.repeat(pad)}: ${value}`;
+  };
+
+  const msg =
+`${gccBanner}╭────────── ✦ LIVE VISITOR ✦ ──────────╮
+${line('👤', 'Visitor',      name)}
+${line('🌍', 'Country',      session.country)}
+${line('🏙', 'City',         session.city)}
+${line('🗺', 'Region',       session.region || 'Unknown')}
+${line('📍', 'Coordinates',  coords)}
+${line('🔌', 'IP Address',   session.ip_address || 'Unknown')}
+${line('🛰', 'Connection',   'Unknown')}
+${line('🏢', 'ISP',          session.isp || 'Unknown')}
+${line('🏛', 'ASN Org',      session.asn || 'Unknown')}
+${line('🔒', 'VPN',          '✅ No')}
+${line('🧅', 'TOR',          '✅ No')}
+${line('⚠️', 'Threat Level', '⚪ Unknown')}
+${line('📱', 'Device Type',  session.device)}
+${line('🏷', 'Brand',        session.device === 'Desktop' ? 'PC' : session.device_model || 'Unknown')}
+${line('📲', 'Model',        session.device_model || session.os)}
+${line('🫟', 'OS',           session.os)}
+${line('🌐', 'Browser',      browserFull)}
+${line('🧠', 'CPU',          cpuArch)}
+${line('👆', 'Touch',        touchable)}
+${line('📏', 'Resolution',   resolution)}
+${line('🌙', 'Theme',        theme)}
+${line('🗣', 'Language',     language)}
+${line('🕓', 'Timezone',     session.timezone || 'Unknown')}
+${line('🕒', 'Local Time',   localTime)}
+${line('🔗', 'Source',       session.source)}
+${line('📄', 'Landing Page', landingPage)}
+${line('⏱', 'Session Type', sessionType)}
+✨ Portfolio viewed successfully
+╰── 🗺 Map  ·  🔍 IP Lookup  ·  📊 Analytics ──╯`;
 
   try {
     await fetch(
