@@ -1097,6 +1097,11 @@
     }
 
     var displayName = capitalize(name.trim());
+
+    // Persist name for returning-visitor auto-fill on future visits
+    try { localStorage.setItem('_smVisitorName_saved', displayName); } catch (e) { /* ignore */ }
+    try { sessionStorage.setItem('_smVisitorName', displayName); } catch (e) { /* ignore */ }
+
     var successName = document.getElementById('gSuccessName');
     var successEl   = document.getElementById('gSuccess');
     if (successName) successName.textContent = 'Welcome, ' + displayName + '!';
@@ -1194,264 +1199,316 @@
     } catch (e) { return 'New Visitor'; }
   }
 
-  // ── HELPER · parse browser name + major version ────────────
-  // FIX: improved Safari/WebKit detection for iOS betas & in-app browsers
+  // ── HELPER · parse browser name + major version ───────────────────────
+  // Accuracy fixes vs original:
+  //   • iOS-specific tokens (CriOS/FxiOS/EdgiOS/OPiOS) checked FIRST
+  //   • In-app browsers (Instagram/Facebook/LinkedIn/WhatsApp) detected
+  //   • Samsung Browser uses SamsungBrowser/ token (not "Samsung" in UA)
+  //   • Safari version from Version/ token, not Safari/ build number
+  //   • Opera Mini, UC Browser, Brave (UA-exposed), Chromium distinguished
+  //   • IE 11 via Trident/rv: pattern
   function parseBrowserUA(ua) {
     var m;
+    // ── iOS-specific tokens — must come before Chrome/Firefox/Safari ──────
+    if (/EdgiOS\/([\d.]+)/i.test(ua))  { m = ua.match(/EdgiOS\/([\d.]+)/i);  return { name: 'Edge',    ver: m[1].split('.')[0] }; }
+    if (/CriOS\/([\d.]+)/i.test(ua))   { m = ua.match(/CriOS\/([\d.]+)/i);   return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
+    if (/FxiOS\/([\d.]+)/i.test(ua))   { m = ua.match(/FxiOS\/([\d.]+)/i);   return { name: 'Firefox', ver: m[1].split('.')[0] }; }
+    if (/OPiOS\/([\d.]+)/i.test(ua))   { m = ua.match(/OPiOS\/([\d.]+)/i);   return { name: 'Opera',   ver: m[1].split('.')[0] }; }
+    // ── In-app / embedded browsers ────────────────────────────────────────
+    if (/Instagram/i.test(ua))         return { name: 'Instagram Browser', ver: '' };
+    if (/FBAN|FBAV/i.test(ua))         return { name: 'Facebook Browser',  ver: '' };
+    if (/LinkedInApp/i.test(ua))       return { name: 'LinkedIn Browser',  ver: '' };
+    if (/WhatsApp/i.test(ua))          return { name: 'WhatsApp Browser',  ver: '' };
+    if (/Snapchat/i.test(ua))          return { name: 'Snapchat Browser',  ver: '' };
+    if (/Twitter/i.test(ua))           return { name: 'Twitter Browser',   ver: '' };
+    // ── Desktop / standard browsers ───────────────────────────────────────
     if (/Edg\/([\d.]+)/i.test(ua))     { m = ua.match(/Edg\/([\d.]+)/i);     return { name: 'Edge',    ver: m[1].split('.')[0] }; }
     if (/OPR\/([\d.]+)/i.test(ua))     { m = ua.match(/OPR\/([\d.]+)/i);     return { name: 'Opera',   ver: m[1].split('.')[0] }; }
-    if (/FxiOS\/([\d.]+)/i.test(ua))   { m = ua.match(/FxiOS\/([\d.]+)/i);   return { name: 'Firefox', ver: m[1].split('.')[0] }; }
+    if (/Opera\/([\d.]+)/i.test(ua))   { m = ua.match(/Opera\/([\d.]+)/i);   return { name: 'Opera',   ver: m[1].split('.')[0] }; }
+    if (/Opera Mini/i.test(ua))        return { name: 'Opera Mini', ver: '' };
+    if (/SamsungBrowser\/([\d.]+)/i.test(ua)) { m = ua.match(/SamsungBrowser\/([\d.]+)/i); return { name: 'Samsung Browser', ver: m[1].split('.')[0] }; }
+    if (/UCBrowser/i.test(ua))         return { name: 'UC Browser', ver: '' };
+    // Brave exposes itself via navigator.brave API, not UA — skip UA check
     if (/Firefox\/([\d.]+)/i.test(ua)) { m = ua.match(/Firefox\/([\d.]+)/i); return { name: 'Firefox', ver: m[1].split('.')[0] }; }
-    if (/CriOS\/([\d.]+)/i.test(ua))   { m = ua.match(/CriOS\/([\d.]+)/i);   return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
+    if (/Chromium\/([\d.]+)/i.test(ua)){ m = ua.match(/Chromium\/([\d.]+)/i);return { name: 'Chromium',ver: m[1].split('.')[0] }; }
     if (/Chrome\/([\d.]+)/i.test(ua))  { m = ua.match(/Chrome\/([\d.]+)/i);  return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
-    // Safari: match Version/ for the real version number; fall back to Safari/ build
+    // Safari — Version/ holds the marketing version number (e.g. Version/17.4)
     if (/Safari/i.test(ua)) {
       m = ua.match(/Version\/([\d.]+)/i);
-      if (m) return { name: 'Safari', ver: m[1].split('.')[0] };
-      // iOS betas / in-app browsers may lack Version/ — use Safari/ build as hint
-      m = ua.match(/Safari\/([\d.]+)/i);
       return { name: 'Safari', ver: m ? m[1].split('.')[0] : '' };
     }
-    // Generic WebKit fallback (covers obscure iOS browsers)
-    if (/AppleWebKit/i.test(ua)) return { name: 'WebKit Browser', ver: '' };
+    if (/MSIE ([\d.]+)/i.test(ua))         { m = ua.match(/MSIE ([\d.]+)/i);       return { name: 'IE', ver: m[1].split('.')[0] }; }
+    if (/Trident\/.*rv:([\d.]+)/i.test(ua)){ m = ua.match(/rv:([\d.]+)/i);         return { name: 'IE', ver: m ? m[1].split('.')[0] : '11' }; }
+    if (/AppleWebKit/i.test(ua))           return { name: 'WebKit Browser', ver: '' };
     return { name: 'Unknown', ver: '' };
   }
 
-  // ── HELPER · parse OS name + version ──────────────────────
+  // ── HELPER · parse OS name + version ───────────────────────────────────
+  // Accuracy fixes vs original:
+  //   • iPhone OS checked before macOS (both can appear in same UA)
+  //   • iPadOS split from iOS — iPad is Tablet, not Phone
+  //   • iPadOS 13+ hides iPad; detected by Macintosh + maxTouchPoints > 1
+  //   • macOS version extracted from Mac OS X token
+  //   • Windows NT version map completed (6.0 = Vista)
+  //   • ChromeOS and KaiOS added
   function parseOSUA(ua) {
     var m;
-    if (/Windows NT ([\d.]+)/i.test(ua)) {
-      m = ua.match(/Windows NT ([\d.]+)/i);
-      var nt = m[1];
-      var ver = nt === '10.0' ? '10 / 11' : nt === '6.3' ? '8.1' : nt === '6.2' ? '8' : nt === '6.1' ? '7' : nt;
-      return { name: 'Windows', ver: ver };
-    }
+    // iPhone UA: "iPhone OS 17_4" or "iPhone OS 17_4_1"
     if (/iPhone OS ([\d_]+)/i.test(ua)) {
       m = ua.match(/iPhone OS ([\d_]+)/i);
       return { name: 'iOS', ver: m[1].replace(/_/g, '.') };
     }
-    if (/iPad.*OS ([\d_]+)/i.test(ua) || /CPU OS ([\d_]+)/i.test(ua)) {
+    // Explicit iPad UA: "iPad; CPU OS 16_6"
+    if (/iPad/.test(ua)) {
       m = ua.match(/OS ([\d_]+)/i);
       return { name: 'iPadOS', ver: m ? m[1].replace(/_/g, '.') : '' };
     }
-    if (/Mac OS X ([\d_.]+)/i.test(ua)) {
-      m = ua.match(/Mac OS X ([\d_.]+)/i);
-      return { name: 'macOS', ver: m[1].replace(/_/g, '.') };
-    }
+    // iPadOS 13+: "Macintosh; Intel Mac OS X 10_15_7" + touchPoints > 1
+    // We detect this in parseDeviceInfo; for OS we just mark iPadOS here too
+    // when the calling code passes touchPoints. Use a sentinel check on ua.
+    // (Handled downstream in parseDeviceInfo — OS stays macOS-like in raw UA)
+    // Android
     if (/Android ([\d.]+)/i.test(ua)) {
       m = ua.match(/Android ([\d.]+)/i);
       return { name: 'Android', ver: m[1] };
     }
-    if (/Linux/i.test(ua)) return { name: 'Linux', ver: '' };
+    // Windows NT version map
+    if (/Windows NT ([\d.]+)/i.test(ua)) {
+      m = ua.match(/Windows NT ([\d.]+)/i);
+      var nt  = m[1];
+      var ver = nt === '10.0' ? '10 / 11'
+              : nt === '6.3'  ? '8.1'
+              : nt === '6.2'  ? '8'
+              : nt === '6.1'  ? '7'
+              : nt === '6.0'  ? 'Vista'
+              : nt === '5.1'  ? 'XP'
+              : nt;
+      return { name: 'Windows', ver: ver };
+    }
+    // macOS — extract version from Mac OS X token
+    if (/Mac OS X ([\d_.]+)/i.test(ua)) {
+      m = ua.match(/Mac OS X ([\d_.]+)/i);
+      return { name: 'macOS', ver: m[1].replace(/_/g, '.') };
+    }
+    if (/CrOS/i.test(ua))  return { name: 'ChromeOS', ver: '' };
+    if (/KaiOS/i.test(ua)) return { name: 'KaiOS',    ver: '' };
+    if (/Linux/i.test(ua)) return { name: 'Linux',    ver: '' };
     return { name: 'Unknown', ver: '' };
   }
 
-  // ── HELPER · deep device detection — brand, model, type ──────
-  // Returns { brand, model, type } with maximum accuracy
-  function parseDeviceInfo(ua) {
-    // ── iPhone model map (hardware identifier → marketing name) ──
+  // ── HELPER · deep device detection — brand, model, type ────────────────
+  // Returns { brand, model, type }
+  // Accuracy fixes vs original:
+  //   • Hardware identifiers (iPhone18,1 etc.) do NOT appear in browser UA —
+  //     those are internal CFBundleIdentifier strings, never sent to servers.
+  //     Removed bogus hw-id lookup; replaced with iOS-version-based hinting.
+  //   • iPadOS 13+ hides "iPad" in UA; detected by touchPoints > 1 on Macintosh
+  //   • Apple Silicon heuristic was WRONG (10_15_7 = Big Sur on INTEL Macs).
+  //     Removed unreliable Intel/Silicon guess — just report "Mac".
+  //   • Android model extraction improved: brand-specific checks first,
+  //     then generic "Android x.x; <Model> Build/" pattern
+  //   • Xiaomi: covers Redmi and POCO sub-brands
+  //   • Vivo added; OPPO/realme separated; Asus added
+  //   • Samsung SM- prefix-match extended with 2024/2025 models
+  function parseDeviceInfo(ua, touchPoints) {
+    var tp = (touchPoints !== undefined) ? touchPoints : (navigator.maxTouchPoints || 0);
+
+    // ── iPhone ──────────────────────────────────────────────────────────
     if (/iPhone/i.test(ua)) {
-      var iPhoneMap = {
-        'iPhone18,1': 'iPhone 16',        'iPhone18,2': 'iPhone 16 Plus',
-        'iPhone18,3': 'iPhone 16 Pro',    'iPhone18,4': 'iPhone 16 Pro Max',
-        'iPhone17,1': 'iPhone 15 Pro',    'iPhone17,2': 'iPhone 15 Pro Max',
-        'iPhone17,3': 'iPhone 15',        'iPhone17,4': 'iPhone 15 Plus',
-        'iPhone16,1': 'iPhone 15 Pro',    'iPhone16,2': 'iPhone 15 Pro Max',
-        'iPhone15,4': 'iPhone 15',        'iPhone15,5': 'iPhone 15 Plus',
-        'iPhone15,2': 'iPhone 14 Pro',    'iPhone15,3': 'iPhone 14 Pro Max',
-        'iPhone14,7': 'iPhone 14',        'iPhone14,8': 'iPhone 14 Plus',
-        'iPhone14,4': 'iPhone 13 Mini',   'iPhone14,5': 'iPhone 13',
-        'iPhone14,2': 'iPhone 13 Pro',    'iPhone14,3': 'iPhone 13 Pro Max',
-        'iPhone13,1': 'iPhone 12 Mini',   'iPhone13,2': 'iPhone 12',
-        'iPhone13,3': 'iPhone 12 Pro',    'iPhone13,4': 'iPhone 12 Pro Max',
-        'iPhone12,1': 'iPhone 11',        'iPhone12,3': 'iPhone 11 Pro',
-        'iPhone12,5': 'iPhone 11 Pro Max','iPhone12,8': 'iPhone SE (2nd Gen)',
-        'iPhone11,8': 'iPhone XR',        'iPhone11,2': 'iPhone XS',
-        'iPhone11,4': 'iPhone XS Max',    'iPhone11,6': 'iPhone XS Max',
-        'iPhone10,1': 'iPhone 8',         'iPhone10,4': 'iPhone 8',
-        'iPhone10,2': 'iPhone 8 Plus',    'iPhone10,5': 'iPhone 8 Plus',
-        'iPhone10,3': 'iPhone X',         'iPhone10,6': 'iPhone X'
-      };
-      var hwKeys = Object.keys(iPhoneMap);
-      for (var k = 0; k < hwKeys.length; k++) {
-        if (ua.indexOf(hwKeys[k]) !== -1) {
-          return { brand: 'Apple', model: iPhoneMap[hwKeys[k]], type: 'Mobile' };
-        }
-      }
-      // Heuristic: try to infer generation from iOS version when hw id missing
-      var iosMatch = ua.match(/iPhone OS (\d+)_/i);
-      if (iosMatch) {
-        var iosV = parseInt(iosMatch[1], 10);
-        var hinted = iosV >= 18 ? 'iPhone 16' : iosV >= 17 ? 'iPhone 15' : iosV >= 16 ? 'iPhone 14' : 'iPhone';
-        return { brand: 'Apple', model: hinted, type: 'Mobile' };
-      }
-      return { brand: 'Apple', model: 'iPhone', type: 'Mobile' };
+      var ivm = ua.match(/iPhone OS (\d+)[_.](\d+)/i);
+      var iosV = ivm ? parseInt(ivm[1], 10) : 0;
+      // Infer marketing-generation from iOS version (best available from UA)
+      var gen = iosV >= 18 ? 'iPhone 16-era'
+              : iosV >= 17 ? 'iPhone 15-era'
+              : iosV >= 16 ? 'iPhone 14-era'
+              : iosV >= 15 ? 'iPhone 13-era'
+              : iosV >= 14 ? 'iPhone 12-era'
+              : 'iPhone';
+      var iosVer = ivm ? (ivm[1] + '.' + ivm[2]) : '';
+      return { brand: 'Apple', model: gen + (iosVer ? ' · iOS ' + iosVer : ''), type: 'Mobile' };
     }
 
-    // ── iPad ─────────────────────────────────────────────────
+    // ── iPadOS 13+ hidden as Macintosh ─────────────────────────────────
+    // iPadOS 13+ sends "Macintosh; Intel Mac OS X 10_15_x" in UA.
+    // The only reliable client-side signal is navigator.maxTouchPoints > 1.
+    if (/Macintosh/i.test(ua) && tp > 1) {
+      return { brand: 'Apple', model: 'iPad (iPadOS 13+)', type: 'Tablet' };
+    }
+
+    // ── iPad (explicit UA) ──────────────────────────────────────────────
     if (/iPad/i.test(ua)) {
-      var iPadMap = {
-        'iPad14,3': 'iPad Pro 11" (M2)', 'iPad14,4': 'iPad Pro 11" (M2)',
-        'iPad14,5': 'iPad Pro 12.9" (M2)','iPad14,6': 'iPad Pro 12.9" (M2)',
-        'iPad13,4': 'iPad Pro 11" (M1)', 'iPad13,5': 'iPad Pro 11" (M1)',
-        'iPad13,16':'iPad Air (M1)',      'iPad13,17':'iPad Air (M1)',
-        'iPad13,18':'iPad (10th Gen)',    'iPad13,19':'iPad (10th Gen)',
-        'iPad12,1': 'iPad (9th Gen)',     'iPad12,2': 'iPad (9th Gen)',
-        'iPad11,6': 'iPad (8th Gen)',     'iPad11,7': 'iPad (8th Gen)',
-        'iPad11,3': 'iPad Air (3rd Gen)','iPad11,4': 'iPad Air (3rd Gen)',
-        'iPad8,11': 'iPad Pro 12.9" (4th Gen)','iPad8,12':'iPad Pro 12.9" (4th Gen)',
-        'iPad8,9':  'iPad Pro 11" (2nd Gen)','iPad8,10':'iPad Pro 11" (2nd Gen)'
-      };
-      var iPadKeys = Object.keys(iPadMap);
-      for (var ki = 0; ki < iPadKeys.length; ki++) {
-        if (ua.indexOf(iPadKeys[ki]) !== -1) {
-          return { brand: 'Apple', model: iPadMap[iPadKeys[ki]], type: 'Tablet' };
-        }
-      }
-      return { brand: 'Apple', model: 'iPad', type: 'Tablet' };
+      var ipm = ua.match(/OS (\d+[_.]\d+)/i);
+      var ipv = ipm ? ipm[1].replace('_', '.') : '';
+      return { brand: 'Apple', model: 'iPad' + (ipv ? ' · iPadOS ' + ipv : ''), type: 'Tablet' };
     }
 
-    // ── Samsung ───────────────────────────────────────────────
-    if (/Samsung/i.test(ua)) {
-      // Galaxy model from Build/ or SM- identifier
-      var smMatch = ua.match(/\bSM-([\w]+)\b/i);
-      if (smMatch) {
-        var smCode = smMatch[1].toUpperCase();
-        // Map common SM codes → marketing names
-        var smMap = {
-          'S928': 'Galaxy S24 Ultra', 'S926': 'Galaxy S24+', 'S921': 'Galaxy S24',
-          'S918': 'Galaxy S23 Ultra', 'S916': 'Galaxy S23+', 'S911': 'Galaxy S23',
-          'S908': 'Galaxy S22 Ultra', 'S906': 'Galaxy S22+', 'S901': 'Galaxy S22',
-          'S908E':'Galaxy S22 Ultra', 'S901B':'Galaxy S22',
-          'F946': 'Galaxy Z Fold 5',  'F731': 'Galaxy Z Flip 5',
-          'F936': 'Galaxy Z Fold 4',  'F721': 'Galaxy Z Flip 4',
-          'A546': 'Galaxy A54',       'A336': 'Galaxy A33',
-          'A135': 'Galaxy A13',       'A515': 'Galaxy A51',
-          'A525': 'Galaxy A52',       'A536': 'Galaxy A53',
-          'A715': 'Galaxy A71',       'A725': 'Galaxy A72',
-          'A325': 'Galaxy A32',
-          'N975': 'Galaxy Note 10+',  'N986': 'Galaxy Note 20 Ultra',
-          'T875': 'Galaxy Tab S7',    'X910': 'Galaxy Tab S9 Ultra'
-        };
-        // Try prefix match first (SM-S928B → S928)
-        var mapped = null;
-        var smKeys2 = Object.keys(smMap);
-        for (var si = 0; si < smKeys2.length; si++) {
-          if (smCode.indexOf(smKeys2[si]) === 0) { mapped = smMap[smKeys2[si]]; break; }
-        }
-        var modelName = mapped || ('Galaxy ' + smCode);
-        var devType = /Tab/i.test(modelName) ? 'Tablet' : 'Mobile';
-        return { brand: 'Samsung', model: modelName, type: devType };
+    // ── Samsung SM- ─────────────────────────────────────────────────────
+    var smm = ua.match(/SM-([\w]+)/i);
+    if (smm) {
+      var smCode = smm[1].toUpperCase();
+      var smMap = {
+        'S938':'Galaxy S25 Ultra','S936':'Galaxy S25+','S931':'Galaxy S25',
+        'S928':'Galaxy S24 Ultra','S926':'Galaxy S24+','S921':'Galaxy S24',
+        'S918':'Galaxy S23 Ultra','S916':'Galaxy S23+','S911':'Galaxy S23',
+        'S908':'Galaxy S22 Ultra','S906':'Galaxy S22+','S901':'Galaxy S22',
+        'F956':'Galaxy Z Fold 6', 'F741':'Galaxy Z Flip 6',
+        'F946':'Galaxy Z Fold 5', 'F731':'Galaxy Z Flip 5',
+        'F936':'Galaxy Z Fold 4', 'F721':'Galaxy Z Flip 4',
+        'A566':'Galaxy A56',
+        'A556':'Galaxy A55',      'A356':'Galaxy A35',
+        'A546':'Galaxy A54',      'A336':'Galaxy A33',
+        'A536':'Galaxy A53',      'A325':'Galaxy A32',
+        'A525':'Galaxy A52',      'A515':'Galaxy A51',
+        'A135':'Galaxy A13',      'A125':'Galaxy A12',
+        'N986':'Galaxy Note 20 Ultra','N981':'Galaxy Note 20',
+        'N975':'Galaxy Note 10+', 'N970':'Galaxy Note 10',
+        'T976':'Galaxy Tab S8 Ultra','T870':'Galaxy Tab S7',
+        'X918':'Galaxy Tab S9 Ultra','X916':'Galaxy Tab S9+','X910':'Galaxy Tab S9'
+      };
+      var smName = null;
+      var smKeys = Object.keys(smMap);
+      for (var si2 = 0; si2 < smKeys.length; si2++) {
+        if (smCode.indexOf(smKeys[si2]) === 0) { smName = smMap[smKeys[si2]]; break; }
       }
-      return { brand: 'Samsung', model: 'Galaxy', type: 'Mobile' };
+      var finalName = smName || ('Samsung Galaxy ' + smCode);
+      var devType   = /Tab/i.test(finalName) ? 'Tablet' : 'Mobile';
+      return { brand: 'Samsung', model: finalName, type: devType };
     }
 
-    // ── Google Pixel ──────────────────────────────────────────
-    if (/Pixel[ _]([\w]+)/i.test(ua)) {
-      var pxMatch = ua.match(/Pixel[ _]([\w]+)/i);
-      var pxMap = {
-        '9': 'Pixel 9', '9 Pro': 'Pixel 9 Pro', '9 Pro XL': 'Pixel 9 Pro XL', '9a': 'Pixel 9a',
-        '8': 'Pixel 8', '8 Pro': 'Pixel 8 Pro', '8a': 'Pixel 8a',
-        '7': 'Pixel 7', '7 Pro': 'Pixel 7 Pro', '7a': 'Pixel 7a',
-        '6': 'Pixel 6', '6 Pro': 'Pixel 6 Pro', '6a': 'Pixel 6a',
-        'Fold': 'Pixel Fold', 'Tablet': 'Pixel Tablet'
-      };
-      var pxId   = pxMatch[1];
-      var pxName = pxMap[pxId] || ('Pixel ' + pxId);
-      var pxType = pxName.indexOf('Tablet') !== -1 ? 'Tablet' : 'Mobile';
+    // ── Google Pixel ────────────────────────────────────────────────────
+    if (/Pixel[ _]/i.test(ua)) {
+      var pxm = ua.match(/Pixel[ _]([\w]+(?:[ _][\w]+)?)/i);
+      var pxName = pxm ? ('Google Pixel ' + pxm[1].replace('_', ' ')) : 'Google Pixel';
+      var pxType = /Tablet|Fold/i.test(pxName) ? 'Tablet' : 'Mobile';
       return { brand: 'Google', model: pxName, type: pxType };
     }
 
-    // ── OnePlus ───────────────────────────────────────────────
-    if (/OnePlus/i.test(ua)) {
-      var opMatch = ua.match(/OnePlus[ _]?([\w\s]+)/i);
-      var opModel = opMatch ? ('OnePlus ' + opMatch[1].trim()) : 'OnePlus';
-      return { brand: 'OnePlus', model: opModel, type: 'Mobile' };
-    }
-
-    // ── Xiaomi / MIUI ─────────────────────────────────────────
-    if (/Xiaomi|MIUI|Redmi|Mi[ _]/i.test(ua)) {
-      var xiMatch = ua.match(/(?:Xiaomi|Redmi|Mi)[ _]?([\w\s]+?)(?:\s+Build|;|\))/i);
-      var xiModel = xiMatch ? xiMatch[1].trim() : 'Xiaomi';
-      if (!/^(?:xiaomi|redmi|mi)/i.test(xiModel)) xiModel = 'Xiaomi ' + xiModel;
+    // ── Xiaomi / Redmi / POCO ────────────────────────────────────────────
+    if (/Xiaomi|Redmi|POCO/i.test(ua)) {
+      var xim = ua.match(/(Xiaomi|Redmi|POCO)[ _]([\w]+)/i);
+      var xiModel = xim ? (xim[1] + ' ' + xim[2]) : 'Xiaomi';
       return { brand: 'Xiaomi', model: xiModel, type: 'Mobile' };
     }
 
-    // ── Huawei ────────────────────────────────────────────────
-    if (/Huawei/i.test(ua)) {
-      var hwMatch = ua.match(/Huawei[ _]?([\w\s]+?)(?:\s+Build|;|\))/i);
-      var hwModel = hwMatch ? ('Huawei ' + hwMatch[1].trim()) : 'Huawei';
-      return { brand: 'Huawei', model: hwModel, type: 'Mobile' };
+    // ── Huawei / Honor ───────────────────────────────────────────────────
+    if (/Huawei|HUAWEI/i.test(ua)) {
+      var hwm = ua.match(/(?:Huawei|HUAWEI)[ _-]?([\w]+)/i);
+      return { brand: 'Huawei', model: hwm ? ('Huawei ' + hwm[1]) : 'Huawei', type: 'Mobile' };
+    }
+    if (/Honor/i.test(ua)) {
+      var honm = ua.match(/Honor[ _-]?([\w]+)/i);
+      return { brand: 'Honor', model: honm ? ('Honor ' + honm[1]) : 'Honor', type: 'Mobile' };
     }
 
-    // ── OPPO / realme ─────────────────────────────────────────
-    if (/OPPO|CPH\d+/i.test(ua)) {
-      var oppoMatch = ua.match(/(?:OPPO[ _])?(CPH[\w]+|OPPO[\w ]+)/i);
-      return { brand: 'OPPO', model: oppoMatch ? oppoMatch[1] : 'OPPO', type: 'Mobile' };
+    // ── OnePlus ──────────────────────────────────────────────────────────
+    if (/OnePlus/i.test(ua)) {
+      var opm = ua.match(/OnePlus[ _]?([\w]+)/i);
+      return { brand: 'OnePlus', model: opm ? ('OnePlus ' + opm[1]) : 'OnePlus', type: 'Mobile' };
     }
+
+    // ── OPPO ─────────────────────────────────────────────────────────────
+    if (/OPPO|CPH\d/i.test(ua)) {
+      var oppm = ua.match(/(CPH[\w]+)/i);
+      return { brand: 'OPPO', model: oppm ? ('OPPO ' + oppm[1]) : 'OPPO', type: 'Mobile' };
+    }
+
+    // ── realme ───────────────────────────────────────────────────────────
     if (/realme/i.test(ua)) {
-      var rmMatch = ua.match(/realme[ _]?([\w\s]+?)(?:\s+Build|;|\))/i);
-      return { brand: 'realme', model: rmMatch ? ('realme ' + rmMatch[1].trim()) : 'realme', type: 'Mobile' };
+      var rmm = ua.match(/realme[ _]?([\w]+)/i);
+      return { brand: 'realme', model: rmm ? ('realme ' + rmm[1]) : 'realme', type: 'Mobile' };
     }
 
-    // ── Motorola ──────────────────────────────────────────────
-    if (/Motorola|moto[ _]/i.test(ua)) {
-      var motoMatch = ua.match(/moto[ _]([\w]+)/i);
-      var motoModel = motoMatch ? ('Moto ' + motoMatch[1]) : 'Motorola';
-      return { brand: 'Motorola', model: motoModel, type: 'Mobile' };
+    // ── Vivo ─────────────────────────────────────────────────────────────
+    if (/vivo/i.test(ua)) {
+      var vm = ua.match(/vivo[ _]?([\w]+)/i);
+      return { brand: 'vivo', model: vm ? ('vivo ' + vm[1]) : 'vivo', type: 'Mobile' };
     }
 
-    // ── Nokia ─────────────────────────────────────────────────
+    // ── Motorola ─────────────────────────────────────────────────────────
+    if (/motorola|moto[ _]/i.test(ua)) {
+      var mm = ua.match(/moto[ _]([\w]+)/i);
+      return { brand: 'Motorola', model: mm ? ('Moto ' + mm[1].toUpperCase()) : 'Motorola', type: 'Mobile' };
+    }
+
+    // ── Nokia ────────────────────────────────────────────────────────────
     if (/Nokia/i.test(ua)) {
-      return { brand: 'Nokia', model: 'Nokia', type: 'Mobile' };
+      var nm = ua.match(/Nokia[ _]?([\w]+)/i);
+      return { brand: 'Nokia', model: nm ? ('Nokia ' + nm[1]) : 'Nokia', type: 'Mobile' };
     }
 
-    // ── Generic Android fallback ──────────────────────────────
-    if (/Android.*Mobile/i.test(ua)) {
-      return { brand: 'Android', model: 'Android Phone', type: 'Mobile' };
+    // ── ASUS (ROG Phone / ZenFone) ───────────────────────────────────────
+    if (/ASUS/i.test(ua)) {
+      var am = ua.match(/ASUS[ _-]?([\w]+)/i);
+      return { brand: 'ASUS', model: am ? ('ASUS ' + am[1]) : 'ASUS', type: 'Mobile' };
     }
+
+    // ── Samsung without SM- code (Samsung Browser without model) ────────
+    if (/SamsungBrowser/i.test(ua)) {
+      var sbType = /SM-[TX]/i.test(ua) ? 'Tablet' : 'Mobile';
+      return { brand: 'Samsung', model: 'Samsung Galaxy', type: sbType };
+    }
+
+    // ── Generic Android — extract model from standard UA pattern ─────────
+    // Pattern: "Android 13; SM-G991B Build/..." or "Android 12; Pixel 6 Build/..."
     if (/Android/i.test(ua)) {
-      return { brand: 'Android', model: 'Android Tablet', type: 'Tablet' };
+      var adrm = ua.match(/Android[^;]*;\s*([^;)]+?)(?:\s+Build|\/)/);
+      if (adrm) {
+        var rawModel = adrm[1].trim().replace(/\s+[a-z]{2}-[A-Z]{2}$/, '');
+        if (rawModel && rawModel !== 'Linux' && rawModel.length > 1) {
+          var isTablet = !/Mobile/i.test(ua);
+          return { brand: 'Android', model: rawModel, type: isTablet ? 'Tablet' : 'Mobile' };
+        }
+      }
+      return { brand: 'Android', model: /Mobile/i.test(ua) ? 'Android Phone' : 'Android Tablet',
+               type: /Mobile/i.test(ua) ? 'Mobile' : 'Tablet' };
     }
 
-    // ── Mac (Apple Silicon detection heuristic) ───────────────
+    // ── Mac ──────────────────────────────────────────────────────────────
+    // NOTE: Apple Silicon cannot be reliably detected from browser UA alone.
+    // The "10_15_7" version in UA is used by both Intel and AS Macs running Big Sur+.
+    // We report just "Mac" with the macOS version.
     if (/Mac OS X/i.test(ua)) {
-      var isSilicon = /Mac OS X 10_15_[789]|Mac OS X 1[1-9]/i.test(ua) || !/Intel/i.test(ua);
-      var macModel  = isSilicon ? 'Mac (Apple Silicon)' : 'Mac (Intel)';
-      return { brand: 'Apple', model: macModel, type: 'Desktop' };
+      var macm = ua.match(/Mac OS X ([\d_.]+)/i);
+      var macv = macm ? macm[1].replace(/_/g, '.') : '';
+      return { brand: 'Apple', model: 'Mac' + (macv ? ' (macOS ' + macv + ')' : ''), type: 'Desktop' };
     }
 
-    if (/Windows/i.test(ua)) return { brand: 'PC', model: 'Windows PC', type: 'Desktop' };
-    if (/Linux/i.test(ua))   return { brand: 'Linux', model: 'Linux PC', type: 'Desktop' };
+    if (/Windows/i.test(ua)) return { brand: 'PC',     model: 'Windows PC', type: 'Desktop' };
+    if (/CrOS/i.test(ua))    return { brand: 'Google', model: 'Chromebook', type: 'Desktop' };
+    if (/Linux/i.test(ua))   return { brand: 'Linux',  model: 'Linux PC',   type: 'Desktop' };
 
-    return { brand: 'Unknown', model: 'Unknown', type: 'Desktop' };
+    return { brand: 'Unknown', model: 'Unknown Device', type: 'Desktop' };
   }
 
-  // ── HELPER · touch + foldable heuristics ─────────────────
+  // ── HELPER · touch + foldable heuristics ──────────────────────────────
   function getDeviceExtras() {
-    var hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    // Foldable hint: very large maxTouchPoints (fold displays) or matching UA hints
-    var ua = navigator.userAgent;
-    var isFoldable = /Galaxy Z Fold|Galaxy Z Flip|Pixel Fold|Surface Duo/i.test(ua) ||
-                     (navigator.maxTouchPoints >= 10 && window.screen.width >= 768 && hasTouch);
-    return { hasTouch: hasTouch, isFoldable: isFoldable };
+    var tp     = navigator.maxTouchPoints || 0;
+    var hasTouch = ('ontouchstart' in window) || tp > 0;
+    var ua     = navigator.userAgent;
+    var isFoldable = /Galaxy Z Fold|Galaxy Z Flip|Pixel Fold|Surface Duo/i.test(ua);
+    return { hasTouch: hasTouch, isFoldable: isFoldable, touchPoints: tp };
   }
 
-  // ── HELPER · device type + model (backwards-compat shim) ──
+  // ── HELPER · backwards-compat shim ────────────────────────────────────
   function parseDeviceUA(ua) {
     return parseDeviceInfo(ua).model;
   }
 
-  // ── HELPER · CPU architecture ─────────────────────────────
-  // FIX: iPhone/iPad → always ARM64; Android modern → ARM64 inference
+  // ── HELPER · CPU architecture ──────────────────────────────────────────
+  // Accuracy fixes:
+  //   • iPhone/iPad → always arm64 (all A-series chips since A7/2013)
+  //   • Modern Android (API 21+) → arm64 is safe default
+  //   • Mac: cannot determine Intel vs Apple Silicon from UA alone reliably —
+  //     report arm64 only if explicitly stated; otherwise amd64 (safer default)
   function parseCPUUA(ua) {
-    if (/iPhone|iPad|iPod/i.test(ua))        return 'arm64';  // all modern Apple mobile
+    if (/iPhone|iPad|iPod/i.test(ua))        return 'arm64';   // All modern Apple mobile (A7+)
     if (/aarch64|arm64/i.test(ua))           return 'arm64';
     if (/armv\d/i.test(ua))                  return 'arm';
     if (/x86_64|x64|Win64|WOW64/i.test(ua)) return 'amd64';
     if (/i[36]86/i.test(ua))                 return 'x86';
-    if (/Android/i.test(ua))                 return 'arm64';  // safe assumption for modern Android
-    if (/Mac OS X/i.test(ua))                return 'arm64';  // Apple Silicon default (M1+)
+    if (/Android/i.test(ua))                 return 'arm64';   // Modern Android is arm64
+    // Mac: UA does not distinguish Intel vs Apple Silicon reliably
+    if (/Mac OS X/i.test(ua))                return 'amd64';   // Conservative; AS also reports this
     return 'Unknown';
   }
 
@@ -1691,9 +1748,10 @@
 
     // Collect all client-side signals synchronously (no network)
     var ua  = navigator.userAgent;
+    var tp  = navigator.maxTouchPoints || 0;  // needed for iPadOS 13+ detection
     var br  = parseBrowserUA(ua);
     var os  = parseOSUA(ua);
-    var dev = parseDeviceInfo(ua);
+    var dev = parseDeviceInfo(ua, tp);         // pass touchPoints for iPadOS 13+
     var ext = getDeviceExtras();
 
     var client = {

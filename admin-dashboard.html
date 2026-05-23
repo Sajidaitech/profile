@@ -277,6 +277,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .table-title {
@@ -287,18 +289,80 @@
       text-transform: uppercase;
     }
 
-    .refresh-btn {
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--border);
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Buttons ──────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       border-radius: 8px;
-      padding: 6px 12px;
+      padding: 6px 13px;
       font-family: var(--ff);
       font-size: 12px;
-      color: var(--ink-2);
+      font-weight: 600;
       cursor: pointer;
-      transition: background .2s;
+      border: 1px solid var(--border);
+      transition: background .2s, opacity .2s, transform .1s;
+      white-space: nowrap;
+      user-select: none;
     }
-    .refresh-btn:hover { background: rgba(255,255,255,.1); }
+    .btn:active { transform: scale(.97); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,.06);
+      color: var(--ink-2);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.10); }
+
+    /* Refresh spinning state */
+    .btn-ghost.spinning { opacity: .6; pointer-events: none; }
+    .btn-ghost.spinning .btn-icon { display: inline-block; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .btn-danger {
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.25);
+      color: #FCA5A5;
+    }
+    .btn-danger:hover { background: rgba(239,68,68,.22); }
+    .btn-danger:disabled { opacity: .35; pointer-events: none; }
+
+    /* Selection count badge */
+    #sel-count-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--amber);
+      padding: 4px 10px;
+      background: rgba(245,158,11,.12);
+      border: 1px solid rgba(245,158,11,.25);
+      border-radius: 999px;
+      display: none;
+    }
+
+    /* ── Checkbox styles ──────────────────────────────── */
+    .row-cb {
+      width: 15px; height: 15px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    th.cb-col, td.cb-col {
+      width: 44px;
+      padding-left: 20px !important;
+      padding-right: 4px !important;
+    }
+
+    /* Highlight selected rows */
+    tbody tr.selected {
+      background: rgba(0,102,255,.08) !important;
+    }
 
     table {
       width: 100%;
@@ -321,6 +385,7 @@
       transition: background .15s;
     }
     tbody tr:hover { background: rgba(255,255,255,.03); }
+    tbody tr.selected:hover { background: rgba(0,102,255,.12) !important; }
     tbody tr:last-child { border-bottom: none; }
 
     tbody td {
@@ -346,6 +411,59 @@
 
     .tag-source { background: rgba(0,102,255,.14); color: #60A5FA; }
     .tag-gcc    { background: rgba(245,158,11,.14); color: #FCD34D; }
+
+    /* ── Delete confirm modal ─────────────────────────── */
+    #delete-modal {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.6);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+    #delete-modal.open { display: flex; }
+
+    .modal-card {
+      background: #141824;
+      border: 1px solid var(--border-h);
+      border-radius: 18px;
+      padding: 28px 32px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .modal-icon { font-size: 32px; margin-bottom: 12px; }
+    .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .modal-body { font-size: 13px; color: var(--ink-2); margin-bottom: 22px; line-height: 1.6; }
+
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+    /* ── Toast ────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1E2535;
+      border: 1px solid var(--border-h);
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      z-index: 600;
+      pointer-events: none;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+      opacity: 0;
+      white-space: nowrap;
+    }
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    #toast.toast-ok   { border-color: rgba(16,185,129,.4); color: var(--green); }
+    #toast.toast-err  { border-color: rgba(239,68,68,.4);  color: #FCA5A5; }
 
     /* ── Loading ──────────────────────────────────────── */
     .skeleton {
@@ -415,7 +533,7 @@
       <div class="kpi"><div class="kpi-label">This Week</div><div class="kpi-value" id="kpi-week">—</div><div class="kpi-sub">Last 7 days</div></div>
       <div class="kpi"><div class="kpi-label">This Month</div><div class="kpi-value" id="kpi-month">—</div><div class="kpi-sub">Last 30 days</div></div>
       <div class="kpi"><div class="kpi-label">Returning</div><div class="kpi-value" id="kpi-returning">—</div><div class="kpi-sub">Repeat visitors</div></div>
-      <div class="kpi"><div class="kpi-label">Avg Session</div><div class="kpi-value" id="kpi-duration">—</div><div class="kpi-sub">Seconds on site</div></div>
+      <div class="kpi"><div class="kpi-label">Avg Session</div><div class="kpi-value" id="kpi-duration">—</div><div class="kpi-sub">Time on site</div></div>
     </div>
 
     <!-- Charts -->
@@ -442,12 +560,26 @@
     <div class="table-card">
       <div class="table-header">
         <div class="table-title">🕐 Recent Visitors</div>
-        <button class="refresh-btn" id="refresh-btn">↻ Refresh</button>
+        <div class="table-actions">
+          <span id="sel-count-badge">0 selected</span>
+          <button class="btn btn-ghost" id="select-all-btn" title="Select all visible rows">
+            ☑ Select All
+          </button>
+          <button class="btn btn-danger" id="delete-sel-btn" disabled title="Delete selected rows">
+            🗑 Delete Selected
+          </button>
+          <button class="btn btn-ghost" id="refresh-btn">
+            <span class="btn-icon">↻</span> Refresh
+          </button>
+        </div>
       </div>
       <div style="overflow-x:auto;">
         <table>
           <thead>
             <tr>
+              <th class="cb-col">
+                <input type="checkbox" class="row-cb" id="master-cb" title="Select / deselect all">
+              </th>
               <th>Name</th>
               <th>Location</th>
               <th>Source</th>
@@ -455,11 +587,13 @@
               <th>Browser</th>
               <th>OS</th>
               <th>Duration</th>
+              <th>Visits</th>
               <th>When</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="visitors-tbody">
-            <tr><td colspan="7" style="text-align:center;padding:32px;color:var(--ink-3);">Loading…</td></tr>
+            <tr><td colspan="11" style="text-align:center;padding:32px;color:var(--ink-3);">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -468,22 +602,32 @@
   </main>
 </div>
 
+<!-- ── Delete confirm modal ──────────────────────────────── -->
+<div id="delete-modal">
+  <div class="modal-card">
+    <div class="modal-icon">🗑</div>
+    <div class="modal-title" id="modal-title">Delete visitors?</div>
+    <div class="modal-body" id="modal-body">This action cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modal-cancel-btn">Cancel</button>
+      <button class="btn btn-danger" id="modal-confirm-btn">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ──────────────────────────────────────────────── -->
+<div id="toast"></div>
+
 <!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 // ============================================================
-// CONFIG — fill in your values
+// CONFIG
 // ============================================================
-const SUPABASE_URL     = 'https://tbdgrhekycgfdeatxjnq.supabase.co';
+const SUPABASE_URL      = 'https://tbdgrhekycgfdeatxjnq.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZGdyaGVreWNnZmRlYXR4am5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5MzEsImV4cCI6MjA5NDk2NzkzMX0.HP48nehewf5HajLukSkLdJwuqiUTmbnfdcAk6x8_UEU';
-
-// ⚠️  This password is checked client-side only — it is NOT
-//    secure against a determined attacker. For real security,
-//    use Supabase Auth (magic link / email+password) instead.
-//    For a personal portfolio this is fine.
-const ADMIN_PASSWORD = 'sajid';  // ← change this
-
-const GCC_COUNTRIES = ['Qatar','UAE','Saudi Arabia','Kuwait','Bahrain','Oman'];
+const ADMIN_PASSWORD    = 'sajid';  // ← change this
+const GCC_COUNTRIES     = ['Qatar','UAE','Saudi Arabia','Kuwait','Bahrain','Oman'];
 
 // ============================================================
 // AUTH
@@ -518,9 +662,61 @@ function initDashboard() {
   });
 
   loadAll();
-  document.getElementById('refresh-btn').addEventListener('click', loadAll);
 
-  // Realtime subscription for live updates
+  // ── Refresh button with spinner feedback ──────────────────
+  const refreshBtn = document.getElementById('refresh-btn');
+  refreshBtn.addEventListener('click', async () => {
+    // Prevent double-clicks
+    if (refreshBtn.classList.contains('spinning')) return;
+    refreshBtn.classList.add('spinning');
+    refreshBtn.querySelector('.btn-icon').textContent = '↻';
+    try {
+      await loadAll();
+    } finally {
+      refreshBtn.classList.remove('spinning');
+    }
+  });
+
+  // ── Select All button ─────────────────────────────────────
+  document.getElementById('select-all-btn').addEventListener('click', () => {
+    const masterCb = document.getElementById('master-cb');
+    const allChecked = allRowCheckboxes().every(cb => cb.checked);
+    allRowCheckboxes().forEach(cb => {
+      cb.checked = !allChecked;
+      cb.closest('tr').classList.toggle('selected', !allChecked);
+    });
+    masterCb.checked = !allChecked;
+    masterCb.indeterminate = false;
+    updateSelectionUI();
+  });
+
+  // ── Master checkbox (thead) ───────────────────────────────
+  document.getElementById('master-cb').addEventListener('change', (e) => {
+    allRowCheckboxes().forEach(cb => {
+      cb.checked = e.target.checked;
+      cb.closest('tr').classList.toggle('selected', e.target.checked);
+    });
+    updateSelectionUI();
+  });
+
+  // ── Delete Selected ───────────────────────────────────────
+  document.getElementById('delete-sel-btn').addEventListener('click', () => {
+    const ids = selectedIds();
+    if (!ids.length) return;
+    openModal(
+      `Delete ${ids.length} visitor${ids.length > 1 ? 's' : ''}?`,
+      `You are about to permanently delete <strong style="color:var(--ink)">${ids.length} row${ids.length > 1 ? 's' : ''}</strong> from the visitors table. This cannot be undone.`,
+      async () => { await deleteRows(ids); }
+    );
+  });
+
+  // ── Modal cancel ──────────────────────────────────────────
+  document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+  document.getElementById('delete-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // ── Realtime subscription ─────────────────────────────────
   db.channel('dash-live')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, loadAll)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'online_visitors' }, updateOnlineBadge)
@@ -534,14 +730,14 @@ async function loadAll() {
 // ── Summary via RPC ─────────────────────────────────────────
 async function loadSummary() {
   const { data, error } = await db.rpc('get_analytics_summary');
-  if (error) { console.error(error); return; }
+  if (error) { console.error('get_analytics_summary error:', error.message); return; }
 
   setText('kpi-total',     fmt(data.total));
   setText('kpi-today',     fmt(data.today));
   setText('kpi-week',      fmt(data.this_week));
   setText('kpi-month',     fmt(data.this_month));
   setText('kpi-returning', fmt(data.returning));
-  setText('kpi-duration',  data.avg_duration ? data.avg_duration + 's' : '—');
+  setText('kpi-duration',  data.avg_duration ? fmtDur(data.avg_duration) : '—');
 
   renderBarChart('chart-country', data.by_country,  '#0066FF');
   renderBarChart('chart-source',  data.by_source,   '#8B5CF6');
@@ -549,40 +745,99 @@ async function loadSummary() {
   renderBarChart('chart-browser', data.by_browser,  '#F59E0B');
 }
 
-// ── Online badge ────────────────────────────────────────────
+// ── Online badge ─────────────────────────────────────────────
 async function updateOnlineBadge() {
   const { data } = await db.rpc('get_online_count');
   document.getElementById('online-badge').textContent =
     `${data || 0} online now`;
 }
 
-// ── Recent visitors table ───────────────────────────────────
+// ── Recent visitors table ────────────────────────────────────
+// FIX: LEFT JOIN visitor_profiles to get name + location as fallback
+// when the visitors row was inserted before the gate was submitted.
 async function loadRecentVisitors() {
+  // Query visitors table; also pull from visitor_profiles via fingerprint
+  // so that even rows inserted before name entry show the correct name.
   const { data, error } = await db
     .from('visitors')
-    .select('visitor_name,country,city,source,device,device_model,browser,os,duration,is_returning,created_at')
+    .select(`
+      id,
+      session_id,
+      visitor_name,
+      country,
+      city,
+      source,
+      device,
+      device_model,
+      browser,
+      os,
+      duration,
+      is_returning,
+      visit_count,
+      fingerprint,
+      created_at
+    `)
     .order('created_at', { ascending: false })
-    .limit(50);
+    .limit(100);
 
-  if (error) return;
-
-  const tbody = document.getElementById('visitors-tbody');
-  if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--ink-3);">No visitors yet</td></tr>';
+  if (error) {
+    console.error('loadRecentVisitors error:', error.message);
     return;
   }
 
-  tbody.innerHTML = data.map(v => {
+  // FIX: For any row missing visitor_name or country, fetch from visitor_profiles
+  // by fingerprint so the dashboard always shows the best available data.
+  const missingFps = [...new Set(
+    data
+      .filter(v => (!v.visitor_name || !v.country || v.country === 'Unknown') && v.fingerprint)
+      .map(v => v.fingerprint)
+  )];
+
+  let profileMap = {};
+  if (missingFps.length) {
+    const { data: profiles } = await db
+      .from('visitor_profiles')
+      .select('fingerprint,visitor_name,country,city')
+      .in('fingerprint', missingFps);
+    if (profiles) {
+      profiles.forEach(p => { profileMap[p.fingerprint] = p; });
+    }
+  }
+
+  const tbody = document.getElementById('visitors-tbody');
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--ink-3);">No visitors yet</td></tr>';
+    return;
+  }
+
+  // Merge profile data into visitor rows where needed
+  const rows = data.map(v => {
+    const p = profileMap[v.fingerprint] || {};
+    return {
+      ...v,
+      visitor_name: v.visitor_name || p.visitor_name || null,
+      country:      (v.country && v.country !== 'Unknown') ? v.country : (p.country || v.country),
+      city:         (v.city    && v.city    !== 'Unknown') ? v.city    : (p.city    || v.city),
+    };
+  });
+
+  tbody.innerHTML = rows.map(v => {
     const isGCC  = GCC_COUNTRIES.includes(v.country);
-    const loc    = [v.city, v.country].filter(Boolean).join(', ') || '—';
+    const loc    = [v.city, v.country].filter(x => x && x !== 'Unknown').join(', ') || '—';
     const when   = timeAgo(new Date(v.created_at));
-    const dur    = v.duration > 0 ? v.duration + 's' : '—';
+    const dur    = v.duration > 0 ? fmtDur(v.duration) : '—';
     const source = v.source || 'Direct';
+    const vc     = v.visit_count || 1;
+    const visitsCell = vc > 1
+      ? `<span style="font-weight:600;color:var(--green);">${vc}</span> <span class="tag tag-gcc" style="font-size:10px;">returning</span>`
+      : `<span style="color:var(--ink-3);">1</span>`;
 
     const nameCell = v.visitor_name
       ? `<td style="font-weight:600;color:var(--ink);">${esc(v.visitor_name)}</td>`
       : `<td style="color:var(--ink-3);">—</td>`;
-    return `<tr>
+
+    return `<tr data-id="${esc(v.id)}">
+      <td class="cb-col"><input type="checkbox" class="row-cb" data-id="${esc(v.id)}"></td>
       ${nameCell}
       <td class="td-country">${esc(loc)}${isGCC ? ' 🇶🇦' : ''}</td>
       <td><span class="tag tag-source">${esc(source)}</span>${isGCC ? ' <span class="tag tag-gcc">GCC</span>' : ''}</td>
@@ -590,12 +845,195 @@ async function loadRecentVisitors() {
       <td>${esc(v.browser || '—')}</td>
       <td>${esc(v.os || '—')}</td>
       <td style="font-family:var(--ff-mono);font-size:12px;">${dur}</td>
+      <td style="font-size:12px;">${visitsCell}</td>
       <td style="color:var(--ink-3);font-size:12px;">${when}</td>
+      <td>
+        <button class="btn btn-danger"
+                style="padding:4px 10px;font-size:11px;"
+                onclick="confirmDeleteOne('${esc(v.id)}', ${JSON.stringify(esc(v.visitor_name || 'this visitor'))})">
+          🗑
+        </button>
+      </td>
     </tr>`;
   }).join('');
+
+  // Re-attach per-row checkbox listeners after re-render
+  document.querySelectorAll('.row-cb[data-id]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.closest('tr').classList.toggle('selected', cb.checked);
+      updateSelectionUI();
+    });
+  });
+
+  // Reset master checkbox and selection state
+  document.getElementById('master-cb').checked = false;
+  document.getElementById('master-cb').indeterminate = false;
+  updateSelectionUI();
 }
 
-// ── Bar chart renderer ──────────────────────────────────────
+
+// ============================================================
+// SELECTION HELPERS
+// ============================================================
+
+function allRowCheckboxes() {
+  return [...document.querySelectorAll('.row-cb[data-id]')];
+}
+
+function selectedIds() {
+  return allRowCheckboxes()
+    .filter(cb => cb.checked)
+    .map(cb => cb.dataset.id);
+}
+
+function updateSelectionUI() {
+  const all      = allRowCheckboxes();
+  const checked  = all.filter(cb => cb.checked);
+  const n        = checked.length;
+  const masterCb = document.getElementById('master-cb');
+  const badge    = document.getElementById('sel-count-badge');
+  const delBtn   = document.getElementById('delete-sel-btn');
+  const selAllBtn = document.getElementById('select-all-btn');
+
+  // Master checkbox state
+  if (n === 0) {
+    masterCb.checked = false;
+    masterCb.indeterminate = false;
+  } else if (n === all.length) {
+    masterCb.checked = true;
+    masterCb.indeterminate = false;
+  } else {
+    masterCb.checked = false;
+    masterCb.indeterminate = true;
+  }
+
+  // Badge
+  if (n > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent   = `${n} selected`;
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // Delete button
+  delBtn.disabled = n === 0;
+
+  // Select All button label
+  const allChecked = all.length > 0 && all.every(cb => cb.checked);
+  selAllBtn.innerHTML = allChecked ? '☐ Deselect All' : '☑ Select All';
+}
+
+
+// ============================================================
+// DELETE LOGIC
+// ============================================================
+
+function confirmDeleteOne(id, nameLabel) {
+  openModal(
+    `Delete visitor?`,
+    `Remove <strong style="color:var(--ink)">${nameLabel}</strong> from the visitors table? This cannot be undone.`,
+    async () => { await deleteRows([id]); }
+  );
+}
+
+window.confirmDeleteOne = confirmDeleteOne; // expose for inline onclick
+
+async function deleteRows(ids) {
+  if (!ids.length) return;
+
+  // ── Why RPC instead of .delete()? ────────────────────────────────────────
+  // The visitors table has RLS enabled. The anon key has no DELETE policy,
+  // so a direct .delete() call silently deletes 0 rows (Supabase returns no
+  // error but also deletes nothing when RLS blocks the operation).
+  //
+  // Solution: call a SECURITY DEFINER Postgres function that runs as the
+  // table owner and therefore bypasses RLS entirely. You MUST run the SQL
+  // below once in your Supabase SQL Editor before delete will work:
+  //
+  //   CREATE OR REPLACE FUNCTION delete_visitors(p_ids uuid[])
+  //   RETURNS integer
+  //   LANGUAGE plpgsql
+  //   SECURITY DEFINER
+  //   AS $$
+  //   DECLARE
+  //     deleted_count integer;
+  //   BEGIN
+  //     DELETE FROM visitors WHERE id = ANY(p_ids);
+  //     GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  //     RETURN deleted_count;
+  //   END;
+  //   $$;
+  //
+  //   -- Allow anon to call this function:
+  //   GRANT EXECUTE ON FUNCTION delete_visitors(uuid[]) TO anon;
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const { data, error } = await db.rpc('delete_visitors', { p_ids: ids });
+
+  if (error) {
+    console.error('Delete error:', error.message);
+
+    // Friendly hint if the RPC simply doesn't exist yet
+    if (error.message.includes('Could not find') || error.message.includes('function') || error.code === 'PGRST202') {
+      showToast('⚠️ Run the delete_visitors SQL in Supabase first — see comments in code', 'err');
+    } else {
+      showToast(`❌ Delete failed: ${error.message}`, 'err');
+    }
+    return;
+  }
+
+  const n = typeof data === 'number' ? data : ids.length;
+  showToast(`✓ Deleted ${n} row${n !== 1 ? 's' : ''}`, 'ok');
+  await loadAll();
+}
+
+
+// ============================================================
+// MODAL
+// ============================================================
+let _modalCallback = null;
+
+function openModal(title, body, onConfirm) {
+  document.getElementById('modal-title').innerHTML = title;
+  document.getElementById('modal-body').innerHTML  = body;
+  _modalCallback = onConfirm;
+  document.getElementById('delete-modal').classList.add('open');
+
+  // Wire confirm once
+  const confirmBtn = document.getElementById('modal-confirm-btn');
+  confirmBtn.onclick = async () => {
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Deleting…';
+    closeModal();
+    if (_modalCallback) await _modalCallback();
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Yes, Delete';
+    _modalCallback = null;
+  };
+}
+
+function closeModal() {
+  document.getElementById('delete-modal').classList.remove('open');
+}
+
+
+// ============================================================
+// TOAST
+// ============================================================
+let _toastTimer;
+
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className   = 'show' + (type ? ' toast-' + type : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { el.className = ''; }, 3000);
+}
+
+
+// ============================================================
+// BAR CHART RENDERER
+// ============================================================
 function renderBarChart(containerId, items, color) {
   const el = document.getElementById(containerId);
   if (!el || !items) return;
@@ -614,13 +1052,25 @@ function renderBarChart(containerId, items, color) {
   `).join('');
 }
 
-// ── Helpers ─────────────────────────────────────────────────
+
+// ============================================================
+// HELPERS
+// ============================================================
 function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
 }
 
 function fmt(n) { return (n || 0).toLocaleString(); }
+
+// Format seconds → "45s", "2m 13s", "1h 4m"
+function fmtDur(s) {
+  if (!s || s <= 0) return '—';
+  s = Math.round(s);
+  if (s < 60)   return s + 's';
+  if (s < 3600) return Math.floor(s / 60) + 'm ' + (s % 60) + 's';
+  return Math.floor(s / 3600) + 'h ' + Math.floor((s % 3600) / 60) + 'm';
+}
 
 function esc(str) {
   return String(str || '')
