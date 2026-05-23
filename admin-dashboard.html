@@ -26,6 +26,40 @@
       --r:         14px;
       --ff:        'DM Sans', system-ui, sans-serif;
       --ff-mono:   'DM Mono', monospace;
+      --header-bg: rgba(11,15,26,.9);
+      --modal-bg:  #141824;
+      --toast-bg:  #1E2535;
+      --bar-track: rgba(255,255,255,.06);
+      --row-hover: rgba(255,255,255,.03);
+      --row-sel:   rgba(0,102,255,.08);
+      --row-sel-h: rgba(0,102,255,.12);
+      --row-sep:   rgba(255,255,255,.04);
+      --tag-bg:    rgba(255,255,255,.06);
+      --skeleton-a: rgba(255,255,255,.06);
+      --skeleton-b: rgba(255,255,255,.10);
+    }
+
+    /* ── Light Mode ─────────────────────────────────────── */
+    [data-theme="light"] {
+      --bg:        #F3F5FA;
+      --bg-card:   rgba(255,255,255,.85);
+      --bg-card-h: rgba(255,255,255,1);
+      --border:    rgba(0,0,0,.09);
+      --border-h:  rgba(0,0,0,.18);
+      --ink:       rgba(10,14,30,.92);
+      --ink-2:     rgba(10,14,30,.55);
+      --ink-3:     rgba(10,14,30,.35);
+      --header-bg: rgba(243,245,250,.92);
+      --modal-bg:  #FFFFFF;
+      --toast-bg:  #FFFFFF;
+      --bar-track: rgba(0,0,0,.06);
+      --row-hover: rgba(0,0,0,.02);
+      --row-sel:   rgba(0,102,255,.06);
+      --row-sel-h: rgba(0,102,255,.10);
+      --row-sep:   rgba(0,0,0,.05);
+      --tag-bg:    rgba(0,0,0,.06);
+      --skeleton-a: rgba(0,0,0,.06);
+      --skeleton-b: rgba(0,0,0,.10);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -121,7 +155,7 @@
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      background: rgba(11,15,26,.9);
+      background: var(--header-bg);
       -webkit-backdrop-filter: blur(20px);
       backdrop-filter: blur(20px);
       z-index: 100;
@@ -243,9 +277,7 @@
     .bar-track {
       flex: 1;
       height: 6px;
-      background: rgba(255,255,255,.06);
-      border-radius: 999px;
-      overflow: hidden;
+      background: var(--bar-track);
     }
 
     .bar-fill {
@@ -315,10 +347,10 @@
     .btn:active { transform: scale(.97); }
 
     .btn-ghost {
-      background: rgba(255,255,255,.06);
+      background: var(--tag-bg);
       color: var(--ink-2);
     }
-    .btn-ghost:hover { background: rgba(255,255,255,.10); }
+    .btn-ghost:hover { background: var(--bar-track); filter: brightness(1.15); }
 
     /* Refresh spinning state */
     .btn-ghost.spinning { opacity: .6; pointer-events: none; }
@@ -359,11 +391,6 @@
       padding-right: 4px !important;
     }
 
-    /* Highlight selected rows */
-    tbody tr.selected {
-      background: rgba(0,102,255,.08) !important;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -381,11 +408,12 @@
     }
 
     tbody tr {
-      border-bottom: 1px solid rgba(255,255,255,.04);
+      border-bottom: 1px solid var(--row-sep);
       transition: background .15s;
     }
-    tbody tr:hover { background: rgba(255,255,255,.03); }
-    tbody tr.selected:hover { background: rgba(0,102,255,.12) !important; }
+    tbody tr:hover { background: var(--row-hover); }
+    tbody tr.selected { background: var(--row-sel) !important; }
+    tbody tr.selected:hover { background: var(--row-sel-h) !important; }
     tbody tr:last-child { border-bottom: none; }
 
     tbody td {
@@ -405,7 +433,7 @@
       border-radius: 6px;
       font-size: 11px;
       font-weight: 600;
-      background: rgba(255,255,255,.06);
+      background: var(--tag-bg);
       color: var(--ink-2);
     }
 
@@ -424,7 +452,7 @@
     #delete-modal.open { display: flex; }
 
     .modal-card {
-      background: #141824;
+      background: var(--modal-bg);
       border: 1px solid var(--border-h);
       border-radius: 18px;
       padding: 28px 32px;
@@ -445,7 +473,7 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: #1E2535;
+      background: var(--toast-bg);
       border: 1px solid var(--border-h);
       border-radius: 10px;
       padding: 10px 20px;
@@ -470,15 +498,68 @@
       display: inline-block;
       border-radius: 6px;
       background: linear-gradient(90deg,
-        rgba(255,255,255,.06) 25%,
-        rgba(255,255,255,.10) 50%,
-        rgba(255,255,255,.06) 75%);
+        var(--skeleton-a) 25%,
+        var(--skeleton-b) 50%,
+        var(--skeleton-a) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.4s infinite;
     }
     @keyframes shimmer {
       0%   { background-position: 200% 0; }
       100% { background-position: -200% 0; }
+    }
+
+    /* ── Theme Toggle ─────────────────────────────────────── */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: var(--ff);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-2);
+      cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+      white-space: nowrap;
+    }
+    .theme-toggle:hover { background: var(--bg-card-h); border-color: var(--border-h); color: var(--ink); }
+
+    /* ── Nav Buttons (Home / Gate) ────────────────────────── */
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 8px;
+      padding: 6px 13px;
+      font-family: var(--ff);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--ink-2);
+      text-decoration: none;
+      transition: background .2s, border-color .2s, color .2s, transform .1s;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .nav-btn:hover  { background: var(--bg-card-h); border-color: var(--border-h); color: var(--ink); }
+    .nav-btn:active { transform: scale(.97); }
+
+    .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    /* ── Auth card light mode ─────────────────────────────── */
+    [data-theme="light"] .auth-card {
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 8px 32px rgba(0,0,0,.10);
+    }
+    [data-theme="light"] .auth-input {
+      background: rgba(0,0,0,.04);
+      color: var(--ink);
     }
 
     /* ── Responsive ───────────────────────────────────── */
@@ -489,6 +570,7 @@
       .charts-grid { grid-template-columns: 1fr; }
       table { font-size: 12px; }
       thead th, tbody td { padding: 10px 12px; }
+      .header-right { gap: 5px; }
     }
   </style>
 </head>
@@ -505,6 +587,10 @@
     <button class="auth-btn" id="auth-btn">Access Dashboard</button>
     <div class="auth-error" id="auth-error">Incorrect password. Try again.</div>
   </div>
+  <a href="https://sajidmk.com" style="font-size:13px;color:var(--ink-3);text-decoration:none;margin-top:4px;transition:color .2s;"
+     onmouseover="this.style.color='var(--ink-2)'" onmouseout="this.style.color='var(--ink-3)'">
+    ← Back to website
+  </a>
 </div>
 
 <!-- ── Dashboard ─────────────────────────────────────────── -->
@@ -518,9 +604,21 @@
         <div class="h-sub">sajidmk.com · Real-time</div>
       </div>
     </div>
-    <div class="live-badge">
-      <span class="pulse"></span>
-      <span id="online-badge">— online now</span>
+    <div class="header-right">
+      <div class="live-badge">
+        <span class="pulse"></span>
+        <span id="online-badge">— online now</span>
+      </div>
+      <a href="https://sajidmk.com" class="nav-btn" title="Go to website homepage">
+        🏠 <span>Home</span>
+      </a>
+      <button class="nav-btn" id="gate-btn" title="Go back to gate page">
+        🔒 <span>Gate</span>
+      </button>
+      <button class="theme-toggle" id="theme-btn" title="Toggle light/dark mode">
+        <span id="theme-icon">☀️</span>
+        <span id="theme-label">Light</span>
+      </button>
     </div>
   </header>
 
@@ -630,17 +728,51 @@ const ADMIN_PASSWORD    = 'sajid';  // ← change this
 const GCC_COUNTRIES     = ['Qatar','UAE','Saudi Arabia','Kuwait','Bahrain','Oman'];
 
 // ============================================================
+// THEME
+// ============================================================
+(function() {
+  const saved = localStorage.getItem('dash-theme') || 'dark';
+  applyTheme(saved);
+})();
+
+function applyTheme(mode) {
+  document.documentElement.setAttribute('data-theme', mode);
+  localStorage.setItem('dash-theme', mode);
+  const icon  = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-label');
+  if (icon && label) {
+    icon.textContent  = mode === 'light' ? '🌙' : '☀️';
+    label.textContent = mode === 'light' ? 'Dark' : 'Light';
+  }
+}
+
+document.getElementById('theme-btn').addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+// ============================================================
 // AUTH
 // ============================================================
 const authInput = document.getElementById('auth-input');
 const authBtn   = document.getElementById('auth-btn');
 const authError = document.getElementById('auth-error');
 
+function showDashboard() {
+  document.getElementById('auth-overlay').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  initDashboard();
+}
+
+// ── Admin auto-bypass: already authenticated this session ──
+if (sessionStorage.getItem('dash-authed') === '1') {
+  showDashboard();
+}
+
 function tryAuth() {
   if (authInput.value === ADMIN_PASSWORD) {
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    initDashboard();
+    sessionStorage.setItem('dash-authed', '1');
+    showDashboard();
   } else {
     authError.style.display = 'block';
     authInput.value = '';
@@ -650,6 +782,15 @@ function tryAuth() {
 
 authBtn.addEventListener('click', tryAuth);
 authInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); });
+
+// ── Gate button: go back to auth overlay ──────────────────
+document.getElementById('gate-btn').addEventListener('click', () => {
+  sessionStorage.removeItem('dash-authed');
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('auth-overlay').style.display = 'flex';
+  authInput.value = '';
+  authError.style.display = 'none';
+});
 
 // ============================================================
 // DASHBOARD

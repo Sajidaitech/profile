@@ -199,11 +199,7 @@ const ANALYTICS_CONFIG = {
   // in the DOM when counter updates try to find them.
   // ============================================================
   function boot() {
-    // Step 1: inject the floating glassmorphism widget into the page
-    // (FIX #2 — was never called in the original code)
-    injectWidget();
-
-    // Step 2: update counters as soon as Supabase is available
+    // Step 1: update counters as soon as Supabase is available (widget removed)
     quickCountFetch();
 
     // Step 3: start full tracking engine
@@ -970,7 +966,10 @@ window.analyticsSetVisitorName = async function (name) {
   // Update in-memory session
   if (_session) _session.visitor_name = clean;
 
-  if (_db) {
+  // ── FIX: If _db isn't ready yet (Supabase still loading / geo still
+  // fetching), the visitor row may not even exist yet. Poll until _db and
+  // _session are both set, then do the update. Max wait: 10 s.
+  async function doUpdate() {
     var sid = getSessionId();
     var fp  = _fingerprint || getVisitorFingerprint();
 
@@ -985,6 +984,26 @@ window.analyticsSetVisitorName = async function (name) {
       .update({ visitor_name: clean })
       .eq('fingerprint', fp)
       .catch(function () {});
+
+    console.log('[Analytics] visitor_name updated ✓', clean);
+  }
+
+  if (_db) {
+    // Ready immediately — update now
+    await doUpdate();
+  } else {
+    // Not ready yet — poll every 200 ms for up to 10 s
+    var waited = 0;
+    var poll = setInterval(async function () {
+      waited += 200;
+      if (_db) {
+        clearInterval(poll);
+        await doUpdate();
+      } else if (waited >= 10000) {
+        clearInterval(poll);
+        console.warn('[Analytics] analyticsSetVisitorName: gave up waiting for _db after 10s');
+      }
+    }, 200);
   }
 };
 
