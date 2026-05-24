@@ -211,6 +211,28 @@
    RESET & BASE
 ================================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ════ GPU COMPOSITING — Ultra-smooth performance ════ */
+*, *::before, *::after {
+  will-change: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+/* Promote composited layers explicitly */
+.top-nav,
+.glass-card, .glass-card-deep,
+.hero-glass-card, .hero-editorial-layout,
+.exp-card, .lge-card, .edu-card,
+.cert-card, .wh-card, .ach-item,
+.about-bio-col, .about-panel-col,
+.project-card, .museum-case,
+.gate-glass-card, .weather-bar,
+.scroll-progress {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   font-family: var(--ff-sans);
@@ -298,11 +320,9 @@ body::before {
       #eae6df 50%, #e7e3db 68%, #e4e0d8 100%
     );
   will-change: transform;
-  animation: ambientShift 44s ease-in-out infinite;
+  
 }
-@keyframes ambientShift {
-  0%,100% { opacity: 1; }
-  40%     { opacity: .97; }
+40%     { opacity: .97; }
   70%     { opacity: .99; }
 }
 body.gate-active::before { animation-play-state: paused; }
@@ -312,43 +332,11 @@ body::after {
   content: '';
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    /* ── PRIMARY conic ray — top-right origin, 12–58° cone ── */
-    conic-gradient(
-      from 220deg at 88% -8%,
-      transparent 0deg, transparent 12deg,
-      rgba(218,183,120,.04) 18deg, rgba(222,186,124,.10) 26deg,
-      rgba(218,182,120,.12) 34deg, rgba(214,178,116,.08) 42deg,
-      rgba(208,172,110,.03) 50deg, transparent 58deg, transparent 360deg
-    ),
-    /* ── SECONDARY conic ray — softer parallel, depth ── */
-    conic-gradient(
-      from 215deg at 110% 5%,
-      transparent 0deg, transparent 10deg,
-      rgba(215,180,116,.03) 17deg, rgba(218,183,118,.06) 25deg,
-      rgba(215,180,114,.07) 33deg, rgba(210,175,110,.04) 40deg,
-      transparent 48deg, transparent 360deg
-    ),
-    /* ── Warm light pool — diffuse accumulation mid-right ── */
-    radial-gradient(ellipse 52% 68% at 78% 42%,
-      rgba(215,178,112,.05) 0%, rgba(212,175,108,.024) 40%, transparent 70%
-    ),
-    /* ── Atmosphere haze ── */
-    radial-gradient(ellipse 80% 50% at 65% 30%,
-      rgba(205,168,102,.018) 0%, transparent 60%
-    ),
-    /* ── Content-section dark pools — glass card lift zones ── */
-    /* Hero section — slight depth behind main card */
-    radial-gradient(ellipse 70% 45% at 50% 22%,
-      rgba(60,52,42,0.09) 0%, rgba(60,52,42,0.04) 55%, transparent 80%
-    ),
-    /* Mid-page content band — central reading zone */
-    radial-gradient(ellipse 90% 35% at 50% 52%,
-      rgba(55,48,38,0.08) 0%, rgba(55,48,38,0.03) 55%, transparent 78%
-    ),
-    /* Lower section pool */
-    radial-gradient(ellipse 75% 40% at 50% 80%,
-      rgba(58,50,40,0.09) 0%, rgba(58,50,40,0.04) 50%, transparent 76%
-    );
+    /* Simplified light layer — performance optimized */
+    radial-gradient(ellipse 80% 60% at 75% 30%, rgba(215,178,112,.04) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 45% at 50% 22%, rgba(60,52,42,0.06) 0%, transparent 80%),
+    radial-gradient(ellipse 90% 35% at 50% 52%, rgba(55,48,38,0.05) 0%, transparent 78%),
+    radial-gradient(ellipse 75% 40% at 50% 80%, rgba(58,50,40,0.06) 0%, transparent 76%);
   mix-blend-mode: multiply;
   opacity: 1;
 }
@@ -425,7 +413,7 @@ body::after {
   background-size: 200% 100%;
   animation: shimmerProg 2.5s linear infinite;
   z-index: 1100; pointer-events: none;
-  box-shadow: 0 0 8px rgba(0,122,255,.40);
+  
   will-change: width;
 }
 @keyframes shimmerProg {
@@ -685,8 +673,8 @@ body.gate-active { overflow: hidden !important; }
     ) !important;
 
   /* Realistic blur stack */
-  backdrop-filter: blur(3px) !important;
-  -webkit-backdrop-filter: blur(3px) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
 
   /* Edge lighting — top bright highlight, sides soft, bottom subtle */
   border: none !important;
@@ -718,10 +706,7 @@ body.gate-active { overflow: hidden !important; }
   z-index: 800 !important;
   overflow: visible !important;
   animation: navDrop .70s var(--ease-out) .05s both !important;
-  transition:
-    box-shadow .40s ease,
-    background .40s ease,
-    transform .40s var(--ease-out) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   will-change: transform, box-shadow !important;
 }
 
@@ -968,7 +953,7 @@ body.gate-active { overflow: hidden !important; }
     0 10px 24px rgba(8,12,40,.11),
     0 18px 40px rgba(8,12,40,.08),
     /* Glow bloom on hover */
-    0 0 24px rgba(200,215,255,.30);
+    
 }
 .nav-resume-btn:active { transform: translateY(0px) scale(.98); }
 
@@ -1008,7 +993,7 @@ body.gate-active { overflow: hidden !important; }
   display: block; width: 100%; height: 1.5px;
   background: linear-gradient(90deg, var(--ink-2), var(--ink));
   border-radius: 2px;
-  transition: all .22s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
   transform-origin: center;
 }
 .nav-mob-toggle.active .nmt-bar-1 { transform: translateY(6px) rotate(45deg); }
@@ -1028,8 +1013,8 @@ body.gate-active { overflow: hidden !important; }
     rgba(255,255,255,.02) 50%,
     rgba(255,255,255,.02) 100%
   );
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.28),
@@ -1176,8 +1161,8 @@ body.gate-active { overflow: hidden !important; }
       rgba(255,255,255,.05) 100%
     );
 
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 
   border-radius: 28px;
 
@@ -1783,8 +1768,8 @@ body.gate-active { overflow: hidden !important; }
     rgba(255,255,255,.46) 70%,
     rgba(255,255,255,.05) 100%
   );
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.18),
@@ -1989,7 +1974,7 @@ body.gate-active { overflow: hidden !important; }
   padding: 7px 16px; border-radius: var(--r-lg);
   font-size: 12px; font-weight: 500; color: var(--ink-2);
   background: transparent; cursor: pointer;
-  transition: all .18s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .exp-tab.active {
   background: rgba(255,255,255,.02);
@@ -2054,7 +2039,7 @@ body.gate-active { overflow: hidden !important; }
    /* border-top removed */
   font-size: 11px; font-weight: 600;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.28), var(--sh-xs);
-  transition: all .16s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .btn-sm-gold:hover { background: rgba(255,255,255,.01); transform: translateY(-1px); box-shadow: var(--sh-sm); }
 
@@ -2087,7 +2072,7 @@ body.gate-active { overflow: hidden !important; }
   padding: 3px 8px; border-radius: var(--r-pill);
   background: rgba(255,255,255,.01); 
   font-size: 10.5px; color: var(--ink-2); box-shadow: var(--sh-xs);
-  transition: all .14s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .ac-skill:hover { background: rgba(255,255,255,.01); color: var(--ink); transform: translateY(-1px); }
 
@@ -2104,7 +2089,7 @@ body.gate-active { overflow: hidden !important; }
 .edu-tab {
   padding: 7px 16px; border-radius: var(--r-lg);
   font-size: 12px; font-weight: 500; color: var(--ink-2);
-  background: transparent; cursor: pointer; transition: all .18s ease;
+  background: transparent; cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .edu-tab.active {
   background: rgba(255,255,255,.02);
@@ -2176,7 +2161,7 @@ body.gate-active { overflow: hidden !important; }
   padding: 3px 9px; border-radius: var(--r-pill);
   background: rgba(255,255,255,.02); 
   font-size: 10px; font-weight: 600; color: var(--ink); box-shadow: var(--sh-xs);
-  transition: all .14s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .rec-linkedin-btn:hover { background: rgba(255,255,255,.01); transform: translateY(-1px); }
 
@@ -2243,7 +2228,7 @@ body.gate-active { overflow: hidden !important; }
   background: rgba(0,102,255,.10);
   color: #0050c8; font-size: 11px; font-weight: 700;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.28);
-  transition: all .16s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .chc-verify-btn:hover { background: rgba(0,102,255,.16); transform: translateY(-1px); }
 .chc-seal { position: absolute; top: 14px; right: 18px; font-size: 28px; opacity: .15; }
@@ -2282,7 +2267,7 @@ body.gate-active { overflow: hidden !important; }
   padding: 4px 10px; border-radius: var(--r-pill);
   border: none; font-size: 10.5px; font-weight: 600;
   background: rgba(255,255,255,.01); box-shadow: var(--sh-xs);
-  transition: all .14s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .cc-cert-btn:hover { background: rgba(255,255,255,.01); transform: translateY(-1px); box-shadow: var(--sh-sm); }
 .cc-in-progress { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; color: var(--ink-3); }
@@ -2575,7 +2560,7 @@ body.gate-active { overflow: hidden !important; }
 .lge-tab-pill {
   padding: 7px 16px; border-radius: var(--r-lg);
   font-size: 12px; font-weight: 500; color: var(--ink-2);
-  background: transparent; cursor: pointer; transition: all .18s ease;
+  background: transparent; cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
   display: flex; align-items: center; gap: 5px;
 }
 .lge-tab-pill.lge-tab-active {
@@ -2643,7 +2628,7 @@ body.gate-active { overflow: hidden !important; }
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 12px; border-radius: var(--r-pill); border: 1px solid;
   font-size: 11px; font-weight: 600; background: rgba(255,255,255,.01);
-  box-shadow: var(--sh-xs); transition: all .16s ease;
+  box-shadow: var(--sh-xs); transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .lge-action-btn:hover { background: rgba(255,255,255,.01); transform: translateY(-1px); box-shadow: var(--sh-sm); }
 
@@ -2689,7 +2674,7 @@ body.gate-active { overflow: hidden !important; }
 .pc-impact { font-size: 12px; color: var(--ink-2); line-height: 1.62; margin-bottom: 8px; padding: 7px 10px; background: rgba(0,102,255,.04); border-left: 2px solid rgba(0,102,255,.18); border-radius: 0 var(--r-sm) var(--r-sm) 0; }
 .pc-tools { display: flex; flex-wrap: wrap; gap: 3px; }
 .pc-tool-badge { padding: 2px 7px; border-radius: var(--r-pill); background: rgba(255,255,255,.01);  font-size: 9.5px; color: var(--ink-2); }
-.pc-link { display: flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 11px; font-weight: 600; color: var(--ink-2); padding: 5px 10px; border-radius: var(--r-lg); background: rgba(255,255,255,.01);  box-shadow: var(--sh-xs); transition: all .14s ease; }
+.pc-link { display: flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 11px; font-weight: 600; color: var(--ink-2); padding: 5px 10px; border-radius: var(--r-lg); background: rgba(255,255,255,.01);  box-shadow: var(--sh-xs); transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease; }
 .pc-link:hover { background: rgba(255,255,255,.01); }
 
 @media (max-width: 768px) {
@@ -2714,7 +2699,7 @@ body.gate-active { overflow: hidden !important; }
   padding: 3px 9px; border-radius: var(--r-pill);
   background: rgba(255,255,255,.02); 
   font-size: 10.5px; color: var(--ink-2); box-shadow: var(--sh-xs);
-  transition: all .14s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .tool-chip:hover { background: rgba(255,255,255,.01); color: var(--ink); transform: translateY(-1px); }
 .tool-chip i { font-size: 9.5px; color: var(--tool-color, var(--accent)); }
@@ -3552,8 +3537,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     rgba(255,255,255,.02) 70%,
     rgba(255,255,255,.02) 100%
   );
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.28),
@@ -3708,8 +3693,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 ================================================================ */
 .glass-card-deep {
   background: rgba(255,255,255,.01);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   
   border-radius: var(--r-xl);
   box-shadow:
@@ -4639,7 +4624,7 @@ a, button, [role="button"] {
   position: absolute;
   width: 140px; height: 140px;
   border-radius: 50%;
-  filter: blur(50px);
+  filter: blur(2px);
   opacity: .18;
   top: -30px; right: -30px;
   pointer-events: none;
@@ -4915,7 +4900,7 @@ a, button, [role="button"] {
   position: absolute;
   width: 120px; height: 120px;
   border-radius: 50%;
-  filter: blur(45px);
+  filter: blur(2px);
   opacity: .15;
   top: -20px; right: -20px;
   pointer-events: none;
@@ -6647,7 +6632,7 @@ a[href="#fieldwork"].nav-link::before { content: none; }
     inset 0 1.5px 0 rgba(255,255,255,.28),
     0 1px 3px rgba(0,60,180,.10),
     0 4px 14px rgba(0,60,180,.10);
-  transition: all var(--t-fast) var(--ease-spring);
+  transition: transform 0.16s var(--ease-spring), opacity 0.16s ease;
   will-change: transform;
 }
 .btn-primary:hover {
@@ -6679,7 +6664,7 @@ a[href="#fieldwork"].nav-link::before { content: none; }
     inset 0 1px 0 rgba(255,255,255,.28),
     0 1px 3px rgba(80,90,140,.08),
     0 4px 12px rgba(60,70,120,.07);
-  transition: all var(--t-fast) var(--ease-spring);
+  transition: transform 0.16s var(--ease-spring), opacity 0.16s ease;
   will-change: transform;
 }
 .btn-ghost:hover {
@@ -8155,10 +8140,10 @@ strong { color: #06080f; }
 ──────────────────────────────────────────────────────────────── */
 :root {
   /* ── Blur budget ──────────────────────────────────────────────
-     Rule: never exceed blur(20px) for cards. Nav pill gets 28px
+     Rule: never exceed blur(2px) for cards. Nav pill gets 28px
      (fixed position, compositor-promoted). Body bg gets none.
      backdrop-filter is expensive; saturate() adds negligible cost.  */
-  --bf-xs:  blur(8px)  saturate(150%);
+  --bf-xs:  blur(2px) saturate(1.1);
   --bf-sm:  blur(2px) saturate(110%);
   --bf-md:  blur(2px) saturate(110%) brightness(1.00);
   --bf-lg:  blur(2px) saturate(110%) brightness(1.00);
@@ -8653,7 +8638,7 @@ body {
   --blur-glass-sm:  blur(2px);
   --blur-glass-md:  blur(2px);
   --blur-glass-lg:  blur(2px);
-  --blur-glass-xl:  blur(3px);
+  --blur-glass-xl: blur(2px);
 
   /* Floating shadow system — layered depth */
   --sh-float-sm:
@@ -9106,7 +9091,7 @@ body {
     0 3px 8px rgba(8,14,50,.06),
     0 6px 14px rgba(8,14,50,.05);
 
-  transition: all .16s var(--ease-out);
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
   position: relative; overflow: hidden;
 }
 
@@ -9430,7 +9415,7 @@ body {
     inset 0 1px 0 rgba(255,255,255,.28),
     0 1px 4px rgba(8,14,50,.06),
     0 3px 8px rgba(8,14,50,.05);
-  transition: all .16s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 .lge-proj-chip:hover {
   background: rgba(255,255,255,.02);
@@ -9512,7 +9497,7 @@ body {
   --blur-card:  blur(2px);
   --blur-pill:  blur(2px);
   --blur-nav:   blur(2px) saturate(110%) brightness(1.00);
-  --blur-hero:  blur(3px) saturate(110%) brightness(1.00);
+  --blur-hero: blur(2px);
   --blur-heavy: blur(2px);
 
   /* ── Glass alpha: calibrated for background visibility.
@@ -10257,7 +10242,7 @@ body {
 .stagger-child, .bento-item, .ach-item, .lang-item {
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity .40s var(--ease-out), transform .40s var(--ease-out);
+  transition: opacity .40s var(--ease-out), transform 0.2s ease;
 }
 .stagger-visible {
   opacity: 1 !important;
@@ -10367,7 +10352,7 @@ body::before { animation: bgBreathe 44s ease-in-out infinite !important; }
     --blur-card:  blur(2px);
     --blur-pill:  blur(2px);
     --blur-nav:   blur(2px) saturate(110%) brightness(1.00);
-    --blur-hero:  blur(3px) saturate(110%) brightness(1.00);
+    --blur-hero: blur(2px);
     --blur-heavy: blur(2px);
   }
 
@@ -10439,16 +10424,16 @@ body::before { animation: bgBreathe 44s ease-in-out infinite !important; }
    § 14  SUPPORTS FALLBACK — No backdrop-filter
 ================================================================ */
 @supports not (backdrop-filter: blur(1px)) {
-  .top-nav                                { background: rgba(255,255,255,.12) !important; }
-  .hero-glass-card, .hero-editorial-layout{ background: rgba(255,255,255,.12) !important; }
+  .top-nav                                { background: rgba(255,255,255,0.06) !important; }
+  .hero-glass-card, .hero-editorial-layout{ background: rgba(255,255,255,0.06) !important; }
   .about-section .about-bio-col,
-  .about-section .about-panel-col         { background: rgba(255,255,255,.68) !important; }
-  .arsenal-category                       { background: rgba(255,255,255,.68) !important; }
-  .exp-card, .lge-card                    { background: rgba(255,255,255,.68) !important; }
+  .about-section .about-panel-col         { background: rgba(255,255,255,0.08) !important; }
+  .arsenal-category                       { background: rgba(255,255,255,0.08) !important; }
+  .exp-card, .lge-card                    { background: rgba(255,255,255,0.08) !important; }
   .ac-skill, .lge-tag, .exp-meta-chip,
-  .exp-stat-chip, .lge-stat-chip, .p-chip { background: rgba(255,255,255,.12) !important; }
-  .about-stats-row, .ach-item             { background: rgba(255,255,255,.68) !important; }
-  .exp-tabs-wrap, .lge-tabs-nav           { background: rgba(255,255,255,.68) !important; }
+  .exp-stat-chip, .lge-stat-chip, .p-chip { background: rgba(255,255,255,0.06) !important; }
+  .about-stats-row, .ach-item             { background: rgba(255,255,255,0.08) !important; }
+  .exp-tabs-wrap, .lge-tabs-nav           { background: rgba(255,255,255,0.08) !important; }
 }
 
 /* ── End final polish v7.0 ───────────────────────────────────── */
@@ -11141,12 +11126,12 @@ body::before { animation: bgBreathe 44s ease-in-out infinite !important; }
   .hero-glass-card, .hero-editorial-layout { background: rgba(255,255,255,.06) !important; }
   .about-section .about-bio-col,
   .about-section .about-panel-col          { background: rgba(255,255,255,.06) !important; }
-  .arsenal-category                        { background: rgba(255,255,255,.12) !important; }
-  .exp-card, .lge-card                     { background: rgba(255,255,255,.12) !important; }
+  .arsenal-category                        { background: rgba(255,255,255,0.06) !important; }
+  .exp-card, .lge-card                     { background: rgba(255,255,255,0.06) !important; }
   .ac-skill, .lge-tag, .exp-meta-chip,
   .exp-stat-chip, .lge-stat-chip, .p-chip  { background: rgba(255,255,255,.06) !important; }
-  .about-stats-row, .ach-item              { background: rgba(255,255,255,.12) !important; }
-  .exp-tabs-wrap, .lge-tabs-nav            { background: rgba(255,255,255,.12) !important; }
+  .about-stats-row, .ach-item              { background: rgba(255,255,255,0.06) !important; }
+  .exp-tabs-wrap, .lge-tabs-nav            { background: rgba(255,255,255,0.06) !important; }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -11226,7 +11211,7 @@ body::before { animation: bgBreathe 44s ease-in-out infinite !important; }
   .hero-editorial-layout, .arsenal-category,
   .about-section .about-bio-col,
   .about-section .about-panel-col {
-    background: rgba(255,255,255,.18) !important;
+    background: rgba(255,255,255,0.06) !important;
     backdrop-filter: none !important;
     box-shadow: 0 1px 4px rgba(0,0,0,.08) !important;
   }
@@ -11959,7 +11944,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
 .nav-link.active {
   color: #0d0f14 !important;
   font-weight: 600 !important;
-  background: rgba(255,255,255,.55) !important;
+  background: rgba(255,255,255,0.06) !important;
   transform: translateY(-1.5px) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.80),
@@ -12013,7 +11998,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
 
 /* Mobile hamburger */
 .nav-mob-toggle {
-  background: rgba(255,255,255,.50) !important;
+  background: rgba(255,255,255,0.05) !important;
   backdrop-filter: none !important;
   border: none !important;
   box-shadow:
@@ -12038,7 +12023,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
   text-shadow: none !important;
 }
 .nav-mob-link:hover {
-  background: rgba(255,255,255,.55) !important;
+  background: rgba(255,255,255,0.06) !important;
   color: #0d0f14 !important;
   font-weight: 600 !important;
 }
@@ -12106,7 +12091,7 @@ h1 {
   font-weight: 600 !important;
   letter-spacing: 0.2px !important;
   color: #1e2430 !important;
-  background: rgba(255,255,255,.42) !important;
+  background: rgba(255,255,255,0.04) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.70),
     0 1px 4px rgba(0,0,0,.06) !important;
@@ -12120,7 +12105,7 @@ h1 {
 .exp-tabs-wrap,
 .lge-tabs-nav {
   border: none !important;
-  background: rgba(255,255,255,.22) !important;
+  background: rgba(255,255,255,0.05) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.50),
     0 2px 8px rgba(0,0,0,.06) !important;
@@ -12204,7 +12189,7 @@ h1 {
 
 /* ── Arsenal category cards ── */
 .arsenal-category {
-  background: rgba(255,255,255,.52) !important;
+  background: rgba(255,255,255,0.05) !important;
   backdrop-filter: blur(2px) !important;
   -webkit-backdrop-filter: blur(2px) !important;
   border: none !important;
@@ -12377,7 +12362,7 @@ h1 {
 
 /* Contact items — proper card lift */
 .contact-item {
-  background: rgba(255,255,255,.48) !important;
+  background: rgba(255,255,255,0.05) !important;
   border: none !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.75),
@@ -12386,7 +12371,7 @@ h1 {
   backdrop-filter: none !important;
 }
 .contact-item:hover {
-  background: rgba(255,255,255,.60) !important;
+  background: rgba(255,255,255,0.06) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.80),
     0 2px 8px rgba(0,0,0,.08),
@@ -12417,7 +12402,7 @@ h1 {
 
 /* Social panel */
 .social-panel {
-  background: rgba(255,255,255,.40) !important;
+  background: rgba(255,255,255,0.04) !important;
   border: none !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.72),
@@ -12428,7 +12413,7 @@ h1 {
 
 /* Social buttons */
 .social-btn {
-  background: rgba(255,255,255,.50) !important;
+  background: rgba(255,255,255,0.05) !important;
   border: none !important;
   border-radius: 12px !important;
   box-shadow:
@@ -12437,7 +12422,7 @@ h1 {
   backdrop-filter: none !important;
 }
 .social-btn:hover {
-  background: rgba(255,255,255,.68) !important;
+  background: rgba(255,255,255,0.08) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.80),
     0 3px 10px rgba(0,0,0,.09) !important;
@@ -12654,7 +12639,7 @@ h1 {
 /* ══ 2. MUSEUM-CASE & PROJECT CARDS — make visible on warm bg ══ */
 .museum-case,
 .project-card {
-  background: rgba(255,255,255,.52) !important;
+  background: rgba(255,255,255,0.05) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   border: none !important;
@@ -12853,8 +12838,8 @@ h1 {
 .exp-tabs-wrap,
 .lge-tabs-nav,
 .kpi-block {
-  backdrop-filter: blur(1.5px) saturate(1.4) !important;
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.4) !important;
+  backdrop-filter: blur(1.5px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(1.5px) saturate(1.2) !important;
 }
 
 /* Pills, chips, nav, buttons — lighter blur, same restoration */
@@ -12875,8 +12860,8 @@ h1 {
 
 /* Nav — keep slightly denser */
 .top-nav {
-  backdrop-filter: blur(10px) saturate(1.6) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(1.6) !important;
+  backdrop-filter: blur(2px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(1.2) !important;
 }
 
 
@@ -13122,8 +13107,8 @@ section,
 [class*="-badge"]:not(.ac-icon-badge):not(.ac-badge-blue):not(.ac-badge-sky):not(.ac-badge-indigo) {
   /* Liquid glass fill — just visible against warm wall */
   background: rgba(255,255,255,.072) !important;
-  backdrop-filter: blur(1.5px) saturate(1.5) !important;
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.5) !important;
+  backdrop-filter: blur(1.5px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(1.5px) saturate(1.2) !important;
   border: none !important;
   outline: none !important;
 
@@ -13188,8 +13173,8 @@ section,
 .contact-btn,
 [class*="-btn"]:not(.rpc-download-btn):not(.pdf-modal-btn-download):not(.gate-submit-btn):not(.float-whatsapp) {
   background: rgba(255,255,255,.07) !important;
-  backdrop-filter: blur(1.5px) saturate(1.5) !important;
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.5) !important;
+  backdrop-filter: blur(1.5px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(1.5px) saturate(1.2) !important;
   border: none !important;
   outline: none !important;
 
@@ -13280,7 +13265,7 @@ section,
 .lge-tabs-nav .tab-btn.active,
 [class*="-tabs-nav"] button.active,
 [class*="-tabs-nav"] .tab-active {
-  background: rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,0.04) !important;
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.52),
     inset 0 -1px 0 rgba(0,0,0,.05),
@@ -13399,93 +13384,17 @@ body::before {
       #e2ded6 100%
     ) !important;
   will-change: transform;
-  animation: ambientShift 44s ease-in-out infinite;
+  
 }
 
 /* ── L2: Volumetric light cones + glass-lift depth pools ─────── */
 body::after {
   background:
-    /* ── PRIMARY conic ray — sharp top-right origin ── */
-    conic-gradient(
-      from 222deg at 92% -6%,
-      transparent    0deg,
-      transparent    10deg,
-      rgba(222,188,124, .030)  16deg,
-      rgba(228,194,128, .085)  24deg,
-      rgba(232,198,130, .115)  32deg,
-      rgba(228,194,127, .090)  40deg,
-      rgba(222,188,122, .045)  48deg,
-      rgba(215,181,116, .015)  56deg,
-      transparent    64deg,
-      transparent    360deg
-    ),
-    /* ── SECONDARY cone — broader, diffuse volume ── */
-    conic-gradient(
-      from 216deg at 110% 2%,
-      transparent    0deg,
-      transparent    8deg,
-      rgba(218,184,118, .020)  14deg,
-      rgba(222,188,122, .055)  22deg,
-      rgba(224,190,123, .072)  30deg,
-      rgba(220,186,120, .042)  38deg,
-      rgba(215,181,116, .015)  46deg,
-      transparent    54deg,
-      transparent    360deg
-    ),
-    /* ── TERTIARY ambient ray — upper-right bloom fill ── */
-    conic-gradient(
-      from 208deg at 85% -15%,
-      transparent    0deg,
-      transparent    6deg,
-      rgba(215,180,112, .015)  12deg,
-      rgba(218,182,114, .032)  20deg,
-      rgba(215,180,112, .020)  28deg,
-      transparent    36deg,
-      transparent    360deg
-    ),
-    /* ── Warm light accumulation — diffuse right-centre zone ── */
-    radial-gradient(ellipse 55% 70% at 80% 38%,
-      rgba(218,182,114, .055)  0%,
-      rgba(214,178,110, .026)  40%,
-      transparent               72%
-    ),
-    /* ── Secondary warm bloom — upper-right, soft ── */
-    radial-gradient(ellipse 38% 52% at 92% 18%,
-      rgba(224,188,118, .040)  0%,
-      rgba(218,183,112, .018)  50%,
-      transparent               75%
-    ),
-    /* ── Atmosphere haze — mid-right ── */
-    radial-gradient(ellipse 80% 55% at 68% 28%,
-      rgba(208,172,106, .022)  0%,
-      transparent               62%
-    ),
-    /* ═══ CONTENT DEPTH POOLS — localized wall darkening ════ */
-    /* Each pool sits behind a content zone. Glass floats above it. */
-    /* Hero zone — upper-center */
-    radial-gradient(ellipse 72% 48% at 50% 20%,
-      rgba(50,44,36, .110)   0%,
-      rgba(50,44,36, .055)   50%,
-      transparent              80%
-    ),
-    /* Upper-mid content band */
-    radial-gradient(ellipse 85% 32% at 50% 42%,
-      rgba(48,42,34, .090)   0%,
-      rgba(48,42,34, .040)   52%,
-      transparent              76%
-    ),
-    /* Central section pool */
-    radial-gradient(ellipse 90% 38% at 50% 62%,
-      rgba(46,40,32, .095)   0%,
-      rgba(46,40,32, .040)   54%,
-      transparent              78%
-    ),
-    /* Lower content pool */
-    radial-gradient(ellipse 78% 42% at 50% 82%,
-      rgba(50,44,36, .105)   0%,
-      rgba(50,44,36, .048)   50%,
-      transparent              76%
-    ) !important;
+    /* Simplified light layer — performance optimized */
+    radial-gradient(ellipse 80% 60% at 75% 30%, rgba(215,178,112,.04) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 45% at 50% 22%, rgba(60,52,42,0.06) 0%, transparent 80%),
+    radial-gradient(ellipse 90% 35% at 50% 52%, rgba(55,48,38,0.05) 0%, transparent 78%),
+    radial-gradient(ellipse 75% 40% at 50% 80%, rgba(58,50,40,0.06) 0%, transparent 76%);
   mix-blend-mode: multiply;
   opacity: 1;
 }
@@ -14028,7 +13937,7 @@ body::before {
   z-index: 0 !important;
   pointer-events: none !important;
   will-change: transform !important;
-  animation: ambientShift 44s ease-in-out infinite !important;
+  
   background:
     linear-gradient(128deg,
       transparent              0%,  transparent             14%,
@@ -14228,9 +14137,7 @@ body::after {
   ) !important;
 }
 
-@keyframes ambientShift {
-  0%,100% { opacity: 1.000; }
-  38%     { opacity: 0.972; }
+38%     { opacity: 0.972; }
   62%     { opacity: 0.985; }
   80%     { opacity: 0.978; }
 }
@@ -14249,24 +14156,24 @@ body::after {
 .about-stats-row, .ach-item, .exp-tabs-wrap,
 .lge-tabs-nav, .kpi-block {
   background: rgba(255,255,255,.038) !important;
-  backdrop-filter: blur(1.5px) saturate(1.45) !important;
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.45) !important;
+  backdrop-filter: blur(1.5px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(1.5px) saturate(1.2) !important;
   border: none !important;
 }
 
 /* ── Hero: apex clarity ──────────────────────────────────────── */
 .hero-glass-card, .hero-editorial-layout {
   background: rgba(255,255,255,.042) !important;
-  backdrop-filter: blur(1.5px) saturate(1.5) !important;
-  -webkit-backdrop-filter: blur(1.5px) saturate(1.5) !important;
+  backdrop-filter: blur(1.5px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(1.5px) saturate(1.2) !important;
   border: none !important;
 }
 
 /* ── Nav: functional blur ────────────────────────────────────── */
 .top-nav {
   background: rgba(255,255,255,.048) !important;
-  backdrop-filter: blur(12px) saturate(1.6) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(1.6) !important;
+  backdrop-filter: blur(2px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(1.2) !important;
   border: none !important;
 }
 
@@ -14321,9 +14228,7 @@ body::after {
     inset 0 -0.5px 0 rgba(0,0,0,.04),
     0 0 0 0.5px rgba(0,0,0,.09),
     0 4px 10px rgba(0,0,0,.09),
-    0 12px 28px rgba(0,0,0,.10),
-    0 28px 50px rgba(0,0,0,.07),
-    0 52px 78px rgba(0,0,0,.04) !important;
+    0 14px 28px rgba(0,0,0,.07) !important;
 }
 
 /* Z3: panels, arsenal, kpi */
@@ -14334,10 +14239,8 @@ body::after {
     inset 0 1.5px 0 rgba(255,255,255,.30),
     inset 0 -0.5px 0 rgba(0,0,0,.04),
     0 0 0 0.5px rgba(0,0,0,.09),
-    0 5px 13px rgba(0,0,0,.09),
-    0 16px 34px rgba(0,0,0,.10),
-    0 34px 58px rgba(0,0,0,.07),
-    0 58px 86px rgba(0,0,0,.04) !important;
+    0 4px 12px rgba(0,0,0,.09),
+    0 14px 30px rgba(0,0,0,.07) !important;
 }
 
 /* Z4: editorial layout */
@@ -14346,11 +14249,8 @@ body::after {
     inset 0 2px 0 rgba(255,255,255,.36),
     inset 0 -1px 0 rgba(0,0,0,.04),
     0 0 0 0.5px rgba(0,0,0,.10),
-    0 8px 20px rgba(0,0,0,.10),
-    0 22px 46px rgba(0,0,0,.12),
-    0 46px 78px rgba(0,0,0,.08),
-    0 80px 118px rgba(0,0,0,.05),
-    0 118px 160px rgba(0,0,0,.03) !important;
+    0 6px 18px rgba(0,0,0,.10),
+    0 20px 42px rgba(0,0,0,.08) !important;
 }
 
 /* Z5: hero glass card — apex */
@@ -14359,11 +14259,8 @@ body::after {
     inset 0 2px 0 rgba(255,255,255,.42),
     inset 0 -1px 0 rgba(0,0,0,.05),
     0 0 0 0.5px rgba(0,0,0,.10),
-    0 12px 28px rgba(0,0,0,.11),
-    0 28px 58px rgba(0,0,0,.13),
-    0 58px 96px rgba(0,0,0,.09),
-    0 96px 144px rgba(0,0,0,.06),
-    0 144px 196px rgba(0,0,0,.03) !important;
+    0 8px 24px rgba(0,0,0,.12),
+    0 24px 48px rgba(0,0,0,.08) !important;
 }
 
 /* Nav */
@@ -14373,9 +14270,7 @@ body::after {
     inset 0 -1px 0 rgba(0,0,0,.04),
     0 0 0 0.5px rgba(0,0,0,.08),
     0 4px 14px rgba(0,0,0,.10),
-    0 14px 34px rgba(0,0,0,.09),
-    0 30px 58px rgba(0,0,0,.06),
-    0 54px 84px rgba(0,0,0,.04) !important;
+    0 14px 32px rgba(0,0,0,.07) !important;
 }
 
 /* Pills */
@@ -14461,3 +14356,1263 @@ p, span, a, li, td, th, label, small,
 }
 
 /* ── End Final Premium Polish v10.0 ── */
+
+
+/* ════════════════════════════════════════════════════════════════
+   LIQUID GLASS OVERRIDE v6.0
+   Navbar + All Cards — Apple Vision Pro Crystal Aesthetic
+   Applied last → wins all specificity battles.
+════════════════════════════════════════════════════════════════ */
+
+/* ── NAVBAR — Floating liquid glass strip ─────────────────────── */
+.top-nav,
+.top-nav.scrolled {
+  background: rgba(255,255,255,0.025) !important;
+  backdrop-filter: blur(2px) saturate(1.15) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(1.15) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+  outline: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -0.5px 0 rgba(255,255,255,0.04),
+    0 2px 8px  rgba(0,0,0,0.03),
+    0 4px 20px rgba(0,0,0,0.04) !important;
+  will-change: transform !important;
+  transform: translateX(-50%) translateZ(0) !important;
+}
+
+/* Kill all nav pseudo-element backgrounds that add opacity */
+.top-nav::before {
+  background: none !important;
+}
+.top-nav::after {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Nav link hover pill — ultra-light */
+.nav-link:hover,
+.nav-link.active {
+  background: rgba(255,255,255,0.06) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 1px 4px rgba(0,0,0,0.04) !important;
+}
+
+/* Resume button — gossamer glass */
+.nav-resume-btn {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 8px rgba(0,0,0,0.05) !important;
+}
+.nav-resume-btn:hover {
+  background: rgba(255,255,255,0.07) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 14px rgba(0,0,0,0.07) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Mobile hamburger — same language */
+.nav-mob-toggle {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 2px 6px rgba(0,0,0,0.04) !important;
+}
+
+/* Mobile drawer */
+.nav-mob-drawer {
+  background: rgba(245,243,240,0.55) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 8px 24px rgba(0,0,0,0.06) !important;
+}
+
+/* ── ALL CARDS — Crystal transparent glass ───────────────────── */
+.glass-card,
+.glass-card-deep,
+.museum-case,
+.project-card,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.ach-award-card,
+.wh-card,
+.rec-glass-card,
+.edu-rec-card,
+.arsenal-category,
+.about-bio-col,
+.about-panel-col,
+.about-stats-row,
+.ach-item,
+.hero-glass-card,
+.hero-editorial-layout,
+.exp-tabs-wrap,
+.lge-tabs-nav,
+.kpi-block,
+.about-stat,
+.hero-vchip {
+  background: rgba(255,255,255,0.03) !important;
+  backdrop-filter: blur(1.5px) !important;
+  -webkit-backdrop-filter: blur(1.5px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    inset 0 -0.5px 0 rgba(0,0,0,0.03),
+    0 0 0 0.5px rgba(0,0,0,0.05),
+    0 4px 12px rgba(0,0,0,0.04),
+    0 10px 30px rgba(0,0,0,0.05) !important;
+}
+
+/* Hero cards get a tiny extra glimmer — apex elevation */
+.hero-glass-card,
+.hero-editorial-layout {
+  background: rgba(255,255,255,0.035) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.18),
+    inset 0 -0.5px 0 rgba(0,0,0,0.03),
+    0 0 0 0.5px rgba(0,0,0,0.06),
+    0 6px 18px rgba(0,0,0,0.05),
+    0 18px 40px rgba(0,0,0,0.06) !important;
+}
+
+/* Card surface reflections — keep but even more subtle */
+.hero-glass-card::before,
+.hero-editorial-layout::before,
+.exp-card::before,
+.lge-card::before,
+.museum-case::before,
+.project-card::before,
+.about-bio-col::before,
+.about-panel-col::before,
+.arsenal-category::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.01) 35%,
+    transparent 60%
+  ) !important;
+  border-top: none !important;
+}
+
+/* Hover lift — keep airy */
+.glass-card:hover,
+.museum-case:hover        { transform: translateY(-4px) scale(1.005) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 0.5px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.07), 0 20px 40px rgba(0,0,0,0.06) !important; }
+.exp-card:hover,
+.lge-card:hover,
+.project-card:hover       { transform: translateY(-3px) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 0.5px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.07), 0 16px 36px rgba(0,0,0,0.06) !important; }
+
+/* Pills & chips — same crystal but even lighter */
+.p-chip,
+.ac-skill,
+.lge-tag,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip,
+.tool-chip,
+.mc-tool-tag,
+.pc-sector-tag,
+[class*="-chip"],
+[class*="-tag"]:not(.ac-badge-blue):not(.ac-badge-sky):not(.ac-badge-indigo) {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(1px) !important;
+  -webkit-backdrop-filter: blur(1px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.16),
+    0 1px 4px rgba(0,0,0,0.04) !important;
+}
+
+/* Buttons — slightly more defined than chips */
+.btn-primary,
+.btn-ghost,
+[class*="-btn"]:not(.rpc-download-btn):not(.pdf-modal-btn-download):not(.gate-submit-btn):not(.float-whatsapp) {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(1.5px) !important;
+  -webkit-backdrop-filter: blur(1.5px) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 2px 8px rgba(0,0,0,0.05),
+    0 6px 16px rgba(0,0,0,0.04) !important;
+}
+
+/* Logo icon backgrounds — keep white for logo readability */
+.exp-logo-img-wrap,
+.edu-icon-img {
+  background: rgba(255,255,255,0.72) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 2px 8px rgba(0,0,50,0.06), inset 0 1px 0 rgba(255,255,255,0.40) !important;
+}
+
+/* Weather bar */
+.weather-bar {
+  background: rgba(255,255,255,0.025) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 4px 16px rgba(0,0,0,0.04) !important;
+}
+
+/* Print / reduced-motion safety */
+@media print {
+  .top-nav, [class*="glass"], [class*="card"] {
+    background: rgba(255,255,255,0.9) !important;
+    backdrop-filter: none !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15) !important;
+  }
+}
+
+/* ── End Liquid Glass Override v6.0 ── */
+
+
+/* ════════════════════════════════════════════════════════════════
+   LIQUID GLASS CAPSULES v7.0
+   Buttons · Pills · Tags — Compact floating glass capsules
+   Mobile-First Optimization — Apple Vision Pro mobile experience
+════════════════════════════════════════════════════════════════ */
+
+/* ── UNIVERSAL PILL / CHIP RESET — compact crystal capsules ──── */
+.p-chip,
+.ac-skill,
+.lge-tag,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip,
+.tool-chip,
+.mc-tool-tag,
+.pc-sector-tag,
+.btn-sm-gold,
+.lge-proj-chip,
+[class*="-chip"]:not(.exp-stat-chip),
+[class*="-tag"]:not(.ac-badge-blue):not(.ac-badge-sky):not(.ac-badge-indigo) {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: blur(1px) !important;
+  -webkit-backdrop-filter: blur(1px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow:
+    inset 0 0.5px 0 rgba(255,255,255,0.16),
+    0 1px 3px rgba(0,0,0,0.04) !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  letter-spacing: 0.01em !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  will-change: transform !important;
+  white-space: nowrap !important;
+}
+
+/* Pill hover — float up cleanly */
+.p-chip:hover,
+.ac-skill:hover,
+.tool-chip:hover,
+.btn-sm-gold:hover,
+[class*="-chip"]:hover,
+[class*="-tag"]:not(.ac-badge-blue):not(.ac-badge-sky):not(.ac-badge-indigo):hover {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 0.5px 0 rgba(255,255,255,0.20),
+    0 3px 8px rgba(0,0,0,0.06) !important;
+}
+
+/* Exp stat chips — keep accent color but slim */
+.exp-stat-chip {
+  padding: 2px 9px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* Lge stat chips — keep vertical layout, slim padding */
+.lge-stat-chip {
+  padding: 4px 10px !important;
+  font-size: 10px !important;
+}
+.lge-stat-val { font-size: 12px !important; }
+.lge-stat-lbl { font-size: 8.5px !important; }
+
+/* ── HERO VCHIPS — compact floating stat pills ────────────────── */
+.hero-vchip {
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: blur(1.5px) !important;
+  -webkit-backdrop-filter: blur(1.5px) !important;
+  border: 1px solid rgba(255,255,255,0.09) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 8px rgba(0,0,0,0.05) !important;
+  padding: 6px 7px !important;
+  min-width: 46px !important;
+  border-radius: 12px !important;
+}
+.hero-vchip:hover {
+  transform: translateY(-2px) scale(1.04) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 14px rgba(0,0,0,0.07) !important;
+}
+.hvc-val  { font-size: 12px !important; }
+.hvc-lbl  { font-size: 7px !important; }
+
+/* ── BTN-PRIMARY — compact liquid glass capsule ───────────────── */
+.btn-primary {
+  padding: 7px 16px !important;
+  font-size: 11px !important;
+  letter-spacing: 0.05em !important;
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: blur(1px) !important;
+  -webkit-backdrop-filter: blur(1px) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -0.5px 0 rgba(0,0,0,0.03),
+    0 1px 0 rgba(180,200,240,0.20),
+    0 3px 10px rgba(0,60,180,0.07),
+    0 6px 18px rgba(0,0,0,0.05) !important;
+  transition: transform 0.18s var(--ease-spring), box-shadow 0.18s ease !important;
+}
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 1px 0 rgba(180,200,240,0.26),
+    0 5px 14px rgba(0,60,180,0.09),
+    0 10px 24px rgba(0,0,0,0.07) !important;
+}
+.btn-primary:active { transform: translateY(0) scale(0.98) !important; }
+
+/* ── BTN-GHOST — even lighter, gossamer ──────────────────────── */
+.btn-ghost {
+  padding: 7px 16px !important;
+  font-size: 11px !important;
+  background: rgba(255,255,255,0.03) !important;
+  backdrop-filter: blur(1px) !important;
+  -webkit-backdrop-filter: blur(1px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 8px rgba(0,0,0,0.04) !important;
+  transition: transform 0.18s var(--ease-spring), box-shadow 0.18s ease !important;
+}
+.btn-ghost:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(255,255,255,0.05) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 12px rgba(0,0,0,0.06) !important;
+}
+
+/* ── NAV-RESUME-BTN — slim pill ───────────────────────────────── */
+.nav-resume-btn {
+  padding: 6px 14px !important;
+  font-size: 11px !important;
+  gap: 5px !important;
+}
+
+/* ── EDU TAB ACTIVE — match glass language ────────────────────── */
+.edu-tab.active {
+  background: rgba(255,255,255,0.05) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.16),
+    0 2px 6px rgba(0,0,0,0.05) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE OPTIMIZATION — 768px and below
+   Ultra-smooth Apple Vision Pro mobile experience
+════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* ── CSS tokens — mobile scale ── */
+  :root {
+    --nav-h: 50px !important;
+    --nav-top: 7px !important;
+    --section-pad: clamp(18px, 4vw, 32px) !important;
+    --r-xl: 16px !important;
+    --r-2xl: 20px !important;
+    --blur-1: blur(1px) !important;
+    --blur-2: blur(1.5px) !important;
+    --blur-3: blur(1.5px) !important;
+  }
+
+  /* ── BODY — no horizontal overflow ── */
+  body { overflow-x: hidden !important; }
+
+  /* ── NAVBAR — thinner, lighter ── */
+  .top-nav {
+    width: calc(100vw - 16px) !important;
+    height: var(--nav-h) !important;
+    padding: 0 6px !important;
+    background: rgba(255,255,255,0.03) !important;
+    backdrop-filter: blur(1.5px) !important;
+    -webkit-backdrop-filter: blur(1.5px) !important;
+    box-shadow:
+      inset 0 0.5px 0 rgba(255,255,255,0.10),
+      0 2px 10px rgba(0,0,0,0.03) !important;
+  }
+  .nav-inner { padding: 0 10px !important; gap: 8px !important; }
+  .nav-logo-img-wrap img { width: 26px !important; height: 26px !important; }
+  .nav-logo-name { font-size: 11px !important; }
+  .nav-logo-role { font-size: 8px !important; }
+  .nav-logo-divider { height: 18px !important; }
+  .nav-links-center { display: none !important; }
+  .nav-mob-toggle { display: flex !important; }
+  .nav-resume-btn { display: none !important; }
+
+  /* ── MOBILE DRAWER ── */
+  .nav-mob-drawer {
+    left: 8px !important; right: 8px !important;
+    backdrop-filter: blur(1.5px) !important;
+    -webkit-backdrop-filter: blur(1.5px) !important;
+  }
+  .nav-mob-link { padding: 10px 12px !important; font-size: 13px !important; }
+
+  /* ── CARDS — full width, compact glass ── */
+  .glass-card,
+  .glass-card-deep,
+  .museum-case,
+  .project-card,
+  .exp-card,
+  .lge-card,
+  .edu-card,
+  .cert-card,
+  .cert-hero-card,
+  .ach-award-card,
+  .wh-card,
+  .rec-glass-card,
+  .edu-rec-card,
+  .arsenal-category,
+  .about-bio-col,
+  .about-panel-col,
+  .about-stats-row,
+  .ach-item,
+  .kpi-block,
+  .hero-glass-card,
+  .hero-editorial-layout {
+    backdrop-filter: blur(1px) !important;
+    -webkit-backdrop-filter: blur(1px) !important;
+    box-shadow:
+      inset 0 0.5px 0 rgba(255,255,255,0.12),
+      0 2px 8px rgba(0,0,0,0.04),
+      0 6px 18px rgba(0,0,0,0.04) !important;
+    border-radius: var(--r-xl) !important;
+  }
+
+  /* Card padding — compact */
+  .museum-case,
+  .project-card    { padding: 14px !important; }
+  .exp-card,
+  .lge-card,
+  .edu-card,
+  .cert-card,
+  .arsenal-category { padding: 14px !important; }
+  .about-bio-col,
+  .about-panel-col  { padding: 14px !important; }
+
+  /* ── GRIDS — single column ── */
+  .museum-grid,
+  #projectsGrid      { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .arsenal-grid      { grid-template-columns: 1fr !important; gap: 8px !important; }
+  #arsenalBento      { grid-template-columns: 1fr !important; }
+  .span-2            { grid-column: span 1 !important; }
+  .contact-cta-grid  { grid-template-columns: 1fr !important; gap: 8px !important; }
+  .why-hire-grid     { grid-template-columns: 1fr !important; gap: 8px !important; }
+
+  /* ── HERO SECTION ── */
+  .hero-editorial-layout {
+    flex-direction: column !important;
+    gap: 16px !important;
+    padding: 16px !important;
+  }
+  .hero-portrait-col { max-width: 140px !important; margin: 0 auto !important; }
+  .hero-portrait-col img { border-radius: 16px !important; }
+  .hero-vchip-row { gap: 6px !important; flex-wrap: wrap !important; justify-content: center !important; }
+  .hero-vchip {
+    padding: 5px 6px !important;
+    min-width: 40px !important;
+    border-radius: 10px !important;
+    flex-direction: row !important;
+    gap: 4px !important;
+  }
+  .hvc-connector { display: none !important; }
+  .hvc-val  { font-size: 11px !important; }
+  .hvc-lbl  { font-size: 7px !important; }
+
+  /* ── TYPOGRAPHY — tighten for mobile ── */
+  h1, .hero-name { font-size: clamp(22px, 6vw, 32px) !important; }
+  h2, .section-title { font-size: clamp(18px, 4.5vw, 26px) !important; }
+  h3 { font-size: clamp(14px, 3.5vw, 18px) !important; }
+  p, .exp-bullet, .lge-bullet-row { font-size: 12px !important; line-height: 1.6 !important; }
+
+  /* ── BUTTONS mobile — smaller, thumb-friendly ── */
+  .btn-primary,
+  .btn-ghost {
+    padding: 8px 16px !important;
+    font-size: 11px !important;
+    min-height: 36px !important;
+    touch-action: manipulation !important;
+  }
+
+  /* ── PILLS mobile — extra compact ── */
+  .p-chip,
+  .ac-skill,
+  .lge-tag,
+  .exp-meta-chip,
+  .tool-chip,
+  .mc-tool-tag,
+  .pc-sector-tag,
+  [class*="-chip"],
+  [class*="-tag"]:not(.ac-badge-blue):not(.ac-badge-sky):not(.ac-badge-indigo) {
+    padding: 2px 7px !important;
+    font-size: 9.5px !important;
+  }
+
+  /* ── SECTION SPACING ── */
+  .section { padding: clamp(16px, 3.5vw, 28px) 0 !important; }
+  .container, .inner-wrap { padding-left: 12px !important; padding-right: 12px !important; }
+
+  /* ── EXPERIENCE tabs ── */
+  .exp-tabs-wrap { flex-direction: column !important; gap: 2px !important; padding: 3px !important; }
+  .exp-tab, .edu-tab { padding: 8px 12px !important; font-size: 12px !important; border-radius: 10px !important; }
+
+  /* ── ABOUT stats row ── */
+  .about-stats-row { flex-wrap: wrap !important; gap: 8px !important; }
+  .about-stat      { flex: 1 1 calc(50% - 4px) !important; min-width: 0 !important; padding: 10px !important; }
+
+  /* ── WEATHER BAR ── */
+  .weather-bar {
+    font-size: 9.5px !important;
+    padding: 3px 10px !important;
+    gap: 6px !important;
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  .scroll-progress { height: 1.5px !important; }
+
+  /* ── ANIMATIONS — kill all on mobile for smooth scrolling ── */
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+  }
+  /* Keep essential transitions */
+  .nav-link,
+  .btn-primary,
+  .btn-ghost,
+  .glass-card,
+  .museum-case,
+  .exp-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  }
+  /* Kill hover lifts on mobile — no hover on touch */
+  .glass-card:hover,
+  .museum-case:hover,
+  .exp-card:hover,
+  .lge-card:hover,
+  .project-card:hover,
+  .p-chip:hover,
+  .tool-chip:hover,
+  .ac-skill:hover {
+    transform: none !important;
+  }
+  /* Kill background animations */
+  body::before { animation: none !important; }
+
+  /* ── TOUCH targets — minimum 44px ── */
+  .nav-mob-toggle,
+  .btn-primary,
+  .btn-ghost,
+  .nav-mob-link,
+  .exp-tab,
+  .edu-tab {
+    min-height: 40px !important;
+    touch-action: manipulation !important;
+  }
+
+  /* ── LGE cards ── */
+  .lge-tabs-nav { flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; scrollbar-width: none !important; }
+  .lge-tabs-nav::-webkit-scrollbar { display: none !important; }
+  .lge-stat-chip { padding: 4px 8px !important; }
+
+  /* ── CERT / ACH grids ── */
+  .cert-grid,
+  .ach-grid { grid-template-columns: 1fr !important; gap: 8px !important; }
+
+  /* ── RECOMMENDATION cards ── */
+  .rec-glass-card,
+  .edu-rec-card { padding: 12px !important; }
+
+  /* ── KPI blocks ── */
+  .kpi-block { padding: 10px 12px !important; }
+
+  /* ── FAB / Float buttons ── */
+  .float-whatsapp,
+  .fab-container { bottom: 16px !important; right: 12px !important; }
+
+  /* ── LANG cards ── */
+  #langGrid { gap: 6px !important; }
+  .lang-card { padding: 6px 10px !important; }
+  .lang-name { font-size: 12px !important; }
+}
+
+/* ── 480px — extra-small phone ──────────────────────────────── */
+@media (max-width: 480px) {
+
+  :root {
+    --nav-h: 46px !important;
+  }
+
+  /* Stack hero chips tighter */
+  .hero-vchip-row { gap: 4px !important; }
+  .hero-vchip { padding: 4px 6px !important; min-width: 36px !important; }
+
+  /* About stats — 2-column grid */
+  .about-stat { flex: 1 1 calc(50% - 4px) !important; padding: 8px !important; }
+
+  /* Museum/project cards — reduce padding further */
+  .museum-case,
+  .project-card { padding: 12px !important; }
+
+  /* Typography */
+  h1, .hero-name { font-size: clamp(20px, 7vw, 28px) !important; }
+  h2, .section-title { font-size: clamp(16px, 5vw, 22px) !important; }
+
+  /* Buttons */
+  .btn-primary,
+  .btn-ghost { padding: 7px 14px !important; font-size: 10.5px !important; }
+
+  /* Pills */
+  .p-chip,
+  .ac-skill,
+  .lge-tag,
+  .exp-meta-chip,
+  .tool-chip,
+  .mc-tool-tag {
+    padding: 1.5px 6px !important;
+    font-size: 9px !important;
+  }
+
+  /* Sections */
+  .section { padding: 14px 0 !important; }
+  .container, .inner-wrap { padding-left: 10px !important; padding-right: 10px !important; }
+
+  /* Kill section title spacing */
+  .section-header { margin-bottom: 14px !important; }
+}
+
+/* ── prefers-reduced-motion — universal ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Tablet — 1024px ────────────────────────────────────────── */
+@media (max-width: 1024px) and (min-width: 769px) {
+
+  .museum-grid,
+  #projectsGrid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+  .arsenal-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  #arsenalBento { grid-template-columns: repeat(2, 1fr) !important; }
+
+  .btn-primary,
+  .btn-ghost { padding: 7px 15px !important; font-size: 11px !important; }
+}
+
+/* ── End Liquid Glass Capsules v7.0 ── */
+
+
+/* ════════════════════════════════════════════════════════════════
+   WALLPAPER v8.0 — Cinematic Matte Plaster + Architectural Light
+   TEXT SHARPNESS v8.0 — Zero blur on text, maximum contrast
+   Strategy:
+     • body::before  — warm ivory plaster base + directional light
+     • body::after   — content-zone depth pools (darkens behind cards)
+     • wall-vignette — stronger cinematic frame
+     • wall-light    — top-right warm caustic source
+     • wall-shadow-left — dramatic left-wall occlusion
+     • ALL text      — backdrop-filter:none, filter:none, sharp weights
+════════════════════════════════════════════════════════════════ */
+
+/* ── LAYER 1 OVERRIDE: Matte plaster + directional sunlight ───── */
+body::before {
+  background:
+    /* PRIMARY sunlight shaft — top-right origin, sweeps to lower-left */
+    linear-gradient(
+      122deg,
+      rgba(255,248,235,0.00)  0%,
+      rgba(255,248,235,0.00) 18%,
+      rgba(252,240,210,0.10) 26%,
+      rgba(250,235,200,0.18) 34%,
+      rgba(248,232,196,0.22) 42%,
+      rgba(246,228,190,0.16) 52%,
+      rgba(244,224,184,0.07) 62%,
+      rgba(255,248,235,0.00) 74%
+    ),
+    /* SECONDARY shaft — offset, softer, broadens the lit zone */
+    linear-gradient(
+      112deg,
+      rgba(252,244,225,0.00)  0%,
+      rgba(252,244,225,0.00) 28%,
+      rgba(250,238,208,0.06) 38%,
+      rgba(248,234,202,0.10) 50%,
+      rgba(246,230,196,0.07) 62%,
+      rgba(252,244,225,0.00) 76%
+    ),
+    /* LEFT WALL — deep architectural shadow, unlit zone */
+    linear-gradient(to right,
+      rgba(90,78,62,0.62)  0%,
+      rgba(90,78,62,0.42)  5%,
+      rgba(90,78,62,0.18) 14%,
+      rgba(90,78,62,0.05) 26%,
+      transparent          42%
+    ),
+    /* CEILING — top edge recession, cool & dark */
+    linear-gradient(to bottom,
+      rgba(72,62,50,0.52)  0%,
+      rgba(72,62,50,0.22)  4%,
+      rgba(72,62,50,0.07) 10%,
+      transparent          22%
+    ),
+    /* FLOOR — subtle bottom recession */
+    linear-gradient(to top,
+      rgba(64,56,44,0.36)  0%,
+      rgba(64,56,44,0.12)  6%,
+      transparent          18%
+    ),
+    /* RIGHT EDGE — very soft falloff, light comes from here */
+    linear-gradient(to left,
+      rgba(255,248,228,0.08)  0%,
+      rgba(255,248,228,0.03)  6%,
+      transparent            18%
+    ),
+    /* SURFACE DEPTH — mid-wall tonal variation for card contrast */
+    radial-gradient(ellipse 140% 100% at 50% 50%,
+      rgba(240,232,218,0.00)  0%,
+      rgba(160,148,132,0.09) 58%,
+      rgba(130,118,102,0.18) 100%
+    ),
+    /* WARM POOL — diffuse right-zone warmth from light source */
+    radial-gradient(ellipse 110% 80% at 78% 38%,
+      rgba(255,240,200,0.06)  0%,
+      rgba(255,235,190,0.02) 50%,
+      transparent            75%
+    ),
+    /* BASE COAT — warm ivory matte plaster, slight tonal sweep */
+    linear-gradient(158deg,
+      #ebe7e0  0%,
+      #edeae3 14%,
+      #f0ece5 30%,
+      #eceae2 50%,
+      #e8e4dc 70%,
+      #e4e0d8 100%
+    ) !important;
+  will-change: auto !important;
+}
+
+/* ── LAYER 2 OVERRIDE: Content-zone depth pools ───────────────── */
+body::after {
+  background:
+    /* Hero zone — slight depth behind main card */
+    radial-gradient(ellipse 72% 42% at 50% 20%,
+      rgba(52,44,34,0.10) 0%,
+      rgba(52,44,34,0.04) 55%,
+      transparent 80%
+    ),
+    /* Central content band — darkens behind cards for contrast */
+    radial-gradient(ellipse 95% 38% at 50% 52%,
+      rgba(48,40,30,0.10) 0%,
+      rgba(48,40,30,0.04) 55%,
+      transparent 78%
+    ),
+    /* Lower section pool */
+    radial-gradient(ellipse 78% 42% at 50% 82%,
+      rgba(50,42,32,0.09) 0%,
+      rgba(50,42,32,0.03) 52%,
+      transparent 76%
+    ),
+    /* Warm sunlight pool — top-right accent from light source */
+    radial-gradient(ellipse 55% 65% at 80% 28%,
+      rgba(220,185,120,0.05) 0%,
+      rgba(215,178,110,0.02) 45%,
+      transparent 68%
+    ) !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* ── LAYER 5 OVERRIDE: Sunlight caustic — stronger top-right ──── */
+.wall-light {
+  background:
+    /* Primary caustic — warm golden source, top-right */
+    radial-gradient(ellipse 48% 66% at 88% 18%,
+      rgba(240,205,140,0.09) 0%,
+      rgba(235,198,130,0.04) 45%,
+      transparent 72%
+    ),
+    /* Secondary spill — mid-right warm fill */
+    radial-gradient(ellipse 38% 48% at 78% 48%,
+      rgba(232,196,126,0.05) 0%,
+      rgba(228,190,120,0.02) 50%,
+      transparent 70%
+    ),
+    /* Subtle bounce — left wall catches a trace of warm light */
+    radial-gradient(ellipse 22% 60% at 4% 42%,
+      rgba(220,180,110,0.03) 0%,
+      transparent 65%
+    ) !important;
+  mix-blend-mode: screen !important;
+}
+
+/* ── LAYER 6 OVERRIDE: Vignette — deeper cinematic frame ─────── */
+.wall-vignette {
+  background:
+    /* Primary radial — stronger edges for depth illusion */
+    radial-gradient(ellipse 108% 108% at 50% 50%,
+      transparent              22%,
+      rgba(72,60,46,0.06)     44%,
+      rgba(60,50,38,0.16)     62%,
+      rgba(46,38,28,0.32)     78%,
+      rgba(34,28,20,0.50)    100%
+    ),
+    /* Top-left corner — deep shadow, away from light source */
+    radial-gradient(ellipse 55% 55% at 0% 0%,
+      rgba(36,30,22,0.24) 0%, transparent 68%
+    ),
+    /* Top-right corner — lighter, light comes from here */
+    radial-gradient(ellipse 40% 40% at 100% 0%,
+      rgba(36,30,22,0.06) 0%, transparent 60%
+    ),
+    /* Bottom-left — deep */
+    radial-gradient(ellipse 55% 55% at 0% 100%,
+      rgba(34,28,20,0.22) 0%, transparent 68%
+    ),
+    /* Bottom-right — medium */
+    radial-gradient(ellipse 50% 50% at 100% 100%,
+      rgba(34,28,20,0.18) 0%, transparent 65%
+    ) !important;
+}
+
+/* ── LAYER 7 OVERRIDE: Left shadow — strong unlit wall zone ───── */
+.wall-shadow-left {
+  background: linear-gradient(to right,
+    rgba(48,38,28,0.55)  0%,
+    rgba(48,38,28,0.34)  6%,
+    rgba(48,38,28,0.14) 16%,
+    rgba(48,38,28,0.04) 28%,
+    transparent          46%
+  ) !important;
+}
+
+/* ── GRAIN OVERRIDE: Slightly more visible plaster texture ──── */
+.wall-grain      { opacity: 0.07 !important; }
+.wall-grain-fine { opacity: 0.045 !important; }
+
+
+/* ════════════════════════════════════════════════════════════════
+   TEXT SHARPNESS — Absolute guarantee: zero blur, full contrast
+   Rule: backdrop-filter ONLY on the glass ELEMENT, NEVER on text.
+════════════════════════════════════════════════════════════════ */
+
+/* ── 1. DESIGN TOKEN OVERRIDES — sharper ink palette ─────────── */
+:root {
+  --ink:   #111318 !important;
+  --ink-2: #252a38 !important;
+  --ink-3: #4a5568 !important;
+  --ink-4: #718096 !important;
+}
+
+/* ── 2. BASE BODY TEXT ──────────────────────────────────────────  */
+body {
+  color: #111318 !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* ── 3. HEADING WEIGHTS — 600+ only ──────────────────────────── */
+h1, h2, h3 { font-weight: 700 !important; color: #111318 !important; }
+h4, h5, h6 { font-weight: 600 !important; color: #111318 !important; }
+
+/* ── 4. BODY TEXT — 500 minimum ─────────────────────────────── */
+p, li, td, th, label, small, blockquote {
+  color: #252a38 !important;
+  font-weight: 500 !important;
+}
+
+/* ── 5. ZERO BLUR ON ALL TEXT — ironclad ─────────────────────── */
+h1, h2, h3, h4, h5, h6,
+p, span, a, li, td, th, label, small, blockquote,
+strong, em, b, i, code, pre,
+[class*="-title"], [class*="-heading"], [class*="-name"],
+[class*="-desc"],  [class*="-text"],   [class*="-label"],
+[class*="-meta"],  [class*="-role"],   [class*="-date"],
+[class*="-bio"],   [class*="-quote"],  [class*="-summary"],
+[class*="-val"],   [class*="-lbl"],    [class*="-org"],
+[class*="-sub"],   [class*="-eyebrow"],[class*="-sector"],
+.nav-logo-name, .nav-logo-role, .nav-link,
+.hvc-val, .hvc-lbl, .hvc-icon,
+.sec-label, .sec-title, .sec-num,
+.wb-time, .wb-date, .wb-weather-text {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* ── 6. CONTENT-ZONE SCRIM — darkens area behind text on glass ── */
+/* Adds a subtle inner gradient to each card so text sits on a
+   slightly darker surface — improves contrast without obscuring glass */
+.glass-card::after,
+.exp-card::after,
+.lge-card::after,
+.museum-case::after,
+.project-card::after,
+.about-bio-col::after,
+.about-panel-col::after,
+.arsenal-category::after,
+.hero-glass-card::after,
+.hero-editorial-layout::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.00)  0%,
+    rgba(0,0,0,0.015) 60%,
+    rgba(0,0,0,0.03)  100%
+  ) !important;
+}
+
+/* Ensure all card content sits above the scrim */
+.glass-card > *,
+.exp-card > *,
+.lge-card > *,
+.museum-case > *,
+.project-card > *,
+.about-bio-col > *,
+.about-panel-col > *,
+.arsenal-category > *,
+.hero-glass-card > *,
+.hero-editorial-layout > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* ── 7. SECTION TITLES — maximum punch ───────────────────────── */
+.sec-title, .section-title,
+[class*="section-title"], [class*="sec-title"] {
+  color: #111318 !important;
+  font-weight: 700 !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* ── 8. SECONDARY TEXT — legible but recessed ────────────────── */
+.sec-num, .sec-label, [class*="-eyebrow"],
+[class*="-org"], [class*="-date"], [class*="-meta"] {
+  color: #4a5568 !important;
+  font-weight: 500 !important;
+}
+
+/* ── 9. NAV TEXT — sharp on glass ────────────────────────────── */
+.nav-logo-name { color: #111318 !important; font-weight: 700 !important; }
+.nav-logo-role { color: #4a5568 !important; font-weight: 500 !important; }
+.nav-link      { color: #252a38 !important; font-weight: 500 !important; }
+.nav-link:hover,
+.nav-link.active { color: #111318 !important; font-weight: 600 !important; }
+
+/* ── 10. KPI / STAT VALUES — high contrast numbers ───────────── */
+[class*="-val"], [class*="-stat-val"],
+.hvc-val, .kpi-val, .about-stat-val,
+[class*="kpi-"], [class*="stat-val"] {
+  color: #111318 !important;
+  font-weight: 700 !important;
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* ── End Wallpaper v8.0 + Text Sharpness v8.0 ── */
+
+
+/* ════════════════════════════════════════════════════════════════
+   DARK BLUE GLASS CARDS v9.0
+   Scope: .wh-card (Hands-On Infrastructure Experience)
+   Style: Apple Vision Pro cinematic dark navy glass
+   ────────────────────────────────────────────────────────────────
+   CLEAR GLASS BUTTONS v9.0
+   Scope: .rpc-download-btn · .pdf-modal-btn-download
+          .cta-btn-resume · .rcb-btn-primary · .msc-resume
+          all solid-blue download/CTA buttons → clear liquid glass
+════════════════════════════════════════════════════════════════ */
+
+/* ══ 1. WH-CARD — Deep navy cinematic glass ══════════════════════ */
+.wh-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(40,70,120,0.18)  0%,
+      rgba(10,20,45,0.22)  100%
+    ),
+    rgba(10,25,55,0.28) !important;
+  backdrop-filter: blur(2px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(1.3) !important;
+  border: 1px solid rgba(180,220,255,0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(180,220,255,0.10),
+    inset 0 -1px 0 rgba(0,0,30,0.12),
+    0 0 0 0.5px rgba(100,160,255,0.06),
+    0 4px 14px rgba(0,0,0,0.14),
+    0 10px 30px rgba(0,0,0,0.18),
+    0 24px 48px rgba(0,0,30,0.12) !important;
+  border-radius: var(--r-xl) !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transition: transform 0.22s var(--ease-spring), box-shadow 0.22s ease !important;
+  will-change: transform !important;
+  transform: translateZ(0) !important;
+}
+
+/* Surface shimmer — diagonal ice-blue reflection */
+.wh-card::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: linear-gradient(
+    138deg,
+    rgba(180,220,255,0.06)  0%,
+    rgba(140,190,255,0.03) 30%,
+    transparent             55%
+  ) !important;
+}
+
+/* Bottom depth scrim — darkens slightly for readability */
+.wh-card::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: linear-gradient(
+    180deg,
+    transparent           0%,
+    rgba(0,5,20,0.06)    65%,
+    rgba(0,5,20,0.12)   100%
+  ) !important;
+}
+
+/* All card content above pseudos */
+.wh-card > * { position: relative !important; z-index: 1 !important; }
+
+/* ── Hover — float up with deeper navy glow ── */
+.wh-card:hover {
+  transform: translateY(-4px) translateZ(0) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(180,220,255,0.14),
+    inset 0 -1px 0 rgba(0,0,30,0.14),
+    0 0 0 0.5px rgba(120,180,255,0.10),
+    0 6px 20px rgba(0,0,0,0.18),
+    0 16px 40px rgba(0,10,40,0.20),
+    0 32px 60px rgba(0,5,30,0.14) !important;
+}
+
+/* ── Icon wrap — icy glass instead of solid color ── */
+.wh-card .wh-icon-wrap,
+.wh-icon-wrap {
+  background: rgba(140,190,255,0.12) !important;
+  color: rgba(180,220,255,0.90) !important;
+  border: 1px solid rgba(180,220,255,0.14) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(220,240,255,0.20),
+    0 2px 8px rgba(0,80,200,0.12) !important;
+}
+
+/* Keep colored icon variants but desaturate to icy versions */
+.wh-icon-green  { background: rgba(0,200,120,0.12) !important; color: rgba(100,240,180,0.90) !important; border-color: rgba(80,220,160,0.14) !important; box-shadow: inset 0 1px 0 rgba(160,255,220,0.18), 0 2px 8px rgba(0,180,100,0.10) !important; }
+.wh-icon-amber  { background: rgba(220,150,0,0.12) !important; color: rgba(255,210,100,0.90) !important; border-color: rgba(220,180,60,0.14) !important; box-shadow: inset 0 1px 0 rgba(255,230,120,0.18), 0 2px 8px rgba(200,140,0,0.10) !important; }
+.wh-icon-purple { background: rgba(140,80,255,0.12) !important; color: rgba(200,160,255,0.90) !important; border-color: rgba(180,120,255,0.14) !important; box-shadow: inset 0 1px 0 rgba(220,180,255,0.18), 0 2px 8px rgba(120,60,240,0.10) !important; }
+.wh-icon-teal   { background: rgba(0,160,200,0.12) !important; color: rgba(100,220,255,0.90) !important; border-color: rgba(60,200,240,0.14) !important; box-shadow: inset 0 1px 0 rgba(140,240,255,0.18), 0 2px 8px rgba(0,140,200,0.10) !important; }
+.wh-icon-rose   { background: rgba(220,40,80,0.12) !important; color: rgba(255,140,160,0.90) !important; border-color: rgba(255,100,130,0.14) !important; box-shadow: inset 0 1px 0 rgba(255,180,200,0.18), 0 2px 8px rgba(200,30,70,0.10) !important; }
+
+/* ── WH-CARD TEXT — pure white headings, soft body ── */
+.wh-card .wh-title,
+.wh-card h3 {
+  color: rgba(240,248,255,0.96) !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 8px rgba(0,20,60,0.30) !important;
+}
+.wh-card .wh-desc,
+.wh-card p {
+  color: rgba(200,220,245,0.82) !important;
+  font-weight: 500 !important;
+}
+.wh-card .wh-proof {
+  background: rgba(20,50,100,0.18) !important;
+  border: 1px solid rgba(140,190,255,0.10) !important;
+  color: rgba(180,210,245,0.70) !important;
+}
+
+/* ── WH badges — dark glass versions ── */
+.wh-card .wh-badge {
+  background: rgba(100,160,255,0.12) !important;
+  color: rgba(160,210,255,0.90) !important;
+  border: 1px solid rgba(140,190,255,0.14) !important;
+}
+.wh-card .wh-badge-green  { background: rgba(0,180,100,0.12) !important; color: rgba(100,240,180,0.90) !important; border-color: rgba(80,200,140,0.14) !important; }
+.wh-card .wh-badge-amber  { background: rgba(200,140,0,0.12) !important;  color: rgba(255,210,100,0.90) !important; border-color: rgba(200,170,60,0.14) !important; }
+.wh-card .wh-badge-purple { background: rgba(120,60,240,0.12) !important; color: rgba(200,160,255,0.90) !important; border-color: rgba(160,100,255,0.14) !important; }
+.wh-card .wh-badge-teal   { background: rgba(0,140,190,0.12) !important;  color: rgba(100,220,255,0.90) !important; border-color: rgba(60,190,230,0.14) !important; }
+.wh-card .wh-badge-rose   { background: rgba(200,30,70,0.12) !important;  color: rgba(255,140,160,0.90) !important; border-color: rgba(240,90,120,0.14) !important; }
+
+/* ── WH glow orbs — softer ambient on dark glass ── */
+.wh-card .wh-card-glow {
+  filter: blur(2px) !important;
+  opacity: 0.12 !important;
+}
+.wh-card:hover .wh-card-glow { opacity: 0.18 !important; }
+
+/* ── WH tags within cards ── */
+.wh-card .wh-tag,
+.wh-tag {
+  background: rgba(100,160,255,0.10) !important;
+  color: rgba(160,210,255,0.88) !important;
+  border: 1px solid rgba(140,190,255,0.12) !important;
+  backdrop-filter: blur(1px) !important;
+  -webkit-backdrop-filter: blur(1px) !important;
+}
+
+/* ══ 2. CLEAR GLASS BUTTONS — Remove all solid blue fills ════════ */
+
+/* ── Download PDF Resume (resume card button) ── */
+.rpc-download-btn {
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -0.5px 0 rgba(0,0,0,0.04),
+    0 2px 8px rgba(0,0,0,0.06),
+    0 6px 18px rgba(0,0,0,0.05) !important;
+  backdrop-filter: blur(1.5px) !important;
+  -webkit-backdrop-filter: blur(1.5px) !important;
+}
+.rpc-download-btn:hover {
+  background: rgba(255,255,255,0.07) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 4px 14px rgba(0,0,0,0.09),
+    0 10px 28px rgba(0,0,0,0.08) !important;
+  transform: translateY(-2px) !important;
+  opacity: 1 !important;
+}
+
+/* ── PDF modal download button ── */
+.pdf-modal-btn-download {
+  background: rgba(255,255,255,0.05) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 2px 8px rgba(0,0,0,0.06),
+    0 6px 16px rgba(0,0,0,0.05) !important;
+}
+.pdf-modal-btn-download:hover {
+  background: rgba(255,255,255,0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 4px 14px rgba(0,0,0,0.09) !important;
+}
+
+/* ── CTA Resume button (hero section) ── */
+.cta-btn-resume {
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.20),
+    inset 0 -0.5px 0 rgba(0,0,0,0.04),
+    0 3px 10px rgba(0,0,0,0.06),
+    0 8px 22px rgba(0,0,0,0.06) !important;
+}
+.cta-btn-resume::after {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent) !important;
+}
+.cta-btn-resume:hover {
+  background: rgba(255,255,255,0.07) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.24),
+    0 5px 16px rgba(0,0,0,0.09),
+    0 12px 30px rgba(0,0,0,0.08) !important;
+}
+.cta-btn-resume .cta-btn-label { color: var(--ink-3) !important; }
+.cta-btn-resume .cta-btn-title { color: var(--ink) !important; text-shadow: none !important; }
+.cta-btn-resume .cta-btn-arrow { color: var(--ink-3) !important; }
+.cta-btn-resume .cta-btn-icon-wrap {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+/* ── rcb-btn-primary (recommendation/contact card blue btn) ── */
+.rcb-btn-primary {
+  background: rgba(255,255,255,0.04) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.16),
+    0 2px 8px rgba(0,0,0,0.06),
+    0 6px 16px rgba(0,0,0,0.05) !important;
+}
+.rcb-btn-primary:hover {
+  background: rgba(255,255,255,0.07) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    0 4px 14px rgba(0,0,0,0.08) !important;
+}
+
+/* ── msc-resume (mobile sticky CTA) ── */
+.msc-resume {
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--ink) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 2px 8px rgba(0,0,0,0.06) !important;
+}
+
+/* ── rpc-icon (resume card icon avatar) — glass not solid ── */
+.rpc-icon {
+  background: rgba(0,102,255,0.10) !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(0,102,255,0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(140,180,255,0.18) !important;
+}
+
+/* ── End Dark Blue Glass Cards + Clear Glass Buttons v9.0 ── */
