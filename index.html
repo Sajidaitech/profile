@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <meta name="description" content="Sajid Mehmood — CCNA Certified IT Support Engineer | Aviation &amp; Healthcare in Qatar | Government Immigration Sector, UAE">
-  <meta name="theme-color" content="#c8d4e8">
+  <meta name="theme-color" content="#eae6df">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Safari scroll bounce fix -->
+  <meta name="format-detection" content="telephone=no">
   <title>Sajid Mehmood — Systems Engineer</title>
   <link rel="icon" href="logo.png" type="image/png">
 
@@ -20,10 +22,16 @@
   <meta name="twitter:title" content="Sajid Mehmood — IT Systems Engineer">
   <meta name="twitter:description" content="CCNA Certified IT Support Engineer | Aviation &amp; Healthcare — Qatar | Government Immigration — UAE">
 
-  <!-- Critical resource preloads -->
-  <link rel="preload" href="logo.png" as="image">
-  <link rel="preload" href="photo.jpg" as="image">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" as="style">
+  <!-- Critical resource preloads — LCP optimization -->
+  <link rel="preload" href="logo.png" as="image" fetchpriority="high">
+  <link rel="preload" href="photo.jpg" as="image" fetchpriority="high">
+  <link rel="preload" href="styles.css" as="style">
+  <!-- Preconnect before font CSS loads -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonts: single optimized request, display=swap for no FOIT -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"></noscript>
 
   <!-- DNS prefetch for external APIs used at runtime -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -32,19 +40,15 @@
   <link rel="dns-prefetch" href="https://ipapi.co">
   <link rel="dns-prefetch" href="https://api.openweathermap.org">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <!-- Icons — preload critical subset, defer rest -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- AOS — defer, non-critical -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" media="print" onload="this.media='all'">
 
-  <!-- AOS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-
-  <!-- Supabase — loaded early so analytics counters show on gate -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" async></script>
+  <!-- Supabase — defer so it doesn't block render -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 
   <!-- ONE stylesheet only -->
   <link rel="stylesheet" href="styles.css">
@@ -73,7 +77,7 @@
   ================================================================ -->
   <div id="gateOverlay" class="gate-overlay">
     <div class="gate-bg">
-      <img src="loginpage.png" alt="" class="gate-bg-img" aria-hidden="true">
+      <img src="loginpage.png" alt="" class="gate-bg-img" aria-hidden="true" loading="lazy">
       <div class="gate-vignette" aria-hidden="true"></div>
     </div>
 
@@ -847,16 +851,16 @@
     <!-- Tabs -->
     <div class="exp-tabs-wrap">
       <button class="exp-tab active" data-tab="tawkel" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="ALTAWKEL.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Al Tawkel
+        <img src="ALTAWKEL.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Al Tawkel
       </button>
       <button class="exp-tab" data-tab="elegancia" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="mmch.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Elegancia / MMCH
+        <img src="mmch.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Elegancia / MMCH
       </button>
       <button class="exp-tab" data-tab="starlink" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> PIH Group
+        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> PIH Group
       </button>
       <button class="exp-tab" data-tab="ooredoo" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Ooredoo
+        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Ooredoo
       </button>
     </div>
 
@@ -872,7 +876,7 @@
           <div class="exp-card-header">
 
             <div class="exp-logo-wrap exp-logo-img-wrap">
-              <img src="ALTAWKEL.jpg" alt="Al Tawkel Immigration Center" class="exp-logo-img">
+              <img src="ALTAWKEL.jpg" alt="Al Tawkel Immigration Center" class="exp-logo-img" loading="lazy">
             </div>
 
             <div class="exp-title-group">
@@ -946,7 +950,7 @@
         <div class="exp-card">
           <div class="exp-card-header">
             <div class="exp-logo-wrap exp-logo-img-wrap">
-              <img src="mmch.jpg" alt="Military Medical City Hospital" class="exp-logo-img">
+              <img src="mmch.jpg" alt="Military Medical City Hospital" class="exp-logo-img" loading="lazy">
             </div>
             <div class="exp-title-group">
               <h3 class="exp-role">IT Support Engineer</h3>
@@ -970,19 +974,19 @@
           <!-- Hospital logos strip -->
           <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.55);border:0.5px solid rgba(255,255,255,.80);border-radius:14px;backdrop-filter:blur(12px);">
             <div class="exp-site-logo-item" title="Military Medical City Hospital">
-              <img src="mmch.jpg" alt="MMCH" style="height:36px;width:auto;object-fit:contain;border-radius:6px;">
+              <img src="mmch.jpg" alt="MMCH" style="height:36px;width:auto;object-fit:contain;border-radius:6px;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="Korean Medical Center">
-              <img src="kmc.png" alt="KMC" style="height:36px;width:auto;object-fit:contain;border-radius:6px;">
+              <img src="kmc.png" alt="KMC" style="height:36px;width:auto;object-fit:contain;border-radius:6px;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="The View Hospital">
-              <img src="tvh.png" alt="TVH" style="height:28px;width:auto;object-fit:contain;border-radius:6px;">
+              <img src="tvh.png" alt="TVH" style="height:28px;width:auto;object-fit:contain;border-radius:6px;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="Power International Holding">
-              <img src="PIH.png" alt="PIH" style="height:36px;width:auto;object-fit:contain;border-radius:6px;">
+              <img src="PIH.png" alt="PIH" style="height:36px;width:auto;object-fit:contain;border-radius:6px;" loading="lazy">
             </div>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
@@ -1057,7 +1061,7 @@
         <div class="exp-card">
           <div class="exp-card-header">
             <div class="exp-logo-wrap exp-logo-img-wrap" style="background:#fff;">
-              <img src="sartlink_Ooredoo.png" alt="Starlink - Power International Holding" class="exp-logo-img">
+              <img src="sartlink_Ooredoo.png" alt="Starlink - Power International Holding" class="exp-logo-img" loading="lazy">
             </div>
             <div class="exp-title-group">
               <h3 class="exp-role">IT Support Engineer</h3>
@@ -1081,27 +1085,27 @@
           <!-- PIH logos strip -->
           <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.55);border:0.5px solid rgba(255,255,255,.80);border-radius:14px;backdrop-filter:blur(12px);">
             <div class="exp-site-logo-item" title="Power International Holding">
-              <img src="PIH.png" alt="PIH" style="height:38px;width:auto;object-fit:contain;">
+              <img src="PIH.png" alt="PIH" style="height:38px;width:auto;object-fit:contain;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="Aura Group">
-              <img src="aura.png" alt="Aura Group" style="height:36px;width:auto;object-fit:contain;">
+              <img src="aura.png" alt="Aura Group" style="height:36px;width:auto;object-fit:contain;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="UCC UrbaCon Trading & Contracting">
-              <img src="ucc.png" alt="UCC" style="height:32px;width:auto;object-fit:contain;">
+              <img src="ucc.png" alt="UCC" style="height:32px;width:auto;object-fit:contain;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="InfraRoad Trading">
-              <img src="infraroad.png" alt="InfraRoad" style="height:28px;width:auto;object-fit:contain;">
+              <img src="infraroad.png" alt="InfraRoad" style="height:28px;width:auto;object-fit:contain;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="Elegancia Health Care">
-              <img src="elegancia.png" alt="UBT JV" style="height:32px;width:auto;object-fit:contain;">
+              <img src="elegancia.png" alt="UBT JV" style="height:32px;width:auto;object-fit:contain;" loading="lazy">
             </div>
             <div class="exp-site-logo-sep" style="width:1px;height:28px;background:rgba(0,0,50,.08);"></div>
             <div class="exp-site-logo-item" title="UBT JV">
-              <img src="ubtjv.png" alt="UBT JV" style="height:32px;width:auto;object-fit:contain;">
+              <img src="ubtjv.png" alt="UBT JV" style="height:32px;width:auto;object-fit:contain;" loading="lazy">
             </div>
           </div>
           <!-- PIH Project chips -->
@@ -1195,7 +1199,7 @@
           <div class="exp-card-header">
 
             <div class="exp-logo-wrap exp-logo-img-wrap" style="background:#fff;">
-              <img src="sartlink_Ooredoo.png" alt="Starlink Ooredoo International" class="exp-logo-img">
+              <img src="sartlink_Ooredoo.png" alt="Starlink Ooredoo International" class="exp-logo-img" loading="lazy">
             </div>
 
             <div class="exp-title-group">
@@ -1462,13 +1466,13 @@
     <!-- EDUCATION TABS -->
     <div class="edu-tabs-wrap">
       <button class="edu-tab active" data-edu="middlesex" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="middlesex.png" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:4px;background:#000;"> Middlesex University
+        <img src="middlesex.png" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:4px;background:#000;" loading="lazy"> Middlesex University
       </button>
       <button class="edu-tab" data-edu="aptech" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="aptech.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;"> Aptech Qatar
+        <img src="aptech.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Aptech Qatar
       </button>
       <button class="edu-tab" data-edu="igcse" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="brighfuture.jpg" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:50%;"> IGCSE
+        <img src="brighfuture.jpg" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:50%;" loading="lazy"> IGCSE
       </button>
     </div>
 
@@ -1481,7 +1485,7 @@
       <div class="edu-card">
 
         <div class="edu-icon edu-icon-img">
-          <img src="middlesex.png" alt="Middlesex University Dubai" class="edu-logo-img">
+          <img src="middlesex.png" alt="Middlesex University Dubai" class="edu-logo-img" loading="lazy">
         </div>
 
         <div class="edu-content">
@@ -1568,7 +1572,7 @@
       <div class="edu-card">
 
         <div class="edu-icon edu-icon-img">
-          <img src="aptech.jpg" alt="Aptech Qatar" class="edu-logo-img">
+          <img src="aptech.jpg" alt="Aptech Qatar" class="edu-logo-img" loading="lazy">
         </div>
 
         <div class="edu-content">
@@ -1666,7 +1670,7 @@
       <div class="edu-card">
 
         <div class="edu-icon edu-icon-img">
-          <img src="brighfuture.jpg" alt="Bright Future International School" class="edu-logo-img">
+          <img src="brighfuture.jpg" alt="Bright Future International School" class="edu-logo-img" loading="lazy">
         </div>
 
         <div class="edu-content">
@@ -2190,12 +2194,24 @@
           <span class="footer-role">IT Support Engineer · CCNA</span>
         </div>
       </div>
-      <div class="footer-links">
-        <a href="#about"    class="nav-anchor">Profile</a>
-        <a href="#projects" class="nav-anchor">Projects</a>
-        <a href="#arsenal"  class="nav-anchor">Arsenal</a>
-        <a href="#contact"  class="nav-anchor">Contact</a>
-      </div>
+      <nav class="footer-links footer-nav-btns" aria-label="Footer navigation">
+        <a href="#about"    class="footer-glass-btn nav-anchor">
+          <i class="fas fa-user footer-btn-icon"></i>
+          <span>Profile</span>
+        </a>
+        <a href="#projects" class="footer-glass-btn nav-anchor">
+          <i class="fas fa-folder-open footer-btn-icon"></i>
+          <span>Projects</span>
+        </a>
+        <a href="#arsenal"  class="footer-glass-btn nav-anchor">
+          <i class="fas fa-toolbox footer-btn-icon"></i>
+          <span>Arsenal</span>
+        </a>
+        <a href="#contact"  class="footer-glass-btn nav-anchor">
+          <i class="fas fa-bolt footer-btn-icon"></i>
+          <span>Contact</span>
+        </a>
+      </nav>
       <div class="footer-copy">
         <span>&copy; 2025 Sajid Mehmood. All Rights Reserved. 🌙</span>
         <div class="footer-visitor-badge">
@@ -2357,7 +2373,7 @@
       </div>
       <!-- Image -->
       <div class="hie-modal-img-wrap">
-        <img src="" alt="" id="hieModalImg" class="hie-modal-img">
+        <img src="" alt="" id="hieModalImg" class="hie-modal-img" loading="lazy">
       </div>
     </div>
   </div>

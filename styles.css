@@ -319,9 +319,6 @@ body::before {
   will-change: transform;
   
 }
-40%     { opacity: .97; }
-  70%     { opacity: .99; }
-}
 body.gate-active::before { animation-play-state: paused; }
 
 /* ── LAYER 2: Sunlight volume + content-section depth pools ── */
@@ -670,8 +667,8 @@ body.gate-active { overflow: hidden !important; }
     ) !important;
 
   /* Realistic blur stack */
-  backdrop-filter: blur(2px) !important;
-  -webkit-backdrop-filter: blur(2px) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
 
   /* Edge lighting — top bright highlight, sides soft, bottom subtle */
   border: none !important;
@@ -4089,11 +4086,11 @@ a, button, [role="button"] {
 .wb-time, .wb-date, .wb-weather-text { color: var(--ink-2) !important; }
 
 /* Gate overlay */
-.gate-brand-name          { color: var(--ink) !important; }
-.gate-brand-sub           { color: var(--ink-3) !important; }
-.gate-headline            { color: var(--ink) !important; }
-.gate-sub                 { color: var(--ink-2) !important; }
-.gate-label               { color: var(--ink-2) !important; }
+.gate-brand-name          { color: rgba(255,255,255,.95) !important; }
+.gate-brand-sub           { color: rgba(255,255,255,.75) !important; }
+.gate-headline            { color: #ffffff !important; }
+.gate-sub                 { color: rgba(255,255,255,.88) !important; }
+.gate-label               { color: rgba(255,255,255,.80) !important; }
 
 /* Ring / panel labels */
 .ring-val, .ring-lbl      { color: var(--ink) !important; }
@@ -7538,12 +7535,12 @@ body {
   color: rgba(255,255,255,.97);
   text-shadow: 0 1px 4px rgba(0,0,0,.30);
 }
-.gate-sub        { color: rgba(255,255,255,.10); }
-.gate-eyebrow    { color: rgba(255,255,255,.64); }
+.gate-sub        { color: rgba(255,255,255,.82); }
+.gate-eyebrow    { color: rgba(255,255,255,.80); }
 .gate-brand-name { color: rgba(255,255,255,.95); letter-spacing: .14em; }
-.gate-brand-sub  { color: rgba(255,255,255,.65); }
-.gate-label      { color: rgba(255,255,255,.12); }
-.gate-status-text { color: rgba(255,255,255,.08); }
+.gate-brand-sub  { color: rgba(255,255,255,.75); }
+.gate-label      { color: rgba(255,255,255,.80); }
+.gate-status-text { color: rgba(255,255,255,.70); }
 
 /* ── 17. WEATHER BAR ────────────────────────────────────────── */
 .weather-bar { color: var(--ink-2); font-weight: 600; }
@@ -11582,8 +11579,8 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
     rgba(220,232,255,.10) 55%,
     rgba(255,255,255,.04) 100%
   ) !important;
-  backdrop-filter: blur(2px) !important;
-  -webkit-backdrop-filter: blur(2px) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.20),
     inset 0 -1px 0 rgba(0,0,0,.06),
@@ -11606,7 +11603,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
   font-weight: 700 !important;
   letter-spacing: .16em !important;
   margin-bottom: 4px !important;
-  color: rgba(255,255,255,.50) !important;
+  color: rgba(255,255,255,.80) !important;
 }
 
 /* Gate divider rule */
@@ -11636,7 +11633,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
 /* Gate sub-copy */
 .gate-sub {
   font-size: 12px !important;
-  color: rgba(255,255,255,.62) !important;
+  color: rgba(255,255,255,.88) !important;
   font-weight: 450 !important;
   line-height: 1.55 !important;
   letter-spacing: 0.005em !important;
@@ -11720,7 +11717,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
 .gate-status-row { margin-top: 8px !important; gap: 5px !important; }
 .gate-status-text {
   font-size: 9.5px !important;
-  color: rgba(255,255,255,.38) !important;
+  color: rgba(255,255,255,.70) !important;
   font-weight: 500 !important;
   letter-spacing: 0.02em !important;
 }
@@ -14140,10 +14137,6 @@ body::after {
   ) !important;
 }
 
-38%     { opacity: 0.972; }
-  62%     { opacity: 0.985; }
-  80%     { opacity: 0.978; }
-}
 
 
 /* ╔══════════════════════════════════════════════════════════════
@@ -16099,1108 +16092,849 @@ strong, em, b, i, code, pre,
 
 /* ── End Portfolio Image System v6.0 ───────────────────────────── */
 
+
+/* ================================================================
+   PATCH v7.0 — Final Production Polish
+   Tasks 4 · 5 · 6 · 8 · 9 · 10
+   Consolidates all prior patches, removes conflicts,
+   applies canonical rules with !important where needed to
+   override the multi-layer existing CSS.
+   
+   PRESERVED:  Beige/blue theme · glass aesthetic · branding ·
+               content · section order · premium minimal feel
+================================================================ */
+
+
 /* ════════════════════════════════════════════════════════════════
-   FOOTER ACTIONS AREA
-   Premium glass pill buttons — Apple Vision Pro aesthetic.
-   Uses only existing CSS variables. No external dependencies.
-   Desktop: flex row, two rows. Mobile ≤768px: 3+3 equal-width grid.
+   §1  DESIGN TOKENS — Extended for this patch
+════════════════════════════════════════════════════════════════ */
+:root {
+  /* Safe-area insets — referenced everywhere below */
+  --safe-t: env(safe-area-inset-top,    0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left,   0px);
+  --safe-r: env(safe-area-inset-right,  0px);
+
+  /* Consolidated shadow tokens (single source of truth) */
+  --sh-glass-card:
+    inset 0 1.5px 0 rgba(255,255,255,.28),
+    inset  1px  0 0 rgba(255,255,255,.18),
+    inset -1px  0 0 rgba(255,255,255,.12),
+    inset  0  -1px 0 rgba(0,0,0,.05),
+    0  2px  6px rgba(0,0,40,.09),
+    0  8px 22px rgba(0,0,40,.10),
+    0 20px 44px rgba(0,0,40,.07),
+    0  0   0 0.5px rgba(0,0,30,.06);
+
+  --sh-glass-card-hover:
+    inset 0 1.5px 0 rgba(255,255,255,.32),
+    inset  1px  0 0 rgba(255,255,255,.22),
+    inset -1px  0 0 rgba(255,255,255,.14),
+    inset  0  -1px 0 rgba(0,0,0,.05),
+    0  4px 14px rgba(0,0,40,.14),
+    0 14px 36px rgba(0,0,40,.16),
+    0 30px 60px rgba(0,0,40,.11),
+    0  0   0 0.5px rgba(0,102,255,.12);
+
+  --sh-pill:
+    inset 0 1.5px 0 rgba(255,255,255,.22),
+    inset  0 -1px 0 rgba(0,0,0,.04),
+    0  2px  6px rgba(0,0,0,.07),
+    0  6px 18px rgba(0,0,0,.06),
+    0  0   0 0.5px rgba(0,0,0,.07);
+
+  /* Footer glass button specific */
+  --footer-btn-bg:   rgba(255,255,255,.54);
+  --footer-btn-border: rgba(255,255,255,.82);
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §2  SAFARI / iOS CRITICAL FIXES
+   Must come early so they aren't overridden
 ════════════════════════════════════════════════════════════════ */
 
-/* ── Wrapper ──────────────────────────────────────────────────── */
-.footer-actions {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  padding: 20px 0 4px;
+/* 2.1 — Root overflow: clip is stronger than hidden on iOS */
+html {
+  overflow-x: clip !important;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* dvh = dynamic viewport height (shrinks when browser chrome shows) */
+  min-height: 100dvh;
+}
+body {
+  overflow-x: clip !important;
+  max-width: 100vw !important;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
-/* ── Thin divider above the actions ──────────────────────────── */
-.fa-divider {
-  width: min(480px, 100%);
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(0,0,50,.10) 20%,
-    rgba(0,0,50,.14) 50%,
-    rgba(0,0,50,.10) 80%,
-    transparent 100%
-  );
-  margin-bottom: 4px;
+/* 2.2 — Gate overlay full-height fix for Safari */
+.gate-overlay {
+  height: 100vh;
+  height: 100dvh;
+  /* Fallback for very old iOS that doesn't support dvh */
+  min-height: -webkit-fill-available;
 }
 
-/* ── Row container ────────────────────────────────────────────── */
-.fa-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  max-width: 520px;
+/* 2.3 — Hero section height with svh (smallest viewport height) */
+.hero-section {
+  min-height: 100vh;
+  min-height: 100svh;
 }
 
-/* ── Base button ──────────────────────────────────────────────── */
-.fa-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 9px 20px;
-  border-radius: var(--r-pill);
-  font-family: var(--ff-sans);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--ink-2);
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  outline: none;
+/* 2.4 — Sticky nav — needs -webkit-sticky for old Safari */
+.top-nav {
+  position: -webkit-sticky !important;
+  position: fixed !important; /* keep fixed — existing JS relies on this */
+}
+
+/* 2.5 — Momentum scrolling on scrollable containers */
+.nav-mob-drawer,
+.exp-tabs-wrap,
+.lge-tabs-nav,
+.edu-tabs-wrap {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 2.6 — Input zoom prevention (iOS zooms when font-size < 16px) */
+.gate-input,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+textarea,
+select {
+  font-size: 16px !important;
+  /* Remove iOS inner shadow on inputs */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 2.7 — Safari backdrop-filter: needs non-transparent background to render */
+/* Cards that have backdrop-filter but background:transparent won't blur in Safari */
+.glass-card,
+.museum-case,
+.project-card,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.wh-card,
+.ach-item,
+.rec-glass-card,
+.edu-rec-card,
+.arsenal-category,
+.about-stats-row,
+.kpi-block {
+  /* Tiny non-zero background triggers Safari's compositing layer */
+  background-color: rgba(255,255,255,.012) !important;
+  /* Ensure GPU layer */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* 2.8 — Nav mobile overflow: clip contents so name doesn't bust layout */
+.nav-inner {
   overflow: hidden;
-  /* Glass fill */
-  background: rgba(255,255,255,.055);
-  backdrop-filter: blur(12px) saturate(1.6);
-  -webkit-backdrop-filter: blur(12px) saturate(1.6);
-  /* Crystal edge + layered depth */
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 6px rgba(0,0,0,.07),
-    0 6px 18px rgba(0,0,0,.06),
-    0 0 0 0.5px rgba(0,0,0,.07);
-  /* Spring transition */
-  transition:
-    transform var(--t-base) var(--ease-spring),
-    box-shadow var(--t-base) var(--ease-out),
-    background var(--t-fast) ease,
-    color var(--t-fast) ease;
-  will-change: transform;
-  /* Minimum touch target */
-  min-height: 38px;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+}
+.nav-logo-name {
+  max-width: clamp(80px, 22vw, 160px);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ── Icon ─────────────────────────────────────────────────────── */
-.fa-btn-icon {
-  font-size: 13px;
-  flex-shrink: 0;
-  transition: transform var(--t-fast) var(--ease-spring);
+/* 2.9 — Mobile sticky CTA safe-area bottom padding */
+.mobile-sticky-cta {
+  /* Correct safe-area bottom clearance */
+  padding-bottom: calc(10px + var(--safe-b)) !important;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
-/* ── Ambient glow orb (hidden by default) ─────────────────────── */
-.fa-btn-glow {
-  position: absolute;
-  inset: -6px;
-  border-radius: inherit;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--t-base) var(--ease-out);
-  filter: blur(10px);
-  z-index: -1;
-}
-
-/* ── Hover state — lift + glow ────────────────────────────────── */
-.fa-btn:hover {
-  transform: translateY(-3px) scale(1.04);
-  color: var(--ink);
-}
-.fa-btn:hover .fa-btn-glow { opacity: 0.55; }
-.fa-btn:hover .fa-btn-icon { transform: scale(1.12); }
-
-/* ── Active / press state ─────────────────────────────────────── */
-.fa-btn:active {
-  transform: scale(0.95) translateY(1px) !important;
-  transition-duration: 0.08s !important;
-}
-
-/* ══════════════════════════════════════════════════════════════
-   BUTTON COLOUR VARIANTS
-   Each variant: branded background, matching glow + hover shadow
-══════════════════════════════════════════════════════════════ */
-
-/* WhatsApp — Green */
-.fa-btn--whatsapp {
-  background: rgba(37,211,102,.10);
-  color: #1a9e50;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 6px rgba(37,211,102,.10),
-    0 6px 18px rgba(37,211,102,.08),
-    0 0 0 0.5px rgba(37,211,102,.16);
-}
-.fa-btn--whatsapp .fa-btn-glow {
-  background: radial-gradient(ellipse, rgba(37,211,102,.55) 0%, transparent 70%);
-}
-.fa-btn--whatsapp:hover {
-  background: rgba(37,211,102,.16);
-  color: #138f40;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.28),
-    0 4px 14px rgba(37,211,102,.22),
-    0 12px 32px rgba(37,211,102,.14),
-    0 0 0 1px rgba(37,211,102,.24);
-}
-
-/* Resume — Blue accent */
-.fa-btn--resume {
-  background: rgba(0,102,255,.09);
-  color: var(--accent);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 6px rgba(0,102,255,.10),
-    0 6px 18px rgba(0,102,255,.08),
-    0 0 0 0.5px rgba(0,102,255,.16);
-}
-.fa-btn--resume .fa-btn-glow {
-  background: radial-gradient(ellipse, rgba(0,102,255,.55) 0%, transparent 70%);
-}
-.fa-btn--resume:hover {
-  background: rgba(0,102,255,.15);
-  color: #0052cc;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.28),
-    0 4px 14px rgba(0,102,255,.22),
-    0 12px 32px rgba(0,102,255,.14),
-    0 0 0 1px rgba(0,102,255,.24);
-}
-
-/* LinkedIn — LinkedIn Blue */
-.fa-btn--linkedin {
-  background: rgba(0,119,181,.09);
-  color: #005f94;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 6px rgba(0,119,181,.10),
-    0 6px 18px rgba(0,119,181,.08),
-    0 0 0 0.5px rgba(0,119,181,.16);
-}
-.fa-btn--linkedin .fa-btn-glow {
-  background: radial-gradient(ellipse, rgba(0,119,181,.55) 0%, transparent 70%);
-}
-.fa-btn--linkedin:hover {
-  background: rgba(0,119,181,.15);
-  color: #004a77;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.28),
-    0 4px 14px rgba(0,119,181,.22),
-    0 12px 32px rgba(0,119,181,.14),
-    0 0 0 1px rgba(0,119,181,.24);
-}
-
-/* Email — Gold/amber */
-.fa-btn--email {
-  background: rgba(200,169,110,.10);
-  color: #8a6820;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 6px rgba(200,169,110,.10),
-    0 6px 18px rgba(200,169,110,.08),
-    0 0 0 0.5px rgba(200,169,110,.18);
-}
-.fa-btn--email .fa-btn-glow {
-  background: radial-gradient(ellipse, rgba(200,169,110,.55) 0%, transparent 70%);
-}
-.fa-btn--email:hover {
-  background: rgba(200,169,110,.18);
-  color: #6e5010;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.28),
-    0 4px 14px rgba(200,169,110,.22),
-    0 12px 32px rgba(200,169,110,.14),
-    0 0 0 1px rgba(200,169,110,.28);
-}
-
-/* Call — Teal */
-.fa-btn--call {
-  background: rgba(0,174,163,.09);
-  color: #007a73;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 6px rgba(0,174,163,.10),
-    0 6px 18px rgba(0,174,163,.08),
-    0 0 0 0.5px rgba(0,174,163,.16);
-}
-.fa-btn--call .fa-btn-glow {
-  background: radial-gradient(ellipse, rgba(0,174,163,.55) 0%, transparent 70%);
-}
-.fa-btn--call:hover {
-  background: rgba(0,174,163,.16);
-  color: #006058;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.28),
-    0 4px 14px rgba(0,174,163,.22),
-    0 12px 32px rgba(0,174,163,.14),
-    0 0 0 1px rgba(0,174,163,.24);
-}
-
-/* Back to Top — Neutral ink glass */
-.fa-btn--top {
-  background: rgba(0,0,50,.05);
-  color: var(--ink-3);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 6px rgba(0,0,0,.06),
-    0 6px 18px rgba(0,0,0,.05),
-    0 0 0 0.5px rgba(0,0,50,.10);
-}
-.fa-btn--top .fa-btn-glow {
-  background: radial-gradient(ellipse, rgba(84,96,112,.40) 0%, transparent 70%);
-}
-.fa-btn--top:hover {
-  background: rgba(0,0,50,.09);
-  color: var(--ink);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.28),
-    0 4px 14px rgba(0,0,50,.10),
-    0 12px 28px rgba(0,0,50,.07),
-    0 0 0 1px rgba(0,0,50,.12);
-}
-/* Chevron icon floats up on hover */
-.fa-btn--top:hover .fa-btn-icon {
-  transform: translateY(-2px) scale(1.12);
-}
-
-/* ══════════════════════════════════════════════════════════════
-   MOBILE — ≤ 768px : 3 + 3 equal-width grid layout
-══════════════════════════════════════════════════════════════ */
+/* 2.10 — body bottom padding on mobile accounts for sticky bar + safe area */
 @media (max-width: 768px) {
+  body {
+    padding-bottom: calc(68px + var(--safe-b)) !important;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
 
-  .footer-actions {
+/* 2.11 — Scrollbar styling */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,50,.14);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,50,.24); }
+
+
+/* ════════════════════════════════════════════════════════════════
+   §3  PERFORMANCE — LCP · FID · CLS · Lighthouse
+════════════════════════════════════════════════════════════════ */
+
+/* 3.1 — content-visibility: auto on below-fold sections.
+   contain-intrinsic-size prevents CLS when browser skips layout. */
+.about-section,
+.projects-section,
+.experience-section,
+.arsenal-section,
+.education-section,
+.achievements-section,
+.certifications-section,
+.fieldwork-section,
+.references-section,
+.contact-section {
+  content-visibility: auto;
+  contain-intrinsic-block-size: 600px;
+}
+
+/* 3.2 — Only promote layers that ACTUALLY animate */
+/* Remove blanket will-change from static decorative layers */
+.wall-grain,
+.wall-grain-fine,
+.wall-light,
+.wall-vignette,
+.wall-shadow-left,
+body::before,
+body::after {
+  will-change: auto !important;
+}
+
+/* Keep will-change only on animated elements */
+.top-nav,
+.footer-glass-btn,
+.fab-main,
+.fab-option,
+.msc-btn,
+.gate-submit-btn,
+.gate-glass-card,
+.scroll-progress,
+.hero-glass-card,
+.hero-editorial-layout,
+.hero-portrait-frame,
+.hero-vchip {
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 3.3 — CLS prevention: reserve space for known images */
+.hero-portrait-frame   { aspect-ratio: 3 / 4; }
+.gate-bg-img           { aspect-ratio: 16 / 9; }
+.hie-img-wrap          { aspect-ratio: 16 / 9; }
+
+/* 3.4 — Reduce blur/filter cost on mobile */
+@media (max-width: 768px) {
+  /* Decorative grain layers off on mobile — no visible difference,
+     saves significant rasterization work on low-end devices */
+  .wall-grain-fine,
+  .lg-light-leak { display: none !important; }
+
+  .wall-grain { opacity: 0.035 !important; }
+  .wall-light { opacity: 0.4   !important; }
+
+  /* Cheap backdrop filter on mobile — still gives glass feel */
+  .gate-glass-card {
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+  }
+  .top-nav {
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+  .nav-mob-drawer {
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+}
+
+/* 3.5 — Reduced-motion: kill all animations, transitions */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
+  /* But keep opacity for AOS (it sets initial opacity:0 via JS) */
+  [data-aos] { transition: opacity 0.01ms !important; }
+}
+
+/* 3.6 — Skeleton shimmer for counters while loading */
+.gvs-value,
+#gate-total-count,
+#gate-online-count,
+#footer-total-count,
+#footer-online-count {
+  min-width: 1ch;
+  transition: opacity 0.3s ease;
+}
+
+/* Loading state placeholder */
+[data-loading="true"] .gvs-value::after,
+.gvs-value:empty::after {
+  content: '';
+  display: inline-block;
+  width: 2.2ch;
+  height: 1em;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,.06) 25%,
+    rgba(0,0,0,.10) 50%,
+    rgba(0,0,0,.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.4s ease infinite;
+  vertical-align: middle;
+}
+@keyframes skeletonPulse {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 3.7 — Contain decorative layers for cheaper paint */
+.wall-grain,
+.wall-grain-fine,
+.wall-vignette,
+.wall-shadow-left {
+  contain: strict;
+  isolation: isolate;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §4  FOOTER GLASS BUTTONS (Task 4)
+   The 4 footer nav items: Profile · Projects · Arsenal · Contact
+   Premium Apple-style glass pills with full interactive states.
+════════════════════════════════════════════════════════════════ */
+
+/* Container */
+.footer-links.footer-nav-btns,
+nav.footer-nav-btns {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 9px;
+  align-items: center;
+  justify-content: center;
+  /* Override old footer-links plain text styles */
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* ── The button ── */
+.footer-glass-btn {
+  /* Layout */
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 92px;
+  flex: 1 1 92px;
+  max-width: 124px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  /* Typography */
+  font-family: var(--ff-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  color: var(--ink-2);
+
+  /* Glass surface: warm semi-translucent white on beige */
+  background: var(--footer-btn-bg);
+  border: 1px solid var(--footer-btn-border);
+  box-shadow: var(--sh-pill);
+
+  /* Safari: non-zero background ensures backdrop-filter renders */
+  background-color: rgba(255,255,255,.54);
+
+  /* Cheap saturation boost instead of blur — performant */
+  backdrop-filter: saturate(1.5) brightness(1.03);
+  -webkit-backdrop-filter: saturate(1.5) brightness(1.03);
+
+  /* GPU layer */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+
+  /* Spring transition */
+  transition:
+    transform  0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.14s ease,
+    color      0.14s ease;
+
+  /* Touch */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Prismatic top-left shimmer */
+.footer-glass-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    128deg,
+    rgba(255,255,255,.65) 0%,
+    rgba(255,255,255,.22) 36%,
+    transparent 58%
+  );
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+  opacity: 1;
+}
+
+/* Icon */
+.footer-btn-icon {
+  font-size: 11px;
+  color: var(--accent);
+  opacity: 0.78;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition:
+    transform  0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity    0.14s ease;
+}
+
+/* Text label */
+.footer-glass-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HOVER ── */
+@media (hover: hover) {
+  .footer-glass-btn:hover {
+    background: rgba(255,255,255,.76);
+    color: var(--ink);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,.95),
+      inset  1px  0 0 rgba(255,255,255,.60),
+      inset -1px  0 0 rgba(255,255,255,.40),
+      inset  0  -1px 0 rgba(0,0,0,.03),
+      0  4px 12px rgba(0,102,255,.11),
+      0 10px 28px rgba(0,102,255,.08),
+      0  0   0 0.5px rgba(0,102,255,.16);
+  }
+  .footer-glass-btn:hover .footer-btn-icon {
+    transform: scale(1.2) rotate(-5deg);
+    opacity: 1;
+  }
+  .footer-glass-btn:hover::before {
+    opacity: 0.65;
+  }
+}
+
+/* ── ACTIVE / PRESS ── */
+.footer-glass-btn:active {
+  transform: translateY(1px) scale(0.96) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.70),
+    inset 0 3px 8px rgba(0,0,0,.09),
+    0 1px 3px rgba(0,0,0,.07),
+    0 0 0 0.5px rgba(0,102,255,.08) !important;
+  transition-duration: 0.07s !important;
+}
+
+/* ── FOCUS ── */
+.footer-glass-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── MOBILE: 2×2 equal grid ── */
+@media (max-width: 600px) {
+  .footer-links.footer-nav-btns,
+  nav.footer-nav-btns {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
-    padding: 16px 0 4px;
-  }
-
-  .fa-divider {
     width: 100%;
-    margin-bottom: 2px;
+    max-width: 300px;
+    margin: 0 auto;
   }
-
-  /* Each row becomes a 3-column equal-width grid */
-  .fa-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 7px;
-    max-width: 100%;
-    width: 100%;
-    padding: 0 2px;
-  }
-
-  /* Buttons fill their cell, centred content */
-  .fa-btn {
-    width: 100%;
-    padding: 11px 6px;
+  .footer-glass-btn {
+    max-width: none;
+    min-width: 0;
+    flex: none;
+    padding: 9px 8px;
     font-size: 11px;
-    gap: 5px;
-    min-height: 48px;
-    border-radius: 14px;
-    /* Touch-optimised: no hover lift on mobile */
-    flex-direction: column;
-    justify-content: center;
   }
-
-  /* Icon bigger on mobile pill */
-  .fa-btn-icon {
-    font-size: 15px;
-  }
-
-  /* Kill hover transform on touch devices */
-  .fa-btn:hover {
-    transform: none;
-  }
-
-  /* Keep active press feedback */
-  .fa-btn:active {
-    transform: scale(0.93) !important;
-    opacity: 0.82 !important;
-  }
-
-  /* Suppress glow on mobile for performance */
-  .fa-btn-glow { display: none; }
 }
-
-/* ── 480px — compact iPhones ──────────────────────────────────── */
-@media (max-width: 480px) {
-
-  .fa-row { gap: 6px; }
-
-  .fa-btn {
-    padding: 10px 4px;
+@media (max-width: 360px) {
+  .footer-glass-btn {
     font-size: 10.5px;
-    min-height: 46px;
-    border-radius: 12px;
-    gap: 4px;
+    padding: 8px 6px;
+    gap: 5px;
   }
-
-  .fa-btn-icon { font-size: 14px; }
-
-  .fa-btn-label { letter-spacing: 0; }
+  .footer-btn-icon { font-size: 10px; }
 }
 
-/* ── End Footer Actions Area ───────────────────────────────────── */
 
-/* ================================================================
-   STEP 5 — Desktop Footer Actions: Premium Glass Container
-================================================================ */
+/* ════════════════════════════════════════════════════════════════
+   §5  FOOTER LAYOUT — Canonical single definition
+   Consolidates the 6 conflicting .footer-inner declarations
+════════════════════════════════════════════════════════════════ */
 
-/* Glass wrap: only visible on desktop (>=769px) */
-.fa-glass-wrap {
+.footer {
+  padding: 0;
+  border-top: 1px solid rgba(0,0,50,.07);
+  background: rgba(255,255,255,.018);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-inner {
+  /* Single canonical definition — overrides all prior versions */
+  position: relative !important;
+  max-width: var(--container) !important;
+  margin: 0 auto !important;
+  padding: clamp(18px, 3vw, 30px) clamp(14px, 3vw, 32px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  /* Remove any lingering backdrop from previous patch */
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+}
+.footer-logo  { width: 26px; height: 26px; border-radius: 8px; }
+.footer-name  { display: block; font-size: 13px; font-weight: 700; color: var(--ink); }
+.footer-role  { display: block; font-size: 10px; color: var(--ink-3); }
+
+.footer-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  font-size: 11px !important;
+  color: var(--ink-3) !important;
+  text-align: right;
+}
+
+/* Mobile footer: stack vertically */
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+  .footer-copy { text-align: left !important; }
+  .footer-nav-btns { align-self: stretch; }
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §6  MOBILE STICKY CTA — Upgraded glass (final, canonical)
+   Overrides the conflicting definitions from earlier patches
+════════════════════════════════════════════════════════════════ */
+
+.mobile-sticky-cta {
+  /* Display */
+  display: none;
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+
+  /* Glass surface — warm beige/white tint matching site */
+  background: rgba(235,231,224,.88) !important;
+  backdrop-filter: blur(20px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.8) !important;
+  border-top: 1px solid rgba(255,255,255,.58) !important;
+  box-shadow:
+    0 -2px 12px rgba(0,0,50,.06),
+    0 -6px 28px rgba(0,0,50,.05),
+    inset 0 1px 0 rgba(255,255,255,.75) !important;
+
+  /* Padding: horizontal gutter + safe-area bottom */
+  padding: 10px 16px !important;
+  padding-bottom: max(10px, calc(10px + var(--safe-b))) !important;
+  padding-bottom: max(10px, calc(10px + env(safe-area-inset-bottom,0px))) !important;
+
+  gap: 8px !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-sticky-cta { display: flex !important; }
+}
+@media (min-width: 769px) {
+  .mobile-sticky-cta { display: none !important; }
+}
+
+/* Sticky CTA buttons */
+.msc-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  width: 100%;
-  max-width: 560px;
-  margin: 0 auto;
-  padding: 18px 24px 14px;
-  border-radius: 20px;
-  /* Premium glass */
-  background: rgba(255, 255, 255, 0.045);
-  backdrop-filter: blur(18px) saturate(1.7);
-  -webkit-backdrop-filter: blur(18px) saturate(1.7);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.04),
-    0 4px 24px rgba(0, 0, 50, 0.08),
-    0 12px 40px rgba(0, 0, 50, 0.06),
-    0 0 0 1px rgba(0, 0, 50, 0.06);
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  max-width: 106px;
+  min-height: 48px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #fff;
+  /* Firm colour — not glass, for contrast in bar */
+  transition: opacity .15s, transform .18s cubic-bezier(0.34,1.56,.64,1);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.msc-btn i { font-size: 16px; }
+.msc-btn:active { transform: scale(.94); opacity: .86; }
+.msc-whatsapp { background: linear-gradient(145deg, #25D366, #1da84f); }
+.msc-resume   { background: linear-gradient(145deg, #0066FF, #5856d6); }
+.msc-linkedin { background: linear-gradient(145deg, #0077b5, #0062a3); }
+
+
+/* ════════════════════════════════════════════════════════════════
+   §7  NAVIGATION — Spacing, Safe Area, Performance
+════════════════════════════════════════════════════════════════ */
+
+/* Nav safe-area: on notched phones the pill nav needs top offset */
+@supports (padding-top: env(safe-area-inset-top)) {
+  :root {
+    /* If device has a notch, raise nav-top */
+    --nav-top: max(10px, calc(var(--safe-t) - 4px));
+  }
 }
 
-/* On mobile, glass wrap dissolves — buttons keep their own styling */
+/* Mobile nav drawer: scrollable + safe height */
 @media (max-width: 768px) {
-  .fa-glass-wrap {
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-    max-width: 100%;
+  .nav-mob-drawer {
+    max-height: calc(100dvh - var(--nav-top) - var(--nav-h) - 20px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-mob-link {
+    min-height: 44px;
+    display: flex !important;
+    align-items: center;
+    font-size: 14.5px !important;
   }
 }
 
 
-/* ================================================================
-   STEP 6 — Mobile Sticky Bar: Upgraded Glassmorphism
-================================================================ */
+/* ════════════════════════════════════════════════════════════════
+   §8  SPACING CONSISTENCY — Uniform section rhythm
+════════════════════════════════════════════════════════════════ */
 
-/* Override existing mobile-sticky-cta with glassmorphism */
-.mobile-sticky-cta {
-  background: rgba(255, 255, 255, 0.72) !important;
-  backdrop-filter: blur(22px) saturate(1.9) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(1.9) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.55) !important;
-  box-shadow:
-    0 -2px 16px rgba(0, 0, 50, 0.08),
-    0 -6px 30px rgba(0, 0, 50, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.80) !important;
+/* Canonical section padding — every section uses this */
+.section {
+  padding-top:    var(--section-pad) !important;
+  padding-bottom: var(--section-pad) !important;
+  position: relative;
+  z-index: 10;
 }
 
-/* Dark mode glass */
-[data-theme="dark"] .mobile-sticky-cta,
-.dark .mobile-sticky-cta {
-  background: rgba(18, 18, 30, 0.78) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.10) !important;
-  box-shadow:
-    0 -2px 16px rgba(0, 0, 0, 0.22),
-    0 -6px 30px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+/* First section after nav gets extra top clearance */
+.hero-section {
+  padding-top: calc(var(--nav-top) + var(--nav-h) + clamp(24px,3vw,40px)) !important;
 }
 
-/* Top / Back-to-top button in mobile bar */
-.msc-top {
-  background: rgba(0, 0, 50, 0.10);
-  color: var(--ink-2, #444);
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
+/* Section headers — consistent bottom margin */
+.section-header {
+  margin-bottom: clamp(18px, 2.8vw, 32px) !important;
 }
-.msc-top:hover { background: rgba(0, 0, 50, 0.16); }
 
-/* Desktop: always hide mobile sticky bar */
-@media (min-width: 769px) {
-  .mobile-sticky-cta {
-    display: none !important;
+/* Container: single source, no !important war */
+.container,
+.section-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-left:  clamp(14px, 3.5vw, 36px);
+  padding-right: clamp(14px, 3.5vw, 36px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §9  EXPERIENCE TABS — Mobile horizontal scroll fix
+════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .exp-tabs-wrap {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    width: 100% !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
   }
+  .exp-tabs-wrap::-webkit-scrollbar { display: none; }
+  .exp-tab { scroll-snap-align: start; white-space: nowrap; flex-shrink: 0; }
 }
 
 
-/* ================================================================
-   STEP 7 — Entrance Animations: Fade-in + Slide-up
-================================================================ */
+/* ════════════════════════════════════════════════════════════════
+   §10  GRID OVERFLOWS — No horizontal scroll anywhere
+════════════════════════════════════════════════════════════════ */
 
-/* Keyframe */
-@keyframes fa-rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Single root guard */
+html, body {
+  overflow-x: clip !important;
+  max-width: 100vw;
 }
 
-/* Footer action buttons — staggered entrance */
-.footer-actions .fa-btn {
-  opacity: 0;
-  animation: fa-rise-in 0.45s var(--ease-out, cubic-bezier(.22,.68,0,1.2)) forwards;
+/* All major sections */
+.why-hire-section,
+.contact-section,
+.about-section,
+.projects-section,
+.experience-section,
+.arsenal-section,
+.education-section,
+.achievements-section,
+.certifications-section,
+.fieldwork-section,
+.references-section,
+#why-hire, #contact, #about {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
-/* Row 1 stagger */
-.fa-row-primary .fa-btn:nth-child(1) { animation-delay: 0.05s; }
-.fa-row-primary .fa-btn:nth-child(2) { animation-delay: 0.13s; }
-.fa-row-primary .fa-btn:nth-child(3) { animation-delay: 0.21s; }
-
-/* Row 2 stagger */
-.fa-row-secondary .fa-btn:nth-child(1) { animation-delay: 0.29s; }
-.fa-row-secondary .fa-btn:nth-child(2) { animation-delay: 0.37s; }
-.fa-row-secondary .fa-btn:nth-child(3) { animation-delay: 0.45s; }
-
-/* Mobile sticky bar buttons — staggered entrance */
-.msc-anim {
-  opacity: 0;
-  animation: fa-rise-in 0.42s var(--ease-out, cubic-bezier(.22,.68,0,1.2)) forwards;
+/* Grids */
+.why-hire-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: clamp(10px,1.8vw,22px) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
-.msc-anim:nth-child(1) { animation-delay: 0.08s; }
-.msc-anim:nth-child(2) { animation-delay: 0.16s; }
-.msc-anim:nth-child(3) { animation-delay: 0.24s; }
-.msc-anim:nth-child(4) { animation-delay: 0.32s; }
-
-/* Respect reduced-motion preference */
-@media (prefers-reduced-motion: reduce) {
-  .footer-actions .fa-btn,
-  .msc-anim {
-    animation: none;
-    opacity: 1;
-  }
+@media (max-width: 980px) {
+  .why-hire-grid { grid-template-columns: repeat(2,1fr) !important; }
+}
+@media (max-width: 600px) {
+  .why-hire-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
 }
 
-/* ================================================================
-   STEP 5-7 OVERRIDES — Typography, Glass Rule, Engage Layout Fix
-================================================================ */
+/* Contact layout */
+.contact-layout {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
 
-/* ── Step 5: Typography ─────────────────────────────────────────── */
+/* All card types */
+.wh-card,
+.project-card,
+.museum-case,
+.exp-card,
+.edu-card,
+.cert-card,
+.ach-award-card,
+.arsenal-category {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
 
-/* Section titles: larger + darker */
+/* Sectors trust bar wrap */
+.stb-sectors {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 8px 14px !important;
+  max-width: 100% !important;
+}
+
+/* Proof bar */
+.proof-bar {
+  max-width: 100% !important;
+  flex-wrap: wrap !important;
+  overflow: hidden !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §11  TYPOGRAPHY — Clean, readable, premium
+════════════════════════════════════════════════════════════════ */
+
+/* Section titles */
 .sec-title,
 h2.sec-title {
-  font-size: clamp(24px, 3.2vw, 42px) !important;
-  color: #06080f !important;
+  font-size: clamp(22px, 3vw, 38px) !important;
   font-weight: 800 !important;
+  color: var(--ink) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.02em !important;
 }
 
-/* Why-Hire card titles: larger + darker */
-.wh-title,
-.wh-card .wh-title,
-.wh-card h3 {
-  font-size: clamp(1.05rem, 1.6vw, 1.3rem) !important;
-  font-weight: 800 !important;
-  color: #06080f !important;
+/* Exp/edu/cert role headings */
+.exp-role,
+.edu-degree,
+.mc-title {
+  font-family: var(--ff-serif) !important;
+  line-height: 1.2 !important;
 }
 
-/* Descriptions: summarized feel (max-height 2 lines via line-clamp) */
+/* Body text: comfortable reading line-height */
+.exp-bullet,
+.mc-desc,
+.edu-description,
 .wh-desc,
-.wh-card .wh-desc {
-  font-size: clamp(.8rem, 1vw, .875rem) !important;
-  line-height: 1.55 !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-  margin-bottom: 10px !important;
-  color: #1e2d4a !important;
-}
-
-/* Badges: smaller + transparent pill */
-.wh-badge {
-  font-size: .62rem !important;
-  padding: 2px 8px !important;
-  border-radius: 99px !important;
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid rgba(0,0,0,.08) !important;
-  font-weight: 700 !important;
-  letter-spacing: .07em !important;
-}
-.wh-badge-green  { color: #009944 !important; }
-.wh-badge-amber  { color: #B45309 !important; }
-.wh-badge-purple { color: #6D28D9 !important; }
-.wh-badge-teal   { color: #0369A1 !important; }
-.wh-badge-rose   { color: #BE123C !important; }
-
-/* Proof bars: single line only */
-.wh-proof {
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  padding: 6px 10px !important;
-  font-size: .7rem !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  background: rgba(255,255,255,.02) !important;
-  border: 1px solid rgba(0,0,0,.06) !important;
-  border-radius: var(--r-sm, 6px) !important;
-}
-
-/* Contact intro: smaller + darker */
-.contact-intro {
-  font-size: 13px !important;
-  color: #1e2d4a !important;
-  line-height: 1.65 !important;
-}
-
-/* ── Step 6: Global Glass Rule — ALL cards ────────────────────────── */
-/* Apply to every major card/panel not already covered */
-.ref-card,
-.hie-card,
-.resume-preview-card,
-.rpc-download-btn,
-.social-panel,
-.social-btn,
-.recruiter-cta-block,
-.availability-banner,
-.contact-item,
-.contact-promise,
-.contact-last-updated,
-.ci-icon-wrap,
-.sectors-trust-bar,
-.about-stat,
-.panel-achievements,
-.panel-sla-ring,
-.panel-chips,
-.gate-glass-card,
-.hero-glass-card,
-.kpi-block,
-.exp-timeline-wrap,
-.lge-stat-chip,
-.exp-stat-chip,
-.exp-meta-chip,
-.weather-bar,
-.footer-inner,
-.rpc-header,
-.rpc-tags,
-.cta-action-btn {
-  background: rgba(255,255,255,.03) !important;
-  backdrop-filter: blur(2px) !important;
-  -webkit-backdrop-filter: blur(2px) !important;
-  border: none !important;
-}
-
-/* RPC tags: transparent pill */
-.rpc-tag {
-  background: rgba(255,255,255,.04) !important;
-  border: 1px solid rgba(0,0,0,.07) !important;
-  border-radius: 99px !important;
-  font-size: .7rem !important;
-  padding: 3px 9px !important;
-}
-
-/* ── Step 7: Engage section layout fix ───────────────────────────── */
-
-/* Remove extra padding/margin from contact section */
-.contact-section {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-.contact-section .section-header,
-.contact-section header.section-header {
-  margin-bottom: 16px !important;
-}
-
-/* Remove the extra space that was marked in red (top gap) */
-#contact {
-  padding-top: clamp(32px, 4vw, 48px) !important;
-}
-
-/* Move CTA grid (green box) to fill the right column space */
-/* On desktop: contact-left + contact-right layout */
-.contact-layout {
-  grid-template-columns: 1fr 1fr !important;
-  align-items: start !important;
-  gap: 20px !important;
-}
-
-/* Push the CTA grid to be more prominent */
-.contact-cta-grid {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 10px !important;
-  margin-top: 0 !important;
-}
-
-/* Make CTA buttons more compact and glass-style */
-.cta-action-btn {
-  padding: 14px 18px !important;
-  border-radius: 14px !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.16),
-    0 2px 8px rgba(0,0,0,.06),
-    0 6px 20px rgba(0,0,0,.07) !important;
-}
-
-/* ── Footer: Remove the footer-actions button cluster ─────────────── */
-/* Hide the duplicate footer action buttons (the "class button" in footer) */
-.footer-actions {
-  display: none !important;
-}
-
-/* Keep mobile sticky CTA bar clean */
-.mobile-sticky-cta {
-  background: rgba(255,255,255,.06) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border-top: 1px solid rgba(255,255,255,.12) !important;
-  border-bottom: none !important;
-}
-
-
-/* ── Move CTA grid visually to contact-right area ─────────────── */
-/* On desktop, show the CTA grid prominently at top of right column */
-@media (min-width: 901px) {
-  .contact-left {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  /* Move CTA grid to top of right column by using grid reorder */
-  .contact-layout {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    grid-template-areas:
-      "left right"
-      "cta right" !important;
-  }
-  .contact-left {
-    grid-area: left !important;
-  }
-  .contact-right {
-    grid-area: right !important;
-    grid-row: 1 / span 2 !important;
-  }
-  .contact-cta-grid {
-    grid-area: cta !important;
-  }
-}
-
-/* Remove extra vertical gap from contact section header */
-.contact-section .sec-rule {
-  margin-bottom: 8px !important;
-}
-
-/* Shrink the resume card slightly */
-.resume-preview-card {
-  padding: 14px 16px !important;
-}
-.rpc-header {
-  margin-bottom: 8px !important;
-}
-
-/* Social panel refinements */
-.social-panel {
-  padding: clamp(14px, 2vw, 20px) !important;
-}
-.social-heading {
-  font-size: .78rem !important;
-  font-weight: 700 !important;
+.bio-body,
+.hie-desc {
+  line-height: 1.68 !important;
   color: var(--ink-2) !important;
-  margin-bottom: 10px !important;
-}
-.social-btn {
-  padding: 9px 12px !important;
 }
 
-
-/* ================================================================
-   WHY HIRE + HIE CARDS — 3D Crystal Redesign
-   • Removes excess space in Why Hire cards
-   • Makes all text readable with strong contrast
-   • 3D crystal glass aesthetic (no heavy color)
-   • HIE / Fieldwork cards: light glass, no dark blue
-================================================================ */
-
-/* ── WHY HIRE: 3D Crystal Card ──────────────────────────────────── */
-.wh-card,
-.why-hire-grid .wh-card {
-  position: relative !important;
-  padding: 14px 16px 12px !important;
-  border-radius: 18px !important;
-  overflow: visible !important;
-
-  /* Pure transparent 3D glass — zero fill, zero blur, zero color */
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border: none !important;
-
-  /* Crystal edge lighting — prismatic 3D rim only */
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.72),
-    inset 1.5px 0 0 rgba(255,255,255,.42),
-    inset -1px 0 0 rgba(255,255,255,.14),
-    inset 0 -1px 0 rgba(0,0,0,.06),
-    0 1px 0 rgba(255,255,255,.42),
-    0 2px 6px rgba(0,0,0,.07),
-    0 6px 18px rgba(0,0,0,.09),
-    0 18px 40px rgba(0,0,0,.06),
-    0 0 0 0.5px rgba(255,255,255,.20) !important;
-
-  transform: perspective(800px) rotateX(0deg) rotateY(0deg) !important;
-  transition:
-    transform .35s cubic-bezier(.25,.46,.45,.94),
-    box-shadow .35s ease !important;
-}
-
-/* 3D lift on hover */
-.wh-card:hover,
-.why-hire-grid .wh-card:hover {
-  transform: perspective(800px) translateY(-6px) rotateX(1.5deg) !important;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.95),
-    inset 1.5px 0 0 rgba(255,255,255,.70),
-    inset -1px 0 0 rgba(255,255,255,.22),
-    inset 0 -1px 0 rgba(0,0,0,.05),
-    0 1px 0 rgba(255,255,255,.60),
-    0 4px 10px rgba(0,0,0,.08),
-    0 12px 32px rgba(0,0,0,.12),
-    0 28px 60px rgba(0,0,0,.07) !important;
-}
-
-/* Prismatic top reflection strip */
-.wh-card::before,
-.why-hire-grid .wh-card::before {
-  content: '' !important;
-  position: absolute !important;
-  top: 0 !important; left: 8% !important; right: 8% !important;
-  height: 1px !important;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255,255,255,.95) 30%,
-    rgba(255,255,255,1) 50%,
-    rgba(255,255,255,.95) 70%,
-    transparent 100%) !important;
-  border-radius: 99px !important;
-  z-index: 2 !important;
-}
-
-/* Subtle inner crystal refraction */
-.wh-card::after,
-.why-hire-grid .wh-card::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  border-radius: 18px !important;
-  /* No white fill — pure glass with only edge prismatic sheen */
-  background: transparent !important;
-  pointer-events: none !important;
-  z-index: 1 !important;
-}
-
-/* All card content above pseudo-elements */
-.wh-card > * {
-  position: relative !important;
-  z-index: 3 !important;
-}
-
-/* Glow blob: neutral warm — no color tint */
-.wh-card-glow {
-  background: radial-gradient(ellipse,
-    rgba(200,200,200,.18) 0%,
-    transparent 70%) !important;
-  opacity: 0.6 !important;
-}
-.wh-card:hover .wh-card-glow { opacity: 0.9 !important; }
-
-/* ── Icon wraps: crystal glass chip ─────────────────────────────── */
-.wh-icon-wrap,
-.wh-card .wh-icon-wrap {
-  width: 38px !important; height: 38px !important;
-  background: rgba(255,255,255,.55) !important;
-  backdrop-filter: blur(4px) !important;
-  border: 1px solid rgba(255,255,255,.80) !important;
-  border-radius: 10px !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.90),
-    0 2px 6px rgba(0,0,0,.08) !important;
-  margin-bottom: 10px !important;
-  font-size: 1rem !important;
-}
-
-/* Icon colors — readable on crystal background */
-.wh-icon-mission { background: rgba(255,255,255,.50) !important; color: #2563EB !important; border-color: rgba(255,255,255,.75) !important; }
-.wh-icon-infra   { background: rgba(255,255,255,.50) !important; color: #059669 !important; border-color: rgba(255,255,255,.75) !important; }
-.wh-icon-ops     { background: rgba(255,255,255,.50) !important; color: #D97706 !important; border-color: rgba(255,255,255,.75) !important; }
-.wh-icon-lead    { background: rgba(255,255,255,.50) !important; color: #7C3AED !important; border-color: rgba(255,255,255,.75) !important; }
-.wh-icon-support { background: rgba(255,255,255,.50) !important; color: #0891B2 !important; border-color: rgba(255,255,255,.75) !important; }
-.wh-icon-sec     { background: rgba(255,255,255,.50) !important; color: #E11D48 !important; border-color: rgba(255,255,255,.75) !important; }
-
-/* ── Text: maximum readability on crystal ────────────────────────── */
-.wh-card .wh-title,
-.wh-card h3,
-.why-hire-grid .wh-title {
-  font-size: clamp(1rem, 1.35vw, 1.18rem) !important;
-  font-weight: 800 !important;
-  color: #0a0e1a !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.80) !important;
-  line-height: 1.28 !important;
-  margin-bottom: 6px !important;
-}
-
-.wh-card .wh-desc,
-.wh-card p,
-.why-hire-grid .wh-desc {
-  font-size: clamp(.79rem, .95vw, .86rem) !important;
-  color: #1e2940 !important;
-  line-height: 1.55 !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-  margin-bottom: 8px !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.50) !important;
-}
-
-/* Badges: crystal pill */
-.wh-card .wh-badge,
-.why-hire-grid .wh-badge {
-  font-size: .60rem !important;
-  padding: 2px 9px !important;
-  border-radius: 99px !important;
-  background: rgba(255,255,255,.55) !important;
-  border: 1px solid rgba(255,255,255,.75) !important;
+/* Why Hire card titles */
+.wh-title {
   font-weight: 700 !important;
-  letter-spacing: .07em !important;
-  text-shadow: none !important;
-  box-shadow: 0 1px 2px rgba(0,0,0,.06) !important;
-}
-.wh-badge-green  { color: #047857 !important; }
-.wh-badge-amber  { color: #92400E !important; }
-.wh-badge-purple { color: #5B21B6 !important; }
-.wh-badge-teal   { color: #0E7490 !important; }
-.wh-badge-rose   { color: #9F1239 !important; }
-
-/* Proof bar: crystal strip */
-.wh-card .wh-proof,
-.why-hire-grid .wh-proof {
-  background: rgba(255,255,255,.45) !important;
-  border: 1px solid rgba(255,255,255,.70) !important;
-  border-radius: 8px !important;
-  padding: 5px 10px !important;
-  font-size: .68rem !important;
-  color: #1e2940 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.85) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.60) !important;
-}
-.wh-proof-icon { opacity: .7 !important; }
-
-/* ── HIE / Fieldwork Cards: Light Crystal (no dark blue) ─────────── */
-.hie-card,
-.fieldwork-section .hie-card {
-  border-radius: 20px !important;
-  overflow: hidden !important;
+  font-size: clamp(1rem, 1.5vw, 1.2rem) !important;
+  color: var(--ink) !important;
+  line-height: 1.3 !important;
 }
 
-.hie-card-inner,
-.fieldwork-section .hie-card-inner {
-  background:
-    linear-gradient(160deg,
-      rgba(255,255,255,.68) 0%,
-      rgba(248,250,255,.45) 50%,
-      rgba(240,245,255,.28) 100%) !important;
-  backdrop-filter: blur(20px) saturate(1.9) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(1.9) !important;
-  border: none !important;
-  border-radius: 20px !important;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.90),
-    inset 1px 0 0 rgba(255,255,255,.55),
-    inset -1px 0 0 rgba(255,255,255,.20),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 2px 8px rgba(0,0,0,.07),
-    0 10px 30px rgba(0,0,0,.08),
-    0 24px 56px rgba(0,0,0,.05) !important;
-}
 
-.hie-card:hover .hie-card-inner {
-  border-color: rgba(255,255,255,.85) !important;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.95),
-    inset 1px 0 0 rgba(255,255,255,.70),
-    inset -1px 0 0 rgba(255,255,255,.28),
-    inset 0 -1px 0 rgba(0,0,0,.04),
-    0 4px 14px rgba(0,0,0,.09),
-    0 16px 44px rgba(0,0,0,.12),
-    0 32px 72px rgba(0,0,0,.06) !important;
-}
+/* ════════════════════════════════════════════════════════════════
+   §12  GLASS SYSTEM — Unified, reduced-blur, Safari-safe
+   Single authoritative glass card definition.
+   Replaces all conflicting glass overrides from earlier patches.
+════════════════════════════════════════════════════════════════ */
 
-/* Glow: warm neutral */
-.hie-card-glow {
-  background: radial-gradient(ellipse,
-    rgba(180,190,210,.15) 0%,
-    transparent 65%) !important;
-}
-
-/* Image overlay: very soft, no dark blue tint */
-.hie-img-overlay {
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,.02) 0%,
-    rgba(0,0,0,.28) 100%) !important;
-}
-
-/* Number badge: light crystal */
-.hie-img-badge {
-  background: rgba(255,255,255,.72) !important;
-  backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255,255,255,.85) !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,.10) !important;
-}
-.hie-badge-num {
-  color: #0a0e1a !important;
-  font-weight: 800 !important;
-}
-
-/* Env tags (bottom-left on photo): light glass */
-.hie-env-tag {
-  background: rgba(255,255,255,.60) !important;
-  backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255,255,255,.75) !important;
-  color: #1e2940 !important;
-  font-weight: 600 !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,.08) !important;
-}
-.hie-env-tag i { opacity: .70 !important; color: #2563EB !important; }
-
-/* Content area text */
-.hie-title,
-.hie-card .hie-title {
-  color: #0a0e1a !important;
-  font-weight: 800 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.70) !important;
-}
-
-.hie-desc,
-.hie-card .hie-desc {
-  color: #1e2940 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.50) !important;
-}
-
-/* Activities & tech labels */
-.hie-activities-label,
-.hie-tech-label {
-  color: #2563EB !important;
-}
-
-/* List items */
-.hie-list li {
-  color: #1e2940 !important;
-}
-.hie-list li i {
-  color: #2563EB !important;
-}
-
-/* Tech tags: crystal pill, no blue bg */
-.hie-tag {
-  background: rgba(255,255,255,.55) !important;
-  border: 1px solid rgba(255,255,255,.78) !important;
-  color: #1e3a8a !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.90),
-    0 1px 3px rgba(0,0,0,.07) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.60) !important;
-}
-.hie-tag:hover {
-  background: rgba(255,255,255,.75) !important;
-  border-color: rgba(255,255,255,.92) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    0 2px 8px rgba(0,0,0,.10) !important;
-  transform: translateY(-1px) !important;
-}
-.hie-tag i { color: #2563EB !important; }
-
-/* Icon wraps inside HIE content */
-.hie-icon-wrap,
-.hie-icon-wrap--network {
-  background: rgba(255,255,255,.55) !important;
-  border: 1px solid rgba(255,255,255,.78) !important;
-  color: #2563EB !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.90),
-    0 2px 6px rgba(0,0,0,.07) !important;
-}
-
-/* Footer strip */
-.hie-footer {
-  border-top: 1px solid rgba(255,255,255,.55) !important;
-  background: rgba(255,255,255,.22) !important;
-  padding: 14px 16px 14px !important;
-}
-.hie-footer-item > i {
-  color: #2563EB !important;
-  opacity: .85 !important;
-}
-.hie-footer-label {
-  color: #0a0e1a !important;
-  font-weight: 700 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.60) !important;
-}
-.hie-footer-sub {
-  color: #1e2940 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,.50) !important;
-}
-
-/* Why Hire grid: tighten row gap */
-.why-hire-grid {
-  gap: clamp(12px, 1.6vw, 20px) !important;
-}
-
-/* ================================================================
-   FINAL OVERRIDE — Pure Transparent 3D Glass (No White/Color Fill)
-   Applied last to ensure all cards are truly transparent with only
-   3D glass edge lighting (inset rims + depth shadows).
-================================================================ */
-
-/* WHY HIRE cards — transparent, tighter padding */
-.wh-card,
-.why-hire-grid .wh-card {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-.wh-card::after,
-.why-hire-grid .wh-card::after {
-  background: transparent !important;
-}
-
-/* ARSENAL category cards — transparent, tighter padding */
-.arsenal-category {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  padding: 14px 16px !important;
-}
-.arsenal-category::before {
-  background: transparent !important;
-}
-
-/* ALL main glass cards — fully transparent */
+/* ── Shared glass card mixin ── */
+/* Applied to all card types via the MASTER list */
 .glass-card,
 .museum-case,
 .project-card,
@@ -17211,314 +16945,337 @@ h2.sec-title {
 .cert-card,
 .cert-hero-card,
 .ach-award-card,
+.wh-card,
 .rec-glass-card,
 .edu-rec-card,
+.arsenal-category,
 .about-bio-col,
 .about-panel-col,
 .about-stats-row,
 .ach-item,
 .hero-glass-card,
-.hero-editorial-layout,
 .exp-tabs-wrap,
 .lge-tabs-nav,
 .kpi-block {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  /* Minimal blur — inexpensive, Safari-safe */
+  backdrop-filter: saturate(1.4) brightness(1.01) !important;
+  -webkit-backdrop-filter: saturate(1.4) brightness(1.01) !important;
+
+  /* Canonical shadow */
+  box-shadow: var(--sh-glass-card) !important;
 }
 
-/* ENGAGE section — remove extra bottom space */
-.contact-section,
-#contact {
-  padding-bottom: clamp(16px, 2vw, 24px) !important;
+/* Hover state */
+.glass-card:hover,
+.museum-case:hover,
+.project-card:hover,
+.exp-card:hover,
+.lge-card:hover,
+.edu-card:hover,
+.cert-card:hover,
+.wh-card:hover,
+.arsenal-category:hover {
+  box-shadow: var(--sh-glass-card-hover) !important;
 }
 
-/* HIE / Fieldwork cards — also transparent glass */
-.hie-card-inner,
-.fieldwork-section .hie-card-inner {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+/* ── Pill chips ── */
+.p-chip,
+.ac-skill,
+.lge-tag,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip,
+.btn-primary,
+.btn-ghost,
+.nav-resume-btn,
+.hie-tag,
+.tech-tag {
+  backdrop-filter: saturate(1.3) !important;
+  -webkit-backdrop-filter: saturate(1.3) !important;
+  box-shadow: var(--sh-pill) !important;
 }
 
-/* ================================================================
-   ENGAGE SECTION — Full 3D Glass Redesign
-   • Every card/panel: transparent background, 3D glass border
-   • Tight spacing — no extra whitespace
-   • Left column: info items + resume card + CTA buttons
-   • Right column: social panel + recruiter block + availability
-================================================================ */
-
-/* ── Section wrapper: zero extra padding ──────────────────────── */
-.contact-section,
-#contact {
-  padding-top: clamp(28px, 3.5vw, 44px) !important;
-  padding-bottom: clamp(20px, 2.5vw, 32px) !important;
+/* ── Nav pill ── */
+.top-nav {
+  backdrop-filter: blur(2px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(1.5) !important;
 }
 
-/* ── Layout: tight two-column gap ─────────────────────────────── */
+
+/* ════════════════════════════════════════════════════════════════
+   §13  REUSABLE UTILITY CLASSES (Task 8)
+════════════════════════════════════════════════════════════════ */
+
+/* Visibility utilities */
+.u-hide-mobile  { }
+.u-show-mobile  { display: none !important; }
+.u-hide-tablet  { }
+
+@media (max-width: 768px) {
+  .u-hide-mobile { display: none !important; }
+  .u-show-mobile { display: revert !important; }
+}
+@media (max-width: 1024px) {
+  .u-hide-tablet { display: none !important; }
+}
+
+/* Hover lift — reusable on any element */
+.u-lift {
+  transition: transform 0.26s cubic-bezier(0.34,1.56,.64,1),
+              box-shadow 0.22s cubic-bezier(0.22,1,.36,1);
+  will-change: transform;
+}
+@media (hover: hover) {
+  .u-lift:hover { transform: translateY(-3px); }
+}
+.u-lift:active { transform: translateY(1px) !important; }
+
+/* Glass surface utility */
+.u-glass {
+  background: rgba(255,255,255,.52);
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-glass-card);
+  -webkit-backdrop-filter: saturate(1.4);
+  backdrop-filter: saturate(1.4);
+}
+
+/* Truncate to 2 lines */
+.u-clamp-2 {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §14  ABOUT STATS ROW — Clear dividers on mobile
+════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .about-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .about-stat {
+    padding: 14px 8px !important;
+  }
+  .astat-num { font-size: 18px !important; }
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §15  HERO — Responsive at all breakpoints
+════════════════════════════════════════════════════════════════ */
+
+/* Tablet portrait */
+@media (max-width: 1024px) {
+  .hero-editorial-layout:not(:has(.hero-inner-grid)),
+  .hero-inner-grid {
+    grid-template-columns: minmax(0,160px) 46px minmax(0,1fr) !important;
+    gap: 14px !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero-editorial-layout:not(:has(.hero-inner-grid)),
+  .hero-inner-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 16px !important;
+  }
+  .hero-portrait-col {
+    max-width: 170px;
+    margin: 0 auto !important;
+  }
+  .hero-vertical-chips {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px !important;
+  }
+  .hvc-connector { display: none !important; }
+  .hero-vchip {
+    flex-direction: row !important;
+    min-width: unset;
+    padding: 6px 10px !important;
+  }
+  .hero-name-first,
+  .hero-name-last { font-size: clamp(26px, 7.5vw, 42px) !important; }
+}
+
+@media (max-width: 480px) {
+  .hero-portrait-col { max-width: 140px !important; }
+  .hero-name-first,
+  .hero-name-last { font-size: clamp(24px, 8vw, 36px) !important; }
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §16  CERTIFICATIONS GRID — Consistent breakpoints
+════════════════════════════════════════════════════════════════ */
+
+.certs-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px)  { .certs-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 480px)  { .certs-grid { grid-template-columns: 1fr; } }
+
+
+/* ════════════════════════════════════════════════════════════════
+   §17  CONTACT SECTION — Tidy layout, no padding wars
+════════════════════════════════════════════════════════════════ */
+
+#contact,
+.contact-section {
+  padding-top:    clamp(28px, 4vw, 52px) !important;
+  padding-bottom: clamp(28px, 4vw, 52px) !important;
+}
+
 .contact-layout {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
-  gap: 16px !important;
+  gap: 20px !important;
   align-items: start !important;
 }
-@media (max-width: 900px) {
-  .contact-layout { grid-template-columns: 1fr !important; gap: 14px !important; }
+
+@media (max-width: 700px) {
+  .contact-layout {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .contact-left,
+  .contact-right {
+    width: 100% !important;
+    grid-area: unset !important;
+    grid-row: unset !important;
+  }
+  .rcb-actions {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+  }
+  .rcb-btn {
+    flex: 1 1 auto !important;
+  }
 }
 
-/* ── Left column: flex column, tight gap ──────────────────────── */
-.contact-left {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-}
 
-/* ── Status + intro row ────────────────────────────────────────── */
-.contact-last-updated {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 7px !important;
-  font-size: .70rem !important;
-  color: var(--ink-2) !important;
-  background: transparent !important;
-  border-radius: var(--r-pill) !important;
-  padding: 4px 12px !important;
-  margin-bottom: 0 !important;
-  /* 3D glass pill */
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -0.5px 0 rgba(0,0,0,.06),
-    0 1px 3px rgba(0,0,0,.05),
-    0 0 0 0.5px rgba(255,255,255,.20) !important;
-}
+/* ════════════════════════════════════════════════════════════════
+   §18  ICON VISIBILITY — Consistent, readable on light beige bg
+════════════════════════════════════════════════════════════════ */
 
-.contact-intro {
-  font-size: .78rem !important;
-  color: var(--ink-2) !important;
-  line-height: 1.60 !important;
-  margin-bottom: 0 !important;
-}
-
-/* ── Response promise chip ─────────────────────────────────────── */
-.contact-promise {
-  display: flex !important;
-  align-items: center !important;
-  gap: 9px !important;
-  font-size: .76rem !important;
-  color: var(--ink-2) !important;
-  margin-bottom: 0 !important;
-  padding: 8px 14px !important;
-  border-radius: var(--r-sm) !important;
-  /* 3D glass chip */
-  background: transparent !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -0.5px 0 rgba(0,0,0,.05),
-    inset 1px 0 0 rgba(255,255,255,.28),
-    inset -1px 0 0 rgba(255,255,255,.10),
-    0 2px 6px rgba(0,0,0,.06),
-    0 0 0 0.5px rgba(255,255,255,.20) !important;
-}
-
-/* ── Contact items list ────────────────────────────────────────── */
-.contact-items {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-}
-
-.contact-item {
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  padding: 9px 13px !important;
-  border-radius: 12px !important;
-  /* 3D glass row */
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.60),
-    inset 0 -0.5px 0 rgba(0,0,0,.06),
-    inset 1px 0 0 rgba(255,255,255,.30),
-    inset -1px 0 0 rgba(255,255,255,.10),
-    0 2px 6px rgba(0,0,0,.05),
-    0 6px 16px rgba(0,0,0,.06),
-    0 0 0 0.5px rgba(255,255,255,.22) !important;
-  transition: transform .18s var(--ease-spring), box-shadow .18s ease !important;
-}
-.contact-item:hover {
-  transform: translateX(4px) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.70),
-    inset 0 -0.5px 0 rgba(0,0,0,.06),
-    inset 1px 0 0 rgba(255,255,255,.40),
-    0 4px 14px rgba(0,0,0,.10),
-    0 0 0 0.5px rgba(255,255,255,.28) !important;
-}
-.contact-item-clickable:hover {
-  background: transparent !important;
-}
-
-/* ── Resume Preview Card: 3D glass panel ──────────────────────── */
-.resume-preview-card {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: var(--r-lg) !important;
-  padding: 14px 16px !important;
-  margin: 0 !important;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.68),
-    inset 1px 0 0 rgba(255,255,255,.35),
-    inset -1px 0 0 rgba(255,255,255,.12),
-    inset 0 -1px 0 rgba(0,0,0,.06),
-    0 2px 8px rgba(0,0,0,.06),
-    0 10px 28px rgba(0,0,0,.08),
-    0 0 0 0.5px rgba(255,255,255,.22) !important;
-  transition: box-shadow var(--t-base) !important;
-}
-.resume-preview-card:hover {
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.78),
-    inset 1px 0 0 rgba(255,255,255,.45),
-    inset 0 -1px 0 rgba(0,0,0,.06),
-    0 4px 14px rgba(0,0,0,.10),
-    0 16px 40px rgba(0,0,0,.10),
-    0 0 0 0.5px rgba(255,255,255,.30) !important;
-}
-
-/* ── CTA buttons grid: 3D glass row cards ─────────────────────── */
-.contact-cta-grid {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 7px !important;
-  margin-top: 0 !important;
-}
-
-.cta-action-btn {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  padding: 12px 16px !important;
-  border-radius: 13px !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.60),
-    inset 0 -0.5px 0 rgba(0,0,0,.06),
-    inset 1px 0 0 rgba(255,255,255,.30),
-    inset -1px 0 0 rgba(255,255,255,.10),
-    0 2px 8px rgba(0,0,0,.06),
-    0 8px 20px rgba(0,0,0,.07),
-    0 0 0 0.5px rgba(255,255,255,.20) !important;
-  transition: transform .20s var(--ease-spring), box-shadow .20s ease !important;
-}
-.cta-action-btn:hover {
-  transform: translateY(-3px) scale(1.01) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.72),
-    inset 1px 0 0 rgba(255,255,255,.40),
-    0 6px 20px rgba(0,0,0,.10),
-    0 0 0 0.5px rgba(255,255,255,.28) !important;
-}
-
-/* ── Right column ──────────────────────────────────────────────── */
-.contact-right {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 0 !important;
-}
-
-/* ── Social panel: large 3D glass card ────────────────────────── */
-.social-panel {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-radius: 18px !important;
-  padding: 16px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.68),
-    inset 1px 0 0 rgba(255,255,255,.35),
-    inset -1px 0 0 rgba(255,255,255,.12),
-    inset 0 -1px 0 rgba(0,0,0,.06),
-    0 2px 8px rgba(0,0,0,.06),
-    0 12px 32px rgba(0,0,0,.08),
-    0 0 0 0.5px rgba(255,255,255,.22) !important;
-}
-.social-heading {
-  font-size: .72rem !important;
-  font-weight: 700 !important;
-  color: var(--ink-2) !important;
-  margin-bottom: 4px !important;
-  letter-spacing: .04em !important;
-}
-
-/* ── Social buttons: 3D glass rows ────────────────────────────── */
-.social-btn {
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  padding: 9px 12px !important;
+/* Why Hire icon wraps */
+.wh-icon-wrap {
+  width:  40px !important;
+  height: 40px !important;
   border-radius: 11px !important;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  margin-bottom: 0 !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -0.5px 0 rgba(0,0,0,.05),
-    inset 1px 0 0 rgba(255,255,255,.28),
-    0 1px 4px rgba(0,0,0,.05),
-    0 4px 10px rgba(0,0,0,.06),
-    0 0 0 0.5px rgba(255,255,255,.18) !important;
-  transition: transform .18s var(--ease-spring), box-shadow .18s ease !important;
-}
-.social-btn:hover {
-  transform: translateX(4px) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.68),
-    inset 1px 0 0 rgba(255,255,255,.38),
-    0 4px 14px rgba(0,0,0,.10),
-    0 0 0 0.5px rgba(255,255,255,.26) !important;
-}
-.social-btn:last-of-type { margin-bottom: 0 !important; }
-
-/* ── Recruiter CTA block: 3D glass card ───────────────────────── */
-.recruiter-cta-block {
-  background: transparent !important;
-  border-radius: var(--r-lg) !important;
-  padding: 12px 14px !important;
-  margin: 6px 0 !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 1px 0 0 rgba(255,255,255,.28),
-    inset -1px 0 0 rgba(255,255,255,.10),
-    inset 0 -0.5px 0 rgba(0,0,0,.05),
-    0 2px 8px rgba(0,0,0,.05),
-    0 0 0 0.5px rgba(255,255,255,.18) !important;
-}
-
-/* ── Availability banner: 3D glass strip ──────────────────────── */
-.availability-banner {
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
-  padding: 8px 12px !important;
-  margin-top: 6px !important;
-  border-radius: var(--r-lg) !important;
-  background: transparent !important;
-  font-size: .72rem !important;
-  color: var(--ink-2) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -0.5px 0 rgba(0,0,0,.05),
-    0 1px 4px rgba(0,0,0,.05),
-    0 0 0 0.5px rgba(52,199,89,.25) !important;
+  justify-content: center !important;
+  font-size: 1.05rem !important;
+  margin-bottom: 10px !important;
+  flex-shrink: 0 !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
 }
 
+.wh-icon-mission { background: rgba(37,99,235,.14)  !important; color: #1d4ed8 !important; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.90), 0 3px 10px rgba(37,99,235,.18) !important; }
+.wh-icon-infra   { background: rgba(5,150,105,.14)   !important; color: #047857 !important; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.90), 0 3px 10px rgba(5,150,105,.18)  !important; }
+.wh-icon-ops     { background: rgba(217,119,6,.14)   !important; color: #b45309 !important; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.90), 0 3px 10px rgba(217,119,6,.18)  !important; }
+.wh-icon-lead    { background: rgba(124,58,237,.14)  !important; color: #6d28d9 !important; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.90), 0 3px 10px rgba(124,58,237,.18)  !important; }
+.wh-icon-support { background: rgba(8,145,178,.14)   !important; color: #0369a1 !important; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.90), 0 3px 10px rgba(8,145,178,.18)   !important; }
+.wh-icon-sec     { background: rgba(225,29,72,.14)   !important; color: #be123c !important; box-shadow: inset 0 1.5px 0 rgba(255,255,255,.90), 0 3px 10px rgba(225,29,72,.18)   !important; }
+
+/* Contact icon wraps */
+.ci-icon-wrap {
+  background: rgba(0,102,255,.10) !important;
+  color: #0055cc !important;
+  border: 1px solid rgba(0,102,255,.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.80), 0 2px 6px rgba(0,102,255,.10) !important;
+}
+
+/* Social button icons */
+.social-btn .fa-linkedin-in  { color: #0077B5 !important; }
+.social-btn-whatsapp i        { color: #25D366 !important; }
+.social-btn-telegram i        { color: #2AABEE !important; }
+
+/* HIE / fieldwork icon wraps */
+.hie-icon-wrap,
+.hie-icon-wrap--network {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* Resume card icon */
+.rpc-icon {
+  background: rgba(0,102,255,.12) !important;
+  color: #0055cc !important;
+  border: 1px solid rgba(0,102,255,.20) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 3px 10px rgba(0,102,255,.14) !important;
+  opacity: 1 !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §19  FOOTER ACTIONS — Keep hidden (duplicate of sticky bar)
+   The full footer-actions contact button cluster is redundant
+   — the mobile sticky bar and section contact buttons cover it.
+════════════════════════════════════════════════════════════════ */
+.footer-actions {
+  display: none !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   §20  PRINT — Clean, branded
+════════════════════════════════════════════════════════════════ */
+@media print {
+  .top-nav,
+  .gate-overlay,
+  .mobile-sticky-cta,
+  .fab-container,
+  .scroll-progress,
+  .weather-bar,
+  .footer-actions { display: none !important; }
+
+  body { background: #fff !important; color: #000 !important; }
+  .glass-card, .exp-card, .edu-card, .cert-card,
+  .museum-case, .wh-card, .arsenal-category {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+  a { color: inherit !important; text-decoration: none !important; }
+  .section { padding: 12px 0 !important; }
+}
+
+/* ── End Patch v7.0 ── */
+
+/* ════════════════════════════════════════════════════════════════
+   GATE CARD TEXT — Final override: all text visible on dark overlay
+════════════════════════════════════════════════════════════════ */
+.gate-overlay .gate-brand-name,
+.gate-glass-card .gate-brand-name { color: rgba(255,255,255,.95) !important; }
+
+.gate-overlay .gate-brand-sub,
+.gate-glass-card .gate-brand-sub  { color: rgba(255,255,255,.75) !important; }
+
+.gate-overlay .gate-headline,
+.gate-glass-card .gate-headline   { color: #ffffff !important; text-shadow: 0 1px 6px rgba(0,0,0,.30) !important; }
+
+.gate-overlay .gate-sub,
+.gate-glass-card .gate-sub        { color: rgba(255,255,255,.88) !important; }
+
+.gate-overlay .gate-eyebrow,
+.gate-glass-card .gate-eyebrow    { color: rgba(255,255,255,.80) !important; }
+
+.gate-overlay .gate-label,
+.gate-glass-card .gate-label      { color: rgba(255,255,255,.80) !important; }
+
+.gate-overlay .gate-status-text,
+.gate-glass-card .gate-status-text { color: rgba(255,255,255,.70) !important; }
+
+.gate-overlay .gate-input-icon,
+.gate-glass-card .gate-input-icon  { color: rgba(255,255,255,.55) !important; }
