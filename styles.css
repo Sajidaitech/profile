@@ -15448,32 +15448,32 @@ strong, em, b, i, code, pre,
 /* ── WH-CARD TEXT — retain existing ink colors, no forced white ── */
 .wh-card .wh-title,
 .wh-card h3 {
-  color: rgba(240,248,255,0.96) !important;
+  color: #111318 !important;
   font-weight: 700 !important;
-  text-shadow: 0 1px 4px rgba(0,0,0,.10) !important;
+  text-shadow: none !important;
 }
 .wh-card .wh-desc,
 .wh-card p {
-  color: rgba(200,220,245,0.82) !important;
+  color: #2c3140 !important;
   font-weight: 500 !important;
 }
 .wh-card .wh-proof {
-  background: rgba(255,255,255,.03) !important;
-  border: 1px solid rgba(255,255,255,.07) !important;
-  color: rgba(200,215,240,0.70) !important;
+  background: rgba(0,0,0,.04) !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+  color: #3d4a5c !important;
 }
 
-/* ── WH badges — soft transparent tint, no saturated fill ── */
+/* ── WH badges — solid readable tint for light background ── */
 .wh-card .wh-badge {
-  background: rgba(140,170,220,0.08) !important;
-  color: rgba(170,200,240,0.85) !important;
-  border: 1px solid rgba(150,180,235,0.12) !important;
+  background: rgba(0,102,255,0.08) !important;
+  color: #1a3a6b !important;
+  border: 1px solid rgba(0,102,255,0.14) !important;
 }
-.wh-card .wh-badge-green  { background: rgba(120,190,150,0.08) !important; color: rgba(140,210,170,0.85) !important; border-color: rgba(100,180,130,0.12) !important; }
-.wh-card .wh-badge-amber  { background: rgba(210,180,120,0.08) !important; color: rgba(230,200,140,0.85) !important; border-color: rgba(200,170,100,0.12) !important; }
-.wh-card .wh-badge-purple { background: rgba(170,140,220,0.08) !important; color: rgba(190,165,235,0.85) !important; border-color: rgba(155,125,210,0.12) !important; }
-.wh-card .wh-badge-teal   { background: rgba(120,190,200,0.08) !important; color: rgba(140,210,220,0.85) !important; border-color: rgba(100,180,195,0.12) !important; }
-.wh-card .wh-badge-rose   { background: rgba(220,150,170,0.08) !important; color: rgba(235,170,185,0.85) !important; border-color: rgba(210,135,155,0.12) !important; }
+.wh-card .wh-badge-green  { background: rgba(5,150,105,0.10) !important; color: #065f46 !important; border-color: rgba(5,150,105,0.18) !important; }
+.wh-card .wh-badge-amber  { background: rgba(217,119,6,0.10) !important; color: #92400e !important; border-color: rgba(217,119,6,0.18) !important; }
+.wh-card .wh-badge-purple { background: rgba(124,58,237,0.10) !important; color: #4c1d95 !important; border-color: rgba(124,58,237,0.18) !important; }
+.wh-card .wh-badge-teal   { background: rgba(8,145,178,0.10) !important; color: #164e63 !important; border-color: rgba(8,145,178,0.18) !important; }
+.wh-card .wh-badge-rose   { background: rgba(225,29,72,0.10) !important; color: #881337 !important; border-color: rgba(225,29,72,0.18) !important; }
 
 /* ── WH glow orbs — ultra-feathered, purely atmospheric ── */
 .wh-card .wh-card-glow {
@@ -15487,9 +15487,9 @@ strong, em, b, i, code, pre,
 /* ── WH tags within cards ── */
 .wh-card .wh-tag,
 .wh-tag {
-  background: rgba(100,160,255,0.10) !important;
-  color: rgba(160,210,255,0.88) !important;
-  border: 1px solid rgba(140,190,255,0.12) !important;
+  background: rgba(0,102,255,0.08) !important;
+  color: #1a3a6b !important;
+  border: 1px solid rgba(0,102,255,0.14) !important;
   backdrop-filter: blur(1px) !important;
   -webkit-backdrop-filter: blur(1px) !important;
 }
@@ -17279,3 +17279,25 @@ h2.sec-title {
 
 .gate-overlay .gate-input-icon,
 .gate-glass-card .gate-input-icon  { color: rgba(255,255,255,.55) !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   WHY HIRE CARDS — Final override: dark readable text on light bg
+   Fixes pale blue-white text that was invisible on #eae6df beige
+════════════════════════════════════════════════════════════════ */
+.wh-card .wh-title,
+.wh-card h3                        { color: #111318 !important; text-shadow: none !important; }
+
+.wh-card .wh-desc,
+.wh-card p                         { color: #2c3140 !important; }
+
+.wh-card .wh-proof                 { color: #3d4a5c !important; background: rgba(0,0,0,.04) !important; border-color: rgba(0,0,0,.08) !important; }
+
+.wh-card .wh-badge                 { color: #1a3a6b !important; background: rgba(0,102,255,.08) !important; border-color: rgba(0,102,255,.14) !important; }
+.wh-card .wh-badge-green           { color: #065f46 !important; background: rgba(5,150,105,.10) !important; border-color: rgba(5,150,105,.18) !important; }
+.wh-card .wh-badge-amber           { color: #92400e !important; background: rgba(217,119,6,.10) !important; border-color: rgba(217,119,6,.18) !important; }
+.wh-card .wh-badge-purple          { color: #4c1d95 !important; background: rgba(124,58,237,.10) !important; border-color: rgba(124,58,237,.18) !important; }
+.wh-card .wh-badge-teal            { color: #164e63 !important; background: rgba(8,145,178,.10) !important; border-color: rgba(8,145,178,.18) !important; }
+.wh-card .wh-badge-rose            { color: #881337 !important; background: rgba(225,29,72,.10) !important; border-color: rgba(225,29,72,.18) !important; }
+
+.wh-card .wh-tag,
+.wh-tag                            { color: #1a3a6b !important; background: rgba(0,102,255,.08) !important; border-color: rgba(0,102,255,.14) !important; }
