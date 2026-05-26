@@ -142,9 +142,9 @@
 ================================================================ */
 :root {
   /* Backgrounds — warm off-white matte plaster surfaces */
-  --bg:          #B8C9D8;
-  --bg-deep:     #A8B9C8;
-  --bg-surface:  #C8D9E8;
+  --bg:          #C0B4B0;
+  --bg-deep:     #B0A4A0;
+  --bg-surface:  #D0C4C0;
   --bg-section: rgba(0,0,0,.018);
 
   /* Glass system — ultra-light on light bg, barely-there fill */
@@ -240,7 +240,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Light warm matte base */
-  background-color: #B8C9D8;
+  background-color: #C0B4B0;
 }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
@@ -313,8 +313,8 @@ body::before {
     ),
     /* ── Base coat — warm off-white matte plaster ── */
     linear-gradient(162deg,
-      #b2c4d4 0%, #b8c9d8 15%, #bccdd8 32%,
-      #B8C9D8 50%, #b2c3d2 68%, #adbece 100%
+      #b2a4a0 0%, #C0B4B0 15%, #bcb0ac 32%,
+      #C0B4B0 50%, #b2a8a4 68%, #ada4a0 100%
     );
   will-change: transform;
   
@@ -586,6 +586,18 @@ body.gate-active { overflow: hidden !important; }
 .gate-submit-btn.loading .gsb-arrow { display: none; }
 .gate-submit-btn.loading .gw-spinner { display: block; animation: spin  0s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Gate button colour states ── */
+.gate-submit-btn.btn-error {
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%) !important;
+  box-shadow: 0 0 0 2px rgba(231,76,60,.45), 0 6px 20px rgba(192,57,43,.45) !important;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.gate-submit-btn.btn-success {
+  background: linear-gradient(135deg, #1a7a3c 0%, #27ae60 100%) !important;
+  box-shadow: 0 0 0 2px rgba(39,174,96,.45), 0 6px 20px rgba(26,122,60,.45) !important;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
 
 .gate-status-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
 .gate-status-pulse {
@@ -8585,13 +8597,13 @@ strong { color: #06080f; }
 
 /* ── Layer 0: html base — absolute fallback */
 html {
-  background-color: #B8C9D8;
+  background-color: #C0B4B0;
 }
 
 /* ── Layer 1: body — warm off-white matte foundation */
 body {
   background: #eae6df;
-  background-color: #B8C9D8;
+  background-color: #C0B4B0;
 }
 
 /* ── Layer 2: body::before is the full plaster-wall system
@@ -8601,9 +8613,9 @@ body {
 
 /* ── Background token refresh for this section ── */
 :root {
-  --bg:          #B8C9D8;
-  --bg-deep:     #A8B9C8;
-  --bg-surface:  #C8D9E8;
+  --bg:          #C0B4B0;
+  --bg-deep:     #B0A4A0;
+  --bg-surface:  #D0C4C0;
   --bg-section: rgba(0,0,0,.018);
 }
 
@@ -13926,7 +13938,7 @@ section,
    ══════════════════════════════════════════════════════════════ */
 
 body {
-  background-color: #B8C9D8 !important;
+  background-color: #C0B4B0 !important;
 }
 
 /* ── LAYER 1: Plaster base + diagonal sunlight ───────────────── */
@@ -17332,4 +17344,1103 @@ h2.sec-title {
   background: rgba(255,255,255,.28) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   WH-CARD TOP SPACE FIX — Remove excess top padding/gap
+   Icon should sit flush at top of card content area
+════════════════════════════════════════════════════════════════ */
+.wh-card {
+  padding-top: 18px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+}
+
+.wh-card .wh-icon-wrap,
+.wh-icon-wrap {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Remove any top spacer or empty block pushing content down */
+.wh-card > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Ensure wh-card-glow (absolute) doesn't affect layout */
+.wh-card-glow {
+  top: -20px !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   HOME SECTION — Remove ALL mouse-over movement & animations
+   No tilt, no float, no translateY on hover
+════════════════════════════════════════════════════════════════ */
+
+.hero-glass-card,
+.hero-editorial-layout {
+  animation: none !important;
+  transform: none !important;
+}
+
+.hero-glass-card:hover,
+.hero-editorial-layout:hover {
+  animation: none !important;
+  transform: none !important;
+}
+
+.hero-vchip:hover {
+  transform: none !important;
+}
+
+.hero-portrait-col:hover,
+.hero-portrait-col *:hover,
+.hero-portrait-img:hover {
+  transform: none !important;
+}
+
+[data-tilt],
+[data-tilt]:hover {
+  transform: none !important;
+  transition: none !important;
+}
+
+.hero-linkedin-btn:hover,
+.hero-cta-btn:hover,
+.hero-btn:hover {
+  transform: none !important;
+}
+
+.hero-glass-card,
+.hero-editorial-layout,
+.hero-vchip {
+  transition: box-shadow 0s ease !important;
+  will-change: auto !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SECTOR TICKER — Restore orbital movement, fix container + gap
+════════════════════════════════════════════════════════════════ */
+
+/* Gap between LinkedIn button and the ticker box */
+.hero-sector-tags {
+  margin-top: 14px !important;
+}
+
+/* Restore the box: correct size, glass look, overflow visible for orbital items */
+.sector-ticker-wrap {
+  position: relative !important;
+  width: 100% !important;
+  height: 80px !important;
+  overflow: visible !important;
+  cursor: grab !important;
+}
+
+/* Restore the visible rounded pill box via ::before */
+.sector-ticker-wrap::before {
+  display: block !important;
+  content: '' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: calc(100% - 8px) !important;
+  height: 52px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.22) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.50),
+    inset 0 -1px 0 rgba(0,0,0,.04),
+    0 2px 8px rgba(0,0,0,.07),
+    0 8px 24px rgba(0,0,0,.07) !important;
+  pointer-events: none !important;
+}
+
+/* Restore track as absolute positioning context for JS orbital movement */
+.sector-ticker-track {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+/* Restore items to absolute so JS can move them in orbits */
+.sector-ticker-item {
+  position: absolute !important;
+  display: inline-flex !important;
+  pointer-events: none !important;
+}
+
+/* Show only first 5 as original (JS handles the rest) */
+.sector-ticker-item:nth-child(n+6) {
+  display: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FINAL FIXES v2 — Sector ticker · WH-card space · Hero scroll
+════════════════════════════════════════════════════════════════ */
+
+/* ── 1. SECTOR TICKER — tags stay INSIDE the pill box ────────── */
+.hero-sector-tags {
+  margin-top: 14px !important;
+}
+.sector-ticker-wrap {
+  position: relative !important;
+  width: 100% !important;
+  height: 56px !important;
+  overflow: hidden !important;       /* clips everything outside the box */
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.24) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.50),
+    inset 0 -1px 0 rgba(0,0,0,.04),
+    0 2px 8px rgba(0,0,0,.07),
+    0 8px 24px rgba(0,0,0,.07) !important;
+  cursor: default !important;
+}
+/* Hide the pseudo box — the wrap itself is now the box */
+.sector-ticker-wrap::before {
+  display: none !important;
+}
+/* Track fills the wrap */
+.sector-ticker-track {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+/* Items positioned by JS — clipped by overflow:hidden on wrap */
+.sector-ticker-item {
+  position: absolute !important;
+  pointer-events: none !important;
+}
+/* Show all items — overflow:hidden handles visibility */
+.sector-ticker-item:nth-child(n+6) {
+  display: inline-flex !important;
+}
+
+/* ── 2. WH-CARD — remove top dead space ─────────────────────── */
+.wh-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  padding: 20px !important;
+  min-height: unset !important;
+}
+.wh-card .wh-card-glow {
+  top: -20px !important;
+  pointer-events: none !important;
+}
+.wh-card > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+.wh-card .wh-icon-wrap,
+.wh-icon-wrap {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+  flex-shrink: 0 !important;
+}
+
+/* ── 3. HERO SECTION — stop moving on scroll ─────────────────── */
+.hero-section {
+  position: relative !important;
+  transform: none !important;
+  will-change: auto !important;
+}
+/* Kill any CSS scroll-driven translateY on the hero layout */
+.hero-editorial-layout,
+.hero-glass-card,
+.hero-content,
+.hero-layout,
+.hero-wrap {
+  transform: none !important;
+  will-change: auto !important;
+  animation: none !important;
+}
+/* Kill hover lifts everywhere in hero */
+.hero-glass-card:hover,
+.hero-editorial-layout:hover,
+.hero-vchip:hover,
+.hero-portrait-col:hover,
+[data-tilt],
+[data-tilt]:hover {
+  transform: none !important;
+  animation: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SECTOR TICKER — Replace broken orbital with CSS marquee scroll
+   + WH-CARD top space final fix
+════════════════════════════════════════════════════════════════ */
+
+/* ── Kill the old orbital wrap completely ── */
+.sector-ticker-wrap,
+.hero-sector-tags .sector-ticker-wrap {
+  all: unset !important;
+  display: block !important;
+  width: 100% !important;
+  margin-top: 14px !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+/* Fade edges left/right */
+.sector-ticker-wrap::before,
+.sector-ticker-wrap::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; bottom: 0 !important;
+  width: 60px !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+  display: block !important;
+  transform: none !important;
+  width: 60px !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.sector-ticker-wrap::before {
+  left: 0 !important;
+  background: linear-gradient(to right, #C0B4B0, transparent) !important;
+}
+.sector-ticker-wrap::after {
+  right: 0 !important;
+  background: linear-gradient(to left, #C0B4B0, transparent) !important;
+}
+
+/* ── Track: flex row, animate scroll ── */
+.sector-ticker-track {
+  all: unset !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: max-content !important;
+  animation: marqueeScroll 18s linear infinite !important;
+  position: static !important;
+  inset: auto !important;
+  height: auto !important;
+  padding: 6px 0 !important;
+}
+
+.sector-ticker-track:hover {
+  animation-play-state: paused !important;
+}
+
+@keyframes marqueeScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── Items: inline pill chips ── */
+.sector-ticker-item {
+  all: unset !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.30) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    0 2px 6px rgba(0,0,0,.07),
+    0 4px 14px rgba(0,0,0,.06) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #1a2a3a !important;
+  white-space: nowrap !important;
+  position: static !important;
+  top: auto !important; left: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  cursor: default !important;
+  flex-shrink: 0 !important;
+}
+
+/* Show ALL items (both sets for seamless loop) */
+.sector-ticker-item:nth-child(n+6) {
+  display: inline-flex !important;
+}
+
+.sti-dot {
+  display: none !important;
+}
+
+/* ── WH-CARD: kill top dead space — final override ── */
+.wh-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  padding: 22px 22px 20px !important;
+  min-height: unset !important;
+  height: auto !important;
+}
+.wh-card-glow {
+  display: none !important;
+}
+.wh-card > *:first-child,
+.wh-card .wh-icon-wrap:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+.wh-card .wh-icon-wrap {
+  margin-top: 0 !important;
+  margin-bottom: 12px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ARSENAL CARD — Remove top dead space, content flush to top
+════════════════════════════════════════════════════════════════ */
+.arsenal-category {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  padding: 20px !important;
+  min-height: unset !important;
+  height: auto !important;
+}
+
+/* Hide the glow orb that creates invisible height */
+.ac-card-glow {
+  display: none !important;
+}
+
+/* First child (ac-header) flush to top */
+.arsenal-category > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.ac-header {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  margin-bottom: 10px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   GLOSSY SILVER · 3D GLASS SYSTEM — Final Design v1.0
+   Background: polished silver gradient wall
+   Cards: deep transparent glass with prismatic edges + 3D depth
+   Buttons/chips: liquid glass pills with specular highlights
+════════════════════════════════════════════════════════════════ */
+
+/* ── 1. GLOSSY SILVER BACKGROUND WALL ───────────────────────── */
+:root {
+  --bg:         #C8C0BE;
+  --bg-deep:    #B8B0AE;
+  --bg-surface: #D8D0CE;
+}
+
+body {
+  background-color: #C8C0BE !important;
+}
+
+body::before {
+  background:
+    /* Diagonal specular highlight — mirror-like sheen */
+    linear-gradient(
+      118deg,
+      transparent 0%, transparent 20%,
+      rgba(255,255,255,.18) 32%, rgba(255,255,255,.28) 42%,
+      rgba(255,255,255,.22) 52%, rgba(255,255,255,.10) 62%,
+      transparent 75%
+    ),
+    /* Top-left bright spot — light source */
+    radial-gradient(ellipse 70% 50% at 15% 10%,
+      rgba(255,255,255,.30) 0%, rgba(255,255,255,.10) 40%, transparent 70%
+    ),
+    /* Bottom-right shadow recession */
+    radial-gradient(ellipse 60% 50% at 85% 90%,
+      rgba(80,60,58,.22) 0%, transparent 65%
+    ),
+    /* Edge vignette — depth frame */
+    radial-gradient(ellipse 110% 110% at 50% 50%,
+      transparent 30%,
+      rgba(100,80,78,.10) 60%,
+      rgba(80,60,58,.28) 85%,
+      rgba(60,45,43,.42) 100%
+    ),
+    /* Base silver-rose coat */
+    linear-gradient(
+      155deg,
+      #d4cccA 0%, #cec6c4 18%,
+      #c8c0be 38%, #c4bcba 55%,
+      #beb6b4 72%, #b8b0ae 100%
+    ) !important;
+}
+
+/* ── 2. DEEP 3D GLASS CARDS ──────────────────────────────────── */
+.glass-card,
+.museum-case,
+.project-card,
+.glass-card-deep,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.ach-award-card,
+.wh-card,
+.rec-glass-card,
+.edu-rec-card,
+.arsenal-category,
+.about-bio-col,
+.about-panel-col,
+.about-stats-row,
+.ach-item,
+.hero-glass-card,
+.hero-editorial-layout,
+.exp-tabs-wrap,
+.lge-tabs-nav,
+.kpi-block {
+  /* Deep transparent glass — barely-there fill */
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,.38) 0%,
+    rgba(255,255,255,.18) 40%,
+    rgba(255,255,255,.10) 70%,
+    rgba(255,255,255,.20) 100%
+  ) !important;
+
+  /* Strong backdrop blur for true frosted depth */
+  backdrop-filter: blur(24px) saturate(1.6) brightness(1.08) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(1.08) !important;
+
+  /* 3D glass edge lighting system */
+  box-shadow:
+    /* Top specular rim — brightest edge, defines the glass plane */
+    inset 0 1.5px 0 rgba(255,255,255,.75),
+    /* Left prismatic edge */
+    inset 1.5px 0 0 rgba(255,255,255,.45),
+    /* Right edge subtle reflection */
+    inset -1px 0 0 rgba(255,255,255,.25),
+    /* Bottom inner shadow — glass thickness depth */
+    inset 0 -1.5px 0 rgba(0,0,0,.10),
+    /* Inner surface — diffuse top-left glow */
+    inset 0 4px 24px rgba(255,255,255,.14),
+    /* Outer border ring — crisp glass edge */
+    0 0 0 0.5px rgba(255,255,255,.55),
+    /* Z1 shadow — card lifts off surface */
+    0 2px 4px  rgba(80,55,52,.08),
+    0 8px 20px rgba(80,55,52,.12),
+    0 20px 44px rgba(80,55,52,.10),
+    0 40px 80px rgba(80,55,52,.07) !important;
+
+  border-radius: var(--r-xl) !important;
+  border: none !important;
+}
+
+/* Top specular streak — glass catching light */
+.glass-card::before,
+.exp-card::before,
+.lge-card::before,
+.edu-card::before,
+.cert-card::before,
+.wh-card::before,
+.arsenal-category::before,
+.about-bio-col::before,
+.museum-case::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,.22) 0%,
+    rgba(255,255,255,.10) 22%,
+    transparent 45%,
+    rgba(255,255,255,.04) 70%,
+    transparent 100%
+  ) !important;
+}
+
+/* ── 3. GLOSSY NAVIGATION BAR ───────────────────────────────── */
+.top-nav {
+  background: linear-gradient(
+    175deg,
+    rgba(255,255,255,.42) 0%,
+    rgba(255,255,255,.28) 50%,
+    rgba(255,255,255,.35) 100%
+  ) !important;
+  backdrop-filter: blur(28px) saturate(1.8) brightness(1.10) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.8) brightness(1.10) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.80),
+    inset 1px 0 0 rgba(255,255,255,.40),
+    inset -1px 0 0 rgba(255,255,255,.30),
+    inset 0 -1px 0 rgba(0,0,0,.06),
+    inset 0 3px 20px rgba(255,255,255,.18),
+    0 0 0 0.5px rgba(255,255,255,.55),
+    0 4px 16px rgba(80,55,52,.10),
+    0 12px 36px rgba(80,55,52,.10),
+    0 28px 60px rgba(80,55,52,.07) !important;
+}
+
+/* ── 4. GLOSSY LIQUID GLASS BUTTONS & CHIPS ─────────────────── */
+.btn-primary,
+.btn-ghost,
+.nav-resume-btn,
+.p-chip,
+.ac-skill,
+.lge-tag,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip {
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,.55) 0%,
+    rgba(255,255,255,.30) 45%,
+    rgba(255,255,255,.20) 100%
+  ) !important;
+  backdrop-filter: blur(16px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.5) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.85),
+    inset 1px 0 0 rgba(255,255,255,.50),
+    inset -0.5px 0 0 rgba(255,255,255,.35),
+    inset 0 -1px 0 rgba(0,0,0,.07),
+    inset 0 2px 12px rgba(255,255,255,.25),
+    0 0 0 0.5px rgba(255,255,255,.60),
+    0 2px 6px rgba(80,55,52,.09),
+    0 6px 18px rgba(80,55,52,.08) !important;
+  border: none !important;
+}
+
+/* ── 5. SECTOR MARQUEE TAGS — glossy pills ───────────────────── */
+.sector-ticker-item {
+  background: linear-gradient(
+    150deg,
+    rgba(255,255,255,.60) 0%,
+    rgba(255,255,255,.35) 50%,
+    rgba(255,255,255,.25) 100%
+  ) !important;
+  backdrop-filter: blur(14px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.90),
+    inset 0 -1px 0 rgba(0,0,0,.06),
+    0 0 0 0.5px rgba(255,255,255,.55),
+    0 2px 8px rgba(80,55,52,.10),
+    0 6px 16px rgba(80,55,52,.08) !important;
+  color: #2a1e1c !important;
+  font-weight: 600 !important;
+}
+
+/* ── 6. SECTOR TICKER WRAP — glossy pill container ──────────── */
+.sector-ticker-wrap {
+  background: linear-gradient(
+    175deg,
+    rgba(255,255,255,.40) 0%,
+    rgba(255,255,255,.20) 100%
+  ) !important;
+  backdrop-filter: blur(20px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.75),
+    inset 0 -1px 0 rgba(0,0,0,.05),
+    0 0 0 0.5px rgba(255,255,255,.50),
+    0 4px 16px rgba(80,55,52,.08),
+    0 12px 32px rgba(80,55,52,.07) !important;
+}
+
+/* Fade edges match new background */
+.sector-ticker-wrap::before {
+  background: linear-gradient(to right, #C8C0BE, transparent) !important;
+}
+.sector-ticker-wrap::after {
+  background: linear-gradient(to left, #C8C0BE, transparent) !important;
+}
+
+/* ── 7. UPDATE SHADOW TOKENS for warm silver ─────────────────── */
+:root {
+  --sh-xs:      inset 0 1px 0 rgba(255,255,255,.55), 0 2px 4px rgba(80,55,52,.07), 0 6px 14px rgba(80,55,52,.06);
+  --sh-sm:      inset 0 1px 0 rgba(255,255,255,.55), 0 3px 8px rgba(80,55,52,.08), 0 10px 22px rgba(80,55,52,.07);
+  --sh-md:      inset 0 1px 0 rgba(255,255,255,.55), 0 4px 12px rgba(80,55,52,.10), 0 14px 30px rgba(80,55,52,.08);
+  --sh-lg:      inset 0 1px 0 rgba(255,255,255,.55), 0 6px 18px rgba(80,55,52,.12), 0 20px 42px rgba(80,55,52,.10);
+  --sh-glass:   inset 0 1.5px 0 rgba(255,255,255,.75), inset 0 -1px 0 rgba(0,0,0,.06), 0 0 0 0.5px rgba(255,255,255,.50), 0 4px 12px rgba(80,55,52,.09), 0 14px 32px rgba(80,55,52,.08), 0 32px 60px rgba(80,55,52,.06);
+  --sh-glass-lg: inset 0 1.5px 0 rgba(255,255,255,.80), inset 0 -1px 0 rgba(0,0,0,.06), 0 0 0 0.5px rgba(255,255,255,.55), 0 6px 18px rgba(80,55,52,.12), 0 20px 48px rgba(80,55,52,.10), 0 48px 88px rgba(80,55,52,.08);
+  --glass-0: rgba(255,255,255,.22);
+  --glass-1: rgba(255,255,255,.28);
+  --glass-2: rgba(255,255,255,.32);
+  --glass-3: rgba(255,255,255,.38);
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   HERO PHOTO ANIMATIONS — Cinematic entrance + living idle
+════════════════════════════════════════════════════════════════ */
+
+/* ── Entrance: photo frame floats up and fades in ── */
+@keyframes photoEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(32px) scale(0.94);
+    filter: blur(8px) saturate(0.6);
+  }
+  60% {
+    filter: blur(0px) saturate(1.0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+    filter: blur(0px) saturate(1.06);
+  }
+}
+
+/* ── Idle float: gentle up-down breathing ── */
+@keyframes photoFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  30%       { transform: translateY(-6px) rotate(0.4deg); }
+  70%       { transform: translateY(-3px) rotate(-0.3deg); }
+}
+
+/* ── Shimmer sweep: light reflection passes across photo ── */
+@keyframes shimmerSweep {
+  0%   { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateX(220%) skewX(-18deg); opacity: 0; }
+}
+
+/* ── Glow pulse: soft halo behind frame breathes ── */
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.18; transform: scale(1); }
+  50%       { opacity: 0.32; transform: scale(1.06); }
+}
+
+/* ── Apply entrance + float to the portrait frame ── */
+.hero-portrait-frame {
+  animation:
+    photoEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both,
+    photoFloat    5s ease-in-out 1.2s infinite !important;
+  will-change: transform, opacity !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* ── Shimmer layer inside the frame ── */
+.hero-portrait-frame::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 3 !important;
+  pointer-events: none !important;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255,255,255,0.18) 45%,
+    rgba(255,255,255,0.32) 50%,
+    rgba(255,255,255,0.18) 55%,
+    transparent 80%
+  ) !important;
+  animation: shimmerSweep 4s ease-in-out 1.5s infinite !important;
+  border-radius: inherit !important;
+}
+
+/* ── Glow halo behind the frame ── */
+.hero-portrait-col::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: -20px !important;
+  border-radius: 32px !important;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255,220,200,0.28) 0%,
+    rgba(200,180,175,0.18) 45%,
+    transparent 70%
+  ) !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  animation: glowPulse 4s ease-in-out 0.5s infinite !important;
+  filter: blur(18px) !important;
+}
+
+/* Portrait image — subtle zoom on entrance */
+@keyframes photoZoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1.00); }
+}
+
+.hero-portrait-img {
+  animation: photoZoom 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both !important;
+  will-change: transform !important;
+}
+
+/* ── Keep portrait col as positioning context ── */
+.hero-portrait-col {
+  position: relative !important;
+}
+
+
+/* ════════════════════════════════════════════════════════════════
+   PERFORMANCE FIX — Zero scroll stutter
+   Problem: blur(24px) saturate brightness on every card = GPU death
+   Fix: reduce blur, remove saturate/brightness, contain paint layers
+════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Body layers — remove expensive filter stacking ── */
+body::before,
+body::after {
+  will-change: auto !important;
+  filter: none !important;
+}
+
+/* ── 2. ALL glass cards — reduce blur to minimum viable ── */
+.glass-card,
+.museum-case,
+.project-card,
+.glass-card-deep,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.ach-award-card,
+.wh-card,
+.rec-glass-card,
+.edu-rec-card,
+.arsenal-category,
+.about-bio-col,
+.about-panel-col,
+.about-stats-row,
+.ach-item,
+.hero-glass-card,
+.hero-editorial-layout,
+.exp-tabs-wrap,
+.lge-tabs-nav,
+.kpi-block {
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+  contain: layout style !important;
+}
+
+/* ── 3. Nav — keep a bit sharper but still fast ── */
+.top-nav {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  will-change: auto !important;
+}
+
+/* ── 4. Buttons & chips — lightest blur ── */
+.btn-primary,
+.btn-ghost,
+.nav-resume-btn,
+.p-chip,
+.ac-skill,
+.lge-tag,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip,
+.sector-ticker-item {
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  will-change: auto !important;
+}
+
+/* ── 5. Sector ticker wrap ── */
+.sector-ticker-wrap {
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  will-change: auto !important;
+}
+
+/* ── 6. Wall grain layers — biggest scroll perf killers ── */
+.wall-grain,
+.wall-grain-fine,
+.wall-light,
+.wall-vignette,
+.wall-shadow-left {
+  will-change: auto !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  transform: translateZ(0) !important;
+  contain: strict !important;
+}
+
+/* ── 7. Sections — contain their own paint ── */
+.section,
+#hero, #experience, #projects,
+#education, #certifications,
+#why-hire, #arsenal, #contact {
+  contain: layout style !important;
+  will-change: auto !important;
+}
+
+/* ── 8. Hero photo animation — GPU-only properties ── */
+.hero-portrait-frame {
+  will-change: transform !important;
+  contain: layout style !important;
+}
+.hero-portrait-img {
+  will-change: transform !important;
+}
+.hero-portrait-col::before {
+  will-change: opacity, transform !important;
+  contain: strict !important;
+}
+
+/* ── 9. Global will-change reset — was set on everything ── */
+*, *::before, *::after {
+  will-change: auto !important;
+}
+/* Re-apply only where genuinely needed */
+.hero-portrait-frame,
+.hero-portrait-img,
+.scroll-progress {
+  will-change: transform !important;
+}
+.hero-portrait-col::before {
+  will-change: opacity !important;
+}
+
+
+/* ================================================================
+   SECTOR ORBIT FIX — Restore JS-driven 3D ellipse carousel
+   The ticker uses requestAnimationFrame + absolute positioning.
+   Previous CSS marquee overrides broke it. This undoes them all.
+================================================================ */
+
+/* 1. Wrap: fixed height container for absolute-positioned items */
+.sector-ticker-wrap,
+.hero-sector-tags .sector-ticker-wrap {
+  all: unset !important;
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 64px !important;
+  overflow: visible !important;
+  margin-top: 10px !important;
+  cursor: grab !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+.sector-ticker-wrap:active { cursor: grabbing !important; }
+
+/* 2. Kill pseudo fade masks — they don't apply to orbit layout */
+.sector-ticker-wrap::before,
+.sector-ticker-wrap::after {
+  display: none !important;
+}
+
+/* 3. Track: relative container, full size — JS positions items inside */
+.sector-ticker-track {
+  all: unset !important;
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  /* NO flex, NO animation — JS controls everything */
+}
+
+/* 4. Items: absolute, centered — JS applies transform per frame */
+.sector-ticker-item {
+  all: unset !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.38) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.75),
+    inset 0 -1px 0 rgba(0,0,0,.05),
+    0 2px 8px rgba(0,0,0,.08),
+    0 0 0 0.5px rgba(255,255,255,.45) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  color: #1a2a3a !important;
+  white-space: nowrap !important;
+  pointer-events: none !important;
+  /* JS sets transform and opacity each frame — don't override */
+}
+
+/* 5. Active (front) item — slightly more prominent */
+.sector-ticker-item.sti-active {
+  background: rgba(255,255,255,0.55) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.90),
+    0 3px 12px rgba(0,0,0,.10),
+    0 0 0 0.5px rgba(255,255,255,.60) !important;
+}
+
+/* 6. Show ALL items — JS needs all 5 (or 10) to pick first 5 */
+.sector-ticker-item:nth-child(n+1) {
+  display: inline-flex !important;
+}
+
+/* 7. Dot: small blue circle */
+.sti-dot {
+  display: inline-block !important;
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+  background: rgba(0,100,220,.35) !important;
+  flex-shrink: 0 !important;
+}
+
+/* ================================================================
+   GLOBAL SCROLL PERFORMANCE — Kill the GPU killers
+================================================================ */
+
+/* Kill all backdrop-filter — 477 instances = #1 lag cause */
+* {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Kill mix-blend-mode on full-page decorative layers */
+.wall-grain, .wall-grain-fine,
+.wall-light, .wall-vignette, .wall-shadow-left {
+  display: none !important;
+}
+body::after {
+  mix-blend-mode: normal !important;
+  opacity: 0.4 !important;
+}
+
+/* Kill infinite shimmer/glow animations */
+.hero-portrait-frame::after { animation: none !important; display: none !important; }
+.hero-portrait-col::before  { animation: none !important; display: none !important; }
+
+/* Reset global will-change (was applied to everything — hurts perf) */
+*, *::before, *::after { will-change: auto !important; }
+
+/* Only real animators get GPU promotion */
+.scroll-progress       { will-change: transform !important; }
+.hero-portrait-frame   { will-change: opacity !important; }
+
+/* Contain sections — paint doesn't bleed across scroll frames */
+.section,
+#hero, #experience, #projects,
+#education, #certifications, #why-hire, #arsenal, #contact {
+  contain: layout style !important;
+}
+
+
+/* ================================================================
+   SECTOR TICKER — FINAL DEFINITIVE MARQUEE FIX
+   Appended last so it wins over all previous blocks
+================================================================ */
+
+/* 1. Wrap: scrolling container */
+.sector-ticker-wrap,
+.hero-sector-tags .sector-ticker-wrap {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: auto !important;
+  overflow: hidden !important;
+  margin-top: 14px !important;
+  cursor: default !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+.sector-ticker-wrap:active { cursor: default !important; }
+
+/* 2. Fade edges */
+.sector-ticker-wrap::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; bottom: 0 !important; left: 0 !important;
+  width: 50px !important; z-index: 2 !important;
+  pointer-events: none !important;
+  background: linear-gradient(to right, #C0B4B0 0%, transparent 100%) !important;
+  display: block !important;
+}
+.sector-ticker-wrap::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; bottom: 0 !important; right: 0 !important;
+  width: 50px !important; z-index: 2 !important;
+  pointer-events: none !important;
+  background: linear-gradient(to left, #C0B4B0 0%, transparent 100%) !important;
+  display: block !important;
+}
+
+/* 3. Track: flex row marquee */
+.sector-ticker-track {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: max-content !important;
+  height: auto !important;
+  padding: 6px 0 !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  animation: stMarquee 22s linear infinite !important;
+}
+.sector-ticker-track:hover {
+  animation-play-state: paused !important;
+}
+@keyframes stMarquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* 4. All items visible, inline pills */
+.sector-ticker-item,
+.sector-ticker-item:nth-child(n+6),
+.sector-ticker-item:nth-child(n+1) {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.38) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.75),
+    0 2px 8px rgba(0,0,0,.07),
+    0 0 0 0.5px rgba(255,255,255,.45) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #1a2a3a !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  /* override orbital absolute positioning */
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* 5. Dot: hidden (emoji already labels each item) */
+.sti-dot {
+  display: none !important;
 }
