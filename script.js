@@ -3431,150 +3431,172 @@ function printSignature() {
 
 
 // ============================================================
-// SECTOR ORBIT — Draggable 3D glass ellipse carousel
-// Smooth JS-driven orbit with mouse/touch drag support
+// ✦ SECTOR ORBIT — 3D Glass Ellipse Carousel v3.0
+// ============================================================
+// Mexican Wave — sine-wave bounce across horizontal chip row
+// Each chip oscillates up/down with a staggered phase offset,
+// creating a rolling wave. Peak chip = active (glowing).
+// Drag left/right to surf the wave manually.
 // ============================================================
 (function () {
-  // CSS marquee handles sector ticker — orbital JS disabled
-  return;
+  'use strict';
 
-  var ORBIT_RX   = 138;   // ellipse x-radius (px) — overridden by getRadii()
-  var ORBIT_RY   = 34;    // ellipse y-radius (px, flattened for perspective)
-  var SPEED      = 0.35;  // degrees per frame (auto-rotation)
-  var DRAG_SCALE = 0.5;   // drag sensitivity
+  // ── Tuning ──────────────────────────────────────────────
+  var WAVE_SPEED   = 0.022;  // radians per frame (wave advance speed)
+  var WAVE_AMP     = 16;     // vertical bounce amplitude in px
+  var DRAG_SENS    = 0.012;  // drag → phase shift sensitivity
+  var SCALE_MIN    = 0.80;   // chip scale at wave trough
+  var SCALE_MAX    = 1.06;   // chip scale at wave peak
+  var OPACITY_MIN  = 0.38;   // chip opacity at wave trough
+  var OPACITY_MAX  = 1.00;   // chip opacity at wave peak
+  var ENTRY_MS     = 580;    // staggered fade-in duration
+  // ────────────────────────────────────────────────────────
 
-  function initOrbit() {
+  function initWave() {
     var wrap  = document.querySelector('.sector-ticker-wrap');
     var track = document.querySelector('.sector-ticker-track');
     if (!wrap || !track) return;
 
-    // Collect only the first 5 items
     var allItems = track.querySelectorAll('.sector-ticker-item');
     var items = [];
     for (var i = 0; i < Math.min(5, allItems.length); i++) {
       items.push(allItems[i]);
     }
+    for (var j = 5; j < allItems.length; j++) {
+      allItems[j].style.display = 'none';
+    }
     if (!items.length) return;
 
-    var N       = items.length;
-    var angle   = 0;      // global rotation angle (degrees)
-    var raf     = null;
-    var paused  = false;
+    var N        = items.length;
+    var phase    = 0;       // global wave phase (radians)
+    var paused   = false;
     var dragging = false;
-    var lastX   = 0;
-    var velX    = 0;
+    var lastX    = 0;
+    var frontIdx = 0;
 
-    // Responsive radii — always derived from actual container width
-    function getRadii() {
-      var w = wrap.offsetWidth || 300;
-      var rx = Math.max(60, (w / 2) - 24);  // fill width with padding
-      var ry = Math.max(20, Math.round(rx * 0.25));
-      return { rx: rx, ry: ry };
-    }
-
-    function positionItems(deg) {
-      var r = getRadii();
-      var baseAngles = [];
+    // Evenly distribute chip X positions across the pill track
+    function getXPositions() {
+      var w       = wrap.offsetWidth || 400;
+      var padX    = Math.max(30, w * 0.06);
+      var usable  = w - padX * 2;
+      var step    = N > 1 ? usable / (N - 1) : 0;
+      var pos     = [];
       for (var i = 0; i < N; i++) {
-        baseAngles.push(deg + i * (360 / N));
+        pos.push(padX + i * step - w / 2);  // offset from center (left:50%)
       }
-
-      // Find which item is "front" (closest to 90° = bottom of ellipse in 3D)
-      var frontIdx = 0;
-      var maxZ = -Infinity;
-
-      items.forEach(function (el, i) {
-        var rad = (baseAngles[i] % 360) * Math.PI / 180;
-        var x = r.rx * Math.cos(rad);
-        var y = r.ry * Math.sin(rad);
-        // Z depth: sin gives depth perception — sin(90°)=1 is front, sin(270°)=-1 is back
-        var z = Math.sin(rad);
-        var scale = 0.75 + 0.25 * ((z + 1) / 2);  // 0.75..1.0
-        var opacity = 0.45 + 0.55 * ((z + 1) / 2); // 0.45..1.0
-
-        el.style.transform = 'translate(calc(-50% + ' + x + 'px), calc(-50% + ' + y + 'px)) scale(' + scale.toFixed(3) + ')';
-        el.style.opacity   = opacity.toFixed(3);
-        el.style.zIndex    = Math.round(z * 10 + 10);
-
-        if (z > maxZ) { maxZ = z; frontIdx = i; }
-      });
-
-      // Mark front item
-      items.forEach(function (el, i) {
-        if (i === frontIdx) el.classList.add('sti-active');
-        else el.classList.remove('sti-active');
-      });
+      return pos;
     }
 
+    function positionItems(ph) {
+      var xPos    = getXPositions();
+      var maxSin  = -Infinity;
+      var newFront = 0;
+      var TWO_PI  = Math.PI * 2;
+      var phaseStep = TWO_PI / N;  // equal phase gap between chips
+
+      items.forEach(function (el, i) {
+        var chipPhase = ph + i * phaseStep;
+        var sinVal    = Math.sin(chipPhase);   // -1 (trough) → +1 (peak)
+        var zNorm     = (sinVal + 1) / 2;      // 0 → 1
+
+        var scale     = SCALE_MIN   + (SCALE_MAX   - SCALE_MIN)   * zNorm;
+        var opacity   = OPACITY_MIN + (OPACITY_MAX  - OPACITY_MIN) * zNorm;
+        var dy        = -sinVal * WAVE_AMP;    // negative = chip goes UP at peak
+        var zIndex    = Math.round(zNorm * 8 + 1);
+
+        el.style.transform =
+          'translate(calc(-50% + ' + xPos[i].toFixed(2) + 'px),' +
+          ' calc(-50% + '          + dy.toFixed(2)      + 'px))' +
+          ' scale('                + scale.toFixed(3)   + ')';
+        el.style.opacity = opacity.toFixed(3);
+        el.style.zIndex  = zIndex;
+
+        if (sinVal > maxSin) { maxSin = sinVal; newFront = i; }
+      });
+
+      // Toggle active class only on change
+      if (newFront !== frontIdx) {
+        items[frontIdx].classList.remove('sti-active');
+        items[newFront].classList.add('sti-active');
+        frontIdx = newFront;
+      }
+    }
+
+    // ── Animation loop ─────────────────────────────────────
     function tick() {
       if (!dragging && !paused) {
-        // Apply momentum decay when not dragging
-        if (Math.abs(velX) > 0.01) {
-          angle += velX;
-          velX *= 0.96;
-        } else {
-          velX = 0;
-          angle += SPEED;
-        }
+        phase += WAVE_SPEED;
       }
-      angle = ((angle % 360) + 360) % 360;
-      positionItems(angle);
-      raf = requestAnimationFrame(tick);
+      phase = phase % (Math.PI * 2);
+      positionItems(phase);
+      requestAnimationFrame(tick);
     }
 
-    // ── Mouse drag ──
+    // ── Mouse drag ─────────────────────────────────────────
     wrap.addEventListener('mousedown', function (e) {
       dragging = true;
-      lastX = e.clientX;
-      velX = 0;
+      lastX    = e.clientX;
+      wrap.style.cursor = 'grabbing';
       e.preventDefault();
     });
     document.addEventListener('mousemove', function (e) {
       if (!dragging) return;
-      var dx = e.clientX - lastX;
-      velX = dx * DRAG_SCALE;
-      angle += velX;
-      lastX = e.clientX;
+      phase += (e.clientX - lastX) * DRAG_SENS;
+      lastX  = e.clientX;
     });
     document.addEventListener('mouseup', function () {
+      if (!dragging) return;
       dragging = false;
+      wrap.style.cursor = 'grab';
     });
 
-    // ── Touch drag ──
+    // ── Touch drag ─────────────────────────────────────────
     wrap.addEventListener('touchstart', function (e) {
       dragging = true;
-      lastX = e.touches[0].clientX;
-      velX = 0;
+      lastX    = e.touches[0].clientX;
     }, { passive: true });
     wrap.addEventListener('touchmove', function (e) {
-      if (!dragging) return;
-      var dx = e.touches[0].clientX - lastX;
-      velX = dx * DRAG_SCALE;
-      angle += velX;
-      lastX = e.touches[0].clientX;
+      if (!dragging || !e.touches[0]) return;
+      phase += (e.touches[0].clientX - lastX) * DRAG_SENS;
+      lastX  = e.touches[0].clientX;
     }, { passive: true });
     wrap.addEventListener('touchend', function () {
       dragging = false;
     });
 
-    // ── Pause on hover (non-drag) ──
-    wrap.addEventListener('mouseenter', function () { if (!dragging) paused = true; });
-    wrap.addEventListener('mouseleave', function () { paused = false; velX = 0; });
+    // ── Hover pause ────────────────────────────────────────
+    wrap.addEventListener('mouseenter', function () {
+      if (!dragging) paused = true;
+    });
+    wrap.addEventListener('mouseleave', function () {
+      paused = false;
+    });
 
-    // Hide all items before first positioning to prevent stacked overlap at center
-    items.forEach(function (el) { el.style.visibility = 'hidden'; });
-
-    // Kick off — position items first, then reveal them
+    // ── Staggered entry fade-in ────────────────────────────
+    items.forEach(function (el) {
+      el.style.opacity    = '0';
+      el.style.visibility = 'visible';
+    });
     positionItems(0);
-    items.forEach(function (el) { el.style.visibility = ''; });
-    wrap.classList.add('orbit-initialized');
+    items[0].classList.add('sti-active');
+
+    items.forEach(function (el, i) {
+      setTimeout(function () {
+        el.style.transition = 'opacity ' + ENTRY_MS + 'ms cubic-bezier(0.22,1,0.36,1)';
+        el.style.opacity = '';
+        setTimeout(function () { el.style.transition = ''; }, ENTRY_MS + 50);
+      }, 100 + i * 80);
+    });
+
+    // ── Start ──────────────────────────────────────────────
+    wrap.classList.add('wave-initialized');
     tick();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initOrbit);
+    document.addEventListener('DOMContentLoaded', initWave);
   } else {
-    initOrbit();
+    initWave();
   }
 })();
 
