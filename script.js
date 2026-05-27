@@ -4777,3 +4777,1036 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHieModal();
 });
 })();
+
+// ============================================================
+// STEP 4 — CINEMATIC HERO · Mouse-Reactive Lighting
+// ============================================================
+(function () {
+  'use strict';
+
+  function initCinematicHero() {
+    var section = document.getElementById('cinematic-hero');
+    if (!section) return;
+
+    var glow = document.getElementById('chMouseGlow');
+    if (!glow) return;
+
+    var bounds = null;
+    var rafId = null;
+    var mouseX = 0, mouseY = 0;
+    var glowX = 0, glowY = 0;
+
+    function updateBounds() {
+      bounds = section.getBoundingClientRect();
+    }
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function animateGlow() {
+      glowX = lerp(glowX, mouseX, 0.06);
+      glowY = lerp(glowY, mouseY, 0.06);
+      glow.style.left = glowX + 'px';
+      glow.style.top  = glowY + 'px';
+      rafId = requestAnimationFrame(animateGlow);
+    }
+
+    section.addEventListener('mousemove', function(e) {
+      if (!bounds) updateBounds();
+      mouseX = e.clientX - bounds.left;
+      mouseY = e.clientY - bounds.top;
+      glow.style.opacity = '1';
+    });
+
+    section.addEventListener('mouseleave', function() {
+      glow.style.opacity = '0';
+    });
+
+    section.addEventListener('mouseenter', function() {
+      updateBounds();
+      glow.style.opacity = '1';
+    });
+
+    window.addEventListener('resize', function() { bounds = null; });
+    window.addEventListener('scroll', function() { bounds = null; }, { passive: true });
+
+    // Start glow at center
+    updateBounds();
+    if (bounds) {
+      glowX = mouseX = bounds.width / 2;
+      glowY = mouseY = bounds.height / 2;
+    }
+
+    animateGlow();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCinematicHero);
+  } else {
+    initCinematicHero();
+  }
+})();
+
+// ============================================================
+// STEP 6 — VISIONOS FLOATING DOCK
+// Magnification physics · active state · tooltip
+// ============================================================
+(function () {
+  'use strict';
+
+  function initVisionDock() {
+    var dock = document.getElementById('visionDock');
+    var itemsEl = document.getElementById('vdItems');
+    if (!dock || !itemsEl) return;
+
+    var items = Array.from(itemsEl.querySelectorAll('.vd-item'));
+    var MAX_SCALE  = 1.60;   // peak scale at cursor
+    var MID_SCALE  = 1.28;   // neighbour scale
+    var EDGE_SCALE = 1.08;   // second neighbour
+    var MAX_LIFT   = -14;    // px up at peak
+    var RADIUS     = 90;     // px influence radius
+    var ITEM_W     = 52 + 8; // item width + gap
+
+    function getItemCenters() {
+      return items.map(function(item) {
+        var r = item.getBoundingClientRect();
+        return r.left + r.width / 2;
+      });
+    }
+
+    function onMouseMove(e) {
+      var cx = e.clientX;
+      var centers = getItemCenters();
+
+      items.forEach(function(item, i) {
+        // skip divider-adjacent non-anchor items
+        var dist = Math.abs(cx - centers[i]);
+        var t = Math.max(0, 1 - (dist / RADIUS));
+        // Smooth bell curve
+        t = t * t * (3 - 2 * t);
+
+        var scale = 1 + (MAX_SCALE - 1) * t;
+        var ty    = MAX_LIFT * t;
+
+        item.style.setProperty('--vd-scale', scale.toFixed(3));
+        item.style.setProperty('--vd-ty', ty.toFixed(1) + 'px');
+      });
+    }
+
+    function onMouseLeave() {
+      items.forEach(function(item) {
+        item.style.setProperty('--vd-scale', '1');
+        item.style.setProperty('--vd-ty', '0px');
+      });
+    }
+
+    dock.addEventListener('mousemove', onMouseMove);
+    dock.addEventListener('mouseleave', onMouseLeave);
+
+    // ── Active section highlighting ──
+    function markActive() {
+      var scrollY = window.scrollY + window.innerHeight * 0.4;
+      var sections = document.querySelectorAll('section[id], div[id]');
+      var active = '';
+      sections.forEach(function(s) {
+        if (s.offsetTop <= scrollY) active = s.id;
+      });
+      items.forEach(function(item) {
+        var href = item.getAttribute('href') || '';
+        var id   = href.replace('#', '');
+        item.classList.toggle('is-active', id === active && id !== '');
+      });
+    }
+
+    window.addEventListener('scroll', markActive, { passive: true });
+    markActive();
+
+    // ── Refraction flash on click ──
+    items.forEach(function(item) {
+      item.addEventListener('click', function() {
+        var glass = item.querySelector('.vd-item-glass');
+        if (!glass) return;
+        glass.classList.add('refract-active');
+        setTimeout(function() { glass.classList.remove('refract-active'); }, 800);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVisionDock);
+  } else {
+    initVisionDock();
+  }
+})();
+
+
+// ============================================================
+// STEP 7 — ADVANCED CINEMATIC EFFECTS ENGINE
+// Particles · global mouse glow · scanline · cursor · depth
+// ============================================================
+(function () {
+  'use strict';
+
+  // ── 1. CUSTOM CURSOR ──────────────────────────────────────
+  function initCursor() {
+    // Only on non-touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    var dot  = document.createElement('div');
+    var ring = document.createElement('div');
+    dot.className  = 'cinematic-cursor';
+    ring.className = 'cinematic-cursor-ring';
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+
+    var mx = -100, my = -100;
+    var rx = -100, ry = -100;
+    var rafId;
+
+    document.addEventListener('mousemove', function(e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform  = 'translate(calc(-50% + ' + mx + 'px), calc(-50% + ' + my + 'px))';
+    }, { passive: true });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.11;
+      ry += (my - ry) * 0.11;
+      ring.style.transform = 'translate(calc(-50% + ' + rx.toFixed(1) + 'px), calc(-50% + ' + ry.toFixed(1) + 'px))';
+      rafId = requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // Click pulse
+    document.addEventListener('mousedown', function() {
+      dot.classList.add('cursor-click');
+      ring.style.transform += ' scale(0.75)';
+    });
+    document.addEventListener('mouseup', function() {
+      dot.classList.remove('cursor-click');
+    });
+
+    // Hover on interactive elements
+    var hoverEls = 'a, button, .vd-item, .gc-card, .ch-btn, .hero-vchip';
+    document.addEventListener('mouseover', function(e) {
+      if (e.target.closest(hoverEls)) {
+        ring.style.width  = '52px';
+        ring.style.height = '52px';
+        ring.style.borderColor = 'rgba(0,212,255,0.55)';
+        dot.style.opacity = '0.5';
+      }
+    });
+    document.addEventListener('mouseout', function(e) {
+      if (e.target.closest(hoverEls)) {
+        ring.style.width  = '36px';
+        ring.style.height = '36px';
+        ring.style.borderColor = 'rgba(155,114,247,0.35)';
+        dot.style.opacity = '1';
+      }
+    });
+  }
+
+  // ── 2. GLOBAL MOUSE GLOW ─────────────────────────────────
+  function initGlobalMouseGlow() {
+    var glow = document.getElementById('globalMouseGlow');
+    if (!glow) return;
+    var gx = window.innerWidth  / 2;
+    var gy = window.innerHeight / 2;
+    var tx = gx, ty = gy;
+
+    document.addEventListener('mousemove', function(e) {
+      tx = e.clientX; ty = e.clientY;
+    }, { passive: true });
+
+    function animateGlow() {
+      gx += (tx - gx) * 0.04;
+      gy += (ty - gy) * 0.04;
+      glow.style.left = gx + 'px';
+      glow.style.top  = gy + 'px';
+      requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+
+    document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
+    document.addEventListener('mouseenter', function() { glow.style.opacity = '1'; });
+  }
+
+  // ── 3. PARTICLE SYSTEM ───────────────────────────────────
+  function initParticles() {
+    var canvas = document.getElementById('cinematicCanvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+
+    var W, H, dpr;
+    var particles = [];
+    var PARTICLE_COUNT = 55;
+    var mouse = { x: -999, y: -999 };
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1;
+      W   = window.innerWidth;
+      H   = window.innerHeight;
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.scale(dpr, dpr);
+    }
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+
+    var COLORS = [
+      [155, 114, 247],   // purple
+      [0,   212, 255],   // cyan
+      [255, 114, 192],   // pink
+      [200, 220, 255],   // ice blue
+    ];
+
+    function createParticle(forced) {
+      var col = COLORS[Math.floor(Math.random() * COLORS.length)];
+      return {
+        x:    forced ? rand(0, W) : rand(0, W),
+        y:    forced ? rand(0, H) : H + rand(0, 60),
+        vx:   rand(-0.18, 0.18),
+        vy:   rand(-0.28, -0.06),
+        r:    rand(1.2, 2.8),
+        base_r: rand(1.2, 2.8),
+        alpha: rand(0.15, 0.55),
+        base_alpha: rand(0.15, 0.55),
+        color: col,
+        pulse_phase: rand(0, Math.PI * 2),
+        pulse_speed: rand(0.008, 0.022),
+        // Connection line weight
+        connected: false,
+      };
+    }
+
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    for (var i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(createParticle(true));
+    }
+
+    document.addEventListener('mousemove', function(e) {
+      mouse.x = e.clientX; mouse.y = e.clientY;
+    }, { passive: true });
+
+    var LINE_DIST = 130;
+
+    function drawFrame() {
+      ctx.clearRect(0, 0, W, H);
+
+      var t = Date.now();
+
+      // Update particles
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.pulse_phase += p.pulse_speed;
+        var pulse = 0.5 + 0.5 * Math.sin(p.pulse_phase);
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Gentle mouse attraction
+        var dx = mouse.x - p.x;
+        var dy = mouse.y - p.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200 && dist > 0) {
+          var force = (200 - dist) / 200 * 0.0018;
+          p.vx += dx / dist * force;
+          p.vy += dy / dist * force;
+        }
+
+        // Damping
+        p.vx *= 0.995;
+        p.vy *= 0.997;
+
+        // Clamp velocity
+        var spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+        if (spd > 0.55) { p.vx *= 0.55/spd; p.vy *= 0.55/spd; }
+
+        // Respawn
+        if (p.y < -20 || p.x < -20 || p.x > W + 20) {
+          var np = createParticle(false);
+          particles[i] = np;
+          continue;
+        }
+
+        var r   = p.base_r * (0.85 + 0.3 * pulse);
+        var a   = p.base_alpha * (0.7 + 0.5 * pulse);
+        var col = p.color;
+
+        // Draw glow halo
+        var grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 5);
+        grad.addColorStop(0, 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (a * 0.7).toFixed(3) + ')');
+        grad.addColorStop(1, 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0)');
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r * 5, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Draw core
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + Math.min(a * 1.4, 0.75).toFixed(3) + ')';
+        ctx.fill();
+      }
+
+      // Draw connection lines between nearby particles
+      for (var i = 0; i < particles.length; i++) {
+        for (var j = i + 1; j < particles.length; j++) {
+          var pa = particles[i], pb = particles[j];
+          var dx = pa.x - pb.x, dy = pa.y - pb.y;
+          var d  = Math.sqrt(dx*dx + dy*dy);
+          if (d < LINE_DIST) {
+            var lineA = (1 - d / LINE_DIST) * 0.12;
+            var ca = pa.color, cb = pb.color;
+            var grad2 = ctx.createLinearGradient(pa.x, pa.y, pb.x, pb.y);
+            grad2.addColorStop(0, 'rgba(' + ca[0]+','+ca[1]+','+ca[2]+','+lineA.toFixed(3)+')');
+            grad2.addColorStop(1, 'rgba(' + cb[0]+','+cb[1]+','+cb[2]+','+lineA.toFixed(3)+')');
+            ctx.beginPath();
+            ctx.moveTo(pa.x, pa.y);
+            ctx.lineTo(pb.x, pb.y);
+            ctx.strokeStyle = grad2;
+            ctx.lineWidth   = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(drawFrame);
+    }
+
+    drawFrame();
+  }
+
+  // ── 4. NEON SCANLINE ─────────────────────────────────────
+  function initScanline() {
+    var line = document.getElementById('neonScanline');
+    if (!line) return;
+
+    var y = 0;
+    var speed = 1.8;
+    var visible = false;
+    var lastTime = 0;
+    var pauseUntil = 0;
+
+    function tick(now) {
+      if (now < pauseUntil) {
+        requestAnimationFrame(tick);
+        return;
+      }
+
+      if (!visible) {
+        // Start a new scan
+        y = -2;
+        visible = true;
+        line.style.opacity = '0';
+      }
+
+      y += speed;
+
+      // Fade in from top, fade out at bottom
+      var prog = y / window.innerHeight;
+      var alpha = prog < 0.1  ? prog / 0.1 :
+                  prog > 0.85 ? (1 - prog) / 0.15 : 1;
+
+      line.style.top     = y + 'px';
+      line.style.opacity = (alpha * 0.65).toFixed(3);
+
+      if (y > window.innerHeight + 4) {
+        visible = false;
+        line.style.opacity = '0';
+        // Pause 8-16s between sweeps
+        pauseUntil = now + 8000 + Math.random() * 8000;
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    pauseUntil = performance.now() + 3000;
+    requestAnimationFrame(tick);
+  }
+
+  // ── 5. SCROLL-DRIVEN SECTION DEPTH ───────────────────────
+  function initScrollDepth() {
+    // Parallax ambient orbs based on scroll
+    var orbA = document.querySelector('.amb-orb-a');
+    var orbB = document.querySelector('.amb-orb-b');
+    var orbC = document.querySelector('.amb-orb-c');
+
+    window.addEventListener('scroll', function() {
+      var sy = window.scrollY;
+      if (orbA) orbA.style.transform = 'translateY(' + (sy * 0.04) + 'px)';
+      if (orbB) orbB.style.transform = 'translateY(' + (-sy * 0.03) + 'px)';
+      if (orbC) orbC.style.transform = 'translateY(' + (sy * 0.025) + 'px)';
+    }, { passive: true });
+  }
+
+  // ── 6. SECTION TITLE NEON GLOW ON ENTER ─────────────────
+  function initTitleGlow() {
+    var titles = document.querySelectorAll('.sec-title');
+    if (!('IntersectionObserver' in window)) return;
+
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('neon-reflect');
+        } else {
+          e.target.classList.remove('neon-reflect');
+        }
+      });
+    }, { threshold: 0.5 });
+
+    titles.forEach(function(t) { obs.observe(t); });
+  }
+
+  // ── 7. GLASS CARD MOUSE-TILT (3D parallax) ───────────────
+  function initCardTilt() {
+    var cards = document.querySelectorAll('.gc-card');
+    var MAX_ROT = 6; // degrees
+
+    cards.forEach(function(card) {
+      card.addEventListener('mousemove', function(e) {
+        var r    = card.getBoundingClientRect();
+        var cx   = r.left + r.width  / 2;
+        var cy   = r.top  + r.height / 2;
+        var dx   = (e.clientX - cx) / (r.width  / 2);
+        var dy   = (e.clientY - cy) / (r.height / 2);
+        var rotX = -dy * MAX_ROT;
+        var rotY =  dx * MAX_ROT;
+        card.style.transform = 'translateY(-10px) scale(1.012) perspective(800px) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg)';
+      });
+      card.addEventListener('mouseleave', function() {
+        card.style.transform = '';
+      });
+    });
+  }
+
+  // ── 8. GLASS REFRACTION ON SCROLL ENTRY ──────────────────
+  function initScrollRefraction() {
+    if (!('IntersectionObserver' in window)) return;
+    var glassEls = document.querySelectorAll('.gc-card, .glass-card, .hero-vchip');
+
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('refract-active');
+          setTimeout(function() { e.target.classList.remove('refract-active'); }, 900);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    glassEls.forEach(function(el) { obs.observe(el); });
+  }
+
+  // ── INIT ALL ──────────────────────────────────────────────
+  function initAll() {
+    initCursor();
+    initGlobalMouseGlow();
+    // initParticles(); // disabled — dot particle canvas removed
+    initScanline();
+    initScrollDepth();
+    initTitleGlow();
+    initCardTilt();
+    initScrollRefraction();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+})();
+
+
+// ============================================================
+// STEP 8–10 · RESPONSIVE, PERFORMANCE & FINAL QUALITY
+// ============================================================
+
+(function () {
+  'use strict';
+
+  // ── Utility: debounce ──────────────────────────────────────
+  function debounce(fn, ms) {
+    var t;
+    return function () {
+      var args = arguments, ctx = this;
+      clearTimeout(t);
+      t = setTimeout(function () { fn.apply(ctx, args); }, ms);
+    };
+  }
+
+  // ── Utility: throttle via rAF ──────────────────────────────
+  function rafThrottle(fn) {
+    var raf = false;
+    return function () {
+      if (raf) return;
+      raf = true;
+      var args = arguments, ctx = this;
+      requestAnimationFrame(function () {
+        fn.apply(ctx, args);
+        raf = false;
+      });
+    };
+  }
+
+  // ── Device detection ──────────────────────────────────────
+  var isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  var isLowEnd      = isTouchDevice && !window.matchMedia('(min-width:768px)').matches;
+
+  // ============================================================
+  // A · RESPONSIVE VIEWPORT MANAGER
+  // ============================================================
+  var ViewportManager = (function () {
+    var W = window.innerWidth;
+    var H = window.innerHeight;
+
+    function update() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      // Update CSS custom property for true mobile viewport height
+      document.documentElement.style.setProperty('--real-vh', (H * 0.01) + 'px');
+    }
+
+    update();
+    window.addEventListener('resize', debounce(update, 120), { passive: true });
+
+    // iOS: update on orientation change
+    window.addEventListener('orientationchange', function () {
+      setTimeout(update, 200);
+    }, { passive: true });
+
+    return {
+      get w() { return W; },
+      get h() { return H; },
+      isMobile:  function () { return W < 768;  },
+      isTablet:  function () { return W >= 768 && W < 1024; },
+      isDesktop: function () { return W >= 1024; }
+    };
+  })();
+
+  // ============================================================
+  // B · MOBILE TOUCH INTERACTIONS
+  // ============================================================
+
+  // ── B1. Touch ripple on glass elements ──
+  function initTouchRipple() {
+    var rippleTargets = document.querySelectorAll(
+      '.btn-primary, .btn-ghost, .ch-btn, .gate-submit-btn, .fab-option, .msc-btn, .nav-mob-link, .vd-item'
+    );
+
+    function createRipple(el, x, y) {
+      var rect = el.getBoundingClientRect();
+      var rx = x - rect.left;
+      var ry = y - rect.top;
+      var size = Math.max(rect.width, rect.height) * 2;
+
+      var ripple = document.createElement('span');
+      ripple.style.cssText = [
+        'position:absolute',
+        'left:' + (rx - size / 2) + 'px',
+        'top:'  + (ry - size / 2) + 'px',
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'border-radius:50%',
+        'background:rgba(255,255,255,0.18)',
+        'transform:scale(0) translateZ(0)',
+        'pointer-events:none',
+        'z-index:100',
+        'transition:transform 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease'
+      ].join(';');
+
+      var prev = el.style.position;
+      if (!prev || prev === 'static') el.style.position = 'relative';
+      el.style.overflow = 'hidden';
+      el.appendChild(ripple);
+
+      requestAnimationFrame(function () {
+        ripple.style.transform = 'scale(1) translateZ(0)';
+        ripple.style.opacity   = '0';
+      });
+
+      setTimeout(function () { if (ripple.parentNode) ripple.parentNode.removeChild(ripple); }, 500);
+    }
+
+    rippleTargets.forEach(function (el) {
+      el.addEventListener('touchstart', function (e) {
+        var t = e.touches[0];
+        createRipple(el, t.clientX, t.clientY);
+      }, { passive: true });
+
+      // Also on click for desktop
+      el.addEventListener('click', function (e) {
+        if (!isTouchDevice) createRipple(el, e.clientX, e.clientY);
+      });
+    });
+  }
+
+  // ── B2. Mobile nav drawer: touch swipe to close ──
+  function initMobileSwipeClose() {
+    var drawer = document.getElementById('navMobDrawer');
+    if (!drawer) return;
+
+    var startY = 0, startX = 0;
+
+    drawer.addEventListener('touchstart', function (e) {
+      startY = e.touches[0].clientY;
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    drawer.addEventListener('touchend', function (e) {
+      var dy = e.changedTouches[0].clientY - startY;
+      var dx = Math.abs(e.changedTouches[0].clientX - startX);
+      // Swipe up: close drawer
+      if (dy < -50 && dx < 40) {
+        var toggle = document.getElementById('navToggle');
+        if (toggle && drawer.classList.contains('is-open')) {
+          toggle.click();
+        }
+      }
+    }, { passive: true });
+  }
+
+  // ── B3. Gate card: swipe up to dismiss on mobile ──
+  function initGateSwipe() {
+    var card = document.querySelector('.gate-glass-card');
+    if (!card || !ViewportManager.isMobile()) return;
+
+    var startY = 0, isDragging = false;
+
+    card.addEventListener('touchstart', function (e) {
+      startY = e.touches[0].clientY;
+      isDragging = true;
+    }, { passive: true });
+
+    card.addEventListener('touchmove', function (e) {
+      if (!isDragging) return;
+      var dy = e.touches[0].clientY - startY;
+      if (dy > 0) {
+        card.style.transform = 'translateY(' + (dy * 0.35) + 'px)';
+        card.style.transition = 'none';
+      }
+    }, { passive: true });
+
+    card.addEventListener('touchend', function (e) {
+      isDragging = false;
+      var dy = e.changedTouches[0].clientY - startY;
+      card.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1)';
+      card.style.transform  = '';
+    }, { passive: true });
+  }
+
+  // ── B4. Optimized touch scroll: momentum-aware dock ──
+  function initDockTouchScroll() {
+    var dock = document.getElementById('visionDock');
+    if (!dock) return;
+    dock.style.webkitOverflowScrolling = 'touch';
+  }
+
+  // ============================================================
+  // C · RESPONSIVE DOCK BEHAVIOR
+  // ============================================================
+  function initResponsiveDock() {
+    var dock  = document.getElementById('visionDock');
+    if (!dock) return;
+
+    function update() {
+      if (ViewportManager.isMobile()) {
+        dock.setAttribute('aria-label', 'Navigation');
+      } else {
+        dock.setAttribute('aria-label', 'Quick navigation dock');
+      }
+    }
+
+    update();
+    window.addEventListener('resize', debounce(update, 150), { passive: true });
+  }
+
+  // ============================================================
+  // D · PERFORMANCE: Adaptive particle count
+  // ============================================================
+  function setAdaptiveParticles() {
+    // Low-end / mobile: disable heavy canvas
+    if (isLowEnd) {
+      var canvas = document.getElementById('cinematicCanvas');
+      if (canvas) canvas.style.display = 'none';
+
+      var heroCanvas = document.getElementById('heroCanvas');
+      if (heroCanvas) heroCanvas.style.display = 'none';
+    }
+  }
+
+  // ============================================================
+  // E · PERFORMANCE: IntersectionObserver lazy image reveal
+  // ============================================================
+  function initLazyImages() {
+    if (!('IntersectionObserver' in window)) return;
+
+    var imgs = document.querySelectorAll('img[loading="lazy"]');
+    var obs  = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('loaded');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    imgs.forEach(function (img) {
+      if (img.complete) {
+        img.classList.add('loaded');
+      } else {
+        img.addEventListener('load', function () { img.classList.add('loaded'); });
+        obs.observe(img);
+      }
+    });
+  }
+
+  // ============================================================
+  // F · PERFORMANCE: Efficient scroll handler consolidation
+  // ============================================================
+  function initScrollHub() {
+    var scrollY = 0;
+
+    var mobileStickyBar  = document.getElementById('mobileStickyBar');
+    var fabContainer     = document.getElementById('fabContainer');
+    var lastScrollY      = 0;
+    var ticking          = false;
+
+    function onScroll() {
+      scrollY = window.scrollY;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(function () {
+          ticking = false;
+
+          // Mobile sticky bar: hide when near top, show when scrolled
+          if (mobileStickyBar) {
+            if (scrollY > 80) {
+              mobileStickyBar.classList.add('visible');
+            } else {
+              mobileStickyBar.classList.remove('visible');
+            }
+          }
+
+          // FAB: hide on scroll down, show on scroll up
+          if (fabContainer) {
+            var diff = scrollY - lastScrollY;
+            if (diff > 20 && scrollY > 200) {
+              fabContainer.style.transform = 'translateY(120px)';
+              fabContainer.style.opacity   = '0';
+            } else if (diff < -10 || scrollY < 200) {
+              fabContainer.style.transform = '';
+              fabContainer.style.opacity   = '';
+            }
+          }
+
+          lastScrollY = scrollY;
+        });
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // ============================================================
+  // G · RESPONSIVE NAV: active link tracking
+  // ============================================================
+  function initActiveNav() {
+    var sections = document.querySelectorAll('main [id]');
+    var vdItems  = document.querySelectorAll('.vd-item[href^="#"]');
+    var navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+
+    if (!sections.length) return;
+
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var id = e.target.id;
+
+        vdItems.forEach(function (item) {
+          var href = item.getAttribute('href');
+          if (href === '#' + id) {
+            item.classList.add('is-active');
+          } else {
+            item.classList.remove('is-active');
+          }
+        });
+
+        navLinks.forEach(function (link) {
+          var href = link.getAttribute('href');
+          if (href === '#' + id) {
+            link.classList.add('is-active');
+          } else {
+            link.classList.remove('is-active');
+          }
+        });
+      });
+    }, {
+      rootMargin: '-40% 0px -55% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(function (s) { obs.observe(s); });
+  }
+
+  // ============================================================
+  // H · FINAL QUALITY: Premium hover parallax (desktop only)
+  // ============================================================
+  function initHeroParallax() {
+    if (isTouchDevice || ViewportManager.isMobile()) return;
+
+    var hero   = document.querySelector('.hero-editorial-layout');
+    var portrait = document.querySelector('.hero-portrait-frame');
+    var chips  = document.querySelector('.hero-vertical-chips');
+    var type   = document.querySelector('.hero-type-col');
+
+    if (!hero || !portrait) return;
+
+    var mx = 0, my = 0;
+    var cx = 0, cy = 0;
+    var raf;
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function animate() {
+      cx = lerp(cx, mx, 0.06);
+      cy = lerp(cy, my, 0.06);
+
+      if (portrait) portrait.style.transform = 'translate(' + (cx * 8) + 'px,' + (cy * 6) + 'px) translateZ(0)';
+      if (chips)    chips.style.transform    = 'translate(' + (cx * 4) + 'px,' + (cy * 3) + 'px) translateZ(0)';
+      if (type)     type.style.transform     = 'translate(' + (cx * -2) + 'px,' + (cy * -1.5) + 'px) translateZ(0)';
+
+      raf = requestAnimationFrame(animate);
+    }
+
+    hero.addEventListener('mousemove', function (e) {
+      var r  = hero.getBoundingClientRect();
+      mx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
+      my = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+    }, { passive: true });
+
+    hero.addEventListener('mouseleave', function () {
+      mx = 0; my = 0;
+    }, { passive: true });
+
+    hero.addEventListener('mouseenter', function () {
+      if (!raf) animate();
+    });
+    animate();
+  }
+
+  // ============================================================
+  // I · FINAL QUALITY: Smooth mobile sticky CTA transition
+  // ============================================================
+  function initMobileStickyStyles() {
+    var bar = document.getElementById('mobileStickyBar');
+    if (!bar) return;
+
+    // Add transition for smooth appear/disappear
+    bar.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease';
+
+    // Start hidden, JS will reveal after scroll
+    if (window.scrollY < 80) {
+      bar.classList.remove('visible');
+    }
+  }
+
+  // ============================================================
+  // J · PERFORMANCE: CSS class for nav state (avoid JS style thrash)
+  // ============================================================
+  function initNavScrollState() {
+    var nav = document.getElementById('topNav');
+    if (!nav) return;
+
+    var scrolled = false;
+    window.addEventListener('scroll', rafThrottle(function () {
+      var nowScrolled = window.scrollY > 40;
+      if (nowScrolled !== scrolled) {
+        scrolled = nowScrolled;
+        nav.classList.toggle('is-scrolled', scrolled);
+      }
+    }), { passive: true });
+  }
+
+  // ============================================================
+  // K · RESPONSIVE FAB: position & transition setup
+  // ============================================================
+  function initFabResponsive() {
+    var fab = document.getElementById('fabContainer');
+    if (!fab) return;
+
+    // Smooth hide/show via CSS class
+    fab.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease';
+  }
+
+  // ============================================================
+  // L · PERFORMANCE: Passive event listeners for touch
+  // ============================================================
+  function initPassiveListeners() {
+    // Register wheel and touchmove as passive globally
+    // (improves scroll performance significantly on mobile)
+    window.addEventListener('touchstart', function () {}, { passive: true });
+    window.addEventListener('touchmove',  function () {}, { passive: true });
+    window.addEventListener('wheel',      function () {}, { passive: true });
+  }
+
+  // ============================================================
+  // M · FINAL QUALITY: Orb mouse-follow (desktop only, throttled)
+  // ============================================================
+  function initChMouseFollow() {
+    if (isTouchDevice) return;
+
+    var glow = document.getElementById('chMouseGlow');
+    if (!glow) return;
+
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    var raf;
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function animate() {
+      cx = lerp(cx, tx, 0.07);
+      cy = lerp(cy, ty, 0.07);
+      glow.style.transform = 'translate(' + (cx - 300) + 'px,' + (cy - 300) + 'px) translateZ(0)';
+      raf = requestAnimationFrame(animate);
+    }
+
+    document.addEventListener('mousemove', function (e) {
+      tx = e.clientX;
+      ty = e.clientY;
+    }, { passive: true });
+
+    animate();
+  }
+
+  // ============================================================
+  // INIT ALL — deferred after DOM ready
+  // ============================================================
+  function init() {
+    initTouchRipple();
+    initMobileSwipeClose();
+    initGateSwipe();
+    initDockTouchScroll();
+    initResponsiveDock();
+    setAdaptiveParticles();
+    initLazyImages();
+    initScrollHub();
+    initActiveNav();
+    initHeroParallax();
+    initMobileStickyStyles();
+    initNavScrollState();
+    initFabResponsive();
+    initPassiveListeners();
+    initChMouseFollow();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+

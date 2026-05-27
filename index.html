@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, viewport-fit=cover, interactive-widget=resizes-visual">
   <meta name="description" content="Sajid Mehmood — CCNA Certified IT Support Engineer | Aviation &amp; Healthcare in Qatar | Government Immigration Sector, UAE">
   <meta name="theme-color" content="#eae6df">
   <meta name="mobile-web-app-capable" content="yes">
@@ -52,6 +52,20 @@
 
   <!-- ONE stylesheet only -->
   <link rel="stylesheet" href="styles.css">
+  <!-- Critical inline: real-vh fallback & mobile-sticky initial state -->
+  <style>
+    :root { --real-vh: 1vh; }
+    .mobile-sticky-cta { transform: translateY(0); transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease; }
+    .mobile-sticky-cta:not(.visible) { opacity: 0; pointer-events: none; transform: translateY(100%); }
+    @media (max-width:767px) { .mobile-sticky-cta.visible { opacity: 1; pointer-events: auto; transform: translateY(0); } }
+    .fab-container { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease; }
+    .top-nav.is-scrolled { box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.92),
+      0 6px 24px rgba(80,95,135,0.18),
+      0 20px 50px rgba(70,85,125,0.14),
+      0 0 0 0.75px rgba(255,255,255,0.65) !important; }
+    .nav-link.is-active { color: var(--ink) !important; background: rgba(255,255,255,0.35) !important; }
+  </style>
 </head>
 <body>
 
@@ -81,8 +95,21 @@
       <div class="gate-vignette" aria-hidden="true"></div>
     </div>
 
-    <div class="gate-orb gate-orb-1" aria-hidden="true"></div>
-    <div class="gate-orb gate-orb-2" aria-hidden="true"></div>
+    <!-- Straight beam animations -->
+    <div class="gate-beams" aria-hidden="true">
+      <div class="gate-beam gate-beam-h gate-beam-h-1"></div>
+      <div class="gate-beam gate-beam-h gate-beam-h-2"></div>
+      <div class="gate-beam gate-beam-h gate-beam-h-3"></div>
+      <div class="gate-beam gate-beam-h gate-beam-h-4"></div>
+      <div class="gate-beam gate-beam-h gate-beam-h-5"></div>
+      <div class="gate-beam gate-beam-v gate-beam-v-1"></div>
+      <div class="gate-beam gate-beam-v gate-beam-v-2"></div>
+      <div class="gate-beam gate-beam-v gate-beam-v-3"></div>
+      <div class="gate-beam gate-beam-v gate-beam-v-4"></div>
+      <div class="gate-beam gate-beam-d gate-beam-d-1"></div>
+      <div class="gate-beam gate-beam-d gate-beam-d-2"></div>
+      <div class="gate-beam gate-beam-d gate-beam-d-3"></div>
+    </div>
 
     <div class="gate-glass-card">
       <div class="gate-card-shimmer" aria-hidden="true"></div>
@@ -183,7 +210,7 @@
           </div>
           <div class="nav-logo-divider"></div>
           <div class="nav-logo-text">
-            <span class="nav-logo-name scribble-wrap" id="navLogoName" title="Back to home">Sajid Mehmood</span>
+            <span class="nav-logo-name scribble-wrap" id="navLogoName" title="Back to home">sajidmk</span>
             <span class="nav-logo-role">IT Support Engineer</span>
           </div>
         </a>
@@ -372,6 +399,176 @@
       </div>
 
       
+    </section>
+
+
+
+    <!-- ================================================================
+         STEP 5 — PREMIUM GLASS CARDS
+    ================================================================ -->
+    <section id="glass-cards-showcase" class="glass-cards-section section">
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <span class="sec-num">05</span>
+          <h2 class="sec-title">Capabilities &amp; Expertise</h2>
+          <div class="sec-rule"></div>
+          <p class="sec-subtitle" data-aos="fade-up" data-aos-delay="80">Core areas where precision meets innovation.</p>
+        </header>
+
+        <div class="gc-grid">
+
+          <!-- Card 1 -->
+          <div class="gc-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="gc-card-bg" aria-hidden="true"></div>
+            <div class="gc-card-shimmer" aria-hidden="true"></div>
+            <div class="gc-card-border-glow" aria-hidden="true"></div>
+            <div class="gc-card-reflect" aria-hidden="true"></div>
+            <div class="gc-card-inner">
+              <div class="gc-card-icon-wrap">
+                <i class="fas fa-network-wired gc-icon"></i>
+                <div class="gc-icon-glow" aria-hidden="true"></div>
+              </div>
+              <h3 class="gc-card-title">Network Infrastructure</h3>
+              <p class="gc-card-body">Architecting enterprise-grade networks with zero-downtime deployments across aviation and healthcare verticals.</p>
+              <div class="gc-card-tags">
+                <span class="gc-tag">CCNA</span>
+                <span class="gc-tag">Cisco</span>
+                <span class="gc-tag">VLANs</span>
+              </div>
+              <div class="gc-card-footer">
+                <span class="gc-stat">600+ Systems</span>
+                <i class="fas fa-arrow-up-right gc-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="gc-card gc-card--accent" data-aos="fade-up" data-aos-delay="120">
+            <div class="gc-card-bg" aria-hidden="true"></div>
+            <div class="gc-card-shimmer" aria-hidden="true"></div>
+            <div class="gc-card-border-glow" aria-hidden="true"></div>
+            <div class="gc-card-reflect" aria-hidden="true"></div>
+            <div class="gc-card-inner">
+              <div class="gc-card-icon-wrap">
+                <i class="fas fa-shield-halved gc-icon"></i>
+                <div class="gc-icon-glow" aria-hidden="true"></div>
+              </div>
+              <h3 class="gc-card-title">Cyber Security</h3>
+              <p class="gc-card-body">Led a 4-day cyber incident response operation, safeguarding mission-critical systems under real threat conditions.</p>
+              <div class="gc-card-tags">
+                <span class="gc-tag">ITIL</span>
+                <span class="gc-tag">Incident Response</span>
+                <span class="gc-tag">SOC</span>
+              </div>
+              <div class="gc-card-footer">
+                <span class="gc-stat">500+ Incidents</span>
+                <i class="fas fa-arrow-up-right gc-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="gc-card" data-aos="fade-up" data-aos-delay="240">
+            <div class="gc-card-bg" aria-hidden="true"></div>
+            <div class="gc-card-shimmer" aria-hidden="true"></div>
+            <div class="gc-card-border-glow" aria-hidden="true"></div>
+            <div class="gc-card-reflect" aria-hidden="true"></div>
+            <div class="gc-card-inner">
+              <div class="gc-card-icon-wrap">
+                <i class="fas fa-server gc-icon"></i>
+                <div class="gc-icon-glow" aria-hidden="true"></div>
+              </div>
+              <h3 class="gc-card-title">Systems Engineering</h3>
+              <p class="gc-card-body">End-to-end IT infrastructure management from provisioning to decommissioning, across multi-sector enterprise environments.</p>
+              <div class="gc-card-tags">
+                <span class="gc-tag">Windows Server</span>
+                <span class="gc-tag">Active Directory</span>
+                <span class="gc-tag">VMware</span>
+              </div>
+              <div class="gc-card-footer">
+                <span class="gc-stat">4+ Years</span>
+                <i class="fas fa-arrow-up-right gc-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="gc-card gc-card--pink" data-aos="fade-up" data-aos-delay="360">
+            <div class="gc-card-bg" aria-hidden="true"></div>
+            <div class="gc-card-shimmer" aria-hidden="true"></div>
+            <div class="gc-card-border-glow" aria-hidden="true"></div>
+            <div class="gc-card-reflect" aria-hidden="true"></div>
+            <div class="gc-card-inner">
+              <div class="gc-card-icon-wrap">
+                <i class="fas fa-cloud gc-icon"></i>
+                <div class="gc-icon-glow" aria-hidden="true"></div>
+              </div>
+              <h3 class="gc-card-title">Cloud &amp; Virtualisation</h3>
+              <p class="gc-card-body">Deploying and managing hybrid cloud infrastructure, virtualised environments, and containerised workloads at scale.</p>
+              <div class="gc-card-tags">
+                <span class="gc-tag">Azure</span>
+                <span class="gc-tag">VMware</span>
+                <span class="gc-tag">Hyper-V</span>
+              </div>
+              <div class="gc-card-footer">
+                <span class="gc-stat">99.9% Uptime</span>
+                <i class="fas fa-arrow-up-right gc-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="gc-card" data-aos="fade-up" data-aos-delay="480">
+            <div class="gc-card-bg" aria-hidden="true"></div>
+            <div class="gc-card-shimmer" aria-hidden="true"></div>
+            <div class="gc-card-border-glow" aria-hidden="true"></div>
+            <div class="gc-card-reflect" aria-hidden="true"></div>
+            <div class="gc-card-inner">
+              <div class="gc-card-icon-wrap">
+                <i class="fas fa-plane gc-icon"></i>
+                <div class="gc-icon-glow" aria-hidden="true"></div>
+              </div>
+              <h3 class="gc-card-title">Aviation IT</h3>
+              <p class="gc-card-body">Specialised IT support for aviation operations — check-in systems, gate management, and airside infrastructure at Qatar airports.</p>
+              <div class="gc-card-tags">
+                <span class="gc-tag">DCS</span>
+                <span class="gc-tag">CUTE/CUSS</span>
+                <span class="gc-tag">SITA</span>
+              </div>
+              <div class="gc-card-footer">
+                <span class="gc-stat">Mission Critical</span>
+                <i class="fas fa-arrow-up-right gc-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="gc-card gc-card--gold" data-aos="fade-up" data-aos-delay="600">
+            <div class="gc-card-bg" aria-hidden="true"></div>
+            <div class="gc-card-shimmer" aria-hidden="true"></div>
+            <div class="gc-card-border-glow" aria-hidden="true"></div>
+            <div class="gc-card-reflect" aria-hidden="true"></div>
+            <div class="gc-card-inner">
+              <div class="gc-card-icon-wrap">
+                <i class="fas fa-stethoscope gc-icon"></i>
+                <div class="gc-icon-glow" aria-hidden="true"></div>
+              </div>
+              <h3 class="gc-card-title">Healthcare IT</h3>
+              <p class="gc-card-body">Managing clinical IT systems across hospital environments with strict uptime requirements and sensitive data compliance.</p>
+              <div class="gc-card-tags">
+                <span class="gc-tag">HIS</span>
+                <span class="gc-tag">HL7</span>
+                <span class="gc-tag">HIPAA</span>
+              </div>
+              <div class="gc-card-footer">
+                <span class="gc-stat">120+ Endpoints</span>
+                <i class="fas fa-arrow-up-right gc-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </section>
 
     <!-- ================================================================
@@ -2363,6 +2560,25 @@
       <span>LinkedIn</span>
     </a>
   </div>
+
+
+
+  <!-- ================================================================
+       STEP 7 — ADVANCED CINEMATIC EFFECTS CANVAS
+       Particles · global mouse glow · neon reflections · depth layers
+  ================================================================ -->
+  <canvas id="cinematicCanvas" class="cinematic-canvas" aria-hidden="true"></canvas>
+
+  <!-- Global mouse spotlight -->
+  <div class="global-mouse-glow" id="globalMouseGlow" aria-hidden="true"></div>
+
+  <!-- Neon horizontal scan line -->
+  <div class="neon-scanline" id="neonScanline" aria-hidden="true"></div>
+
+  <!-- Ambient depth orbs — global atmosphere layer -->
+  <div class="amb-orb amb-orb-a" aria-hidden="true"></div>
+  <div class="amb-orb amb-orb-b" aria-hidden="true"></div>
+  <div class="amb-orb amb-orb-c" aria-hidden="true"></div>
 
   <!-- ═══ Analytics Engine ═══ -->
   <script src="analytics.js"></script>
