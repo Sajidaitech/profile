@@ -5881,19 +5881,18 @@ document.addEventListener('keydown', function(e) {
   var REST_BG    = 'rgba(255,255,255,0.14)';
   var REST_SHD   = 'inset 0 1px 0 rgba(255,255,255,0.35),0 1px 4px rgba(0,0,0,0.14)';
   var REST_CLR   = 'rgba(244,244,245,0.88)';
-  var REST_SCL   = 'scale(1)';
 
   function activate(el) {
-    el.style.background  = ACTIVE_BG;
-    el.style.boxShadow   = ACTIVE_SHD;
-    el.style.color       = ACTIVE_CLR;
-    el.style.transform   = ACTIVE_SCL;
+    el.style.background = ACTIVE_BG;
+    el.style.boxShadow  = ACTIVE_SHD;
+    el.style.color      = ACTIVE_CLR;
+    el.style.transform  = ACTIVE_SCL;
   }
   function deactivate(el) {
-    el.style.background  = REST_BG;
-    el.style.boxShadow   = REST_SHD;
-    el.style.color       = REST_CLR;
-    el.style.transform   = REST_SCL;
+    el.style.background = REST_BG;
+    el.style.boxShadow  = REST_SHD;
+    el.style.color      = REST_CLR;
+    el.style.transform  = 'scale(1)';
   }
 
   function init() {
