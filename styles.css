@@ -23193,177 +23193,212 @@ body {
 
 
 /* ================================================================
-   WAVE PILL FIX — Make the big pill track exactly fit the chips
-   and restore absolute positioning needed by initWave JS.
-   Appended last so it overrides all previous conflicting blocks.
+   WAVE PILL — DEFINITIVE FIX v3
+   Beats every conflicting block above:
+     • "all: unset" at ~20308
+     • "* { backdrop-filter: none }" at ~20394
+     • "*, *::before, *::after { will-change: auto }" at ~20414
+     • marquee block "position:static / transform:none" at ~20434
+     • "::before,::after { display:none }" at ~20326
+     • "contain: layout style" on #hero at ~20422
+   Strategy: high-specificity selectors + !important on every property.
 ================================================================ */
 
-/* 1 ── The outer pill container (the "bale") */
-.sector-ticker-wrap,
-.hero-sector-tags .sector-ticker-wrap {
-  /* pill dimensions — tall enough for wave bounce (amp=16px) + chip height (~32px) + padding */
-  display:        block    !important;
-  position:       relative !important;
-  width:          100%     !important;
-  height:         80px     !important;   /* chip_h ~32 + 2×amp 32 + 8px breathing = 72→80 */
-  overflow:       visible  !important;   /* chips allowed to bob above/below the visual pill */
-  cursor:         grab     !important;
-  user-select:    none     !important;
-  -webkit-user-select: none !important;
-  margin-top:     14px     !important;
-  /* no background on the wrap itself — pill is a ::before pseudo */
-  background:     transparent !important;
-  box-shadow:     none     !important;
-  border-radius:  0        !important;
-  border:         none     !important;
-  /* kill the marquee animation that was placed on the wrap */
-  animation:      none     !important;
+/* ── 0. Parent: remove contain so chips can overflow visually ── */
+#hero,
+.hero-section,
+.hero-editorial-layout,
+.hero-sector-tags {
+  contain: none !important;
+  overflow: visible !important;
 }
 
-/* 2 ── The visual pill backdrop (::before) — sized to the chip row */
+/* ── 1. The outer pill wrapper (the "bale") ── */
+.hero-sector-tags .sector-ticker-wrap,
+.sector-ticker-wrap {
+  all:             unset    !important;   /* reset any "all:unset" inheritance */
+  display:         block    !important;
+  position:        relative !important;
+  width:           100%     !important;
+  /* 80px = chip height (~32px) + wave amp up (16px) + wave amp down (16px) + 16px breathing */
+  height:          80px     !important;
+  overflow:        visible  !important;   /* chips bob above the visual pill — do NOT clip */
+  cursor:          grab     !important;
+  user-select:     none     !important;
+  -webkit-user-select: none !important;
+  margin-top:      14px     !important;
+  background:      transparent !important;
+  box-shadow:      none     !important;
+  border-radius:   0        !important;
+  border:          none     !important;
+  animation:       none     !important;
+  padding:         0        !important;
+}
+.hero-sector-tags .sector-ticker-wrap:active,
+.sector-ticker-wrap:active {
+  cursor: grabbing !important;
+}
+
+/* ── 2. Visual glass pill — ::before pseudo-element ──
+   Previous blocks killed ::before with display:none.
+   We use high-specificity here to bring it back.         ── */
+.hero-sector-tags .sector-ticker-wrap::before,
 .sector-ticker-wrap::before {
   content:          ''        !important;
+  display:          block     !important;   /* counteract display:none from line ~20326 */
   position:         absolute  !important;
   top:              50%       !important;
   left:             50%       !important;
   transform:        translate(-50%, -50%) !important;
-  /* pill width: full wrap minus a small margin so edges look crisp */
   width:            calc(100% - 8px) !important;
-  /* height: just the resting chip row — chips bob ±16px above/below */
-  height:           44px      !important;
+  height:           46px      !important;
   border-radius:    999px     !important;
-  /* glass pill surface */
+  /* Solid glass surface — no backdrop-filter (killed globally by * rule) */
   background: linear-gradient(
     170deg,
-    rgba(255,255,255,0.14) 0%,
-    rgba(255,255,255,0.08) 50%,
-    rgba(255,255,255,0.12) 100%
-  ) !important;
-  backdrop-filter:         blur(14px) saturate(1.5) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(1.5) !important;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.55),
-    inset 0 -0.5px 0 rgba(0,0,0,0.04),
-    0 4px 16px rgba(0,0,0,0.18),
-    0 0 0 0.75px rgba(255,255,255,0.22) !important;
-  pointer-events: none !important;
-  z-index:         0   !important;
-}
-
-/* Kill the right-side fade-edge that was added */
-.sector-ticker-wrap::after {
-  display: none !important;
-}
-
-/* 3 ── The track: static container, same size as wrap */
-.sector-ticker-track {
-  position:       relative !important;
-  width:          100%     !important;
-  height:         100%     !important;
-  display:        block    !important;    /* items are absolute inside */
-  /* kill the marquee animation */
-  animation:      none     !important;
-  transform:      none     !important;
-}
-
-/* 4 ── Each chip: restore absolute positioning the wave JS expects */
-.sector-ticker-item,
-.sector-ticker-item:nth-child(n+1),
-.sector-ticker-item:nth-child(n+6) {
-  position:        absolute  !important;
-  top:             50%       !important;
-  left:            50%       !important;
-  display:         inline-flex !important;
-  align-items:     center   !important;
-  gap:             6px       !important;
-  padding:         6px 14px  !important;
-  border-radius:   999px     !important;
-  /* glass chip surface */
-  background: linear-gradient(
-    170deg,
-    rgba(255,255,255,0.16) 0%,
-    rgba(255,255,255,0.09) 100%
-  ) !important;
-  backdrop-filter:         blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.55),
-    0 2px 8px rgba(0,0,0,0.12),
-    0 0 0 0.5px rgba(255,255,255,0.22) !important;
-  font-size:       11px      !important;
-  font-weight:     500       !important;
-  color:           var(--ink-2) !important;
-  white-space:     nowrap    !important;
-  will-change:     transform, opacity !important;
-  pointer-events:  none      !important;
-  /* NOT static, NOT flex-row — JS controls position via transform */
-  flex-shrink:     unset     !important;
-  transform:       translate(-50%, -50%) !important; /* JS will override this per frame */
-  opacity:         1         !important;
-  z-index:         1         !important;
-}
-
-/* 5 ── Active chip glows */
-.sector-ticker-item.sti-active {
-  background: linear-gradient(
-    170deg,
-    rgba(255,255,255,0.26) 0%,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.10) 50%,
     rgba(255,255,255,0.16) 100%
   ) !important;
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.80),
-    0 4px 14px rgba(0,0,0,0.18),
-    0 0 18px rgba(212,216,224,0.28),
-    0 0 0 0.75px rgba(255,255,255,0.45) !important;
-  color: var(--ink) !important;
+    inset 0 1.5px 0 rgba(255,255,255,0.60),
+    inset 0 -0.5px 0 rgba(0,0,0,0.05),
+    0 4px 20px rgba(0,0,0,0.22),
+    0 1px 4px rgba(0,0,0,0.12),
+    0 0 0 0.75px rgba(255,255,255,0.28) !important;
+  pointer-events:   none      !important;
+  z-index:          0         !important;
+  will-change:      auto      !important;
 }
 
-/* 6 ── Dot: small coloured indicator, show it */
-.sti-dot {
-  display:         inline-block !important;
-  width:           5px          !important;
-  height:          5px          !important;
-  border-radius:   50%          !important;
-  background:      rgba(212,216,224,0.55) !important;
-  flex-shrink:     0            !important;
-}
-.sector-ticker-item.sti-active .sti-dot {
-  background: rgba(212,216,224,0.95) !important;
-  box-shadow: 0 0 6px rgba(212,216,224,0.60) !important;
+/* ── Kill the right-side fade-edge pseudo that old marquee block added ── */
+.hero-sector-tags .sector-ticker-wrap::after,
+.sector-ticker-wrap::after {
+  display: none !important;
+  content: none !important;
 }
 
-/* 7 ── Mobile: shrink pill height slightly, keep all 5 chips fitting */
+/* ── 3. The track — plain relative container, JS places items inside ── */
+.hero-sector-tags .sector-ticker-wrap .sector-ticker-track,
+.sector-ticker-wrap .sector-ticker-track,
+.sector-ticker-track {
+  all:          unset    !important;
+  display:      block    !important;
+  position:     relative !important;
+  width:        100%     !important;
+  height:       100%     !important;
+  /* KILL the marquee animation that was set on the track */
+  animation:    none     !important;
+  transform:    none     !important;
+  top:          auto     !important;
+  left:         auto     !important;
+  flex-wrap:    unset    !important;
+}
+
+/* ── 4. Each chip — absolute, JS moves them via transform each rAF ── */
+.sector-ticker-wrap .sector-ticker-item,
+.sector-ticker-wrap .sector-ticker-item:nth-child(n+1),
+.sector-ticker-wrap .sector-ticker-item:nth-child(n+6) {
+  /* layout — JS MUST be able to set transform and opacity */
+  position:        absolute    !important;
+  top:             50%         !important;
+  left:            50%         !important;
+  /* Do NOT set transform or opacity here — JS owns those */
+  display:         inline-flex !important;
+  align-items:     center      !important;
+  gap:             6px         !important;
+  padding:         6px 14px    !important;
+  border-radius:   999px       !important;
+  /* Appearance — solid glass (no backdrop-filter, killed by * rule above) */
+  background: linear-gradient(
+    170deg,
+    rgba(255,255,255,0.22) 0%,
+    rgba(255,255,255,0.12) 100%
+  ) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    inset 0 -0.5px 0 rgba(0,0,0,0.04),
+    0 2px 8px rgba(0,0,0,0.14),
+    0 0 0 0.5px rgba(255,255,255,0.30) !important;
+  /* Typography */
+  font-family:     'DM Sans', system-ui, sans-serif !important;
+  font-size:       11px        !important;
+  font-weight:     500         !important;
+  color:           rgba(244,244,245,0.85) !important;
+  white-space:     nowrap      !important;
+  pointer-events:  none        !important;
+  will-change:     transform, opacity !important;
+  /* Flex overrides from marquee block */
+  flex-shrink:     0           !important;
+  flex-direction:  row         !important;
+  /* z-index managed by JS per frame */
+  z-index:         1           !important;
+}
+
+/* ── 5. Active (peak) chip — brighter glow ── */
+.sector-ticker-wrap .sector-ticker-item.sti-active {
+  background: linear-gradient(
+    170deg,
+    rgba(255,255,255,0.34) 0%,
+    rgba(255,255,255,0.20) 100%
+  ) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.85),
+    0 4px 16px rgba(0,0,0,0.20),
+    0 0 20px rgba(212,216,224,0.35),
+    0 0 0 0.75px rgba(255,255,255,0.50) !important;
+  color: rgba(244,244,245,1.00) !important;
+}
+
+/* ── 6. Dot ── */
+.sector-ticker-wrap .sti-dot {
+  display:      inline-block !important;
+  width:        5px          !important;
+  height:       5px          !important;
+  border-radius: 50%         !important;
+  background:   rgba(212,216,224,0.50) !important;
+  flex-shrink:  0            !important;
+}
+.sector-ticker-wrap .sector-ticker-item.sti-active .sti-dot {
+  background: rgba(212,216,224,1.00) !important;
+}
+
+/* ── 7. Mobile ≤767px ── */
 @media (max-width: 767px) {
-  .sector-ticker-wrap,
-  .hero-sector-tags .sector-ticker-wrap {
-    height:     72px !important;
+  .hero-sector-tags .sector-ticker-wrap,
+  .sector-ticker-wrap {
+    height:     74px !important;
     margin-top: 10px !important;
   }
+  .hero-sector-tags .sector-ticker-wrap::before,
   .sector-ticker-wrap::before {
     height: 40px !important;
     width:  calc(100% - 4px) !important;
   }
-  .sector-ticker-item,
-  .sector-ticker-item:nth-child(n+1),
-  .sector-ticker-item:nth-child(n+6) {
+  .sector-ticker-wrap .sector-ticker-item,
+  .sector-ticker-wrap .sector-ticker-item:nth-child(n+1),
+  .sector-ticker-wrap .sector-ticker-item:nth-child(n+6) {
     font-size: 10px    !important;
     padding:   5px 10px !important;
-    gap:       5px     !important;
+    gap:       4px     !important;
   }
 }
 
+/* ── 8. Mobile ≤480px ── */
 @media (max-width: 480px) {
-  .sector-ticker-wrap,
-  .hero-sector-tags .sector-ticker-wrap {
-    height:     68px !important;
+  .hero-sector-tags .sector-ticker-wrap,
+  .sector-ticker-wrap {
+    height: 68px !important;
   }
+  .hero-sector-tags .sector-ticker-wrap::before,
   .sector-ticker-wrap::before {
-    height: 38px !important;
+    height: 36px !important;
   }
-  .sector-ticker-item,
-  .sector-ticker-item:nth-child(n+1),
-  .sector-ticker-item:nth-child(n+6) {
-    font-size: 9.5px  !important;
+  .sector-ticker-wrap .sector-ticker-item,
+  .sector-ticker-wrap .sector-ticker-item:nth-child(n+1),
+  .sector-ticker-wrap .sector-ticker-item:nth-child(n+6) {
+    font-size: 9.5px !important;
     padding:   4px 9px !important;
+    gap:       4px   !important;
   }
 }
