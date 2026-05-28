@@ -3473,14 +3473,24 @@ function printSignature() {
     var dragging = false;
     var lastX    = 0;
     var frontIdx = 0;
+    var started  = false;
+    var cachedW  = 0;       // last known real width
+
+    // ── Measure the actual rendered width, retrying until non-zero ──
+    function getRealWidth() {
+      // Try the wrap first, then fall back up the DOM tree
+      var w = wrap.getBoundingClientRect().width;
+      if (!w) w = wrap.offsetWidth;
+      if (!w && wrap.parentElement) w = wrap.parentElement.getBoundingClientRect().width;
+      return w || 0;
+    }
 
     // Evenly distribute chip X positions across the pill track
-    function getXPositions() {
-      var w       = wrap.offsetWidth || 400;
-      var padX    = Math.max(30, w * 0.06);
-      var usable  = w - padX * 2;
-      var step    = N > 1 ? usable / (N - 1) : 0;
-      var pos     = [];
+    function getXPositions(w) {
+      var padX   = Math.max(30, w * 0.08);
+      var usable = w - padX * 2;
+      var step   = N > 1 ? usable / (N - 1) : 0;
+      var pos    = [];
       for (var i = 0; i < N; i++) {
         pos.push(padX + i * step - w / 2);  // offset from center (left:50%)
       }
@@ -3488,10 +3498,14 @@ function printSignature() {
     }
 
     function positionItems(ph) {
-      var xPos    = getXPositions();
-      var maxSin  = -Infinity;
-      var newFront = 0;
-      var TWO_PI  = Math.PI * 2;
+      var w = getRealWidth();
+      if (!w) return;           // layout not ready yet — skip frame
+      cachedW = w;
+
+      var xPos      = getXPositions(w);
+      var maxSin    = -Infinity;
+      var newFront  = 0;
+      var TWO_PI    = Math.PI * 2;
       var phaseStep = TWO_PI / N;  // equal phase gap between chips
 
       items.forEach(function (el, i) {
@@ -3499,10 +3513,10 @@ function printSignature() {
         var sinVal    = Math.sin(chipPhase);   // -1 (trough) → +1 (peak)
         var zNorm     = (sinVal + 1) / 2;      // 0 → 1
 
-        var scale     = SCALE_MIN   + (SCALE_MAX   - SCALE_MIN)   * zNorm;
-        var opacity   = OPACITY_MIN + (OPACITY_MAX  - OPACITY_MIN) * zNorm;
-        var dy        = -sinVal * WAVE_AMP;    // negative = chip goes UP at peak
-        var zIndex    = Math.round(zNorm * 8 + 1);
+        var scale   = SCALE_MIN   + (SCALE_MAX   - SCALE_MIN)   * zNorm;
+        var opacity = OPACITY_MIN + (OPACITY_MAX  - OPACITY_MIN) * zNorm;
+        var dy      = -sinVal * WAVE_AMP;      // negative = chip goes UP at peak
+        var zIndex  = Math.round(zNorm * 8 + 1);
 
         el.style.transform =
           'translate(calc(-50% + ' + xPos[i].toFixed(2) + 'px),' +
@@ -3572,25 +3586,50 @@ function printSignature() {
       paused = false;
     });
 
-    // ── Staggered entry fade-in ────────────────────────────
-    items.forEach(function (el) {
-      el.style.opacity    = '0';
-      el.style.visibility = 'visible';
-    });
-    positionItems(0);
-    items[0].classList.add('sti-active');
+    // ── Start: wait until the wrap has a real rendered width ──
+    // The gate overlay hides everything on load; the wrap gets width
+    // only after the gate dismisses and layout is painted.
+    function tryStart() {
+      var w = getRealWidth();
+      if (!w) {
+        // Not painted yet — retry next frame
+        requestAnimationFrame(tryStart);
+        return;
+      }
+      if (started) return;
+      started = true;
 
-    items.forEach(function (el, i) {
-      setTimeout(function () {
-        el.style.transition = 'opacity ' + ENTRY_MS + 'ms cubic-bezier(0.22,1,0.36,1)';
-        el.style.opacity = '';
-        setTimeout(function () { el.style.transition = ''; }, ENTRY_MS + 50);
-      }, 100 + i * 80);
+      // Staggered entry fade-in
+      items.forEach(function (el) {
+        el.style.opacity    = '0';
+        el.style.visibility = 'visible';
+      });
+      positionItems(0);
+      items[0].classList.add('sti-active');
+
+      items.forEach(function (el, i) {
+        setTimeout(function () {
+          el.style.transition = 'opacity ' + ENTRY_MS + 'ms cubic-bezier(0.22,1,0.36,1)';
+          el.style.opacity = '';
+          setTimeout(function () { el.style.transition = ''; }, ENTRY_MS + 50);
+        }, 100 + i * 80);
+      });
+
+      wrap.classList.add('wave-initialized');
+      tick();
+    }
+
+    // Also re-spread chips on window resize (e.g. orientation change)
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        positionItems(phase);
+      }, 80);
     });
 
-    // ── Start ──────────────────────────────────────────────
-    wrap.classList.add('wave-initialized');
-    tick();
+    // Kick off — will self-retry via rAF until layout is ready
+    requestAnimationFrame(tryStart);
   }
 
   if (document.readyState === 'loading') {
@@ -5832,3 +5871,46 @@ document.addEventListener('keydown', function(e) {
 
 })();
 
+
+// ── CHIP PULSE CYCLER ─────────────────────────────────────────
+(function () {
+  var ACTIVE_BG  = 'rgba(255,255,255,0.30)';
+  var ACTIVE_SHD = 'inset 0 1px 0 rgba(255,255,255,0.70),0 4px 16px rgba(0,0,0,0.22),0 0 18px rgba(212,216,224,0.30),0 0 0 1px rgba(255,255,255,0.35)';
+  var ACTIVE_CLR = 'rgba(244,244,245,1.00)';
+  var ACTIVE_SCL = 'scale(1.10)';
+  var REST_BG    = 'rgba(255,255,255,0.14)';
+  var REST_SHD   = 'inset 0 1px 0 rgba(255,255,255,0.35),0 1px 4px rgba(0,0,0,0.14)';
+  var REST_CLR   = 'rgba(244,244,245,0.88)';
+  var REST_SCL   = 'scale(1)';
+
+  function activate(el) {
+    el.style.background  = ACTIVE_BG;
+    el.style.boxShadow   = ACTIVE_SHD;
+    el.style.color       = ACTIVE_CLR;
+    el.style.transform   = ACTIVE_SCL;
+  }
+  function deactivate(el) {
+    el.style.background  = REST_BG;
+    el.style.boxShadow   = REST_SHD;
+    el.style.color       = REST_CLR;
+    el.style.transform   = REST_SCL;
+  }
+
+  function init() {
+    var chips = document.querySelectorAll('#chipPill .chip');
+    if (!chips.length) return;
+    var i = 0;
+    activate(chips[i]);
+    setInterval(function () {
+      deactivate(chips[i]);
+      i = (i + 1) % chips.length;
+      activate(chips[i]);
+    }, 2000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
