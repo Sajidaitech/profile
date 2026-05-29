@@ -285,1791 +285,217 @@
 
 
 // ============================================================
-// SECTION 1 · GATE OVERLAY — Professional Name Validation v2.2
+// GATE OVERLAY — chat-style name-entry (new design)
 // ============================================================
 
+/* ================================================================
+   GATE OVERLAY — chat-style name-entry screen
+   Blocks the site until visitor submits their name.
+   Saves name to sessionStorage so it doesn't repeat same session.
+================================================================ */
 (function () {
   'use strict';
 
-  // ----------------------------------------------------------
-  // NTFY.SH — Push notification endpoint
-  // Subscribe to this topic in the ntfy app on your phone.
-  // Keep this topic name private — anyone who knows it can publish.
-  // ----------------------------------------------------------
-  // Rate limit: max 5 attempts per session, 3s cooldown between submits
-  var _submitCount      = 0;
-  var _lastSubmitMs     = 0;
-  var MAX_ATTEMPTS      = 5;
-  var SUBMIT_COOLDOWN_MS = 3000;
+  var SESSION_KEY  = '_smVisitorName';
+  var TYPEWRITER_MS = 12;   // ms per character
 
-  document.body.style.overflow = 'hidden';
-  document.body.classList.add('gate-active');
+  var overlay   = document.getElementById('gateOverlay');
+  var messages  = document.getElementById('gateMessages');
+  var statusEl  = document.getElementById('gateStatus');
+  var inputRow  = document.getElementById('gateInputRow');
+  var nameInput = document.getElementById('gateNameInput');
+  var sendBtn   = document.getElementById('gateSendBtn');
 
-  // ----------------------------------------------------------
-  // 1A · CONSTANTS
-  // ----------------------------------------------------------
+  if (!overlay) return;
 
-  var MIN_LEN = 2;
-  var MAX_LEN = 30;
+  /* ── Already visited this session? Skip gate ── */
+  try {
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      dismissGate(null, true);
+      return;
+    }
+  } catch (e) {}
 
-  // ----------------------------------------------------------
-  // 1B · LEET-SPEAK + UNICODE NORMALIZER
-  // ----------------------------------------------------------
+  /* ── Helpers ── */
+  function setStatus(txt) { if (statusEl) statusEl.textContent = txt; }
 
-  var LEET_MAP = {
-    '0':'o','1':'i','3':'e','4':'a','5':'s','6':'g',
-    '7':'t','8':'b','9':'g','@':'a','$':'s','!':'i','+':'t'
-  };
-
-  function decodeLeet(str) {
-    return str.toLowerCase().split('').map(function (c) {
-      return LEET_MAP[c] || c;
-    }).join('');
+  function addTypingDots() {
+    var el = document.createElement('div');
+    el.className = 'gate-typing';
+    el.id = 'gateTypingDots';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    messages.appendChild(el);
+    messages.scrollTop = messages.scrollHeight;
+    return el;
   }
 
-  function normalize(str) {
-    return decodeLeet(str)
-      .replace(/[àáâãäåā]/g, 'a').replace(/[èéêëē]/g, 'e')
-      .replace(/[ìíîïī]/g, 'i').replace(/[òóôõöō]/g, 'o')
-      .replace(/[ùúûüū]/g, 'u').replace(/[ñ]/g, 'n')
-      .replace(/[ç]/g, 'c').replace(/[ß]/g, 'ss')
-      .replace(/[^a-z]/g, '');
+  function removeTypingDots() {
+    var el = document.getElementById('gateTypingDots');
+    if (el && el.parentNode) el.parentNode.removeChild(el);
   }
 
-  // ----------------------------------------------------------
-  // 1C · BLOCKED: PROFANITY — English + Roman Urdu/Hindi
-  // ----------------------------------------------------------
-
-  var PROFANITY = [
-    // English
-    'fuck','fucker','fucking','fucked','fuckoff','fuk','fck',
-    'shit','shitt','sht',
-    'bitch','btch','biatch',
-    'bastard','bastar',
-    'asshole','ashole','asshl','ass',
-    'cunt','cnt',
-    'dick','dik','dck',
-    'cock','cok','kok',
-    'pussy','psy',
-    'whore','whor',
-    'slut','slt',
-    'faggot','fagot','fag',
-    'nigger','niger','nigga','niga',
-    'retard','retrd',
-    'prick','prck',
-    'twat','twt',
-    'wanker','wnker',
-    'bollocks','bolocks',
-    'bugger',
-    'tosser',
-    'arsehole','arshole',
-    'rape','rapist',
-    'satan','devil','demon',
-    'sex','sexy','sexxx',
-    'porn','prn',
-    'nude','nud',
-    'penis','pnis',
-    'vagina','vgina',
-    'boobs','boob','bobs',
-    // Roman Urdu / Roman Hindi
-    'gandu','gaandu','gand','gnd',
-    'gaand','gaandmara',
-    'chutiya','chutiye','chuti','chut','choot',
-    'maderchod','madarchod','maderchud','mchd','mc',
-    'behenchod','bhenchod','bhanchod','bhnchd','bc',
-    'bhosdike','bhosdiwale','bhosda','bhosdi',
-    'bsdk','bkl',
-    'kutta','kutte','kutti','kutiya',
-    'suar','suwar',
-    'randi','randwa','rand',
-    'launda','laundi',
-    'chakka','chkka',
-    'hijra','hizra','khusra',
-    'lavde','lavda','loda','lund','lnd',
-    'harami','haraamzaada','haramzada','haramzadi','haramkhor',
-    'khabees','zaleel','kameena','kameeni','kamina','kamine',
-    'beghairat','besharram','besharam','besharm',
-    'jahil','jaheel','bewakoof','bewaqoof','bewaquf',
-    'nalayak','duffer','ullu','ulluka','bakwas','bakwaas',
-    'gandi','ganda',
-    'sala','saala','sali','saali',
-    'badmaash','badmash',
-    'lanati','lanat',
-    'pagal','paagal',
-    'madar','teriamma',
-    'maaki','terimaaki',
-    'madarchod'
-  ];
-
-  // ----------------------------------------------------------
-  // 1D · BLOCKED: ROMANTIC / ENDEARMENT TERMS
-  // ----------------------------------------------------------
-
-  var ROMANTIC = [
-    // English endearments / pet names
-    'sweet','sweety','sweetie','sweetheart','sweetzz','sweetness',
-    'honey','honeybee','honeybun','honeypie','honeykins',
-    'babe','baby','babygirl','babyboy','babydoll','babyface','babykins',
-    'darling','darlingg',
-    'lover','loverboy','lovergirl','lovebird','lovebug','loveydovey',
-    'lovey','lovie','loveable','lovemaster',
-    'cutie','cutiepie','cuteness','cutiecutie',
-    'angel','angelface','angelbaby','angelgirl','angelboy',
-    'pretty','prettygirl','prettyone','prettyboy','prettyface',
-    'gorgeous','gorgeousgirl','gorgeousboy',
-    'flirt','flirty','flirter','flirtybabe',
-    'romeo','juliet','casanova','lothario','charmer',
-    'charm','charming',
-    'dreamy','dreamboat','dreamgirl','dreamboy',
-    'heartthrob','hearthrob',
-    'sugar','sugarplum','sugarbabe','sugarbabes','sugarpie',
-    'candy','candygirl','candyboy','candycane',
-    'kiss','kissy','kisses','kissme','smooch','smoochy',
-    'hugs','hugsy','huggie','hugsandkisses',
-    'snuggle','snuggles','snuggly','snugglekins','snugglebear',
-    'cuddle','cuddles','cuddly','cuddlebug','cuddlekins',
-    'pookie','pookiebear','pookiekins','poohbear','teddybear','teddyboo',
-    'wifey','hubby','beau',
-    'stud','hunk',
-    'seductive','seductress',
-    'temptress','tempting',
-    'irresistible',
-    'myqueen','myking','myprincess','myprince',
-    'myangel','myhoney','mybaby','mybabe','mydarling','mysweetheart',
-    'mysweetie','mylife','myheart','mysoul','mylove','myworld',
-    'dreamlover','secretlover','closetlover',
-    'romantic','romance','romantica',
-    'passion','passionate',
-    'beloved','adored','adore','adorable',
-    'flirtatious','crush','crushie',
-    'wink','winky','blush','blushy',
-    'xoxo','xoxoxo','muah','mwah',
-    'heartbeat','butterflies',
-    // Roman Urdu romantic terms
-    'jaan','jaanu','jaaneman','jaanijaan',
-    'pyar','pyari','pyaari','pyaruu',
-    'mehboob','mehbooba','mehboobaa',
-    'aashiq','aashiqa','aashiqui',
-    'dilbar','dilruba','dildaar','dilnasheen',
-    'chaand','chand','chandni','chandaa',
-    'gul','gulzar','gulabo',
-    'shona','shonaaa','shunaaa',
-    'babujaan','babujan','babujii',
-    'raja','rani',
-    'sajna','sajni',
-    'hasina','husnpari',
-    'paro','devdas',
-    'laila','majnu',
-    'mishti','misti',
-    'mishty'
-  ];
-
-  // ----------------------------------------------------------
-  // 1E · BLOCKED: ANIMALS
-  // ----------------------------------------------------------
-
-  var ANIMALS = [
-    'dog','cat','cow','pig','monkey','donkey','goat','horse',
-    'chicken','rat','snake','lion','tiger','bear','wolf','fox',
-    'rabbit','fish','bird','elephant','camel','buffalo','sheep',
-    'duck','hen','rooster','crow','parrot','mouse','hamster',
-    'turtle','lizard','crocodile','frog','bat','fly','ant','bee',
-    'bull','mule','pony','colt','mare','stallion','heifer',
-    'cub','kitten','puppy','piglet','calf','lamb','foal',
-    'chick','drake','gander','doe','buck','ram','ewe',
-    'giraffe','zebra','hippo','rhino','gorilla','chimp',
-    'orangutan','baboon','lemur','panda','koala','kangaroo',
-    'wombat','platypus','emu','ostrich','penguin','flamingo',
-    'toucan','parakeet','macaw','cockatoo','canary','finch',
-    'sparrow','pigeon','hawk','eagle','falcon','owl','vulture',
-    'shark','whale','dolphin','seal','walrus','otter','beaver',
-    'mink','ferret','weasel','badger','hedgehog','mole','shrew',
-    'vole','gerbil','chinchilla','capybara',
-    'sloth','armadillo','anteater','aardvark','tapir','llama',
-    'alpaca','bison','moose','elk','deer','antelope','gazelle',
-    'impala','wildebeest','hyena','cheetah','leopard','jaguar',
-    'panther','puma','cougar','lynx','bobcat','ocelot',
-    'mongoose','meerkat','warthog','boar',
-    'scorpion','tarantula','gecko','iguana','chameleon',
-    'python','cobra','viper','mamba','boa','anaconda',
-    'alligator','tortoise','salamander','newt','toad',
-    'goldfish','catfish','salmon','tuna','cod','trout',
-    'lobster','crab','shrimp','squid','octopus','jellyfish',
-    'starfish','seahorse','clam','oyster','mussel','snail',
-    'slug','worm','beetle','moth','butterfly','dragonfly',
-    'mosquito','wasp','hornet','termite','cockroach','locust'
-  ];
-
-  // ----------------------------------------------------------
-  // 1F · BLOCKED: KEYBOARD SPAM / FILLER WORDS
-  // ----------------------------------------------------------
-
-  var NONSENSE = [
-    'asdf','asdff','asdfg','asdfgh','qwerty','qwert','qwertyuiop',
-    'zxcv','zxcvb','zxcvbn','hjkl','uiop','tyui','erty',
-    'aaaa','bbbb','cccc','dddd','eeee','ffff','gggg','hhhh',
-    'iiii','jjjj','kkkk','llll','mmmm','nnnn','oooo','pppp',
-    'qqqq','rrrr','ssss','tttt','uuuu','vvvv','wwww','xxxx',
-    'yyyy','zzzz','abcd','abcde','abcdef','efgh','ijkl','mnop',
-    'abababab','ababab','xoxo','xoxoxo',
-    'test','testing','tester','tested','testuser',
-    'user','users','username','userid','usertest',
-    'guest','guestuser','admin','administrator','root','superuser',
-    'hello','helo','hi','hey','yo','yoyo',
-    'lol','lmao','haha','hehe','hihi','hoho','hahaha',
-    'ok','okay','okk','okok','fine','sure','yep','nope',
-    'yes','no','none','nah','yah','ya','na',
-    'null','undefined','nan','void','false','true',
-    'anon','anonymous','noname','noone','nobody','someone',
-    'anyone','everyone','person','people',
-    'name','myname','yourname','firstname','lastname',
-    'fake','faker','fakeuser','fakeaccount',
-    'unknown','notknown','random','randomuser',
-    'nothing','something','anything','everything',
-    'blah','blahblah','bla','blab',
-    'spam','spammer','bot','botuser','robot','robo',
-    'aaa','bbb','ccc','ddd','eee','fff','ggg','hhh',
-    'iii','jjj','kkk','lll','mmm','nnn','ooo','ppp',
-    'qqq','rrr','sss','ttt','uuu','vvv','www','xxx','yyy','zzz',
-    'good','bad','nice','best','cool','smart','rich','poor',
-    'big','small','tall','short','fast','slow','hot','cold',
-    'happy','sad','mad','glad','angry','lucky','sorry',
-    'real','fake','true','love','hate','life','dead','kill',
-    'money','food','water','fire','earth','wind','sky','star',
-    'sun','moon','cloud','rain','snow','day','night',
-    'home','house','room','door','window','car','road',
-    'city','town','place','world','country','land','sea',
-    'king','queen','lord','god','master',
-    'super','mega','ultra','hyper','epic','elite','pro','max',
-    'dark','black','white','red','blue','green','gold','silver',
-    // Onomatopoeia / toy words not caught by pattern rules
-    'blinky','plinky','winky','dinky','zinky','slinky',
-    'bubbly','gubbly','wubbly','dubby','lubby','subby','zubby',
-    'splishsplash','snipsnap','skrisbkrab','flipflap','glimglam',
-    'flipadoo','bloopa','blapa','gripgrab','glubglub'
-  ];
-
-  // ----------------------------------------------------------
-  // 1G · BLOCKED: JOB TITLES & ROLES
-  // ----------------------------------------------------------
-
-  var TITLES = [
-    'doctor','dr','nurse','engineer','manager','officer',
-    'director','supervisor','coordinator','administrator',
-    'teacher','professor','lecturer','principal','dean',
-    'ceo','cto','cfo','coo','vp','svp','evp','gm',
-    'president','chairman','chairperson','chairwoman',
-    'intern','trainee','assistant','associate',
-    'analyst','consultant','advisor','specialist',
-    'technician','mechanic','operator','agent',
-    'sir','maam','madam','miss','mister','mr','mrs','ms',
-    'boss','chief','head','lead','senior','junior',
-    'captain','general','colonel','major','lieutenant',
-    'sergeant','corporal','admiral','commander',
-    'clerk','receptionist','secretary','staff',
-    'owner','founder','cofounder','partner',
-    'volunteer','freelancer','contractor','vendor',
-    'developer','programmer','coder','designer',
-    'accountant','auditor','lawyer','attorney','barrister',
-    'dentist','surgeon','pharmacist','therapist',
-    'pilot','driver','guard','security',
-    'inspector','detective','investigator'
-  ];
-
-  // ----------------------------------------------------------
-  // 1H · BLOCKED: FICTIONAL & CELEBRITY CHARACTERS
-  // ----------------------------------------------------------
-
-  var FICTIONAL = [
-    // Superheroes / comics
-    'batman','superman','spiderman','ironman','hulk','thor',
-    'deadpool','wolverine','venom','aquaman','flash','cyborg',
-    'captainamerica','wonderwoman','blackwidow','hawkeye',
-    'antman','blackpanther','doctorstrange','greenlantern',
-    'nightwing','robinn','catwoman','penguin','riddler',
-    // Anime / manga
-    'naruto','goku','vegeta','luffy','sasuke','itachi',
-    'zoro','ichigo','eren','levi','mikasa','hinata',
-    'deku','bakugo','todoroki','allmight','nezuko',
-    'tanjiro','zenitsu','inosuke','gintoki','rukia',
-    // Gaming
-    'mario','luigi','link','zelda','samus','pikachu',
-    'masterchief','kratos','geralt','ezio','altair',
-    'cloud','tifa','aerith','noctis','lightning',
-    'arthur','trevor','michael','niko','cj','tommy',
-    'lara','croft','nathan','drake','joel','ellie',
-    // Movies / TV / Books
-    'joker','dracula','frankenstein','sherlock',
-    'hamlet','tarzan','hercules','achilles','leonidas',
-    'thanos','loki','magneto','mystique','xavier',
-    'yoda','skywalker','darthvader','chewbacca','gandalf',
-    'frodo','bilbo','aragorn','legolas','gimli','sauron',
-    'voldemort','dumbledore','hermione','snape',
-    'jamesbond','ethan','hunt','jasonbourne',
-    'tonystark','steverogers','peterparker',
-    'brucewane','clarkkent','dianaprince',
-    'jacksparrow',
-    // Generic tropes
-    'villain','antihero','sidekick','protagonist','antagonist',
-    'superhero','supervillain','mastermind',
-    // Local pop culture
-    'meeraali','bhola','nawabzada',
-    'sultan','sikandar','badshah',
-    'heer','ranjha','sohni','mahiwal',
-    'romeo','juliet'
-  ];
-
-  // ----------------------------------------------------------
-  // 1I · BLOCKED: FAMILY / RELATION TERMS
-  // ----------------------------------------------------------
-
-  var RELATIONS = [
-    // English family terms
-    'father','dad','daddy','dada','papa','pop','pops',
-    'mother','mom','mommy','mama','mum','mummy',
-    'son','daughter','sibling',
-    'brother','bro','sister','sis',
-    'uncle','aunt','auntie','aunty',
-    'grandfather','grandpa','grandmother','grandma',
-    'grandson','granddaughter',
-    'nephew','niece',
-    'cousin','cousins',
-    'husband','wife',
-    'fiance','fiancee',
-    // Roman Urdu / Hindi family terms
-    'beta','beti','betu','betaa','betaji','uraba','urbab','aba',
-    'bhai','bhaia','bhaijaan','bhaisaab',
-    'behan','behna','aapa','apa','didi',
-    'chacha','chachajaan','kaka','taya','taaya','chachoo',
-    'chachi','mami','khala','phupho','phuppi','mamani',
-    'nana','daada','nanajaan','dadajaan',
-    'nani','daadi','nanijaan','dadijaan',
-    'pota','poti','nwasa','nawasa',
-    'bhanja','bhanji',
-    'abu','abbu','abba','abujaan','walid',
-    'ammi','amma','amijan','walidain',
-    'baap','maa','bap','pitaji','pitah','maaji','maata',
-    'chachu','mamujaan','maamu','mamu',
-    'phuppa','phuppajaan',
-    'jija','jijaji','bhabhi','bhabhijaan',
-    'shohar','biwi',
-    'dulha','dulhan',
-    'sasur','saas','devar','devrani','jethani','jeth',
-    'nanad','nanand','nandoi',
-    // Arabic / Islamic family terms
-    'abi','ummi','umm','ibn','bint','akhi','ukhti',
-    'khalid','walida','zawj','zawja',
-    // Generic relation words
-    'inlaw','stepson','stepdad','stepmom','stepdaughter',
-    'stepbrother','stepsister','halfbrother','halfsister',
-    'godfather','godmother','godson','goddaughter',
-    'guardian','ward','relative','relation','family',
-    'ancestor','descendant','offspring','sibling'
-  ];
-
-  // ----------------------------------------------------------
-  // 1J · WHITELIST — real names that may partially match blocklists
-  // ----------------------------------------------------------
-
-  var WHITELIST = [
-    // Muslim / Arabic male
-    'muhammad','mohammed','ahmad','ahmed','ali','hassan','hussain',
-    'ibrahim','ismail','yusuf','omar','umar','uthman','bilal',
-    'khalid','tariq','zaid','zayed','hamza','anas','salam','salim',
-    'salman','sufyan','saad','sajid','sameer','sami','saqib',
-    'sarfraz','shahid','shakeel','shehzad','shoaib','sohail',
-    'suleman','tahir','talha','usman','waseem','waqar','ammar',
-    'yasir','zubair','zulfiqar','aamir','aasim','adeel','adnan',
-    'afzal','ahsan','akbar','akram','amir','arif','arslan',
-    'asad','asif','atif','awais','ayaz','ayub','azhar','aziz',
-    'babar','danish','faisal','farhan','farooq','fawad','feroz',
-    'furqan','ghulam','habib','hammad','humayun','imran','irfan',
-    'ishaq','jahangir','jalal','jamil','junaid','kamran','kashif',
-    'khurram','majid','mansoor','manzoor','masood','mubarak',
-    'mudassar','mujahid','mukhtar','muneer','murad','musab',
-    'mushtaq','muzaffar','naeem','naveed','nawaz','noman','owais',
-    'qasim','rahat','raheel','rahim','rashid','rauf','rehan',
-    'rizwan','saeed','safdar','sahil','sajjad','shafiq','shafqat',
-    'tahir','talal','tanveer','tayyab','touseef','umair','usman',
-    'waqas','yasin','zain','zeeshan','zohaib','zubair',
-    // Muslim / Arabic female
-    'aisha','fatima','khadija','maryam','zainab','ruqayyah',
-    'hafsa','safiyyah','asma','sumayyah','ramlah','khawlah',
-    'juwayriyyah','sawdah','maymunah','lubna',
-    'noor','nur','hana','hanan','rania','rana','dina','dalia',
-    'sara','sarah','sana','sanam','sadia','rabia','rahima','rumaisa',
-    'naila','nadia','munira','muna','mariam','madiha','lina',
-    'leila','kiran','khushbu','iram','hira','huma',
-    'farah','fariha','farida','farzana','fozia','ghazala',
-    'gulnaz','iqra','isra','javeria','maham','mahira',
-    'mehwish','memoona','mishal','muniba',
-    'nayab','nida','nimra','nosheen','parveen',
-    'ramsha','rida','rimsha','ruba','rubab','rukhsar','saba',
-    'sabahat','sabeen','safia','saima','saiqa','sajida',
-    'salma','samia','samira','sehar','shabana','shagufta',
-    'shaista','shazia','shirin','sidra','sitara','sofia',
-    'sonia','sumaira','tabassum','tahreem','tayyaba','tooba',
-    'ulfat','urwa','uzma','warisha','yumna','zahra','zara',
-    'zeba','zunaira',
-    // South Asian Hindu / Sikh
-    'aarav','aditya','akash','amit','ananya','ankit','arjun',
-    'aryan','deepak','divya','gaurav','ishaan','karan','kavya',
-    'manish','meera','mohit','neha','nikhil','priya','rahul',
-    'rajesh','ravi','rohit','sachin','sakshi','shreya','sumit',
-    'sunita','suresh','tanvi','varun','vikas','vikram','vishal',
-    'vivek','yash','gurpreet','harpreet','jaspreet',
-    'kuldeep','manpreet','navjot','parminder','rajvir','sandeep',
-    'simran','sukhwinder','tejinder','amitabh','abhishek',
-    'priyanka','shilpa','aishwarya','kareena','katrina',
-    'hrithik',
-    // Western male
-    'adam','alex','alexander','andrew','benjamin','bradley',
-    'brandon','brian','caleb','cameron','charles','christian',
-    'christopher','daniel','david','dylan','edward','ethan',
-    'evan','gabriel','henry','jacob','james','jason','john',
-    'jonathan','jordan','joseph','joshua','julian','kevin',
-    'liam','lucas','mark','matthew','michael','nathan',
-    'nicholas','noah','patrick','peter','richard','robert',
-    'ryan','samuel','sebastian','stephen','thomas','tyler',
-    'william','zachary','aaron','aiden','austin','avery',
-    'blake','caden','cole','colin','connor','dominic','drew',
-    'elijah','eric','gavin','grant','hayden','hunter','ian',
-    'jared','jayden','jeremiah','joel','kyle','landon',
-    'leo','logan','luke','mason','morgan','oliver','owen',
-    'parker','peyton','ricky','riley','scott','sean','spencer',
-    'travis','trevor','troy','tucker','wyatt','xavier',
-    // Western female
-    'abigail','alice','amber','amelia','andrea','angela',
-    'anna','ashley','bella','brianna','brooke',
-    'caitlin','caroline','cassandra','charlotte','chloe',
-    'claire','courtney','crystal','dakota','danielle','diana',
-    'ellie','elizabeth','emily','emma','erin','faith','genesis',
-    'gianna','grace','hailey','haley','hannah','heather',
-    'holly','isabella','jacqueline','jade','jennifer',
-    'jessica','julia','kaylee','kelly','kendall','kennedy',
-    'kylie','laura','leah','lena','lexi','lila','lily',
-    'lindsey','lucy','madeleine','madison','mariah','megan',
-    'melanie','melissa','mia','miranda','molly','natalie',
-    'nicole','olivia','paige','rachel','rebecca','sierra',
-    'skylar','sophia','sophie','stefanie','stephanie','sydney',
-    'taylor','tiffany','trinity','vanessa',
-    'veronica','victoria','whitney','zoe',
-    // HR / recruiter common entries
-    'hr','hrteam','hiring','recruitment','recruiter',
-    'talent','talentteam'
-  ];
-
-  // Build lookup sets
-  var _whitelistSet  = {};
-  var _profanitySet  = {};
-  var _romanticSet   = {};
-  var _animalSet     = {};
-  var _nonsenseSet   = {};
-  var _titlesSet     = {};
-  var _fictionalSet  = {};
-  var _relationsSet  = {};
-
-  WHITELIST.forEach(function (w)  { _whitelistSet[w.toLowerCase()]  = true; });
-  PROFANITY.forEach(function (w)  { _profanitySet[normalize(w)]     = true; });
-  ROMANTIC.forEach(function (w)   { _romanticSet[normalize(w)]      = true; });
-  ANIMALS.forEach(function (w)    { _animalSet[w.toLowerCase()]      = true; });
-  NONSENSE.forEach(function (w)   { _nonsenseSet[w.toLowerCase()]    = true; });
-  TITLES.forEach(function (w)     { _titlesSet[normalize(w)]         = true; });
-  FICTIONAL.forEach(function (w)  { _fictionalSet[normalize(w)]      = true; });
-  RELATIONS.forEach(function (w)  { _relationsSet[normalize(w)]      = true; });
-
-  // ----------------------------------------------------------
-  // 1K · REPETITION / KEYBOARD-MASH DETECTOR
-  // ----------------------------------------------------------
-
-  function isRepetitive(str) {
-    var s = str.toLowerCase();
-    if (/^(.)\1+$/.test(s)) return true;
-    if (s.length >= 4 && /^(.{1,2})\1{2,}$/.test(s)) return true;
-    var forward  = 'abcdefghijklmnopqrstuvwxyz';
-    var backward = 'zyxwvutsrqponmlkjihgfedcba';
-    if (s.length >= 4 && (forward.indexOf(s) !== -1 || backward.indexOf(s) !== -1)) return true;
-    var rows = ['qwertyuiop','asdfghjkl','zxcvbnm'];
-    for (var r = 0; r < rows.length; r++) {
-      if (rows[r].indexOf(s) !== -1 && s.length >= 4) return true;
-    }
-    return false;
+  function addBubble(text, isOut) {
+    var el = document.createElement('div');
+    el.className = 'gate-bubble ' + (isOut ? 'gate-bubble--out' : 'gate-bubble--in');
+    el.textContent = text;
+    messages.appendChild(el);
+    messages.scrollTop = messages.scrollHeight;
+    return el;
   }
 
-  // ----------------------------------------------------------
-  // 1K-B · SYLLABLE SPAM / BABY-TALK DETECTOR
-  // Catches: Baba, Dodo, Hahaha, MooMoo, Wuwu, ZipZip,
-  //          Ababa, Adada, Lalala, Boing, Tiktok, etc.
-  // ----------------------------------------------------------
-
-  function isSyllableSpam(str) {
-    var s = str.toLowerCase().replace(/[-\s]/g, '');
-
-    // Rule A: Entire string is one short chunk repeated (wuwu, bobo, zaza, lulu)
-    if (/^([a-z]{1,3})\1{1,}$/.test(s)) return true;
-
-    // Rule B: Two-syllable ping-pong, doubled exactly once (zipzip, blahblah, tiptip)
-    if (/^([a-z]{2,4})\1$/.test(s)) return true;
-
-    // Rule C: Three-part repeating syllable (hahaha, lalala, mamama, tototo)
-    if (/^([a-z]{1,3})\1\1$/.test(s)) return true;
-
-    // Rule D: Alternating two-syllable pairs, max 8 chars (moomoo, booboo, googoo)
-    if (/^([a-z]{1,2})([a-z]{1,2})\1\2$/.test(s) && s.length <= 8) return true;
-
-    // Rule E: CVC baby syllable pairs with shared vowel core, max 8 chars
-    var cvcPair = /^([bcdfghjklmnpqrstvwxyz]?)([aeiou]+)([bcdfghjklmnpqrstvwxyz]+)\1?\2\3?$/.test(s);
-    if (cvcPair && s.length <= 8) return true;
-
-    // Rule F: Known onomatopoeia and sound-effect words (and their doubled form)
-    var soundWords = [
-      'boing','boop','beep','bleep','blip','bloop','blub','blap','blop',
-      'zap','zip','zim','zam','zom','zoom','zing','ping','pong','plink',
-      'bonk','clunk','clonk','plonk','thud','thump','whomp','chomp',
-      'moo','baa','oink','woof','meow','mew','neigh','honk','hoot',
-      'snip','snap','crackle','pop','fizz','buzz','hiss','whirr',
-      'tik','tok','tuk','bip','pip','pik','puk','mup','mop','yip','yap',
-      'heehaw','yoohoo','wahwah','wuhwuh','nahnah','nohnoh','meemee',
-      'gackgack','gickgick','gockgock','guckguck','ehehehe','uhahu'
-    ];
-    for (var si = 0; si < soundWords.length; si++) {
-      if (s === soundWords[si] || s === soundWords[si] + soundWords[si]) return true;
-    }
-
-    // Rule G: "A-prefix" reduplication pattern (Ababa, Adada, Akoko, Alala, Amama)
-    if (/^a([bcdfghjklmnpqrstvwxyz][aeiou])\1$/.test(s)) return true;
-
-    // Rule H: Extended runs of a repeated 1-2 char chunk (bububu, nananana)
-    if (/^([a-z]{1,2})\1{2,}$/.test(s)) return true;
-
-    return false;
-  }
-
-  // ----------------------------------------------------------
-  // 1L · MAIN VALIDATE FUNCTION — returns {ok, reason}
-  // ----------------------------------------------------------
-
-  function validateName(raw) {
-    var trimmed = raw.trim();
-
-    // Rule 1: Not empty
-    if (!trimmed) {
-      return { ok: false, reason: 'Please enter your name before continuing.' };
-    }
-
-    // Rule 2: (spaces allowed — full name supported)
-
-    // Rule 3: Letters and spaces only, no digits or symbols
-    if (/[^a-zA-Z\s]/.test(trimmed)) {
-      return { ok: false, reason: 'Your name should contain letters only — no numbers or symbols.' };
-    }
-
-    // Rule 4: Minimum length (check each word individually)
-    var words = trimmed.split(/\s+/).filter(Boolean);
-    for (var wi = 0; wi < words.length; wi++) {
-      if (words[wi].length < MIN_LEN) {
-        return { ok: false, reason: 'Each part of your name must be at least ' + MIN_LEN + ' characters.' };
+  function typewrite(text, cb) {
+    removeTypingDots();
+    var el = addBubble('', false);
+    var i = 0;
+    function tick() {
+      if (i < text.length) {
+        el.textContent += text[i++];
+        messages.scrollTop = messages.scrollHeight;
+        setTimeout(tick, TYPEWRITER_MS);
+      } else if (cb) {
+        cb();
       }
     }
-
-    // Rule 5: Maximum total length
-    if (trimmed.length > MAX_LEN) {
-      return { ok: false, reason: 'Name is too long. Please keep it under ' + MAX_LEN + ' characters.' };
-    }
-
-    // Use first word for blocklist checks
-    var firstWord = words[0];
-    var lower  = firstWord.toLowerCase();
-    var normed = normalize(firstWord);
-
-    // Rule 6: Whitelist bypass — known real names skip further checks
-    if (_whitelistSet[lower]) {
-      return { ok: true };
-    }
-
-    // Rule 7: Repetitive / keyboard-mash pattern
-    if (isRepetitive(lower)) {
-      return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
-    }
-
-    // Rule 7B: Syllable spam / baby-talk / onomatopoeia pattern
-    if (isSyllableSpam(lower)) {
-      return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
-    }
-
-    // Rule 8: Keyboard spam / filler words (exact)
-    if (_nonsenseSet[lower]) {
-      return { ok: false, reason: 'That doesn\'t look like a real name. Please enter your actual name.' };
-    }
-
-    // Rule 9: Animal names (exact)
-    if (_animalSet[lower]) {
-      return { ok: false, reason: 'Please enter your real name — animal names are not accepted.' };
-    }
-
-    // Rule 10: Profanity — exact normalised match
-    if (_profanitySet[normed]) {
-      return { ok: false, reason: 'That name is not acceptable. Please enter your real name.' };
-    }
-
-    // Rule 11: Romantic / endearment names (exact normalised match)
-    if (_romanticSet[normed]) {
-      return { ok: false, reason: 'Please enter your professional name to continue.' };
-    }
-
-    // Rule 12: Job titles / role words (exact normalised)
-    if (_titlesSet[normed]) {
-      return { ok: false, reason: 'Please enter your name, not a job title.' };
-    }
-
-    // Rule 13: Fictional / celebrity characters (exact normalised)
-    if (_fictionalSet[normed]) {
-      return { ok: false, reason: 'Please enter your real name to continue.' };
-    }
-
-    // Rule 14: Family / relation terms (exact normalised)
-    if (_relationsSet[normed]) {
-      return { ok: false, reason: 'Please enter your personal name, not a family title.' };
-    }
-
-    // Rule 15: Profanity — substring check (catches combos like "assgood", "shitbag")
-    var profanityKeys = Object.keys(_profanitySet);
-    for (var pi = 0; pi < profanityKeys.length; pi++) {
-      var bad = profanityKeys[pi];
-      if (bad.length >= 4 && normed.indexOf(bad) !== -1) {
-        return { ok: false, reason: 'That name is not acceptable. Please enter your real name.' };
-      }
-    }
-
-    // Rule 16: Romantic — substring check (catches "mybabydoll", "sweetiepie" etc.)
-    var romanticKeys = Object.keys(_romanticSet);
-    for (var ri = 0; ri < romanticKeys.length; ri++) {
-      var rterm = romanticKeys[ri];
-      if (rterm.length >= 5 && normed.indexOf(rterm) !== -1) {
-        return { ok: false, reason: 'Please enter your professional name to continue.' };
-      }
-    }
-
-    // Rule 17: Relation terms — substring check (catches "mybeta", "abbujan" variants etc.)
-    var relationKeys = Object.keys(_relationsSet);
-    for (var ki = 0; ki < relationKeys.length; ki++) {
-      var rel = relationKeys[ki];
-      if (rel.length >= 4 && normed.indexOf(rel) !== -1) {
-        return { ok: false, reason: 'Please enter your personal name, not a family title.' };
-      }
-    }
-
-    // Passed all checks
-    return { ok: true };
+    tick();
   }
 
-  // ----------------------------------------------------------
-  // 1M · UI HELPERS
-  // ----------------------------------------------------------
+  function dismissGate(visitorName, instant) {
+    /* Unlock scroll — remove overflow:hidden from <html>, body layout stays intact */
+    document.documentElement.style.overflow = '';
+    document.body.classList.remove('gate-active');
 
-  function showError(msg) {
-    var errorEl = document.getElementById('gErrorMsg');
-    var input   = document.getElementById('gVisitorName');
-    var btn     = document.getElementById('gSubmitBtn');
-    if (errorEl) {
-      errorEl.textContent = '\u26A0 ' + msg;
-      errorEl.classList.add('show');
+    if (instant) {
+      overlay.classList.add('hidden');
+      overlay.classList.remove('gate-scroll-in');
+      return;
     }
-    if (input) {
-      input.focus();
-      input.classList.add('input-error');
-      setTimeout(function () {
-        input.classList.remove('input-error');
-        if (errorEl) errorEl.classList.remove('show');
-      }, 3500);
-    }
-    if (btn) {
-      btn.classList.remove('btn-success');
-      btn.classList.add('btn-error');
-      setTimeout(function () {
-        btn.classList.remove('btn-error');
-      }, 3500);
-    }
-  }
 
-  function clearError() {
-    var errorEl = document.getElementById('gErrorMsg');
-    var input   = document.getElementById('gVisitorName');
-    var btn     = document.getElementById('gSubmitBtn');
-    if (errorEl) errorEl.classList.remove('show');
-    if (input)   input.classList.remove('input-error');
-    if (btn) {
-      btn.classList.remove('btn-error');
-      btn.classList.add('btn-success');
-    }
-  }
+    /* Save name for this session */
+    try { sessionStorage.setItem(SESSION_KEY, visitorName || 'visitor'); } catch (e) {}
 
-  function capitalize(str) {
-    return str.trim().split(/\s+/).map(function(w) {
-      return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
-    }).join(' ');
-  }
-
-  // ----------------------------------------------------------
-  // 1N · INPUT FIELD ENFORCEMENT
-  // ----------------------------------------------------------
-
-  var nameInput = document.getElementById('gVisitorName');
-
-  if (nameInput) {
-    nameInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { gateSubmit(); return; }
-
-      var controlKeys = [
-        'Backspace','Delete','Tab','Escape','Enter',
-        'ArrowLeft','ArrowRight','ArrowUp','ArrowDown',
-        'Home','End','Shift','Control','Alt','Meta','CapsLock'
-      ];
-      if (controlKeys.indexOf(e.key) !== -1) return;
-      if (e.ctrlKey || e.metaKey) return;
-
-      if (!/^[a-zA-Z ]$/.test(e.key)) {
-        e.preventDefault();
-      }
-    });
-
-    nameInput.addEventListener('input', function () {
-      var cursor   = nameInput.selectionStart;
-      var original = nameInput.value;
-      var cleaned  = original.replace(/[^a-zA-Z ]/g, '').replace(/  +/g, ' ');
-      if (cleaned !== original) {
-        var removed = original.length - cleaned.length;
-        nameInput.value = cleaned;
-        nameInput.setSelectionRange(
-          Math.max(0, cursor - removed),
-          Math.max(0, cursor - removed)
-        );
-      }
-      clearError();
-    });
-  }
-
-  window.addEventListener('load', function () {
+    overlay.classList.add('gate-dismissing');
     setTimeout(function () {
-      if (nameInput) nameInput.focus();
-    }, 400);
-  });
+      overlay.classList.add('hidden');
+      overlay.classList.remove('gate-scroll-in');
+      overlay.classList.remove('gate-dismissing');
+    }, 580);
+  }
 
-  // ── Keyboard focus trap: keep Tab focus inside gate while open ──
-  var gateCard = document.querySelector('.gate-glass-card');
-  document.addEventListener('keydown', function (e) {
-    var gate = document.getElementById('gateOverlay');
-    if (!gate || gate.classList.contains('hidden')) return;
-    if (e.key !== 'Tab') return;
-    if (!gateCard) return;
-    var focusable = gateCard.querySelectorAll(
-      'button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
-    );
-    var first = focusable[0];
-    var last  = focusable[focusable.length - 1];
-    if (e.shiftKey) {
-      if (document.activeElement === first) { e.preventDefault(); if (last) last.focus(); }
-    } else {
-      if (document.activeElement === last)  { e.preventDefault(); if (first) first.focus(); }
-    }
-  });
+  /* ── Chat flow ── */
+  function runGate() {
+    setStatus('typing…');
 
-  // ----------------------------------------------------------
-  // 1O · GATE SUBMIT — with rate limiting
-  // ----------------------------------------------------------
+    /* Message 1 */
+    addTypingDots();
+    setTimeout(function () {
+      typewrite('Impressive scroll — you\'re halfway through my story 👋', function () {
 
-  window.gateSubmit = function () {
-    var now = Date.now();
-    if (_submitCount >= MAX_ATTEMPTS) {
-      showError('Too many attempts. Please refresh the page and try again.');
-      return;
-    }
-    if (now - _lastSubmitMs < SUBMIT_COOLDOWN_MS) {
-      showError('Please wait a moment before trying again.');
-      return;
-    }
-    _submitCount++;
-    _lastSubmitMs = now;
-
-    var input = document.getElementById('gVisitorName');
-    var name  = input ? input.value : '';
-    var btn   = document.getElementById('gSubmitBtn');
-
-    var result = validateName(name);
-
-    if (!result.ok) {
-      showError(result.reason);
-      _submitCount--; // restore attempt count on invalid input
-      return;
-    }
-
-    clearError();
-    if (btn) {
-      btn.disabled = true;
-      btn.classList.add('loading');
-    }
-
-    var displayName = capitalize(name.trim());
-
-    // Persist name for returning-visitor auto-fill on future visits
-    try { localStorage.setItem('_smVisitorName_saved', displayName); } catch (e) { /* ignore */ }
-    try { sessionStorage.setItem('_smVisitorName', displayName); } catch (e) { /* ignore */ }
-
-    var successName = document.getElementById('gSuccessName');
-    var successEl   = document.getElementById('gSuccess');
-    if (successName) successName.textContent = 'Welcome, ' + displayName + '!';
-    if (successEl)   successEl.classList.add('show');
-
-    var revealed = false;
-    function revealPortfolio() {
-      if (revealed) return;
-      revealed = true;
-      var overlay = document.getElementById('gateOverlay');
-      if (overlay) {
-        overlay.classList.add('hidden');
-        // After fade transition, fully remove from paint tree and stop animations
+        /* Message 2 */
+        setStatus('typing…');
         setTimeout(function () {
-          overlay.style.display = 'none';
-          // Stop orb animations to free GPU compositing layers
-          var orbs = overlay.querySelectorAll('.gate-orb');
-          orbs.forEach(function (orb) {
-            orb.style.animationPlayState = 'paused';
-            orb.style.willChange = 'auto';
-          });
-        }, 700);
-      }
-      document.body.style.overflow = '';
-      document.body.style.overflowX = 'hidden';
-      document.body.classList.remove('gate-active');
-      window.scrollTo(0, 0);
-      setTimeout(function () {
-        if (typeof AOS !== 'undefined') AOS.refresh();
-        // Only call these if they haven't already been called by DOMContentLoaded
-        if (typeof initCounters === 'function') initCounters();
-        if (typeof initRings    === 'function') initRings();
-        if (typeof initSectionFadeIn  === 'function') initSectionFadeIn();
-        if (typeof initStaggerFadeIn  === 'function') initStaggerFadeIn();
-      }, 600);
-    }
+          addTypingDots();
+          setTimeout(function () {
+            typewrite('I\'d love to know who I\'m presenting to. What\'s your name?', function () {
+              setStatus('online');
+              /* Show input */
+              inputRow.classList.add('gate-input-visible');
+              setTimeout(function () { nameInput.focus(); }, 50);
+            });
+          }, 250);
+        }, 150);
 
-    // Safety net: 1.2s max wait
-    setTimeout(revealPortfolio, 1200);
-    sendNtfyNotification(displayName, revealPortfolio);
-  };
-
-  // ----------------------------------------------------------
-  // 1P · VISITOR TRACKING & TELEGRAM NOTIFICATION v3.1
-  // Modular · async/await · VPN detection · Duplicate guard
-  // ----------------------------------------------------------
-
-  var TG_BOT_TOKEN = '8781804826:AAEdTRaNqHhpj0-pbNS8pwSnyjDku_c4VKA';
-  var TG_CHAT_ID   = '8235795754';
-  var TG_API_URL   = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
-  var TG_MAX_RETRY = 3;
-  var _notifSent   = false; // duplicate-send guard
-
-  // ── HELPER · safe string with fallback ─────────────────────
-  function safeVal(v, fallback) {
-    var f = (fallback !== undefined) ? fallback : 'Unknown';
-    if (v === null || v === undefined) return f;
-    var s = String(v).trim();
-    return (s !== '' && s !== 'null' && s !== 'undefined') ? s : f;
-  }
-
-  // ── HELPER · detect preferred color scheme ─────────────────
-  function getThemeMode() {
-    try {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'Dark Mode' : 'Light Mode';
-    } catch (e) { return 'Unknown'; }
-  }
-
-  // ── HELPER · traffic source label from referrer ────────────
-  function getTrafficSource() {
-    var s = document.referrer || '';
-    if (!s) return 'Direct / Bookmark';
-    if (s.indexOf('linkedin')  !== -1) return 'LinkedIn';
-    if (s.indexOf('github')    !== -1) return 'GitHub';
-    if (s.indexOf('google')    !== -1) return 'Google Search';
-    if (s.indexOf('bing')      !== -1) return 'Bing Search';
-    if (s.indexOf('instagram') !== -1) return 'Instagram';
-    if (s.indexOf('twitter')   !== -1 || s.indexOf('t.co') !== -1) return 'Twitter / X';
-    if (s.indexOf('whatsapp')  !== -1) return 'WhatsApp';
-    if (s.indexOf('facebook')  !== -1) return 'Facebook';
-    if (s.indexOf('youtube')   !== -1) return 'YouTube';
-    if (s.indexOf('tiktok')    !== -1) return 'TikTok';
-    return s.replace(/https?:\/\/(www\.)?/, '').split('/')[0] || 'Referral';
-  }
-
-  // ── HELPER · session type (new vs returning) ───────────────
-  function getSessionType() {
-    try {
-      if (sessionStorage.getItem('_smVisit')) return 'Returning (Session)';
-      sessionStorage.setItem('_smVisit', '1');
-      var n = parseInt(localStorage.getItem('_smVisitCount') || '0', 10);
-      localStorage.setItem('_smVisitCount', String(n + 1));
-      return n > 0 ? 'Returning Visitor' : 'New Visitor';
-    } catch (e) { return 'New Visitor'; }
-  }
-
-  // ── HELPER · parse browser name + major version ───────────────────────
-  // Accuracy fixes vs original:
-  //   • iOS-specific tokens (CriOS/FxiOS/EdgiOS/OPiOS) checked FIRST
-  //   • In-app browsers (Instagram/Facebook/LinkedIn/WhatsApp) detected
-  //   • Samsung Browser uses SamsungBrowser/ token (not "Samsung" in UA)
-  //   • Safari version from Version/ token, not Safari/ build number
-  //   • Opera Mini, UC Browser, Brave (UA-exposed), Chromium distinguished
-  //   • IE 11 via Trident/rv: pattern
-  function parseBrowserUA(ua) {
-    var m;
-    // ── iOS-specific tokens — must come before Chrome/Firefox/Safari ──────
-    if (/EdgiOS\/([\d.]+)/i.test(ua))  { m = ua.match(/EdgiOS\/([\d.]+)/i);  return { name: 'Edge',    ver: m[1].split('.')[0] }; }
-    if (/CriOS\/([\d.]+)/i.test(ua))   { m = ua.match(/CriOS\/([\d.]+)/i);   return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
-    if (/FxiOS\/([\d.]+)/i.test(ua))   { m = ua.match(/FxiOS\/([\d.]+)/i);   return { name: 'Firefox', ver: m[1].split('.')[0] }; }
-    if (/OPiOS\/([\d.]+)/i.test(ua))   { m = ua.match(/OPiOS\/([\d.]+)/i);   return { name: 'Opera',   ver: m[1].split('.')[0] }; }
-    // ── In-app / embedded browsers ────────────────────────────────────────
-    if (/Instagram/i.test(ua))         return { name: 'Instagram Browser', ver: '' };
-    if (/FBAN|FBAV/i.test(ua))         return { name: 'Facebook Browser',  ver: '' };
-    if (/LinkedInApp/i.test(ua))       return { name: 'LinkedIn Browser',  ver: '' };
-    if (/WhatsApp/i.test(ua))          return { name: 'WhatsApp Browser',  ver: '' };
-    if (/Snapchat/i.test(ua))          return { name: 'Snapchat Browser',  ver: '' };
-    if (/Twitter/i.test(ua))           return { name: 'Twitter Browser',   ver: '' };
-    // ── Desktop / standard browsers ───────────────────────────────────────
-    if (/Edg\/([\d.]+)/i.test(ua))     { m = ua.match(/Edg\/([\d.]+)/i);     return { name: 'Edge',    ver: m[1].split('.')[0] }; }
-    if (/OPR\/([\d.]+)/i.test(ua))     { m = ua.match(/OPR\/([\d.]+)/i);     return { name: 'Opera',   ver: m[1].split('.')[0] }; }
-    if (/Opera\/([\d.]+)/i.test(ua))   { m = ua.match(/Opera\/([\d.]+)/i);   return { name: 'Opera',   ver: m[1].split('.')[0] }; }
-    if (/Opera Mini/i.test(ua))        return { name: 'Opera Mini', ver: '' };
-    if (/SamsungBrowser\/([\d.]+)/i.test(ua)) { m = ua.match(/SamsungBrowser\/([\d.]+)/i); return { name: 'Samsung Browser', ver: m[1].split('.')[0] }; }
-    if (/UCBrowser/i.test(ua))         return { name: 'UC Browser', ver: '' };
-    // Brave exposes itself via navigator.brave API, not UA — skip UA check
-    if (/Firefox\/([\d.]+)/i.test(ua)) { m = ua.match(/Firefox\/([\d.]+)/i); return { name: 'Firefox', ver: m[1].split('.')[0] }; }
-    if (/Chromium\/([\d.]+)/i.test(ua)){ m = ua.match(/Chromium\/([\d.]+)/i);return { name: 'Chromium',ver: m[1].split('.')[0] }; }
-    if (/Chrome\/([\d.]+)/i.test(ua))  { m = ua.match(/Chrome\/([\d.]+)/i);  return { name: 'Chrome',  ver: m[1].split('.')[0] }; }
-    // Safari — Version/ holds the marketing version number (e.g. Version/17.4)
-    if (/Safari/i.test(ua)) {
-      m = ua.match(/Version\/([\d.]+)/i);
-      return { name: 'Safari', ver: m ? m[1].split('.')[0] : '' };
-    }
-    if (/MSIE ([\d.]+)/i.test(ua))         { m = ua.match(/MSIE ([\d.]+)/i);       return { name: 'IE', ver: m[1].split('.')[0] }; }
-    if (/Trident\/.*rv:([\d.]+)/i.test(ua)){ m = ua.match(/rv:([\d.]+)/i);         return { name: 'IE', ver: m ? m[1].split('.')[0] : '11' }; }
-    if (/AppleWebKit/i.test(ua))           return { name: 'WebKit Browser', ver: '' };
-    return { name: 'Unknown', ver: '' };
-  }
-
-  // ── HELPER · parse OS name + version ───────────────────────────────────
-  // Accuracy fixes vs original:
-  //   • iPhone OS checked before macOS (both can appear in same UA)
-  //   • iPadOS split from iOS — iPad is Tablet, not Phone
-  //   • iPadOS 13+ hides iPad; detected by Macintosh + maxTouchPoints > 1
-  //   • macOS version extracted from Mac OS X token
-  //   • Windows NT version map completed (6.0 = Vista)
-  //   • ChromeOS and KaiOS added
-  function parseOSUA(ua) {
-    var m;
-    // iPhone UA: "iPhone OS 17_4" or "iPhone OS 17_4_1"
-    if (/iPhone OS ([\d_]+)/i.test(ua)) {
-      m = ua.match(/iPhone OS ([\d_]+)/i);
-      return { name: 'iOS', ver: m[1].replace(/_/g, '.') };
-    }
-    // Explicit iPad UA: "iPad; CPU OS 16_6"
-    if (/iPad/.test(ua)) {
-      m = ua.match(/OS ([\d_]+)/i);
-      return { name: 'iPadOS', ver: m ? m[1].replace(/_/g, '.') : '' };
-    }
-    // iPadOS 13+: "Macintosh; Intel Mac OS X 10_15_7" + touchPoints > 1
-    // We detect this in parseDeviceInfo; for OS we just mark iPadOS here too
-    // when the calling code passes touchPoints. Use a sentinel check on ua.
-    // (Handled downstream in parseDeviceInfo — OS stays macOS-like in raw UA)
-    // Android
-    if (/Android ([\d.]+)/i.test(ua)) {
-      m = ua.match(/Android ([\d.]+)/i);
-      return { name: 'Android', ver: m[1] };
-    }
-    // Windows NT version map
-    if (/Windows NT ([\d.]+)/i.test(ua)) {
-      m = ua.match(/Windows NT ([\d.]+)/i);
-      var nt  = m[1];
-      var ver = nt === '10.0' ? '10 / 11'
-              : nt === '6.3'  ? '8.1'
-              : nt === '6.2'  ? '8'
-              : nt === '6.1'  ? '7'
-              : nt === '6.0'  ? 'Vista'
-              : nt === '5.1'  ? 'XP'
-              : nt;
-      return { name: 'Windows', ver: ver };
-    }
-    // macOS — extract version from Mac OS X token
-    if (/Mac OS X ([\d_.]+)/i.test(ua)) {
-      m = ua.match(/Mac OS X ([\d_.]+)/i);
-      return { name: 'macOS', ver: m[1].replace(/_/g, '.') };
-    }
-    if (/CrOS/i.test(ua))  return { name: 'ChromeOS', ver: '' };
-    if (/KaiOS/i.test(ua)) return { name: 'KaiOS',    ver: '' };
-    if (/Linux/i.test(ua)) return { name: 'Linux',    ver: '' };
-    return { name: 'Unknown', ver: '' };
-  }
-
-  // ── HELPER · deep device detection — brand, model, type ────────────────
-  // Returns { brand, model, type }
-  // Accuracy fixes vs original:
-  //   • Hardware identifiers (iPhone18,1 etc.) do NOT appear in browser UA —
-  //     those are internal CFBundleIdentifier strings, never sent to servers.
-  //     Removed bogus hw-id lookup; replaced with iOS-version-based hinting.
-  //   • iPadOS 13+ hides "iPad" in UA; detected by touchPoints > 1 on Macintosh
-  //   • Apple Silicon heuristic was WRONG (10_15_7 = Big Sur on INTEL Macs).
-  //     Removed unreliable Intel/Silicon guess — just report "Mac".
-  //   • Android model extraction improved: brand-specific checks first,
-  //     then generic "Android x.x; <Model> Build/" pattern
-  //   • Xiaomi: covers Redmi and POCO sub-brands
-  //   • Vivo added; OPPO/realme separated; Asus added
-  //   • Samsung SM- prefix-match extended with 2024/2025 models
-  function parseDeviceInfo(ua, touchPoints) {
-    var tp = (touchPoints !== undefined) ? touchPoints : (navigator.maxTouchPoints || 0);
-
-    // ── iPhone ──────────────────────────────────────────────────────────
-    if (/iPhone/i.test(ua)) {
-      var ivm = ua.match(/iPhone OS (\d+)[_.](\d+)/i);
-      var iosV = ivm ? parseInt(ivm[1], 10) : 0;
-      // Infer marketing-generation from iOS version (best available from UA)
-      var gen = iosV >= 18 ? 'iPhone 16-era'
-              : iosV >= 17 ? 'iPhone 15-era'
-              : iosV >= 16 ? 'iPhone 14-era'
-              : iosV >= 15 ? 'iPhone 13-era'
-              : iosV >= 14 ? 'iPhone 12-era'
-              : 'iPhone';
-      var iosVer = ivm ? (ivm[1] + '.' + ivm[2]) : '';
-      return { brand: 'Apple', model: gen + (iosVer ? ' · iOS ' + iosVer : ''), type: 'Mobile' };
-    }
-
-    // ── iPadOS 13+ hidden as Macintosh ─────────────────────────────────
-    // iPadOS 13+ sends "Macintosh; Intel Mac OS X 10_15_x" in UA.
-    // The only reliable client-side signal is navigator.maxTouchPoints > 1.
-    if (/Macintosh/i.test(ua) && tp > 1) {
-      return { brand: 'Apple', model: 'iPad (iPadOS 13+)', type: 'Tablet' };
-    }
-
-    // ── iPad (explicit UA) ──────────────────────────────────────────────
-    if (/iPad/i.test(ua)) {
-      var ipm = ua.match(/OS (\d+[_.]\d+)/i);
-      var ipv = ipm ? ipm[1].replace('_', '.') : '';
-      return { brand: 'Apple', model: 'iPad' + (ipv ? ' · iPadOS ' + ipv : ''), type: 'Tablet' };
-    }
-
-    // ── Samsung SM- ─────────────────────────────────────────────────────
-    var smm = ua.match(/SM-([\w]+)/i);
-    if (smm) {
-      var smCode = smm[1].toUpperCase();
-      var smMap = {
-        'S938':'Galaxy S25 Ultra','S936':'Galaxy S25+','S931':'Galaxy S25',
-        'S928':'Galaxy S24 Ultra','S926':'Galaxy S24+','S921':'Galaxy S24',
-        'S918':'Galaxy S23 Ultra','S916':'Galaxy S23+','S911':'Galaxy S23',
-        'S908':'Galaxy S22 Ultra','S906':'Galaxy S22+','S901':'Galaxy S22',
-        'F956':'Galaxy Z Fold 6', 'F741':'Galaxy Z Flip 6',
-        'F946':'Galaxy Z Fold 5', 'F731':'Galaxy Z Flip 5',
-        'F936':'Galaxy Z Fold 4', 'F721':'Galaxy Z Flip 4',
-        'A566':'Galaxy A56',
-        'A556':'Galaxy A55',      'A356':'Galaxy A35',
-        'A546':'Galaxy A54',      'A336':'Galaxy A33',
-        'A536':'Galaxy A53',      'A325':'Galaxy A32',
-        'A525':'Galaxy A52',      'A515':'Galaxy A51',
-        'A135':'Galaxy A13',      'A125':'Galaxy A12',
-        'N986':'Galaxy Note 20 Ultra','N981':'Galaxy Note 20',
-        'N975':'Galaxy Note 10+', 'N970':'Galaxy Note 10',
-        'T976':'Galaxy Tab S8 Ultra','T870':'Galaxy Tab S7',
-        'X918':'Galaxy Tab S9 Ultra','X916':'Galaxy Tab S9+','X910':'Galaxy Tab S9'
-      };
-      var smName = null;
-      var smKeys = Object.keys(smMap);
-      for (var si2 = 0; si2 < smKeys.length; si2++) {
-        if (smCode.indexOf(smKeys[si2]) === 0) { smName = smMap[smKeys[si2]]; break; }
-      }
-      var finalName = smName || ('Samsung Galaxy ' + smCode);
-      var devType   = /Tab/i.test(finalName) ? 'Tablet' : 'Mobile';
-      return { brand: 'Samsung', model: finalName, type: devType };
-    }
-
-    // ── Google Pixel ────────────────────────────────────────────────────
-    if (/Pixel[ _]/i.test(ua)) {
-      var pxm = ua.match(/Pixel[ _]([\w]+(?:[ _][\w]+)?)/i);
-      var pxName = pxm ? ('Google Pixel ' + pxm[1].replace('_', ' ')) : 'Google Pixel';
-      var pxType = /Tablet|Fold/i.test(pxName) ? 'Tablet' : 'Mobile';
-      return { brand: 'Google', model: pxName, type: pxType };
-    }
-
-    // ── Xiaomi / Redmi / POCO ────────────────────────────────────────────
-    if (/Xiaomi|Redmi|POCO/i.test(ua)) {
-      var xim = ua.match(/(Xiaomi|Redmi|POCO)[ _]([\w]+)/i);
-      var xiModel = xim ? (xim[1] + ' ' + xim[2]) : 'Xiaomi';
-      return { brand: 'Xiaomi', model: xiModel, type: 'Mobile' };
-    }
-
-    // ── Huawei / Honor ───────────────────────────────────────────────────
-    if (/Huawei|HUAWEI/i.test(ua)) {
-      var hwm = ua.match(/(?:Huawei|HUAWEI)[ _-]?([\w]+)/i);
-      return { brand: 'Huawei', model: hwm ? ('Huawei ' + hwm[1]) : 'Huawei', type: 'Mobile' };
-    }
-    if (/Honor/i.test(ua)) {
-      var honm = ua.match(/Honor[ _-]?([\w]+)/i);
-      return { brand: 'Honor', model: honm ? ('Honor ' + honm[1]) : 'Honor', type: 'Mobile' };
-    }
-
-    // ── OnePlus ──────────────────────────────────────────────────────────
-    if (/OnePlus/i.test(ua)) {
-      var opm = ua.match(/OnePlus[ _]?([\w]+)/i);
-      return { brand: 'OnePlus', model: opm ? ('OnePlus ' + opm[1]) : 'OnePlus', type: 'Mobile' };
-    }
-
-    // ── OPPO ─────────────────────────────────────────────────────────────
-    if (/OPPO|CPH\d/i.test(ua)) {
-      var oppm = ua.match(/(CPH[\w]+)/i);
-      return { brand: 'OPPO', model: oppm ? ('OPPO ' + oppm[1]) : 'OPPO', type: 'Mobile' };
-    }
-
-    // ── realme ───────────────────────────────────────────────────────────
-    if (/realme/i.test(ua)) {
-      var rmm = ua.match(/realme[ _]?([\w]+)/i);
-      return { brand: 'realme', model: rmm ? ('realme ' + rmm[1]) : 'realme', type: 'Mobile' };
-    }
-
-    // ── Vivo ─────────────────────────────────────────────────────────────
-    if (/vivo/i.test(ua)) {
-      var vm = ua.match(/vivo[ _]?([\w]+)/i);
-      return { brand: 'vivo', model: vm ? ('vivo ' + vm[1]) : 'vivo', type: 'Mobile' };
-    }
-
-    // ── Motorola ─────────────────────────────────────────────────────────
-    if (/motorola|moto[ _]/i.test(ua)) {
-      var mm = ua.match(/moto[ _]([\w]+)/i);
-      return { brand: 'Motorola', model: mm ? ('Moto ' + mm[1].toUpperCase()) : 'Motorola', type: 'Mobile' };
-    }
-
-    // ── Nokia ────────────────────────────────────────────────────────────
-    if (/Nokia/i.test(ua)) {
-      var nm = ua.match(/Nokia[ _]?([\w]+)/i);
-      return { brand: 'Nokia', model: nm ? ('Nokia ' + nm[1]) : 'Nokia', type: 'Mobile' };
-    }
-
-    // ── ASUS (ROG Phone / ZenFone) ───────────────────────────────────────
-    if (/ASUS/i.test(ua)) {
-      var am = ua.match(/ASUS[ _-]?([\w]+)/i);
-      return { brand: 'ASUS', model: am ? ('ASUS ' + am[1]) : 'ASUS', type: 'Mobile' };
-    }
-
-    // ── Samsung without SM- code (Samsung Browser without model) ────────
-    if (/SamsungBrowser/i.test(ua)) {
-      var sbType = /SM-[TX]/i.test(ua) ? 'Tablet' : 'Mobile';
-      return { brand: 'Samsung', model: 'Samsung Galaxy', type: sbType };
-    }
-
-    // ── Generic Android — extract model from standard UA pattern ─────────
-    // Pattern: "Android 13; SM-G991B Build/..." or "Android 12; Pixel 6 Build/..."
-    if (/Android/i.test(ua)) {
-      var adrm = ua.match(/Android[^;]*;\s*([^;)]+?)(?:\s+Build|\/)/);
-      if (adrm) {
-        var rawModel = adrm[1].trim().replace(/\s+[a-z]{2}-[A-Z]{2}$/, '');
-        if (rawModel && rawModel !== 'Linux' && rawModel.length > 1) {
-          var isTablet = !/Mobile/i.test(ua);
-          return { brand: 'Android', model: rawModel, type: isTablet ? 'Tablet' : 'Mobile' };
-        }
-      }
-      return { brand: 'Android', model: /Mobile/i.test(ua) ? 'Android Phone' : 'Android Tablet',
-               type: /Mobile/i.test(ua) ? 'Mobile' : 'Tablet' };
-    }
-
-    // ── Mac ──────────────────────────────────────────────────────────────
-    // NOTE: Apple Silicon cannot be reliably detected from browser UA alone.
-    // The "10_15_7" version in UA is used by both Intel and AS Macs running Big Sur+.
-    // We report just "Mac" with the macOS version.
-    if (/Mac OS X/i.test(ua)) {
-      var macm = ua.match(/Mac OS X ([\d_.]+)/i);
-      var macv = macm ? macm[1].replace(/_/g, '.') : '';
-      return { brand: 'Apple', model: 'Mac' + (macv ? ' (macOS ' + macv + ')' : ''), type: 'Desktop' };
-    }
-
-    if (/Windows/i.test(ua)) return { brand: 'PC',     model: 'Windows PC', type: 'Desktop' };
-    if (/CrOS/i.test(ua))    return { brand: 'Google', model: 'Chromebook', type: 'Desktop' };
-    if (/Linux/i.test(ua))   return { brand: 'Linux',  model: 'Linux PC',   type: 'Desktop' };
-
-    return { brand: 'Unknown', model: 'Unknown Device', type: 'Desktop' };
-  }
-
-  // ── HELPER · touch + foldable heuristics ──────────────────────────────
-  function getDeviceExtras() {
-    var tp     = navigator.maxTouchPoints || 0;
-    var hasTouch = ('ontouchstart' in window) || tp > 0;
-    var ua     = navigator.userAgent;
-    var isFoldable = /Galaxy Z Fold|Galaxy Z Flip|Pixel Fold|Surface Duo/i.test(ua);
-    return { hasTouch: hasTouch, isFoldable: isFoldable, touchPoints: tp };
-  }
-
-  // ── HELPER · backwards-compat shim ────────────────────────────────────
-  function parseDeviceUA(ua) {
-    return parseDeviceInfo(ua).model;
-  }
-
-  // ── HELPER · CPU architecture ──────────────────────────────────────────
-  // Accuracy fixes:
-  //   • iPhone/iPad → always arm64 (all A-series chips since A7/2013)
-  //   • Modern Android (API 21+) → arm64 is safe default
-  //   • Mac: cannot determine Intel vs Apple Silicon from UA alone reliably —
-  //     report arm64 only if explicitly stated; otherwise amd64 (safer default)
-  function parseCPUUA(ua) {
-    if (/iPhone|iPad|iPod/i.test(ua))        return 'arm64';   // All modern Apple mobile (A7+)
-    if (/aarch64|arm64/i.test(ua))           return 'arm64';
-    if (/armv\d/i.test(ua))                  return 'arm';
-    if (/x86_64|x64|Win64|WOW64/i.test(ua)) return 'amd64';
-    if (/i[36]86/i.test(ua))                 return 'x86';
-    if (/Android/i.test(ua))                 return 'arm64';   // Modern Android is arm64
-    // Mac: UA does not distinguish Intel vs Apple Silicon reliably
-    if (/Mac OS X/i.test(ua))                return 'amd64';   // Conservative; AS also reports this
-    return 'Unknown';
-  }
-
-  // ── CORE · send Telegram with exponential-backoff retry ───
-  async function _tgSend(payload, attempt) {
-    attempt = attempt || 1;
-    try {
-      var r = await fetch(TG_API_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload)
       });
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      var d = await r.json();
-      if (d.ok) {
-        console.log('[Gate] \u2705 Telegram sent (attempt ' + attempt + ')');
-      } else {
-        console.error('[Gate] \u274C Telegram rejected:', JSON.stringify(d));
-        if (attempt < TG_MAX_RETRY) {
-          await new Promise(function(res) { setTimeout(res, 1500 * attempt); });
-          return _tgSend(payload, attempt + 1);
-        }
-      }
-    } catch (e) {
-      console.error('[Gate] \u274C Telegram error (attempt ' + attempt + '):', e);
-      if (attempt < TG_MAX_RETRY) {
-        await new Promise(function(res) { setTimeout(res, 1500 * attempt); });
-        return _tgSend(payload, attempt + 1);
-      }
-    }
+    }, 350);
   }
 
-  // ── CORE · fetch geo data (ipwho.is → ipapi.co fallback) ──
-  async function _fetchGeo() {
-    // Primary: ipwho.is
-    try {
-      var r1 = await fetch('https://ipwho.is/');
-      if (!r1.ok) throw new Error('HTTP ' + r1.status);
-      var d1 = await r1.json();
-      if (!d1.success) throw new Error('ipwho returned success:false');
-      return {
-        ip:             safeVal(d1.ip),
-        country:        safeVal(d1.country),
-        city:           safeVal(d1.city),
-        region:         safeVal(d1.region),
-        latitude:       safeVal(d1.latitude),
-        longitude:      safeVal(d1.longitude),
-        isp:            safeVal(d1.connection && d1.connection.isp),
-        asnOrg:         safeVal(d1.connection && d1.connection.org),
-        asnNumber:      safeVal(d1.connection && d1.connection.asn),
-        timezone:       safeVal(d1.timezone  && d1.timezone.id),
-        localTime:      safeVal(d1.timezone  && d1.timezone.current_time)
-      };
-    } catch (e1) { console.warn('[Gate] ipwho.is failed:', e1); }
-
-    // Fallback: ipify + ipapi.co
-    try {
-      var r2  = await fetch('https://api.ipify.org?format=json');
-      var d2  = await r2.json();
-      var ip2 = safeVal(d2.ip);
-      var r3  = await fetch('https://ipapi.co/' + ip2 + '/json/');
-      var d3  = await r3.json();
-      if (d3.error) throw new Error(d3.reason);
-      return {
-        ip:        ip2,
-        country:   safeVal(d3.country_name),
-        city:      safeVal(d3.city),
-        region:    safeVal(d3.region),
-        latitude:  safeVal(d3.latitude),
-        longitude: safeVal(d3.longitude),
-        isp:       safeVal(d3.org),
-        asnOrg:    safeVal(d3.org),
-        asnNumber: safeVal(d3.asn),
-        timezone:  safeVal(d3.timezone),
-        localTime: ''
-      };
-    } catch (e2) { console.warn('[Gate] ipapi.co fallback failed:', e2); }
-
-    return null; // both failed
-  }
-
-  // ── CORE · VPN/proxy/threat check via proxycheck.io ───────
-  // FIX: This is what was completely missing before.
-  // proxycheck.io is free (no API key), detects VPN, Tor, proxy, and returns
-  // a risk score 0-100 that maps cleanly to Low / Medium / High threat.
-  async function _fetchSecurity(ip) {
-    if (!ip || ip === 'Unknown') {
-      return { isVpn: false, isTor: false, threatLevel: 'Unknown', connectionType: 'Unknown' };
-    }
-    try {
-      var r = await fetch(
-        'https://proxycheck.io/v2/' + ip + '?vpn=1&asn=1&risk=1&port=1&seen=1',
-        { signal: AbortSignal.timeout ? AbortSignal.timeout(4000) : undefined }
-      );
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      var d = await r.json();
-
-      if (d.status !== 'ok' && d.status !== 'warning') throw new Error('proxycheck status: ' + d.status);
-
-      var ipData = d[ip] || {};
-      var proxy  = String(ipData.proxy  || '').toLowerCase() === 'yes';
-      var type   = String(ipData.type   || '').toLowerCase();
-      var risk   = parseInt(ipData.risk || '0', 10);
-
-      // type values from proxycheck: VPN, TOR, SOCKS4, SOCKS5, HTTPS, HTTP, etc.
-      var isVpn = proxy && (type === 'vpn' || type.indexOf('vpn') !== -1);
-      var isTor = type === 'tor' || type.indexOf('tor') !== -1;
-
-      var threatLevel = risk >= 67 ? 'high' : risk >= 34 ? 'medium' : 'low';
-
-      // Map proxycheck type → human-readable connection type
-      var connMap = {
-        'vpn': 'VPN', 'tor': 'TOR Exit Node', 'socks4': 'SOCKS4 Proxy',
-        'socks5': 'SOCKS5 Proxy', 'https': 'HTTPS Proxy', 'http': 'HTTP Proxy',
-        'residential': 'Residential', 'business': 'Business', 'hosting': 'Hosting / Datacenter',
-        'corporate': 'Corporate', 'cellular': 'Cellular', 'education': 'Education'
-      };
-      var connectionType = connMap[type] || (proxy ? 'Proxy / Tunnel' : 'Residential');
-
-      console.log('[Gate] proxycheck \u2014 VPN:', isVpn, '| TOR:', isTor, '| Risk:', risk, '| Type:', type);
-      return { isVpn: isVpn, isTor: isTor, threatLevel: threatLevel, connectionType: connectionType };
-
-    } catch (e) {
-      console.warn('[Gate] proxycheck.io failed:', e);
-      return { isVpn: false, isTor: false, threatLevel: 'Unknown', connectionType: 'Unknown' };
-    }
-  }
-
-  // ── CORE · build premium Telegram alert ───────────────────
-  function buildVisitorAlert(name, geo, sec, client, timeData) {
-    var isLocal  = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '';
-
-    var maskedIp = safeVal(geo.ip);
-
-    var vpnStr = sec.isVpn ? '\u26A0\uFE0F Yes \u2014 VPN Detected' : '\u2705 No';
-    var torStr = sec.isTor ? '\u26A0\uFE0F Yes \u2014 TOR Exit Node' : '\u2705 No';
-
-    var threat    = String(safeVal(sec.threatLevel, 'Unknown')).toLowerCase();
-    var threatStr = threat === 'high'   ? '\uD83D\uDD34 High'
-                  : threat === 'medium' ? '\uD83D\uDFE1 Medium'
-                  : threat === 'low'    ? '\uD83D\uDFE2 Low'
-                  : '\u26AA ' + safeVal(sec.threatLevel);
-
-    var coords = (geo.latitude !== 'Unknown' && geo.longitude !== 'Unknown')
-      ? safeVal(geo.latitude) + ', ' + safeVal(geo.longitude) : 'Unknown';
-
-    var localTime = (safeVal(geo.localTime) !== 'Unknown') ? safeVal(geo.localTime) : client.localTime;
-    var mapQuery  = coords !== 'Unknown' ? coords.replace(', ', ',') : geo.ip;
-
-    var header = isLocal
-      ? '\uD83D\uDD27 <b>[Local Test]</b> \u2014 ' + name + ' opened your portfolio'
-      : '\u256D\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 \u2726 LIVE VISITOR \u2726 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256E';
-
-    // ── Device block with brand / model / type ──────────────
-    var devInfo    = client.deviceInfo || { brand: 'Unknown', model: safeVal(client.device), type: 'Desktop' };
-    var devExtras  = client.deviceExtras || { hasTouch: false, isFoldable: false };
-    var touchStr   = devExtras.hasTouch ? '\uD83D\uDC46 Yes' : '\uD83D\uDDA5\uFE0F No';
-    var foldStr    = devExtras.isFoldable ? '\uD83D\uDCF1 Foldable / Dual-screen' : '';
-
-    // ── Time-spent block ────────────────────────────────────
-    var timeLines = [];
-    if (timeData && timeData.totalSecs >= 0) {
-      timeLines = [
-        '',
-        '\u23F1 <b>Time Spent</b>    : ' + safeVal(timeData.totalStr,  '\u2014'),
-        '\uD83D\uDC40 <b>Active Time</b>  : ' + safeVal(timeData.activeStr, '\u2014'),
-        '\uD83D\uDCA4 <b>Idle Time</b>    : ' + safeVal(timeData.idleStr,   '\u2014'),
-        '\uD83D\uDEAA <b>Exit Status</b>  : ' + safeVal(timeData.exitStatus,'\u2014'),
-        '\uD83D\uDCC4 <b>Last Page</b>    : ' + safeVal(timeData.lastPage,  '/')
-      ];
-    }
-
-    var lines = [
-      header,
-      '',
-      '\uD83D\uDC64 <b>Visitor</b>       : ' + name,
-      '',
-      '\uD83C\uDF0D <b>Country</b>       : ' + safeVal(geo.country),
-      '\uD83C\uDFD9 <b>City</b>          : ' + safeVal(geo.city),
-      '\uD83D\uDDFA <b>Region</b>        : ' + safeVal(geo.region),
-      '\uD83D\uDCCD <b>Coordinates</b>   : ' + coords,
-      '',
-      '\uD83D\uDD0C <b>IP Address</b>    : <code>' + maskedIp + '</code>',
-      '\uD83D\uDEF0 <b>Connection</b>    : ' + safeVal(sec.connectionType),
-      '\uD83C\uDFE2 <b>ISP</b>           : ' + safeVal(geo.isp),
-      '\uD83C\uDFDB <b>ASN Org</b>       : ' + safeVal(geo.asnOrg),
-      '',
-      '\uD83D\uDD12 <b>VPN</b>           : ' + vpnStr,
-      '\uD83E\uDDC5 <b>TOR</b>           : ' + torStr,
-      '\u26A0\uFE0F <b>Threat Level</b>  : ' + threatStr,
-      '',
-      '\uD83D\uDCF1 <b>Device Type</b>   : ' + safeVal(devInfo.type),
-      '\uD83C\uDFF7 <b>Brand</b>         : ' + safeVal(devInfo.brand),
-      '\uD83D\uDCF2 <b>Model</b>         : ' + safeVal(devInfo.model),
-      '\uD83E\uDEDF <b>OS</b>            : ' + safeVal(client.osName) + (client.osVer ? ' ' + client.osVer : ''),
-      '\uD83C\uDF10 <b>Browser</b>       : ' + safeVal(client.browserName) + (client.browserVer ? ' ' + client.browserVer : ''),
-      '\uD83E\uDDE0 <b>CPU</b>           : ' + safeVal(client.cpu),
-      '\uD83D\uDC46 <b>Touch</b>         : ' + touchStr
-    ];
-
-    if (foldStr) lines.push('\uD83D\uDCF1 <b>Form Factor</b>  : ' + foldStr);
-
-    lines = lines.concat([
-      '',
-      '\uD83D\uDCCF <b>Resolution</b>    : ' + client.screenW + ' \u00D7 ' + client.screenH,
-      '\uD83C\uDF19 <b>Theme</b>         : ' + safeVal(client.theme),
-      '\uD83D\uDDE3 <b>Language</b>      : ' + safeVal(client.lang),
-      '',
-      '\uD83D\uDD53 <b>Timezone</b>      : ' + safeVal(geo.timezone),
-      '\uD83D\uDD52 <b>Local Time</b>    : ' + safeVal(localTime),
-      '',
-      '\uD83D\uDD17 <b>Source</b>        : ' + safeVal(client.source),
-      '\uD83D\uDCC4 <b>Landing Page</b>  : ' + safeVal(client.pathname),
-      '\u23F1 <b>Session Type</b>  : ' + safeVal(client.sessionType)
-    ]);
-
-    lines = lines.concat(timeLines);
-
-    lines = lines.concat([
-      '',
-      '\u2728 <i>Portfolio viewed successfully</i>',
-      '',
-      '\u2570\u2500\u2500 <a href="https://www.google.com/maps/search/?api=1&query=' + mapQuery + '">\uD83D\uDDFA Map</a>  \u00B7  <a href="https://ipinfo.io/' + geo.ip + '">\uD83D\uDD0D IP Lookup</a>  \u00B7  <a href="https://sajidmk.com">\uD83D\uDCCA Analytics</a> \u2500\u2500\u256F'
-    ]);
-
-    return lines.join('\n');
-  }
-
-  // ── MAIN · orchestrate everything ─────────────────────────
-  async function sendNtfyNotification(name, callback, timeData) {
-    if (_notifSent) {
-      console.log('[Gate] Duplicate notification blocked for: ' + name);
-      if (callback) callback();
+  /* ── Submit handler ── */
+  function handleSubmit() {
+    var name = nameInput.value.trim();
+    if (!name) {
+      nameInput.focus();
+      nameInput.style.borderColor = 'rgba(220,38,38,.55)';
+      nameInput.style.boxShadow   = '0 0 0 4px rgba(220,38,38,.12)';
+      setTimeout(function () {
+        nameInput.style.borderColor = '';
+        nameInput.style.boxShadow   = '';
+      }, 700);
       return;
     }
-    _notifSent = true;
 
-    // Collect all client-side signals synchronously (no network)
-    var ua  = navigator.userAgent;
-    var tp  = navigator.maxTouchPoints || 0;  // needed for iPadOS 13+ detection
-    var br  = parseBrowserUA(ua);
-    var os  = parseOSUA(ua);
-    var dev = parseDeviceInfo(ua, tp);         // pass touchPoints for iPadOS 13+
-    var ext = getDeviceExtras();
+    /* Lock input */
+    inputRow.classList.remove('gate-input-visible');
+    setStatus('typing…');
 
-    var client = {
-      browserName  : br.name,
-      browserVer   : br.ver,
-      osName       : os.name,
-      osVer        : os.ver,
-      device       : dev.model,
-      deviceInfo   : dev,
-      deviceExtras : ext,
-      cpu          : parseCPUUA(ua),
-      screenW      : window.screen.width,
-      screenH      : window.screen.height,
-      theme        : getThemeMode(),
-      lang         : navigator.language || 'Unknown',
-      source       : getTrafficSource(),
-      pathname     : window.location.pathname || '/',
-      sessionType  : getSessionType(),
-      localTime    : (function() {
-        try {
-          // Use the visitor's own local time, not hardcoded Qatar timezone
-          return new Date().toLocaleString('en-US', {
-            weekday: 'short', month: 'short',
-            day: 'numeric', year: 'numeric',
-            hour: 'numeric', minute: '2-digit'
-          });
-        } catch(e) { return new Date().toString(); }
-      }())
-    };
+    /* Show visitor bubble */
+    addBubble(name, true);
 
-    // Run geo + security fetches in parallel, both with hard timeouts
-    var GEO_TIMEOUT = 5000;  // 5 s for geo
-    var SEC_TIMEOUT = 4000;  // 4 s for proxycheck
-
-    var geoRace = Promise.race([
-      _fetchGeo(),
-      new Promise(function(res) {
-        setTimeout(function() {
-          console.warn('[Gate] Geo lookup timed out');
-          res(null);
-        }, GEO_TIMEOUT);
-      })
-    ]);
-
-    var geo = await geoRace;
-
-    // Blank geo object if everything failed / timed out
-    if (!geo) {
-      geo = {
-        ip: 'Unknown', country: 'Unknown', city: 'Unknown', region: 'Unknown',
-        latitude: 'Unknown', longitude: 'Unknown', isp: 'Unknown', asnOrg: 'Unknown',
-        asnNumber: 'Unknown', timezone: 'Unknown', localTime: ''
-      };
-    }
-
-    // Security check runs after we have the IP (needs the real IP from geo)
-    var sec = await Promise.race([
-      _fetchSecurity(geo.ip),
-      new Promise(function(res) {
-        setTimeout(function() {
-          console.warn('[Gate] Security lookup timed out');
-          res({ isVpn: false, isTor: false, threatLevel: 'Unknown', connectionType: 'Unknown' });
-        }, SEC_TIMEOUT);
-      })
-    ]);
-
-    var text = buildVisitorAlert(name, geo, sec, client, timeData || null);
-    console.log('[Gate] Sending Telegram notification for: ' + name);
-
-    await _tgSend({
-      chat_id                  : TG_CHAT_ID,
-      text                     : text,
-      parse_mode               : 'HTML',
-      disable_web_page_preview : true
-    });
-
-    if (callback) callback();
+    /* Sajid's farewell */
+    setTimeout(function () {
+      addTypingDots();
+      setTimeout(function () {
+        typewrite('Great to meet you, ' + name + '! Enjoy the tour 🚀', function () {
+          setStatus('online');
+          setTimeout(function () { dismissGate(name, false); }, 400);
+        });
+      }, 300);
+    }, 150);
   }
 
-
-  // ============================================================
-  // TIME TRACKING SYSTEM v1.0
-  // Tracks total, active, and idle time; sends exit summary once.
-  // Works on desktop + mobile Safari via Beacon API fallback.
-  // ============================================================
-
-  // ── Constants ────────────────────────────────────────────────
-  var IDLE_THRESHOLD_MS = 30 * 1000;   // 30 s inactive → considered idle
-  var TIME_KEY          = '_smTimeData'; // sessionStorage key
-
-  // ── State ────────────────────────────────────────────────────
-  var _session = (function () {
-    try {
-      var saved = sessionStorage.getItem(TIME_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch (e) { /* ignore */ }
-    return null;
-  }());
-
-  // Initialise fresh if no saved session
-  if (!_session) {
-    _session = {
-      startMs     : Date.now(),
-      activeMs    : 0,
-      idleMs      : 0,
-      segStart    : Date.now(),   // start of current active segment
-      isActive    : true,         // tab currently visible?
-      idleStart   : null,         // when idle started (null if not idle)
-      exitSent    : false,        // exit notification sent?
-      lastPage    : window.location.pathname || '/'
-    };
-  }
-
-  // ── Persist session state (lightweight, called on changes) ───
-  function _saveSession() {
-    try { sessionStorage.setItem(TIME_KEY, JSON.stringify(_session)); } catch (e) { /* ignore */ }
-  }
-
-  // ── Duration formatter → "2m 34s" ───────────────────────────
-  function _fmtDuration(ms) {
-    if (ms < 0) ms = 0;
-    var totalSecs = Math.floor(ms / 1000);
-    var h = Math.floor(totalSecs / 3600);
-    var m = Math.floor((totalSecs % 3600) / 60);
-    var s = totalSecs % 60;
-    if (h > 0) return h + 'h ' + m + 'm ' + s + 's';
-    if (m > 0) return m + 'm ' + s + 's';
-    return s + 's';
-  }
-
-  // ── Flush active segment into activeMs ───────────────────────
-  function _flushSegment() {
-    if (_session.isActive && _session.segStart !== null) {
-      var elapsed = Date.now() - _session.segStart;
-      if (elapsed > 0) _session.activeMs += elapsed;
-      _session.segStart = null;
-    }
-  }
-
-  // ── Flush idle segment into idleMs ───────────────────────────
-  function _flushIdle() {
-    if (_session.idleStart !== null) {
-      var elapsed = Date.now() - _session.idleStart;
-      if (elapsed > 0) _session.idleMs += elapsed;
-      _session.idleStart = null;
-    }
-  }
-
-  // ── Build time summary object for Telegram ───────────────────
-  function _buildTimeSummary(exitReason) {
-    _flushSegment();
-    _flushIdle();
-    var totalMs  = Date.now() - _session.startMs;
-    var activeMs = _session.activeMs;
-    var idleMs   = _session.idleMs;
-    // Sanity clamp — active + idle should not exceed total
-    if (activeMs + idleMs > totalMs) {
-      activeMs = Math.max(0, totalMs - idleMs);
-    }
-    return {
-      totalSecs  : Math.floor(totalMs  / 1000),
-      totalStr   : _fmtDuration(totalMs),
-      activeStr  : _fmtDuration(activeMs),
-      idleStr    : _fmtDuration(idleMs),
-      exitStatus : exitReason || 'Page Closed',
-      lastPage   : _session.lastPage || window.location.pathname || '/'
-    };
-  }
-
-  // ── Idle detection ───────────────────────────────────────────
-  var _idleTimer = null;
-
-  function _resetIdleTimer() {
-    if (_idleTimer) clearTimeout(_idleTimer);
-    // If user was idle, resume active segment
-    if (_session.idleStart !== null) {
-      _flushIdle();
-      _session.segStart = Date.now();
-      _session.isActive = true;
-    }
-    _idleTimer = setTimeout(function () {
-      // Mark as idle: flush current active segment
-      _flushSegment();
-      _session.idleStart = Date.now();
-      _session.isActive  = false;
-      _saveSession();
-    }, IDLE_THRESHOLD_MS);
-  }
-
-  // Listen for user activity signals
-  ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'pointerdown'].forEach(function (evt) {
-    document.addEventListener(evt, _resetIdleTimer, { passive: true });
-  });
-  _resetIdleTimer(); // kick off timer
-
-  // ── Visibility change — pause/resume timer ───────────────────
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden) {
-      // Tab hidden → flush active segment, stop counting
-      _flushSegment();
-      if (_idleTimer) { clearTimeout(_idleTimer); _idleTimer = null; }
-      _session.isActive = false;
-      _saveSession();
-      _maybeSendExitNotification('Tab Hidden');
-    } else {
-      // Tab visible again → start new active segment
-      _session.isActive = true;
-      _session.segStart = Date.now();
-      _session.exitSent = false; // allow a fresh exit notification next time
-      _saveSession();
-      _resetIdleTimer();
-    }
+  sendBtn.addEventListener('click', handleSubmit);
+  nameInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') handleSubmit();
   });
 
-  // ── Focus / blur as supplementary signals ────────────────────
-  window.addEventListener('blur', function () {
-    if (!document.hidden) {
-      _flushSegment();
-      _session.isActive = false;
-      _saveSession();
-    }
-  });
-  window.addEventListener('focus', function () {
-    if (!_session.isActive) {
-      _session.isActive = true;
-      _session.segStart = Date.now();
-      _saveSession();
-      _resetIdleTimer();
-    }
-  });
+  /* ── Scroll trigger — fires once at 10% page depth ── */
+  var SCROLL_THRESHOLD = 10;
+  var gateTriggered = false;
 
-  // ── Exit notification — send once ────────────────────────────
-  var _exitGuard = false;
-
-  function _maybeSendExitNotification(exitReason) {
-    if (_exitGuard || _session.exitSent) return;
-    _exitGuard         = true;
-    _session.exitSent  = true;
-    _saveSession();
-
-    var summary  = _buildTimeSummary(exitReason);
-    // Only notify if visitor spent at least 5 seconds
-    if (summary.totalSecs < 5) return;
-
-    var visitorName = sessionStorage.getItem('_smVisitorName') || 'Unknown';
-    var tgText = [
-      '\u23F1 <b>Session Summary — ' + visitorName + '</b>',
-      '',
-      '\u23F1 <b>Time Spent</b>    : ' + summary.totalStr,
-      '\uD83D\uDC40 <b>Active Time</b>  : ' + summary.activeStr,
-      '\uD83D\uDCA4 <b>Idle Time</b>    : ' + summary.idleStr,
-      '\uD83D\uDEAA <b>Exit Status</b>  : ' + summary.exitStatus,
-      '\uD83D\uDCC4 <b>Last Page</b>    : ' + summary.lastPage
-    ].join('\n');
-
-    var payload = JSON.stringify({
-      chat_id                  : TG_CHAT_ID,
-      text                     : tgText,
-      parse_mode               : 'HTML',
-      disable_web_page_preview : true
-    });
-
-    // Prefer Beacon API (works on mobile Safari during pagehide)
-    if (navigator.sendBeacon) {
-      var blob = new Blob([payload], { type: 'application/json' });
-      navigator.sendBeacon(TG_API_URL, blob);
-    } else {
-      // Synchronous XHR fallback (old browsers)
-      try {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', TG_API_URL, false); // sync
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(payload);
-      } catch (e) { /* silent fail on exit */ }
-    }
+  function scrollPct() {
+    var h = document.body.scrollHeight - window.innerHeight;
+    return h > 0 ? (window.scrollY / h) * 100 : 0;
   }
 
-  // ── pagehide — most reliable cross-browser exit event ────────
-  window.addEventListener('pagehide', function (e) {
-    var reason = e.persisted ? 'Tab Switched (BF Cache)' : 'Page / Browser Closed';
-    _maybeSendExitNotification(reason);
-  });
+  function triggerGate() {
+    if (gateTriggered) return;
+    gateTriggered = true;
+    window.removeEventListener('scroll', onScrollCheck, { passive: true });
 
-  // ── beforeunload — extra safety net ──────────────────────────
-  window.addEventListener('beforeunload', function () {
-    _maybeSendExitNotification('Page Closed');
-  });
+    /* Freeze scroll — overflow:hidden on <html> leaves body layout 100% intact */
+    document.documentElement.style.overflow = 'hidden';
+    document.body.classList.add('gate-active');
 
-  // ── Store visitor name when gate passes ──────────────────────
-  // (hooked into gateSubmit — we patch the original callback)
-  var _origGateSubmit = window.gateSubmit;
-  window.gateSubmit   = function () {
-    var input = document.getElementById('gVisitorName');
-    if (input && input.value) {
-      var cleanName = input.value.trim();
-      try { sessionStorage.setItem('_smVisitorName', cleanName); } catch (e) { /* ignore */ }
-      // Push name to analytics engine (saves to Supabase)
-      if (typeof window.analyticsSetVisitorName === 'function') {
-        window.analyticsSetVisitorName(cleanName);
+    /* Reveal toast overlay */
+    overlay.classList.remove('hidden');
+    /* Force reflow so spring animation fires */
+    overlay.offsetHeight; // eslint-disable-line no-unused-expressions
+    overlay.classList.add('gate-scroll-in');
+
+    /* Start chat */
+    runGate();
+  }
+
+  function onScrollCheck() {
+    if (scrollPct() >= SCROLL_THRESHOLD) triggerGate();
+  }
+
+  /* Also snap-trigger if user is already past threshold (e.g. browser restore) */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      if (scrollPct() >= SCROLL_THRESHOLD) {
+        triggerGate();
+      } else {
+        window.addEventListener('scroll', onScrollCheck, { passive: true });
       }
+    });
+  } else {
+    if (scrollPct() >= SCROLL_THRESHOLD) {
+      triggerGate();
+    } else {
+      window.addEventListener('scroll', onScrollCheck, { passive: true });
     }
-    _origGateSubmit.apply(this, arguments);
-  };
+  }
+})();
 
-})(); // END GATE OVERLAY
 
 
 // ============================================================

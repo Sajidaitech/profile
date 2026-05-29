@@ -86,94 +86,54 @@
   <div class="lg-light-leak lg-light-leak-2" aria-hidden="true"></div>
   <div class="lg-light-leak lg-light-leak-3" aria-hidden="true"></div>
 
-  <!-- ================================================================
-       GATE OVERLAY — iOS 26 Liquid Glass Entry
-  ================================================================ -->
-  <div id="gateOverlay" class="gate-overlay">
-    <div class="gate-bg">
-      <img src="loginpage.png" alt="" class="gate-bg-img" aria-hidden="true" loading="lazy">
-      <div class="gate-vignette" aria-hidden="true"></div>
+<!-- ══════════════════════════════════════════════════════════
+     GATE OVERLAY — centered name-entry screen
+     Removed once visitor submits their name
+══════════════════════════════════════════════════════════ -->
+<div id="gateOverlay" class="gate-overlay hidden" role="dialog" aria-modal="true" aria-label="Welcome — please introduce yourself">
+
+  <!-- Blurred site preview behind card -->
+  <div class="gate-backdrop"></div>
+
+  <!-- Centered glass card -->
+  <div class="gate-glass-card" id="gateCard">
+
+    <!-- Portrait + online indicator -->
+    <div class="gate-avatar-row">
+      <div class="gate-avatar-wrap">
+        <img src="photo.jpg" alt="Sajid Mehmood" class="gate-avatar-img">
+        <span class="gate-online-dot"></span>
+      </div>
+      <div class="gate-avatar-meta">
+        <span class="gate-avatar-name">Sajid Mehmood</span>
+        <span class="gate-avatar-status" id="gateStatus">typing…</span>
+      </div>
     </div>
 
-    <!-- Straight beam animations -->
-    <div class="gate-beams" aria-hidden="true">
-      <div class="gate-beam gate-beam-h gate-beam-h-1"></div>
-      <div class="gate-beam gate-beam-h gate-beam-h-2"></div>
-      <div class="gate-beam gate-beam-h gate-beam-h-3"></div>
-      <div class="gate-beam gate-beam-h gate-beam-h-4"></div>
-      <div class="gate-beam gate-beam-h gate-beam-h-5"></div>
-      <div class="gate-beam gate-beam-v gate-beam-v-1"></div>
-      <div class="gate-beam gate-beam-v gate-beam-v-2"></div>
-      <div class="gate-beam gate-beam-v gate-beam-v-3"></div>
-      <div class="gate-beam gate-beam-v gate-beam-v-4"></div>
-      <div class="gate-beam gate-beam-d gate-beam-d-1"></div>
-      <div class="gate-beam gate-beam-d gate-beam-d-2"></div>
-      <div class="gate-beam gate-beam-d gate-beam-d-3"></div>
-    </div>
+    <!-- Messages -->
+    <div class="gate-messages" id="gateMessages"></div>
 
-    <div class="gate-glass-card">
-      <div class="gate-card-shimmer" aria-hidden="true"></div>
-
-      <div class="gate-topbar">
-        <img src="logo.png" alt="SM Logo" class="gate-logo">
-        <div class="gate-brand">
-          <span class="gate-brand-name">SAJIDMK.COM</span>
-          <span class="gate-brand-sub">Executive Portfolio</span>
-        </div>
-      </div>
-
-      <div class="gate-rule"></div>
-
-      <div class="gate-copy">
-        <p class="gate-eyebrow"><span class="gate-eyebrow-line"></span>WELCOME<span class="gate-eyebrow-line"></span></p>
-        <h1 class="gate-headline">Who's visiting?</h1>
-        <p class="gate-sub">Enter your name to access the portfolio.</p>
-      </div>
-
-      <div class="gate-field">
-        <label class="gate-label" for="gVisitorName">YOUR NAME</label>
-        <div class="gate-input-wrap">
-          <i class="fas fa-user gate-input-icon"></i>
-          <input type="text" id="gVisitorName" class="gate-input"
-            placeholder="Enter Your Full Name" autocomplete="off" maxlength="40" style="font-size:16px;">
-        </div>
-        <p class="g-error" id="gErrorMsg">⚠️ Please enter your name to continue.</p>
-      </div>
-
-      <button class="gate-submit-btn" id="gSubmitBtn" onclick="gateSubmit()">
-        <div class="gsb-glow" aria-hidden="true"></div>
-        <span class="gsb-label">View Portfolio</span>
-        <i class="fas fa-arrow-right gsb-arrow"></i>
-        <div class="g-spinner gw-spinner"></div>
+    <!-- Name input row (fades in after messages) -->
+    <div class="gate-input-row" id="gateInputRow">
+      <input
+        type="text"
+        id="gateNameInput"
+        class="gate-name-input"
+        placeholder="Your name…"
+        maxlength="60"
+        autocomplete="off"
+        aria-label="Enter your name"
+      >
+      <button class="gate-send-btn" id="gateSendBtn" aria-label="Enter site">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
       </button>
-
-      <div class="gate-status-row">
-        <span class="gate-status-pulse"></span>
-        <span class="gate-status-text">Open to Opportunities &nbsp;·&nbsp; CCNA &nbsp;·&nbsp; ITIL &nbsp;·&nbsp; 📍 Doha, Qatar</span>
-      </div>
-
-      <!-- ── Visitor Counter Strip ── -->
-      <div class="gate-visitor-strip">
-        <div class="gvs-stat">
-          <span class="gvs-icon">👁</span>
-          <span class="gvs-value" id="gate-total-count">—</span>
-          <span class="gvs-label">total visits</span>
-        </div>
-        <div class="gvs-divider"></div>
-        <div class="gvs-stat">
-          <span class="gvs-dot" id="gate-online-dot"></span>
-          <span class="gvs-value" id="gate-online-count">—</span>
-          <span class="gvs-label">online now</span>
-        </div>
-      </div>
-
-      <div class="gate-success" id="gSuccess">
-        <div class="gate-success-icon">✨</div>
-        <p class="gate-success-name" id="gSuccessName">Welcome!</p>
-        <p class="gate-success-sub">Loading portfolio…</p>
-      </div>
     </div>
-  </div>
+
+  </div><!-- /gate-glass-card -->
+</div><!-- /gateOverlay -->
 
   <!-- ================================================================
        FLOATING ACTION BUTTON

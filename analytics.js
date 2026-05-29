@@ -62,33 +62,8 @@ const ANALYTICS_CONFIG = {
 (function () {
   'use strict';
 
-  // ── FIX #10: Pre-fill gate input with remembered name ────
-  // Runs immediately on script load so the input is populated
-  // before the gate is even shown.
-  function prefillGateName() {
-    var savedName = '';
-    try { savedName = localStorage.getItem(ANALYTICS_CONFIG.savedNameKey) || ''; } catch (e) {}
-    if (!savedName) return;
-
-    // Wait for DOM ready then fill the input
-    function doFill() {
-      var input = document.getElementById('gVisitorName');
-      if (input && !input.value) {
-        input.value = savedName;
-        // Show a subtle "Welcome back" hint
-        var label = document.querySelector('.gate-label[for="gVisitorName"], .gate-label');
-        if (label && label.textContent.indexOf('WELCOME BACK') === -1) {
-          label.textContent = 'WELCOME BACK, ' + savedName.split(' ')[0].toUpperCase() + '!';
-        }
-      }
-    }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', doFill);
-    } else {
-      doFill();
-    }
-  }
-  prefillGateName();
+  // ── Gate pre-fill removed — new chat-style gate uses sessionStorage,
+  //    no pre-fill needed (gateNameInput handled by script.js gate logic)
 
   // ── Supabase client factory ───────────────────────────────
   function createClient() {
