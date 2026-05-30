@@ -86,10 +86,10 @@
     this.r  = Math.random() * 2 + 0.5;
     this.life = Math.random() * 0.5 + 0.2;
     this.maxLife = this.life;
-    // Unified blue palette — no purple/violet noise
-    this.hue = [210, 212, 215][Math.floor(Math.random() * 3)];
-    this.sat = Math.floor(Math.random() * 15) + 30;  // 30–45% subtle
-    this.lit = Math.floor(Math.random() * 10) + 55;  // 55–65% mid
+    // Light theme indigo/cyan palette
+    this.hue = [238, 245, 195][Math.floor(Math.random() * 3)]; // indigo, violet, cyan
+    this.sat = Math.floor(Math.random() * 20) + 50;  // 50-70% vivid
+    this.lit = Math.floor(Math.random() * 10) + 60;  // 60-70% light
     this.twinkle = Math.random() * Math.PI * 2;
     this.twinkleSpeed = Math.random() * 0.04 + 0.01;
     this.type = Math.random() > 0.85 ? 'diamond' : 'circle';
@@ -113,20 +113,20 @@
     ctx.save();
     if (this.type === 'diamond') {
       var grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 6);
-      grd.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.25) + ')');
+      grd.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.12) + ')');
       grd.addColorStop(1, 'transparent');
       ctx.fillStyle = grd;
       ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 6, 0, Math.PI * 2); ctx.fill();
       ctx.translate(this.x, this.y); ctx.rotate(Math.PI / 4 + this.twinkle * 0.1);
-      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.65) + ')';
+      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.30) + ')';
       ctx.fillRect(-this.r * 1.2, -this.r * 1.2, this.r * 2.4, this.r * 2.4);
     } else {
       var grd2 = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 4);
-      grd2.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.15) + ')');
+      grd2.addColorStop(0, 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.08) + ')');
       grd2.addColorStop(1, 'transparent');
       ctx.fillStyle = grd2;
       ctx.beginPath(); ctx.arc(this.x, this.y, this.r * 4, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.7) + ')';
+      ctx.fillStyle = 'hsla(' + this.hue + ',' + this.sat + '%,' + this.lit + '%,' + (twinkleAlpha * 0.25) + ')';
       ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.fill();
     }
     ctx.restore();
@@ -160,8 +160,8 @@
     this.speed = Math.random() * 1.5 + 0.5;
     this.chars = '01'.split('');
     this.length = Math.floor(Math.random() * 10) + 5;
-    this.opacity = Math.random() * 0.04 + 0.01; // halved — barely visible texture
-    this.hue = 210; // single unified blue, no teal/purple split
+    this.opacity = Math.random() * 0.02 + 0.005; // light theme — very subtle
+    this.hue = 238; // indigo on light theme
     this.fontSize = Math.floor(Math.random() * 5) + 8;
   }
   DataStream.prototype.update = function () {
@@ -175,7 +175,7 @@
     ctx.font = this.fontSize + 'px "DM Mono", monospace';
     for (var i = 0; i < this.length; i++) {
       var alpha = this.opacity * (1 - i / this.length) * (i === 0 ? 3 : 1);
-      ctx.fillStyle = 'hsla(' + this.hue + ',70%,70%,' + Math.min(alpha, 0.25) + ')';
+      ctx.fillStyle = 'hsla(' + this.hue + ',70%,55%,' + Math.min(alpha, 0.12) + ')';
       ctx.fillText(this.chars[Math.floor(Math.random() * this.chars.length)], this.x, this.y - i * this.fontSize);
     }
   };
@@ -184,13 +184,13 @@
   var LINK_DIST = isMobile ? 80 : 120;
 
   var waveColors = [
-    'hsla(210, 20%, 80%, OPACITY)', // Soft Grey-Blue
-    'hsla(0, 0%, 90%, OPACITY)',    // Soft White
-    'hsla(210, 30%, 85%, OPACITY)'  // Muted Silver
+    'hsla(238, 50%, 55%, OPACITY)', // Soft Indigo
+    'hsla(195, 60%, 50%, OPACITY)', // Cyan
+    'hsla(270, 45%, 58%, OPACITY)'  // Soft Violet
   ];
-  waves.push(new Wave(0, 22, 0.25, waveColors[0], 0.035));
-  waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.028));
-  waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.022));
+  waves.push(new Wave(0, 22, 0.25, waveColors[0], 0.020));
+  waves.push(new Wave(0, 16, -0.18, waveColors[1], 0.016));
+  waves.push(new Wave(0, 12, 0.32, waveColors[2], 0.013));
 
   function updateWavePositions() {
     waves[0].y = H * 0.55;
@@ -217,7 +217,7 @@
           ctx.beginPath();
           ctx.moveTo(particles[a].x, particles[a].y);
           ctx.lineTo(particles[b].x, particles[b].y);
-          ctx.strokeStyle = 'hsla(212, 40%, 65%,' + (op * life) + ')';
+          ctx.strokeStyle = 'hsla(238, 60%, 55%,' + (op * life * 0.5) + ')';
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -227,16 +227,16 @@
 
   function drawAurora(t) {
     var aurora1 = ctx.createLinearGradient(0, H * 0.2, W, H * 0.8);
-    aurora1.addColorStop(0,   'hsla(210,40%,70%,0)');
-    aurora1.addColorStop(0.3, 'hsla(212,35%,72%,' + (0.018 + 0.008 * Math.sin(t * 0.003)) + ')');
-    aurora1.addColorStop(0.6, 'hsla(215,30%,75%,' + (0.012 + 0.006 * Math.cos(t * 0.004)) + ')');
-    aurora1.addColorStop(1,   'hsla(210,25%,78%,0)');
+    aurora1.addColorStop(0,   'hsla(238,60%,60%,0)');
+    aurora1.addColorStop(0.3, 'hsla(238,55%,62%,' + (0.04 + 0.02 * Math.sin(t * 0.003)) + ')');
+    aurora1.addColorStop(0.6, 'hsla(195,70%,55%,' + (0.03 + 0.015 * Math.cos(t * 0.004)) + ')');
+    aurora1.addColorStop(1,   'hsla(270,60%,65%,0)');
     ctx.fillStyle = aurora1;
     ctx.fillRect(0, 0, W, H);
     if (mouse.x > 0) {
       var grd = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 240);
-      grd.addColorStop(0, 'hsla(212,40%,68%,0.03)');
-      grd.addColorStop(0.5, 'hsla(210,30%,72%,0.015)');
+      grd.addColorStop(0, 'hsla(238,60%,60%,0.04)');
+      grd.addColorStop(0.5, 'hsla(195,70%,55%,0.02)');
       grd.addColorStop(1, 'transparent');
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, W, H);
@@ -263,7 +263,7 @@
           k === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
         }
         ctx.closePath();
-        ctx.strokeStyle = 'hsla(212,35%,68%,' + alpha + ')';
+        ctx.strokeStyle = 'hsla(238,55%,60%,' + (alpha * 0.6) + ')';
         ctx.stroke();
       }
     }
@@ -4337,5 +4337,117 @@ document.addEventListener('keydown', function(e) {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
+  }
+})();
+
+// ============================================================
+// EXIT-INTENT GATE POPUP — triggers when cursor leaves viewport
+// ============================================================
+(function () {
+  var exitPopupShown = false;
+  var heroSection = document.getElementById('home');
+  var exitOverlay = null;
+
+  function isOnHeroPage() {
+    if (!heroSection) return true;
+    var rect = heroSection.getBoundingClientRect();
+    return rect.bottom > 0 && rect.top < window.innerHeight;
+  }
+
+  function createExitPopup() {
+    if (exitOverlay) return;
+
+    exitOverlay = document.createElement('div');
+    exitOverlay.id = 'exitIntentOverlay';
+    exitOverlay.innerHTML = `
+      <div class="exit-backdrop"></div>
+      <div class="exit-popup-card" id="exitPopupCard">
+        <div class="exit-popup-glow-ring"></div>
+        <button class="exit-close-btn" id="exitCloseBtn" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="exit-crystal-top"></div>
+        <div class="exit-icon-wrap">
+          <div class="exit-icon-inner">✈️</div>
+          <div class="exit-icon-pulse"></div>
+        </div>
+        <h2 class="exit-headline">Wait — Before You Go!</h2>
+        <p class="exit-subtext">Sajid Mehmood is available for IT roles in Doha.<br>Leave your contact or connect directly.</p>
+        <div class="exit-actions">
+          <a href="https://wa.me/97466969598?text=Hi%20Sajid%2C%20I%20saw%20your%20portfolio%20and%20want%20to%20connect!"
+             target="_blank" rel="noopener noreferrer" class="exit-btn exit-btn--primary">
+            <span class="exit-btn-glow"></span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.121 1.532 5.848L.057 23.485a.5.5 0 0 0 .613.601l5.737-1.502A11.952 11.952 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.944 9.944 0 0 1-5.13-1.424l-.36-.214-3.742.981.998-3.641-.234-.374A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+            WhatsApp Now
+          </a>
+          <a href="https://www.linkedin.com/in/sajid-mk-1b3954333"
+             target="_blank" rel="noopener noreferrer" class="exit-btn exit-btn--secondary">
+            <span class="exit-btn-glow"></span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </a>
+        </div>
+        <p class="exit-footer-note">Based in Doha, Qatar 🇶🇦 &nbsp;·&nbsp; Open to opportunities</p>
+      </div>
+    `;
+
+    document.body.appendChild(exitOverlay);
+
+    // Bind close
+    document.getElementById('exitCloseBtn').addEventListener('click', closeExitPopup);
+    document.querySelector('.exit-backdrop').addEventListener('click', closeExitPopup);
+
+    // Animate in
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        exitOverlay.classList.add('exit-visible');
+      });
+    });
+  }
+
+  function closeExitPopup() {
+    if (!exitOverlay) return;
+    exitOverlay.classList.remove('exit-visible');
+    exitOverlay.classList.add('exit-closing');
+    setTimeout(function () {
+      if (exitOverlay && exitOverlay.parentNode) {
+        exitOverlay.parentNode.removeChild(exitOverlay);
+        exitOverlay = null;
+      }
+    }, 480);
+  }
+
+  function handleMouseLeave(e) {
+    if (exitPopupShown) return;
+    if (!isOnHeroPage()) return;
+    // Only trigger when cursor exits from the TOP of the viewport
+    if (e.clientY <= 5) {
+      exitPopupShown = true;
+      createExitPopup();
+    }
+  }
+
+  document.addEventListener('mouseleave', handleMouseLeave);
+
+  // Escape key closes
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && exitOverlay) closeExitPopup();
+  });
+})();
+
+// ── 3D Nav shimmer stagger on load ──
+(function() {
+  function applyNavShimmer() {
+    var links = document.querySelectorAll('.nav-links-center .nav-link');
+    links.forEach(function(link, i) {
+      link.style.setProperty('--shimmer-delay', (i * 0.08) + 's');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyNavShimmer);
+  } else {
+    applyNavShimmer();
   }
 })();
