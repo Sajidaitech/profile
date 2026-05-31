@@ -721,388 +721,199 @@ body::after {
 }
 
 /* ================================================================
-   GATE OVERLAY — chat-style name-entry (new design)
+   GATE OVERLAY — simple card design (from mixed_index)
 ================================================================ */
 
-/* ── Body lock while gate is active ── */
-body.gate-active {
-  /* scroll locked via html { overflow: hidden } in JS — body layout stays intact */
-}
-
-/* ══════════════════════════════════════════════════════════
-   GATE OVERLAY — hero center-right zone (desktop)
-   Sits in the empty whitespace between text and server racks.
-   Falls back to centered toast on tablet, bottom bar on mobile.
-══════════════════════════════════════════════════════════ */
-.gate-overlay {
-  position: fixed;
-  /* Left edge at 38 % — card center lands ~50–55 % across viewport,
-     sitting in the open whitespace between hero text and server racks */
-  left: 38%;
-  top: 50%;
-  transform: translateY(-50%) translateY(120%) scale(0.88);
-  z-index: 99000;
-  width: 320px;
-  /* Hidden until scroll trigger */
-  opacity: 0;
-  pointer-events: none;
-  /* No full-screen dims — backdrop stays gone */
-  background: transparent;
-  padding: 0;
-  display: block;
-  transition: none; /* animations handle entry/exit */
-}
-
-/* Revealed by scroll — spring pop upward into center-right position */
-.gate-overlay.gate-scroll-in {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(-50%) translateY(0) scale(1);
-  animation: gateToastSpringIn 0.52s cubic-bezier(0.34, 1.72, 0.64, 1) both;
-}
-
-@keyframes gateToastSpringIn {
-  0%   { opacity: 0;   transform: translateY(-50%) translateY(120%) scale(0.82); }
-  55%  { opacity: 1;   transform: translateY(-50%) translateY(-10px) scale(1.04); }
-  75%  {               transform: translateY(-50%) translateY(4px)   scale(0.98); }
-  90%  {               transform: translateY(-50%) translateY(-3px)  scale(1.01); }
-  100% { opacity: 1;   transform: translateY(-50%) translateY(0)     scale(1);    }
-}
-
-/* Dismissal — slides back down */
-.gate-overlay.gate-dismissing {
-  animation: gateToastOut 0.42s cubic-bezier(0.55, 0, 1, 0.6) both !important;
-  pointer-events: none;
-}
-@keyframes gateToastOut {
-  from { opacity: 1; transform: translateY(-50%) translateY(0)    scale(1);    }
-  to   { opacity: 0; transform: translateY(-50%) translateY(120%) scale(0.88); }
-}
-
-/* Large desktop (≥1400 px): more real estate — nudge slightly right */
-@media (min-width: 1400px) {
-  .gate-overlay {
-    left: 40%;
+  #gate-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;   /* above navbar z-index:1000 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    background: url('loginpage.png') center center / cover no-repeat;
   }
-}
 
-/* Tablet landscape (768 px – 1023 px): layout compresses — true horizontal center */
-@media (max-width: 1023px) and (min-width: 768px) {
-  .gate-overlay {
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%) translateY(120%) scale(0.88);
-    width: 300px;
+  #gate-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
   }
-  .gate-overlay.gate-scroll-in {
-    transform: translateY(-50%) translateX(-50%) translateY(0) scale(1);
-    animation: gateToastSpringInTablet 0.52s cubic-bezier(0.34, 1.72, 0.64, 1) both;
+
+  /* subtle tint over the image */
+  .gate-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 20, 45, 0.38);
+    backdrop-filter: blur(2px) brightness(0.9);
+    -webkit-backdrop-filter: blur(2px) brightness(0.9);
   }
-  @keyframes gateToastSpringInTablet {
-    0%   { opacity: 0;   transform: translateY(-50%) translateX(-50%) translateY(120%) scale(0.82); }
-    55%  { opacity: 1;   transform: translateY(-50%) translateX(-50%) translateY(-10px) scale(1.04); }
-    75%  {               transform: translateY(-50%) translateX(-50%) translateY(4px)   scale(0.98); }
-    90%  {               transform: translateY(-50%) translateX(-50%) translateY(-3px)  scale(1.01); }
-    100% { opacity: 1;   transform: translateY(-50%) translateX(-50%) translateY(0)     scale(1);    }
+
+  /* the card itself — compact borderless frosted glass */
+  .gate-card {
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    border: none;
+    border-radius: 16px;
+    padding: 32px 36px 28px;
+    width: min(400px, 88vw);
+    box-shadow: 0 20px 52px rgba(8, 20, 45, 0.45);
+    transform: translateY(40px) scale(0.94);
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+    opacity: 0;
   }
-  .gate-overlay.gate-dismissing {
-    animation: gateToastOutTablet 0.42s cubic-bezier(0.55, 0, 1, 0.6) both !important;
-  }
-  @keyframes gateToastOutTablet {
-    from { opacity: 1; transform: translateY(-50%) translateX(-50%) translateY(0)    scale(1);    }
-    to   { opacity: 0; transform: translateY(-50%) translateX(-50%) translateY(120%) scale(0.88); }
-  }
-  .gate-glass-card {
-    width: 300px;
-    max-width: 300px;
-  }
-}
 
-/* ── No backdrop for the toast style ── */
-.gate-backdrop {
-  display: none;
-}
-
-/* ── Glass toast card ── */
-.gate-glass-card {
-  position: relative;
-  z-index: 1;
-  width: 360px;
-  max-width: 360px;
-  /* Crystal-clear glass — nearly zero fill, maximum see-through */
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px) saturate(180%) brightness(1.12);
-  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.12);
-  border-radius: 22px;
-  /* Thin white rim catches light without adding opacity */
-  border-top:    1px solid rgba(255,255,255,.70);
-  border-left:   1px solid rgba(255,255,255,.50);
-  border-right:  1px solid rgba(255,255,255,.25);
-  border-bottom: 1px solid rgba(255,255,255,.18);
-  box-shadow:
-    inset 0 1px 0   rgba(255,255,255,.55),
-    0  8px  32px rgba(0,0,0,.08),
-    0 20px  60px rgba(0,0,0,.06);
-  overflow: hidden;
-}
-
-.gate-overlay.gate-dismissing .gate-glass-card {
-  animation: none !important;
-}
-
-/* Subtle top-left catch-light — keeps the "glass" feel */
-.gate-glass-card::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  pointer-events: none; z-index: 0;
-  background: linear-gradient(
-    136deg,
-    rgba(255,255,255,.12) 0%,
-    rgba(255,255,255,.06) 30%,
-    transparent 55%,
-    rgba(255,255,255,.04) 100%
-  );
-}
-
-/* ── Avatar / header row — transparent, just a thin divider ── */
-.gate-avatar-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 18px 18px 14px;
-  position: relative; z-index: 2;
-  background: rgba(255,255,255,.10);
-  border-radius: 22px 22px 0 0;
-  border-bottom: 1px solid rgba(255,255,255,.18);
-}
-.gate-avatar-wrap {
-  position: relative;
-  flex-shrink: 0;
-  width: 52px; height: 52px;
-}
-.gate-avatar-img {
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgba(255,255,255,.80);
-  box-shadow: 0 2px 12px rgba(0,0,0,.18);
-  display: block;
-}
-.gate-online-dot {
-  position: absolute;
-  bottom: 1px; right: 1px;
-  width: 13px; height: 13px;
-  border-radius: 50%;
-  background: #34c759;
-  border: 2.5px solid rgba(255,255,255,.90);
-  animation: gatePulse 2s ease-in-out infinite;
-}
-@keyframes gatePulse {
-  0%,100% { box-shadow: 0 0 0 0   rgba(52,199,89,.60); }
-  50%      { box-shadow: 0 0 0 6px rgba(52,199,89,0); }
-}
-.gate-avatar-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.gate-avatar-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1a2340;
-  line-height: 1.2;
-  text-shadow: 0 1px 4px rgba(255,255,255,.60);
-}
-.gate-avatar-status {
-  font-size: 12px;
-  color: #3a5080;
-  line-height: 1.2;
-}
-
-/* ── Messages container ── */
-.gate-messages {
-  padding: 16px 18px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 72px;
-  position: relative; z-index: 2;
-}
-
-/* ── Bubble base ── */
-.gate-bubble {
-  max-width: 84%;
-  padding: 10px 14px;
-  border-radius: 18px;
-  font-size: 13.5px;
-  line-height: 1.52;
-  color: #1a2340;
-  animation: gateBubbleIn .30s cubic-bezier(.34,1.56,.64,1) both;
-}
-@keyframes gateBubbleIn {
-  from { opacity: 0; transform: translateY(10px) scale(.90); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);   }
-}
-/* Incoming — Sajid: frosted bubble, mostly transparent */
-.gate-bubble--in {
-  background: rgba(255,255,255,.28);
-  border: 1px solid rgba(255,255,255,.50);
-  align-self: flex-start;
-  border-bottom-left-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-/* Outgoing — visitor: slightly more visible so it reads clearly */
-.gate-bubble--out {
-  background: rgba(255,255,255,.35);
-  border: 1px solid rgba(255,255,255,.55);
-  color: #1a2340;
-  align-self: flex-end;
-  border-bottom-right-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* ── Typing dots ── */
-.gate-typing {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 11px 16px;
-  background: rgba(255,255,255,.28);
-  border: 1px solid rgba(255,255,255,.50);
-  border-radius: 18px;
-  border-bottom-left-radius: 5px;
-  width: fit-content;
-  align-self: flex-start;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  animation: gateBubbleIn .28s cubic-bezier(.34,1.56,.64,1) both;
-}
-.gate-typing span {
-  display: block;
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #3a5080;
-  animation: gateDot 1.2s ease-in-out infinite;
-}
-.gate-typing span:nth-child(2) { animation-delay: .18s; }
-.gate-typing span:nth-child(3) { animation-delay: .36s; }
-@keyframes gateDot {
-  0%,80%,100% { transform: translateY(0); opacity: .50; }
-  40%          { transform: translateY(-6px); opacity: 1; }
-}
-
-/* ── Input row ── */
-.gate-input-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px 18px;
-  position: relative; z-index: 2;
-  opacity: 0;
-  transform: translateY(10px);
-  pointer-events: none;
-  transition:
-    opacity  .30s ease,
-    transform .32s cubic-bezier(.34,1.56,.64,1);
-}
-.gate-input-row.gate-input-visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.gate-name-input {
-  flex: 1;
-  height: 44px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.22);
-  border: 1px solid rgba(255,255,255,.55);
-  padding: 0 18px;
-  font-size: 14px;
-  color: #1a2340;
-  outline: none;
-  font-family: inherit;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
-}
-.gate-name-input::placeholder { color: rgba(30,50,100,.50); }
-.gate-name-input:focus {
-  background: rgba(255,255,255,.35);
-  border-color: rgba(255,255,255,.80);
-  box-shadow: 0 0 0 3px rgba(255,255,255,.15);
-}
-.gate-send-btn {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.30);
-  border: 1px solid rgba(255,255,255,.60);
-  color: #1a2340;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
-  transition:
-    transform .18s cubic-bezier(.34,1.56,.64,1),
-    background .18s ease,
-    box-shadow .18s ease;
-}
-.gate-send-btn:hover {
-  transform: scale(1.12);
-  background: rgba(255,255,255,.45);
-  box-shadow: 0 4px 14px rgba(0,0,0,.12);
-}
-.gate-send-btn:active { transform: scale(.95); }
-
-/* ── Hidden state (after dismiss) ── */
-.gate-overlay.hidden {
-  display: none !important;
-}
-
-/* ── Mobile (≤767 px): full-width bottom bar — stack naturally, no overlap ── */
-@media (max-width: 767px) {
-  .gate-overlay {
-    left: 16px;
-    right: 16px;
-    top: auto;
-    bottom: 24px;
-    width: auto;
-    /* Reset vertical-center anchoring; use bottom anchor instead */
-    transform: translateY(120%) scale(0.88);
-  }
-  .gate-overlay.gate-scroll-in {
+  #gate-overlay.visible .gate-card {
     transform: translateY(0) scale(1);
-    animation: gateToastSpringInMobile 0.52s cubic-bezier(0.34, 1.72, 0.64, 1) both;
+    opacity: 1;
   }
-  @keyframes gateToastSpringInMobile {
-    0%   { opacity: 0;   transform: translateY(120%) scale(0.82); }
-    55%  { opacity: 1;   transform: translateY(-10px) scale(1.04); }
-    75%  {               transform: translateY(4px)   scale(0.98); }
-    90%  {               transform: translateY(-3px)  scale(1.01); }
-    100% { opacity: 1;   transform: translateY(0)     scale(1);    }
-  }
-  .gate-overlay.gate-dismissing {
-    animation: gateToastOutMobile 0.42s cubic-bezier(0.55, 0, 1, 0.6) both !important;
-  }
-  @keyframes gateToastOutMobile {
-    from { opacity: 1; transform: translateY(0)    scale(1);    }
-    to   { opacity: 0; transform: translateY(120%) scale(0.88); }
-  }
-  .gate-glass-card {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 20px;
-  }
-}
 
+  /* remove the top accent bar */
+  .gate-card::before {
+    display: none;
+  }
+
+  .gate-logo {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 4px;
+  }
+  .gate-logo-line {
+    width: 24px;
+    height: 2px;
+    background: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+  }
+
+  .gate-card h2 {
+    font-family: 'Barlow Condensed', 'Playfair Display', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1.0;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .gate-card h2 span { color: #5db8ff; }
+
+  .gate-card .gate-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.72);
+    margin-bottom: 22px;
+    line-height: 1.55;
+    max-width: 320px;
+  }
+
+  .gate-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .gate-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .gate-field label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+  }
+  .gate-field input {
+    height: 48px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 9px;
+    padding: 0 16px;
+    font-size: 14px;
+    font-family: 'Barlow', sans-serif;
+    color: #ffffff;
+    background: rgba(255,255,255,0.12);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .gate-field input:focus {
+    border-color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+  }
+  .gate-field input::placeholder { color: rgba(255,255,255,0.4); }
+
+  .gate-btn {
+    width: 100%;
+    height: 44px;
+    background: var(--blue, #1a6fc4);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    margin-bottom: 12px;
+  }
+  .gate-btn:hover { background: #1460a8; transform: translateY(-1px); }
+  .gate-btn:active { transform: translateY(0); }
+
+  .gate-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    color: var(--text-muted, #5a6a7a);
+  }
+  .gate-footer a {
+    color: var(--blue, #1a6fc4);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .gate-footer a:hover { text-decoration: underline; }
+
+  .gate-close {
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    color: rgba(255,255,255,0.8);
+    font-size: 18px;
+    line-height: 1;
+  }
+  .gate-close:hover { background: rgba(255,255,255,0.25); color: #ffffff; }
+
+  .gate-welcome-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    margin: 0 auto;
+  }
 
 
 /* ================================================================
@@ -19475,12 +19286,10 @@ body {
   min-height: 100dvh;
 }
 
-/* 2.2 — Gate overlay full-height fix for Safari */
+/* 2.2 — Gate overlay: auto height — this is a floating card, not a full-screen overlay */
 .gate-overlay {
-  height: 100vh;
-  height: 100dvh;
-  /* Fallback for very old iOS that doesn't support dvh */
-  min-height: -webkit-fill-available;
+  height: auto;
+  min-height: unset;
 }
 
 /* 2.3 — Hero section height with svh (smallest viewport height) */
@@ -24568,63 +24377,25 @@ body {
   min-height: 100vh;
 }
 
-/* ── 2. Gate: full-screen frosted backdrop when active ── */
-/*    The overlay becomes full-screen; the glass card stays centred */
+/* ── 2. Gate: preserve fixed positioning — no fullscreen takeover ── */
+/*    These states keep the card exactly where .gate-overlay defines it. */
 .gate-overlay.gate-scroll-in,
 .gate-overlay.gate-dismissing {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  bottom: auto !important;
-  left: 0 !important;
-  transform: none !important;
-  display: flex !important;
-  align-items: flex-end !important;
-  justify-content: center !important;
-  padding-bottom: 32px !important;
-  /* Frosted glass full-screen backdrop */
-  background: rgba(200, 198, 210, 0.30) !important;
-  backdrop-filter: blur(28px) saturate(180%) brightness(1.06) !important;
-  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.06) !important;
-  animation: none !important;
+  /* Positional passthrough — do NOT override left/top/transform/width/height */
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
-/* Spring-in: fade the whole frosted layer */
+/* Revealed — float animation defined in base rule above */
 .gate-overlay.gate-scroll-in {
-  animation: gateFrostIn 0.48s cubic-bezier(0.34, 1.4, 0.64, 1) both !important;
-}
-@keyframes gateFrostIn {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
-/* Dismissal: fade out */
+/* Dismissal */
 .gate-overlay.gate-dismissing {
-  animation: gateFrostOut 0.40s cubic-bezier(0.55, 0, 1, 0.6) both !important;
-}
-@keyframes gateFrostOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-
-/* Card itself animates in from below while backdrop fades */
-.gate-overlay.gate-scroll-in .gate-glass-card {
-  animation: gateCardSpringIn 0.52s cubic-bezier(0.34, 1.72, 0.64, 1) both !important;
-}
-@keyframes gateCardSpringIn {
-  0%   { opacity: 0;   transform: translateY(90px) scale(0.84); }
-  55%  { opacity: 1;   transform: translateY(-8px)  scale(1.03); }
-  75%  { transform: translateY(4px)   scale(0.98); }
-  90%  { transform: translateY(-2px)  scale(1.01); }
-  100% { opacity: 1;   transform: translateY(0)     scale(1);    }
-}
-.gate-overlay.gate-dismissing .gate-glass-card {
-  animation: gateCardOut 0.36s cubic-bezier(0.55, 0, 1, 0.6) both !important;
-}
-@keyframes gateCardOut {
-  from { opacity: 1; transform: translateY(0) scale(1); }
-  to   { opacity: 0; transform: translateY(60px) scale(0.90); }
+  pointer-events: none !important;
 }
 
 /* ── 3. Gate glass card: maximum liquid glass treatment ── */
@@ -25608,47 +25379,27 @@ footer,
 
 
 /* ================================================================
-   GATE OVERLAY — Airport Hero Background
-   loginpage.png fills the full backdrop with a cinematic dark frost
+   GATE CARD — Datacenter floating assistant glass treatment
+   Card appearance tuned for the server room backdrop
 ================================================================ */
 
-/* Full-screen image background on the overlay wrapper */
+/* No image/backdrop on the overlay container — it's just a positioner */
 .gate-overlay.gate-scroll-in,
 .gate-overlay.gate-dismissing {
-  background-image: url('loginpage.png') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  /* Dark cinematic tint + blur over the image */
-  backdrop-filter: blur(4px) brightness(0.72) saturate(1.3) !important;
-  -webkit-backdrop-filter: blur(4px) brightness(0.72) saturate(1.3) !important;
-  /* Override the flat color — image + semi-transparent overlay */
-  background-color: rgba(10, 12, 22, 0.30) !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
-/* Pseudo-element: dark gradient vignette over the image
-   so the glass card pops against the photo */
+/* No vignette pseudo-element — the card floats freely */
 .gate-overlay.gate-scroll-in::before,
 .gate-overlay.gate-dismissing::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 0 !important;
-  pointer-events: none !important;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 100%,
-      rgba(5, 8, 18, 0.70) 0%,
-      rgba(5, 8, 18, 0.40) 50%,
-      transparent 80%
-    ),
-    linear-gradient(180deg,
-      rgba(5, 8, 18, 0.25) 0%,
-      rgba(5, 8, 18, 0.10) 40%,
-      rgba(5, 8, 18, 0.45) 100%
-    ) !important;
+  content: none !important;
+  display: none !important;
 }
 
-/* Keep the card above the pseudo-element */
+/* Card stacks above everything inside the overlay */
 .gate-overlay .gate-glass-card {
   position: relative !important;
   z-index: 2 !important;
@@ -26430,101 +26181,82 @@ footer, .site-footer {
 }
 
 /* ────────────────────────────────────────────────────────────────
-   TIER 13 — GATE OVERLAY: loginpage.png as full background
-   Card floats in empty center-right zone · moved up · pure glass
+   TIER 13 — GATE CARD APPEARANCE
+   Overlay wrapper: transparent positioner (left/top set in base rule)
+   Card: rich liquid glass, floats above server room backdrop
 ──────────────────────────────────────────────────────────────── */
 
-/* ── Full-screen overlay with loginpage.png as background ── */
+/* ── Overlay wrapper stays transparent — just a fixed positioner ── */
 .gate-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  z-index: 99000 !important;
-  /* loginpage.png fills the entire gate screen */
-  background-image: url('loginpage.png') !important;
-  background-size: cover !important;
-  background-position: center center !important;
-  background-repeat: no-repeat !important;
-  background-color: #f0f4fa !important;
-  /* Overlay is just the background — card positions itself */
+  /* Preserve the left/top/transform from the base rule above.
+     Only reset properties that would break the float. */
+  background-image: none !important;
+  background-color: transparent !important;
+  inset: auto !important;           /* cancel any inset:0 */
+  width: 310px !important;
+  height: auto !important;
   display: block !important;
-  /* Animation */
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: none !important;
-  transition: opacity 0.40s ease !important;
+  /* Keep the transform from the base rule — do NOT override it here */
 }
 .gate-overlay.gate-scroll-in {
   opacity: 1 !important;
   pointer-events: auto !important;
-  animation: gatePageIn 0.45s ease both !important;
-}
-@keyframes gatePageIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
 }
 .gate-overlay.gate-dismissing {
-  animation: gatePageOut 0.35s ease both !important;
   pointer-events: none !important;
 }
-@keyframes gatePageOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
 
-/* ── No backdrop div needed — image IS the background ── */
+/* ── No backdrop div needed ── */
 .gate-backdrop {
   display: none !important;
 }
 
-/* ── Glass card — absolutely pinned top-center ── */
+/* ── Glass card — rich liquid glass, auto height, in-flow ── */
 .gate-glass-card {
-  position: absolute !important;
-  top: 9vh !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
+  position: relative !important;   /* in-flow inside the fixed overlay */
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;      /* card does not self-position */
   z-index: 2 !important;
-  width: 340px !important;
-  max-width: calc(100vw - 48px) !important;
-  /* 100% crystal transparent — image shows through completely */
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  width: 100% !important;
+  max-width: 310px !important;
+  /* Liquid glass — bright enough to read over dark server image */
+  background: rgba(255, 255, 255, 0.14) !important;
+  backdrop-filter: blur(44px) saturate(200%) brightness(1.12) !important;
+  -webkit-backdrop-filter: blur(44px) saturate(200%) brightness(1.12) !important;
   border-radius: 24px !important;
-  border: 1px solid rgba(255,255,255,0.30) !important;
-  border-top: 1.5px solid rgba(255,255,255,0.45) !important;
+  border-top:    1.5px solid rgba(255,255,255,0.75) !important;
+  border-left:   1px   solid rgba(255,255,255,0.48) !important;
+  border-right:  1px   solid rgba(255,255,255,0.22) !important;
+  border-bottom: 1px   solid rgba(255,255,255,0.16) !important;
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.35),
-    0  4px 20px rgba(15,30,80,0.10),
-    0 14px 40px rgba(15,30,80,0.08),
-    0  0   0 0.5px rgba(255,255,255,0.20) !important;
+    inset 0 2px 0   rgba(255,255,255,0.60),
+    inset 0 -1px 0  rgba(0,0,0,0.06),
+    0  6px 24px rgba(0,0,0,0.28),
+    0 18px 52px rgba(0,0,0,0.22),
+    0 36px 80px rgba(0,0,0,0.14),
+    0  0   0 0.5px rgba(255,255,255,0.32) !important;
   overflow: hidden !important;
-  animation: gateCardIn 0.55s cubic-bezier(0.34,1.46,0.64,1) 0.10s both !important;
-}
-@keyframes gateCardIn {
-  from { opacity: 0; transform: translateY(22px) scale(0.93); }
-  to   { opacity: 1; transform: translateY(0)    scale(1); }
-}
-.gate-overlay.gate-dismissing .gate-glass-card {
-  animation: gateCardOut 0.30s ease both !important;
-}
-@keyframes gateCardOut {
-  from { opacity: 1; transform: translateY(0)     scale(1);    }
-  to   { opacity: 0; transform: translateY(-16px) scale(0.95); }
 }
 
-/* Subtle diagonal sheen — matches the light in the image */
+/* Subtle diagonal catch-light on card */
 .gate-glass-card::before {
   content: '' !important;
   position: absolute !important; inset: 0 !important;
   border-radius: inherit !important;
   pointer-events: none !important; z-index: 0 !important;
-  background: none !important;
+  background: linear-gradient(
+    136deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.08) 28%,
+    transparent 52%,
+    rgba(255,255,255,0.05) 100%
+  ) !important;
 }
 
-/* ── Header — navy-to-blue, matches image's blue accent ── */
+/* ── Header — navy-to-blue, professional ── */
 .gate-avatar-row {
   background: linear-gradient(130deg, #0B1A4F 0%, #1245A8 55%, #1A6FD4 100%) !important;
   padding: 20px 22px 18px !important;
@@ -26534,7 +26266,6 @@ footer, .site-footer {
   z-index: 2 !important;
   gap: 14px !important;
 }
-/* Top sheen line on header */
 .gate-avatar-row::after {
   content: '' !important;
   position: absolute !important;
@@ -26596,17 +26327,17 @@ footer, .site-footer {
   padding: 11px 15px !important;
 }
 
-/* ── Incoming — semi-transparent white glass ── */
+/* ── Incoming ── */
 .gate-bubble--in {
-  background: rgba(255,255,255,0.72) !important;
-  border: 1px solid rgba(255,255,255,0.85) !important;
+  background: rgba(255,255,255,0.82) !important;
+  border: 1px solid rgba(255,255,255,0.90) !important;
   color: #0D1B3E !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.90), 0 2px 8px rgba(15,30,80,0.08) !important;
   border-radius: 18px !important;
   border-bottom-left-radius: 5px !important;
 }
 
-/* ── Outgoing — solid blue matching image accent ── */
+/* ── Outgoing ── */
 .gate-bubble--out {
   background: linear-gradient(145deg, #1245A8 0%, #1D6FD8 60%, #4A9EF0 100%) !important;
   color: #FFFFFF !important;
@@ -26617,8 +26348,8 @@ footer, .site-footer {
 
 /* ── Typing dots ── */
 .gate-typing {
-  background: rgba(255,255,255,0.72) !important;
-  border: 1px solid rgba(255,255,255,0.85) !important;
+  background: rgba(255,255,255,0.82) !important;
+  border: 1px solid rgba(255,255,255,0.90) !important;
   box-shadow: 0 2px 8px rgba(15,30,80,0.08) !important;
   padding: 12px 16px !important;
 }
@@ -26638,8 +26369,8 @@ footer, .site-footer {
 .gate-name-input {
   height: 46px !important;
   border-radius: 999px !important;
-  background: rgba(255,255,255,0.80) !important;
-  border: 1.5px solid rgba(255,255,255,0.90) !important;
+  background: rgba(255,255,255,0.86) !important;
+  border: 1.5px solid rgba(255,255,255,0.92) !important;
   padding: 0 18px !important;
   font-size: 14px !important;
   font-weight: 500 !important;
@@ -26650,7 +26381,7 @@ footer, .site-footer {
   color: rgba(15,30,80,0.40) !important;
 }
 .gate-name-input:focus {
-  background: rgba(255,255,255,0.96) !important;
+  background: rgba(255,255,255,0.97) !important;
   border-color: #1D6FD8 !important;
   box-shadow: inset 0 1px 3px rgba(15,30,80,0.05), 0 0 0 3px rgba(29,111,216,0.20) !important;
   outline: none !important;
@@ -26674,28 +26405,26 @@ footer, .site-footer {
 /* ── Hidden ── */
 .gate-overlay.hidden { display: none !important; }
 
-/* ── Mobile: center the card ── */
-@media (max-width: 768px) {
+/* ── Mobile ≤767px: full-width bottom bar ── */
+@media (max-width: 767px) {
   .gate-overlay {
-    justify-content: center !important;
-    align-items: center !important;
-    padding-top: 0 !important;
-    padding-right: 0 !important;
+    left: 16px !important;
+    right: 16px !important;
+    top: auto !important;
+    bottom: 24px !important;
+    width: auto !important;
+    transform: translateY(110%) scale(0.88) !important;
+  }
+  .gate-overlay.gate-scroll-in {
+    transform: translateY(0) scale(1) !important;
+  }
+  .gate-overlay.gate-dismissing {
+    transform: translateY(110%) scale(0.88) !important;
   }
   .gate-glass-card {
-    width: calc(100vw - 32px) !important;
-    max-width: 380px !important;
-  }
-}
-/* ── Tablet: keep right but allow more width ── */
-@media (min-width: 769px) and (max-width: 1100px) {
-  .gate-overlay {
-    padding-right: 4vw !important;
-    padding-top: 8vh !important;
-  }
-  .gate-glass-card {
-    width: 320px !important;
-    max-width: 44vw !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 20px !important;
   }
 }
 
@@ -26819,11 +26548,11 @@ footer, .site-footer {
 }
 
 /* ────────────────────────────────────────────────────────────────
-   GLASS OVERLAY — gate overlay with olive bg (on cinematic)
+   GATE OVERLAY — transparent container (no backdrop colour)
 ──────────────────────────────────────────────────────────────── */
 .gate-overlay.gate-scroll-in,
 .gate-overlay.gate-dismissing {
-  background-color: rgba(15,18,10,0.25) !important;
+  background-color: transparent !important;
 }
 
 /* ────────────────────────────────────────────────────────────────
@@ -27185,3 +26914,511 @@ body {
   .engage-right { padding: 14px; gap: 12px; }
 }
 
+
+/* ================================================================
+   STEPS 7–10 — PREMIUM GATE CARD OVERHAUL
+   Header · Bubbles · Input · Floating Animation
+================================================================ */
+
+/* ── STEP 10: Floating card animation (suspend in space) ── */
+@keyframes gateCardFloat {
+  0%   { transform: translateY(0px)   rotate(0.00deg); }
+  25%  { transform: translateY(-4px)  rotate(0.12deg); }
+  50%  { transform: translateY(-7px)  rotate(0.00deg); }
+  75%  { transform: translateY(-3px)  rotate(-0.10deg); }
+  100% { transform: translateY(0px)   rotate(0.00deg); }
+}
+
+.gate-overlay.gate-scroll-in .gate-glass-card {
+  animation: gateCardFloat 7s ease-in-out infinite !important;
+  animation-delay: 0.65s !important;
+}
+
+/* Pause float during hover — don't fight the micro-lift */
+.gate-glass-card:hover {
+  animation-play-state: paused !important;
+  transform: translateY(-3px) !important;
+}
+
+/* ── STEP 7: Header — reduced height, cleaner avatar + status ── */
+.gate-avatar-row {
+  padding: 14px 18px 12px !important;
+  gap: 12px !important;
+  background: linear-gradient(
+    160deg,
+    rgba(255,255,255,0.22) 0%,
+    rgba(255,255,255,0.08) 100%
+  ) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Avatar ring — thinner, crisper */
+.gate-avatar-img {
+  width: 46px !important;
+  height: 46px !important;
+  border: 1.5px solid rgba(255,255,255,0.95) !important;
+  box-shadow:
+    0 0 0 2.5px rgba(255,255,255,0.18),
+    0 3px 14px rgba(0,0,0,0.20),
+    0 0 0 4px rgba(120,180,255,0.08) !important;
+}
+
+.gate-avatar-wrap {
+  width: 46px !important;
+  height: 46px !important;
+}
+
+/* Online dot — repositioned for smaller avatar */
+.gate-online-dot {
+  bottom: 0px !important;
+  right: 0px !important;
+  width: 12px !important;
+  height: 12px !important;
+  border: 2px solid rgba(255,255,255,0.98) !important;
+  background: radial-gradient(circle at 35% 30%, #5de273, #30c957) !important;
+  box-shadow:
+    0 1px 5px rgba(48,201,87,0.45),
+    0 0 0 3px rgba(48,201,87,0.10) !important;
+}
+
+/* Name — editorial serif weight, tighter tracking */
+.gate-avatar-name {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: rgba(10,18,38,0.95) !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.80),
+    0 1px 6px rgba(255,255,255,0.25) !important;
+  line-height: 1.15 !important;
+}
+
+/* Status line — smaller, lighter, italic feel */
+.gate-avatar-status {
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.02em !important;
+  color: rgba(40,80,150,0.52) !important;
+  line-height: 1.2 !important;
+}
+
+/* ── STEP 8: Chat Bubbles — premium spacing, radius, type ── */
+.gate-messages {
+  padding: 14px 16px 8px !important;
+  gap: 8px !important;
+  min-height: 70px !important;
+}
+
+.gate-bubble {
+  max-width: 82% !important;
+  padding: 9px 14px !important;
+  border-radius: 18px !important;
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 420 !important;
+  line-height: 1.52 !important;
+  letter-spacing: -0.005em !important;
+}
+
+/* Inbound bubble — from Sajid: clean frosted white */
+.gate-bubble--in {
+  background: rgba(255,255,255,0.62) !important;
+  border: 1px solid rgba(255,255,255,0.78) !important;
+  border-bottom-left-radius: 4px !important;
+  color: rgba(8,16,38,0.88) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.90),
+    0 1px 6px rgba(0,0,0,0.05),
+    0 4px 16px rgba(0,0,0,0.04) !important;
+}
+
+/* Outbound bubble — visitor reply: slightly tinted */
+.gate-bubble--out {
+  background: rgba(210,225,255,0.44) !important;
+  border: 1px solid rgba(180,210,255,0.55) !important;
+  border-bottom-right-radius: 4px !important;
+  color: rgba(8,20,55,0.90) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.85),
+    0 1px 6px rgba(0,0,0,0.05),
+    0 4px 16px rgba(80,120,200,0.06) !important;
+}
+
+/* Typing dots — slightly smaller, smoother */
+.gate-typing {
+  padding: 10px 16px !important;
+  border-radius: 18px !important;
+  border-bottom-left-radius: 4px !important;
+  gap: 4px !important;
+}
+.gate-typing span {
+  width: 6px !important;
+  height: 6px !important;
+  background: rgba(30,60,130,0.48) !important;
+}
+
+/* ── STEP 9: Input Section — integrated, modern, no generic form ── */
+.gate-input-row {
+  padding: 8px 14px 16px !important;
+  gap: 9px !important;
+  background: linear-gradient(
+    0deg,
+    rgba(255,255,255,0.08) 0%,
+    transparent 100%
+  ) !important;
+  border-top: 1px solid rgba(255,255,255,0.16) !important;
+  margin-top: 2px !important;
+}
+
+.gate-name-input {
+  height: 42px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.42) !important;
+  border: 1px solid rgba(255,255,255,0.68) !important;
+  padding: 0 18px !important;
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 450 !important;
+  color: rgba(8,16,42,0.90) !important;
+  letter-spacing: -0.01em !important;
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.88),
+    inset 0 1.5px 6px rgba(255,255,255,0.22),
+    0 1px 6px rgba(0,0,0,0.05) !important;
+  transition:
+    border-color .22s ease,
+    background .22s ease,
+    box-shadow .22s ease !important;
+}
+.gate-name-input::placeholder {
+  color: rgba(30,60,130,0.35) !important;
+  font-weight: 380 !important;
+  font-style: italic !important;
+}
+.gate-name-input:focus {
+  background: rgba(255,255,255,0.62) !important;
+  border-color: rgba(180,210,255,0.80) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    inset 0 1.5px 6px rgba(255,255,255,0.35),
+    0 0 0 2.5px rgba(160,200,255,0.18),
+    0 3px 12px rgba(100,150,255,0.08) !important;
+}
+
+/* Send button — accent pill, matches the card accent blue */
+.gate-send-btn {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(
+    145deg,
+    rgba(180,210,255,0.55) 0%,
+    rgba(140,180,255,0.32) 100%
+  ) !important;
+  border: 1px solid rgba(160,200,255,0.65) !important;
+  color: rgba(10,30,100,0.78) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.90),
+    0 2px 8px rgba(80,130,220,0.12),
+    0 5px 18px rgba(60,110,200,0.10) !important;
+  transition:
+    transform .22s cubic-bezier(.34,1.56,.64,1),
+    background .20s ease,
+    box-shadow .20s ease !important;
+}
+.gate-send-btn:hover {
+  transform: scale(1.11) !important;
+  background: linear-gradient(
+    145deg,
+    rgba(190,220,255,0.75) 0%,
+    rgba(160,195,255,0.50) 100%
+  ) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.98),
+    0 4px 12px rgba(80,130,220,0.18),
+    0 8px 24px rgba(60,110,200,0.14) !important;
+  color: rgba(10,30,120,0.92) !important;
+}
+.gate-send-btn:active {
+  transform: scale(0.93) !important;
+}
+
+/* Mobile: keep card compact */
+@media (max-width: 767px) {
+  .gate-avatar-row {
+    padding: 12px 16px 10px !important;
+  }
+  .gate-messages {
+    padding: 12px 14px 6px !important;
+  }
+  .gate-input-row {
+    padding: 6px 12px 14px !important;
+  }
+}
+
+/* ================================================================
+   STEPS 11–13 — RESPONSIVE GATE CARD POSITIONING
+   Now: gate-overlay is full-screen with server rack BG image.
+   Card floats right on desktop/tablet, centered on mobile.
+================================================================ */
+
+/* ── Z-INDEX: gate above everything ── */
+.gate-overlay,
+.gate-overlay.gate-scroll-in,
+.gate-overlay.gate-dismissing {
+  z-index: 9000 !important;
+}
+
+/* ── Card float animation — desktop/tablet ── */
+.gate-overlay.gate-scroll-in .gate-glass-card {
+  animation: gateCardFloat 7s ease-in-out infinite !important;
+  animation-delay: 0.65s !important;
+}
+
+/* ── Card float animation — mobile: gentler ── */
+@media (max-width: 767px) {
+  .gate-overlay.gate-scroll-in .gate-glass-card {
+    animation: gateCardFloatMobile 8s ease-in-out infinite !important;
+    animation-delay: 0.62s !important;
+  }
+  @keyframes gateCardFloatMobile {
+    0%,100% { transform: translateY(0px); }
+    50%     { transform: translateY(-4px); }
+  }
+}
+
+/* Card entrance spring — fires on the card itself after overlay fades in */
+.gate-overlay.gate-scroll-in .gate-glass-card {
+  animation:
+    gateCardSpringIn 0.60s cubic-bezier(0.34,1.56,0.64,1) both,
+    gateCardFloat 7s ease-in-out 0.65s infinite !important;
+}
+@keyframes gateCardSpringIn {
+  0%   { opacity:0; transform: translateY(50px) scale(0.86); filter:blur(3px); }
+  40%  { filter:blur(0); }
+  60%  { opacity:1; transform: translateY(-8px) scale(1.03); }
+  80%  { transform: translateY(3px) scale(0.99); }
+  100% { opacity:1; transform: translateY(0) scale(1); }
+}
+
+/* Card exit */
+.gate-overlay.gate-dismissing .gate-glass-card {
+  animation: gateCardSpringOut 0.36s cubic-bezier(0.55,0,1,0.6) both !important;
+}
+@keyframes gateCardSpringOut {
+  from { opacity:1; transform: translateY(0) scale(1); }
+  to   { opacity:0; transform: translateY(40px) scale(0.90); filter:blur(4px); }
+}
+
+/* ── Desktop card sizes ── */
+@media (min-width: 1400px) {
+  .gate-glass-card { width: 350px !important; max-width: 350px !important; }
+}
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .gate-glass-card { width: 340px !important; max-width: 340px !important; }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .gate-glass-card { width: 320px !important; max-width: 320px !important; }
+  .gate-overlay { padding: 0 5% 0 0 !important; }
+}
+@media (max-width: 767px) {
+  .gate-glass-card { width: 100% !important; max-width: 360px !important; border-radius: 24px !important; }
+}
+
+
+/* ================================================================
+   GATE AVATAR — graceful fallback when photo.jpg fails to load
+================================================================ */
+
+/* Initials circle shown when image errors */
+.gate-avatar-wrap.gate-avatar-fallback {
+  background: linear-gradient(
+    135deg,
+    rgba(80, 120, 220, 0.55) 0%,
+    rgba(50, 90, 200, 0.40) 100%
+  ) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1.5px solid rgba(255,255,255,0.80) !important;
+  box-shadow:
+    0 0 0 2.5px rgba(255,255,255,0.18),
+    0 3px 14px rgba(0,0,0,0.20) !important;
+}
+
+/* "SM" initials rendered via ::after */
+.gate-avatar-wrap.gate-avatar-fallback::after {
+  content: 'SM';
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Keep the online dot visible and correctly positioned */
+.gate-avatar-wrap.gate-avatar-fallback .gate-online-dot {
+  bottom: 0px !important;
+  right: 0px !important;
+}
+
+/* ================================================================
+   GATE BRAND PANEL — left side text over server rack image
+   Desktop/tablet: visible  |  Mobile: hidden
+================================================================ */
+
+/* Overlay layout: flex row — brand panel left, card right */
+.gate-overlay {
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 6% 0 8% !important;
+  gap: 40px !important;
+}
+
+/* ── Brand panel ── */
+.gate-brand-panel {
+  flex: 1;
+  max-width: 420px;
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: gateBrandIn 0.70s cubic-bezier(0.22,1,0.36,1) 0.15s both;
+}
+@keyframes gateBrandIn {
+  from { opacity:0; transform: translateX(-28px); }
+  to   { opacity:1; transform: translateX(0); }
+}
+
+.gate-brand-logo {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.70);
+  text-transform: uppercase;
+}
+
+.gate-brand-rule {
+  width: 36px;
+  height: 2.5px;
+  background: linear-gradient(90deg, #3b82f6, rgba(59,130,246,0.30));
+  border-radius: 2px;
+  margin-top: -8px;
+}
+
+.gate-brand-headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 900;
+  line-height: 1.10;
+  color: rgba(255,255,255,0.96);
+  text-shadow: 0 2px 24px rgba(0,0,0,0.35);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.gate-brand-accent {
+  color: #60a5fa;
+  display: inline-block;
+}
+
+.gate-brand-sub {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.62);
+  margin: 0;
+  max-width: 360px;
+}
+
+.gate-brand-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 4px;
+}
+
+.gate-brand-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 999px;
+  padding: 6px 14px 6px 10px;
+  width: fit-content;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  letter-spacing: 0.01em;
+}
+.gate-brand-chip i {
+  color: #60a5fa;
+  font-size: 11px;
+}
+
+/* ── Card stays fixed width on desktop ── */
+.gate-overlay .gate-glass-card {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Tablet: smaller brand panel, less padding ── */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .gate-overlay {
+    padding: 0 4% 0 6% !important;
+    gap: 28px !important;
+  }
+  .gate-brand-panel {
+    max-width: 320px;
+    gap: 14px;
+  }
+  .gate-brand-headline {
+    font-size: clamp(22px, 3.5vw, 32px);
+  }
+  .gate-brand-sub { font-size: 13px; }
+}
+
+/* ── Mobile: hide brand panel, center the card ── */
+@media (max-width: 767px) {
+  .gate-overlay {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0 18px !important;
+    gap: 0 !important;
+  }
+  .gate-brand-panel {
+    display: none !important;
+  }
+  .gate-overlay .gate-glass-card {
+    width: 100% !important;
+    max-width: 360px !important;
+  }
+}
+
+/* ── Large desktop breathing room ── */
+@media (min-width: 1400px) {
+  .gate-overlay {
+    padding: 0 8% 0 10% !important;
+    gap: 60px !important;
+  }
+  .gate-brand-panel { max-width: 480px; }
+}

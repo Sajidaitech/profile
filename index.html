@@ -86,54 +86,50 @@
   <div class="lg-light-leak lg-light-leak-2" aria-hidden="true"></div>
   <div class="lg-light-leak lg-light-leak-3" aria-hidden="true"></div>
 
-<!-- ══════════════════════════════════════════════════════════
-     GATE OVERLAY — centered name-entry screen
-     Removed once visitor submits their name
-══════════════════════════════════════════════════════════ -->
-<div id="gateOverlay" class="gate-overlay hidden" role="dialog" aria-modal="true" aria-label="Welcome — please introduce yourself">
+<!-- ════════════ GATE CARD OVERLAY ════════════ -->
+<div id="gate-overlay">
+  <div class="gate-backdrop" id="gateBackdrop"></div>
+  <div class="gate-card">
+    <button class="gate-close" id="gateClose" aria-label="Close">×</button>
 
-  <!-- Blurred site preview behind card -->
-  <div class="gate-backdrop"></div>
+    <!-- ASK NAME STATE -->
+    <div id="gateAsk">
+      <div class="gate-logo">Sajid MK</div>
+      <div class="gate-logo-line"></div>
 
-  <!-- Centered glass card -->
-  <div class="gate-glass-card" id="gateCard">
+      <h2>Hey, <span>Visitor.</span></h2>
+      <p class="gate-subtitle">Before you explore — what's your name? I'd love to know who's stopping by.</p>
 
-    <!-- Portrait + online indicator -->
-    <div class="gate-avatar-row">
-      <div class="gate-avatar-wrap">
-        <img src="photo.jpg" alt="Sajid Mehmood" class="gate-avatar-img">
-        <span class="gate-online-dot"></span>
+      <div class="gate-fields">
+        <div class="gate-field">
+          <label>Your Name</label>
+          <input type="text" id="visitorName" placeholder="e.g. Alex Johnson" autocomplete="given-name" maxlength="48">
+        </div>
       </div>
-      <div class="gate-avatar-meta">
-        <span class="gate-avatar-name">Sajid Mehmood</span>
-        <span class="gate-avatar-status" id="gateStatus">typing…</span>
-      </div>
+
+      <button class="gate-btn" id="gateContinueBtn">Continue &rarr;</button>
+      <p style="text-align:center; font-size:12px; color: var(--text-muted); margin-top: -8px;">
+        Takes 2 seconds &nbsp;·&nbsp; No account needed
+      </p>
     </div>
 
-    <!-- Messages -->
-    <div class="gate-messages" id="gateMessages"></div>
-
-    <!-- Name input row (fades in after messages) -->
-    <div class="gate-input-row" id="gateInputRow">
-      <input
-        type="text"
-        id="gateNameInput"
-        class="gate-name-input"
-        placeholder="Your name…"
-        maxlength="60"
-        autocomplete="off"
-        aria-label="Enter your name"
-      >
-      <button class="gate-send-btn" id="gateSendBtn" aria-label="Enter site">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+    <!-- WELCOME STATE (hidden initially) -->
+    <div id="gateWelcome" style="display:none; text-align:center;">
+      <div class="gate-welcome-icon">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
+          <circle cx="24" cy="24" r="22" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+          <path d="M14 25l7 7 13-14" stroke="#5db8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-      </button>
+      </div>
+      <h2 id="welcomeHeading" style="margin-top:18px; color:#ffffff;">Welcome,<br><span id="welcomeName"></span><span style="color:#5db8ff"> !</span></h2>
+      <p class="gate-subtitle" style="margin: 14px auto 32px; text-align:center; color:rgba(255,255,255,0.72);">
+        Great to have you here. Explore the portfolio and feel free to reach out.
+      </p>
+      <button class="gate-btn" id="gateDoneBtn">Explore the Portfolio</button>
     </div>
 
-  </div><!-- /gate-glass-card -->
-</div><!-- /gateOverlay -->
+  </div>
+</div>
 
   <!-- ================================================================
        FLOATING ACTION BUTTON
