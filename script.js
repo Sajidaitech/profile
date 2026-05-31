@@ -328,18 +328,9 @@
       setTimeout(() => nameInput.style.borderColor = '', 1200);
       return;
     }
-    welcomeName.textContent = name;
-    gateAsk.style.opacity = '0';
-    gateAsk.style.transition = 'opacity 0.25s';
-    setTimeout(() => {
-      gateAsk.style.display = 'none';
-      gateWelcome.style.display = 'block';
-      gateWelcome.style.opacity = '0';
-      gateWelcome.style.transition = 'opacity 0.35s';
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => { gateWelcome.style.opacity = '1'; });
-      });
-    }, 260);
+    // Skip welcome screen — close overlay immediately and go straight to portfolio
+    if (welcomeName) welcomeName.textContent = name;
+    hideGate();
   }
 
   continueBtn.addEventListener('click', submitName);

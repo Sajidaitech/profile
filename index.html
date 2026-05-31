@@ -89,46 +89,52 @@
 <!-- ════════════ GATE CARD OVERLAY ════════════ -->
 <div id="gate-overlay">
   <div class="gate-backdrop" id="gateBackdrop"></div>
+
+  <!-- Gate card — sits inside the blank glass rectangle in the image -->
   <div class="gate-card">
-    <button class="gate-close" id="gateClose" aria-label="Close">×</button>
+      <button class="gate-close" id="gateClose" aria-label="Close">×</button>
 
-    <!-- ASK NAME STATE -->
-    <div id="gateAsk">
-      <div class="gate-logo">Sajid MK</div>
-      <div class="gate-logo-line"></div>
+      <!-- ASK NAME STATE -->
+      <div id="gateAsk">
+        <div class="gate-logo">Sajid MK</div>
+        <div class="gate-logo-line"></div>
 
-      <h2>Hey, <span>Visitor.</span></h2>
-      <p class="gate-subtitle">Before you explore — what's your name? I'd love to know who's stopping by.</p>
+        <h2>Hey, <span>Visitor.</span></h2>
+        <p class="gate-subtitle">Before you explore — what's your name? I'd love to know who's stopping by.</p>
 
-      <div class="gate-fields">
-        <div class="gate-field">
-          <label>Your Name</label>
-          <input type="text" id="visitorName" placeholder="e.g. Alex Johnson" autocomplete="given-name" maxlength="48">
+        <div class="gate-fields">
+          <div class="gate-field">
+            <label>Your Name</label>
+            <input type="text" id="visitorName" placeholder="e.g. Alex Johnson" autocomplete="given-name" maxlength="48">
+          </div>
         </div>
+
+        <button class="gate-btn" id="gateContinueBtn">Continue &rarr;</button>
+        <p style="text-align:center; font-size:12px; color:rgba(255,255,255,0.45); margin-top:-6px;">
+          Takes 2 seconds &nbsp;·&nbsp; No account needed
+        </p>
       </div>
 
-      <button class="gate-btn" id="gateContinueBtn">Continue &rarr;</button>
-      <p style="text-align:center; font-size:12px; color: var(--text-muted); margin-top: -8px;">
-        Takes 2 seconds &nbsp;·&nbsp; No account needed
-      </p>
-    </div>
-
-    <!-- WELCOME STATE (hidden initially) -->
-    <div id="gateWelcome" style="display:none; text-align:center;">
-      <div class="gate-welcome-icon">
-        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
-          <circle cx="24" cy="24" r="22" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-          <path d="M14 25l7 7 13-14" stroke="#5db8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <!-- WELCOME STATE (hidden initially) -->
+      <div id="gateWelcome" style="display:none; text-align:center;">
+        <div class="gate-welcome-icon">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
+            <circle cx="24" cy="24" r="22" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
+            <path d="M14 25l7 7 13-14" stroke="#5db8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 id="welcomeHeading" style="margin-top:18px; color:#ffffff;">Welcome,<br><span id="welcomeName"></span><span style="color:#5db8ff"> !</span></h2>
+        <p class="gate-subtitle" style="margin:14px auto 32px; text-align:center; color:rgba(255,255,255,0.70);">
+          Great to have you here. Explore the portfolio and feel free to reach out.
+        </p>
+        <button class="gate-btn" id="gateDoneBtn">Explore the Portfolio</button>
       </div>
-      <h2 id="welcomeHeading" style="margin-top:18px; color:#ffffff;">Welcome,<br><span id="welcomeName"></span><span style="color:#5db8ff"> !</span></h2>
-      <p class="gate-subtitle" style="margin: 14px auto 32px; text-align:center; color:rgba(255,255,255,0.72);">
-        Great to have you here. Explore the portfolio and feel free to reach out.
-      </p>
-      <button class="gate-btn" id="gateDoneBtn">Explore the Portfolio</button>
-    </div>
 
-  </div>
+    </div><!-- /gate-card -->
+
+  <!-- BOTTOM SERVICE BAR -->
+
+
 </div>
 
   <!-- ================================================================

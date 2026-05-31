@@ -721,199 +721,353 @@ body::after {
 }
 
 /* ================================================================
-   GATE OVERLAY — simple card design (from mixed_index)
+   GATE OVERLAY — full-screen hero with responsive two-column layout
+   Desktop: branding left, glass card right (inside the image's blank rect)
+   Tablet:  image anchored left-center, card centered
+   Mobile:  image cropped to left panel, card full-width
 ================================================================ */
 
+/* ── Overlay container ── */
+#gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 30% 0 0;
+  gap: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+  /* Hero background — fully covers the viewport, no gaps */
+  background-image: url('loginpage.png');
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100vw;
+  max-width: 100vw;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#gate-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Backdrop tint — gentle left-heavy gradient, keeps image sharp ── */
+.gate-backdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(5, 14, 35, 0.42) 0%,
+    rgba(5, 14, 35, 0.20) 42%,
+    rgba(5, 14, 35, 0.06) 100%
+  );
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ================================================================
+   GATE CARD — glassmorphism card that sits inside the image's
+   blank glass rectangle on desktop
+================================================================ */
+.gate-card {
+  position: relative;
+  z-index: 10;
+  /* Premium glassmorphism matching the glass rect in loginpage.png */
+  background: rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(7px) saturate(1.4) brightness(1.03);
+  -webkit-backdrop-filter: blur(7px) saturate(1.4) brightness(1.03);
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  border-radius: 22px;
+  padding: 36px 40px 32px;
+  width: min(400px, 88vw);
+  box-shadow:
+    0 0 0 0.5px rgba(255,255,255,0.20),
+    0 8px 32px rgba(6, 18, 55, 0.28),
+    0 28px 60px rgba(6, 18, 55, 0.20),
+    inset 0 1.5px 0 rgba(255,255,255,0.55),
+    inset 0 -1px 0 rgba(255,255,255,0.08);
+  transform: translateY(36px) scale(0.95);
+  transition: transform 0.60s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.45s ease;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Shimmer line at top of card */
+.gate-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.85) 20%,
+    rgba(93,184,255,0.75) 50%,
+    rgba(255,255,255,0.85) 80%,
+    transparent 100%
+  );
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(93,184,255,0.30);
+}
+
+.gate-card::before { display: none; }
+
+#gate-overlay.visible .gate-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* ── Card inner content ── */
+.gate-logo {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.80);
+  margin-bottom: 5px;
+}
+.gate-logo-line {
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.55), #5db8ff);
+  border-radius: 2px;
+  margin-bottom: 22px;
+}
+
+.gate-card h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.08;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+.gate-card h2 span { color: #5db8ff; }
+
+.gate-card .gate-subtitle {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.68);
+  margin-bottom: 24px;
+  line-height: 1.60;
+  max-width: 320px;
+}
+
+.gate-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.gate-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.gate-field label {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+}
+.gate-field input {
+  height: 50px;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 12px;
+  padding: 0 17px;
+  font-size: 15px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #ffffff;
+  background: rgba(255,255,255,0.09);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.gate-field input:focus {
+  border-color: rgba(93,184,255,0.65);
+  background: rgba(255,255,255,0.14);
+  box-shadow: 0 0 0 3px rgba(93,184,255,0.16);
+}
+.gate-field input::placeholder { color: rgba(255,255,255,0.35); }
+
+.gate-btn {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(135deg, #1256a8 0%, #1a6fc4 55%, #2589e8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px rgba(26,111,196,0.42);
+  margin-bottom: 14px;
+}
+.gate-btn:hover {
+  background: linear-gradient(135deg, #0f4290, #1560b8 55%, #1e7ed6 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(26,111,196,0.54);
+}
+.gate-btn:active { transform: translateY(0); }
+
+.gate-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--text-muted, #5a6a7a);
+}
+.gate-footer a {
+  color: var(--blue, #1a6fc4);
+  text-decoration: none;
+  font-weight: 600;
+}
+.gate-footer a:hover { text-decoration: underline; }
+
+.gate-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.20);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  color: rgba(255,255,255,0.75);
+  font-size: 18px;
+  line-height: 1;
+}
+.gate-close:hover { background: rgba(255,255,255,0.24); color: #ffffff; }
+
+.gate-welcome-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  background: rgba(255,255,255,0.11);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+/* ================================================================
+   BOTTOM SERVICE TICKER BAR
+================================================================ */
+.gate-bottom-bar { display: none !important; }
+
+/* ================================================================
+   RESPONSIVE BREAKPOINTS
+================================================================ */
+
+/* ── 1440px+ large desktop ── */
+@media (min-width: 1440px) {
   #gate-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1100;   /* above navbar z-index:1000 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-    background: url('loginpage.png') center center / cover no-repeat;
+    padding: 0 32% 0 0;
   }
-
-  #gate-overlay.visible {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  /* subtle tint over the image */
-  .gate-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(8, 20, 45, 0.38);
-    backdrop-filter: blur(2px) brightness(0.9);
-    -webkit-backdrop-filter: blur(2px) brightness(0.9);
-  }
-
-  /* the card itself — compact borderless frosted glass */
   .gate-card {
-    position: relative;
-    z-index: 10;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(24px) saturate(1.6);
-    -webkit-backdrop-filter: blur(24px) saturate(1.6);
-    border: none;
-    border-radius: 16px;
-    padding: 32px 36px 28px;
-    width: min(400px, 88vw);
-    box-shadow: 0 20px 52px rgba(8, 20, 45, 0.45);
-    transform: translateY(40px) scale(0.94);
-    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
-    opacity: 0;
+    width: 420px;
+    padding: 42px 46px 36px;
   }
+}
 
-  #gate-overlay.visible .gate-card {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+/* ── 1024–1439px laptop/desktop ── */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  #gate-overlay { padding: 0 28% 0 0; }
+  .gate-card { width: 380px; }
+}
 
-  /* remove the top accent bar */
-  .gate-card::before {
-    display: none;
+/* ── 768–1023px tablet ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #gate-overlay {
+    background-position: 28% center;
+    padding: 0 18% 0 0;
   }
+  .gate-card { width: 320px; padding: 28px 28px 24px; }
+}
 
-  .gate-logo {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
-    margin-bottom: 4px;
-  }
-  .gate-logo-line {
-    width: 24px;
-    height: 2px;
-    background: rgba(255,255,255,0.5);
-    margin-bottom: 20px;
-  }
-
-  .gate-card h2 {
-    font-family: 'Barlow Condensed', 'Playfair Display', sans-serif;
-    font-size: 28px;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #ffffff;
-    line-height: 1.0;
-    margin-bottom: 8px;
-    letter-spacing: -0.01em;
-  }
-  .gate-card h2 span { color: #5db8ff; }
-
-  .gate-card .gate-subtitle {
-    font-size: 13px;
-    color: rgba(255,255,255,0.72);
-    margin-bottom: 22px;
-    line-height: 1.55;
-    max-width: 320px;
-  }
-
-  .gate-fields {
-    display: flex;
+/* ── < 768px mobile ── */
+@media (max-width: 767px) {
+  #gate-overlay {
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 16px;
+    justify-content: center;
+    align-items: center;
+    padding: 0 18px 70px;
+    /* Crop server racks off-screen, expose the glass rectangle area */
+    background-position: 20% center;
   }
-
-  .gate-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  .gate-backdrop {
+    background: linear-gradient(
+      180deg,
+      rgba(5,14,35,0.52) 0%,
+      rgba(5,14,35,0.30) 50%,
+      rgba(5,14,35,0.55) 100%
+    );
   }
-  .gate-field label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.8);
-  }
-  .gate-field input {
-    height: 48px;
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 9px;
-    padding: 0 16px;
-    font-size: 14px;
-    font-family: 'Barlow', sans-serif;
-    color: #ffffff;
-    background: rgba(255,255,255,0.12);
-    outline: none;
-    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-  }
-  .gate-field input:focus {
-    border-color: rgba(255,255,255,0.55);
-    background: rgba(255,255,255,0.18);
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
-  }
-  .gate-field input::placeholder { color: rgba(255,255,255,0.4); }
-
-  .gate-btn {
+  .gate-card {
     width: 100%;
-    height: 44px;
-    background: var(--blue, #1a6fc4);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Barlow', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-    margin-bottom: 12px;
+    max-width: 360px;
+    border-radius: 20px;
+    padding: 28px 24px 24px;
   }
-  .gate-btn:hover { background: #1460a8; transform: translateY(-1px); }
-  .gate-btn:active { transform: translateY(0); }
+  .gate-card h2 { font-size: 26px; }
+}
 
-  .gate-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12.5px;
-    color: var(--text-muted, #5a6a7a);
+/* ── < 480px small mobile ── */
+@media (max-width: 480px) {
+  #gate-overlay { background-position: 16% center; }
+  .gate-card {
+    max-width: 100%;
+    border-radius: 18px;
+    padding: 26px 20px 22px;
   }
-  .gate-footer a {
-    color: var(--blue, #1a6fc4);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .gate-footer a:hover { text-decoration: underline; }
+  .gate-card h2 { font-size: 24px; }
+  /* 16px prevents iOS auto-zoom on input focus */
+  .gate-field input { height: 46px; font-size: 16px; }
+  .gate-btn { height: 46px; }
+}
 
-  .gate-close {
-    position: absolute;
-    top: 20px;
-    right: 22px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-    color: rgba(255,255,255,0.8);
-    font-size: 18px;
-    line-height: 1;
-  }
-  .gate-close:hover { background: rgba(255,255,255,0.25); color: #ffffff; }
+/* ── Prevent horizontal scroll ── */
+html, body { max-width: 100vw; overflow-x: hidden; }
 
-  .gate-welcome-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50%;
-    margin: 0 auto;
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .gate-card, #gate-overlay .gate-card {
+    transition: opacity 0.2s ease;
+    transform: none !important;
   }
+}
+
+/* ── Backdrop-filter fallback ── */
+@supports not (backdrop-filter: blur(1px)) {
+  .gate-card { background: rgba(6, 18, 55, 0.75); }
+  .gate-backdrop { background: rgba(5, 14, 35, 0.60); }
+}
 
 
 /* ================================================================
@@ -8862,7 +9016,6 @@ body.pdf-modal-open { overflow: hidden; }
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   border: none;
-  
   border-radius: var(--r-xl);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.28),
@@ -8903,7 +9056,8 @@ body.pdf-modal-open { overflow: hidden; }
 .hie-img-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  /* Portrait ratio to match actual photo dimensions */
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -8912,9 +9066,9 @@ body.pdf-modal-open { overflow: hidden; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 25%;
+  object-position: center 20%;
   display: block;
-  transition: transform  0s var(--ease-out);
+  transition: transform 0.4s var(--ease-out);
 }
 .hie-card:hover .hie-img { transform: scale(1.06); }
 
@@ -9147,39 +9301,52 @@ body.pdf-modal-open { overflow: hidden; }
   line-height: 1.4;
 }
 
-/* ── Dark mode ───────────────────────────────────────────── */
+
+/* ── Force light design on HIE cards regardless of system color scheme ── */
+.hie-card-inner {
+  background: rgba(255,255,255,.72) !important;
+  border-color: rgba(0,0,30,.06) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.90),
+    0 4px 18px rgba(0,0,30,.08),
+    0 2px 6px rgba(0,0,30,.04) !important;
+}
+.hie-card:hover .hie-card-inner {
+  border-color: rgba(0,102,255,.35) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.90),
+    0 0 0 1px rgba(0,102,255,.18),
+    0 0 40px rgba(0,102,255,.10),
+    0 12px 40px rgba(0,0,30,.10) !important;
+}
+.hie-title        { color: var(--ink) !important; }
+.hie-desc         { color: var(--ink-2) !important; }
+.hie-list li      { color: var(--ink-2) !important; }
+.hie-footer-sub   { color: var(--ink-3) !important; }
+.hie-subtitle     { color: var(--ink-2) !important; }
+.hie-activities-label,
+.hie-tech-label   { color: var(--ink-3) !important; }
+.hie-tag {
+  background: rgba(0,102,255,.08) !important;
+  border-color: rgba(0,102,255,.18) !important;
+  color: var(--accent) !important;
+}
+.hie-tag:hover {
+  background: rgba(0,102,255,.14) !important;
+  border-color: rgba(0,102,255,.35) !important;
+}
+.hie-icon-wrap {
+  background: rgba(0,102,255,.10) !important;
+  border-color: rgba(0,102,255,.22) !important;
+}
+.hie-footer-label { color: var(--ink) !important; }
+.hie-footer-item i { color: var(--accent) !important; }
+.hie-env-tag { color: rgba(255,255,255,.85) !important; }
+
+/* ── Dark mode — keep light design on HIE cards ───────────── */
 @media (prefers-color-scheme: dark) {
   .hie-card-inner {
-    background: rgba(14,18,32,.72);
-    border-color: rgba(255,255,255,.08);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.08),
-      0 4px 18px rgba(0,0,0,.40);
-  }
-  .hie-card:hover .hie-card-inner {
-    border-color: rgba(0,102,255,.50);
-    box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.10),
-      0 0 0 1px rgba(0,102,255,.22),
-      0 0 40px rgba(0,102,255,.16),
-      0 12px 40px rgba(0,0,0,.50);
-  }
-  .hie-title { color: rgba(255,255,255,.20); }
-  .hie-desc  { color: rgba(255,255,255,.55); }
-  .hie-list li { color: rgba(255,255,255,.55); }
-  .hie-footer-sub { color: rgba(255,255,255,.04); }
-  .hie-subtitle { color: rgba(255,255,255,.45); }
-  .hie-tag {
-    background: rgba(0,102,255,.12);
-    border-color: rgba(0,102,255,.28);
-  }
-  .hie-tag:hover {
-    background: rgba(0,102,255,.22);
-    border-color: rgba(0,102,255,.55);
-  }
-  .hie-icon-wrap {
-    background: rgba(0,102,255,.18);
-    border-color: rgba(0,102,255,.35);
+    background: rgba(255,255,255,.82) !important;
   }
 }
 
@@ -9190,7 +9357,7 @@ body.pdf-modal-open { overflow: hidden; }
     gap: 20px;
   }
   .hie-img-wrap {
-    aspect-ratio: 16 / 8;
+    aspect-ratio: 4 / 3;
   }
 }
 
@@ -9200,7 +9367,7 @@ body.pdf-modal-open { overflow: hidden; }
     gap: 8px;
   }
   .hie-img-wrap {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 3 / 2;
   }
   .hie-content {
     padding: 14px;
@@ -19128,15 +19295,15 @@ strong, em, b, i, code, pre,
    ensure cinematic rendering on both mobile and desktop.
    ───────────────────────────────────────────────────────────────── */
 
-/* Card 1: UPS & Server Power Diagnostics */
+/* Card 1: UPS & Server Power Diagnostics — person crouching, show upper body */
 .hie-card:first-child .hie-img {
-  object-position: center 38%;
+  object-position: center 15%;
   filter: brightness(0.94) contrast(1.08) saturate(1.12);
 }
 
-/* Card 2: IDF Room Network Troubleshooting */
+/* Card 2: IDF Room Network Troubleshooting — person at rack, show work area */
 .hie-card:last-child .hie-img {
-  object-position: center 30%;
+  object-position: center 20%;
   filter: brightness(0.90) contrast(1.1) saturate(1.08);
 }
 
@@ -19157,9 +19324,9 @@ strong, em, b, i, code, pre,
   filter: brightness(0.98) contrast(1.06) saturate(1.18) !important;
 }
 
-/* Refined aspect ratio for more visual impact */
+/* Correct aspect ratio for portrait photos */
 .hie-img-wrap {
-  aspect-ratio: 16 / 10 !important;
+  aspect-ratio: 3 / 4 !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -19441,7 +19608,7 @@ body::after {
 /* 3.3 — CLS prevention: reserve space for known images */
 .hero-portrait-frame   { aspect-ratio: 3 / 4; }
 .gate-bg-img           { aspect-ratio: 16 / 9; }
-.hie-img-wrap          { aspect-ratio: 16 / 9; }
+.hie-img-wrap          { aspect-ratio: 3 / 4; }
 
 /* 3.4 — Reduce blur/filter cost on mobile */
 @media (max-width: 768px) {
@@ -26798,17 +26965,20 @@ body {
   gap: 8px;
   padding: 10px 16px;
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(91,33,182,0.95) 0%, rgba(61,80,32,0.92) 100%);
+  background: linear-gradient(135deg, #5b21b6 0%, #3b5bdb 100%);
   color: #FFFFFF !important;
   font-size: 12.5px;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 2px 10px rgba(91,33,182,0.22), 0 6px 20px rgba(91,33,182,0.14);
+  box-shadow: 0 2px 10px rgba(91,33,182,0.30), 0 6px 20px rgba(59,91,219,0.20);
   transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease;
 }
+.erc-download i,
+.erc-download span,
+.erc-download .erc-ext { color: #FFFFFF !important; opacity: 1 !important; }
 .erc-download:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 4px 16px rgba(91,33,182,0.30), 0 10px 28px rgba(91,33,182,0.20);
+  box-shadow: 0 4px 16px rgba(91,33,182,0.40), 0 10px 28px rgba(59,91,219,0.28);
 }
 .erc-ext { margin-left: auto; font-size: 10px; opacity: 0.75; }
 
@@ -27271,154 +27441,9 @@ body {
 }
 
 /* ================================================================
-   GATE BRAND PANEL — left side text over server rack image
-   Desktop/tablet: visible  |  Mobile: hidden
+   GATE BRAND PANEL — legacy classes kept for backwards compat.
+   Layout is now handled by .gate-hero-text / .gate-card-col
+   defined in the GATE OVERLAY block above.
 ================================================================ */
-
-/* Overlay layout: flex row — brand panel left, card right */
-.gate-overlay {
-  flex-direction: row !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 0 6% 0 8% !important;
-  gap: 40px !important;
-}
-
-/* ── Brand panel ── */
-.gate-brand-panel {
-  flex: 1;
-  max-width: 420px;
-  position: relative;
-  z-index: 2;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  animation: gateBrandIn 0.70s cubic-bezier(0.22,1,0.36,1) 0.15s both;
-}
-@keyframes gateBrandIn {
-  from { opacity:0; transform: translateX(-28px); }
-  to   { opacity:1; transform: translateX(0); }
-}
-
-.gate-brand-logo {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  color: rgba(255,255,255,0.70);
-  text-transform: uppercase;
-}
-
-.gate-brand-rule {
-  width: 36px;
-  height: 2.5px;
-  background: linear-gradient(90deg, #3b82f6, rgba(59,130,246,0.30));
-  border-radius: 2px;
-  margin-top: -8px;
-}
-
-.gate-brand-headline {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(28px, 3.2vw, 44px);
-  font-weight: 900;
-  line-height: 1.10;
-  color: rgba(255,255,255,0.96);
-  text-shadow: 0 2px 24px rgba(0,0,0,0.35);
-  margin: 0;
-  letter-spacing: -0.02em;
-}
-
-.gate-brand-accent {
-  color: #60a5fa;
-  display: inline-block;
-}
-
-.gate-brand-sub {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.65;
-  color: rgba(255,255,255,0.62);
-  margin: 0;
-  max-width: 360px;
-}
-
-.gate-brand-chips {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  margin-top: 4px;
-}
-
-.gate-brand-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.75);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.16);
-  border-radius: 999px;
-  padding: 6px 14px 6px 10px;
-  width: fit-content;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  letter-spacing: 0.01em;
-}
-.gate-brand-chip i {
-  color: #60a5fa;
-  font-size: 11px;
-}
-
-/* ── Card stays fixed width on desktop ── */
-.gate-overlay .gate-glass-card {
-  flex-shrink: 0;
-  position: relative;
-  z-index: 2;
-}
-
-/* ── Tablet: smaller brand panel, less padding ── */
-@media (min-width: 768px) and (max-width: 1199px) {
-  .gate-overlay {
-    padding: 0 4% 0 6% !important;
-    gap: 28px !important;
-  }
-  .gate-brand-panel {
-    max-width: 320px;
-    gap: 14px;
-  }
-  .gate-brand-headline {
-    font-size: clamp(22px, 3.5vw, 32px);
-  }
-  .gate-brand-sub { font-size: 13px; }
-}
-
-/* ── Mobile: hide brand panel, center the card ── */
-@media (max-width: 767px) {
-  .gate-overlay {
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 0 18px !important;
-    gap: 0 !important;
-  }
-  .gate-brand-panel {
-    display: none !important;
-  }
-  .gate-overlay .gate-glass-card {
-    width: 100% !important;
-    max-width: 360px !important;
-  }
-}
-
-/* ── Large desktop breathing room ── */
-@media (min-width: 1400px) {
-  .gate-overlay {
-    padding: 0 8% 0 10% !important;
-    gap: 60px !important;
-  }
-  .gate-brand-panel { max-width: 480px; }
-}
+.gate-brand-panel { display: none !important; }
+.gate-overlay .gate-glass-card { flex-shrink: 0; position: relative; z-index: 2; }
