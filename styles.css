@@ -940,24 +940,8 @@ body::after {
 .gate-footer a:hover { text-decoration: underline; }
 
 .gate-close {
-  position: absolute;
-  top: 18px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.13);
-  border: 1px solid rgba(255,255,255,0.20);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, color 0.2s;
-  color: rgba(255,255,255,0.75);
-  font-size: 18px;
-  line-height: 1;
+  display: none !important;
 }
-.gate-close:hover { background: rgba(255,255,255,0.24); color: #ffffff; }
 
 .gate-welcome-icon {
   display: flex;

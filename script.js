@@ -353,10 +353,8 @@
 
   continueBtn.addEventListener('click', submitName);
   nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitName(); });
-  doneBtn.addEventListener('click', hideGate);
-  closeBtn.addEventListener('click', hideGate);
-  backdrop.addEventListener('click', hideGate);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') hideGate(); });
+  doneBtn.addEventListener('click', submitName);
+  // X button is hidden via CSS — gate cannot be closed without entering a name.
 
   window.addEventListener('scroll', () => {
     const scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
