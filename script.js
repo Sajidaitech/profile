@@ -316,6 +316,13 @@
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
     if (scrollHint) scrollHint.classList.add('hidden');
+    // Force mobile background image via inline style — overrides all CSS !important rules
+    if (window.innerWidth <= 767) {
+      overlay.style.backgroundImage    = "url('mobile_gate_card.png')";
+      overlay.style.backgroundSize     = 'cover';
+      overlay.style.backgroundPosition = 'center center';
+      overlay.style.backgroundColor    = '#07111f';
+    }
     setTimeout(() => nameInput && nameInput.focus(), 550);
   }
 
