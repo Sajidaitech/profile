@@ -311,6 +311,10 @@
   function showGate() {
     if (dismissed) return;
     overlay.classList.add('visible');
+    document.body.classList.add('gate-active');
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
     if (scrollHint) scrollHint.classList.add('hidden');
     setTimeout(() => nameInput && nameInput.focus(), 550);
   }
@@ -318,6 +322,10 @@
   function hideGate() {
     dismissed = true;
     overlay.classList.remove('visible');
+    document.body.classList.remove('gate-active');
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
   }
 
   function submitName() {
