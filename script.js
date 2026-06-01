@@ -316,12 +316,15 @@
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
     if (scrollHint) scrollHint.classList.add('hidden');
-    // Force mobile background image via inline style — overrides all CSS !important rules
+    // Force correct background div visibility via JS (belt-and-suspenders on top of CSS)
+    const bgDesktop = document.getElementById('gate-bg-desktop');
+    const bgMobile  = document.getElementById('gate-bg-mobile');
     if (window.innerWidth <= 767) {
-      overlay.style.backgroundImage    = "url('mobile_gate_card.png')";
-      overlay.style.backgroundSize     = 'cover';
-      overlay.style.backgroundPosition = 'center center';
-      overlay.style.backgroundColor    = '#07111f';
+      if (bgDesktop) bgDesktop.style.display = 'none';
+      if (bgMobile)  bgMobile.style.display  = 'block';
+    } else {
+      if (bgDesktop) bgDesktop.style.display = 'block';
+      if (bgMobile)  bgMobile.style.display  = 'none';
     }
     setTimeout(() => nameInput && nameInput.focus(), 550);
   }

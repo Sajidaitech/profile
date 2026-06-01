@@ -27615,10 +27615,8 @@ body {
     justify-content: flex-start !important;
     align-items: flex-start !important;
     padding: 0 !important;
-    background-image: url('mobile_gate_card.png') !important;
-    background-size: cover !important;
-    background-position: center center !important;
-    background-color: #07111f !important;
+    /* Background handled by #gate-bg-mobile div — not the overlay itself */
+    background: transparent !important;
     transform: none !important;
     display: flex !important;
     opacity: 0 !important;
@@ -27883,5 +27881,60 @@ body {
   .gate-card .gate-subtitle   { font-size: 9px !important; }
   .gate-field input, #visitorName { height: 32px !important; }
   .gate-btn, #gateContinueBtn, #gateDoneBtn { height: 32px !important; font-size: 9px !important; }
+}
+
+
+/* ================================================================
+   GATE BACKGROUND DIVS — completely separate desktop vs mobile
+   Each div is an absolutely positioned layer behind the card.
+   CSS here is the source of truth; JS in script.js reinforces it.
+================================================================ */
+
+/* ── Shared base for both bg divs ── */
+#gate-bg-desktop,
+#gate-bg-mobile {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ── DESKTOP: loginpage.png ── */
+/* Shows on screens > 767px. Hidden on mobile. */
+#gate-bg-desktop {
+  display: block;
+  background-image: url('loginpage.png') !important;
+  background-position: center center !important;
+  background-color: #07111f !important;
+}
+@media (max-width: 767px) {
+  #gate-bg-desktop {
+    display: none !important;
+  }
+}
+
+/* ── MOBILE: mobile_gate_card.png ── */
+/* Shows on screens <= 767px. Hidden on desktop. */
+#gate-bg-mobile {
+  display: none;
+  background-image: url('mobile_gate_card.png') !important;
+  background-position: center center !important;
+  background-color: #07111f !important;
+}
+@media (max-width: 767px) {
+  #gate-bg-mobile {
+    display: block !important;
+  }
+}
+
+/* ── Gate card always sits above both bg divs ── */
+.gate-card,
+#gate-overlay .gate-card {
+  position: relative !important;
+  z-index: 10 !important;
 }
 
