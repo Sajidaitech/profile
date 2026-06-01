@@ -736,14 +736,14 @@ body::after {
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 30% 0 0;
+  /* Push card to sit inside the glass rect: ~36% from right */
+  padding: 0 36% 0 0;
   gap: 0;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.45s ease;
-  /* Solid dark fallback so page NEVER bleeds through if image fails to load */
-  background-color: #080e20;
   background-image: url('loginpage.png');
+  background-color: #07111f;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -777,14 +777,14 @@ body::after {
 .gate-card {
   position: relative;
   z-index: 10;
-  /* Premium glassmorphism matching the glass rect in loginpage.png */
   background: rgba(255, 255, 255, 0.11);
   backdrop-filter: blur(7px) saturate(1.4) brightness(1.03);
   -webkit-backdrop-filter: blur(7px) saturate(1.4) brightness(1.03);
   border: 1px solid rgba(255, 255, 255, 0.30);
-  border-radius: 22px;
-  padding: 36px 40px 32px;
-  width: min(400px, 88vw);
+  /* Desktop: 430-440px wide, 16-20px radius to match loginpage.png glass rect */
+  border-radius: 18px;
+  padding: 36px 38px 32px;
+  width: 435px;
   box-shadow:
     0 0 0 0.5px rgba(255,255,255,0.20),
     0 8px 32px rgba(6, 18, 55, 0.28),
@@ -983,74 +983,92 @@ body::after {
 /* ── 1440px+ large desktop ── */
 @media (min-width: 1440px) {
   #gate-overlay {
-    padding: 0 32% 0 0;
+    padding: 0 37% 0 0;
   }
   .gate-card {
-    width: 420px;
-    padding: 42px 46px 36px;
+    width: 440px;
+    border-radius: 18px;
+    padding: 38px 42px 34px;
   }
 }
 
 /* ── 1024–1439px laptop/desktop ── */
 @media (min-width: 1024px) and (max-width: 1439px) {
-  #gate-overlay { padding: 0 28% 0 0; }
-  .gate-card { width: 380px; }
+  #gate-overlay { padding: 0 34% 0 0; }
+  .gate-card { width: 430px; border-radius: 17px; }
 }
 
 /* ── 768–1023px tablet ── */
 @media (min-width: 768px) and (max-width: 1023px) {
   #gate-overlay {
     background-position: 28% center;
-    padding: 0 18% 0 0;
+    padding: 0 24% 0 0;
   }
-  .gate-card { width: 320px; padding: 28px 28px 24px; }
+  .gate-card { width: 430px; border-radius: 16px; padding: 30px 32px 26px; }
 }
 
-/* ── < 768px mobile ── */
+/* ── < 768px mobile — use mobile_gate_card.png ── */
 @media (max-width: 767px) {
   #gate-overlay {
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 24px 20px;
-    background-position: 30% center;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0;
+    background-image: url('mobile_gate_card.png') !important;
+    background-size: cover !important;
+    background-position: center center !important;
+    background-color: #07111f !important;
   }
   .gate-backdrop {
-    /* Strong enough to block the page completely */
-    background: rgba(6, 12, 32, 0.78);
+    background: transparent;
   }
   .gate-card {
-    width: 100%;
-    max-width: 380px;
-    border-radius: 20px;
-    padding: 30px 26px 26px;
-    background: rgba(14, 26, 60, 0.82);
-    backdrop-filter: blur(24px) saturate(1.6);
-    -webkit-backdrop-filter: blur(24px) saturate(1.6);
-    border: 1px solid rgba(255,255,255,0.18);
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.10),
-      0 16px 48px rgba(0,0,0,0.60),
-      inset 0 1.5px 0 rgba(255,255,255,0.50);
+    /* Fit exactly inside the glass rect drawn in mobile_gate_card.png     */
+    /* Image 864px wide → scale ~0.451 on 390px screen                    */
+    /* Glass rect in image: x≈75, y≈510, w≈545, h≈590                     */
+    /* On screen: left≈34px, top≈236px, w≈246px → but you specified 540px */
+    /* Using your measurements: 540w × 845h with 30px radius              */
+    position: absolute;
+    width: 540px;
+    height: 845px;
+    border-radius: 30px;
+    /* Center the card horizontally and place it at ~28% from top */
+    left: 50%;
+    top: 28%;
+    transform: translateX(-50%) translateY(36px) scale(0.95);
+    padding: 40px 36px 36px;
+    background: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border: none;
+    box-shadow: none;
+    overflow: visible;
   }
-  .gate-card h2 { font-size: 26px; }
-  .gate-card .gate-subtitle { font-size: 13px; margin-bottom: 20px; }
+  #gate-overlay.visible .gate-card {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  .gate-card h2 { font-size: 28px; }
+  .gate-card .gate-subtitle { font-size: 14px; margin-bottom: 22px; }
+  .gate-field input { height: 52px; font-size: 16px; }
+  .gate-btn { height: 52px; font-size: 14px; }
 }
 
 /* ── < 480px small mobile ── */
 @media (max-width: 480px) {
-  #gate-overlay {
-    background-position: 28% center;
-    padding: 20px 16px;
-  }
-  .gate-backdrop { background: rgba(5, 10, 28, 0.80); }
   .gate-card {
-    max-width: 100%;
-    border-radius: 18px;
-    padding: 26px 20px 22px;
+    width: 100vw;
+    height: auto;
+    min-height: 70vh;
+    border-radius: 28px;
+    left: 0;
+    top: 26%;
+    transform: translateY(36px) scale(0.95);
+    padding: 36px 28px 32px;
   }
-  .gate-card h2 { font-size: 24px; }
-  /* 16px prevents iOS auto-zoom on input focus */
+  #gate-overlay.visible .gate-card {
+    transform: translateY(0) scale(1);
+  }
+  .gate-card h2 { font-size: 26px; }
   .gate-field input { height: 48px; font-size: 16px; }
   .gate-btn { height: 48px; }
 }
