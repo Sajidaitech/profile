@@ -1007,70 +1007,189 @@ body::after {
   .gate-card { width: 430px; border-radius: 16px; padding: 30px 32px 26px; }
 }
 
-/* ── < 768px mobile — use mobile_gate_card.png ── */
+/* ── < 768px mobile — dark navy design ── */
 @media (max-width: 767px) {
   #gate-overlay {
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: flex-end;
+    align-items: stretch;
     padding: 0;
-    background-image: url('mobile_gate_card.png') !important;
-    background-size: cover !important;
-    background-position: center center !important;
-    background-color: #07111f !important;
+    background-image: none !important;
+    background: #080e20 !important;
+    background-color: #080e20 !important;
   }
+
+  /* Subtle top ambient glow */
+  #gate-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 55%;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(80, 60, 180, 0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(40, 80, 200, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Thin gradient separator line at top of card */
+  #gate-overlay::after {
+    content: '';
+    position: absolute;
+    top: 42%;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(100, 120, 255, 0.35) 20%,
+      rgba(160, 140, 255, 0.50) 50%,
+      rgba(100, 120, 255, 0.35) 80%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .gate-backdrop {
     background: transparent;
   }
+
   .gate-card {
-    /* Fit exactly inside the glass rect drawn in mobile_gate_card.png     */
-    /* Image 864px wide → scale ~0.451 on 390px screen                    */
-    /* Glass rect in image: x≈75, y≈510, w≈545, h≈590                     */
-    /* On screen: left≈34px, top≈236px, w≈246px → but you specified 540px */
-    /* Using your measurements: 540w × 845h with 30px radius              */
-    position: absolute;
-    width: 540px;
-    height: 845px;
-    border-radius: 30px;
-    /* Center the card horizontally and place it at ~28% from top */
-    left: 50%;
-    top: 28%;
-    transform: translateX(-50%) translateY(36px) scale(0.95);
-    padding: 40px 36px 36px;
-    background: transparent;
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: auto;
+    min-height: 58vh;
+    border-radius: 0;
+    left: auto;
+    top: auto;
+    transform: translateY(36px) scale(0.98);
+    padding: 36px 28px 48px;
+    background: rgba(10, 14, 38, 0.72);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
     border: none;
-    box-shadow: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 -24px 60px rgba(0, 0, 0, 0.40),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
     overflow: visible;
+    margin-top: auto;
   }
+
   #gate-overlay.visible .gate-card {
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translateY(0) scale(1);
   }
-  .gate-card h2 { font-size: 28px; }
-  .gate-card .gate-subtitle { font-size: 14px; margin-bottom: 22px; }
-  .gate-field input { height: 52px; font-size: 16px; }
-  .gate-btn { height: 52px; font-size: 14px; }
+
+  /* Logo — small spaced caps */
+  .gate-logo {
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.30em !important;
+    color: rgba(255,255,255,0.55) !important;
+    margin-bottom: 3px !important;
+  }
+
+  /* Blue underline */
+  .gate-logo-line {
+    width: 28px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, #5b6ef5, #9b8ff7) !important;
+    margin-bottom: 26px !important;
+    border-radius: 2px !important;
+  }
+
+  /* "Hey, Visitor." — Playfair, purple accent */
+  .gate-card h2 {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-size: 30px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.10 !important;
+    margin-bottom: 12px !important;
+  }
+  .gate-card h2 span {
+    color: #7c6ef0 !important;
+  }
+
+  /* Subtitle */
+  .gate-card .gate-subtitle {
+    font-size: 14px !important;
+    color: rgba(255,255,255,0.52) !important;
+    line-height: 1.60 !important;
+    margin-bottom: 28px !important;
+    max-width: 100% !important;
+  }
+
+  /* Label */
+  .gate-field label {
+    font-size: 10px !important;
+    letter-spacing: 0.12em !important;
+    color: rgba(255,255,255,0.45) !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Input — rounded pill, light fill */
+  .gate-field input {
+    height: 54px !important;
+    font-size: 15px !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    padding: 0 20px !important;
+    transition: border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease !important;
+  }
+  .gate-field input::placeholder {
+    color: rgba(255,255,255,0.28) !important;
+  }
+  .gate-field input:focus {
+    background: rgba(255,255,255,0.12) !important;
+    border-color: rgba(120,100,255,0.55) !important;
+    box-shadow: 0 0 0 3px rgba(120,100,255,0.12) !important;
+  }
+
+  /* Continue button — muted dark pill */
+  .gate-btn {
+    height: 54px !important;
+    font-size: 13px !important;
+    border-radius: 14px !important;
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    color: rgba(255,255,255,0.70) !important;
+    letter-spacing: 0.12em !important;
+    box-shadow: none !important;
+    transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease !important;
+    margin-bottom: 12px !important;
+  }
+  .gate-btn:hover {
+    background: rgba(255,255,255,0.16) !important;
+    border-color: rgba(255,255,255,0.24) !important;
+    color: rgba(255,255,255,0.90) !important;
+    transform: none !important;
+  }
+
+  /* Close button — keep in top-right of card */
+  .gate-close {
+    top: 20px !important;
+    right: 20px !important;
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    color: rgba(255,255,255,0.55) !important;
+  }
 }
 
 /* ── < 480px small mobile ── */
 @media (max-width: 480px) {
   .gate-card {
-    width: 100vw;
-    height: auto;
-    min-height: 70vh;
-    border-radius: 28px;
-    left: 0;
-    top: 26%;
-    transform: translateY(36px) scale(0.95);
-    padding: 36px 28px 32px;
+    padding: 32px 22px 44px !important;
+    min-height: 55vh !important;
   }
-  #gate-overlay.visible .gate-card {
-    transform: translateY(0) scale(1);
-  }
-  .gate-card h2 { font-size: 26px; }
-  .gate-field input { height: 48px; font-size: 16px; }
-  .gate-btn { height: 48px; }
+  .gate-card h2 { font-size: 27px !important; }
+  .gate-field input { height: 50px !important; font-size: 15px !important; }
+  .gate-btn { height: 50px !important; }
 }
 
 /* ── Prevent horizontal scroll ── */
