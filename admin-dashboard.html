@@ -2931,13 +2931,10 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   <div class="auth-card">
     <div class="auth-logo">📊</div>
     <div class="auth-title">Analytics Dashboard</div>
-    <div class="auth-sub">sajidmk.com · Enter admin credentials to continue</div>
-    <p style="font-size:12px;color:var(--ink-3);margin:0 0 6px;text-align:left;">Admin Email</p>
-    <input class="auth-input" type="email" id="auth-email"
-           placeholder="admin@example.com" autocomplete="username" style="margin-bottom:10px;">
+    <div class="auth-sub">sajidmk.com · Enter admin password to continue</div>
     <p style="font-size:12px;color:var(--ink-3);margin:0 0 6px;text-align:left;">Password</p>
     <input class="auth-input" type="password" id="auth-input"
-           placeholder="Password" autocomplete="current-password">
+           placeholder="Enter password" autocomplete="current-password">
     <button class="auth-btn" id="auth-btn">Access Dashboard</button>
     <div class="auth-error" id="auth-error" style="display:none;"></div>
   </div>
@@ -3149,6 +3146,10 @@ document.getElementById('theme-btn').addEventListener('click', () => {
 // ============================================================
 // AUTH
 // ============================================================
+// AUTH — Simple password
+// ============================================================
+const ADMIN_PASSWORD = 'Sajid@2026';   // ← Change this to your own password
+
 const authInput = document.getElementById('auth-input');
 const authBtn   = document.getElementById('auth-btn');
 const authError = document.getElementById('auth-error');
@@ -3156,100 +3157,46 @@ const authError = document.getElementById('auth-error');
 function showDashboard() {
   document.getElementById('auth-overlay').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+  sessionStorage.setItem('admin-auth', '1');
   initDashboard();
 }
 
-// ── Supabase Auth client for the analytics project ──────────
-// Separate from revDb (reviews project) — same anon key, different URL.
-const _authClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    persistSession:   true,
-    autoRefreshToken: true,
-    storageKey:       'analytics-admin-session'
-  }
-});
+// Auto-unlock if already authenticated this session
+if (sessionStorage.getItem('admin-auth') === '1') {
+  showDashboard();
+}
 
-// Email field is now hardcoded in HTML — no dynamic injection needed.
-
-// ── Check for existing session on page load ────────────────
-_authClient.auth.getSession().then(({ data }) => {
-  if (data && data.session) {
-    showDashboard();
-  }
-});
-
-// ── Listen for auth state changes (e.g. token refresh) ─────
-_authClient.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_OUT') {
-    document.getElementById('dashboard').style.display    = 'none';
-    document.getElementById('auth-overlay').style.display = 'flex';
-  }
-});
-
-// ── Sign in with Supabase Auth ─────────────────────────────
-async function tryAuth() {
-  const emailEl = document.getElementById('auth-email');
-  const email   = (emailEl ? emailEl.value : '').trim();
+// Password check
+function tryAuth() {
   const password = authInput.value;
-
-  if (!email) {
-    authError.textContent = 'Please enter your admin email.';
-    authError.style.display = 'block';
-    if (emailEl) emailEl.focus();
-    return;
-  }
   if (!password) {
-    authError.textContent = 'Please enter your password.';
+    authError.textContent = 'Please enter the password.';
     authError.style.display = 'block';
     authInput.focus();
     return;
   }
-
-  authBtn.disabled = true;
-  authBtn.textContent = 'Signing in…';
-  authError.style.display = 'none';
-
-  const { error } = await _authClient.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    const msg = error.message || '';
-    if (msg.toLowerCase().includes('not confirmed') || msg.toLowerCase().includes('email not confirmed')) {
-      authError.textContent = 'Email not confirmed — click the confirmation link Supabase sent to your inbox.';
-    } else if (msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('credentials') || msg.toLowerCase().includes('password')) {
-      authError.textContent = 'Wrong email or password. Make sure this user exists in Supabase Auth 2192 Users.';
-    } else {
-      authError.textContent = 'Auth error: ' + msg;
-    }
-    console.error('[Auth] Supabase error:', error);
+  if (password === ADMIN_PASSWORD) {
+    showDashboard();
+  } else {
+    authError.textContent = 'Incorrect password. Try again.';
     authError.style.display = 'block';
     authInput.value = '';
     authInput.focus();
-    authBtn.disabled = false;
-    authBtn.textContent = 'Access Dashboard';
-    return;
   }
-
-  // Success — Supabase sets the session; showDashboard uses it.
-  authBtn.disabled = false;
-  authBtn.textContent = 'Access Dashboard';
-  showDashboard();
 }
 
 authBtn.addEventListener('click', tryAuth);
 authInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); });
-const emailField = document.getElementById('auth-email');
-if (emailField) emailField.addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); });
 
-// ── Gate / sign out button ─────────────────────────────────
-document.getElementById('gate-btn').addEventListener('click', async () => {
-  await _authClient.auth.signOut();
+// Sign out button
+document.getElementById('gate-btn').addEventListener('click', () => {
+  sessionStorage.removeItem('admin-auth');
   document.getElementById('dashboard').style.display    = 'none';
   document.getElementById('auth-overlay').style.display = 'flex';
-  const ef = document.getElementById('auth-email');
-  if (ef) ef.value = '';
   authInput.value = '';
   authError.style.display = 'none';
 });
+
 
 // ============================================================
 // DASHBOARD

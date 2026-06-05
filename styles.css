@@ -584,7 +584,7 @@ body::after {
   font-size: clamp(22px, 3vw, 36px);
   font-weight: 700; color: var(--ink); line-height: 1.1; margin-bottom: 6px;
   background: linear-gradient(135deg, #1A1D24 0%, #3A3D50 60%, #5A5070 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: #ffffff;
   background-clip: text;
 }
 .sec-rule {

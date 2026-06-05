@@ -2527,7 +2527,7 @@
       <!-- ── /FOOTER ACTIONS AREA ──────────────────────────────── -->
 
       <!-- Hidden admin button — discreet chart icon, only you know it is here -->
-      <a href="admin-dashboard.html" class="footer-admin-btn" title="Admin Analytics" aria-label="Admin dashboard" target="_blank" rel="noopener noreferrer">
+      <a href="#" onclick="openAdminDashboard();return false;" class="footer-admin-btn" title="Admin Analytics" aria-label="Admin dashboard">
         <i class="fas fa-chart-line"></i>
       </a>
     </div>
@@ -2642,5 +2642,24 @@
   ════════════════════════════════════════════════════════════ -->
   <script src="review-submit.js" defer></script>
 
+
+  <!-- ── Admin Dashboard Modal ──────────────────────────────── -->
+  <div id="admin-modal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(10,12,20,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);">
+    <button onclick="closeAdminDashboard()" style="position:absolute;top:16px;right:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer;z-index:10;line-height:1;" title="Close">✕</button>
+    <iframe id="admin-iframe" src="admin-dashboard.html" style="width:100%;height:100%;border:none;" allow="same-origin"></iframe>
+  </div>
+  <script>
+    function openAdminDashboard() {
+      document.getElementById('admin-modal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeAdminDashboard() {
+      document.getElementById('admin-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeAdminDashboard();
+    });
+  </script>
+
 </body>
-</html>
