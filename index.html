@@ -145,7 +145,7 @@
         <div class="gate-fields">
           <div class="gate-field">
             <label>Your Name</label>
-            <input type="text" id="visitorName" placeholder="Enter Your Full Name" autocomplete="given-name" maxlength="48">
+            <input type="text" id="visitorName" placeholder="e.g. Alex Johnson" autocomplete="given-name" maxlength="48">
           </div>
         </div>
 
@@ -2620,18 +2620,42 @@
     return _reviewClient;
   }
 
-  /* ── Star rating interaction ── */
+  /* ── Star rating interaction — fully rebuilt ── */
   (function(){
     let _rating = 0;
-    const stars = document.querySelectorAll('.review-star');
-    stars.forEach(s => {
-      s.addEventListener('mouseover', () => highlightStars(+s.dataset.val));
-      s.addEventListener('mouseleave', () => highlightStars(_rating));
-      s.addEventListener('click', () => { _rating = +s.dataset.val; highlightStars(_rating); });
-    });
-    function highlightStars(n){
-      stars.forEach(s => s.classList.toggle('active', +s.dataset.val <= n));
+
+    function highlightStars(n) {
+      document.querySelectorAll('.review-star').forEach(s => {
+        if (+s.dataset.val <= n) { s.classList.add('active'); }
+        else { s.classList.remove('active'); }
+      });
     }
+
+    function selectRating(val) {
+      _rating = val;
+      highlightStars(_rating);
+    }
+
+    function initStars() {
+      const stars = document.querySelectorAll('.review-star');
+      if (!stars.length) return;
+
+      stars.forEach(s => {
+        s.setAttribute('tabindex', '0');
+        s.setAttribute('role', 'button');
+        s.setAttribute('aria-label', 'Rate ' + s.dataset.val + ' stars');
+
+        s.addEventListener('mouseover', () => highlightStars(+s.dataset.val));
+        s.addEventListener('mouseleave', () => highlightStars(_rating));
+        s.addEventListener('click', (e) => { e.preventDefault(); selectRating(+s.dataset.val); });
+        s.addEventListener('touchend', (e) => { e.preventDefault(); selectRating(+s.dataset.val); }, { passive: false });
+        s.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectRating(+s.dataset.val); }
+        });
+      });
+    }
+
+    initStars();
     window._getReviewRating = () => _rating;
 
     /* char counter */
