@@ -2924,7 +2924,7 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
 }
 
 /* ================================================================
-   QR LOGIN — Auth method toggle + QR panel
+   QR SESSION LOGIN — Premium Liquid Glass Auth System
 ================================================================ */
 
 /* ── Method toggle tabs ── */
@@ -2960,10 +2960,7 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   transition: all .20s var(--ease-out);
   white-space: nowrap;
 }
-.auth-method-tab:hover {
-  color: var(--ink-2);
-  background: rgba(255,255,255,.08);
-}
+.auth-method-tab:hover { color: var(--ink-2); background: rgba(255,255,255,.08); }
 .auth-method-tab.active {
   background: linear-gradient(160deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.11) 100%);
   color: var(--ink);
@@ -2981,73 +2978,115 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
 .auth-tab-icon { font-size: 14px; }
 
 /* ── Auth panels ── */
-#qr-panel { display: none; flex-direction: column; gap: 14px; }
+#qr-panel    { display: none; flex-direction: column; gap: 16px; }
 #password-panel { display: flex; flex-direction: column; gap: 14px; }
 
-/* ── QR canvas wrapper — the glass frame around the QR ── */
+/* ================================================================
+   QR GLASS FRAME — Premium liquid glass container
+================================================================ */
 .qr-frame {
   position: relative;
   align-self: center;
-  width: 196px;
-  height: 196px;
-  border-radius: 20px;
-  padding: 12px;
+  width: 200px;
+  height: 200px;
+  border-radius: 24px;
+  padding: 14px;
   background:
     linear-gradient(145deg,
-      rgba(255,255,255,.16) 0%,
-      rgba(255,255,255,.09) 50%,
-      rgba(80,120,255,.08) 100%);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+      rgba(255,255,255,.20) 0%,
+      rgba(255,255,255,.10) 52%,
+      rgba(80,120,255,.10) 100%);
+  backdrop-filter: blur(32px) saturate(200%) brightness(1.12);
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.12);
   border-top:    1.5px solid rgba(255,255,255,.36);
   border-left:   1px   solid rgba(255,255,255,.20);
-  border-right:  1px   solid rgba(255,255,255,.08);
-  border-bottom: 1px   solid rgba(0,0,0,.30);
+  border-right:  1px   solid rgba(255,255,255,.10);
+  border-bottom: 1px   solid rgba(0,0,0,.28);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.32),
-    inset 1.5px 0 0 rgba(255,255,255,.16),
-    inset -1px 0 0  rgba(255,255,255,.07),
+    inset 0 2px 0   rgba(255,255,255,.36),
+    inset 2px 0 0   rgba(255,255,255,.18),
+    inset -1px 0 0  rgba(255,255,255,.08),
     inset 0 -1px 0  rgba(0,0,0,.22),
-    0 0 0 1px rgba(0,0,0,.42),
-    0 4px 16px rgba(0,0,0,.36),
-    0 16px 44px rgba(0,0,0,.28),
-    0 0 40px rgba(80,120,255,.06);
-  overflow: hidden;
-  transition: box-shadow .3s ease, transform .3s var(--ease-spring);
+    inset 0 4px 28px rgba(255,255,255,.08),
+    0 0 0 1px rgba(0,0,0,.44),
+    0 8px 32px rgba(0,0,0,.40),
+    0 24px 64px rgba(0,0,0,.28),
+    0 0 80px rgba(80,120,255,.06);
+  transition: box-shadow .30s ease, border-color .30s ease;
 }
+/* Inner shimmer sweep */
 .qr-frame::before {
   content: '';
   position: absolute;
   inset: 0;
+  border-radius: 23px;
   background: linear-gradient(
-    136deg,
+    140deg,
     rgba(255,255,255,.22) 0%,
-    rgba(255,255,255,.08) 24%,
-    transparent 46%
+    rgba(255,255,255,.06) 28%,
+    transparent 52%
   );
   pointer-events: none;
-  border-radius: inherit;
 }
-.qr-frame.qr-success {
-  border-top-color: rgba(52,199,89,.50);
-  border-left-color: rgba(52,199,89,.28);
-  box-shadow:
-    inset 0 1.5px 0 rgba(52,199,89,.40),
-    0 0 0 1px rgba(0,0,0,.42),
-    0 4px 20px rgba(0,0,0,.36),
-    0 0 40px rgba(52,199,89,.20);
-}
-.qr-frame.qr-expired {
-  border-top-color: rgba(255,59,48,.36);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,59,48,.28),
-    0 0 0 1px rgba(0,0,0,.42),
-    0 4px 16px rgba(0,0,0,.28);
-  opacity: .55;
+/* Corner accent dots */
+.qr-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 23px;
+  background:
+    radial-gradient(3px 3px at 14px 14px,  rgba(255,255,255,.45) 50%, transparent 50%),
+    radial-gradient(3px 3px at calc(100% - 14px) 14px, rgba(255,255,255,.45) 50%, transparent 50%),
+    radial-gradient(3px 3px at 14px calc(100% - 14px), rgba(255,255,255,.30) 50%, transparent 50%),
+    radial-gradient(3px 3px at calc(100% - 14px) calc(100% - 14px), rgba(255,255,255,.30) 50%, transparent 50%);
+  pointer-events: none;
 }
 
-/* ── Inner canvas container ── */
+[data-theme="light"] .qr-frame {
+  background: rgba(255,255,255,.82);
+  border-top-color: rgba(255,255,255,.95);
+  border-color: rgba(0,0,0,.10);
+  box-shadow: 0 4px 24px rgba(0,0,0,.14), 0 12px 48px rgba(0,0,0,.10);
+}
+
+/* State: success */
+.qr-frame.qr-success {
+  border-top-color: rgba(52,199,89,.60);
+  box-shadow:
+    inset 0 2px 0 rgba(52,199,89,.40),
+    0 0 0 1px rgba(0,0,0,.44),
+    0 8px 32px rgba(0,0,0,.36),
+    0 0 60px rgba(52,199,89,.14);
+}
+/* State: expired */
+.qr-frame.qr-expired {
+  border-top-color: rgba(239,68,68,.40);
+  opacity: .70;
+  box-shadow:
+    inset 0 2px 0 rgba(239,68,68,.28),
+    0 0 0 1px rgba(0,0,0,.44),
+    0 4px 16px rgba(0,0,0,.26);
+}
+/* State: approved (pending transition) */
+.qr-frame.qr-approved {
+  border-top-color: rgba(52,199,89,.60);
+  box-shadow:
+    inset 0 2px 0 rgba(52,199,89,.40),
+    0 0 0 1px rgba(0,0,0,.44),
+    0 8px 40px rgba(52,199,89,.20);
+}
+/* State: rejected */
+.qr-frame.qr-rejected {
+  border-top-color: rgba(239,68,68,.50);
+  box-shadow:
+    inset 0 2px 0 rgba(239,68,68,.32),
+    0 0 0 1px rgba(0,0,0,.44),
+    0 4px 20px rgba(239,68,68,.14);
+}
+
+/* ── QR Canvas wrap inside the frame ── */
 #qr-canvas-wrap {
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 12px;
@@ -3055,386 +3094,174 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,.04);
-  position: relative;
 }
-/* The QRCode lib generates a canvas or img — both need to fill the wrap */
-#qr-canvas-wrap canvas,
-#qr-canvas-wrap img {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-  image-rendering: pixelated;
+#qr-canvas-wrap img,
+#qr-canvas-wrap canvas {
   border-radius: 8px;
-  /* invert+hue trick: white bg → transparent, black modules → stay */
-  filter: invert(0);
-}
-/* Dark mode: QR is white bg + black modules. We want it to feel glass:
-   make bg near-transparent dark and modules light */
-[data-theme="dark"] #qr-canvas-wrap canvas,
-[data-theme="dark"] #qr-canvas-wrap img {
-  filter: invert(1) hue-rotate(180deg);
-  opacity: .88;
+  display: block;
 }
 
-/* ── Expired / loading overlay ── */
+/* ── Overlay (generating / expired / success) ── */
 .qr-overlay {
-  display: none;
   position: absolute;
   inset: 0;
   border-radius: 12px;
   background: rgba(14,17,28,.72);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   font-size: 13px;
   font-weight: 600;
   color: var(--ink-2);
-  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s ease;
   z-index: 2;
 }
-.qr-overlay.visible { display: flex; }
-.qr-overlay-icon { font-size: 28px; }
+.qr-overlay.visible { opacity: 1; pointer-events: auto; }
+.qr-overlay-icon { font-size: 32px; line-height: 1; }
 
-/* ── Status row: timer + state text ── */
+/* ── Status + timer row ── */
 .qr-status-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 .qr-status-text {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--ink-3);
-  font-weight: 500;
-  flex: 1;
+  transition: color .22s;
 }
-.qr-status-text.qr-waiting { color: #6ab0ff; }
-.qr-status-text.qr-success-text { color: #34c759; font-weight: 700; }
+.qr-status-text.qr-waiting  { color: var(--ink-3); }
+.qr-status-text.qr-success-text { color: #34c759; }
 .qr-status-text.qr-expired-text { color: #ff6b6b; }
+.qr-status-text.qr-rejected-text { color: #ff6b6b; }
 
+/* ── Timer pill ── */
 .qr-timer-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  font-family: var(--ff-mono);
-  background: rgba(80,130,255,.12);
-  border: 1px solid rgba(80,130,255,.24);
-  color: #6ab0ff;
-  transition: background .3s, border-color .3s, color .3s;
-  white-space: nowrap;
+  font-family: var(--ff-mono, 'DM Mono', monospace);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: var(--ink-2);
+  letter-spacing: .04em;
+  transition: background .3s, color .3s, border-color .3s;
+  min-width: 44px;
+  text-align: center;
 }
 .qr-timer-pill.urgent {
-  background: rgba(245,158,11,.14);
-  border-color: rgba(245,158,11,.30);
-  color: #f59e0b;
+  background: rgba(255,140,0,.14);
+  border-color: rgba(255,140,0,.30);
+  color: #ffaa3c;
   animation: timerPulse .9s ease-in-out infinite;
 }
 .qr-timer-pill.expired {
-  background: rgba(255,59,48,.12);
-  border-color: rgba(255,59,48,.24);
+  background: rgba(239,68,68,.12);
+  border-color: rgba(239,68,68,.28);
   color: #ff6b6b;
-  animation: none;
 }
 @keyframes timerPulse {
   0%,100% { opacity: 1; }
-  50%      { opacity: .6; }
+  50%      { opacity: .65; }
 }
 
-/* ── Scan hint ── */
-.qr-hint {
+/* ── Session ID micro-tag ── */
+.qr-session-tag {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.10);
-  border-top-color: rgba(255,255,255,.18);
-  border-radius: 11px;
-  font-size: 12px;
-  color: var(--ink-3);
-  line-height: 1.45;
-}
-.qr-hint-icon { font-size: 16px; flex-shrink: 0; }
-[data-theme="light"] .qr-hint {
-  background: rgba(0,0,0,.04);
-  border-color: rgba(0,0,0,.09);
-}
-
-/* ── Refresh button ── */
-.qr-refresh-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   gap: 6px;
-  padding: 11px 18px;
-  background: rgba(255,255,255,.09);
-  border: 1px solid rgba(255,255,255,.18);
-  border-top-color: rgba(255,255,255,.28);
-  border-radius: 12px;
-  color: var(--ink-2);
-  font-size: 13px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background .18s, transform .18s, box-shadow .18s;
-  width: 100%;
-}
-.qr-refresh-btn:hover {
-  background: rgba(255,255,255,.16);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0,0,0,.22);
-}
-[data-theme="light"] .qr-refresh-btn {
-  background: rgba(0,0,0,.05);
-  border-color: rgba(0,0,0,.10);
-  border-top-color: rgba(255,255,255,.80);
-  color: var(--ink-2);
-}
-
-/* ================================================================
-   OWNER DEVICE REGISTRATION STYLES
-================================================================ */
-
-/* ── Hero (empty state) ── */
-.od-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 52px 24px 44px;
-  gap: 14px;
-  text-align: center;
-}
-.od-hero-icon {
-  font-size: 52px;
-  line-height: 1;
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,.40));
-}
-.od-hero-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -.01em;
-}
-.od-hero-sub {
-  font-size: 13.5px;
-  color: var(--ink-3);
-  max-width: 380px;
-  line-height: 1.6;
-}
-[data-theme="light"] .od-hero-sub { color: #5a6070; }
-
-/* ── Register button ── */
-.od-register-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 14px 28px;
-  margin-top: 6px;
-  background: linear-gradient(158deg, #1a5cff 0%, #003ab8 100%);
-  border: none;
-  border-top:    1.5px solid rgba(255,255,255,.28);
-  border-left:   1px   solid rgba(255,255,255,.16);
-  border-bottom: 1px   solid rgba(0,0,0,.32);
-  border-radius: 14px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: inherit;
-  cursor: pointer;
-  transition: opacity .2s, transform .2s, box-shadow .2s;
-  box-shadow:
-    0 4px 20px rgba(10,68,255,.44),
-    0 1px 0 rgba(255,255,255,.18) inset;
-}
-.od-register-btn:hover:not(:disabled) {
-  opacity: .92;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 28px rgba(10,68,255,.58);
-}
-.od-register-btn:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-  transform: none;
-}
-.od-btn-icon { font-size: 18px; }
-
-/* ── Security note ── */
-.od-security-note {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  background: rgba(80,130,255,.08);
-  border: 1px solid rgba(80,130,255,.18);
+  font-size: 10.5px;
+  font-family: var(--ff-mono, 'DM Mono', monospace);
+  color: var(--ink-4);
+  padding: 4px 10px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
   border-radius: 999px;
-  font-size: 12px;
-  color: var(--ink-3);
-  margin-top: 4px;
+  align-self: center;
+  letter-spacing: .02em;
+  user-select: none;
 }
-
-/* ── Registered device card ── */
-.od-card {
-  border-radius: 20px;
-  padding: 28px 28px 24px;
-  margin: 8px 0 4px;
-  background:
-    linear-gradient(160deg,
-      rgba(255,255,255,.13) 0%,
-      rgba(255,255,255,.07) 55%,
-      rgba(40,90,200,.07)  100%);
-  backdrop-filter: blur(36px) saturate(200%);
-  -webkit-backdrop-filter: blur(36px) saturate(200%);
-  border-top:    1.5px solid rgba(255,255,255,.28);
-  border-left:   1px   solid rgba(255,255,255,.16);
-  border-right:  1px   solid rgba(255,255,255,.07);
-  border-bottom: 1px   solid rgba(0,0,0,.22);
-  box-shadow: var(--sh-v7-sm);
-  position: relative;
-  overflow: hidden;
-}
-.od-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    140deg,
-    rgba(255,255,255,.18) 0%,
-    rgba(255,255,255,.05) 30%,
-    transparent 52%
-  );
-  pointer-events: none;
-}
-[data-theme="light"] .od-card {
-  background: rgba(255,255,255,.72);
-  border-top-color: rgba(255,255,255,.90);
-  border-left-color: rgba(0,0,0,.06);
-  border-right-color: rgba(0,0,0,.04);
-  border-bottom-color: rgba(0,0,0,.10);
-  box-shadow: 0 2px 12px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06);
-}
-
-.od-card-trusted {
-  border-top-color: rgba(80,200,120,.36);
-  box-shadow: var(--sh-v7-sm), 0 0 0 1px rgba(80,200,120,.10);
-}
-
-.od-card-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-}
-.od-card-icon-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+.qr-session-tag .qr-sid-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.22);
   flex-shrink: 0;
 }
-.od-card-icon {
-  font-size: 48px;
-  line-height: 1;
-  filter: drop-shadow(0 3px 10px rgba(0,0,0,.40));
+.qr-session-tag.sid-active   .qr-sid-dot { background: #4ddb88; box-shadow: 0 0 6px rgba(77,219,136,.50); animation: sidPulse 1.6s ease-in-out infinite; }
+.qr-session-tag.sid-expired  .qr-sid-dot { background: #ff6b6b; }
+.qr-session-tag.sid-approved .qr-sid-dot { background: #34c759; }
+.qr-session-tag.sid-rejected .qr-sid-dot { background: #ff6b6b; }
+@keyframes sidPulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%     { opacity: .55; transform: scale(.80); }
 }
-.od-trusted-badge {
+[data-theme="light"] .qr-session-tag { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.10); color: #8a95aa; }
+
+/* ── State pills strip ── */
+.qr-state-strip {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.qr-state-pip {
   display: inline-flex;
   align-items: center;
-  padding: 3px 10px;
-  background: rgba(60,200,100,.14);
-  border: 1px solid rgba(60,200,100,.28);
+  gap: 4px;
+  padding: 3px 9px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  color: #4ddb88;
-  white-space: nowrap;
-}
-[data-theme="light"] .od-trusted-badge { color: #1a8f4a; background: rgba(30,160,80,.10); border-color: rgba(30,160,80,.22); }
-
-.od-card-meta {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-}
-.od-card-name {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: -.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.od-card-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.od-detail-label {
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--ink-4);
+  letter-spacing: .04em;
   text-transform: uppercase;
-  letter-spacing: .08em;
+  border: 1px solid transparent;
+  opacity: .36;
+  transition: opacity .22s, background .22s;
 }
-[data-theme="light"] .od-detail-label { color: #8a95aa; }
-.od-detail-value {
-  font-size: 12.5px;
-  color: var(--ink-2);
-}
-.od-mono {
-  font-family: var(--ff-mono, 'DM Mono', monospace);
-  font-size: 11.5px;
-  word-break: break-all;
-  color: var(--ink-3);
-}
+.qr-state-pip.active { opacity: 1; }
+.qr-state-pip.pending  { background: rgba(255,200,50,.10);  border-color: rgba(255,200,50,.24);  color: #ffc832; }
+.qr-state-pip.approved { background: rgba(52,199,89,.10);   border-color: rgba(52,199,89,.24);   color: #34c759; }
+.qr-state-pip.rejected { background: rgba(239,68,68,.10);   border-color: rgba(239,68,68,.24);   color: #ef4444; }
+.qr-state-pip.expired  { background: rgba(160,160,160,.08); border-color: rgba(160,160,160,.18); color: #9ca3af; }
 
-/* ── Success banner ── */
-.od-success-banner {
+/* ── Hint text ── */
+.qr-hint {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 18px;
-  padding: 12px 16px;
-  background: rgba(40,200,100,.10);
-  border: 1px solid rgba(40,200,100,.22);
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ink-4);
+  line-height: 1.55;
+  padding: 10px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07);
   border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #4ddb88;
-  animation: odSuccessFade .5s ease forwards;
 }
-@keyframes odSuccessFade {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0);   }
-}
-[data-theme="light"] .od-success-banner { color: #1a8f4a; background: rgba(30,160,80,.08); border-color: rgba(30,160,80,.18); }
+.qr-hint-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+[data-theme="light"] .qr-hint { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.07); color: #8a95aa; }
 
-/* ── Replace button ── */
-.od-card-actions {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-}
-.od-replace-btn {
+/* ── Refresh / New code button ── */
+.qr-refresh-btn {
+  align-self: center;
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 9px 18px;
-  background: rgba(255,100,80,.08);
-  border: 1px solid rgba(255,100,80,.20);
-  border-top-color: rgba(255,100,80,.28);
-  border-radius: 11px;
-  color: #ff8070;
+  padding: 9px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-top-color: rgba(255,255,255,.30);
+  background: rgba(255,255,255,.08);
+  color: var(--ink-2);
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;
@@ -3443,54 +3270,15 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
-.od-replace-btn:hover {
-  background: rgba(255,100,80,.16);
-  color: #ffaa9a;
+.qr-refresh-btn:hover {
+  background: rgba(255,255,255,.14);
+  color: var(--ink);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(255,80,60,.18);
+  box-shadow: 0 4px 16px rgba(0,0,0,.24);
 }
-[data-theme="light"] .od-replace-btn { color: #cc3a28; background: rgba(200,40,20,.06); border-color: rgba(200,40,20,.16); }
+[data-theme="light"] .qr-refresh-btn { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.12); color: #334155; }
 
-/* ── Loading skeleton ── */
-.od-skeleton-wrap {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 32px 28px;
-}
-.od-skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,.06) 0%,
-    rgba(255,255,255,.12) 50%,
-    rgba(255,255,255,.06) 100%
-  );
-  background-size: 200% 100%;
-  animation: odShimmer 1.4s ease-in-out infinite;
-}
-[data-theme="light"] .od-skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(0,0,0,.05) 0%,
-    rgba(0,0,0,.09) 50%,
-    rgba(0,0,0,.05) 100%
-  );
-  background-size: 200% 100%;
-}
-@keyframes odShimmer {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
-}
-
-/* ── Replace modal backdrop ── */
-#od-replace-modal {
-  display: none;
-}
-#od-replace-modal.od-modal-open {
-  display: flex !important;
-}
-
-/* ── "Scan with iPhone" button on password panel ── */
+/* ── "Scan with iPhone" launch button in password panel ── */
 .qr-launch-btn {
   display: flex;
   align-items: center;
@@ -3556,23 +3344,19 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   background: rgba(255,255,255,.10);
 }
 [data-theme="light"] .auth-sep::before,
-[data-theme="light"] .auth-sep::after {
-  background: rgba(0,0,0,.09);
-}
+[data-theme="light"] .auth-sep::after { background: rgba(0,0,0,.09); }
 
-/* ── Waiting spinner ring (inside qr-overlay while generating) ── */
-@keyframes qrSpinRing {
-  to { transform: rotate(360deg); }
-}
+/* ── Waiting spinner ring ── */
+@keyframes qrSpinRing { to { transform: rotate(360deg); } }
 .qr-spin-ring {
-  width: 32px; height: 32px;
+  width: 30px; height: 30px;
   border-radius: 50%;
   border: 2.5px solid rgba(255,255,255,.12);
   border-top-color: #6ab0ff;
   animation: qrSpinRing .7s linear infinite;
 }
 
-/* ── Mobile approval page overlay (rendered inside same file) ── */
+/* ── Mobile approval page (shown on iPhone when URL has ?session=) ── */
 #qr-mobile-page {
   display: none;
   position: fixed;
@@ -3586,18 +3370,20 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
+
+/* Mobile approval card — premium glass */
 .qr-mobile-card {
   background:
     linear-gradient(160deg,
-      rgba(255,255,255,.16) 0%,
+      rgba(255,255,255,.18) 0%,
       rgba(255,255,255,.09) 55%,
-      rgba(60,90,200,.08) 100%);
-  backdrop-filter: blur(44px) saturate(220%);
-  -webkit-backdrop-filter: blur(44px) saturate(220%);
-  border-top:    1.5px solid rgba(255,255,255,.34);
-  border-left:   1px   solid rgba(255,255,255,.18);
-  border-right:  1px   solid rgba(255,255,255,.08);
-  border-bottom: 1px   solid rgba(0,0,0,.30);
+      rgba(60,90,200,.10) 100%);
+  backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+  -webkit-backdrop-filter: blur(48px) saturate(220%) brightness(1.12);
+  border-top:    1.5px solid rgba(255,255,255,.38);
+  border-left:   1px   solid rgba(255,255,255,.20);
+  border-right:  1px   solid rgba(255,255,255,.10);
+  border-bottom: 1px   solid rgba(0,0,0,.32);
   border-radius: 32px;
   padding: 48px 36px 40px;
   width: 90%;
@@ -3605,13 +3391,17 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.32),
-    0 0 0 1px rgba(0,0,0,.46),
-    0 20px 64px rgba(0,0,0,.60),
-    0 8px 24px rgba(0,0,0,.36),
-    0 0 60px rgba(80,120,255,.06);
+    inset 0 2px 0   rgba(255,255,255,.36),
+    inset 2px 0 0   rgba(255,255,255,.18),
+    inset -1px 0 0  rgba(255,255,255,.10),
+    inset 0 -1px 0  rgba(0,0,0,.26),
+    inset 0 4px 32px rgba(255,255,255,.08),
+    0 0 0 1px rgba(0,0,0,.48),
+    0 24px 72px rgba(0,0,0,.64),
+    0 8px 28px rgba(0,0,0,.40),
+    0 0 80px rgba(80,120,255,.08);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -3622,92 +3412,99 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   inset: 0;
   background: linear-gradient(
     140deg,
-    rgba(255,255,255,.20) 0%,
+    rgba(255,255,255,.22) 0%,
     rgba(255,255,255,.06) 28%,
     transparent 52%
   );
   pointer-events: none;
 }
-.qr-mobile-icon {
-  font-size: 52px;
-  line-height: 1;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,.40));
-}
-.qr-mobile-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.2;
-}
-.qr-mobile-sub {
-  font-size: 13.5px;
-  color: var(--ink-3);
-  line-height: 1.55;
-  max-width: 280px;
-}
+.qr-mobile-icon  { font-size: 54px; line-height: 1; filter: drop-shadow(0 4px 14px rgba(0,0,0,.42)); }
+.qr-mobile-title { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.qr-mobile-sub   { font-size: 13.5px; color: var(--ink-3); line-height: 1.55; max-width: 280px; }
 .qr-mobile-domain {
-  display: inline-flex;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px;
+  background: rgba(80,130,255,.12); border: 1px solid rgba(80,130,255,.24);
+  border-radius: 999px;
+  font-size: 12px; font-weight: 700; color: #6ab0ff;
+  font-family: var(--ff-mono, 'DM Mono', monospace);
+}
+
+/* Session info row on mobile */
+.qr-mobile-session-info {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 5px 14px;
-  background: rgba(80,130,255,.12);
-  border: 1px solid rgba(80,130,255,.24);
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #6ab0ff;
-  font-family: var(--ff-mono);
+  width: 100%;
 }
+.qr-mobile-expires {
+  font-size: 12px;
+  color: var(--ink-4);
+  font-family: var(--ff-mono, 'DM Mono', monospace);
+}
+.qr-mobile-expires.urgent { color: #ffaa3c; }
+.qr-mobile-expires.expired { color: #ff6b6b; }
+
+/* Approve button */
 .qr-mobile-approve-btn {
   width: 100%;
   padding: 15px 24px;
   background: linear-gradient(158deg, #1a5cff 0%, #003ab8 100%);
   border: none;
-  border-top:    1.5px solid rgba(255,255,255,.28);
-  border-left:   1px   solid rgba(255,255,255,.16);
+  border-top:    1.5px solid rgba(255,255,255,.30);
+  border-left:   1px   solid rgba(255,255,255,.18);
   border-bottom: 1px   solid rgba(0,0,0,.32);
   border-radius: 14px;
   color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: inherit;
+  font-size: 15px; font-weight: 700; font-family: inherit;
   cursor: pointer;
   transition: opacity .2s, transform .2s, box-shadow .2s;
   box-shadow:
-    0 4px 20px rgba(10,68,255,.50),
+    0 4px 20px rgba(10,68,255,.52),
     0 1px 0 rgba(255,255,255,.20) inset;
   margin-top: 4px;
 }
 .qr-mobile-approve-btn:hover:not(:disabled) {
-  opacity: .92;
+  opacity: .92; transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(10,68,255,.62);
+}
+.qr-mobile-approve-btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* Reject button */
+.qr-mobile-reject-btn {
+  width: 100%;
+  padding: 11px 24px;
+  background: rgba(239,68,68,.10);
+  border: 1px solid rgba(239,68,68,.22);
+  border-top-color: rgba(239,68,68,.32);
+  border-radius: 12px;
+  color: #ef4444;
+  font-size: 13px; font-weight: 600; font-family: inherit;
+  cursor: pointer;
+  transition: all .20s;
+  backdrop-filter: blur(12px);
+}
+.qr-mobile-reject-btn:hover:not(:disabled) {
+  background: rgba(239,68,68,.18);
   transform: translateY(-1px);
-  box-shadow: 0 8px 28px rgba(10,68,255,.60);
 }
-.qr-mobile-approve-btn:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-  transform: none;
-}
+.qr-mobile-reject-btn:disabled { opacity: .38; cursor: not-allowed; }
+
 .qr-mobile-state {
-  font-size: 13px;
-  color: var(--ink-3);
-  min-height: 20px;
-  font-weight: 500;
+  font-size: 13px; color: var(--ink-3);
+  min-height: 20px; font-weight: 500;
 }
 .qr-mobile-state.success { color: #34c759; font-weight: 700; }
 .qr-mobile-state.error   { color: #ff6b6b; font-weight: 600; }
 
-/* Security badge */
 .qr-security-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: flex; align-items: center; gap: 6px;
   padding: 6px 14px;
   background: rgba(52,199,89,.08);
   border: 1px solid rgba(52,199,89,.18);
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 11px; font-weight: 600;
   color: rgba(52,199,89,.80);
 }
 
@@ -3715,7 +3512,327 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   .auth-method-tab span:last-child { display: none; }
   .auth-card { padding: 32px 22px; }
   .qr-mobile-card { padding: 40px 24px 32px; }
+  .qr-frame { width: 182px; height: 182px; }
 }
+
+/* ================================================================
+   DEVICE BINDING — Unauthorized Device Screen
+   Replaces qr-mobile-card content when device check fails.
+================================================================ */
+
+/* Card override — red-tinted when unauthorized */
+.qr-mobile-card.device-blocked {
+  background:
+    linear-gradient(160deg,
+      rgba(239,68,68,.14) 0%,
+      rgba(20,16,22,.95) 55%,
+      rgba(180,20,20,.08) 100%) !important;
+  border-top-color:   rgba(239,68,68,.40) !important;
+  border-left-color:  rgba(239,68,68,.20) !important;
+  border-right-color: rgba(239,68,68,.12) !important;
+  border-bottom-color:rgba(120,0,0,.40) !important;
+  box-shadow:
+    inset 0 2px 0   rgba(239,68,68,.28),
+    inset 2px 0 0   rgba(239,68,68,.14),
+    inset -1px 0 0  rgba(239,68,68,.08),
+    inset 0 -1px 0  rgba(0,0,0,.36),
+    inset 0 4px 40px rgba(239,68,68,.06),
+    0 0 0 1px        rgba(0,0,0,.60),
+    0 24px 72px      rgba(0,0,0,.70),
+    0 8px 28px       rgba(0,0,0,.50),
+    0 0 80px         rgba(239,68,68,.10) !important;
+  animation: cardShake .44s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes cardShake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(3px);  }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px);  }
+}
+
+/* Scanning / verifying device overlay on the card */
+.device-verify-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 32px;
+  background: rgba(14,17,28,.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity .32s ease;
+}
+.device-verify-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.device-scan-ring {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 3px solid rgba(106,176,255,.16);
+  border-top-color: #6ab0ff;
+  animation: deviceScanSpin .8s linear infinite;
+  position: relative;
+}
+.device-scan-ring::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgba(106,176,255,.40);
+  animation: deviceScanSpin .5s linear infinite reverse;
+}
+@keyframes deviceScanSpin { to { transform: rotate(360deg); } }
+
+.device-verify-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6ab0ff;
+  letter-spacing: .04em;
+  font-family: var(--ff-mono,'DM Mono',monospace);
+}
+.device-verify-sublabel {
+  font-size: 11px;
+  color: var(--ink-4);
+  font-family: var(--ff-mono,'DM Mono',monospace);
+}
+
+/* The main "UNAUTHORIZED DEVICE" content block */
+.unauth-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  animation: unauthReveal .38s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes unauthReveal {
+  from { opacity: 0; transform: scale(.94) translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.unauth-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.unauth-icon {
+  font-size: 58px;
+  line-height: 1;
+  filter: drop-shadow(0 0 24px rgba(239,68,68,.55)) drop-shadow(0 4px 14px rgba(0,0,0,.55));
+  animation: unauthIconPulse 2.4s ease-in-out infinite;
+}
+@keyframes unauthIconPulse {
+  0%,100% { filter: drop-shadow(0 0 24px rgba(239,68,68,.55)) drop-shadow(0 4px 14px rgba(0,0,0,.55)); }
+  50%     { filter: drop-shadow(0 0 40px rgba(239,68,68,.80)) drop-shadow(0 4px 14px rgba(0,0,0,.55)); }
+}
+.unauth-ring {
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(239,68,68,.22);
+  animation: unauthRingPulse 2.4s ease-in-out infinite;
+}
+@keyframes unauthRingPulse {
+  0%,100% { transform: scale(1);    opacity: .60; }
+  50%     { transform: scale(1.12); opacity: .20; }
+}
+
+.unauth-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ff6b6b;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+}
+
+.unauth-domain-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: rgba(239,68,68,.12);
+  border: 1px solid rgba(239,68,68,.28);
+  border-top-color: rgba(239,68,68,.42);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff8080;
+  font-family: var(--ff-mono,'DM Mono',monospace);
+}
+
+.unauth-desc {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.65;
+  max-width: 270px;
+  text-align: center;
+}
+.unauth-desc strong { color: #ff9090; font-weight: 700; }
+
+/* Info rows panel */
+.unauth-info-panel {
+  width: 100%;
+  background: rgba(239,68,68,.05);
+  border: 1px solid rgba(239,68,68,.16);
+  border-top-color: rgba(239,68,68,.28);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.unauth-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+.unauth-info-row-icon {
+  font-size: 17px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  filter: grayscale(.3);
+}
+.unauth-info-row-body {}
+.unauth-info-row-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #ff8080;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.unauth-info-row-value {
+  font-size: 11px;
+  color: var(--ink-4);
+  line-height: 1.45;
+}
+.unauth-device-hash {
+  font-family: var(--ff-mono,'DM Mono',monospace);
+  font-size: 10px;
+  color: rgba(255,107,107,.50);
+  word-break: break-all;
+  margin-top: 2px;
+}
+
+/* Bottom security badge — blocked state */
+.unauth-blocked-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.18);
+  border-top-color: rgba(239,68,68,.30);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(239,68,68,.72);
+  letter-spacing: .03em;
+}
+/* pulsing dot on badge */
+.unauth-blocked-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+  animation: blockedDotPulse 1.8s ease-in-out infinite;
+}
+@keyframes blockedDotPulse {
+  0%,100% { opacity: 1;  transform: scale(1); }
+  50%     { opacity: .4; transform: scale(.7); }
+}
+
+/* Registration helper overlay (shown with ?register_device=1) */
+#device-reg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(14,17,28,.96);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px;
+  animation: regOverlayIn .3s ease both;
+}
+@keyframes regOverlayIn {
+  from { opacity: 0; transform: scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+.reg-card {
+  background:
+    linear-gradient(158deg,
+      rgba(255,255,255,.13) 0%,
+      rgba(255,255,255,.07) 55%,
+      rgba(106,176,255,.08) 100%);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+  border-top:    1.5px solid rgba(255,255,255,.30);
+  border-left:   1px   solid rgba(255,255,255,.16);
+  border-right:  1px   solid rgba(255,255,255,.08);
+  border-bottom: 1px   solid rgba(0,0,0,.30);
+  border-radius: 28px;
+  padding: 36px 28px 32px;
+  width: 90%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.28),
+    0 0 0 1px rgba(0,0,0,.44),
+    0 24px 64px rgba(0,0,0,.60);
+  text-align: center;
+}
+.reg-icon    { font-size: 40px; }
+.reg-title   { font-size: 18px; font-weight: 800; color: var(--ink); }
+.reg-sub     { font-size: 12.5px; color: var(--ink-3); line-height: 1.6; max-width: 270px; }
+.reg-hash-box {
+  width: 100%;
+  background: rgba(106,176,255,.06);
+  border: 1px solid rgba(106,176,255,.20);
+  border-top-color: rgba(106,176,255,.32);
+  border-radius: 12px;
+  padding: 13px 14px;
+  font-family: var(--ff-mono,'DM Mono',monospace);
+  font-size: 10.5px;
+  color: #6ab0ff;
+  word-break: break-all;
+  text-align: left;
+  line-height: 1.55;
+}
+.reg-copy-btn {
+  width: 100%;
+  padding: 13px 20px;
+  background: linear-gradient(158deg, #1a5cff 0%, #003ab8 100%);
+  border: none;
+  border-top: 1.5px solid rgba(255,255,255,.28);
+  border-radius: 13px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(10,68,255,.48);
+  transition: opacity .2s, transform .2s;
+}
+.reg-copy-btn:hover { opacity: .88; transform: translateY(-1px); }
+.reg-note { font-size: 11px; color: var(--ink-4); }
 </style>
 </head>
 <body>
@@ -3757,13 +3874,12 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
       </button>
     </div>
 
-    <!-- ── QR panel ── -->
+    <!-- ── QR Session panel ── -->
     <div id="qr-panel" role="tabpanel" aria-labelledby="tab-qr">
 
-      <!-- The glass QR frame -->
+      <!-- Premium glass QR frame -->
       <div class="qr-frame" id="qr-frame">
         <div id="qr-canvas-wrap">
-          <!-- QR canvas injected here by JS -->
           <div class="qr-overlay visible" id="qr-generating-overlay">
             <div class="qr-spin-ring"></div>
             <span>Generating…</span>
@@ -3773,21 +3889,33 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
 
       <!-- Status + timer row -->
       <div class="qr-status-row">
-        <span class="qr-status-text qr-waiting" id="qr-status-text">
-          Waiting for scan…
-        </span>
-        <span class="qr-timer-pill" id="qr-timer-pill">2:00</span>
+        <span class="qr-status-text qr-waiting" id="qr-status-text">Waiting for scan…</span>
+        <span class="qr-timer-pill" id="qr-timer-pill">1:00</span>
+      </div>
+
+      <!-- Session ID tag -->
+      <div class="qr-session-tag sid-active" id="qr-session-tag">
+        <span class="qr-sid-dot"></span>
+        <span id="qr-session-id-display">—</span>
+      </div>
+
+      <!-- State indicators -->
+      <div class="qr-state-strip">
+        <span class="qr-state-pip pending active" id="pip-pending">⏳ Pending</span>
+        <span class="qr-state-pip approved"       id="pip-approved">✅ Approved</span>
+        <span class="qr-state-pip rejected"       id="pip-rejected">❌ Rejected</span>
+        <span class="qr-state-pip expired"        id="pip-expired">⏱ Expired</span>
       </div>
 
       <!-- Hint -->
       <div class="qr-hint">
         <span class="qr-hint-icon">📷</span>
-        <span>Open your iPhone camera and point it at the code. Tap the notification to approve login.</span>
+        <span>Open your iPhone camera and point it at the code. The session expires in 60 seconds and is single-use.</span>
       </div>
 
-      <!-- Refresh (shown only when expired) -->
+      <!-- Refresh (shown when expired/rejected) -->
       <button class="qr-refresh-btn" id="qr-refresh-btn" style="display:none;">
-        ↻ &nbsp;Generate New Code
+        ↻ &nbsp;New Session
       </button>
     </div>
 
@@ -3798,24 +3926,54 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   </a>
 </div>
 
-<!-- ── Mobile QR Approval Page (shown when URL has ?qr_token=) ── -->
+<!-- ── Mobile Approval Page (shown when URL has ?session=SESSION_ID) ── -->
 <div id="qr-mobile-page">
-  <div class="qr-mobile-card">
+  <div class="qr-mobile-card" id="qr-mobile-card">
+
+    <!-- DEVICE VERIFICATION OVERLAY — shown while fingerprinting, hidden after check -->
+    <div class="device-verify-overlay" id="device-verify-overlay">
+      <div class="device-scan-ring"></div>
+      <div class="device-verify-label">Verifying Device</div>
+      <div class="device-verify-sublabel">Checking owner credential…</div>
+    </div>
+
     <div class="qr-mobile-icon" id="qr-mobile-icon">🔐</div>
-    <div class="qr-mobile-title">Admin Login Request</div>
+    <div class="qr-mobile-title" id="qr-mobile-title">Admin Login Request</div>
     <div class="qr-mobile-domain">📊 sajidmk.com</div>
-    <div class="qr-mobile-sub">
+    <div class="qr-mobile-sub" id="qr-mobile-sub">
       Someone is requesting admin access to the Analytics Dashboard.
       Only approve if this was you.
     </div>
-    <div class="qr-security-badge">
-      <span>🔒</span>
-      <span>One-time code · Expires in 2 min</span>
+    <div class="qr-mobile-session-info">
+      <div class="qr-mobile-expires" id="qr-mobile-expires">Checking session…</div>
     </div>
-    <button class="qr-mobile-approve-btn" id="qr-mobile-approve-btn">
+    <div class="qr-security-badge" id="qr-security-badge">
+      <span>🔒</span>
+      <span>Single-use · 60s session · No secret in URL</span>
+    </div>
+    <button class="qr-mobile-approve-btn" id="qr-mobile-approve-btn" disabled>
       ✅ &nbsp;Approve Login
     </button>
+    <button class="qr-mobile-reject-btn" id="qr-mobile-reject-btn" disabled>
+      ❌ &nbsp;Reject — Not Me
+    </button>
     <div class="qr-mobile-state" id="qr-mobile-state"></div>
+  </div>
+</div>
+
+<!-- ── Device Registration Helper (shown with ?register_device=1) ── -->
+<div id="device-reg-overlay" style="display:none;">
+  <div class="reg-card">
+    <div class="reg-icon">📱</div>
+    <div class="reg-title">Register This Device</div>
+    <div class="reg-sub">
+      Copy this SHA-256 hash and paste it as
+      <code style="color:#6ab0ff;font-size:10.5px;">OWNER_DEVICE_CREDENTIAL</code>
+      in the script to register this iPhone as the owner device.
+    </div>
+    <div class="reg-hash-box" id="reg-hash-display">Computing…</div>
+    <button class="reg-copy-btn" id="reg-copy-btn">📋 &nbsp;Copy Hash</button>
+    <div class="reg-note">Remove <code style="font-size:10px;">?register_device=1</code> from the URL after saving.</div>
   </div>
 </div>
 
@@ -3960,112 +4118,56 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
     </div>
 
     <!-- ════════════════════════════════════════════════════
-         OWNER DEVICE REGISTRATION
+         LOGIN AUDIT LOG
     ═════════════════════════════════════════════════════ -->
-    <div class="table-card" id="owner-device-section">
+    <div class="table-card" id="audit-section">
       <div class="table-header">
-        <div class="table-title">🔑 Owner Device</div>
+        <div class="table-title">🛡 Login Audit Log</div>
         <div class="table-actions">
-          <button class="btn btn-ghost" id="od-refresh-btn" title="Refresh owner device status">
+          <div class="rev-tabs" id="audit-tabs">
+            <button class="rev-tab active" data-audit-filter="all">All</button>
+            <button class="rev-tab"        data-audit-filter="approved">Approved</button>
+            <button class="rev-tab"        data-audit-filter="rejected">Rejected</button>
+            <button class="rev-tab"        data-audit-filter="expired">Expired</button>
+          </div>
+          <button class="btn btn-ghost" id="audit-refresh-btn">
             <span class="btn-icon">↻</span> Refresh
           </button>
         </div>
       </div>
 
-      <!-- ── Unregistered state ── -->
-      <div id="od-unregistered" style="display:none;">
-        <div class="od-hero">
-          <div class="od-hero-icon">📱</div>
-          <div class="od-hero-title">No Owner Device Registered</div>
-          <div class="od-hero-sub">
-            Register this iPhone as the trusted Owner Device using Face ID (Passkey).
-            No passwords are stored — only a cryptographic key tied to your device's Secure Enclave.
-          </div>
-          <button class="od-register-btn" id="od-register-btn">
-            <span class="od-btn-icon">🔐</span>
-            Register This Device with Face ID
-          </button>
-          <div class="od-security-note">
-            <span>🛡️</span>
-            <span>Uses WebAuthn / Passkey — your biometric data never leaves your device</span>
-          </div>
-        </div>
+      <!-- Stats pills -->
+      <div class="rev-stats" id="audit-stats">
+        <span class="rev-stat-pill" id="as-total"  style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);color:var(--ink-2);">…</span>
+        <span class="rev-stat-pill rev-stat-approved" id="as-approved">…</span>
+        <span class="rev-stat-pill rev-stat-rejected" id="as-rejected">…</span>
+        <span class="rev-stat-pill rev-stat-pending"  id="as-expired" style="background:rgba(255,170,0,.08);border-color:rgba(255,170,0,.22);color:rgba(255,185,50,.90);">…</span>
       </div>
 
-      <!-- ── Registered state ── -->
-      <div id="od-registered" style="display:none;">
-        <div class="od-card od-card-trusted">
-          <div class="od-card-top">
-            <div class="od-card-icon-wrap">
-              <span class="od-card-icon">📱</span>
-              <span class="od-trusted-badge">✓ Trusted</span>
-            </div>
-            <div class="od-card-meta">
-              <div class="od-card-name" id="od-device-name">—</div>
-              <div class="od-card-detail">
-                <span class="od-detail-label">Credential ID</span>
-                <span class="od-detail-value od-mono" id="od-cred-id">—</span>
-              </div>
-              <div class="od-card-detail">
-                <span class="od-detail-label">Registered</span>
-                <span class="od-detail-value" id="od-created-at">—</span>
-              </div>
-            </div>
-          </div>
-          <div class="od-success-banner" id="od-success-banner" style="display:none;">
-            <span>✅</span>
-            <span>Owner Device Registered Successfully</span>
-          </div>
-          <div class="od-card-actions">
-            <button class="od-replace-btn" id="od-replace-btn">
-              🔄 Replace Owner Device
-            </button>
-          </div>
-        </div>
+      <!-- Table -->
+      <div style="overflow-x:auto;margin-top:4px;">
+        <table id="audit-table">
+          <thead>
+            <tr>
+              <th style="width:160px;">Timestamp</th>
+              <th style="width:110px;">Session</th>
+              <th style="width:90px;">Method</th>
+              <th style="width:80px;">Result</th>
+              <th>Browser</th>
+              <th>Device</th>
+              <th>Platform</th>
+              <th style="width:120px;">Country</th>
+              <th style="width:110px;">IP</th>
+            </tr>
+          </thead>
+          <tbody id="audit-tbody">
+            <tr><td colspan="9" style="text-align:center;padding:32px;color:var(--ink-3);">Loading…</td></tr>
+          </tbody>
+        </table>
       </div>
-
-      <!-- ── Loading skeleton ── -->
-      <div id="od-loading">
-        <div class="od-skeleton-wrap">
-          <div class="od-skeleton" style="width:56px;height:56px;border-radius:16px;"></div>
-          <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
-            <div class="od-skeleton" style="width:55%;height:18px;border-radius:8px;"></div>
-            <div class="od-skeleton" style="width:80%;height:13px;border-radius:6px;"></div>
-            <div class="od-skeleton" style="width:45%;height:13px;border-radius:6px;"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── Error state ── -->
-      <div id="od-error" style="display:none;">
-        <div class="od-hero">
-          <div class="od-hero-icon">⚠️</div>
-          <div class="od-hero-title" id="od-error-title">Something went wrong</div>
-          <div class="od-hero-sub" id="od-error-msg">Please refresh and try again.</div>
-          <button class="btn btn-ghost" onclick="initOwnerDevice()" style="margin-top:8px;">↻ Retry</button>
-        </div>
-      </div>
-
     </div>
 
   </main>
-</div>
-
-<!-- ── Owner Device Replace Confirm Modal ────────────────── -->
-<div id="od-replace-modal" style="display:none;position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;background:rgba(10,13,22,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);">
-  <div class="modal-card" style="max-width:400px;">
-    <div class="modal-icon">🔄</div>
-    <div class="modal-title">Replace Owner Device?</div>
-    <div class="modal-body">
-      This will <strong style="color:var(--ink)">permanently revoke</strong> the current owner device
-      and register this device as the new owner using Face ID.<br><br>
-      <span style="color:var(--ink-3);font-size:12px;">Only one owner device can exist at a time.</span>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" id="od-replace-cancel-btn">Cancel</button>
-      <button class="btn btn-danger" id="od-replace-confirm-btn">🔐 Yes, Replace with Face ID</button>
-    </div>
-  </div>
 </div>
 
 <!-- ── Delete confirm modal ──────────────────────────────── -->
@@ -4130,9 +4232,7 @@ document.getElementById('theme-btn').addEventListener('click', () => {
 // AUTH — Password + QR Login
 // ============================================================
 const ADMIN_PASSWORD  = 'Sajid@2026';   // ← Change this to your own password
-const QR_TTL_SECONDS  = 120;            // 2 minute expiry
-const QR_POLL_MS      = 2000;           // poll every 2 s
-const QR_TABLE        = 'qr_sessions';  // Supabase table (see SQL below)
+// QR_TTL_SECONDS, QR_POLL_MS, QR_TABLE defined in QR SESSION MANAGEMENT block below
 
 // ── Supabase client used only for QR (no auth session persistence) ──
 // We create it early so QR callbacks can use it before initDashboard.
@@ -4153,13 +4253,25 @@ const authError = document.getElementById('auth-error');
 
 // ============================================================
 // showDashboard — shared by both auth paths
+// When called from Realtime unlock, `animated` = true triggers
+// the full glass-burst unlock sequence before revealing dashboard.
 // ============================================================
-function showDashboard() {
+function showDashboard(animated = false) {
   stopQrPolling();
-  document.getElementById('auth-overlay').style.display = 'none';
-  document.getElementById('dashboard').style.display    = 'block';
+  stopRealtimeSubscription();
   sessionStorage.setItem('admin-auth', '1');
-  initDashboard();
+
+  if (animated) {
+    playUnlockSequence(() => {
+      document.getElementById('auth-overlay').style.display = 'none';
+      document.getElementById('dashboard').style.display    = 'block';
+      initDashboard();
+    });
+  } else {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('dashboard').style.display    = 'block';
+    initDashboard();
+  }
 }
 
 // Auto-unlock if already authenticated this session
@@ -4179,8 +4291,10 @@ function tryAuth() {
     return;
   }
   if (password === ADMIN_PASSWORD) {
+    writeAuditLog(null, 'approved', 'password');
     showDashboard();
   } else {
+    writeAuditLog(null, 'rejected', 'password');
     authError.textContent = 'Incorrect password. Try again.';
     authError.style.display = 'block';
     authInput.value = '';
@@ -4233,113 +4347,372 @@ document.getElementById('qr-launch-btn').addEventListener('click',() => switchAu
 document.getElementById('qr-refresh-btn').addEventListener('click',() => startQrSession());
 
 // ============================================================
-// QR SESSION MANAGEMENT
+// QR SESSION MANAGEMENT — Secure Temporary Login Sessions
 // ============================================================
-let _qrPollTimer    = null;
-let _qrCountdown    = null;
-let _currentToken   = null;
-let _qrCodeInstance = null;
+// Supabase schema (run once in SQL editor):
+//
+//   -- Sessions table (add new columns to existing table):
+//   ALTER TABLE qr_sessions
+//     ADD COLUMN IF NOT EXISTS device_credential text,
+//     ADD COLUMN IF NOT EXISTS rejection_reason  text;
+//
+//   -- Or create fresh:
+//   CREATE TABLE IF NOT EXISTS qr_sessions (
+//     session_id        text        PRIMARY KEY,
+//     status            text        NOT NULL DEFAULT 'pending'
+//                                   CHECK (status IN ('pending','approved','rejected','expired')),
+//     created_at        timestamptz NOT NULL DEFAULT now(),
+//     expires_at        timestamptz NOT NULL,
+//     resolved_at       timestamptz,
+//     device_credential text,
+//     rejection_reason  text
+//   );
+//   ALTER TABLE qr_sessions ENABLE ROW LEVEL SECURITY;
+//   CREATE POLICY "anon_insert"  ON qr_sessions FOR INSERT TO anon WITH CHECK (true);
+//   CREATE POLICY "anon_select"  ON qr_sessions FOR SELECT TO anon USING (true);
+//   CREATE POLICY "anon_update"  ON qr_sessions FOR UPDATE TO anon USING (true);
+//   CREATE POLICY "anon_delete"  ON qr_sessions FOR DELETE TO anon USING (true);
+//
+//   -- Rejection audit log (append-only):
+//   CREATE TABLE IF NOT EXISTS device_rejection_log (
+//     id               bigserial   PRIMARY KEY,
+//     session_id       text        NOT NULL,
+//     rejected_at      timestamptz NOT NULL DEFAULT now(),
+//     device_hash      text,
+//     user_agent       text,
+//     platform         text,
+//     rejection_reason text
+//   );
+//   ALTER TABLE device_rejection_log ENABLE ROW LEVEL SECURITY;
+//   CREATE POLICY "anon_insert_log" ON device_rejection_log FOR INSERT TO anon WITH CHECK (true);
+//
+//   -- ══════════════════════════════════════════════════════
+//   -- LOGIN AUDIT LOG — complete login attempt history
+//   -- ══════════════════════════════════════════════════════
+//   CREATE TABLE IF NOT EXISTS login_audit_log (
+//     id            bigserial    PRIMARY KEY,
+//     timestamp     timestamptz  NOT NULL DEFAULT now(),
+//     session_id    text,
+//     browser       text,
+//     device        text,
+//     platform      text,
+//     country       text,
+//     ip            text,
+//     result        text         NOT NULL
+//                                CHECK (result IN ('approved','rejected','expired')),
+//     login_method  text         NOT NULL
+//                                CHECK (login_method IN ('qr','password','session_resume'))
+//   );
+//   ALTER TABLE login_audit_log ENABLE ROW LEVEL SECURITY;
+//   -- Append-only: anon can INSERT but never SELECT/UPDATE/DELETE
+//   CREATE POLICY "audit_insert" ON login_audit_log FOR INSERT TO anon WITH CHECK (true);
+//   -- Only authenticated (service role / dashboard) can read
+//   CREATE POLICY "audit_select" ON login_audit_log FOR SELECT TO authenticated USING (true);
+//   -- Optional: auto-purge entries older than 90 days
+//   -- SELECT cron.schedule(
+//   --   'purge-old-audit-logs',
+//   --   '0 3 * * *',
+//   --   $$DELETE FROM login_audit_log WHERE timestamp < now() - interval '90 days'$$
+//   -- );
+//
+//   -- Auto-delete expired QR rows (pg_cron):
+//   SELECT cron.schedule(
+//     'cleanup-expired-qr-sessions',
+//     '* * * * *',
+//     $$DELETE FROM qr_sessions WHERE expires_at < now()$$
+//   );
+// ────────────────────────────────────────────────────────────
 
-/** Generate a UUID-v4 token */
-function genToken() {
-  return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-  );
+const QR_TTL_SECONDS   = 60;
+const QR_POLL_MS       = 2000;
+const QR_TABLE         = 'qr_sessions';
+const DEVICE_LOG_TABLE = 'device_rejection_log';
+const AUDIT_LOG_TABLE  = 'login_audit_log';
+
+// ============================================================
+// OWNER DEVICE CREDENTIAL
+// ─────────────────────────────────────────────────────────────
+// The SHA-256 fingerprint hash of the registered owner iPhone.
+//
+// HOW TO REGISTER YOUR DEVICE:
+//   1. Open this page on your iPhone (Safari)
+//   2. Add ?register_device=1 to the URL
+//   3. The registration card will appear — copy the hash
+//   4. Paste it below, replacing 'REGISTER_YOUR_DEVICE_FIRST'
+//   5. Save the file and re-deploy
+//
+// The fingerprint is derived from browser signals only
+// (userAgent, screen, timezone, language, hardware) and is
+// one-way hashed. The raw string is never stored anywhere.
+// ─────────────────────────────────────────────────────────────
+const OWNER_DEVICE_CREDENTIAL = 'REGISTER_YOUR_DEVICE_FIRST';
+// ↑↑ Replace with your 64-char hex hash after running ?register_device=1 ↑↑
+
+// ============================================================
+// DEVICE FINGERPRINTING ENGINE
+// ============================================================
+
+/**
+ * Builds a stable SHA-256 device fingerprint from passive
+ * browser signals. No permissions required, no prompts.
+ * Stable across reloads; changes if browser data is cleared.
+ */
+async function buildDeviceFingerprint() {
+  const signals = [
+    navigator.userAgent                                            || '',
+    navigator.platform                                            || '',
+    navigator.vendor                                              || '',
+    navigator.language                                            || '',
+    String(navigator.hardwareConcurrency || 0),
+    String(navigator.maxTouchPoints      || 0),
+    String(screen.width  || 0) + 'x' + String(screen.height || 0),
+    String(screen.colorDepth  || 0),
+    String(screen.pixelDepth  || 0),
+    String(window.devicePixelRatio || 1),
+    Intl.DateTimeFormat().resolvedOptions().timeZone              || '',
+    Intl.DateTimeFormat().resolvedOptions().locale                || '',
+    String('ontouchstart' in window ? 1 : 0),
+  ];
+  const raw      = 'device_v1:' + signals.join('||');
+  const encoded  = new TextEncoder().encode(raw);
+  const hashBuf  = await crypto.subtle.digest('SHA-256', encoded);
+  const hashArr  = Array.from(new Uint8Array(hashBuf));
+  return hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-/** Full URL that the scanned QR will open */
-function buildQrUrl(token) {
-  const base = window.location.href.split('?')[0];
-  return base + '?qr_token=' + token;
+/**
+ * Returns true if the current device matches the registered owner.
+ */
+async function isOwnerDevice() {
+  if (OWNER_DEVICE_CREDENTIAL === 'REGISTER_YOUR_DEVICE_FIRST') return false;
+  if (OWNER_DEVICE_CREDENTIAL.length !== 64) return false;
+  try {
+    const hash = await buildDeviceFingerprint();
+    return hash === OWNER_DEVICE_CREDENTIAL;
+  } catch(e) {
+    console.warn('[DeviceAuth] Fingerprint error:', e);
+    return false;
+  }
 }
 
-/** Start a fresh QR session: insert DB row → render QR → start poll + countdown */
-async function startQrSession() {
-  stopQrPolling();
-  _currentToken = genToken();
+// ── Registration helper — run on ?register_device=1 ────────
+(async function maybeShowRegistration() {
+  const isReg = new URLSearchParams(window.location.search).get('register_device') === '1';
+  const needsReg = OWNER_DEVICE_CREDENTIAL === 'REGISTER_YOUR_DEVICE_FIRST';
+  if (!isReg && !needsReg) return;
 
-  // Reset UI to "generating" state
-  setQrStatus('waiting', 'Generating secure code…');
-  setQrTimer(QR_TTL_SECONDS);
-  document.getElementById('qr-refresh-btn').style.display = 'none';
-  document.getElementById('qr-frame').classList.remove('qr-success','qr-expired');
-
-  // Show generating overlay, hide any old QR
-  const overlay = document.getElementById('qr-generating-overlay');
-  overlay.innerHTML = '<div class="qr-spin-ring"></div><span>Generating…</span>';
-  overlay.classList.add('visible');
-
-  const token  = _currentToken;
-  const expiry = new Date(Date.now() + QR_TTL_SECONDS * 1000).toISOString();
+  const overlay = document.getElementById('device-reg-overlay');
+  const hashEl  = document.getElementById('reg-hash-display');
+  const copyBtn = document.getElementById('reg-copy-btn');
+  if (!overlay) return;
 
   try {
-    // Insert session row into Supabase
-    const { error } = await getQrDb()
-      .from(QR_TABLE)
-      .insert({
-        token,
-        expires_at:   expiry,
-        approved:     false,
-        approved_at:  null,
-        created_at:   new Date().toISOString()
+    const hash = await buildDeviceFingerprint();
+    console.log('%c[DeviceAuth] Owner device hash:', 'color:#6ab0ff;font-weight:bold;font-size:14px;', hash);
+    console.log('%c[DeviceAuth] Paste this as OWNER_DEVICE_CREDENTIAL in the script.', 'color:#ffc832;');
+
+    if (hashEl) hashEl.textContent = hash;
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(hash);
+          copyBtn.textContent = '✅  Copied to clipboard!';
+          setTimeout(() => { copyBtn.innerHTML = '📋 &nbsp;Copy Hash'; }, 2400);
+        } catch(e) {
+          // Fallback: select the text
+          hashEl.style.userSelect = 'all';
+          const sel = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(hashEl);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
       });
-
-    if (error) {
-      // Graceful fallback: if table doesn't exist yet, use sessionStorage-only mode
-      console.warn('QR Supabase insert failed (table may not exist):', error.message);
-      sessionStorage.setItem('qr-fallback-' + token, 'pending');
     }
-  } catch (e) {
-    console.warn('QR DB error, using local fallback:', e);
-    sessionStorage.setItem('qr-fallback-' + token, 'pending');
+
+    // Only show registration overlay if on the plain page (not QR scan flow)
+    const hasSid = new URLSearchParams(window.location.search).get('session');
+    if (!hasSid && isReg) {
+      overlay.style.display = 'flex';
+    }
+  } catch(e) {
+    console.warn('[DeviceAuth] Registration helper error:', e);
   }
+})();
 
-  // Render QR code (slight delay so overlay shows)
-  await new Promise(r => setTimeout(r, 180));
-  renderQrCode(token);
-
-  // Hide overlay once QR is rendered
-  overlay.classList.remove('visible');
-  setQrStatus('waiting', 'Waiting for scan…');
-
-  // Start countdown + poll
-  startCountdown(Date.now() + QR_TTL_SECONDS * 1000);
-  startQrPolling(token);
+// ── Log rejected device to Supabase audit table ─────────────
+async function logDeviceRejection(sessionId, deviceHash, reason) {
+  try {
+    await getQrDb()
+      .from(DEVICE_LOG_TABLE)
+      .insert({
+        session_id:       sessionId,
+        rejected_at:      new Date().toISOString(),
+        device_hash:      deviceHash,
+        user_agent:       navigator.userAgent,
+        platform:         navigator.platform || '',
+        rejection_reason: reason,
+      });
+    console.warn('[DeviceAuth] Rejection logged →', { sessionId, reason });
+  } catch(e) {
+    // Log failure is non-fatal — block still stands
+    console.warn('[DeviceAuth] Could not write rejection log:', e);
+  }
 }
 
-/** Inject QR code into #qr-canvas-wrap */
-function renderQrCode(token) {
-  const wrap = document.getElementById('qr-canvas-wrap');
-  // Remove any previous QR child (keep the overlay)
+// ── Reject session in DB + stamp reason ─────────────────────
+async function rejectSessionUnauthorized(sessionId, deviceHash, reason) {
+  try {
+    await getQrDb()
+      .from(QR_TABLE)
+      .update({
+        status:            'rejected',
+        resolved_at:       new Date().toISOString(),
+        rejection_reason:  reason,
+        device_credential: deviceHash,
+      })
+      .eq('session_id', sessionId)
+      .eq('status', 'pending');
+  } catch(e) {
+    console.warn('[DeviceAuth] DB reject failed:', e);
+  }
+}
+
+// ── Render the full "Unauthorized Device" hard-stop screen ──
+function renderUnauthorizedScreen(card, deviceHash) {
+  // 1. Add blocked class for red-tinted card
+  card.classList.add('device-blocked');
+
+  // 2. Clear all card children and inject the block screen
+  card.innerHTML = `
+    <div class="unauth-content">
+
+      <div class="unauth-icon-wrap">
+        <div class="unauth-ring"></div>
+        <div class="unauth-icon">🚫</div>
+      </div>
+
+      <div class="unauth-title">Unauthorized Device</div>
+
+      <div class="unauth-domain-badge">
+        ⛔&nbsp;&nbsp;sajidmk.com · Access Denied
+      </div>
+
+      <div class="unauth-desc">
+        This device is <strong>not registered</strong> as the owner iPhone.
+        This attempt has been <strong>rejected and logged</strong>.
+      </div>
+
+      <div class="unauth-info-panel">
+
+        <div class="unauth-info-row">
+          <div class="unauth-info-row-icon">🔒</div>
+          <div class="unauth-info-row-body">
+            <div class="unauth-info-row-label">Session Terminated</div>
+            <div class="unauth-info-row-value">
+              This QR session has been invalidated. A new scan will be required.
+            </div>
+          </div>
+        </div>
+
+        <div class="unauth-info-row">
+          <div class="unauth-info-row-icon">📋</div>
+          <div class="unauth-info-row-body">
+            <div class="unauth-info-row-label">Rejection Logged</div>
+            <div class="unauth-info-row-value">
+              Device fingerprint recorded in audit log.
+            </div>
+            <div class="unauth-device-hash">${deviceHash ? deviceHash.slice(0,20) + '…' : 'unknown'}</div>
+          </div>
+        </div>
+
+        <div class="unauth-info-row">
+          <div class="unauth-info-row-icon">📱</div>
+          <div class="unauth-info-row-body">
+            <div class="unauth-info-row-label">Owner Device Required</div>
+            <div class="unauth-info-row-value">
+              Only the registered owner iPhone may approve logins.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="unauth-blocked-badge">
+        <div class="unauth-blocked-dot"></div>
+        <span>BLOCKED · LOGGED · SESSION REJECTED</span>
+      </div>
+
+    </div>
+  `;
+}
+
+let _qrPollTimer    = null;
+let _qrCountdown    = null;
+let _currentSid     = null;  // active session_id
+let _qrCodeInstance = null;
+
+// ── Crypto-random session ID (not a secret — just a lookup key) ──
+function genSessionId() {
+  const arr = crypto.getRandomValues(new Uint8Array(18));
+  return Array.from(arr, b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── URL placed inside QR — contains ONLY the session_id ──
+function buildSessionUrl(sid) {
+  const base = window.location.href.split('?')[0];
+  return base + '?session=' + sid;
+}
+
+// ── State pip helpers ──────────────────────────────────────
+function setActivePip(state) {
+  ['pending','approved','rejected','expired'].forEach(s => {
+    const el = document.getElementById('pip-' + s);
+    if (el) el.classList.toggle('active', s === state);
+  });
+  const tag = document.getElementById('qr-session-tag');
+  if (tag) {
+    tag.className = 'qr-session-tag sid-' + state;
+  }
+}
+
+// ── Render QR code ────────────────────────────────────────
+function renderQrCode(sid) {
+  const wrap    = document.getElementById('qr-canvas-wrap');
   const overlay = document.getElementById('qr-generating-overlay');
   wrap.innerHTML = '';
   wrap.appendChild(overlay);
 
-  const url   = buildQrUrl(token);
+  const url   = buildSessionUrl(sid);
   const theme = document.documentElement.getAttribute('data-theme') || 'dark';
   const isDark = theme !== 'light';
 
-  // QRCode library: colorDark/Light are module/background
   _qrCodeInstance = new QRCode(wrap, {
-    text:          url,
-    width:         172,
-    height:        172,
-    colorDark:     isDark ? '#e8eaf6' : '#0f172a',
-    colorLight:    isDark ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0)',
-    correctLevel:  QRCode.CorrectLevel.M
+    text:         url,
+    width:        172,
+    height:       172,
+    colorDark:    isDark ? '#e8eaf6' : '#0f172a',
+    colorLight:   'rgba(255,255,255,0)',
+    correctLevel: QRCode.CorrectLevel.M
   });
 }
 
-// ── Countdown ───────────────────────────────────────────────
+// ── Session ID display ────────────────────────────────────
+function updateSidDisplay(sid) {
+  const el = document.getElementById('qr-session-id-display');
+  if (el && sid) {
+    el.textContent = sid.slice(0,8) + '…' + sid.slice(-6);
+    el.title = 'Session: ' + sid;
+  }
+}
+
+// ── Countdown ────────────────────────────────────────────
 function startCountdown(expiresAt) {
   clearInterval(_qrCountdown);
   _qrCountdown = setInterval(() => {
     const rem = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
     setQrTimer(rem);
-    if (rem <= 0) {
-      clearInterval(_qrCountdown);
-      onQrExpired();
-    }
+    if (rem <= 0) { clearInterval(_qrCountdown); onQrExpired(); }
   }, 1000);
 }
 
@@ -4348,10 +4721,10 @@ function setQrTimer(seconds) {
   if (!pill) return;
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
-  pill.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  pill.textContent = m + ':' + s.toString().padStart(2,'0');
   pill.className   = 'qr-timer-pill';
-  if (seconds === 0) pill.classList.add('expired');
-  else if (seconds <= 20) pill.classList.add('urgent');
+  if      (seconds === 0) pill.classList.add('expired');
+  else if (seconds <= 15) pill.classList.add('urgent');
 }
 
 function setQrStatus(type, text) {
@@ -4362,214 +4735,482 @@ function setQrStatus(type, text) {
   if (type === 'waiting')  el.classList.add('qr-waiting');
   if (type === 'success')  el.classList.add('qr-success-text');
   if (type === 'expired')  el.classList.add('qr-expired-text');
+  if (type === 'rejected') el.classList.add('qr-rejected-text');
 }
 
-// ── Polling ─────────────────────────────────────────────────
-function startQrPolling(token) {
+// ── Polling ───────────────────────────────────────────────
+function startQrPolling(sid) {
   clearInterval(_qrPollTimer);
-  _qrPollTimer = setInterval(() => checkQrApproval(token), QR_POLL_MS);
+  _qrPollTimer = setInterval(() => checkSessionStatus(sid), QR_POLL_MS);
 }
 
 function stopQrPolling() {
   clearInterval(_qrPollTimer);
   clearInterval(_qrCountdown);
-  _qrPollTimer  = null;
-  _qrCountdown  = null;
+  _qrPollTimer = null;
+  _qrCountdown = null;
+  stopRealtimeSubscription();
 }
 
-async function checkQrApproval(token) {
-  // Guard: don't check if this is no longer the active token
-  if (token !== _currentToken) { stopQrPolling(); return; }
-
+async function checkSessionStatus(sid) {
+  if (sid !== _currentSid) { stopQrPolling(); return; }
   try {
-    // First check Supabase
     const { data, error } = await getQrDb()
       .from(QR_TABLE)
-      .select('approved, approved_at, expires_at')
-      .eq('token', token)
-      .single();
+      .select('status, expires_at')
+      .eq('session_id', sid)
+      .maybeSingle();
 
-    if (error) {
-      // Supabase unavailable — check sessionStorage fallback
-      const fallback = sessionStorage.getItem('qr-approved-' + token);
-      if (fallback === '1') onQrApproved(token);
-      return;
-    }
+    if (error || !data) return; // silent — keep polling
 
-    // Check expiry server-side
-    if (new Date(data.expires_at) < new Date()) {
+    // Server-side expiry check
+    if (new Date(data.expires_at) < new Date() && data.status === 'pending') {
+      await markSessionExpired(sid);
       onQrExpired();
       return;
     }
 
-    if (data.approved) {
-      onQrApproved(token);
-    }
-  } catch (e) {
-    // Network error — silent, keep polling
-  }
+    if (data.status === 'approved') { onQrApproved(sid); return; }
+    if (data.status === 'rejected') { onQrRejected(sid); return; }
+    if (data.status === 'expired')  { onQrExpired();     return; }
+  } catch(e) { /* network error — keep polling */ }
 }
 
+// Mark row expired in DB (best effort)
+async function markSessionExpired(sid) {
+  try {
+    await getQrDb()
+      .from(QR_TABLE)
+      .update({ status: 'expired', resolved_at: new Date().toISOString() })
+      .eq('session_id', sid)
+      .eq('status', 'pending');
+  } catch(e) {}
+}
+
+// Delete expired rows (called on each new session start)
+async function cleanupExpiredSessions() {
+  try {
+    await getQrDb()
+      .from(QR_TABLE)
+      .delete()
+      .lt('expires_at', new Date().toISOString());
+  } catch(e) {}
+}
+
+// ── State handlers ────────────────────────────────────────
 function onQrExpired() {
+  const expiredSid = _currentSid;
   stopQrPolling();
-  if (_currentToken) {
-    // Mark row expired (best effort)
-    getQrDb().from(QR_TABLE).delete().eq('token', _currentToken).then(() => {});
-    _currentToken = null;
-  }
-  document.getElementById('qr-frame').classList.add('qr-expired');
-  setQrStatus('expired', 'Code expired');
+  _currentSid = null;
+  setActivePip('expired');
+  document.getElementById('qr-frame').className = 'qr-frame qr-expired';
+  setQrStatus('expired', 'Session expired');
   setQrTimer(0);
   document.getElementById('qr-refresh-btn').style.display = '';
-
-  // Show expired overlay on the QR
   const overlay = document.getElementById('qr-generating-overlay');
-  overlay.innerHTML = '<div class="qr-overlay-icon">⏱</div><span>Code expired</span>';
+  overlay.innerHTML = '<div class="qr-overlay-icon">⏱</div><span>Expired</span>';
   overlay.classList.add('visible');
+  // ── Audit log ────────────────────────────────────────────
+  writeAuditLog(expiredSid, 'expired', 'qr');
 }
 
-function onQrApproved(token) {
+function onQrRejected(sid) {
   stopQrPolling();
-  _currentToken = null;
+  _currentSid = null;
+  setActivePip('rejected');
+  document.getElementById('qr-frame').className = 'qr-frame qr-rejected';
+  setQrStatus('rejected', '❌ Rejected on device');
+  document.getElementById('qr-refresh-btn').style.display = '';
+  const overlay = document.getElementById('qr-generating-overlay');
+  overlay.innerHTML = '<div class="qr-overlay-icon">❌</div><span style="color:#ff6b6b;">Rejected</span>';
+  overlay.classList.add('visible');
+  // ── Audit log ────────────────────────────────────────────
+  writeAuditLog(sid, 'rejected', 'qr');
+}
 
-  // ── Success animation ──
-  document.getElementById('qr-frame').classList.add('qr-success');
+function onQrApproved(sid) {
+  stopQrPolling();
+  stopRealtimeSubscription();
+  _currentSid = null;
+  setActivePip('approved');
+  document.getElementById('qr-frame').className = 'qr-frame qr-approved';
   setQrStatus('success', '✅ Approved — unlocking…');
-
   const overlay = document.getElementById('qr-generating-overlay');
   overlay.innerHTML = '<div class="qr-overlay-icon">✅</div><span style="color:#4ae06a;">Approved!</span>';
   overlay.style.background = 'rgba(14,17,28,.60)';
   overlay.classList.add('visible');
-
-  setTimeout(() => showDashboard(), 900);
+  // ── Audit log ────────────────────────────────────────────
+  writeAuditLog(sid, 'approved', 'qr');
+  setTimeout(() => showDashboard(true), 620);
 }
+
+// ── Start a new session ────────────────────────────────────
+async function startQrSession() {
+  stopQrPolling();
+  stopRealtimeSubscription();
+  const sid = genSessionId();
+  _currentSid = sid;
+
+  // Reset UI
+  setQrStatus('waiting', 'Generating secure session…');
+  setQrTimer(QR_TTL_SECONDS);
+  setActivePip('pending');
+  document.getElementById('qr-refresh-btn').style.display = 'none';
+  document.getElementById('qr-frame').className = 'qr-frame';
+  updateSidDisplay(sid);
+
+  const overlay = document.getElementById('qr-generating-overlay');
+  overlay.innerHTML = '<div class="qr-spin-ring"></div><span>Generating…</span>';
+  overlay.style.background = '';
+  overlay.classList.add('visible');
+
+  const expiry = new Date(Date.now() + QR_TTL_SECONDS * 1000).toISOString();
+
+  // Delete expired rows first
+  cleanupExpiredSessions();
+
+  try {
+    const { error } = await getQrDb()
+      .from(QR_TABLE)
+      .insert({
+        session_id:  sid,
+        status:      'pending',
+        expires_at:  expiry,
+        created_at:  new Date().toISOString()
+      });
+
+    if (error) {
+      console.warn('[QR] Supabase insert failed:', error.message);
+    }
+  } catch(e) {
+    console.warn('[QR] DB error:', e);
+  }
+
+  await new Promise(r => setTimeout(r, 160));
+  renderQrCode(sid);
+  overlay.classList.remove('visible');
+  setQrStatus('waiting', 'Waiting for scan…');
+
+  const expiresAt = Date.now() + QR_TTL_SECONDS * 1000;
+  startCountdown(expiresAt);
+
+  // Start BOTH Realtime subscription (instant) + polling (fallback)
+  startRealtimeSubscription(sid);
+  startQrPolling(sid);
+}
+
+// ── Wire tab/button events ─────────────────────────────────
+function switchAuthTab(mode) {
+  const tabPw = document.getElementById('tab-password');
+  const tabQr = document.getElementById('tab-qr');
+  const panePw = document.getElementById('password-panel');
+  const paneQr = document.getElementById('qr-panel');
+  if (mode === 'qr') {
+    tabPw.classList.remove('active'); tabPw.setAttribute('aria-selected','false');
+    tabQr.classList.add('active');    tabQr.setAttribute('aria-selected','true');
+    panePw.style.display = 'none';
+    paneQr.style.display = 'flex';
+    startQrSession();
+  } else {
+    tabQr.classList.remove('active');  tabQr.setAttribute('aria-selected','false');
+    tabPw.classList.add('active');     tabPw.setAttribute('aria-selected','true');
+    paneQr.style.display = 'none';
+    panePw.style.display = 'flex';
+    stopQrPolling();
+  }
+}
+
+document.getElementById('tab-password').addEventListener('click', () => switchAuthTab('password'));
+document.getElementById('tab-qr').addEventListener('click',       () => switchAuthTab('qr'));
+document.getElementById('qr-launch-btn').addEventListener('click',() => switchAuthTab('qr'));
+document.getElementById('qr-refresh-btn').addEventListener('click',() => startQrSession());
+
 
 // ============================================================
 // MOBILE APPROVAL PAGE
-// Runs when URL contains ?qr_token=<token>
+// ─────────────────────────────────────────────────────────────
+// SECURITY FLOW:
+//   Step 1 — Read session_id from URL
+//   Step 2 — Build SHA-256 device fingerprint
+//   Step 3 — Compare against OWNER_DEVICE_CREDENTIAL
+//   Step 4 — MISMATCH: render Unauthorized Device screen,
+//             atomically reject session in DB, write audit log.
+//             HARD STOP — Approve/Reject buttons never rendered.
+//   Step 5 — MATCH: verify session validity (expiry + status)
+//             then enable Approve / Reject buttons.
 // ============================================================
-(function handleQrMobilePage() {
+(async function handleMobileApprovalPage() {
   const params = new URLSearchParams(window.location.search);
-  const token  = params.get('qr_token');
-  if (!token) return;
+  const sid    = params.get('session');
+  if (!sid) return;
 
-  // Show mobile approval UI immediately, hide everything else
-  document.getElementById('auth-overlay').style.display  = 'none';
-  document.getElementById('dashboard').style.display     = 'none';
+  // Show mobile UI, hide everything else
+  document.getElementById('auth-overlay').style.display   = 'none';
+  document.getElementById('dashboard').style.display      = 'none';
   document.getElementById('qr-mobile-page').style.display = 'flex';
 
-  const approveBtn  = document.getElementById('qr-mobile-approve-btn');
-  const stateEl     = document.getElementById('qr-mobile-state');
-  const iconEl      = document.getElementById('qr-mobile-icon');
+  const card       = document.getElementById('qr-mobile-card');
+  const verifyOverlay = document.getElementById('device-verify-overlay');
+  const approveBtn = document.getElementById('qr-mobile-approve-btn');
+  const rejectBtn  = document.getElementById('qr-mobile-reject-btn');
+  const stateEl    = document.getElementById('qr-mobile-state');
+  const iconEl     = document.getElementById('qr-mobile-icon');
+  const expiresEl  = document.getElementById('qr-mobile-expires');
+  const secBadge   = document.getElementById('qr-security-badge');
+  const titleEl    = document.getElementById('qr-mobile-title');
+  const subEl      = document.getElementById('qr-mobile-sub');
 
-  // Verify the token is valid and not yet expired before showing approve btn
-  (async function verifyToken() {
-    stateEl.textContent = 'Verifying code…';
-    approveBtn.disabled = true;
+  // Buttons locked until device passes — defensive
+  approveBtn.disabled = true;
+  rejectBtn.disabled  = true;
 
-    try {
-      const { data, error } = await getQrDb()
-        .from(QR_TABLE)
-        .select('approved, expires_at')
-        .eq('token', token)
-        .single();
+  let _expiresAt   = null;
+  let _expiryTimer = null;
 
-      if (error || !data) {
+  // ── STEP 2 + 3: Fingerprint & compare ─────────────────────
+  let deviceHash    = null;
+  let deviceTrusted = false;
+
+  try {
+    deviceHash    = await buildDeviceFingerprint();
+    deviceTrusted = (
+      OWNER_DEVICE_CREDENTIAL !== 'REGISTER_YOUR_DEVICE_FIRST' &&
+      OWNER_DEVICE_CREDENTIAL.length === 64 &&
+      deviceHash === OWNER_DEVICE_CREDENTIAL
+    );
+  } catch(e) {
+    console.warn('[DeviceAuth] Fingerprint error:', e);
+    deviceTrusted = false;
+  }
+
+  // ── STEP 4: Device mismatch → HARD BLOCK ─────────────────
+  if (!deviceTrusted) {
+    console.warn('[DeviceAuth] ⛔ UNAUTHORIZED DEVICE. Blocking session.');
+
+    // Fire DB rejection and audit log concurrently — do NOT await before
+    // showing block screen. Block screen appears immediately; DB ops are
+    // best-effort and non-blocking from the user's perspective.
+    const reason = deviceHash ? 'UNAUTHORIZED_DEVICE' : 'FINGERPRINT_ERROR';
+    Promise.all([
+      rejectSessionUnauthorized(sid, deviceHash, reason),
+      logDeviceRejection(sid, deviceHash, reason),
+    ]).catch(() => {}); // silent — block already shown
+
+    // Hide the scanning overlay instantly
+    if (verifyOverlay) verifyOverlay.classList.add('hidden');
+
+    // Render the hard-stop screen — this replaces ALL card content
+    // including the approve/reject buttons. They are never shown.
+    renderUnauthorizedScreen(card, deviceHash);
+
+    return; // ← FINAL STOP. Never continues to Face ID or session check.
+  }
+
+  // ── STEP 5: Owner device confirmed ────────────────────────
+  console.log('[DeviceAuth] ✅ Owner device verified.');
+
+  // Hide the scanning overlay; reveal normal card content
+  if (verifyOverlay) verifyOverlay.classList.add('hidden');
+
+  // Update security badge to reflect device verification
+  if (secBadge) {
+    secBadge.innerHTML = '<span>✅</span><span>Owner Device Verified · Single-use · 60s</span>';
+    secBadge.style.cssText += ';background:rgba(52,199,89,.10);border-color:rgba(52,199,89,.26);color:rgba(52,199,89,.90);';
+  }
+
+  // ── Session countdown (only runs on verified device) ───────
+  function startExpiryCountdown(expiresAt) {
+    clearInterval(_expiryTimer);
+    _expiryTimer = setInterval(() => {
+      const rem = Math.max(0, Math.floor((new Date(expiresAt) - Date.now()) / 1000));
+      if (expiresEl) {
+        expiresEl.textContent = rem > 0
+          ? '⏱ Session expires in ' + rem + 's'
+          : 'Session expired';
+        expiresEl.className = 'qr-mobile-expires'
+          + (rem <= 10 ? ' urgent' : '')
+          + (rem <= 0  ? ' expired' : '');
+      }
+      if (rem <= 0) {
+        clearInterval(_expiryTimer);
+        approveBtn.disabled = true;
+        rejectBtn.disabled  = true;
         stateEl.className   = 'qr-mobile-state error';
-        stateEl.textContent = 'Invalid or expired code. Please scan again.';
-        iconEl.textContent  = '❌';
-        return;
+        stateEl.textContent = 'Session expired. Scan a new QR code.';
+        if (iconEl) iconEl.textContent = '⏱';
       }
+    }, 1000);
+  }
 
-      if (new Date(data.expires_at) < new Date()) {
-        stateEl.className   = 'qr-mobile-state error';
-        stateEl.textContent = 'This code has expired. Generate a new one.';
-        iconEl.textContent  = '⏱';
-        return;
-      }
+  // ── Verify session validity in DB ─────────────────────────
+  try {
+    if (stateEl) stateEl.textContent = 'Verifying session…';
 
-      if (data.approved) {
-        stateEl.className   = 'qr-mobile-state success';
-        stateEl.textContent = 'Already approved.';
-        iconEl.textContent  = '✅';
-        return;
-      }
+    const { data, error } = await getQrDb()
+      .from(QR_TABLE)
+      .select('status, expires_at')
+      .eq('session_id', sid)
+      .maybeSingle();
 
-      // Token is valid — enable approve button
-      stateEl.textContent = '';
-      approveBtn.disabled = false;
-
-    } catch(e) {
-      // Supabase not available — fallback mode: write to sessionStorage
-      // (only works same-browser, but is a graceful degradation)
-      stateEl.textContent = '';
-      approveBtn.disabled = false;
-      approveBtn.dataset.fallback = '1';
-    }
-  })();
-
-  approveBtn.addEventListener('click', async () => {
-    approveBtn.disabled = true;
-    stateEl.textContent = 'Approving…';
-
-    // Fallback: sessionStorage (same-browser testing)
-    if (approveBtn.dataset.fallback === '1') {
-      sessionStorage.setItem('qr-approved-' + token, '1');
-      stateEl.className   = 'qr-mobile-state success';
-      stateEl.textContent = '✅ Approved! You can close this tab.';
-      iconEl.textContent  = '✅';
+    if (error || !data) {
+      stateEl.className   = 'qr-mobile-state error';
+      stateEl.textContent = 'Invalid or expired session. Scan again.';
+      if (iconEl) iconEl.textContent = '❌';
+      if (expiresEl) expiresEl.textContent = '';
       return;
     }
 
+    if (new Date(data.expires_at) < new Date()) {
+      stateEl.className   = 'qr-mobile-state error';
+      stateEl.textContent = 'This session has expired. Scan a new code.';
+      if (iconEl) iconEl.textContent = '⏱';
+      if (expiresEl) { expiresEl.textContent = 'Expired'; expiresEl.className = 'qr-mobile-expires expired'; }
+      return;
+    }
+
+    if (data.status === 'approved') {
+      stateEl.className   = 'qr-mobile-state success';
+      stateEl.textContent = 'Already approved.';
+      if (iconEl) iconEl.textContent = '✅';
+      if (expiresEl) expiresEl.textContent = '';
+      return;
+    }
+
+    if (data.status !== 'pending') {
+      stateEl.className   = 'qr-mobile-state error';
+      stateEl.textContent = 'Session ' + data.status + '. Scan a new code.';
+      if (expiresEl) expiresEl.textContent = '';
+      return;
+    }
+
+    // All clear — valid pending session on the owner device
+    _expiresAt          = data.expires_at;
+    stateEl.textContent = '';
+    approveBtn.disabled = false;
+    rejectBtn.disabled  = false;
+    startExpiryCountdown(_expiresAt);
+
+  } catch(e) {
+    stateEl.className   = 'qr-mobile-state error';
+    stateEl.textContent = 'Network error. Please try again.';
+    if (expiresEl) expiresEl.textContent = '';
+  }
+
+  // ── Approve (only reachable by owner device + Face ID) ───────
+  approveBtn.addEventListener('click', async () => {
+    approveBtn.disabled = true;
+    rejectBtn.disabled  = true;
+    clearInterval(_expiryTimer);
+
+    // ── FACE ID GATE ─ required before any approval ───────────
+    const faceOk = await faceIDGate('approve this login');
+    if (!faceOk) {
+      // Face ID failed or was cancelled — hard reject, no re-enable
+      stateEl.className   = 'qr-mobile-state error';
+      stateEl.textContent = '❌ Face ID authentication failed. Approval denied.';
+      if (iconEl) iconEl.textContent = '❌';
+      if (expiresEl) expiresEl.textContent = '';
+      // Buttons remain disabled — session must be retried
+      return;
+    }
+    // ── Face ID passed — proceed with approval ────────────────
+
+    stateEl.textContent = 'Approving…';
+
     try {
-      // Mark approved in DB with timestamp + prevent replay
       const { data: current } = await getQrDb()
         .from(QR_TABLE)
-        .select('approved, expires_at')
-        .eq('token', token)
-        .single();
+        .select('status, expires_at')
+        .eq('session_id', sid)
+        .maybeSingle();
 
       if (!current) {
-        stateEl.className   = 'qr-mobile-state error';
+        stateEl.className = 'qr-mobile-state error';
         stateEl.textContent = 'Session not found.';
         return;
       }
       if (new Date(current.expires_at) < new Date()) {
-        stateEl.className   = 'qr-mobile-state error';
-        stateEl.textContent = 'Code expired — too slow! Try again.';
-        iconEl.textContent  = '⏱';
+        stateEl.className = 'qr-mobile-state error';
+        stateEl.textContent = 'Session expired. Scan a new code.';
+        if (iconEl) iconEl.textContent = '⏱';
         return;
       }
-      if (current.approved) {
-        stateEl.className   = 'qr-mobile-state error';
-        stateEl.textContent = 'Already used. Please scan a new code.';
+      if (current.status !== 'pending') {
+        stateEl.className = 'qr-mobile-state error';
+        stateEl.textContent = 'Session already ' + current.status + '.';
         return;
       }
 
       const { error } = await getQrDb()
         .from(QR_TABLE)
         .update({
-          approved:    true,
-          approved_at: new Date().toISOString()
+          status:            'approved',
+          resolved_at:       new Date().toISOString(),
+          device_credential: deviceHash,
         })
-        .eq('token', token)
-        .eq('approved', false); // atomic — prevents race condition
+        .eq('session_id', sid)
+        .eq('status', 'pending');
 
       if (error) {
         stateEl.className   = 'qr-mobile-state error';
         stateEl.textContent = 'Error: ' + error.message;
         approveBtn.disabled = false;
+        rejectBtn.disabled  = false;
         return;
       }
 
       stateEl.className   = 'qr-mobile-state success';
       stateEl.textContent = '✅ Login approved! Desktop will unlock now.';
-      iconEl.textContent  = '✅';
+      if (iconEl) iconEl.textContent = '✅';
+      if (expiresEl) expiresEl.textContent = '';
+      // ── Audit log (mobile side) ────────────────────────────
+      writeAuditLog(sid, 'approved', 'qr');
 
     } catch(e) {
       stateEl.className   = 'qr-mobile-state error';
       stateEl.textContent = 'Network error. Try again.';
       approveBtn.disabled = false;
+      rejectBtn.disabled  = false;
+    }
+  });
+
+  // ── Reject (only reachable by owner device) ────────────────
+  rejectBtn.addEventListener('click', async () => {
+    approveBtn.disabled = true;
+    rejectBtn.disabled  = true;
+    clearInterval(_expiryTimer);
+    stateEl.textContent = 'Rejecting…';
+
+    try {
+      const { error } = await getQrDb()
+        .from(QR_TABLE)
+        .update({
+          status:      'rejected',
+          resolved_at: new Date().toISOString(),
+        })
+        .eq('session_id', sid)
+        .eq('status', 'pending');
+
+      if (error) {
+        stateEl.className   = 'qr-mobile-state error';
+        stateEl.textContent = 'Error: ' + error.message;
+        approveBtn.disabled = false;
+        rejectBtn.disabled  = false;
+        return;
+      }
+
+      stateEl.className   = 'qr-mobile-state error';
+      stateEl.textContent = 'Login rejected.';
+      if (iconEl) iconEl.textContent = '🚫';
+      if (expiresEl) expiresEl.textContent = '';
+      // ── Audit log (mobile side) ────────────────────────────
+      writeAuditLog(sid, 'rejected', 'qr');
+
+    } catch(e) {
+      stateEl.className   = 'qr-mobile-state error';
+      stateEl.textContent = 'Network error. Try again.';
+      approveBtn.disabled = false;
+      rejectBtn.disabled  = false;
     }
   });
 })();
@@ -4578,21 +5219,7 @@ function onQrApproved(token) {
 // ============================================================
 // DASHBOARD
 // ============================================================
-// ── Supabase SQL required for QR Login ──────────────────────
-// Run this ONCE in Supabase SQL editor:
-//
-//   CREATE TABLE IF NOT EXISTS qr_sessions (
-//     token        text PRIMARY KEY,
-//     created_at   timestamptz NOT NULL DEFAULT now(),
-//     expires_at   timestamptz NOT NULL,
-//     approved     boolean NOT NULL DEFAULT false,
-//     approved_at  timestamptz
-//   );
-//   ALTER TABLE qr_sessions ENABLE ROW LEVEL SECURITY;
-//   CREATE POLICY "anon insert" ON qr_sessions FOR INSERT TO anon WITH CHECK (true);
-//   CREATE POLICY "anon select" ON qr_sessions FOR SELECT TO anon USING (true);
-//   CREATE POLICY "anon update" ON qr_sessions FOR UPDATE TO anon USING (true);
-// ────────────────────────────────────────────────────────────
+// ── SQL schema is in the QR SESSION MANAGEMENT block above ──
 
 let db;
 let _dashboardInitialized = false;
@@ -4669,8 +5296,8 @@ function initDashboard() {
   // ── Review Moderation ─────────────────────────────────────
   initReviews();
 
-  // ── Owner Device Registration ──────────────────────────────
-  initOwnerDevice();
+  // ── Login Audit Log ───────────────────────────────────────
+  initAuditLog();
 }
 
 async function loadAll() {
@@ -5189,6 +5816,17 @@ async function handleRevAction(id, action) {
   const btns = card ? card.querySelectorAll('.rev-btn') : [];
   btns.forEach(b => b.disabled = true);
 
+  // ── FACE ID GATE — required for approve action ───────────
+  if (action === 'approve') {
+    const faceOk = await faceIDGate('approve this review');
+    if (!faceOk) {
+      showToast('❌ Face ID authentication failed — approval denied.', 'err');
+      btns.forEach(b => b.disabled = false);
+      return;
+    }
+  }
+  // ─────────────────────────────────────────────────────────
+
   const rdb = getRevDb();
 
   if (action === 'approve') {
@@ -5257,270 +5895,1060 @@ async function loadReviewStats() {
 // (initReviews is wired at the bottom of initDashboard body above)
 
 
-
 // ============================================================
-// OWNER DEVICE REGISTRATION — WebAuthn / Passkey
-// Table: owner_devices (id, credential_id, device_name,
-//                       trusted, created_at)
-// One row maximum. No passwords stored.
+// AUDIT LOG DASHBOARD — Read + Render
+// ─────────────────────────────────────────────────────────────
+// Reads from login_audit_log and renders in the dashboard table.
+// Uses the authenticated `db` client (dashboard-only access).
+// Realtime subscription keeps the table live without refresh.
 // ============================================================
 
-const OD_TABLE = 'owner_devices';
+let _auditFilter = 'all';
 
-// ── Supabase client (reuses main SUPABASE_URL / SUPABASE_ANON_KEY) ──
-let _odDb = null;
-function getOdDb() {
-  if (_odDb) return _odDb;
-  _odDb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: { persistSession: false }
+function initAuditLog() {
+  // Wire filter tabs
+  document.querySelectorAll('[data-audit-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-audit-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      _auditFilter = btn.dataset.auditFilter;
+      loadAuditLog();
+    });
   });
-  return _odDb;
+
+  // Wire refresh button
+  const refreshBtn = document.getElementById('audit-refresh-btn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async () => {
+      if (refreshBtn.classList.contains('spinning')) return;
+      refreshBtn.classList.add('spinning');
+      refreshBtn.querySelector('.btn-icon').textContent = '↻';
+      try { await Promise.all([loadAuditLog(), loadAuditStats()]); }
+      finally { refreshBtn.classList.remove('spinning'); }
+    });
+  }
+
+  // Initial load
+  loadAuditLog();
+  loadAuditStats();
+
+  // ── Realtime: live-update the table on new entries ────────
+  db.channel('audit-log-live')
+    .on('postgres_changes', {
+      event:  'INSERT',
+      schema: 'public',
+      table:  AUDIT_LOG_TABLE,
+    }, () => {
+      loadAuditLog();
+      loadAuditStats();
+    })
+    .subscribe();
 }
 
-// ── State ─────────────────────────────────────────────────
-let _odRecord = null;          // current DB row or null
-let _odJustRegistered = false; // show success banner once
+// ── Load and render audit entries ────────────────────────────
+async function loadAuditLog() {
+  const tbody = document.getElementById('audit-tbody');
+  if (!tbody) return;
 
-// ── DOM helpers ───────────────────────────────────────────
-function odShow(id)  { const el = document.getElementById(id); if (el) el.style.display = ''; }
-function odHide(id)  { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
-function odState(state) {
-  ['od-loading','od-unregistered','od-registered','od-error'].forEach(odHide);
-  odShow(state);
+  // Skeleton rows
+  tbody.innerHTML = [1,2,3].map(() => `
+    <tr>
+      ${Array(9).fill('<td><div class="rev-skeleton" style="height:13px;width:85%;border-radius:4px;"></div></td>').join('')}
+    </tr>
+  `).join('');
+
+  let query = db
+    .from(AUDIT_LOG_TABLE)
+    .select('id,timestamp,session_id,browser,device,platform,country,ip,result,login_method')
+    .order('timestamp', { ascending: false })
+    .limit(200);
+
+  if (_auditFilter !== 'all') {
+    query = query.eq('result', _auditFilter);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--red,#ff6b6b);">⚠️ ${esc(error.message)}</td></tr>`;
+    return;
+  }
+
+  if (!data || !data.length) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--ink-3);">No ${_auditFilter === 'all' ? '' : _auditFilter + ' '}login attempts yet.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(r => renderAuditRow(r)).join('');
 }
 
-// ── Init ──────────────────────────────────────────────────
-async function initOwnerDevice() {
-  odState('od-loading');
+// ── Render a single audit table row ──────────────────────────
+function renderAuditRow(r) {
+  // Timestamp — two-line: date + time
+  const ts   = new Date(r.timestamp);
+  const date = ts.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+  const time = ts.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+
+  // Result badge
+  const resultCfg = {
+    approved: { bg: 'rgba(52,199,89,.12)',  border: 'rgba(52,199,89,.28)',  color: 'rgba(52,199,89,.95)',  icon: '✅' },
+    rejected: { bg: 'rgba(255,69,58,.12)',  border: 'rgba(255,69,58,.28)',  color: 'rgba(255,100,90,.95)', icon: '❌' },
+    expired:  { bg: 'rgba(255,170,0,.10)',  border: 'rgba(255,170,0,.25)',  color: 'rgba(255,185,50,.90)', icon: '⏱' },
+  };
+  const rc = resultCfg[r.result] || resultCfg.rejected;
+  const resultBadge = `<span style="
+    display:inline-flex;align-items:center;gap:4px;
+    padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.02em;
+    background:${rc.bg};border:1px solid ${rc.border};color:${rc.color};
+  ">${rc.icon} ${esc(r.result)}</span>`;
+
+  // Method badge
+  const methodCfg = {
+    qr:             { bg: 'rgba(90,130,255,.12)', border: 'rgba(90,130,255,.28)', color: 'rgba(120,160,255,.90)', label: '📱 QR' },
+    password:       { bg: 'rgba(160,90,255,.12)', border: 'rgba(160,90,255,.28)', color: 'rgba(180,120,255,.90)', label: '🔑 Password' },
+    session_resume: { bg: 'rgba(255,255,255,.07)', border: 'rgba(255,255,255,.14)', color: 'var(--ink-3)',         label: '↩ Resume' },
+  };
+  const mc = methodCfg[r.login_method] || methodCfg.password;
+  const methodBadge = `<span style="
+    display:inline-flex;align-items:center;gap:3px;
+    padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500;
+    background:${mc.bg};border:1px solid ${mc.border};color:${mc.color};
+  ">${mc.label}</span>`;
+
+  // Session ID — truncated with tooltip
+  const sidShort = r.session_id
+    ? `<span title="${esc(r.session_id)}" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-3);cursor:default;">${esc(r.session_id.slice(0,8))}…</span>`
+    : `<span style="color:var(--ink-4);">—</span>`;
+
+  // IP — monospace
+  const ipCell = r.ip
+    ? `<span style="font-family:'DM Mono',monospace;font-size:11px;">${esc(r.ip)}</span>`
+    : `<span style="color:var(--ink-4);">—</span>`;
+
+  // Row colour hint by result
+  const rowStyle = r.result === 'approved'
+    ? 'background:rgba(52,199,89,.03);'
+    : r.result === 'rejected'
+    ? 'background:rgba(255,69,58,.03);'
+    : '';
+
+  return `<tr style="${rowStyle}">
+    <td style="white-space:nowrap;">
+      <div style="font-size:12px;color:var(--ink-2);">${esc(date)}</div>
+      <div style="font-size:11px;color:var(--ink-4);font-family:'DM Mono',monospace;">${esc(time)}</div>
+    </td>
+    <td>${sidShort}</td>
+    <td>${methodBadge}</td>
+    <td>${resultBadge}</td>
+    <td style="font-size:12px;">${esc(r.browser || '—')}</td>
+    <td style="font-size:12px;">${esc(r.device  || '—')}</td>
+    <td style="font-size:12px;">${esc(r.platform|| '—')}</td>
+    <td style="font-size:12px;">${esc(r.country || '—')}</td>
+    <td>${ipCell}</td>
+  </tr>`;
+}
+
+// ── Load stats pills ──────────────────────────────────────────
+async function loadAuditStats() {
+  const { data } = await db
+    .from(AUDIT_LOG_TABLE)
+    .select('result');
+  if (!data) return;
+
+  const total    = data.length;
+  const approved = data.filter(r => r.result === 'approved').length;
+  const rejected = data.filter(r => r.result === 'rejected').length;
+  const expired  = data.filter(r => r.result === 'expired').length;
+
+  const et = document.getElementById('as-total');
+  const ea = document.getElementById('as-approved');
+  const er = document.getElementById('as-rejected');
+  const ex = document.getElementById('as-expired');
+  if (et) et.textContent = `🛡 ${total} Total`;
+  if (ea) ea.textContent = `✅ ${approved} Approved`;
+  if (er) er.textContent = `❌ ${rejected} Rejected`;
+  if (ex) ex.textContent = `⏱ ${expired} Expired`;
+}
+
+// ─── END AUDIT LOG DASHBOARD ──────────────────────────────────
+
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+// ============================================================
+// LOGIN AUDIT LOG ENGINE
+// ─────────────────────────────────────────────────────────────
+// Collects: timestamp, session_id, browser, device, platform,
+//           country, ip, result, login_method
+// Writes an append-only row to login_audit_log on every outcome.
+// Fire-and-forget — never blocks the auth flow.
+// ─────────────────────────────────────────────────────────────
+// Entry point:  writeAuditLog(sessionId, result, loginMethod)
+//   result:       'approved' | 'rejected' | 'expired'
+//   loginMethod:  'qr' | 'password' | 'session_resume'
+// ============================================================
+
+// ── Client environment detection ─────────────────────────────
+
+function _detectBrowser(ua) {
+  ua = ua || navigator.userAgent;
+  if (/Edg\//.test(ua))                        return 'Edge';
+  if (/OPR\/|Opera/.test(ua))                  return 'Opera';
+  if (/SamsungBrowser/.test(ua))               return 'Samsung';
+  if (/Firefox\//.test(ua))                    return 'Firefox';
+  if (/Chrome\//.test(ua) && /Safari\//.test(ua)) return 'Chrome';
+  if (/Safari\//.test(ua))                     return 'Safari';
+  if (/MSIE|Trident/.test(ua))                 return 'IE';
+  return 'Unknown';
+}
+
+function _detectDevice(ua) {
+  ua = ua || navigator.userAgent;
+  if (/iPad/.test(ua))                          return 'Tablet';
+  if (/iPhone|iPod/.test(ua))                   return 'Mobile';
+  if (/Android/.test(ua) && /Mobile/.test(ua))  return 'Mobile';
+  if (/Android/.test(ua))                       return 'Tablet';
+  if (/Mobi|Touch/.test(ua))                    return 'Mobile';
+  return 'Desktop';
+}
+
+function _detectPlatform(ua) {
+  ua = ua || navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua))  return 'iOS';
+  if (/Android/.test(ua))           return 'Android';
+  if (/Win/.test(navigator.platform || ua))  return 'Windows';
+  if (/Mac/.test(navigator.platform || ua))  return 'macOS';
+  if (/Linux/.test(navigator.platform || ua)) return 'Linux';
+  return 'Unknown';
+}
+
+// ── IP + country via ipapi.co (free, no key needed) ──────────
+// Returns { ip, country } — both may be null on failure.
+async function _fetchIpInfo() {
   try {
-    const db = getOdDb();
-    const { data, error } = await db
-      .from(OD_TABLE)
-      .select('*')
-      .order('created_at', { ascending: true })
-      .limit(1)
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (!data) {
-      _odRecord = null;
-      odState('od-unregistered');
-    } else {
-      _odRecord = data;
-      odRenderRegistered(data, false);
-    }
-  } catch (err) {
-    console.error('[OD] load error', err);
-    document.getElementById('od-error-title').textContent = 'Failed to load owner device';
-    document.getElementById('od-error-msg').textContent   = err.message || 'Unknown error';
-    odState('od-error');
+    const res  = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(4000) });
+    if (!res.ok) return { ip: null, country: null };
+    const json = await res.json();
+    return {
+      ip:      json.ip      || null,
+      country: json.country_name || json.country || null,
+    };
+  } catch {
+    return { ip: null, country: null };
   }
 }
 
-// ── Render registered state ────────────────────────────────
-function odRenderRegistered(rec, showBanner) {
-  document.getElementById('od-device-name').textContent  = rec.device_name || 'Unknown Device';
-  document.getElementById('od-created-at').textContent   =
-    new Date(rec.created_at).toLocaleString('en-GB', {
-      day:'numeric', month:'short', year:'numeric',
-      hour:'2-digit', minute:'2-digit'
+// ── Main write function ───────────────────────────────────────
+// Fire-and-forget. Errors are logged to console but never thrown.
+async function writeAuditLog(sessionId, result, loginMethod) {
+  try {
+    const ua   = navigator.userAgent;
+    const ipInfo = await _fetchIpInfo();
+
+    const entry = {
+      timestamp:    new Date().toISOString(),
+      session_id:   sessionId   || null,
+      browser:      _detectBrowser(ua),
+      device:       _detectDevice(ua),
+      platform:     _detectPlatform(ua),
+      country:      ipInfo.country,
+      ip:           ipInfo.ip,
+      result:       result,
+      login_method: loginMethod,
+    };
+
+    console.log('[AuditLog] Writing entry:', entry.result, entry.login_method, entry.session_id?.slice(0,8));
+
+    const { error } = await getQrDb()
+      .from(AUDIT_LOG_TABLE)
+      .insert(entry);
+
+    if (error) {
+      console.warn('[AuditLog] Insert failed:', error.message);
+    } else {
+      console.log('[AuditLog] ✅ Entry written.');
+    }
+  } catch(e) {
+    console.warn('[AuditLog] Unexpected error:', e.message);
+  }
+}
+
+// ─── END AUDIT LOG ENGINE ─────────────────────────────────────
+
+
+// ============================================================
+// SUPABASE REALTIME — INSTANT DESKTOP UNLOCK
+// ─────────────────────────────────────────────────────────────
+// Architecture:
+//   Desktop subscribes to postgres_changes on qr_sessions filtered
+//   by session_id. When status → 'approved', the unlock sequence
+//   fires immediately — no polling latency.
+//   Polling remains active as a silent fallback in case the WS
+//   connection drops or Realtime is unavailable.
+// ─────────────────────────────────────────────────────────────
+// Channel lifecycle:
+//   startRealtimeSubscription(sid) — subscribe for this session
+//   stopRealtimeSubscription()     — remove channel + cleanup
+// ============================================================
+
+let _realtimeChannel = null;
+let _realtimeActive  = false;
+
+function startRealtimeSubscription(sid) {
+  stopRealtimeSubscription();
+
+  const db = getQrDb();
+
+  _realtimeChannel = db
+    .channel('qr-unlock-' + sid, {
+      config: { broadcast: { self: false } }
+    })
+    .on(
+      'postgres_changes',
+      {
+        event:  'UPDATE',
+        schema: 'public',
+        table:  QR_TABLE,
+        filter: 'session_id=eq.' + sid,
+      },
+      (payload) => {
+        // Guard: only act if this is still the active session
+        if (sid !== _currentSid) return;
+
+        const newStatus = payload?.new?.status;
+        console.log('[Realtime] session', sid.slice(0,8), '→', newStatus);
+
+        if (newStatus === 'approved') {
+          onQrApproved(sid);
+        } else if (newStatus === 'rejected') {
+          onQrRejected(sid);
+        } else if (newStatus === 'expired') {
+          onQrExpired();
+        }
+      }
+    )
+    .subscribe((status, err) => {
+      if (status === 'SUBSCRIBED') {
+        _realtimeActive = true;
+        console.log('[Realtime] ✅ Subscribed to session', sid.slice(0,8));
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
+        _realtimeActive = false;
+        console.warn('[Realtime] ⚠️ Channel', status, '— polling fallback active', err || '');
+        // Polling is already running — no action needed
+      }
+    });
+}
+
+function stopRealtimeSubscription() {
+  if (_realtimeChannel) {
+    try {
+      getQrDb().removeChannel(_realtimeChannel);
+    } catch(e) {}
+    _realtimeChannel = null;
+  }
+  _realtimeActive = false;
+}
+
+
+// ============================================================
+// UNLOCK ANIMATION — Premium Glass Burst Sequence
+// ─────────────────────────────────────────────────────────────
+// Sequence (total ~1 400 ms):
+//   0 ms   — inject unlock-stage overlay (full-screen glass layer)
+//   0 ms   — green pulse ring expands from centre
+//   80 ms  — checkmark icon drops in with spring scale
+//   320 ms — "Access Granted" text fades up
+//   480 ms — shimmer sweep across the overlay
+//   780 ms — overlay scales up + fades out (auth gate dissolves)
+//   900 ms — particle burst fires (8 shards scatter)
+//   1 050 ms — dashboard fades in with upward slide
+//   callback() — fires at ~1 050 ms to show dashboard
+// ============================================================
+
+function playUnlockSequence(callback) {
+  // ── Inject keyframe styles once ───────────────────────────
+  if (!document.getElementById('unlock-anim-styles')) {
+    const st = document.createElement('style');
+    st.id = 'unlock-anim-styles';
+    st.textContent = `
+      /* ── Overlay ── */
+      #unlock-stage {
+        position: fixed; inset: 0; z-index: 88888;
+        display: flex; align-items: center; justify-content: center;
+        flex-direction: column;
+        background: rgba(10, 12, 22, 0.0);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        pointer-events: none;
+        transition: none;
+      }
+      #unlock-stage.active {
+        background: rgba(10, 12, 22, 0.88);
+        backdrop-filter: blur(40px) saturate(200%) brightness(1.08);
+        -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.08);
+        transition: background 180ms ease, backdrop-filter 180ms ease;
+      }
+      #unlock-stage.dissolve {
+        background: rgba(10, 12, 22, 0.0) !important;
+        backdrop-filter: blur(0px) !important;
+        -webkit-backdrop-filter: blur(0px) !important;
+        transform: scale(1.04);
+        opacity: 0;
+        transition:
+          background 420ms cubic-bezier(.4,0,.2,1),
+          backdrop-filter 420ms ease,
+          opacity 380ms cubic-bezier(.4,0,.2,1) 40ms,
+          transform 420ms cubic-bezier(.4,0,.6,1);
+      }
+
+      /* ── Glass card ── */
+      #unlock-card {
+        position: relative;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 0;
+        padding: 48px 52px 44px;
+        border-radius: 32px;
+        background: linear-gradient(160deg,
+          rgba(255,255,255,.13) 0%,
+          rgba(255,255,255,.07) 55%,
+          rgba(60,100,220,.08) 100%
+        );
+        border-top:    1.5px solid rgba(255,255,255,.30);
+        border-left:   1px   solid rgba(255,255,255,.16);
+        border-right:  1px   solid rgba(255,255,255,.07);
+        border-bottom: 1px   solid rgba(0,0,0,.28);
+        box-shadow:
+          inset 0 2px 0   rgba(255,255,255,.34),
+          inset 2px 0 0   rgba(255,255,255,.18),
+          inset -1px 0 0  rgba(255,255,255,.09),
+          inset 0 -1px 0  rgba(0,0,0,.26),
+          inset 0 4px 28px rgba(255,255,255,.07),
+          0 0 0 1px rgba(0,0,0,.46),
+          0 0 0 1.5px rgba(255,255,255,.08),
+          0 8px 32px rgba(0,0,0,.44),
+          0 24px 64px rgba(0,0,0,.36),
+          0 56px 100px rgba(0,0,0,.26),
+          0 0 80px rgba(52,199,89,.08);
+        opacity: 0;
+        transform: scale(.88) translateY(12px);
+        overflow: hidden;
+        isolation: isolate;
+      }
+      #unlock-card.pop-in {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        transition: opacity 260ms cubic-bezier(.34,1.56,.64,1),
+                    transform 340ms cubic-bezier(.34,1.56,.64,1);
+      }
+      #unlock-card.pop-out {
+        opacity: 0;
+        transform: scale(1.06) translateY(-10px);
+        transition: opacity 280ms ease, transform 300ms ease;
+      }
+
+      /* ── Shimmer sweep ── */
+      #unlock-card::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(
+          105deg,
+          transparent 0%,
+          rgba(255,255,255,.0) 30%,
+          rgba(255,255,255,.28) 50%,
+          rgba(255,255,255,.0) 70%,
+          transparent 100%
+        );
+        transform: translateX(-110%);
+        pointer-events: none;
+      }
+      #unlock-card.shimmer::after {
+        transform: translateX(110%);
+        transition: transform 680ms cubic-bezier(.4,0,.2,1);
+      }
+
+      /* ── Pulse ring ── */
+      #unlock-pulse {
+        position: absolute;
+        width: 120px; height: 120px;
+        border-radius: 50%;
+        background: transparent;
+        border: 2px solid rgba(52,199,89,.6);
+        box-shadow: 0 0 24px rgba(52,199,89,.30);
+        opacity: 0;
+        transform: scale(.6);
+      }
+      #unlock-pulse.fire {
+        opacity: 0;
+        transform: scale(2.8);
+        transition:
+          transform 700ms cubic-bezier(.2,0,.4,1),
+          opacity   700ms cubic-bezier(.2,0,.4,1);
+      }
+      /* Second echo ring */
+      #unlock-pulse2 {
+        position: absolute;
+        width: 120px; height: 120px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1.5px solid rgba(52,199,89,.35);
+        opacity: 0;
+        transform: scale(.6);
+      }
+      #unlock-pulse2.fire {
+        opacity: 0;
+        transform: scale(3.8);
+        transition:
+          transform 900ms cubic-bezier(.2,0,.4,1) 80ms,
+          opacity   900ms cubic-bezier(.2,0,.4,1) 80ms;
+      }
+
+      /* ── Check icon ── */
+      #unlock-check {
+        position: relative; z-index: 2;
+        width: 80px; height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(145deg,
+          rgba(52,199,89,.22) 0%,
+          rgba(52,199,89,.10) 100%
+        );
+        border: 1.5px solid rgba(52,199,89,.50);
+        box-shadow:
+          inset 0 1.5px 0 rgba(255,255,255,.22),
+          0 0 0 1px rgba(0,0,0,.36),
+          0 4px 16px rgba(52,199,89,.18),
+          0 0 40px rgba(52,199,89,.10);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 36px;
+        opacity: 0;
+        transform: scale(.5) rotate(-20deg);
+        margin-bottom: 24px;
+      }
+      #unlock-check.drop-in {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        transition:
+          opacity 300ms cubic-bezier(.34,1.56,.64,1) 60ms,
+          transform 420ms cubic-bezier(.34,1.56,.64,1) 60ms;
+      }
+
+      /* ── Text ── */
+      #unlock-title {
+        font-family: 'DM Sans', system-ui, sans-serif;
+        font-size: 22px; font-weight: 700;
+        letter-spacing: -.02em;
+        color: #f0f2f8;
+        opacity: 0; transform: translateY(10px);
+        position: relative; z-index: 2;
+      }
+      #unlock-title.rise {
+        opacity: 1; transform: translateY(0);
+        transition: opacity 280ms ease 200ms, transform 320ms cubic-bezier(.34,1.2,.64,1) 200ms;
+      }
+      #unlock-sub {
+        font-family: 'DM Sans', system-ui, sans-serif;
+        font-size: 13px; font-weight: 400;
+        color: rgba(100,199,120,.85);
+        letter-spacing: .01em;
+        margin-top: 6px;
+        opacity: 0; transform: translateY(6px);
+        position: relative; z-index: 2;
+      }
+      #unlock-sub.rise {
+        opacity: 1; transform: translateY(0);
+        transition: opacity 260ms ease 300ms, transform 300ms ease 300ms;
+      }
+
+      /* ── Particle shards ── */
+      .unlock-shard {
+        position: fixed;
+        width: 6px; height: 6px;
+        border-radius: 2px;
+        background: rgba(52,199,89,.80);
+        box-shadow: 0 0 8px rgba(52,199,89,.60);
+        pointer-events: none;
+        z-index: 88887;
+        opacity: 1;
+        transition: transform 800ms cubic-bezier(.2,0,.4,1),
+                    opacity   800ms ease;
+      }
+
+      /* ── Auth overlay dissolve ── */
+      #auth-overlay.unlocking {
+        pointer-events: none !important;
+        opacity: 0 !important;
+        transform: scale(1.03) !important;
+        transition: opacity 480ms cubic-bezier(.4,0,.2,1) !important,
+                    transform 520ms cubic-bezier(.4,0,.6,1) !important;
+      }
+
+      /* ── Dashboard entrance ── */
+      #dashboard.unlock-enter {
+        opacity: 0 !important;
+        transform: translateY(18px) scale(.992) !important;
+      }
+      #dashboard.unlock-enter-active {
+        opacity: 1 !important;
+        transform: translateY(0) scale(1) !important;
+        transition: opacity 480ms cubic-bezier(.4,0,.2,1),
+                    transform 520ms cubic-bezier(.34,1.1,.64,1) !important;
+      }
+    `;
+    document.head.appendChild(st);
+  }
+
+  // ── Build the overlay DOM ─────────────────────────────────
+  let stage = document.getElementById('unlock-stage');
+  if (stage) stage.remove();
+
+  stage = document.createElement('div');
+  stage.id = 'unlock-stage';
+  stage.innerHTML = `
+    <div id="unlock-pulse"></div>
+    <div id="unlock-pulse2"></div>
+    <div id="unlock-card">
+      <div id="unlock-check">✓</div>
+      <div id="unlock-title">Access Granted</div>
+      <div id="unlock-sub">Identity verified · Unlocking dashboard</div>
+    </div>
+  `;
+  document.body.appendChild(stage);
+
+  const card   = document.getElementById('unlock-card');
+  const check  = document.getElementById('unlock-check');
+  const title  = document.getElementById('unlock-title');
+  const sub    = document.getElementById('unlock-sub');
+  const pulse  = document.getElementById('unlock-pulse');
+  const pulse2 = document.getElementById('unlock-pulse2');
+
+  // ── Timeline ──────────────────────────────────────────────
+  // t=0: overlay becomes active (blur + dim)
+  requestAnimationFrame(() => {
+    stage.classList.add('active');
+  });
+
+  // t=30: pulse ring fires
+  setTimeout(() => {
+    pulse.style.opacity  = '1';
+    pulse2.style.opacity = '1';
+    requestAnimationFrame(() => {
+      pulse.classList.add('fire');
+      pulse2.classList.add('fire');
+    });
+  }, 30);
+
+  // t=80: card pops in
+  setTimeout(() => {
+    card.classList.add('pop-in');
+  }, 80);
+
+  // t=140: check icon drops in
+  setTimeout(() => {
+    check.classList.add('drop-in');
+  }, 140);
+
+  // t=320: text rises up
+  setTimeout(() => {
+    title.classList.add('rise');
+    sub.classList.add('rise');
+  }, 320);
+
+  // t=500: shimmer sweep
+  setTimeout(() => {
+    card.classList.add('shimmer');
+  }, 500);
+
+  // t=760: fire particle burst from card centre
+  setTimeout(() => {
+    _fireParticleBurst();
+  }, 760);
+
+  // t=820: card pops out + overlay dissolves
+  setTimeout(() => {
+    card.classList.add('pop-out');
+  }, 820);
+
+  setTimeout(() => {
+    stage.classList.add('dissolve');
+  }, 860);
+
+  // t=900: auth overlay slides out
+  setTimeout(() => {
+    const authOverlay = document.getElementById('auth-overlay');
+    if (authOverlay) authOverlay.classList.add('unlocking');
+  }, 900);
+
+  // t=1000: callback — show & prepare dashboard, then animate it in
+  setTimeout(() => {
+    stage.remove();
+
+    // Hide auth overlay (already invisible from CSS transition)
+    const authOverlay = document.getElementById('auth-overlay');
+    if (authOverlay) authOverlay.style.display = 'none';
+
+    // Prepare dashboard for entrance animation
+    const dash = document.getElementById('dashboard');
+    dash.classList.add('unlock-enter');
+    dash.style.display = 'block';
+
+    // callback initialises the dashboard data
+    callback();
+
+    // Trigger entrance animation on next frame
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        dash.classList.add('unlock-enter-active');
+        // Clean up entrance classes after transition
+        setTimeout(() => {
+          dash.classList.remove('unlock-enter', 'unlock-enter-active');
+          dash.style.opacity    = '';
+          dash.style.transform  = '';
+          dash.style.transition = '';
+        }, 600);
+      });
+    });
+  }, 1000);
+}
+
+// ── Particle burst: 10 shards scatter from viewport centre ───
+function _fireParticleBurst() {
+  const cx = window.innerWidth  / 2;
+  const cy = window.innerHeight / 2;
+  const colours = [
+    'rgba(52,199,89,.90)',
+    'rgba(80,220,110,.80)',
+    'rgba(100,240,130,.70)',
+    'rgba(255,255,255,.60)',
+    'rgba(130,255,160,.65)',
+    'rgba(60,190,100,.85)',
+    'rgba(200,255,210,.55)',
+    'rgba(40,160,80,.90)',
+    'rgba(170,255,190,.50)',
+    'rgba(255,255,255,.40)',
+  ];
+  for (let i = 0; i < 10; i++) {
+    const shard = document.createElement('div');
+    shard.className = 'unlock-shard';
+    const angle  = (i / 10) * Math.PI * 2 + (Math.random() - .5) * .6;
+    const dist   = 120 + Math.random() * 180;
+    const size   = 4 + Math.random() * 7;
+    shard.style.cssText = `
+      left: ${cx - size/2}px;
+      top:  ${cy - size/2}px;
+      width: ${size}px; height: ${size}px;
+      background: ${colours[i]};
+      box-shadow: 0 0 ${size * 2}px ${colours[i]};
+      border-radius: ${Math.random() > .5 ? '50%' : '2px'};
+    `;
+    document.body.appendChild(shard);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        shard.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) rotate(${Math.random()*360}deg) scale(0)`;
+        shard.style.opacity   = '0';
+      });
     });
 
-  // Truncate credential_id for display
-  const cid = rec.credential_id || '';
-  document.getElementById('od-cred-id').textContent =
-    cid.length > 36 ? cid.slice(0, 18) + '…' + cid.slice(-12) : cid;
-  document.getElementById('od-cred-id').title = cid;
-
-  const banner = document.getElementById('od-success-banner');
-  if (showBanner) {
-    banner.style.display = '';
-    setTimeout(() => { banner.style.display = 'none'; }, 7000);
-  } else {
-    banner.style.display = 'none';
+    setTimeout(() => shard.remove(), 900);
   }
-
-  odState('od-registered');
 }
 
-// ── WebAuthn helpers ───────────────────────────────────────
 
-/** Encode ArrayBuffer → base64url */
-function odToBase64url(buf) {
+// ─── END REALTIME UNLOCK ENGINE ──────────────────────────────
+
+
+// ============================================================
+// WEBAUTHN FACE ID ENGINE
+// ─────────────────────────────────────────────────────────────
+// Requirements:
+//   1. WebAuthn API only — no passwords, no PIN fallback
+//   2. Triggers native Face ID / platform biometric
+//   3. Cryptographically secure challenge (32 random bytes)
+//   4. Challenge verified client-side (signature + clientDataJSON)
+//   5. Replay prevention — every challenge is single-use (Set)
+//   6. Only successful Face ID may continue
+//   7. Hard rejection on any failure
+// ─────────────────────────────────────────────────────────────
+// SETUP (run once to register your device):
+//   Open browser console and call:  await faceIDRegister()
+//   This stores the credential ID in localStorage under 'faceId_credId'
+//   After registration, all approve actions require Face ID.
+// ============================================================
+
+const FACEID_CRED_KEY       = 'faceId_credId';
+const FACEID_RPID           = window.location.hostname || 'localhost';
+const FACEID_ORIGIN         = window.location.origin;
+const FACEID_CHALLENGE_BITS = 256;  // 32 bytes
+
+// ── Replay guard: consumed challenges cannot be reused ────────
+const _usedChallenges = new Set();
+
+// ── Generate a cryptographically secure single-use challenge ──
+function _genChallenge() {
+  const buf = new Uint8Array(32);
+  crypto.getRandomValues(buf);
+  return buf;
+}
+
+// ── Base64url encode (no padding) — WebAuthn standard ─────────
+function _b64url(buf) {
   return btoa(String.fromCharCode(...new Uint8Array(buf)))
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
-/** Decode base64url → Uint8Array */
-function odFromBase64url(str) {
-  const b64 = str.replace(/-/g, '+').replace(/_/g, '/');
-  const raw = atob(b64);
-  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+// ── Base64url decode ──────────────────────────────────────────
+function _b64urlDecode(str) {
+  str = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (str.length % 4) str += '=';
+  return Uint8Array.from(atob(str), c => c.charCodeAt(0));
 }
 
-/** Detect friendly device name from user agent */
-function odDeviceName() {
-  const ua = navigator.userAgent;
-  if (/iPhone/.test(ua))  return 'iPhone';
-  if (/iPad/.test(ua))    return 'iPad';
-  if (/Mac/.test(ua))     return 'Mac';
-  if (/Android/.test(ua)) return 'Android Device';
-  if (/Windows/.test(ua)) return 'Windows Device';
-  return 'Unknown Device';
-}
-
-// ── WebAuthn Registration ──────────────────────────────────
-async function odRegister() {
+// ── Check if WebAuthn + platform authenticator available ──────
+async function _checkWebAuthnSupport() {
   if (!window.PublicKeyCredential) {
-    showToast('❌ WebAuthn not supported on this browser/device', 'err');
-    return;
+    throw new Error('WebAuthn not supported in this browser.');
   }
+  const avail = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+  if (!avail) {
+    throw new Error('No platform biometric authenticator (Face ID / Touch ID) found on this device.');
+  }
+}
 
-  const btn = document.getElementById('od-register-btn') ||
-              document.getElementById('od-replace-confirm-btn');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Waiting for Face ID…'; }
+// ── Retrieve stored credential ID ────────────────────────────
+function _getStoredCredId() {
+  const raw = localStorage.getItem(FACEID_CRED_KEY);
+  if (!raw) return null;
+  try { return _b64urlDecode(raw); } catch { return null; }
+}
 
+// ── Store credential ID after registration ────────────────────
+function _storeCredId(credId) {
+  localStorage.setItem(FACEID_CRED_KEY, _b64url(credId));
+}
+
+// ── REGISTRATION (call once from console) ────────────────────
+// Exposed globally so the owner can run: await faceIDRegister()
+window.faceIDRegister = async function() {
+  await _checkWebAuthnSupport();
+
+  const challenge  = _genChallenge();
+  const userId     = new TextEncoder().encode('sajidmk-admin');
+
+  const options = {
+    challenge,
+    rp:   { name: 'sajidmk Admin', id: FACEID_RPID },
+    user: { id: userId, name: 'admin', displayName: 'Admin' },
+    pubKeyCredParams: [
+      { type: 'public-key', alg: -7  },  // ES256 (preferred)
+      { type: 'public-key', alg: -257 }, // RS256 fallback
+    ],
+    authenticatorSelection: {
+      authenticatorAttachment: 'platform',    // Face ID / Touch ID only
+      userVerification:        'required',    // biometric mandatory
+      requireResidentKey:      false,
+    },
+    attestation: 'none',
+    timeout:     60000,
+    excludeCredentials: [],
+  };
+
+  let cred;
   try {
-    // ── 1. Create challenge ──────────────────────────────
-    const challenge = crypto.getRandomValues(new Uint8Array(32));
-    const userId    = crypto.getRandomValues(new Uint8Array(16));
+    cred = await navigator.credentials.create({ publicKey: options });
+  } catch (e) {
+    throw new Error('Face ID registration cancelled or failed: ' + e.message);
+  }
 
-    const options = {
-      challenge,
-      rp: {
-        name: 'sajidmk.com Admin',
-        id:   location.hostname === 'localhost' ? 'localhost' : 'sajidmk.com'
-      },
-      user: {
-        id:          userId,
-        name:        'owner@sajidmk.com',
-        displayName: 'Sajid Mehmood (Owner)'
-      },
-      pubKeyCredParams: [
-        { type: 'public-key', alg: -7  }, // ES256 (preferred — Face ID)
-        { type: 'public-key', alg: -257 } // RS256 (fallback)
-      ],
-      authenticatorSelection: {
-        authenticatorAttachment: 'platform',   // device-bound (Face ID / Touch ID)
-        residentKey:             'required',   // discoverable credential
-        requireResidentKey:       true,
-        userVerification:        'required'    // biometric required
-      },
-      attestation: 'none',  // no server-side attestation needed
-      timeout:     120000
-    };
+  _storeCredId(cred.rawId);
+  console.log('[FaceID] ✅ Registered. Credential ID stored.');
+  return _b64url(cred.rawId);
+};
 
-    // ── 2. Trigger Face ID prompt ────────────────────────
-    const credential = await navigator.credentials.create({ publicKey: options });
+// ── AUTHENTICATION — the gate called before every approval ────
+// Returns: void on success, throws on any failure.
+// Guarantees: single-use challenge, biometric user-verification required,
+//             no password/PIN fallback, origin bound.
+async function requireFaceID() {
+  // 1. Verify browser + hardware support
+  await _checkWebAuthnSupport();
 
-    // ── 3. Extract public key from response ──────────────
-    const response       = credential.response;
-    const credentialId   = odToBase64url(credential.rawId);
-    const publicKeyDer   = odToBase64url(response.getPublicKey
-                             ? response.getPublicKey()
-                             : response.attestationObject);    // fallback
+  // 2. Ensure device is registered
+  const credId = _getStoredCredId();
+  if (!credId) {
+    throw new Error(
+      'Face ID not registered on this device.\n\n' +
+      'Run  await faceIDRegister()  in the browser console to register.'
+    );
+  }
 
-    // ── 4. Determine device name ─────────────────────────
-    const deviceName = odDeviceName() + ' · ' +
-      new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+  // 3. Generate a fresh, cryptographically secure, single-use challenge
+  const challenge    = _genChallenge();
+  const challengeKey = _b64url(challenge);
 
-    // ── 5. Upsert to Supabase ────────────────────────────
-    //  Enforce "only one owner" at the application layer:
-    //  delete any existing row, then insert the new one.
-    const db = getOdDb();
+  // Guard: reject if this challenge was somehow already used
+  if (_usedChallenges.has(challengeKey)) {
+    throw new Error('REPLAY_ATTACK: Challenge already consumed.');
+  }
 
-    // Remove previous owner device (if replacing)
-    await db.from(OD_TABLE).delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  // 4. Request assertion — platform biometric, user verification required,
+  //    NO PIN/password fallback allowed.
+  const options = {
+    challenge,
+    rpId:              FACEID_RPID,
+    allowCredentials: [{ type: 'public-key', id: credId }],
+    userVerification:  'required',    // biometric only — no PIN fallback
+    timeout:           60000,
+  };
 
-    const { data, error } = await db
-      .from(OD_TABLE)
-      .insert({
-        credential_id: credentialId,
-        device_name:   deviceName,
-        trusted:       true
-      })
-      .select()
-      .single();
+  let assertion;
+  try {
+    assertion = await navigator.credentials.get({ publicKey: options });
+  } catch (e) {
+    // DOMException: NotAllowedError → user cancelled or biometric failed
+    // DOMException: SecurityError  → origin mismatch
+    throw new Error('Face ID authentication failed or was cancelled.');
+  }
 
-    if (error) throw error;
+  // 5. Mark challenge as consumed (replay prevention)
+  _usedChallenges.add(challengeKey);
 
-    _odRecord = data;
-    odCloseReplaceModal();
-    odRenderRegistered(data, true);
-    showToast('🔐 Owner Device Registered Successfully', 'ok');
+  // 6. Verify the assertion client-side
+  //    — clientDataJSON must reference our exact challenge & origin
+  //    — userVerification flag must be set in authenticatorData
+  const clientData = JSON.parse(
+    new TextDecoder().decode(assertion.response.clientDataJSON)
+  );
 
+  // 6a. Challenge binding — confirms server issued this exact challenge
+  const returnedChallenge = clientData.challenge; // already base64url
+  if (returnedChallenge !== challengeKey) {
+    throw new Error('SECURITY: Challenge mismatch — request rejected.');
+  }
+
+  // 6b. Origin binding — prevents cross-origin credential use
+  if (clientData.origin !== FACEID_ORIGIN) {
+    throw new Error('SECURITY: Origin mismatch — request rejected.');
+  }
+
+  // 6c. Type check
+  if (clientData.type !== 'webauthn.get') {
+    throw new Error('SECURITY: Unexpected assertion type.');
+  }
+
+  // 6d. Authenticator data flags — bit 2 (UV) must be set,
+  //     confirming the platform performed user verification (biometric).
+  const authData = new Uint8Array(assertion.response.authenticatorData);
+  const flags    = authData[32]; // flags byte is at offset 32
+  const UV_FLAG  = 0x04;        // User Verified bit
+  const UP_FLAG  = 0x01;        // User Present bit
+  if (!(flags & UV_FLAG)) {
+    throw new Error('SECURITY: Biometric user verification was NOT performed. Request rejected.');
+  }
+  if (!(flags & UP_FLAG)) {
+    throw new Error('SECURITY: User presence not confirmed. Request rejected.');
+  }
+
+  // ✅ All checks passed — Face ID confirmed
+}
+
+// ── UI helper: show Face ID modal overlay ────────────────────
+function _showFaceIDModal(message = 'Verifying identity…') {
+  let modal = document.getElementById('faceid-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'faceid-modal';
+    modal.style.cssText = `
+      position:fixed;inset:0;z-index:99999;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(10,12,20,.82);
+      backdrop-filter:blur(24px) saturate(180%);
+      -webkit-backdrop-filter:blur(24px) saturate(180%);
+    `;
+    modal.innerHTML = `
+      <div id="faceid-modal-card" style="
+        background:linear-gradient(160deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,.07) 60%,rgba(60,90,180,.08) 100%);
+        backdrop-filter:blur(40px) saturate(200%) brightness(1.12);
+        -webkit-backdrop-filter:blur(40px) saturate(200%) brightness(1.12);
+        border-top:1.5px solid rgba(255,255,255,.28);
+        border-left:1px solid rgba(255,255,255,.14);
+        border-right:1px solid rgba(255,255,255,.07);
+        border-bottom:1px solid rgba(0,0,0,.26);
+        border-radius:28px;
+        padding:40px 36px 36px;
+        min-width:300px;max-width:340px;
+        text-align:center;
+        box-shadow:inset 0 2px 0 rgba(255,255,255,.32),0 0 0 1px rgba(0,0,0,.44),0 20px 60px rgba(0,0,0,.55);
+        font-family:'DM Sans',system-ui,sans-serif;
+        color:#f0f2f8;
+      ">
+        <div id="faceid-icon" style="font-size:56px;margin-bottom:16px;line-height:1;">🔒</div>
+        <div id="faceid-title" style="font-size:18px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px;">Face ID Required</div>
+        <div id="faceid-msg" style="font-size:13.5px;color:#8a94aa;line-height:1.5;">${message}</div>
+        <div id="faceid-spinner" style="margin:20px auto 0;width:28px;height:28px;border:2px solid rgba(255,255,255,.12);border-top-color:rgba(100,160,255,.8);border-radius:50%;animation:faceIdSpin .7s linear infinite;"></div>
+      </div>
+    `;
+    if (!document.getElementById('faceid-spin-style')) {
+      const st = document.createElement('style');
+      st.id = 'faceid-spin-style';
+      st.textContent = '@keyframes faceIdSpin{to{transform:rotate(360deg)}}';
+      document.head.appendChild(st);
+    }
+    document.body.appendChild(modal);
+  } else {
+    document.getElementById('faceid-msg').textContent  = message;
+    document.getElementById('faceid-icon').textContent = '🔒';
+    document.getElementById('faceid-title').textContent = 'Face ID Required';
+    document.getElementById('faceid-spinner').style.display = '';
+    modal.style.display = 'flex';
+  }
+  return modal;
+}
+
+function _updateFaceIDModal(icon, title, msg, hideSpinner = false) {
+  const ic = document.getElementById('faceid-icon');
+  const ti = document.getElementById('faceid-title');
+  const mg = document.getElementById('faceid-msg');
+  const sp = document.getElementById('faceid-spinner');
+  if (ic) ic.textContent = icon;
+  if (ti) ti.textContent = title;
+  if (mg) mg.textContent = msg;
+  if (sp) sp.style.display = hideSpinner ? 'none' : '';
+}
+
+function _hideFaceIDModal(delay = 0) {
+  setTimeout(() => {
+    const modal = document.getElementById('faceid-modal');
+    if (modal) modal.style.display = 'none';
+  }, delay);
+}
+
+// ── Top-level gate: show modal → run WebAuthn → return bool ──
+async function faceIDGate(actionLabel = 'this action') {
+  const modal = _showFaceIDModal(`Authenticate with Face ID to ${actionLabel}`);
+  try {
+    await requireFaceID();
+    _updateFaceIDModal('✅', 'Verified', 'Identity confirmed.', true);
+    _hideFaceIDModal(700);
+    return true;
   } catch (err) {
-    console.error('[OD] registration error', err);
-
-    let msg = err.message || 'Registration failed';
-    if (err.name === 'NotAllowedError') {
-      msg = 'Face ID was cancelled or not available. Please try again.';
-    } else if (err.name === 'InvalidStateError') {
-      msg = 'This device may already be registered as a passkey.';
-    } else if (err.name === 'SecurityError') {
-      msg = 'Security error — make sure the page is served over HTTPS.';
-    }
-
-    showToast('❌ ' + msg, 'err');
-
-    // Restore button
-    const regBtn = document.getElementById('od-register-btn');
-    if (regBtn) {
-      regBtn.disabled = false;
-      regBtn.innerHTML = '<span class="od-btn-icon">🔐</span> Register This Device with Face ID';
-    }
-    const confBtn = document.getElementById('od-replace-confirm-btn');
-    if (confBtn) {
-      confBtn.disabled = false;
-      confBtn.textContent = '🔐 Yes, Replace with Face ID';
-    }
+    console.warn('[FaceID] ❌ Gate rejected:', err.message);
+    const isSetup = err.message.includes('not registered');
+    _updateFaceIDModal(
+      isSetup ? '⚙️' : '❌',
+      isSetup ? 'Setup Required'  : 'Authentication Failed',
+      isSetup
+        ? 'Run  await faceIDRegister()  in the browser console to enable Face ID.'
+        : err.message,
+      true
+    );
+    _hideFaceIDModal(3200);
+    return false;
   }
 }
 
-// ── Replace modal ──────────────────────────────────────────
-function odOpenReplaceModal() {
-  const m = document.getElementById('od-replace-modal');
-  if (m) m.classList.add('od-modal-open');
-}
-function odCloseReplaceModal() {
-  const m = document.getElementById('od-replace-modal');
-  if (m) m.classList.remove('od-modal-open');
-}
-
-// ── Wire buttons ───────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  // Register button (empty state)
-  document.getElementById('od-register-btn')?.addEventListener('click', odRegister);
-
-  // Refresh
-  document.getElementById('od-refresh-btn')?.addEventListener('click', async () => {
-    const btn = document.getElementById('od-refresh-btn');
-    if (btn) btn.querySelector('.btn-icon').textContent = '⏳';
-    await initOwnerDevice();
-    if (btn) btn.querySelector('.btn-icon').textContent = '↻';
-  });
-
-  // Replace button (registered state)
-  document.getElementById('od-replace-btn')?.addEventListener('click', odOpenReplaceModal);
-
-  // Replace modal — cancel
-  document.getElementById('od-replace-cancel-btn')?.addEventListener('click', odCloseReplaceModal);
-
-  // Replace modal — confirm (triggers Face ID then replaces)
-  document.getElementById('od-replace-confirm-btn')?.addEventListener('click', odRegister);
-
-  // Close modal on backdrop click
-  document.getElementById('od-replace-modal')?.addEventListener('click', e => {
-    if (e.target === document.getElementById('od-replace-modal')) odCloseReplaceModal();
-  });
-});
-
-// initOwnerDevice() is called by initDashboard() — see patch note below.
-// If you haven't patched initDashboard() yet, add this line inside it:
-//   initOwnerDevice();
-// ────────────────────────────────────────────────────────────────────────
-
+// ─── END WEBAUTHN FACE ID ENGINE ─────────────────────────────
 
 
 function setText(id, val) {
