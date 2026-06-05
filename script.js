@@ -312,9 +312,11 @@
     if (dismissed) return;
     overlay.classList.add('visible');
     document.body.classList.add('gate-active');
+    var _scrollbarW = window.innerWidth - document.documentElement.clientWidth;
+    window._savedScrollY = window.scrollY;
     document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
+    document.body.style.paddingRight = _scrollbarW + 'px';
+    /* position:fixed removed — causes CLS on body */
     if (scrollHint) scrollHint.classList.add('hidden');
     // Force correct background div visibility via JS (belt-and-suspenders on top of CSS)
     const bgDesktop = document.getElementById('gate-bg-desktop');
@@ -334,8 +336,8 @@
     overlay.classList.remove('visible');
     document.body.classList.remove('gate-active');
     document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
+    document.body.style.paddingRight = '';
+    /* No scroll restoration needed — position was never changed */
   }
 
   function submitName() {
@@ -346,6 +348,11 @@
       setTimeout(() => nameInput.style.borderColor = '', 1200);
       return;
     }
+    // Persist name so the review form uses it as sender_name
+    try {
+      localStorage.setItem('sajid_visitor_name', name);
+      sessionStorage.setItem('sajid_visitor_name', name);
+    } catch (e) { /* private browsing — ignore */ }
     // Skip welcome screen — close overlay immediately and go straight to portfolio
     if (welcomeName) welcomeName.textContent = name;
     hideGate();
@@ -374,9 +381,8 @@
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function () {
-  if (typeof AOS !== 'undefined') {
-    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 50 });
-  }
+  // AOS disabled — was causing flicker on sections below hero
+  // if (typeof AOS !== 'undefined') { AOS.init(...) }
   initNav();
   initCursor();
   initFAB();
@@ -397,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initScrollReveal();
   initMagneticButtons();
   initSoftParallax();
-  initDynamicStaggerObserver();
+  // initDynamicStaggerObserver(); // disabled — caused stagger flicker
   setTimeout(initStaggerFadeIn, 50);
   printSignature();
 });
@@ -476,8 +482,10 @@ function initNav() {
       if (!nav) return;
       nav.classList.toggle('scrolled', window.scrollY > 60);
       var current = '';
+      /* Use getBoundingClientRect + pageYOffset instead of offsetTop to avoid forced reflow */
       document.querySelectorAll('section[id]').forEach(function (sec) {
-        if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+        var secTop = sec.getBoundingClientRect().top + window.pageYOffset;
+        if (window.scrollY >= secTop - 120) current = sec.id;
       });
       navLinks.forEach(function (link) {
         link.classList.toggle('active', link.getAttribute('href') === '#' + current);
@@ -716,27 +724,7 @@ function initTestimonialsSlider() {
 // ============================================================
 
 function initSectionFadeIn() {
-  if (!('IntersectionObserver' in window)) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var sections = document.querySelectorAll('.section');
-  sections.forEach(function (sec) {
-    if (sec.getBoundingClientRect().top > window.innerHeight) {
-      sec.style.cssText = 'opacity:0;transform:translateY(24px);transition:opacity 0.65s ease,transform 0.65s cubic-bezier(0.4,0,0.2,1);';
-    }
-  });
-
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity   = '1';
-        entry.target.style.transform = 'translateY(0)';
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
-
-  sections.forEach(function (sec) { observer.observe(sec); });
+  // Disabled — was hiding sections after render causing full-page flicker
 }
 
 
@@ -745,28 +733,7 @@ function initSectionFadeIn() {
 // ============================================================
 
 function initScrollReveal() {
-  if (typeof IntersectionObserver === 'undefined') return;
-  if (window.innerWidth < 768) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var els = document.querySelectorAll('.project-card, .exp-card, .ach-item, .lang-card');
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (!entry.isIntersecting) return;
-      entry.target.style.cssText = 'transition:opacity 0.5s ease,transform 0.5s ease;opacity:1;transform:none;';
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.08 });
-
-  els.forEach(function (el) { el.style.opacity = '0'; observer.observe(el); });
-
-  setTimeout(function () {
-    els.forEach(function (el) {
-      if (el.style.opacity === '0') {
-        el.style.cssText = 'transition:opacity 0.5s ease,transform 0.5s ease;opacity:1;transform:none;';
-      }
-    });
-  }, 3500);
+  // Disabled — was setting opacity:0 on rendered cards causing flicker
 }
 
 
@@ -3163,8 +3130,7 @@ document.addEventListener('keydown', function(e) {
     function animateGlow() {
       glowX = lerp(glowX, mouseX, 0.06);
       glowY = lerp(glowY, mouseY, 0.06);
-      glow.style.left = glowX + 'px';
-      glow.style.top  = glowY + 'px';
+      glow.style.transform = 'translate(' + glowX.toFixed(1) + 'px,' + glowY.toFixed(1) + 'px) translateZ(0)';
       rafId = requestAnimationFrame(animateGlow);
     }
 
@@ -3275,7 +3241,12 @@ document.addEventListener('keydown', function(e) {
       });
     }
 
-    window.addEventListener('scroll', markActive, { passive: true });
+    var _markPending = false;
+    window.addEventListener('scroll', function() {
+      if (_markPending) return;
+      _markPending = true;
+      requestAnimationFrame(function() { _markPending = false; markActive(); });
+    }, { passive: true });
     markActive();
 
     // ── Refraction flash on click ──
@@ -3374,14 +3345,18 @@ document.addEventListener('keydown', function(e) {
       tx = e.clientX; ty = e.clientY;
     }, { passive: true });
 
+    var _glowRaf = null;
     function animateGlow() {
       gx += (tx - gx) * 0.04;
       gy += (ty - gy) * 0.04;
-      glow.style.left = gx + 'px';
-      glow.style.top  = gy + 'px';
-      requestAnimationFrame(animateGlow);
+      glow.style.transform = 'translate(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px) translateZ(0)';
+      var settled = Math.abs(tx - gx) < 0.5 && Math.abs(ty - gy) < 0.5;
+      _glowRaf = settled ? null : requestAnimationFrame(animateGlow);
     }
-    animateGlow();
+    document.addEventListener('mousemove', function() {
+      if (!_glowRaf) _glowRaf = requestAnimationFrame(animateGlow);
+    }, { passive: true });
+    _glowRaf = requestAnimationFrame(animateGlow);
 
     document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
     document.addEventListener('mouseenter', function() { glow.style.opacity = '1'; });
@@ -3568,7 +3543,7 @@ document.addEventListener('keydown', function(e) {
       var alpha = prog < 0.1  ? prog / 0.1 :
                   prog > 0.85 ? (1 - prog) / 0.15 : 1;
 
-      line.style.top     = y + 'px';
+      line.style.transform = 'translateY(' + y + 'px) translateZ(0)'; /* transform instead of top — compositor-only */
       line.style.opacity = (alpha * 0.65).toFixed(3);
 
       if (y > window.innerHeight + 4) {
@@ -3592,11 +3567,17 @@ document.addEventListener('keydown', function(e) {
     var orbB = document.querySelector('.amb-orb-b');
     var orbC = document.querySelector('.amb-orb-c');
 
+    var _depthPending = false;
     window.addEventListener('scroll', function() {
-      var sy = window.scrollY;
-      if (orbA) orbA.style.transform = 'translateY(' + (sy * 0.04) + 'px)';
-      if (orbB) orbB.style.transform = 'translateY(' + (-sy * 0.03) + 'px)';
-      if (orbC) orbC.style.transform = 'translateY(' + (sy * 0.025) + 'px)';
+      if (_depthPending) return;
+      _depthPending = true;
+      requestAnimationFrame(function() {
+        _depthPending = false;
+        var sy = window.scrollY;
+        if (orbA) orbA.style.transform = 'translateY(' + (sy * 0.04) + 'px) translateZ(0)';
+        if (orbB) orbB.style.transform = 'translateY(' + (-sy * 0.03) + 'px) translateZ(0)';
+        if (orbC) orbC.style.transform = 'translateY(' + (sy * 0.025) + 'px) translateZ(0)';
+      });
     }, { passive: true });
   }
 
@@ -3609,8 +3590,7 @@ document.addEventListener('keydown', function(e) {
       entries.forEach(function(e) {
         if (e.isIntersecting) {
           e.target.classList.add('neon-reflect');
-        } else {
-          e.target.classList.remove('neon-reflect');
+          obs.unobserve(e.target); /* add-only — no class churn on scroll direction change */
         }
       });
     }, { threshold: 0.5 });
@@ -3624,18 +3604,25 @@ document.addEventListener('keydown', function(e) {
     var MAX_ROT = 6; // degrees
 
     cards.forEach(function(card) {
+      var _rect = null;
+      card.addEventListener('mouseenter', function() {
+        _rect = card.getBoundingClientRect(); /* cache once per hover — not per mousemove */
+        card.style.willChange = 'transform';
+      });
       card.addEventListener('mousemove', function(e) {
-        var r    = card.getBoundingClientRect();
-        var cx   = r.left + r.width  / 2;
-        var cy   = r.top  + r.height / 2;
-        var dx   = (e.clientX - cx) / (r.width  / 2);
-        var dy   = (e.clientY - cy) / (r.height / 2);
+        if (!_rect) return;
+        var cx   = _rect.left + _rect.width  / 2;
+        var cy   = _rect.top  + _rect.height / 2;
+        var dx   = (e.clientX - cx) / (_rect.width  / 2);
+        var dy   = (e.clientY - cy) / (_rect.height / 2);
         var rotX = -dy * MAX_ROT;
         var rotY =  dx * MAX_ROT;
-        card.style.transform = 'translateY(-10px) scale(1.012) perspective(800px) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg)';
+        card.style.transform = 'translateY(-10px) scale(1.012) perspective(800px) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) translateZ(0)';
       });
       card.addEventListener('mouseleave', function() {
+        _rect = null;
         card.style.transform = '';
+        card.style.willChange = 'auto'; /* de-promote GPU layer when not hovering */
       });
     });
   }
@@ -4036,23 +4023,27 @@ document.addEventListener('keydown', function(e) {
       if (chips)    chips.style.transform    = 'translate(' + (cx * 4) + 'px,' + (cy * 3) + 'px) translateZ(0)';
       if (type)     type.style.transform     = 'translate(' + (cx * -2) + 'px,' + (cy * -1.5) + 'px) translateZ(0)';
 
-      raf = requestAnimationFrame(animate);
+      /* Stop rAF when settled — do not spin forever when mouse is still */
+      var settled = Math.abs(mx - cx) < 0.005 && Math.abs(my - cy) < 0.005;
+      raf = settled ? null : requestAnimationFrame(animate);
     }
 
     hero.addEventListener('mousemove', function (e) {
       var r  = hero.getBoundingClientRect();
       mx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
       my = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
+      if (!raf) raf = requestAnimationFrame(animate); /* start only if not running */
     }, { passive: true });
 
     hero.addEventListener('mouseleave', function () {
       mx = 0; my = 0;
+      if (!raf) raf = requestAnimationFrame(animate);
     }, { passive: true });
 
     hero.addEventListener('mouseenter', function () {
-      if (!raf) animate();
+      if (!raf) raf = requestAnimationFrame(animate);
     });
-    animate();
+    /* Do NOT call animate() unconditionally — only start on interaction */
   }
 
   // ============================================================

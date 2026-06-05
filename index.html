@@ -23,6 +23,7 @@
   <meta name="twitter:description" content="CCNA Certified IT Support Engineer | Aviation &amp; Healthcare — Qatar | Government Immigration — UAE">
 
   <!-- Critical resource preloads — LCP optimization -->
+  <link rel="preload" href="background.png" as="image" fetchpriority="high">
   <link rel="preload" href="logo.png" as="image" fetchpriority="high">
   <link rel="preload" href="photo.jpg" as="image" fetchpriority="high">
   <link rel="preload" href="styles.css" as="style">
@@ -44,8 +45,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 
-  <!-- AOS — defer, non-critical -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" media="print" onload="this.media='all'">
+  <!-- AOS CSS removed — animation system disabled to prevent section flicker -->
 
   <!-- Supabase — defer so it doesn't block render -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
@@ -60,11 +60,11 @@
     @media (max-width:767px) { .mobile-sticky-cta.visible { opacity: 1; pointer-events: auto; transform: translateY(0); } }
     .fab-container { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease; }
     .top-nav.is-scrolled { box-shadow:
-      inset 0 1.5px 0 rgba(255,255,255,0.92),
-      0 6px 24px rgba(80,95,135,0.18),
-      0 20px 50px rgba(70,85,125,0.14),
-      0 0 0 0.75px rgba(255,255,255,0.65) !important; }
-    .nav-link.is-active { color: var(--ink) !important; background: rgba(255,255,255,0.35) !important; }
+      inset 0 1.5px 0 rgba(255,255,255,0.28),
+      0 6px 28px rgba(0,0,0,0.50),
+      0 20px 56px rgba(0,0,0,0.32),
+      0 0 0 0.5px rgba(255,255,255,0.14) !important; }
+    .nav-link.is-active { color: #FFFFFF !important; background: rgba(255,255,255,0.16) !important; }
     /* GATE: force full viewport cover + body lock */
     #gate-overlay { position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;min-height:100dvh!important;background:none!important;background-color:transparent!important; }
     body.gate-active { overflow:hidden!important;position:fixed!important;width:100%!important; }
@@ -87,7 +87,7 @@
     #gate-bg-mobile {
       display: none;
       position: absolute; inset: 0;
-      background-image: url('mobilegatecard.png');
+      background-image: url('loginpage.png');
       background-size: cover;
       background-position: center center;
       background-color: #07111f;
@@ -160,10 +160,10 @@
         <div class="gate-welcome-icon">
           <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
             <circle cx="24" cy="24" r="22" stroke="rgba(255,255,255,0.85)" stroke-width="2"/>
-            <path d="M14 25l7 7 13-14" stroke="#5db8ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 25l7 7 13-14" stroke="#D4A840" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h2 id="welcomeHeading" style="margin-top:18px; color:#ffffff;">Welcome,<br><span id="welcomeName"></span><span style="color:#5db8ff"> !</span></h2>
+        <h2 id="welcomeHeading" style="margin-top:18px; color:#ffffff;">Welcome,<br><span id="welcomeName"></span><span style="color:#D4A840"> !</span></h2>
         <p class="gate-subtitle" style="margin:14px auto 32px; text-align:center; color:rgba(255,255,255,0.70);">
           Great to have you here. Explore the portfolio and feel free to reach out.
         </p>
@@ -2326,9 +2326,65 @@
               <span>Available for enterprise roles in Qatar &amp; GCC — respond within 4 hrs</span>
             </div>
 
+            <!-- ── REVIEW BOX ── -->
+            <div class="review-box" id="reviewBox">
+              <div class="review-box-header">
+                <i class="fas fa-star review-box-star"></i>
+                <span class="review-box-title">Leave a Review</span>
+              </div>
+              <p class="review-box-hint">What do you think about this portfolio?</p>
+
+              <!-- Step 1: Input form -->
+              <div id="reviewForm">
+                <div class="review-rating-row" id="reviewRatingRow">
+                  <span class="review-rating-label">Rating</span>
+                  <div class="review-stars" id="reviewStars">
+                    <span class="review-star" data-val="1">★</span>
+                    <span class="review-star" data-val="2">★</span>
+                    <span class="review-star" data-val="3">★</span>
+                    <span class="review-star" data-val="4">★</span>
+                    <span class="review-star" data-val="5">★</span>
+                  </div>
+                </div>
+                <input id="reviewName" type="text" maxlength="60" placeholder="Your name" style="width:100%;padding:9px 12px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.13);font-size:13px;font-family:inherit;background:rgba(0,0,0,0.04);color:inherit;outline:none;">
+                <textarea id="reviewText" class="review-textarea" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="3" maxlength="500"></textarea>
+                <div class="review-form-footer">
+                  <span class="review-char-count"><span id="reviewCharCount">0</span>/500</span>
+                  <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                  </button>
+                </div>
+              </div>
+
+              <!-- Step 2: Thank-you state (hidden) -->
+              <div id="reviewThanks" style="display:none; text-align:center; padding: 16px 0 8px;">
+                <i class="fas fa-circle-check" style="color:#22c55e; font-size:28px; margin-bottom:8px; display:block;"></i>
+                <p style="font-weight:600; color:var(--ink); margin-bottom:4px;">Thank you for your review!</p>
+                <p style="font-size:12px; color:var(--ink-4);">It will appear on this portfolio once approved.</p>
+              </div>
+            </div>
+            <!-- ── /REVIEW BOX ── -->
+
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ================================================================
+         WEBSITE REVIEWS
+    ================================================================ -->
+    <section id="website-reviews" class="section reviews-section" style="display:none;">
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <span class="sec-num">★</span>
+          <h2 class="sec-title">What Visitors Say</h2>
+          <div class="sec-rule"></div>
+          <p class="sec-subtitle">Genuine feedback from recruiters, colleagues, and professionals who visited this portfolio.</p>
+        </header>
+        <div class="reviews-grid" id="reviewsGrid">
+          <!-- Cards injected by JS -->
+        </div>
       </div>
     </section>
 
@@ -2539,10 +2595,174 @@
   <script src="analytics.js"></script>
 
   <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" defer></script>
+  <!-- AOS JS removed — animation system disabled to prevent section flicker -->
   <!-- ONE script file only -->
   <script src="script.js" defer></script>
   <noscript><style>.gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
+
+  <!-- ═══ REVIEW SYSTEM ═══ -->
+  <script>
+  /* ── Dedicated review Supabase client ── */
+  const _REVIEW_URL = 'https://ruiqfkzuqxxbyvycvsfo.supabase.co';
+  // Service-role key used here so inserts bypass RLS and always reach the DB
+  const _REVIEW_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1aXFma3p1cXh4Ynl2eWN2c2ZvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDUxMjY5OCwiZXhwIjoyMDk2MDg4Njk4fQ.8ZROoodpIVf9vwN34oM-WuT8qY_PWcryJnWKURZFkAI';
+
+  let _reviewClient = null;
+  function _getReviewClient() {
+    if (_reviewClient) return _reviewClient;
+    if (window.supabase && window.supabase.createClient) {
+      try {
+        _reviewClient = window.supabase.createClient(_REVIEW_URL, _REVIEW_KEY, {
+          auth: { persistSession: false, autoRefreshToken: false }
+        });
+      } catch(e) { console.warn('Review client init failed:', e); }
+    }
+    return _reviewClient;
+  }
+
+  /* ── Star rating interaction ── */
+  (function(){
+    let _rating = 0;
+    const stars = document.querySelectorAll('.review-star');
+    stars.forEach(s => {
+      s.addEventListener('mouseover', () => highlightStars(+s.dataset.val));
+      s.addEventListener('mouseleave', () => highlightStars(_rating));
+      s.addEventListener('click', () => { _rating = +s.dataset.val; highlightStars(_rating); });
+    });
+    function highlightStars(n){
+      stars.forEach(s => s.classList.toggle('active', +s.dataset.val <= n));
+    }
+    window._getReviewRating = () => _rating;
+
+    /* char counter */
+    const ta = document.getElementById('reviewText');
+    const cc = document.getElementById('reviewCharCount');
+    if(ta && cc) ta.addEventListener('input', () => cc.textContent = ta.value.length);
+
+    /* Pre-fill name field from localStorage (set by gate overlay) */
+    try {
+      const saved = localStorage.getItem('sajid_visitor_name') || sessionStorage.getItem('sajid_visitor_name');
+      const nameField = document.getElementById('reviewName');
+      if (saved && nameField) nameField.value = saved;
+    } catch(e) {}
+  })();
+
+  /* ── Submit review ── */
+  async function submitReview(){
+    const text   = (document.getElementById('reviewText')?.value || '').trim();
+    const rating = window._getReviewRating ? window._getReviewRating() : 0;
+    const btn    = document.getElementById('reviewSubmitBtn');
+
+    if(!text){ alert('Please write a short review before submitting.'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+    /* Name: prefer the form field, then localStorage, then gate session, then Anonymous */
+    const nameField = (document.getElementById('reviewName')?.value || '').trim();
+    const visitorName = nameField
+      || localStorage.getItem('sajid_visitor_name')
+      || sessionStorage.getItem('sajid_visitor_name')
+      || 'Anonymous';
+
+    /* Persist whatever name they typed so future reviews keep it */
+    if (nameField) {
+      try {
+        localStorage.setItem('sajid_visitor_name', nameField);
+        sessionStorage.setItem('sajid_visitor_name', nameField);
+      } catch(e) {}
+    }
+
+    // Wait up to 3s for Supabase SDK to be ready if it isn't yet
+    let attempts = 0;
+    let client = null;
+    while (!client && attempts < 6) {
+      client = _getReviewClient();
+      if (!client) { await new Promise(r => setTimeout(r, 500)); attempts++; }
+    }
+
+    let stored = false;
+    if (client) {
+      try {
+        const payload = {
+          sender_name:      visitorName,
+          sender_email:     null,
+          subject:          '⭐ Portfolio Review — ' + (rating || '?') + '/5 stars',
+          message:          text,
+          message_type:     'review',
+          status:           'new',
+          review_rating:    rating || null,
+          review_published: false
+        };
+        const { error } = await client.from('contact_messages').insert(payload);
+        if (!error) {
+          stored = true;
+        } else if (error.message && error.message.toLowerCase().includes('column')) {
+          // Columns missing — retry without review-specific columns
+          const { review_rating: _rr, review_published: _rp, ...fallback } = payload;
+          const { error: e2 } = await client.from('contact_messages').insert(fallback);
+          if (!e2) stored = true;
+        } else {
+          console.warn('Review insert error:', error);
+        }
+      } catch(e) { console.warn('Review submit error:', e); }
+    }
+
+    /* Always show thank-you — good UX */
+    document.getElementById('reviewForm').style.display   = 'none';
+    document.getElementById('reviewThanks').style.display = 'block';
+  }
+
+  /* ── Load published reviews ── */
+  async function loadPublishedReviews(){
+    // Wait for Supabase SDK
+    let attempts = 0;
+    let client = null;
+    while (!client && attempts < 8) {
+      client = _getReviewClient();
+      if (!client) { await new Promise(r => setTimeout(r, 500)); attempts++; }
+    }
+    if (!client) return;
+
+    try {
+      const { data, error } = await client
+        .from('contact_messages')
+        .select('sender_name, message, review_rating, created_at')
+        .eq('message_type', 'review')
+        .eq('review_published', true)
+        .order('created_at', { ascending: false });
+
+      if (error || !data || !data.length) return;
+
+      const section = document.getElementById('website-reviews');
+      if (section) section.style.display = '';
+      const grid = document.getElementById('reviewsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = data.map(r => {
+        const n       = Math.max(0, Math.min(5, r.review_rating || 5));
+        const stars   = '<span style="color:#f59e0b">' + '★'.repeat(n) + '</span>' +
+                        '<span style="opacity:0.3">' + '☆'.repeat(5 - n) + '</span>';
+        const date    = new Date(r.created_at).toLocaleDateString('en-GB', {year:'numeric', month:'short', day:'numeric'});
+        const initials= (r.sender_name||'A').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+        return `
+          <div class="review-card">
+            <div class="rc-stars">${stars}</div>
+            <p class="rc-text">"${(r.message||'').replace(/"/g,'&quot;')}"</p>
+            <div class="rc-footer">
+              <span class="rc-avatar">${initials}</span>
+              <div>
+                <span class="rc-name">${r.sender_name||'Anonymous'}</span>
+                <span class="rc-date">${date}</span>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    } catch(e) { /* silent */ }
+  }
+
+  window.addEventListener('load', () => setTimeout(loadPublishedReviews, 2000));
+  </script>
 
 </body>
 </html>

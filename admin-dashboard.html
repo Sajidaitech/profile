@@ -1,558 +1,1327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analytics Dashboard · sajidmk.com</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-/* ================================================================
-   ADMIN DASHBOARD — matches sajidmk.com light portfolio design
-================================================================ */
-
-/* ── Fonts — same as portfolio ── */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap');
-
-/* ── Design tokens — light palette matching portfolio ── */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Admin — Sajid MK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════ */
 :root {
-  --bg:         #eae6df;
-  --bg-deep:    #e2ddd6;
-  --bg-surface: #f0ece5;
-  --ink:        #1a1f2e;
-  --ink-2:      #3d4560;
-  --ink-3:      #6b748e;
-  --ink-4:      #9aa0b4;
-  --accent:     #1a6fc4;
-  --accent-2:   #5b21b6;
-  --ff-sans:    'DM Sans', system-ui, sans-serif;
-  --ff-mono:    'DM Mono', monospace;
-  --ff-display: 'Playfair Display', Georgia, serif;
-  --r-sm:       8px;
-  --r-md:       12px;
-  --r-lg:       16px;
-  --r-xl:       20px;
-  --r-pill:     999px;
-  --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
+  --bg:        #080a0f;
+  --bg2:       #0c0f18;
+  --bg3:       #111520;
+  --surface:   #161b2a;
+  --surf2:     #1c2235;
+  --border:    rgba(255,255,255,.05);
+  --border2:   rgba(255,255,255,.09);
+  --border3:   rgba(255,255,255,.14);
+  --gold:      #d4a840;
+  --gold2:     #f0c865;
+  --gold3:     rgba(212,168,64,.12);
+  --blue:      #4a8ef5;
+  --green:     #2dd674;
+  --red:       #f05252;
+  --amber:     #f8b13a;
+  --cyan:      #22d4e0;
+  --text:      #edf0f8;
+  --text2:     #8896b4;
+  --text3:     #404d6a;
+  --ff-head:   'Bebas Neue', sans-serif;
+  --ff-body:   'Instrument Sans', sans-serif;
+  --ff-mono:   'JetBrains Mono', monospace;
+  --r:         8px;
+  --r-lg:      14px;
+  --r-xl:      20px;
+  --sh:        0 4px 30px rgba(0,0,0,.6);
+  --sh-gold:   0 0 40px rgba(212,168,64,.15);
+  --t:         .2s cubic-bezier(.4,0,.2,1);
 }
-
-/* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ── Body — warm off-white linen background ── */
+html { scroll-behavior: smooth; }
 body {
-  font-family: var(--ff-sans);
+  font-family: var(--ff-body);
   background: var(--bg);
-  color: var(--ink);
+  color: var(--text);
   min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  /* Subtle grain texture via gradient */
-  background-image:
-    radial-gradient(ellipse 70% 50% at 20% 10%, rgba(180,190,220,0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 45% at 80% 85%, rgba(160,175,210,0.14) 0%, transparent 55%);
+  overflow: hidden;
 }
 
-/* ── Auth overlay ── */
-#auth-overlay {
-  min-height: 100vh;
+/* ═══════════════════════════════════════════════════
+   GATE PAGE
+═══════════════════════════════════════════════════ */
+#gateScreen {
+  position: fixed; inset: 0; z-index: 2000;
+  display: flex; align-items: stretch;
+  overflow: hidden;
+}
+
+/* LEFT PANEL — Branding */
+.gate-left {
+  width: 45%;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 24px;
+  justify-content: space-between;
+  padding: 56px 52px;
+  overflow: hidden;
+  background: #06070c;
+}
+.gate-left-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,168,64,.10) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(74,142,245,.08) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(34,212,224,.04) 0%, transparent 60%);
+}
+
+/* Animated grid lines */
+.gate-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(212,168,64,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,168,64,.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: radial-gradient(ellipse 90% 90% at 20% 20%, black 30%, transparent 75%);
+}
+
+/* Floating orbs */
+.gate-orb {
+  position: absolute; border-radius: 50%; pointer-events: none; filter: blur(70px);
+}
+.gate-orb-1 { width: 420px; height: 420px; top: -120px; left: -80px; background: rgba(212,168,64,.08); animation: orbF 16s ease-in-out infinite alternate; }
+.gate-orb-2 { width: 300px; height: 300px; bottom: -60px; right: -40px; background: rgba(74,142,245,.06); animation: orbF 20s ease-in-out infinite alternate-reverse; }
+@keyframes orbF { from{transform:translate(0,0)} to{transform:translate(24px,18px)} }
+
+/* Brand mark */
+.gate-brand-mark {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; gap: 14px;
+}
+.gate-monogram {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: linear-gradient(135deg, #8a6520, var(--gold), #e8cc72);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head); font-size: 22px; color: #06070a;
+  box-shadow: 0 4px 20px rgba(212,168,64,.4), 0 0 0 1px rgba(212,168,64,.3);
+  flex-shrink: 0; letter-spacing: 1px;
+}
+.gate-brand-text { line-height: 1.2; }
+.gate-brand-name { font-family: var(--ff-head); font-size: 18px; letter-spacing: 2px; color: var(--text); }
+.gate-brand-role { font-size: 10px; color: var(--text3); font-family: var(--ff-mono); letter-spacing: 1.5px; margin-top: 2px; }
+
+/* Hero text */
+.gate-hero {
+  position: relative; z-index: 2;
+  margin-top: auto; margin-bottom: auto;
+}
+.gate-eyebrow {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 3px;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.gate-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+.gate-headline {
+  font-family: var(--ff-head); font-size: clamp(72px, 7vw, 100px);
+  line-height: 0.95; letter-spacing: 1px; color: var(--text);
+  margin-bottom: 24px;
+}
+.gate-headline em { color: var(--gold); font-style: normal; }
+.gate-desc {
+  font-size: 14px; color: var(--text2); line-height: 1.8; max-width: 340px;
+  border-left: 2px solid var(--gold3); padding-left: 18px;
+}
+
+/* Stat bar at bottom */
+.gate-stats {
+  position: relative; z-index: 2;
+  display: flex; gap: 32px;
+}
+.gate-stat { }
+.gate-stat-num {
+  font-family: var(--ff-head); font-size: 28px; letter-spacing: 1px;
+  color: var(--text); line-height: 1;
+}
+.gate-stat-label {
+  font-size: 10px; font-family: var(--ff-mono); color: var(--text3);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px;
+}
+
+/* Divider line */
+.gate-divider {
+  width: 1px; background: linear-gradient(to bottom, transparent, rgba(212,168,64,.2) 30%, rgba(212,168,64,.2) 70%, transparent);
+  flex-shrink: 0;
+}
+
+/* RIGHT PANEL — Form */
+.gate-right {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 40px;
+  background: var(--bg);
+  position: relative; overflow-y: auto;
+}
+.gate-right-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 100% 0%, rgba(212,168,64,.04) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 0% 100%, rgba(74,142,245,.04) 0%, transparent 55%);
+}
+
+.gate-form-wrap {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 420px;
+  animation: slideIn .5s cubic-bezier(.34,1.2,.64,1) both;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Step indicator */
+.gate-steps {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 40px;
+}
+.gate-step-dot {
+  height: 3px; border-radius: 2px;
+  background: var(--surf2);
+  transition: all var(--t); width: 24px;
+}
+.gate-step-dot.active { width: 48px; background: var(--gold); }
+.gate-step-dot.done { background: rgba(212,168,64,.35); }
+
+.gate-step-label {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 2px;
+  color: var(--text3); text-transform: uppercase; margin-left: auto;
+}
+
+/* Form heading */
+.gate-form-title {
+  font-family: var(--ff-head); font-size: 42px; letter-spacing: 1px;
+  line-height: 1; margin-bottom: 8px; color: var(--text);
+}
+.gate-form-title em { color: var(--gold); font-style: normal; }
+.gate-form-sub {
+  font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 36px;
+}
+
+/* Field label */
+.gate-label {
+  display: block; font-size: 10px; font-weight: 600;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 1.2px;
+  margin-bottom: 8px;
+}
+
+/* Input */
+.gate-input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--t), box-shadow var(--t), background var(--t);
+  margin-bottom: 20px;
+}
+.gate-input::placeholder { color: var(--text3); }
+.gate-input:focus {
+  border-color: var(--gold);
+  background: rgba(212,168,64,.04);
+  box-shadow: 0 0 0 3px rgba(212,168,64,.08);
+}
+.gate-input-error { border-color: var(--red) !important; }
+
+/* Two column grid */
+.gate-grid-2 {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-bottom: 4px;
+}
+.gate-grid-2 .gate-input { margin-bottom: 0; }
+
+/* Select */
+.gate-select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 13px 16px;
+  color: var(--text);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23404d6a' d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+  transition: border-color var(--t), box-shadow var(--t);
+  margin-bottom: 20px;
+}
+.gate-select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,168,64,.08); outline: none; }
+.gate-select option { background: #111520; }
+
+/* Consent */
+.gate-consent {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 28px; cursor: pointer;
+}
+.gate-consent input[type=checkbox] {
+  width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;
+  accent-color: var(--gold);
+}
+.gate-consent-text { font-size: 12px; color: var(--text3); line-height: 1.6; }
+
+/* CTA Button */
+.gate-btn {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, #8a6520, var(--gold), #f0c865);
+  color: #06070a;
+  border: none; border-radius: var(--r);
+  font-family: var(--ff-body); font-size: 14px; font-weight: 700;
+  cursor: pointer; letter-spacing: .5px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: all var(--t);
+  box-shadow: 0 4px 24px rgba(212,168,64,.28);
+  position: relative; overflow: hidden;
+}
+.gate-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,.15), transparent);
+  transform: translateX(-100%);
+  transition: transform .5s ease;
+}
+.gate-btn:hover::before { transform: translateX(100%); }
+.gate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(212,168,64,.38); }
+.gate-btn:active { transform: translateY(0); }
+
+.gate-note {
+  text-align: center; font-size: 11px; color: var(--text3); margin-top: 14px;
+  font-family: var(--ff-mono); letter-spacing: .5px;
+}
+
+/* Welcome state */
+.gate-welcome { text-align: center; }
+.gate-welcome-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(212,168,64,.08);
+  border: 1px solid rgba(212,168,64,.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px; font-size: 28px; color: var(--gold);
+  animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn { from{opacity:0;transform:scale(.5)} to{opacity:1;transform:scale(1)} }
+.gate-welcome-title {
+  font-family: var(--ff-head); font-size: 38px; letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.gate-welcome-title em { color: var(--gold); font-style: normal; }
+.gate-welcome-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 28px; max-width: 320px; margin-left: auto; margin-right: auto; }
+
+/* Chips */
+.visitor-chips {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  margin-bottom: 28px;
+}
+.visitor-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 999px;
+  background: rgba(212,168,64,.08); border: 1px solid rgba(212,168,64,.18);
+  font-size: 11px; color: var(--gold2); font-family: var(--ff-mono);
+}
+.visitor-chip i { font-size: 10px; }
+
+/* ═══════════════════════════════════════════════════
+   AUTH SCREEN
+═══════════════════════════════════════════════════ */
+#authScreen {
+  position: fixed; inset: 0; z-index: 1500;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 25% 25%, rgba(212,168,64,.04) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 75% 75%, rgba(74,142,245,.03) 0%, transparent 55%);
 }
 .auth-card {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border: 1px solid rgba(255,255,255,0.90);
+  background: var(--bg2);
+  border: 1px solid var(--border2);
   border-radius: var(--r-xl);
-  padding: 40px 36px;
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
+  padding: 44px 42px;
+  width: 100%; max-width: 420px;
+  box-shadow: var(--sh), var(--sh-gold);
+}
+.auth-logo {
+  font-family: var(--ff-head); font-size: 24px; letter-spacing: 3px; color: var(--gold); margin-bottom: 2px;
+}
+.auth-sub { color: var(--text3); font-size: 11px; margin-bottom: 28px; font-family: var(--ff-mono); letter-spacing: 1px; }
+.auth-card h2 { font-family: var(--ff-head); font-size: 28px; letter-spacing: 1px; margin-bottom: 4px; }
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block; font-size: 10px; font-weight: 600;
+  color: var(--text3); margin-bottom: 7px;
+  text-transform: uppercase; letter-spacing: 1px; font-family: var(--ff-mono);
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 11px 14px; color: var(--text);
+  font-family: var(--ff-body); font-size: 14px;
+  transition: border-color var(--t); outline: none; resize: vertical;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,168,64,.08);
+}
+.form-group select option { background: var(--bg2); }
+.pwd-wrap { position: relative; }
+.pwd-wrap input { padding-right: 42px; }
+.pwd-eye { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text3); cursor: pointer; font-size: 13px; padding: 4px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: var(--r);
+  font-family: var(--ff-body); font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none; transition: all var(--t); text-decoration: none;
+}
+.btn-gold {
+  background: linear-gradient(135deg, #8a6520, var(--gold), #f0c865);
+  color: #06070a; width: 100%; justify-content: center; padding: 13px;
+  font-size: 14px; box-shadow: 0 4px 20px rgba(212,168,64,.22);
+}
+.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(212,168,64,.36); }
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: #3a7ae0; }
+.btn-danger  { background: rgba(240,82,82,.10); color: var(--red); border: 1px solid rgba(240,82,82,.22); }
+.btn-danger:hover  { background: rgba(240,82,82,.20); }
+.btn-ghost   { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+.btn-ghost:hover { background: var(--surface); color: var(--text); border-color: var(--border3); }
+.btn-sm      { padding: 6px 12px; font-size: 12px; }
+.btn-icon    { width: 32px; height: 32px; padding: 0; justify-content: center; align-items: center; border-radius: 7px; }
+.auth-error  { color: var(--red); font-size: 12px; margin-top: 8px; min-height: 16px; text-align: center; }
+.auth-success{ color: var(--green); font-size: 12px; margin-top: 8px; min-height: 16px; text-align: center; }
+.btn-passkey {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 12px 16px;
+  background: rgba(212,168,64,.07); border: 1px solid rgba(212,168,64,.22);
+  border-radius: var(--r); color: var(--gold);
+  font-family: var(--ff-body); font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all var(--t); margin-bottom: 10px;
+}
+.btn-passkey:hover { background: rgba(212,168,64,.16); border-color: var(--gold); }
+.btn-google {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 12px 16px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); color: var(--text);
+  font-family: var(--ff-body); font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all var(--t); margin-bottom: 14px;
+}
+.btn-google:hover { background: var(--surface); border-color: var(--border3); }
+.auth-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 4px 0 16px; color: var(--text3); font-size: 11px; font-family: var(--ff-mono);
+}
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+.auth-link-btn {
+  background: none; border: none; color: var(--text2); font-size: 12px;
+  cursor: pointer; padding: 2px 0; transition: color var(--t); font-family: var(--ff-body);
+}
+.auth-link-btn:hover { color: var(--gold); }
+.auth-back-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: none; color: var(--text2); font-size: 13px;
+  cursor: pointer; padding: 0; margin-bottom: 20px;
+  font-family: var(--ff-body); transition: color var(--t);
+}
+.auth-back-btn:hover { color: var(--text); }
+.otp-inputs { display: flex; gap: 8px; justify-content: center; margin-bottom: 4px; }
+.otp-digit {
+  width: 44px !important; height: 52px !important;
+  text-align: center; font-size: 22px !important; font-weight: 600;
+  background: var(--bg3) !important; border: 1px solid var(--border2) !important;
+  border-radius: var(--r) !important; color: var(--text) !important;
+  caret-color: var(--gold); padding: 0 !important;
+  font-family: var(--ff-mono) !important;
+}
+.otp-digit:focus { border-color: var(--gold) !important; box-shadow: 0 0 0 3px rgba(212,168,64,.10) !important; outline: none; }
+.otp-digit.filled { border-color: rgba(212,168,64,.4) !important; }
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT — SIDEBAR + CONTENT
+═══════════════════════════════════════════════════ */
+#sidebar {
+  width: 232px; min-height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: none; flex-direction: column;
+  position: fixed; left: 0; top: 0; bottom: 0;
+  z-index: 100;
+  transition: transform var(--t);
+}
+.sidebar-header {
+  padding: 22px 18px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo-row {
+  display: flex; align-items: center; gap: 11px; margin-bottom: 0;
+}
+.sidebar-monogram {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: linear-gradient(135deg, #8a6520, var(--gold));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head); font-size: 16px; letter-spacing: 1px;
+  color: #06070a; flex-shrink: 0;
+}
+.sidebar-name { font-family: var(--ff-head); font-size: 16px; letter-spacing: 1.5px; color: var(--text); line-height: 1; }
+.sidebar-role { font-size: 9px; color: var(--text3); font-family: var(--ff-mono); letter-spacing: 1px; margin-top: 2px; }
+
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 10px 10px; }
+.sidebar-nav::-webkit-scrollbar { width: 0; }
+
+.nav-group-label {
+  font-size: 9px; font-weight: 700; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 1.8px;
+  padding: 16px 10px 6px;
+  font-family: var(--ff-mono);
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 7px;
+  color: var(--text2); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all var(--t);
+  margin-bottom: 1px; border: none; background: none;
+  width: 100%; text-align: left;
+}
+.nav-item i { width: 16px; text-align: center; font-size: 12px; color: var(--text3); transition: color var(--t); flex-shrink: 0; }
+.nav-item:hover { background: var(--surface); color: var(--text); }
+.nav-item:hover i { color: var(--text2); }
+.nav-item.active { background: var(--gold3); color: var(--gold); }
+.nav-item.active i { color: var(--gold); }
+.nav-badge {
+  margin-left: auto;
+  font-size: 10px; font-weight: 700;
+  padding: 1px 7px; border-radius: 10px;
+  display: none;
+}
+.nav-badge.red { background: var(--red); color: #fff; }
+.nav-badge.amber { background: var(--amber); color: #06070a; }
+
+.sidebar-footer {
+  padding: 12px 10px 16px;
+  border-top: 1px solid var(--border);
+}
+.user-chip {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--r);
+  background: var(--surface); margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+.user-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), #8a6520);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #06070a; flex-shrink: 0;
+  font-family: var(--ff-head); letter-spacing: 1px;
+}
+.user-email { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.view-site {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--text2); font-size: 12px; padding: 7px 10px;
+  border-radius: 7px; text-decoration: none; transition: all var(--t);
+}
+.view-site:hover { background: var(--surface); color: var(--text); }
+.view-site i { font-size: 11px; width: 16px; text-align: center; }
+
+/* ═══════════════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════════════ */
+#mainContent {
+  margin-left: 232px; flex: 1;
+  min-height: 100vh; display: none; flex-direction: column;
+}
+.top-bar {
+  height: 52px; background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; position: sticky; top: 0; z-index: 50;
+}
+.top-bar-left { display: flex; align-items: center; gap: 14px; }
+.top-bar-title {
+  font-family: var(--ff-head); font-size: 17px; letter-spacing: 1.5px; color: var(--text);
+}
+.top-bar-actions { display: flex; align-items: center; gap: 10px; }
+.live-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--text3); font-family: var(--ff-mono);
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 8px rgba(45,214,116,.5);
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* ═══════════════════════════════════════════════════
+   PAGES
+═══════════════════════════════════════════════════ */
+.page { display: none; padding: 28px; }
+.page.active { display: block; }
+.page-header {
+  margin-bottom: 28px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.page-title {
+  font-family: var(--ff-head); font-size: 28px; letter-spacing: 1.5px; color: var(--text);
+}
+.page-sub { color: var(--text2); font-size: 13px; margin-top: 3px; }
+
+/* ═══════════════════════════════════════════════════
+   STATS GRID
+═══════════════════════════════════════════════════ */
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px 20px;
+  position: relative; overflow: hidden;
+  transition: border-color var(--t), transform var(--t);
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212,168,64,.3), transparent);
+  opacity: 0; transition: opacity var(--t);
+}
+.stat-card:hover { border-color: var(--border3); transform: translateY(-2px); }
+.stat-card:hover::before { opacity: 1; }
+.stat-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: rgba(212,168,64,.08); border: 1px solid rgba(212,168,64,.12);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px; font-size: 15px; color: var(--gold);
+}
+.stat-label {
+  font-size: 9px; font-weight: 700; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
+  font-family: var(--ff-mono);
+}
+.stat-val {
+  font-family: var(--ff-head); font-size: 36px; letter-spacing: 1px;
+  color: var(--text); line-height: 1; margin-bottom: 8px;
+}
+.stat-meta { font-size: 11px; color: var(--text3); }
+
+/* ═══════════════════════════════════════════════════
+   CARDS / PANELS
+═══════════════════════════════════════════════════ */
+.panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden; margin-bottom: 20px;
+}
+.panel-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+}
+.panel-title {
+  font-family: var(--ff-head); font-size: 16px; letter-spacing: 1px; color: var(--text);
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-title i { font-size: 13px; color: var(--gold); }
+.panel-body { padding: 0; }
+
+/* Messages */
+.msg-card {
+  display: flex; gap: 14px; padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--t); cursor: pointer;
+}
+.msg-card:hover { background: var(--surface); }
+.msg-card:last-child { border-bottom: none; }
+.msg-card.unread { border-left: 3px solid var(--gold); padding-left: 19px; }
+.msg-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--surface), var(--surf2));
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--text); font-family: var(--ff-head); letter-spacing: 1px;
+}
+.msg-body { flex: 1; min-width: 0; }
+.msg-from { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-subject { font-size: 12px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-text { font-size: 12px; color: var(--text3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-meta { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.msg-time { font-size: 11px; color: var(--text3); font-family: var(--ff-mono); }
+
+/* Empty state */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px; color: var(--text3); gap: 12px; text-align: center;
+}
+.empty-state i { font-size: 32px; opacity: .3; }
+.empty-state p { font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════
+   TABLE
+═══════════════════════════════════════════════════ */
+.table-wrap { overflow-x: auto; }
+.data-table {
+  width: 100%; border-collapse: collapse;
+}
+.data-table th {
+  text-align: left; padding: 10px 18px;
+  font-size: 9px; font-weight: 700; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 1.5px; font-family: var(--ff-mono);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2); position: sticky; top: 0;
+}
+.data-table td {
+  padding: 13px 18px; border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--text2); vertical-align: middle;
+}
+.data-table tr:hover td { background: var(--surface); }
+.data-table tr.selected td { background: rgba(212,168,64,.04); }
+.data-table tr:last-child td { border-bottom: none; }
+.actions-cell { display: flex; align-items: center; gap: 6px; }
+
+/* ═══════════════════════════════════════════════════
+   BADGES
+═══════════════════════════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 8px; border-radius: 6px;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .8px;
+  font-family: var(--ff-mono);
+}
+.badge-green { background: rgba(45,214,116,.12); color: var(--green); }
+.badge-red   { background: rgba(240,82,82,.12);  color: var(--red); }
+.badge-blue  { background: rgba(74,142,245,.12); color: var(--blue); }
+.badge-amber { background: rgba(248,177,58,.12); color: var(--amber); }
+.badge-gold  { background: rgba(212,168,64,.12); color: var(--gold); }
+.badge-gray  { background: rgba(255,255,255,.06); color: var(--text3); }
+
+/* ═══════════════════════════════════════════════════
+   FORM GRID
+═══════════════════════════════════════════════════ */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid .span-2 { grid-column: span 2; }
+
+/* ═══════════════════════════════════════════════════
+   TOGGLE
+═══════════════════════════════════════════════════ */
+.toggle { position: relative; display: inline-block; width: 38px; height: 22px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; cursor: pointer; inset: 0;
+  background: var(--surf2); border: 1px solid var(--border2);
+  border-radius: 22px; transition: var(--t);
+}
+.toggle-slider::before {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; bottom: 2px; left: 2px;
+  background: var(--text3); border-radius: 50%; transition: var(--t);
+}
+.toggle input:checked + .toggle-slider { background: rgba(212,168,64,.2); border-color: rgba(212,168,64,.4); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--gold); }
+
+/* ═══════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity var(--t);
+  padding: 24px;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: var(--r-xl); width: 100%; max-width: 560px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.6);
+  transform: translateY(16px); transition: transform var(--t);
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-header {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-family: var(--ff-head); font-size: 20px; letter-spacing: 1px; }
+.modal-close {
+  background: none; border: none; color: var(--text3); cursor: pointer;
+  font-size: 20px; width: 32px; height: 32px; display: flex; align-items: center;
+  justify-content: center; border-radius: 7px; transition: all var(--t);
+}
+.modal-close:hover { background: var(--surface); color: var(--text); }
+.modal-body { padding: 22px 24px; max-height: 60vh; overflow-y: auto; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+}
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+#toastContainer {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+}
+.toast {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-radius: var(--r);
+  font-size: 13px; font-weight: 500;
+  box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  animation: toastIn .3s ease both;
+  max-width: 340px;
+}
+@keyframes toastIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+.toast.success { background: rgba(45,214,116,.15); border: 1px solid rgba(45,214,116,.3); color: var(--green); }
+.toast.error   { background: rgba(240,82,82,.15);  border: 1px solid rgba(240,82,82,.3);  color: var(--red); }
+
+/* ═══════════════════════════════════════════════════
+   UPLOAD ZONE
+═══════════════════════════════════════════════════ */
+.upload-zone {
+  border: 2px dashed var(--border2); border-radius: var(--r);
+  padding: 28px; text-align: center; cursor: pointer;
+  transition: all var(--t); color: var(--text3);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.upload-zone:hover { border-color: var(--gold); color: var(--text2); background: rgba(212,168,64,.04); }
+.upload-zone i { font-size: 24px; }
+.upload-zone p { font-size: 13px; }
+.upload-zone small { font-size: 11px; }
+.progress-bar-wrap { height: 4px; background: var(--surf2); border-radius: 2px; overflow: hidden; display: none; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2)); border-radius: 2px; transition: width .3s ease; }
+
+/* ═══════════════════════════════════════════════════
+   SPINNER
+═══════════════════════════════════════════════════ */
+.spinner {
+  width: 24px; height: 24px; border: 2px solid var(--surface);
+  border-top-color: var(--gold);
+  border-radius: 50%; animation: spin .7s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════
+   SEARCH / FILTER BAR
+═══════════════════════════════════════════════════ */
+.filter-bar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 16px 22px; border-bottom: 1px solid var(--border);
+}
+.search-wrap {
+  position: relative; flex: 1; min-width: 200px;
+}
+.search-wrap i {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--text3); font-size: 13px; pointer-events: none;
+}
+.search-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 9px 12px 9px 34px; color: var(--text);
+  font-family: var(--ff-body); font-size: 13px; outline: none;
+  transition: border-color var(--t);
+}
+.search-input:focus { border-color: var(--gold); }
+.search-input::placeholder { color: var(--text3); }
+.filter-select {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 9px 12px; color: var(--text2);
+  font-family: var(--ff-body); font-size: 13px; outline: none; cursor: pointer;
+  transition: border-color var(--t);
+}
+.filter-select:focus { border-color: var(--gold); }
+
+/* ═══════════════════════════════════════════════════
+   REVIEW ITEMS
+═══════════════════════════════════════════════════ */
+.review-item {
+  display: flex; gap: 14px; padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+}
+.review-item:last-child { border-bottom: none; }
+.review-item-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--surface), var(--surf2));
+  border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--text); font-family: var(--ff-head);
+}
+.review-item-body { flex: 1; min-width: 0; }
+.review-item-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.review-item-text { font-size: 12px; color: var(--text2); margin-top: 4px; line-height: 1.6; }
+.review-item-actions { display: flex; gap: 6px; margin-top: 8px; }
+.review-stars-sm { font-size: 12px; margin-bottom: 2px; }
+
+/* ═══════════════════════════════════════════════════
+   SKILL / CERT GRID
+═══════════════════════════════════════════════════ */
+.content-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px; padding: 22px;
+}
+.content-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 18px;
+  transition: border-color var(--t), transform var(--t);
+}
+.content-card:hover { border-color: var(--border3); transform: translateY(-2px); }
+.content-card-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 10px; gap: 10px;
+}
+.content-card-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.content-card-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.content-card-body { font-size: 12px; color: var(--text3); line-height: 1.6; }
+.content-card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border);
+}
+
+/* Drag handle */
+.drag-handle { cursor: grab; color: var(--text3); font-size: 14px; padding: 4px; }
+.drag-handle:hover { color: var(--text2); }
+
+/* ═══════════════════════════════════════════════════
+   GALLERY GRID
+═══════════════════════════════════════════════════ */
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px; padding: 22px;
+}
+.gallery-card {
+  border-radius: var(--r); overflow: hidden; position: relative;
+  background: var(--surface); border: 1px solid var(--border);
+  aspect-ratio: 4/3; cursor: pointer;
+  transition: transform var(--t), border-color var(--t);
+}
+.gallery-card:hover { transform: scale(1.03); border-color: var(--border3); }
+.gallery-card img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 60%);
+  opacity: 0; transition: opacity var(--t);
+  display: flex; align-items: flex-end; padding: 12px;
+}
+.gallery-card:hover .gallery-card-overlay { opacity: 1; }
+.gallery-card-title { font-size: 12px; font-weight: 600; color: #fff; }
+
+/* ═══════════════════════════════════════════════════
+   VISITOR TABLE EXTRAS
+═══════════════════════════════════════════════════ */
+.purpose-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; padding: 3px 9px; border-radius: 6px;
+  font-family: var(--ff-mono);
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  #sidebar { transform: translateX(-100%); }
+  #sidebar.open { transform: translateX(0); }
+  #mainContent { margin-left: 0; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 700px) {
+  .gate-left { display: none; }
+  .gate-right { padding: 36px 24px; }
+  .gate-grid-2 { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid .span-2 { grid-column: span 1; }
+}
+@media (max-width: 560px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
+/* ── KPI Grid ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 14px;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.90),
-    0 4px 24px rgba(0,0,40,0.08),
-    0 12px 40px rgba(0,0,40,0.06);
-  text-align: center;
+  margin-bottom: 20px;
 }
-.auth-logo  { font-size: 40px; }
-.auth-title {
-  font-family: var(--ff-display);
-  font-size: 22px; font-weight: 700;
-  color: var(--ink);
-}
-.auth-sub { font-size: 13px; color: var(--ink-3); }
-.auth-input {
-  width: 100%; padding: 11px 14px;
-  border: 1px solid rgba(0,0,40,0.12);
-  border-radius: var(--r-md);
-  font-family: var(--ff-sans); font-size: 14px;
-  color: var(--ink);
-  background: rgba(255,255,255,0.80);
-  outline: none;
-  transition: border-color .18s, box-shadow .18s;
-}
-.auth-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(26,111,196,0.15);
-}
-.auth-btn {
-  width: 100%; padding: 12px;
-  background: linear-gradient(135deg, #1a6fc4 0%, #1452a0 100%);
-  color: #fff; border: none; border-radius: var(--r-md);
-  font-family: var(--ff-sans); font-size: 14px; font-weight: 700;
-  cursor: pointer;
-  transition: transform .2s var(--ease-spring), box-shadow .2s ease;
-  box-shadow: 0 2px 10px rgba(26,111,196,0.30);
-}
-.auth-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(26,111,196,0.36);
-}
-.auth-error {
-  display: none; font-size: 12.5px;
-  color: #d93025; font-weight: 600;
-}
-.auth-error.visible { display: block; }
-
-/* ── Dashboard ── */
-#dashboard { display: none; min-height: 100vh; }
-
-/* ── Header ── */
-header {
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-lg);
+  padding: 18px 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 28px;
-  background: rgba(255,255,255,0.78);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border-bottom: 1px solid rgba(255,255,255,0.90);
-  position: sticky; top: 0; z-index: 100;
-  gap: 12px; flex-wrap: wrap;
-  box-shadow:
-    inset 0 -1px 0 rgba(0,0,40,0.06),
-    0 2px 16px rgba(0,0,40,0.06);
+  align-items: flex-start;
+  gap: 14px;
+  transition: border-color var(--t), transform var(--t);
 }
-.header-left { display: flex; align-items: center; gap: 12px; }
-.header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.h-logo { font-size: 24px; }
-.h-title {
-  font-family: var(--ff-display);
-  font-size: 16px; font-weight: 700;
-  color: var(--ink); line-height: 1.2;
+.kpi-card:hover { border-color: var(--border3); transform: translateY(-1px); }
+.kpi-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
 }
-.h-sub { font-size: 11px; color: var(--ink-3); }
+.kpi-label { font-size: 10px; font-family: var(--ff-mono); letter-spacing: 1.2px; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
+.kpi-value { font-family: var(--ff-head); font-size: 28px; letter-spacing: 1px; color: var(--text); line-height: 1; margin-bottom: 3px; }
+.kpi-sub { font-size: 11px; color: var(--text3); }
+
+/* ── Charts Grid ── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+/* ── Bar Chart ── */
+.bar-row { display: flex; align-items: center; gap: 10px; padding: 5px 0; }
+.bar-label { font-size: 12px; color: var(--text2); width: 110px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { flex: 1; height: 6px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(.4,0,.2,1); }
+.bar-count { font-size: 11px; font-family: var(--ff-mono); color: var(--text3); width: 28px; text-align: right; flex-shrink: 0; }
 
 /* ── Live badge ── */
 .live-badge {
   display: flex; align-items: center; gap: 7px;
-  padding: 5px 13px;
-  background: rgba(52,199,89,0.10);
-  border: 1px solid rgba(52,199,89,0.28);
-  border-radius: var(--r-pill);
-  font-size: 12px; font-weight: 600; color: #1a8a3a;
+  padding: 5px 12px; border-radius: 99px;
+  background: rgba(45,214,116,.08);
+  border: 1px solid rgba(45,214,116,.18);
+  font-size: 12px; font-family: var(--ff-mono); color: var(--green);
 }
-.pulse {
+.live-pulse {
   width: 7px; height: 7px; border-radius: 50%;
-  background: #34c759; flex-shrink: 0;
-  animation: pulseRing 2s infinite;
+  background: var(--green); flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(45,214,116,.5);
+  animation: livePulse 1.8s infinite;
 }
-@keyframes pulseRing {
-  0%   { box-shadow: 0 0 0 0   rgba(52,199,89,.5); }
-  70%  { box-shadow: 0 0 0 6px rgba(52,199,89,0);  }
-  100% { box-shadow: 0 0 0 0   rgba(52,199,89,0);  }
-}
-
-/* ── Nav buttons ── */
-.nav-btn, .theme-toggle {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 7px 14px;
-  background: rgba(255,255,255,0.72);
-  border: 1px solid rgba(0,0,40,0.10);
-  border-radius: var(--r-md);
-  color: var(--ink-2);
-  font-size: 12px; font-weight: 600;
-  font-family: var(--ff-sans);
-  cursor: pointer; text-decoration: none;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.90), 0 1px 4px rgba(0,0,40,0.06);
-  transition: background .18s, transform .18s, box-shadow .18s;
-}
-.nav-btn:hover, .theme-toggle:hover {
-  background: rgba(255,255,255,0.92);
-  transform: translateY(-1px);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.90), 0 4px 12px rgba(0,0,40,0.08);
+@keyframes livePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(45,214,116,.5); }
+  70%  { box-shadow: 0 0 0 7px rgba(45,214,116,0); }
+  100% { box-shadow: 0 0 0 0 rgba(45,214,116,0); }
 }
 
-/* ── Main layout ── */
-main {
-  padding: 28px;
-  display: flex; flex-direction: column; gap: 20px;
-  max-width: 1440px; margin: 0 auto;
-}
-
-/* ── KPI grid ── */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
-  gap: 14px;
-}
-.kpi {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  border: 1px solid rgba(255,255,255,0.90);
-  border-radius: var(--r-xl);
-  padding: 20px 20px 18px;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.90),
-    0 2px 10px rgba(0,0,40,0.06),
-    0 6px 20px rgba(0,0,40,0.04);
-  transition: transform .22s var(--ease-spring), box-shadow .22s ease;
-}
-.kpi:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.90),
-    0 6px 20px rgba(0,0,40,0.10),
-    0 16px 40px rgba(0,0,40,0.07);
-}
-.kpi-label {
-  font-size: 10px; font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 8px;
-}
-.kpi-value {
-  font-size: 30px; font-weight: 700;
-  color: var(--ink); line-height: 1;
-  margin-bottom: 4px;
-  font-variant-numeric: tabular-nums;
-  font-family: var(--ff-mono);
-}
-.kpi-sub { font-size: 11px; color: var(--ink-4); }
-
-/* ── Charts grid ── */
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 14px;
-}
-.chart-card {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  border: 1px solid rgba(255,255,255,0.90);
-  border-radius: var(--r-xl);
-  padding: 20px;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.90),
-    0 2px 10px rgba(0,0,40,0.06),
-    0 6px 20px rgba(0,0,40,0.04);
-}
-.chart-title {
-  font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 16px;
-}
-.bar-list  { display: flex; flex-direction: column; gap: 10px; }
-.bar-row   { display: flex; align-items: center; gap: 10px; }
-.bar-label {
-  font-size: 12px; color: var(--ink-2); font-weight: 500;
-  min-width: 88px; max-width: 120px;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.bar-track {
-  flex: 1; height: 6px;
-  background: rgba(0,0,40,0.07);
-  border-radius: var(--r-pill); overflow: hidden;
-}
-.bar-fill {
-  height: 100%; border-radius: var(--r-pill);
-  background: linear-gradient(90deg, #1a6fc4, #5b8fdf);
-  transition: width .7s cubic-bezier(.34,1.56,.64,1);
-}
-.bar-count {
-  font-size: 12px; font-weight: 600;
-  color: var(--ink-3); min-width: 26px;
-  text-align: right; font-family: var(--ff-mono);
-}
-
-/* ── Table card ── */
-.table-card {
-  background: rgba(255,255,255,0.72);
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  border: 1px solid rgba(255,255,255,0.90);
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.90),
-    0 2px 10px rgba(0,0,40,0.06),
-    0 6px 20px rgba(0,0,40,0.04);
-}
-.table-header {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(0,0,40,0.06);
-  flex-wrap: wrap; gap: 10px;
-}
-.table-title { font-size: 14px; font-weight: 700; color: var(--ink); }
-.table-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-/* ── Table ── */
-table { width: 100%; border-collapse: collapse; font-size: 13px; color: var(--ink-2); }
-thead tr { border-bottom: 1px solid rgba(0,0,40,0.07); }
-th {
-  padding: 10px 14px; text-align: left;
-  font-size: 10.5px; font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase;
-  color: var(--ink-3); white-space: nowrap;
-}
-td {
-  padding: 11px 14px;
-  border-bottom: 1px solid rgba(0,0,40,0.05);
-  color: var(--ink-2); vertical-align: middle;
-}
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: rgba(26,111,196,0.04); }
-tbody tr.selected td { background: rgba(26,111,196,0.07); }
-.cb-col { width: 36px; text-align: center; padding: 0 8px; }
-.row-cb { cursor: pointer; width: 15px; height: 15px; accent-color: var(--accent); }
-.td-country { font-size: 12px; }
-
-/* ── Tags ── */
-.tag {
-  display: inline-block;
-  padding: 2px 9px;
-  background: rgba(0,0,40,0.06);
-  border: 1px solid rgba(0,0,40,0.10);
-  border-radius: var(--r-pill);
-  font-size: 11px; font-weight: 600; color: var(--ink-2);
-}
-.tag-source {
-  background: rgba(26,111,196,0.10);
-  border-color: rgba(26,111,196,0.20);
-  color: var(--accent);
-}
-.tag-gcc {
-  background: rgba(52,199,89,0.10);
-  border-color: rgba(52,199,89,0.22);
-  color: #1a8a3a;
-}
-
-/* ── Buttons ── */
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--r-md);
-  font-size: 12px; font-weight: 600;
-  font-family: var(--ff-sans);
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: all .18s ease;
-  white-space: nowrap;
-}
-.btn-ghost {
-  background: rgba(255,255,255,0.72) !important;
-  border-color: rgba(0,0,40,0.10) !important;
-  color: var(--ink-2) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.90), 0 1px 4px rgba(0,0,40,0.06) !important;
-}
-.btn-ghost:hover {
-  background: rgba(255,255,255,0.95) !important;
-  transform: translateY(-1px) !important;
-}
-.btn-danger {
-  background: rgba(217,48,37,0.08);
-  border-color: rgba(217,48,37,0.20);
-  color: #d93025;
-}
-.btn-danger:hover {
-  background: rgba(217,48,37,0.14);
-  transform: translateY(-1px);
-}
-.btn-danger:disabled { opacity: .38; cursor: not-allowed; transform: none !important; }
-.btn-icon { display: inline-block; transition: transform .6s; }
-.spinning .btn-icon { animation: spinIcon .7s linear infinite; }
-@keyframes spinIcon { to { transform: rotate(360deg); } }
-
-/* ── Selection badge ── */
-#sel-count-badge {
-  display: none;
-  padding: 3px 10px;
-  background: rgba(26,111,196,0.10);
-  border: 1px solid rgba(26,111,196,0.22);
-  border-radius: var(--r-pill);
-  font-size: 11px; font-weight: 600; color: var(--accent);
-}
-
-/* ── Delete modal ── */
+/* ── Delete Modal (old-style for analytics) ── */
 #delete-modal {
-  display: none; position: fixed; inset: 0; z-index: 500;
+  display: none; position: fixed; inset: 0; z-index: 3000;
   align-items: center; justify-content: center;
-  background: rgba(0,0,0,0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
 }
 #delete-modal.open { display: flex; }
-.modal-card {
-  background: rgba(255,255,255,0.92);
-  border: 1px solid rgba(255,255,255,0.95);
-  border-radius: var(--r-xl);
-  padding: 36px 32px;
-  max-width: 400px; width: 90%;
-  display: flex; flex-direction: column; gap: 12px;
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,0.95),
-    0 8px 40px rgba(0,0,40,0.16),
-    0 24px 60px rgba(0,0,40,0.10);
-  text-align: center;
+.modal-card-analytics {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: var(--r-xl); padding: 36px 32px;
+  max-width: 380px; width: 90%; text-align: center;
 }
-.modal-icon  { font-size: 38px; }
-.modal-title { font-size: 20px; font-weight: 700; color: var(--ink); font-family: var(--ff-display); }
-.modal-body  { font-size: 14px; color: var(--ink-2); line-height: 1.55; }
-.modal-actions { display: flex; gap: 10px; justify-content: center; margin-top: 6px; }
-
-/* ── Toast ── */
-#toast {
-  position: fixed; bottom: 28px; left: 50%;
-  transform: translateX(-50%) translateY(16px);
-  padding: 10px 24px;
-  background: rgba(255,255,255,0.94);
-  border: 1px solid rgba(0,0,40,0.10);
-  border-radius: var(--r-pill);
-  color: var(--ink); font-size: 13px; font-weight: 600;
-  opacity: 0; pointer-events: none;
-  transition: opacity .28s ease, transform .28s ease;
-  z-index: 9999; white-space: nowrap;
-  box-shadow: 0 4px 20px rgba(0,0,40,0.12);
-}
-#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-#toast.toast-ok  { border-color: rgba(52,199,89,0.40); color: #1a8a3a; }
-#toast.toast-err { border-color: rgba(217,48,37,0.40); color: #d93025; }
-
-/* ── Responsive ── */
-@media (max-width: 640px) {
-  main          { padding: 14px; gap: 14px; }
-  header        { padding: 12px 16px; }
-  .kpi-value    { font-size: 26px; }
-  .h-title      { font-size: 14px; }
-  .table-header { flex-direction: column; align-items: flex-start; }
-  .kpi-grid     { grid-template-columns: repeat(2, 1fr); }
-  .charts-grid  { grid-template-columns: 1fr; }
-  .nav-btn span, .theme-toggle span:last-child { display: none; }
-}
+.modal-card-analytics .modal-icon { font-size: 32px; margin-bottom: 12px; }
+.modal-card-analytics .modal-title { font-family: var(--ff-head); font-size: 22px; margin-bottom: 8px; }
+.modal-card-analytics .modal-body { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 24px; }
+.modal-card-analytics .modal-actions { display: flex; gap: 10px; justify-content: center; }
 </style>
 </head>
 <body>
 
-<!-- ── Auth Gate ─────────────────────────────────────────── -->
-<div id="auth-overlay">
+<!-- ════════════════════════════════════════════
+     ADMIN AUTH SCREEN
+════════════════════════════════════════════ -->
+<div id="authScreen">
   <div class="auth-card">
-    <div class="auth-logo">📊</div>
-    <div class="auth-title">Analytics Dashboard</div>
-    <div class="auth-sub">sajidmk.com · Enter admin password to continue</div>
-    <input class="auth-input" type="password" id="auth-input"
-           placeholder="Password" autocomplete="current-password">
-    <button class="auth-btn" id="auth-btn">Access Dashboard</button>
-    <div class="auth-error" id="auth-error">Incorrect password. Try again.</div>
+    <div class="auth-logo">ADMIN PANEL</div>
+    <div class="auth-sub">SAJID MK · PORTFOLIO</div>
+
+    <!-- Sign In -->
+    <div id="panelSignIn">
+      <h2 style="margin-bottom:6px">Welcome back</h2>
+      <p style="color:var(--text2);font-size:13px;margin-bottom:24px">Sign in to manage your portfolio content.</p>
+
+      <button class="btn-passkey" onclick="signInPasskey()" id="passkeyBtn">
+        <i class="fas fa-fingerprint"></i>
+        Sign in with Passkey
+        <span style="font-size:10px;opacity:.6;font-weight:400;margin-left:auto">Face ID · Touch ID</span>
+      </button>
+
+      <button class="btn-google" onclick="signInGoogle()" id="googleBtn">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#EA4335" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#4285F4" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2.04c-.72.48-1.63.77-2.7.77-2.08 0-3.84-1.4-4.47-3.29H1.84v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.51 10.5A4.8 4.8 0 0 1 4.26 9c0-.52.09-1.03.25-1.5V5.43H1.84A8 8 0 0 0 .98 9c0 1.3.31 2.53.86 3.57l2.67-2.07z"/><path fill="#34A853" d="M8.98 4.21c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.84 5.43L4.51 7.5c.63-1.89 2.39-3.29 4.47-3.29z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="auth-divider">or email & password</div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="authEmail" placeholder="sajid.teech@gmail.com" autocomplete="email" value="sajid.teech@gmail.com" onkeydown="if(event.key==='Enter')signIn()">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pwd-wrap">
+          <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()">
+          <button class="pwd-eye" onclick="togglePwd()"><i class="fas fa-eye" id="pwdEyeIcon"></i></button>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="signIn()" id="signInBtn">
+        <i class="fas fa-lock-open"></i> Sign In
+      </button>
+      <div class="auth-error" id="authError"></div>
+      <div style="display:flex;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:6px">
+        <button class="auth-link-btn" onclick="showPanel('panelForgot')">Forgot password?</button>
+        <button class="auth-link-btn" onclick="showPanel('panelOTP')">Use passcode</button>
+      </div>
+    </div>
+
+    <!-- Forgot Password -->
+    <div id="panelForgot" style="display:none">
+      <button class="auth-back-btn" onclick="showPanel('panelSignIn')"><i class="fas fa-arrow-left"></i> Back</button>
+      <h2 style="margin-bottom:6px">Reset Password</h2>
+      <p style="color:var(--text2);font-size:13px;margin-bottom:24px">We'll send a reset link to your email.</p>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="forgotEmail" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <button class="btn btn-gold" onclick="sendForgotPassword()" id="forgotBtn">
+        <i class="fas fa-paper-plane"></i> Send Reset Link
+      </button>
+      <div class="auth-error" id="forgotError"></div>
+      <div class="auth-success" id="forgotSuccess"></div>
+    </div>
+
+    <!-- OTP -->
+    <div id="panelOTP" style="display:none">
+      <button class="auth-back-btn" onclick="showPanel('panelSignIn')"><i class="fas fa-arrow-left"></i> Back</button>
+      <h2 style="margin-bottom:6px">Email Passcode</h2>
+      <p style="color:var(--text2);font-size:13px;margin-bottom:24px">We'll send a 6-digit code to your email.</p>
+      <div id="otpStep1">
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="otpEmail" placeholder="sajid.teech@gmail.com" autocomplete="email" value="sajid.teech@gmail.com">
+        </div>
+        <button class="btn btn-gold" onclick="sendOTP()" id="otpSendBtn">
+          <i class="fas fa-mobile-alt"></i> Send Passcode
+        </button>
+      </div>
+      <div id="otpStep2" style="display:none">
+        <p style="color:var(--text2);font-size:13px;margin-bottom:16px">Code sent to <strong id="otpEmailLabel" style="color:var(--gold)"></strong></p>
+        <div class="otp-inputs">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          <input class="otp-digit" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+        </div>
+        <button class="btn btn-gold" onclick="verifyOTP()" id="otpVerifyBtn" style="margin-top:16px">
+          <i class="fas fa-check-circle"></i> Verify Passcode
+        </button>
+        <button class="auth-link-btn" onclick="resendOTP()" style="margin-top:12px;display:block">Resend code</button>
+      </div>
+      <div class="auth-error" id="otpError"></div>
+      <div class="auth-success" id="otpSuccess"></div>
+    </div>
+
+    <!-- Passkey Setup -->
+    <div id="panelPasskeySetup" style="display:none">
+      <button class="auth-back-btn" onclick="showPanel('panelSignIn')"><i class="fas fa-arrow-left"></i> Back</button>
+      <h2 style="margin-bottom:6px">Register Passkey</h2>
+      <p style="color:var(--text2);font-size:13px;margin-bottom:24px">Set up Face ID, Touch ID, or a security key.</p>
+      <button class="btn-passkey" onclick="registerPasskey()" id="registerPasskeyBtn">
+        <i class="fas fa-fingerprint"></i> Register This Device
+      </button>
+      <div class="auth-error" id="passkeySetupError"></div>
+      <div class="auth-success" id="passkeySetupSuccess"></div>
+    </div>
   </div>
-  <a href="https://sajidmk.com" style="font-size:13px;color:var(--ink-3);text-decoration:none;margin-top:4px;transition:color .2s;"
-     onmouseover="this.style.color='var(--ink-2)'" onmouseout="this.style.color='var(--ink-3)'">
-    ← Back to website
-  </a>
 </div>
 
-<!-- ── Dashboard ─────────────────────────────────────────── -->
-<div id="dashboard">
-
-  <header>
-    <div class="header-left">
-      <div class="h-logo">📊</div>
+<!-- ════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo-row">
+      <div class="sidebar-monogram">S</div>
       <div>
-        <div class="h-title">Visitor Analytics</div>
-        <div class="h-sub">sajidmk.com · Real-time</div>
+        <div class="sidebar-name">SAJID MK</div>
+        <div class="sidebar-role">PORTFOLIO ADMIN</div>
       </div>
     </div>
-    <div class="header-right">
-      <div class="live-badge">
-        <span class="pulse"></span>
-        <span id="online-badge">— online now</span>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-group-label">Overview</div>
+    <button class="nav-item active" onclick="showPage('dashboard',this)">
+      <i class="fas fa-chart-pie"></i> Dashboard
+    </button>
+    <button class="nav-item" onclick="showPage('messages',this)">
+      <i class="fas fa-envelope"></i> Messages
+      <span class="nav-badge red" id="unreadBadge"></span>
+    </button>
+    <button class="nav-item" onclick="showPage('reviews',this)">
+      <i class="fas fa-star"></i> Reviews
+      <span class="nav-badge amber" id="pendingReviewsBadge"></span>
+    </button>
+    <button class="nav-item" onclick="showPage('visitors',this)">
+      <i class="fas fa-users"></i> Visitor Log
+    </button>
+
+    <div class="nav-group-label">Content</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="user-avatar" id="userInitial">S</div>
+      <div style="flex:1;min-width:0">
+        <div class="user-email" id="userEmail">loading...</div>
       </div>
-      <a href="https://sajidmk.com" class="nav-btn" title="Go to website homepage">
-        🏠 <span>Home</span>
-      </a>
-      <button class="nav-btn" id="gate-btn" title="Go back to gate page">
-        🔒 <span>Gate</span>
-      </button>
-      <button class="theme-toggle" id="theme-btn" title="Toggle light/dark mode">
-        <span id="theme-icon">☀️</span>
-        <span id="theme-label">Light</span>
-      </button>
     </div>
-  </header>
+    <a href="index.html" target="_blank" class="view-site">
+      <i class="fas fa-external-link-alt"></i> View Portfolio
+    </a>
+    <button class="nav-item" onclick="signOut()" style="color:var(--red)">
+      <i class="fas fa-sign-out-alt" style="color:var(--red)"></i> Sign Out
+    </button>
+    <button class="nav-item" onclick="resetApiKey()" style="color:var(--text3);font-size:12px">
+      <i class="fas fa-key" style="color:var(--text3)"></i> Change API Key
+    </button>
+    <button class="nav-item" onclick="document.getElementById('authScreen').style.display='flex';document.getElementById('mainContent').style.display='none';document.getElementById('sidebar').style.display='none';showPanel('panelPasskeySetup')" style="color:var(--gold)">
+      <i class="fas fa-fingerprint" style="color:var(--gold)"></i> Register Passkey
+    </button>
+  </div>
+</nav>
 
-  <main>
+<!-- ════════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════════ -->
+<div id="mainContent">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <button onclick="document.getElementById('sidebar').classList.toggle('open')" class="btn btn-ghost btn-icon" style="display:none" id="menuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="top-bar-title" id="topBarTitle">DASHBOARD</div>
+    </div>
+    <div class="top-bar-actions">
+      <div class="live-badge"><div class="live-dot"></div> Live</div>
+      <span id="topBarVisitorTag" style="font-size:11px;color:var(--text3);font-family:var(--ff-mono);display:none"></span>
+    </div>
+  </div>
 
-    <!-- KPIs -->
-    <div class="kpi-grid" id="kpi-grid">
-      <div class="kpi"><div class="kpi-label">Total Visits</div><div class="kpi-value" id="kpi-total">—</div><div class="kpi-sub">All time</div></div>
-      <div class="kpi"><div class="kpi-label">Today</div><div class="kpi-value" id="kpi-today">—</div><div class="kpi-sub">Since midnight UTC</div></div>
-      <div class="kpi"><div class="kpi-label">This Week</div><div class="kpi-value" id="kpi-week">—</div><div class="kpi-sub">Last 7 days</div></div>
-      <div class="kpi"><div class="kpi-label">This Month</div><div class="kpi-value" id="kpi-month">—</div><div class="kpi-sub">Last 30 days</div></div>
-      <div class="kpi"><div class="kpi-label">Returning</div><div class="kpi-value" id="kpi-returning">—</div><div class="kpi-sub">Repeat visitors</div></div>
-      <div class="kpi"><div class="kpi-label">Avg Session</div><div class="kpi-value" id="kpi-duration">—</div><div class="kpi-sub">Time on site</div></div>
+  <!-- ── DASHBOARD ── -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <div class="page-title">VISITOR ANALYTICS</div>
+        <div class="page-sub">sajidmk.com · Real-time</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="live-badge">
+          <span class="live-pulse"></span>
+          <span id="online-badge">— online now</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="refresh-btn">
+          <span class="btn-icon">↻</span> Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(74,142,245,.12);color:#4a8ef5"><i class="fas fa-users"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-label">Total Visits</div>
+          <div class="kpi-value" id="kpi-total">—</div>
+          <div class="kpi-sub">All time</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(45,214,116,.12);color:#2dd674"><i class="fas fa-calendar-day"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-label">Today</div>
+          <div class="kpi-value" id="kpi-today">—</div>
+          <div class="kpi-sub">Since midnight UTC</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(139,92,246,.12);color:#8b5cf6"><i class="fas fa-calendar-week"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-label">This Week</div>
+          <div class="kpi-value" id="kpi-week">—</div>
+          <div class="kpi-sub">Last 7 days</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(212,168,64,.12);color:var(--gold)"><i class="fas fa-calendar-alt"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-label">This Month</div>
+          <div class="kpi-value" id="kpi-month">—</div>
+          <div class="kpi-sub">Last 30 days</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(34,212,224,.12);color:#22d4e0"><i class="fas fa-rotate"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-label">Returning</div>
+          <div class="kpi-value" id="kpi-returning">—</div>
+          <div class="kpi-sub">Repeat visitors</div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:rgba(248,177,58,.12);color:#f8b13a"><i class="fas fa-clock"></i></div>
+        <div class="kpi-body">
+          <div class="kpi-label">Avg Session</div>
+          <div class="kpi-value" id="kpi-duration">—</div>
+          <div class="kpi-sub">Time on site</div>
+        </div>
+      </div>
     </div>
 
     <!-- Charts -->
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-title">🌍 Countries</div>
-        <div class="bar-list" id="chart-country"></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-globe" style="color:#4a8ef5"></i> Countries</div></div>
+        <div class="panel-body" id="chart-country"></div>
       </div>
-      <div class="chart-card">
-        <div class="chart-title">🔗 Traffic Sources</div>
-        <div class="bar-list" id="chart-source"></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-share-nodes" style="color:#8b5cf6"></i> Traffic Sources</div></div>
+        <div class="panel-body" id="chart-source"></div>
       </div>
-      <div class="chart-card">
-        <div class="chart-title">📱 Devices</div>
-        <div class="bar-list" id="chart-device"></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-mobile-screen" style="color:#2dd674"></i> Devices</div></div>
+        <div class="panel-body" id="chart-device"></div>
       </div>
-      <div class="chart-card">
-        <div class="chart-title">🌐 Browsers</div>
-        <div class="bar-list" id="chart-browser"></div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title"><i class="fas fa-window-maximize" style="color:#f8b13a"></i> Browsers</div></div>
+        <div class="panel-body" id="chart-browser"></div>
       </div>
     </div>
 
-    <!-- Recent visitors -->
-    <div class="table-card">
-      <div class="table-header">
-        <div class="table-title">🕐 Recent Visitors</div>
-        <div class="table-actions">
-          <span id="sel-count-badge">0 selected</span>
-          <button class="btn btn-ghost" id="select-all-btn" title="Select all visible rows">
-            ☑ Select All
-          </button>
-          <button class="btn btn-danger" id="delete-sel-btn" disabled title="Delete selected rows">
-            🗑 Delete Selected
-          </button>
-          <button class="btn btn-ghost" id="refresh-btn">
-            <span class="btn-icon">↻</span> Refresh
-          </button>
+    <!-- Recent Visitors Table -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fas fa-clock"></i> Recent Visitors</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span id="sel-count-badge" style="display:none;font-size:11px;font-family:var(--ff-mono);color:var(--gold);padding:3px 10px;background:rgba(212,168,64,.1);border-radius:99px;border:1px solid rgba(212,168,64,.2);">0 selected</span>
+          <button class="btn btn-ghost btn-sm" id="select-all-btn">☑ Select All</button>
+          <button class="btn btn-sm" id="delete-sel-btn" disabled style="background:rgba(240,82,82,.10);color:var(--red);border:1px solid rgba(240,82,82,.22);">🗑 Delete Selected</button>
         </div>
       </div>
       <div style="overflow-x:auto;">
-        <table>
+        <table class="data-table">
           <thead>
             <tr>
-              <th class="cb-col">
-                <input type="checkbox" class="row-cb" id="master-cb" title="Select / deselect all">
-              </th>
+              <th style="width:32px"><input type="checkbox" id="master-cb" style="accent-color:var(--gold)"></th>
               <th>Name</th>
               <th>Location</th>
               <th>Source</th>
@@ -562,545 +1331,711 @@ tbody tr.selected td { background: rgba(26,111,196,0.07); }
               <th>Duration</th>
               <th>Visits</th>
               <th>When</th>
-              <th>Action</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="visitors-tbody">
-            <tr><td colspan="11" style="text-align:center;padding:32px;color:var(--ink-3);">Loading…</td></tr>
+            <tr><td colspan="11" style="text-align:center;padding:40px;color:var(--text3);">Loading…</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-  </main>
+  </div>
+
+  <!-- ── MESSAGES ── -->
+  <div class="page" id="page-messages">
+    <div class="page-header">
+      <div><div class="page-title">MESSAGES</div><div class="page-sub">All contact form submissions</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="exportMessages()"><i class="fas fa-download"></i> Export CSV</button>
+    </div>
+    <div class="panel">
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input class="search-input" type="text" id="msgSearch" placeholder="Search messages…" oninput="filterMessages()">
+        </div>
+        <select class="filter-select" id="msgStatusFilter" onchange="filterMessages()">
+          <option value="">All Status</option>
+          <option value="new">New</option>
+          <option value="read">Read</option>
+          <option value="replied">Replied</option>
+          <option value="archived">Archived</option>
+        </select>
+        <select class="filter-select" id="msgTypeFilter" onchange="filterMessages()">
+          <option value="">All Types</option>
+          <option value="general">General</option>
+          <option value="hire">Hire</option>
+          <option value="review">Review</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Sender</th><th>Subject / Preview</th><th>Type</th><th>Status</th><th>Date</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="msgTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REVIEWS ── -->
+  <div class="page" id="page-reviews">
+    <div class="page-header">
+      <div><div class="page-title">REVIEWS</div><div class="page-sub">Website testimonials and ratings</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><i class="fas fa-clock"></i> Pending <span id="pendingReviewCount" style="font-size:12px;color:var(--text3);font-weight:400;margin-left:4px"></span></div>
+        </div>
+        <div id="pendingReviewsList"><div class="empty-state"><i class="fas fa-inbox"></i><p>No pending reviews</p></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title"><i class="fas fa-check-circle"></i> Published <span id="publishedReviewCount" style="font-size:12px;color:var(--text3);font-weight:400;margin-left:4px"></span></div>
+        </div>
+        <div id="publishedReviewsList"><div class="empty-state"><i class="fas fa-star"></i><p>No published reviews</p></div></div>
+      </div>
+    </div>
+    <div id="reviewDbHelper" style="display:none" class="panel" style="margin-top:20px">
+      <div class="panel-body" style="padding:22px">
+        <p style="color:var(--amber);font-size:13px">
+          <i class="fas fa-triangle-exclamation"></i>
+          Reviews DB columns not set up. Run the SQL migration in Supabase to add <code>review_rating</code> and <code>review_published</code> columns to <code>contact_messages</code>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── VISITORS ── -->
+  <div class="page" id="page-visitors">
+    <div class="page-header">
+      <div><div class="page-title">VISITOR LOG</div><div class="page-sub">Everyone who came through the gate</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="loadVisitors()"><i class="fas fa-sync-alt"></i> Refresh</button>
+    </div>
+    <div class="panel">
+      <div class="filter-bar">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input class="search-input" type="text" id="visitorSearch" placeholder="Search visitors…" oninput="filterVisitors()">
+        </div>
+        <select class="filter-select" id="visitorPurposeFilter" onchange="filterVisitors()">
+          <option value="">All Purposes</option>
+          <option value="job_opportunity">💼 Hiring</option>
+          <option value="freelance">🤝 Freelance</option>
+          <option value="collaboration">🔗 Collaboration</option>
+          <option value="reference">📋 Reference</option>
+          <option value="networking">🌐 Networking</option>
+          <option value="general">👀 Browsing</option>
+          <option value="other">💬 Other</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th>Name</th><th>Organisation</th><th>Role</th><th>Purpose</th><th>Time</th></tr>
+          </thead>
+          <tbody id="visitorTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PROFILE ── -->
+
+  <!-- ── EXPERIENCE ── -->
+
+  <!-- ── PROJECTS ── -->
+
+  <!-- ── SKILLS ── -->
+
+  <!-- ── CERTIFICATIONS ── -->
+
+  <!-- ── GALLERY ── -->
+
+  <!-- ── BLOG ── -->
+
+  <!-- ── RESUME ── -->
 </div>
 
-<!-- ── Delete confirm modal ──────────────────────────────── -->
-<div id="delete-modal">
-  <div class="modal-card">
-    <div class="modal-icon">🗑</div>
-    <div class="modal-title" id="modal-title">Delete visitors?</div>
-    <div class="modal-body" id="modal-body">This action cannot be undone.</div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" id="modal-cancel-btn">Cancel</button>
-      <button class="btn btn-danger" id="modal-confirm-btn">Yes, Delete</button>
+<!-- ════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════ -->
+
+<!-- Experience Modal -->
+
+<!-- Project Modal -->
+
+<!-- Skill Modal -->
+
+<!-- Skill Category Modal -->
+<div class="modal-overlay" id="skillCatModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header"><div class="modal-title">Add Skill Category</div><button class="modal-close" onclick="closeModal('skillCatModal')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Category Title</label><input type="text" id="skillCatTitle" placeholder="Networking"></div>
+      <div class="form-group"><label>Sort Order</label><input type="number" id="skillCatOrder" value="0" min="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('skillCatModal')">Cancel</button>
+      <button class="btn btn-gold" onclick="saveSkillCat()"><i class="fas fa-save"></i> Save</button>
     </div>
   </div>
 </div>
 
-<!-- ── Toast ──────────────────────────────────────────────── -->
-<div id="toast"></div>
+<!-- Cert Modal -->
 
-<!-- Supabase JS v2 -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<!-- Gallery Modal -->
+
+<!-- Blog Modal -->
+
+<!-- Message Detail Modal -->
+<div class="modal-overlay" id="msgDetailModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Message Detail</div><button class="modal-close" onclick="closeModal('msgDetailModal')">×</button></div>
+    <div class="modal-body" id="msgDetailBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('msgDetailModal')">Close</button>
+      <button class="btn btn-primary" id="msgReplyBtn"><i class="fas fa-reply"></i> Reply via Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- Resume Upload Modal -->
+
+<!-- ── Analytics Delete Modal ── -->
+<div id="delete-modal" style="display:none;position:fixed;inset:0;z-index:3000;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(4px)">
+  <div class="modal-card-analytics">
+    <div class="modal-icon">🗑</div>
+    <div class="modal-title" id="delete-modal-title">Delete?</div>
+    <div class="modal-body" id="delete-modal-body">This cannot be undone.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="delete-modal-cancel">Cancel</button>
+      <button class="btn btn-sm" id="delete-modal-confirm" style="background:rgba(240,82,82,.15);color:var(--red);border:1px solid rgba(240,82,82,.25)">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer"></div>
+
 <script>
-// ============================================================
-// CONFIG
-// ============================================================
-const SUPABASE_URL      = 'https://tbdgrhekycgfdeatxjnq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZGdyaGVreWNnZmRlYXR4am5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5MzEsImV4cCI6MjA5NDk2NzkzMX0.HP48nehewf5HajLukSkLdJwuqiUTmbnfdcAk6x8_UEU';
-const ADMIN_PASSWORD    = 'sajid';  // ← change this
-const GCC_COUNTRIES     = ['Qatar','UAE','Saudi Arabia','Kuwait','Bahrain','Oman'];
+// ═══════════════════════════════════════════════════
+// GATE PAGE LOGIC
+// ═══════════════════════════════════════════════════
+function esc(str) {
+  if (str == null) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-// ============================================================
-// THEME
-// ============================================================
-(function() {
-  const saved = localStorage.getItem('dash-theme') || 'light';
-  applyTheme(saved);
+// ═══════════════════════════════════════════════════
+// SUPABASE CONFIG
+// ═══════════════════════════════════════════════════
+const SUPABASE_URL         = 'https://ruiqfkzuqxxbyvycvsfo.supabase.co';
+const SUPABASE_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1aXFma3p1cXh4Ynl2eWN2c2ZvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDUxMjY5OCwiZXhwIjoyMDk2MDg4Njk4fQ.8ZROoodpIVf9vwN34oM-WuT8qY_PWcryJnWKURZFkAI';
+
+function _getStoredKey() { return localStorage.getItem('sm_admin_anon_key') || SUPABASE_SERVICE_KEY; }
+function _getStoredUrl() { return localStorage.getItem('sm_admin_url') || SUPABASE_URL; }
+
+let sb = null;
+function _initClient(url, key) {
+  sb = window.supabase.createClient(url, key, {
+    auth: { autoRefreshToken: true, persistSession: true, detectSessionInUrl: true, experimental: { passkey: true } }
+  });
+  window._sbAdmin = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
+
+(function boot() {
+  if (!localStorage.getItem('sm_admin_anon_key')) {
+    localStorage.setItem('sm_admin_anon_key', SUPABASE_SERVICE_KEY);
+    localStorage.setItem('sm_admin_url', SUPABASE_URL);
+  }
+  _initClient(_getStoredUrl(), SUPABASE_SERVICE_KEY);
 })();
 
-function applyTheme(mode) {
-  document.documentElement.setAttribute('data-theme', mode);
-  localStorage.setItem('dash-theme', mode);
-  const icon  = document.getElementById('theme-icon');
-  const label = document.getElementById('theme-label');
-  if (icon && label) {
-    icon.textContent  = mode === 'light' ? '🌙' : '☀️';
-    label.textContent = mode === 'light' ? 'Dark' : 'Light';
-  }
+// ═══════════════════════════════════════════════════
+// AUTH PANELS
+// ═══════════════════════════════════════════════════
+function showPanel(id) {
+  ['panelSignIn','panelForgot','panelOTP','panelPasskeySetup'].forEach(p => {
+    const el = document.getElementById(p);
+    if (el) el.style.display = p === id ? '' : 'none';
+  });
+  ['authError','forgotError','forgotSuccess','otpError','otpSuccess','passkeySetupError','passkeySetupSuccess'].forEach(pid => {
+    const el = document.getElementById(pid); if (el) el.textContent = '';
+  });
 }
 
-document.getElementById('theme-btn').addEventListener('click', () => {
-  const current = document.documentElement.getAttribute('data-theme') || 'dark';
-  applyTheme(current === 'dark' ? 'light' : 'dark');
-});
-
-// ============================================================
-// AUTH
-// ============================================================
-const authInput = document.getElementById('auth-input');
-const authBtn   = document.getElementById('auth-btn');
-const authError = document.getElementById('auth-error');
-
-function showDashboard() {
-  document.getElementById('auth-overlay').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  initDashboard();
+function togglePwd() {
+  const inp = document.getElementById('authPassword');
+  const ico = document.getElementById('pwdEyeIcon');
+  if (inp.type === 'password') { inp.type = 'text'; ico.className = 'fas fa-eye-slash'; }
+  else { inp.type = 'password'; ico.className = 'fas fa-eye'; }
 }
 
-// ── Admin auto-bypass: already authenticated this session ──
-if (sessionStorage.getItem('dash-authed') === '1') {
-  showDashboard();
-}
-
-function tryAuth() {
-  if (authInput.value === ADMIN_PASSWORD) {
-    sessionStorage.setItem('dash-authed', '1');
-    showDashboard();
-  } else {
-    authError.style.display = 'block';
-    authInput.value = '';
-    authInput.focus();
-  }
-}
-
-authBtn.addEventListener('click', tryAuth);
-authInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryAuth(); });
-
-// ── Gate button: go back to auth overlay ──────────────────
-document.getElementById('gate-btn').addEventListener('click', () => {
-  sessionStorage.removeItem('dash-authed');
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('auth-overlay').style.display = 'flex';
-  authInput.value = '';
-  authError.style.display = 'none';
-});
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-let db;
-
-function initDashboard() {
-  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: { persistSession: false }
+document.addEventListener('DOMContentLoaded', () => {
+  const digits = document.querySelectorAll('.otp-digit');
+  digits.forEach((inp, i) => {
+    inp.addEventListener('input', e => {
+      inp.value = inp.value.replace(/\D/g,'').slice(-1);
+      if (inp.value) { inp.classList.add('filled'); if (i < digits.length - 1) digits[i+1].focus(); }
+      else inp.classList.remove('filled');
+    });
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !inp.value && i > 0) digits[i-1].focus();
+      if (e.key === 'Enter') verifyOTP();
+    });
+    inp.addEventListener('paste', e => {
+      e.preventDefault();
+      const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'');
+      [...paste].slice(0,6).forEach((ch, j) => { if (digits[i+j]) { digits[i+j].value = ch; digits[i+j].classList.add('filled'); } });
+      digits[Math.min(i + paste.length, digits.length - 1)].focus();
+    });
   });
 
-  loadAll();
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
 
-  // ── Refresh button with spinner feedback ──────────────────
-  const refreshBtn = document.getElementById('refresh-btn');
-  refreshBtn.addEventListener('click', async () => {
-    // Prevent double-clicks
-    if (refreshBtn.classList.contains('spinning')) return;
-    refreshBtn.classList.add('spinning');
-    refreshBtn.querySelector('.btn-icon').textContent = '↻';
-    try {
-      await loadAll();
-    } finally {
-      refreshBtn.classList.remove('spinning');
+  // Check for an existing session so returning users skip the login screen.
+  // boot() already ran synchronously (sb is set), but the Supabase SDK itself
+  // is loaded via a plain <script> tag (not defer/async), so window.supabase is
+  // guaranteed ready by DOMContentLoaded — no timing hazard here.
+  checkSession();
+});
+
+async function signIn() {
+  const email = document.getElementById('authEmail').value.trim();
+  const pass  = document.getElementById('authPassword').value;
+  const btn   = document.getElementById('signInBtn');
+  const err   = document.getElementById('authError');
+  if (!email || !pass) { err.textContent = 'Please enter email and password.'; return; }
+  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:#06070a"></div> Signing in…';
+  btn.disabled = true; err.textContent = '';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (error) { err.textContent = error.message; btn.innerHTML = '<i class="fas fa-lock-open"></i> Sign In'; btn.disabled = false; return; }
+  const user = data.user ?? data.session?.user;
+  if (!user) { err.textContent = 'Sign-in succeeded but no user returned. Please try again.'; btn.innerHTML = '<i class="fas fa-lock-open"></i> Sign In'; btn.disabled = false; return; }
+  initDashboard(user);
+}
+
+async function signInGoogle() {
+  const btn = document.getElementById('googleBtn');
+  const err = document.getElementById('authError');
+  err.textContent = ''; btn.disabled = true; btn.style.opacity = '.7';
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href, queryParams: { login_hint: 'sajid.teech@gmail.com' } }
+  });
+  if (error) {
+    err.textContent = error.message?.includes('provider') ? 'Google sign-in not enabled in Supabase.' : error.message;
+    btn.disabled = false; btn.style.opacity = '1';
+  }
+}
+
+async function signInPasskey() {
+  const btn = document.getElementById('passkeyBtn');
+  const err = document.getElementById('authError');
+  err.textContent = ''; btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div> Waiting…';
+  try {
+    const { data, error } = await sb.auth.signInWithPasskey();
+    if (error) {
+      if (error.status === 400 || error.message?.toLowerCase().includes('not enabled')) err.textContent = 'Passkeys not enabled. Enable in Supabase → Authentication.';
+      else if (error.message?.toLowerCase().includes('no passkey')) err.textContent = 'No passkey found. Sign in with password first, then register a passkey.';
+      else err.textContent = error.message;
+    } else if (data?.user) { initDashboard(data.user); }
+  } catch(e) {
+    err.textContent = e.name === 'NotAllowedError' ? 'Passkey cancelled.' : 'Passkey error: ' + e.message;
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-fingerprint"></i> Sign in with Passkey <span style="font-size:10px;opacity:.6;font-weight:400;margin-left:auto">Face ID · Touch ID</span>';
+}
+
+async function registerPasskey() {
+  const btn = document.getElementById('registerPasskeyBtn');
+  const err = document.getElementById('passkeySetupError');
+  const ok  = document.getElementById('passkeySetupSuccess');
+  err.textContent = ''; ok.textContent = '';
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div> Waiting…';
+  try {
+    const { data, error } = await sb.auth.enrollPasskey();
+    if (error) { err.textContent = error.message; }
+    else { ok.textContent = '✓ Passkey registered! You can now sign in with biometrics.'; }
+  } catch(e) { err.textContent = 'Could not register: ' + e.message; }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-fingerprint"></i> Register This Device';
+}
+
+async function sendForgotPassword() {
+  const email = document.getElementById('forgotEmail').value.trim();
+  const btn   = document.getElementById('forgotBtn');
+  const err   = document.getElementById('forgotError');
+  const ok    = document.getElementById('forgotSuccess');
+  err.textContent = ''; ok.textContent = '';
+  if (!email) { err.textContent = 'Please enter your email address.'; return; }
+  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:#06070a"></div> Sending…';
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + window.location.pathname + '?reset=true' });
+  if (error) { err.textContent = error.message; }
+  else { ok.textContent = '✓ Reset link sent to ' + email; }
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reset Link';
+}
+
+async function handlePasswordReset() {
+  const hash = window.location.hash;
+  if (hash.includes('type=recovery')) {
+    const params = new URLSearchParams(hash.replace('#',''));
+    const token = params.get('access_token');
+    if (token) {
+      const newPass = prompt('Enter your new password (min 8 characters):');
+      if (newPass && newPass.length >= 8) {
+        const { error } = await sb.auth.updateUser({ password: newPass });
+        if (error) alert('Error: ' + error.message);
+        else { alert('✓ Password updated!'); window.history.replaceState({}, '', window.location.pathname); }
+      }
     }
-  });
-
-  // ── Select All button ─────────────────────────────────────
-  document.getElementById('select-all-btn').addEventListener('click', () => {
-    const masterCb = document.getElementById('master-cb');
-    const allChecked = allRowCheckboxes().every(cb => cb.checked);
-    allRowCheckboxes().forEach(cb => {
-      cb.checked = !allChecked;
-      cb.closest('tr').classList.toggle('selected', !allChecked);
-    });
-    masterCb.checked = !allChecked;
-    masterCb.indeterminate = false;
-    updateSelectionUI();
-  });
-
-  // ── Master checkbox (thead) ───────────────────────────────
-  document.getElementById('master-cb').addEventListener('change', (e) => {
-    allRowCheckboxes().forEach(cb => {
-      cb.checked = e.target.checked;
-      cb.closest('tr').classList.toggle('selected', e.target.checked);
-    });
-    updateSelectionUI();
-  });
-
-  // ── Delete Selected ───────────────────────────────────────
-  document.getElementById('delete-sel-btn').addEventListener('click', () => {
-    const ids = selectedIds();
-    if (!ids.length) return;
-    openModal(
-      `Delete ${ids.length} visitor${ids.length > 1 ? 's' : ''}?`,
-      `You are about to permanently delete <strong style="color:var(--ink)">${ids.length} row${ids.length > 1 ? 's' : ''}</strong> from the visitors table. This cannot be undone.`,
-      async () => { await deleteRows(ids); }
-    );
-  });
-
-  // ── Modal cancel ──────────────────────────────────────────
-  document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
-  document.getElementById('delete-modal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeModal();
-  });
-
-  // ── Realtime subscription ─────────────────────────────────
-  db.channel('dash-live')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, loadAll)
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'online_visitors' }, updateOnlineBadge)
-    .subscribe();
+  }
 }
 
-async function loadAll() {
-  await Promise.all([loadSummary(), loadRecentVisitors(), updateOnlineBadge()]);
+let _otpEmail = '';
+async function sendOTP() {
+  const email = document.getElementById('otpEmail').value.trim();
+  const btn = document.getElementById('otpSendBtn');
+  const err = document.getElementById('otpError');
+  const ok  = document.getElementById('otpSuccess');
+  err.textContent = ''; ok.textContent = '';
+  if (!email) { err.textContent = 'Please enter your email.'; return; }
+  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:#06070a"></div> Sending…';
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  if (error) { err.textContent = error.message; btn.disabled = false; btn.innerHTML = '<i class="fas fa-mobile-alt"></i> Send Passcode'; return; }
+  _otpEmail = email;
+  document.getElementById('otpEmailLabel').textContent = email;
+  document.getElementById('otpStep1').style.display = 'none';
+  document.getElementById('otpStep2').style.display = '';
+  ok.textContent = '✓ Passcode sent! Check your inbox.';
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-mobile-alt"></i> Send Passcode';
+  setTimeout(() => { const d = document.querySelector('.otp-digit'); if(d) d.focus(); }, 100);
 }
 
-// ── Summary via RPC ─────────────────────────────────────────
-async function loadSummary() {
+async function resendOTP() {
+  document.getElementById('otpEmail').value = _otpEmail;
+  document.getElementById('otpStep2').style.display = 'none';
+  document.getElementById('otpStep1').style.display = '';
+  await sendOTP();
+}
+
+async function verifyOTP() {
+  const digits = [...document.querySelectorAll('.otp-digit')].map(d => d.value).join('');
+  const btn = document.getElementById('otpVerifyBtn');
+  const err = document.getElementById('otpError');
+  const ok  = document.getElementById('otpSuccess');
+  err.textContent = ''; ok.textContent = '';
+  if (digits.length < 6) { err.textContent = 'Please enter all 6 digits.'; return; }
+  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;border-top-color:#06070a"></div> Verifying…';
+  const { data, error } = await sb.auth.verifyOtp({ email: _otpEmail, token: digits, type: 'email' });
+  if (error) { err.textContent = 'Invalid or expired code. ' + error.message; btn.disabled = false; btn.innerHTML = '<i class="fas fa-check-circle"></i> Verify Passcode'; return; }
+  ok.textContent = '✓ Verified! Loading dashboard…';
+  setTimeout(() => initDashboard(data.user), 800);
+}
+
+// ═══════════════════════════════════════════════════
+// SESSION / INIT
+// ═══════════════════════════════════════════════════
+function resetApiKey() {
+  if (!confirm('Clear saved API key?')) return;
+  localStorage.removeItem('sm_admin_anon_key'); localStorage.removeItem('sm_admin_url'); location.reload();
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('sidebar').style.display = 'none';
+  showPanel('panelSignIn');
+}
+
+async function checkSession() {
+  const { data: sessionData } = await sb.auth.getSession();
+  if (sessionData.session) { initDashboard(sessionData.session.user); return; }
+  await handlePasswordReset();
+}
+
+function initDashboard(user) {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'flex';
+  document.getElementById('sidebar').style.display = 'flex';
+  document.body.style.overflow = 'auto';
+  if (window.innerWidth <= 900) document.getElementById('menuBtn').style.display = 'flex';
+  const email = user.email || '';
+  document.getElementById('userEmail').textContent = email;
+  document.getElementById('userInitial').textContent = email.charAt(0).toUpperCase();
+  const vname = localStorage.getItem('sajid_visitor_name') || sessionStorage.getItem('sajid_visitor_name');
+  if (vname) {
+    const tag = document.getElementById('topBarVisitorTag');
+    tag.textContent = '· ' + vname; tag.style.display = '';
+  }
+  loadDashboard();
+}
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function showPage(pageId, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('topBarTitle').textContent = el ? el.textContent.trim().toUpperCase() : pageId.toUpperCase();
+  const loaders = {
+    dashboard: loadDashboard, messages: loadMessages, reviews: loadReviews,
+    visitors: loadVisitors
+  };
+  if (loaders[pageId]) loaders[pageId]();
+}
+
+// ═══════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════
+function toast(msg, type = 'success') {
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i><span>${msg}</span>`;
+  document.getElementById('toastContainer').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(16px)'; setTimeout(() => el.remove(), 300); }, 3500);
+}
+
+// ═══════════════════════════════════════════════════
+// MODAL HELPERS
+// ═══════════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
+// ── Analytics constants ──
+const SUPABASE_ANALYTICS_URL  = 'https://tbdgrhekycgfdeatxjnq.supabase.co';
+const SUPABASE_ANALYTICS_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZGdyaGVreWNnZmRlYXR4am5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5MzEsImV4cCI6MjA5NDk2NzkzMX0.HP48nehewf5HajLukSkLdJwuqiUTmbnfdcAk6x8_UEU';
+const GCC_COUNTRIES = ['Qatar','UAE','Saudi Arabia','Kuwait','Bahrain','Oman'];
+let db_analytics = null;
+
+function getAnalyticsDb() {
+  if (db_analytics) return db_analytics;
+  if (window.supabase && window.supabase.createClient) {
+    db_analytics = window.supabase.createClient(SUPABASE_ANALYTICS_URL, SUPABASE_ANALYTICS_KEY, {
+      auth: { persistSession: false }
+    });
+  }
+  return db_analytics;
+}
+
+async function loadDashboard() {
+  const db = getAnalyticsDb();
+  if (!db) { setTimeout(loadDashboard, 600); return; }
+
+  await Promise.all([loadAnalyticsSummary(db), loadRecentVisitorsTable(db), updateOnlineBadge(db)]);
+
+  // Setup refresh button
+  const refreshBtn = document.getElementById('refresh-btn');
+  if (refreshBtn && !refreshBtn._wired) {
+    refreshBtn._wired = true;
+    refreshBtn.addEventListener('click', async () => {
+      if (refreshBtn.classList.contains('spinning')) return;
+      refreshBtn.classList.add('spinning');
+      try { await Promise.all([loadAnalyticsSummary(db), loadRecentVisitorsTable(db), updateOnlineBadge(db)]); }
+      finally { refreshBtn.classList.remove('spinning'); }
+    });
+  }
+
+  // Wire selection/delete controls
+  const selectAllBtn = document.getElementById('select-all-btn');
+  if (selectAllBtn && !selectAllBtn._wired) {
+    selectAllBtn._wired = true;
+    selectAllBtn.addEventListener('click', () => {
+      const masterCb = document.getElementById('master-cb');
+      const allChecked = allRowCheckboxes().every(cb => cb.checked);
+      allRowCheckboxes().forEach(cb => { cb.checked = !allChecked; cb.closest('tr').classList.toggle('selected', !allChecked); });
+      masterCb.checked = !allChecked; masterCb.indeterminate = false;
+      updateSelectionUI();
+    });
+  }
+  const masterCb = document.getElementById('master-cb');
+  if (masterCb && !masterCb._wired) {
+    masterCb._wired = true;
+    masterCb.addEventListener('change', (e) => {
+      allRowCheckboxes().forEach(cb => { cb.checked = e.target.checked; cb.closest('tr').classList.toggle('selected', e.target.checked); });
+      updateSelectionUI();
+    });
+  }
+  const delSelBtn = document.getElementById('delete-sel-btn');
+  if (delSelBtn && !delSelBtn._wired) {
+    delSelBtn._wired = true;
+    delSelBtn.addEventListener('click', () => {
+      const ids = selectedIds();
+      if (!ids.length) return;
+      openDeleteModal(`Delete ${ids.length} visitor${ids.length>1?'s':''}?`,
+        `Permanently delete <strong>${ids.length} row${ids.length>1?'s':''}</strong>? Cannot be undone.`,
+        async () => { await deleteVisitorRows(db, ids); });
+    });
+  }
+
+  // Realtime
+  if (!window._analyticsRealtimeWired) {
+    window._analyticsRealtimeWired = true;
+    db.channel('dash-analytics')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, () => loadRecentVisitorsTable(db))
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'online_visitors' }, () => updateOnlineBadge(db))
+      .subscribe();
+  }
+}
+
+async function loadAnalyticsSummary(db) {
   const { data, error } = await db.rpc('get_analytics_summary');
-  if (error) { console.error('get_analytics_summary error:', error.message); return; }
-
+  if (error) { console.warn('Analytics summary error:', error.message); return; }
   setText('kpi-total',     fmt(data.total));
   setText('kpi-today',     fmt(data.today));
   setText('kpi-week',      fmt(data.this_week));
   setText('kpi-month',     fmt(data.this_month));
   setText('kpi-returning', fmt(data.returning));
   setText('kpi-duration',  data.avg_duration ? fmtDur(data.avg_duration) : '—');
-
-  renderBarChart('chart-country', data.by_country,  '#0066FF');
-  renderBarChart('chart-source',  data.by_source,   '#8B5CF6');
-  renderBarChart('chart-device',  data.by_device,   '#10B981');
-  renderBarChart('chart-browser', data.by_browser,  '#F59E0B');
+  renderBarChart('chart-country', data.by_country, '#4a8ef5');
+  renderBarChart('chart-source',  data.by_source,  '#8b5cf6');
+  renderBarChart('chart-device',  data.by_device,  '#2dd674');
+  renderBarChart('chart-browser', data.by_browser, '#f8b13a');
 }
 
-// ── Online badge ─────────────────────────────────────────────
-async function updateOnlineBadge() {
-  const { data } = await db.rpc('get_online_count');
-  document.getElementById('online-badge').textContent =
-    `${data || 0} online now`;
+async function updateOnlineBadge(db) {
+  try {
+    const { data } = await db.rpc('get_online_count');
+    const el = document.getElementById('online-badge');
+    if (el) el.textContent = `${data || 0} online now`;
+  } catch(e) {}
 }
 
-// ── Recent visitors table ────────────────────────────────────
-// FIX: LEFT JOIN visitor_profiles to get name + location as fallback
-// when the visitors row was inserted before the gate was submitted.
-async function loadRecentVisitors() {
-  // Query visitors table; also pull from visitor_profiles via fingerprint
-  // so that even rows inserted before name entry show the correct name.
+async function loadRecentVisitorsTable(db) {
   const { data, error } = await db
     .from('visitors')
-    .select(`
-      id,
-      session_id,
-      visitor_name,
-      country,
-      city,
-      source,
-      device,
-      device_model,
-      browser,
-      os,
-      duration,
-      is_returning,
-      visit_count,
-      fingerprint,
-      created_at
-    `)
+    .select('id,session_id,visitor_name,country,city,source,device,device_model,browser,os,duration,is_returning,visit_count,fingerprint,created_at')
     .order('created_at', { ascending: false })
     .limit(100);
+  if (error) { console.warn('Visitors load error:', error.message); return; }
 
-  if (error) {
-    console.error('loadRecentVisitors error:', error.message);
-    return;
-  }
-
-  // FIX: For any row missing visitor_name or country, fetch from visitor_profiles
-  // by fingerprint so the dashboard always shows the best available data.
-  const missingFps = [...new Set(
-    data
-      .filter(v => (!v.visitor_name || !v.country || v.country === 'Unknown') && v.fingerprint)
-      .map(v => v.fingerprint)
-  )];
-
+  const missingFps = [...new Set(data.filter(v => (!v.visitor_name || !v.country || v.country==='Unknown') && v.fingerprint).map(v => v.fingerprint))];
   let profileMap = {};
   if (missingFps.length) {
-    const { data: profiles } = await db
-      .from('visitor_profiles')
-      .select('fingerprint,visitor_name,country,city')
-      .in('fingerprint', missingFps);
-    if (profiles) {
-      profiles.forEach(p => { profileMap[p.fingerprint] = p; });
-    }
+    const { data: profiles } = await db.from('visitor_profiles').select('fingerprint,visitor_name,country,city').in('fingerprint', missingFps);
+    if (profiles) profiles.forEach(p => { profileMap[p.fingerprint] = p; });
   }
 
-  const tbody = document.getElementById('visitors-tbody');
-  if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--ink-3);">No visitors yet</td></tr>';
-    return;
-  }
-
-  // Merge profile data into visitor rows where needed
   const rows = data.map(v => {
     const p = profileMap[v.fingerprint] || {};
-    return {
-      ...v,
-      visitor_name: v.visitor_name || p.visitor_name || null,
-      country:      (v.country && v.country !== 'Unknown') ? v.country : (p.country || v.country),
-      city:         (v.city    && v.city    !== 'Unknown') ? v.city    : (p.city    || v.city),
-    };
+    return { ...v, visitor_name: v.visitor_name || p.visitor_name || null, country: (v.country && v.country!=='Unknown') ? v.country : (p.country || v.country), city: (v.city && v.city!=='Unknown') ? v.city : (p.city || v.city) };
   });
 
+  const tbody = document.getElementById('visitors-tbody');
+  if (!tbody) return;
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--text3)">No visitors yet</td></tr>'; return; }
+
   tbody.innerHTML = rows.map(v => {
-    const isGCC  = GCC_COUNTRIES.includes(v.country);
-    const loc    = [v.city, v.country].filter(x => x && x !== 'Unknown').join(', ') || '—';
-    const when   = timeAgo(new Date(v.created_at));
-    const dur    = v.duration > 0 ? fmtDur(v.duration) : '—';
-    const source = v.source || 'Direct';
-    const vc     = v.visit_count || 1;
-    const visitsCell = vc > 1
-      ? `<span style="font-weight:600;color:var(--green);">${vc}</span> <span class="tag tag-gcc" style="font-size:10px;">returning</span>`
-      : `<span style="color:var(--ink-3);">1</span>`;
-
-    const nameCell = v.visitor_name
-      ? `<td style="font-weight:600;color:var(--ink);">${esc(v.visitor_name)}</td>`
-      : `<td style="color:var(--ink-3);">—</td>`;
-
-    return `<tr data-id="${esc(v.id)}">
-      <td class="cb-col"><input type="checkbox" class="row-cb" data-id="${esc(v.id)}"></td>
+    const isGCC = GCC_COUNTRIES.includes(v.country);
+    const loc = [v.city, v.country].filter(x => x && x!=='Unknown').join(', ') || '—';
+    const when = timeAgoFmt(new Date(v.created_at));
+    const dur = v.duration > 0 ? fmtDur(v.duration) : '—';
+    const vc = v.visit_count || 1;
+    const visitsCell = vc > 1 ? `<span style="font-weight:600;color:var(--green)">${vc}</span> <span class="badge badge-green" style="font-size:10px">returning</span>` : `<span style="color:var(--text3)">1</span>`;
+    const nameCell = v.visitor_name ? `<td style="font-weight:600;color:var(--text)">${escHtml(v.visitor_name)}</td>` : `<td style="color:var(--text3)">—</td>`;
+    return `<tr data-id="${escHtml(v.id)}">
+      <td style="width:32px"><input type="checkbox" class="row-cb" data-id="${escHtml(v.id)}" style="accent-color:var(--gold)"></td>
       ${nameCell}
-      <td class="td-country">${esc(loc)}${isGCC ? ' 🇶🇦' : ''}</td>
-      <td><span class="tag tag-source">${esc(source)}</span>${isGCC ? ' <span class="tag tag-gcc">GCC</span>' : ''}</td>
-      <td><span class="tag">${esc(v.device || '—')}</span><br><span style="font-size:11px;color:var(--ink-3);">${esc(v.device_model || '')}</span></td>
-      <td>${esc(v.browser || '—')}</td>
-      <td>${esc(v.os || '—')}</td>
-      <td style="font-family:var(--ff-mono);font-size:12px;">${dur}</td>
-      <td style="font-size:12px;">${visitsCell}</td>
-      <td style="color:var(--ink-3);font-size:12px;">${when}</td>
-      <td>
-        <button class="btn btn-danger"
-                style="padding:4px 10px;font-size:11px;"
-                onclick="confirmDeleteOne('${esc(v.id)}', ${JSON.stringify(esc(v.visitor_name || 'this visitor'))})">
-          🗑
-        </button>
-      </td>
+      <td>${escHtml(loc)}${isGCC?' 🇶🇦':''}</td>
+      <td><span class="badge badge-blue">${escHtml(v.source||'Direct')}</span>${isGCC?' <span class="badge badge-amber">GCC</span>':''}</td>
+      <td><span class="badge badge-gray">${escHtml(v.device||'—')}</span><br><span style="font-size:11px;color:var(--text3)">${escHtml(v.device_model||'')}</span></td>
+      <td style="font-size:12px">${escHtml(v.browser||'—')}</td>
+      <td style="font-size:12px">${escHtml(v.os||'—')}</td>
+      <td style="font-family:var(--ff-mono);font-size:12px">${dur}</td>
+      <td style="font-size:12px">${visitsCell}</td>
+      <td style="color:var(--text3);font-size:12px">${when}</td>
+      <td><button class="btn btn-sm" style="background:rgba(240,82,82,.1);color:var(--red);border:1px solid rgba(240,82,82,.2);padding:3px 10px;font-size:11px" onclick="confirmDeleteOneVisitor('${escHtml(v.id)}','${escHtml(v.visitor_name||'this visitor')}')">🗑</button></td>
     </tr>`;
   }).join('');
 
-  // Re-attach per-row checkbox listeners after re-render
   document.querySelectorAll('.row-cb[data-id]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      cb.closest('tr').classList.toggle('selected', cb.checked);
-      updateSelectionUI();
-    });
+    cb.addEventListener('change', () => { cb.closest('tr').classList.toggle('selected', cb.checked); updateSelectionUI(); });
   });
-
-  // Reset master checkbox and selection state
   document.getElementById('master-cb').checked = false;
   document.getElementById('master-cb').indeterminate = false;
   updateSelectionUI();
 }
 
-
-// ============================================================
-// SELECTION HELPERS
-// ============================================================
-
-function allRowCheckboxes() {
-  return [...document.querySelectorAll('.row-cb[data-id]')];
-}
-
-function selectedIds() {
-  return allRowCheckboxes()
-    .filter(cb => cb.checked)
-    .map(cb => cb.dataset.id);
-}
+function allRowCheckboxes() { return [...document.querySelectorAll('.row-cb[data-id]')]; }
+function selectedIds() { return allRowCheckboxes().filter(cb => cb.checked).map(cb => cb.dataset.id); }
 
 function updateSelectionUI() {
-  const all      = allRowCheckboxes();
-  const checked  = all.filter(cb => cb.checked);
-  const n        = checked.length;
+  const all = allRowCheckboxes(), checked = all.filter(cb => cb.checked), n = checked.length;
   const masterCb = document.getElementById('master-cb');
-  const badge    = document.getElementById('sel-count-badge');
-  const delBtn   = document.getElementById('delete-sel-btn');
+  const badge = document.getElementById('sel-count-badge');
+  const delBtn = document.getElementById('delete-sel-btn');
+  if (!masterCb) return;
+  masterCb.checked = n > 0 && n === all.length;
+  masterCb.indeterminate = n > 0 && n < all.length;
+  if (badge) { badge.style.display = n > 0 ? 'inline-block' : 'none'; badge.textContent = `${n} selected`; }
+  if (delBtn) delBtn.disabled = n === 0;
   const selAllBtn = document.getElementById('select-all-btn');
-
-  // Master checkbox state
-  if (n === 0) {
-    masterCb.checked = false;
-    masterCb.indeterminate = false;
-  } else if (n === all.length) {
-    masterCb.checked = true;
-    masterCb.indeterminate = false;
-  } else {
-    masterCb.checked = false;
-    masterCb.indeterminate = true;
-  }
-
-  // Badge
-  if (n > 0) {
-    badge.style.display = 'inline-block';
-    badge.textContent   = `${n} selected`;
-  } else {
-    badge.style.display = 'none';
-  }
-
-  // Delete button
-  delBtn.disabled = n === 0;
-
-  // Select All button label
-  const allChecked = all.length > 0 && all.every(cb => cb.checked);
-  selAllBtn.innerHTML = allChecked ? '☐ Deselect All' : '☑ Select All';
+  if (selAllBtn) selAllBtn.innerHTML = (all.length > 0 && all.every(cb => cb.checked)) ? '☐ Deselect All' : '☑ Select All';
 }
 
-
-// ============================================================
-// DELETE LOGIC
-// ============================================================
-
-function confirmDeleteOne(id, nameLabel) {
-  openModal(
-    `Delete visitor?`,
-    `Remove <strong style="color:var(--ink)">${nameLabel}</strong> from the visitors table? This cannot be undone.`,
-    async () => { await deleteRows([id]); }
-  );
+function confirmDeleteOneVisitor(id, name) {
+  openDeleteModal('Delete visitor?', `Remove <strong style="color:var(--text)">${name}</strong>? Cannot be undone.`, async () => {
+    await deleteVisitorRows(getAnalyticsDb(), [id]);
+  });
 }
+window.confirmDeleteOneVisitor = confirmDeleteOneVisitor;
 
-window.confirmDeleteOne = confirmDeleteOne; // expose for inline onclick
-
-async function deleteRows(ids) {
-  if (!ids.length) return;
-
-  // ── Why RPC instead of .delete()? ────────────────────────────────────────
-  // The visitors table has RLS enabled. The anon key has no DELETE policy,
-  // so a direct .delete() call silently deletes 0 rows (Supabase returns no
-  // error but also deletes nothing when RLS blocks the operation).
-  //
-  // Solution: call a SECURITY DEFINER Postgres function that runs as the
-  // table owner and therefore bypasses RLS entirely. You MUST run the SQL
-  // below once in your Supabase SQL Editor before delete will work:
-  //
-  //   CREATE OR REPLACE FUNCTION delete_visitors(p_ids uuid[])
-  //   RETURNS integer
-  //   LANGUAGE plpgsql
-  //   SECURITY DEFINER
-  //   AS $$
-  //   DECLARE
-  //     deleted_count integer;
-  //   BEGIN
-  //     DELETE FROM visitors WHERE id = ANY(p_ids);
-  //     GET DIAGNOSTICS deleted_count = ROW_COUNT;
-  //     RETURN deleted_count;
-  //   END;
-  //   $$;
-  //
-  //   -- Allow anon to call this function:
-  //   GRANT EXECUTE ON FUNCTION delete_visitors(uuid[]) TO anon;
-  // ─────────────────────────────────────────────────────────────────────────
-
+async function deleteVisitorRows(db, ids) {
   const { data, error } = await db.rpc('delete_visitors', { p_ids: ids });
-
-  if (error) {
-    console.error('Delete error:', error.message);
-
-    // Friendly hint if the RPC simply doesn't exist yet
-    if (error.message.includes('Could not find') || error.message.includes('function') || error.code === 'PGRST202') {
-      showToast('⚠️ Run the delete_visitors SQL in Supabase first — see comments in code', 'err');
-    } else {
-      showToast(`❌ Delete failed: ${error.message}`, 'err');
-    }
-    return;
-  }
-
+  if (error) { toast('Delete failed: ' + error.message, 'error'); return; }
   const n = typeof data === 'number' ? data : ids.length;
-  showToast(`✓ Deleted ${n} row${n !== 1 ? 's' : ''}`, 'ok');
-  await loadAll();
+  toast(`Deleted ${n} row${n!==1?'s':''}`, 'success');
+  await loadRecentVisitorsTable(db);
 }
 
-
-// ============================================================
-// MODAL
-// ============================================================
-let _modalCallback = null;
-
-function openModal(title, body, onConfirm) {
-  document.getElementById('modal-title').innerHTML = title;
-  document.getElementById('modal-body').innerHTML  = body;
-  _modalCallback = onConfirm;
-  document.getElementById('delete-modal').classList.add('open');
-
-  // Wire confirm once
-  const confirmBtn = document.getElementById('modal-confirm-btn');
-  confirmBtn.onclick = async () => {
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = 'Deleting…';
-    closeModal();
-    if (_modalCallback) await _modalCallback();
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = 'Yes, Delete';
-    _modalCallback = null;
+// ── Delete modal for analytics (separate from admin modal) ──
+let _deleteModalCb = null;
+function openDeleteModal(title, body, onConfirm) {
+  const modal = document.getElementById('delete-modal');
+  document.getElementById('delete-modal-title').innerHTML = title;
+  document.getElementById('delete-modal-body').innerHTML = body;
+  _deleteModalCb = onConfirm;
+  modal.classList.add('open');
+  document.getElementById('delete-modal-confirm').onclick = async () => {
+    modal.classList.remove('open');
+    if (_deleteModalCb) { await _deleteModalCb(); _deleteModalCb = null; }
   };
+  document.getElementById('delete-modal-cancel').onclick = () => modal.classList.remove('open');
 }
 
-function closeModal() {
-  document.getElementById('delete-modal').classList.remove('open');
-}
-
-
-// ============================================================
-// TOAST
-// ============================================================
-let _toastTimer;
-
-function showToast(msg, type = '') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className   = 'show' + (type ? ' toast-' + type : '');
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => { el.className = ''; }, 3000);
-}
-
-
-// ============================================================
-// BAR CHART RENDERER
-// ============================================================
 function renderBarChart(containerId, items, color) {
   const el = document.getElementById(containerId);
-  if (!el || !items) return;
-
+  if (!el || !items || !items.length) { if(el) el.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:8px">No data yet</div>'; return; }
   const max = Math.max(...items.map(i => i.cnt), 1);
-  el.innerHTML = items.map(item => `
-    <div class="bar-row">
-      <span class="bar-label" title="${esc(item.country || item.source || item.device || item.browser || item.os || '?')}">
-        ${esc(item.country || item.source || item.device || item.browser || item.os || '?')}
-      </span>
-      <div class="bar-track">
-        <div class="bar-fill" style="width:${(item.cnt / max * 100).toFixed(1)}%;background:${color};"></div>
-      </div>
-      <span class="bar-count">${item.cnt}</span>
-    </div>
-  `).join('');
+  el.innerHTML = items.map(item => {
+    const label = item.country || item.source || item.device || item.browser || item.os || '?';
+    return `<div class="bar-row"><span class="bar-label" title="${escHtml(label)}">${escHtml(label)}</span><div class="bar-track"><div class="bar-fill" style="width:${(item.cnt/max*100).toFixed(1)}%;background:${color}"></div></div><span class="bar-count">${item.cnt}</span></div>`;
+  }).join('');
 }
 
+function setText(id, val) { const el = document.getElementById(id); if(el) el.textContent = val; }
+function fmt(n) { return (n||0).toLocaleString(); }
+function fmtDur(s) { if(!s||s<=0) return '—'; s=Math.round(s); if(s<60) return s+'s'; if(s<3600) return Math.floor(s/60)+'m '+( s%60)+'s'; return Math.floor(s/3600)+'h '+Math.floor((s%3600)/60)+'m'; }
+function escHtml(str) { return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function timeAgoFmt(date) { const d=Math.floor((Date.now()-date)/1000); if(d<60) return d+'s ago'; if(d<3600) return Math.floor(d/60)+'m ago'; if(d<86400) return Math.floor(d/3600)+'h ago'; return Math.floor(d/86400)+'d ago'; }
 
-// ============================================================
-// HELPERS
-// ============================================================
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
 
-function fmt(n) { return (n || 0).toLocaleString(); }
-
-// Format seconds → "45s", "2m 13s", "1h 4m"
-function fmtDur(s) {
-  if (!s || s <= 0) return '—';
-  s = Math.round(s);
-  if (s < 60)   return s + 's';
-  if (s < 3600) return Math.floor(s / 60) + 'm ' + (s % 60) + 's';
-  return Math.floor(s / 3600) + 'h ' + Math.floor((s % 3600) / 60) + 'm';
-}
-
-function esc(str) {
-  return String(str || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-
-function timeAgo(date) {
-  const diff = Math.floor((Date.now() - date) / 1000);
-  if (diff < 60)     return diff + 's ago';
-  if (diff < 3600)   return Math.floor(diff / 60) + 'm ago';
-  if (diff < 86400)  return Math.floor(diff / 3600) + 'h ago';
-  return Math.floor(diff / 86400) + 'd ago';
-}
-</script>
-</body>
-</html>
