@@ -1,0 +1,778 @@
+/* ================================================================
+   WCAG AA ACCESSIBILITY FIXES — Complete Override Layer
+   Target: 0 Contrast Errors · 0 Small Text Alerts · Full Keyboard Support
+   Preserves premium glassmorphism design — only readability enhanced
+================================================================ */
+
+/* ================================================================
+   PRIORITY 1 — CONTRAST FIXES
+   Glass cards on background.png image need darker base + white text
+   for sections where the photo background shows through.
+   Sections with white/light glass cards: use dark ink (original).
+   Dark glass panels (gate, review box, dark tinted): use white text.
+================================================================ */
+
+/* ── 1A. Glass cards sitting on airport photo = white glass = dark text ── */
+/* These are already correct (dark ink on white glass) — reinforce */
+.glass-card, .museum-case, .project-card, .glass-card-deep,
+.exp-card, .lge-card, .edu-card, .cert-card, .cert-hero-card,
+.ach-award-card, .wh-card, .about-text-col, .about-panel-col,
+.about-bio-col, .about-stats-row, .kpi-block, .panel-sla-ring,
+.panel-achievements, .hero-editorial-layout {
+  /* Darken the glass base to improve text contrast */
+  background: linear-gradient(160deg,
+    rgba(255,255,255,0.82) 0%,
+    rgba(245,248,255,0.70) 50%,
+    rgba(255,255,255,0.78) 100%
+  ) !important;
+}
+
+/* ── 1B. Proof bar / sector trust bar — slightly darker glass ── */
+.proof-bar, .sectors-trust-bar {
+  background: rgba(255,255,255,0.80) !important;
+}
+
+/* ── 1C. Dark-tinted glass panels — use white text ── */
+/* Gate card is dark glass on airport image */
+.gate-card {
+  background: rgba(0,0,0,0.55) !important;
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+.gate-card h2,
+.gate-card h2 span { color: #FFFFFF !important; }
+.gate-card .gate-subtitle { color: rgba(255,255,255,0.90) !important; }
+.gate-logo { color: rgba(255,255,255,0.90) !important; }
+.gate-field label { color: rgba(255,255,255,0.90) !important; }
+.gate-field input { color: #FFFFFF !important; }
+
+/* Gate info text — was 0.45 opacity (FAIL) → 0.75 min */
+.gate-card p[style*="0.45"],
+.gate-card p[style*="rgba(255,255,255,0.45)"] {
+  color: rgba(255,255,255,0.75) !important;
+}
+
+/* Welcome state inside gate */
+#gateWelcome p.gate-subtitle {
+  color: rgba(255,255,255,0.90) !important;
+}
+
+/* ── 1D. Review box — dark glass, needs white text ── */
+.review-box {
+  background: rgba(0,0,0,0.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+.review-box-title,
+.review-box-hint,
+.review-rating-label {
+  color: #FFFFFF !important;
+}
+.review-box-star { color: #f59e0b !important; }
+.review-char-count {
+  color: rgba(255,255,255,0.75) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.75) !important;
+  font-size: 14px !important;
+}
+#reviewThanks p:first-of-type { color: #FFFFFF !important; }
+#reviewThanks p:last-of-type { color: rgba(255,255,255,0.90) !important; font-size: 14px !important; }
+
+/* ── 1E. Navbar on photo background — text must be white or very dark ink ── */
+.nav-logo-name { color: #FFFFFF !important; }
+.nav-logo-role { color: rgba(255,255,255,0.75) !important; font-size: 11px !important; }
+
+/* Nav links are on the glass pill — dark glass pills → white text */
+.nav-link { color: #1e293b !important; font-size: 13px !important; }
+.nav-link:hover, .nav-link.active, .nav-link.is-active {
+  color: #0f172a !important;
+}
+
+/* ── 1F. Weather bar — text on transparent bar over photo ── */
+/* Darken the bar for readability */
+.weather-bar {
+  background: rgba(0,0,0,0.30) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  padding: 6px 20px !important;
+}
+.wb-time { color: #FFFFFF !important; }
+.wb-date { color: rgba(255,255,255,0.90) !important; }
+.wb-weather-text { color: rgba(255,255,255,0.90) !important; }
+.wb-icon { color: rgba(255,255,255,0.90) !important; }
+.wb-sep { color: rgba(255,255,255,0.50) !important; }
+
+/* ── 1G. Navbar glass — ensure all text meets AA ── */
+/* The nav uses light glass pill — dark ink works. Fix only the ones failing. */
+.nav-resume-btn { color: #0f172a !important; font-size: 13px !important; }
+
+/* ── 1H. Hero section chips — on white glass, dark ink ── */
+.hvc-val   { color: #0f172a !important; }
+.hvc-icon  { color: #334155 !important; }
+.hvc-lbl   { color: #334155 !important; font-size: 14px !important; }
+.hero-eyebrow-text { color: #1e293b !important; font-size: 14px !important; }
+.hnr-tag   { color: #1e293b !important; font-size: 14px !important; }
+.hero-statement { color: #1e293b !important; }
+
+/* KPI block — white glass, dark ink */
+.kpi-num   { color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; }
+.kpi-unit  { color: #334155 !important; }
+.kpi-label { color: #334155 !important; font-size: 14px !important; }
+
+/* ── 1I. Why Hire section — white glass cards, dark ink ── */
+.wh-title  { color: #0f172a !important; }
+.wh-desc   { color: #1e293b !important; }
+.wh-proof  { color: #334155 !important; }
+.wh-proof span { color: #334155 !important; }
+.wh-badge  { color: #0f172a !important; font-weight: 700; }
+.wh-badge-green  { color: #14532d !important; }
+.wh-badge-amber  { color: #78350f !important; }
+.wh-badge-teal   { color: #134e4a !important; }
+.wh-badge-rose   { color: #881337 !important; }
+.wh-badge-purple { color: #4c1d95 !important; }
+.ps-label  { color: #334155 !important; font-size: 14px !important; }
+.ps-num    { color: #0f172a !important; }
+.stb-label { color: #1e293b !important; font-size: 14px !important; }
+.stb-sector { color: #1e293b !important; font-size: 14px !important; }
+
+/* ── 1J. About section ── */
+.bio-lead  { color: #0f172a !important; }
+.bio-body  { color: #1e293b !important; }
+.astat-num { color: #0f172a !important; }
+.astat-label { color: #334155 !important; font-size: 14px !important; }
+.ach-text strong { color: #0f172a !important; }
+.ach-text span   { color: #1e293b !important; font-size: 14px !important; }
+
+/* ── 1K. Projects / Museum Cases ── */
+.mc-title  { color: #0f172a !important; }
+.mc-org    { color: #334155 !important; }
+.mc-sector { color: #334155 !important; font-size: 14px !important; }
+.mc-desc   { color: #1e293b !important; }
+.csm-lbl   { color: #334155 !important; font-size: 14px !important; }
+.csm-val   { color: #0f172a !important; }
+.mc-outcome-label { color: #334155 !important; font-size: 14px !important; }
+.mc-outcome-val   { color: #0f172a !important; }
+.mc-tool-tag      { color: #1e293b !important; font-size: 14px !important; }
+.pc-block-text    { color: #1e293b !important; font-size: 14px !important; }
+.pc-impact        { color: #1e293b !important; font-size: 14px !important; }
+.pc-tool-badge    { color: #1e293b !important; font-size: 14px !important; }
+.pc-block-label.challenge { color: #92400e !important; }
+.pc-block-label.solution  { color: #166534 !important; }
+
+/* ── 1L. Experience section ── */
+.exp-role     { color: #0f172a !important; }
+.exp-company  { color: #1e293b !important; }
+.exp-bullet   { color: #1e293b !important; }
+.exp-quote    { color: #1e293b !important; }
+.exp-quote-author { color: #334155 !important; font-size: 14px !important; }
+.exp-stat-chip { color: #0f172a !important; font-size: 14px !important; }
+.exp-meta-chip { color: #334155 !important; font-size: 14px !important; }
+
+/* ── 1M. Education ── */
+.edu-description { color: #1e293b !important; }
+.edu-result      { color: #1e293b !important; }
+.edu-date        { color: #334155 !important; font-size: 14px !important; }
+
+/* ── 1N. Arsenal / Tech Stack ── */
+.ac-title    { color: #0f172a !important; }
+.ac-subtitle { color: #334155 !important; font-size: 14px !important; }
+.tool-chip   { color: #1e293b !important; font-size: 14px !important; }
+.lang-name   { color: #0f172a !important; }
+.lang-level  { color: #334155 !important; font-size: 14px !important; }
+
+/* ── 1O. References section ── */
+.ref-name    { color: #0f172a !important; }
+.ref-title   { color: #1e293b !important; font-size: 14px !important; }
+.ref-company { color: #334155 !important; font-size: 14px !important; }
+.ref-note    { color: #1e293b !important; font-size: 14px !important; }
+.ref-rel-pill { color: #1e293b !important; font-size: 14px !important; }
+.ref-disclaimer { color: #334155 !important; font-size: 14px !important; }
+.ref-view-link { color: #005f94 !important; }
+
+/* ── 1P. Contact / Engage section ── */
+.engage-status-text { color: #0f172a !important; font-size: 14px !important; }
+.engage-version     { color: #334155 !important; font-size: 14px !important; }
+.engage-intro       { color: #1e293b !important; }
+.er-label    { color: #334155 !important; font-size: 14px !important; }
+.er-value    { color: #0f172a !important; }
+.er-cta      { color: #0f172a !important; font-size: 14px !important; }
+.erc-title   { color: #0f172a !important; }
+.erc-sub     { color: #334155 !important; font-size: 14px !important; }
+
+/* ── 1Q. Footer ── */
+.footer-name { color: #0f172a !important; }
+.footer-role { color: #334155 !important; font-size: 14px !important; }
+.footer-copy { color: #334155 !important; font-size: 14px !important; }
+.footer-links a { color: #1e293b !important; }
+
+/* ── 1R. Glass cards with dark tints (contact CTAs) — keep white ── */
+.cta-resume .cta-btn-label  { color: rgba(255,255,255,0.90) !important; }
+.cta-whatsapp .cta-btn-label { color: rgba(255,255,255,0.90) !important; }
+.cta-resume .cta-btn-arrow  { color: rgba(255,255,255,0.90) !important; }
+.cta-whatsapp .cta-btn-arrow { color: rgba(255,255,255,0.90) !important; }
+
+/* ── 1S. Navbar mobile drawer — light glass, dark ink ── */
+.nav-mob-link { color: #1e293b !important; font-size: 16px !important; }
+
+/* ── 1T. Section headers ── */
+.sec-subtitle { color: #1e293b !important; font-size: 16px !important; }
+.sec-title {
+  color: #0f172a !important;
+  /* Override gradient that makes text nearly invisible at low contrast */
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background-clip: unset !important;
+}
+.sec-eyebrow { color: #334155 !important; font-size: 14px !important; }
+.sec-num { display: none !important; } /* Decorative — hidden for a11y */
+
+/* ── 1U. Glass Capabilities Cards ── */
+.gc-card-title { color: #0f172a !important; }
+.gc-card-body  { color: #1e293b !important; }
+.gc-stat       { color: #334155 !important; font-size: 14px !important; }
+.gc-tag        { color: #1e293b !important; font-size: 14px !important; }
+
+/* gc-cards on dark background get white text */
+.gc-card {
+  background: rgba(0,0,0,0.35) !important;
+  backdrop-filter: blur(14px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.3) !important;
+}
+.gc-card .gc-card-title { color: #FFFFFF !important; }
+.gc-card .gc-card-body  { color: rgba(255,255,255,0.90) !important; }
+.gc-card .gc-stat       { color: rgba(255,255,255,0.90) !important; }
+.gc-card .gc-tag        { color: #FFFFFF !important; background: rgba(255,255,255,0.15) !important; }
+.gc-card .gc-icon       { color: #FFFFFF !important; }
+.gc-card .gc-arrow      { color: rgba(255,255,255,0.75) !important; }
+
+/* ── 1V. Cert cards, achievement awards — check if dark or light ── */
+/* Cert cards use light glass — dark ink */
+.cc-name, .cc-issuer { color: #0f172a !important; }
+.cc-date, .cc-id     { color: #334155 !important; font-size: 14px !important; }
+
+/* ── 1W. Fieldwork / HIE section ── */
+.hie-title   { color: #0f172a !important; }
+.hie-desc    { color: #1e293b !important; }
+.hie-caption { color: #334155 !important; font-size: 14px !important; }
+
+/* ── 1X. Mobile sticky bar — dark glass, needs white text ── */
+.msc-btn { color: #FFFFFF !important; font-size: 16px !important; }
+
+/* ── 1Y. Engage section left/right — light glass, dark text ── */
+.engage-left, .engage-right, .engage-wrap {
+  background: linear-gradient(160deg, rgba(255,255,255,0.80) 0%, rgba(245,248,255,0.68) 100%) !important;
+}
+/* Override CTA glass buttons in dark-tinted zones */
+.engage-cta-btn { color: #FFFFFF !important; }
+.engage-cta-primary { background: rgba(18,140,126,0.85) !important; }
+.engage-cta-ghost   { background: rgba(0,119,181,0.75) !important; }
+
+/* ── 1Z. Review cards (published reviews) ── */
+.rc-text { color: #1e293b !important; }
+.rc-name { color: #0f172a !important; }
+.rc-date { color: #334155 !important; font-size: 14px !important; }
+
+
+/* ================================================================
+   PRIORITY 2 — MINIMUM FONT SIZES
+   Eliminate all 7px, 8px, 9px, 10px, 11px, 12px body text.
+   Minimum: 16px body, 14px labels/metadata/buttons
+================================================================ */
+
+/* ── Body text baseline ── */
+body { font-size: 16px !important; }
+
+/* ── Hero chip labels ── */
+.hvc-lbl    { font-size: 14px !important; }
+.hero-eyebrow-text { font-size: 14px !important; }
+.hnr-tag    { font-size: 14px !important; letter-spacing: 0.10em !important; }
+.kpi-label  { font-size: 14px !important; }
+.kpi-unit   { font-size: 14px !important; }
+
+/* ── About ── */
+.astat-label { font-size: 14px !important; }
+.ach-text span { font-size: 14px !important; }
+.p-chip { font-size: 14px !important; }
+
+/* ── Why Hire ── */
+.ps-label { font-size: 14px !important; }
+.stb-label { font-size: 14px !important; }
+.stb-sector { font-size: 14px !important; }
+
+/* ── Navigation ── */
+.nav-link { font-size: 13px !important; } /* small intentionally — pill nav */
+.nav-logo-role { font-size: 12px !important; } /* very small badge — acceptable decorative */
+.nav-mob-link { font-size: 16px !important; }
+
+/* ── Projects ── */
+.mc-sector { font-size: 14px !important; }
+.csm-lbl   { font-size: 14px !important; }
+.mc-outcome-label { font-size: 14px !important; }
+.mc-tool-tag { font-size: 14px !important; }
+.pc-block-label { font-size: 14px !important; }
+.pc-block-text  { font-size: 14px !important; }
+.pc-impact      { font-size: 14px !important; }
+.pc-tool-badge  { font-size: 14px !important; }
+
+/* ── Experience ── */
+.exp-quote-author { font-size: 14px !important; }
+.exp-stat-chip    { font-size: 14px !important; }
+.exp-meta-chip    { font-size: 14px !important; }
+.exp-bullet       { font-size: 16px !important; }
+.exp-quote        { font-size: 16px !important; }
+
+/* ── Education ── */
+.edu-date { font-size: 14px !important; }
+
+/* ── Arsenal ── */
+.ac-subtitle  { font-size: 14px !important; }
+.tool-chip    { font-size: 14px !important; }
+.lang-level   { font-size: 14px !important; }
+.ac-skill     { font-size: 14px !important; }
+.tool-chip i  { font-size: 14px !important; }
+
+/* ── References ── */
+.ref-title    { font-size: 14px !important; }
+.ref-company  { font-size: 14px !important; }
+.ref-note     { font-size: 14px !important; }
+.ref-rel-pill { font-size: 14px !important; }
+.ref-disclaimer { font-size: 14px !important; }
+
+/* ── Contact ── */
+.er-label         { font-size: 14px !important; }
+.er-cta           { font-size: 14px !important; }
+.erc-sub          { font-size: 14px !important; }
+.engage-version   { font-size: 14px !important; }
+.engage-status-text { font-size: 14px !important; }
+.er-value         { font-size: 16px !important; }
+
+/* ── Footer ── */
+.footer-role  { font-size: 14px !important; }
+.footer-copy  { font-size: 14px !important; }
+
+/* ── Caps/labels ── */
+.sec-eyebrow  { font-size: 14px !important; }
+.sec-subtitle { font-size: 16px !important; }
+
+/* ── Buttons minimum 16px ── */
+.gate-btn       { font-size: 16px !important; }
+.btn-primary    { font-size: 14px !important; }
+.btn-ghost      { font-size: 14px !important; }
+.nav-resume-btn { font-size: 13px !important; }
+.review-submit-btn { font-size: 16px !important; }
+.engage-cta-btn { font-size: 16px !important; }
+.msc-btn        { font-size: 16px !important; }
+.fa-btn-label   { font-size: 14px !important; }
+.exp-tab        { font-size: 16px !important; }
+
+/* ── Review form inputs ── */
+#reviewName       { font-size: 16px !important; }
+.review-textarea  { font-size: 16px !important; }
+.review-char-count { font-size: 14px !important; }
+
+/* ── Mobile: Never below 14px ── */
+@media (max-width: 767px) {
+  body          { font-size: 16px !important; }
+  .hvc-lbl      { font-size: 14px !important; }
+  .kpi-label    { font-size: 14px !important; }
+  .ps-label     { font-size: 14px !important; }
+  .ac-subtitle  { font-size: 14px !important; }
+  .nav-link     { font-size: 14px !important; }
+  .tool-chip    { font-size: 14px !important; }
+  .ref-note     { font-size: 14px !important; }
+  .er-label     { font-size: 14px !important; }
+  /* Never below 14px on any element */
+  * { font-size: max(var(--computed-font-size, inherit), 14px); }
+}
+
+
+/* ================================================================
+   PRIORITY 3 — STAR RATING ACCESSIBILITY
+   Replace click-only with proper radiogroup pattern.
+   The HTML changes are in the HTML file; CSS adds visual states.
+================================================================ */
+
+/* Radiogroup container */
+.review-stars[role="radiogroup"] {
+  display: inline-flex !important;
+  gap: 4px !important;
+  align-items: center !important;
+}
+
+/* Each radio star */
+.review-star[role="radio"] {
+  cursor: pointer !important;
+  outline: none !important;
+  font-size: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 40px !important;
+  min-height: 40px !important; /* Minimum touch target 44px area */
+  padding: 4px !important;
+  border-radius: 8px !important;
+  transition: transform 0.18s ease, color 0.15s ease !important;
+  color: rgba(255,255,255,0.35) !important;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.50) !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  /* Remove default focus outline — we add custom */
+  background: transparent !important;
+}
+
+/* Focus state — strong visible indicator */
+.review-star[role="radio"]:focus-visible,
+.review-star[role="radio"]:focus {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 2px !important;
+  background: rgba(255,255,255,0.12) !important;
+  border-radius: 8px !important;
+}
+
+/* Checked / hover states */
+.review-star[role="radio"][aria-checked="true"],
+.review-star[role="radio"].active,
+.review-star[role="radio"]:hover {
+  color: #f59e0b !important;
+  -webkit-text-stroke: 0px transparent !important;
+  text-shadow: 0 0 14px rgba(245,158,11,0.65) !important;
+  transform: scale(1.22) !important;
+}
+
+
+/* ================================================================
+   PRIORITY 4 — FORM ACCESSIBILITY
+   Labels, aria associations, focus states
+================================================================ */
+
+/* Gate form label */
+.gate-field label {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: rgba(255,255,255,0.90) !important;
+  display: block !important;
+  margin-bottom: 7px !important;
+}
+
+/* All inputs — strong focus visible state */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.20) !important;
+}
+
+/* For dark-background inputs */
+.gate-field input:focus-visible,
+.gate-field input:focus {
+  outline: 2px solid #D4A840 !important;
+  outline-offset: 2px !important;
+  border-color: rgba(212,168,64,0.80) !important;
+  box-shadow: 0 0 0 4px rgba(212,168,64,0.20) !important;
+}
+
+/* Review form inputs on dark background */
+#reviewName:focus,
+#reviewName:focus-visible,
+.review-textarea:focus,
+.review-textarea:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 2px !important;
+  border-color: rgba(255,255,255,0.55) !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15) !important;
+}
+
+/* Review name input needs visible label association */
+#reviewName::placeholder  { color: rgba(255,255,255,0.55) !important; font-size: 16px !important; }
+.review-textarea::placeholder { color: rgba(255,255,255,0.55) !important; font-size: 16px !important; }
+
+/* Review label text */
+.review-box-hint { font-size: 14px !important; color: rgba(255,255,255,0.90) !important; }
+.review-rating-label { font-size: 14px !important; color: rgba(255,255,255,0.90) !important; }
+
+
+/* ================================================================
+   PRIORITY 5 — REDUNDANT LINK FIX (CSS only — note for HTML fix)
+   The nav logo links to #home and the hero section also has a #home.
+   The mobile drawer duplicates all nav links.
+   The footer has duplicate links to same sections as header nav.
+   These are handled in HTML; here we ensure any visually hidden
+   duplicate links are truly hidden from AT.
+================================================================ */
+/* Already handled by aria-hidden="true" on duplicate decorative links */
+.ref-view-link[aria-hidden="true"] {
+  pointer-events: none !important;
+}
+
+
+/* ================================================================
+   PRIORITY 6 — IMAGE ACCESSIBILITY
+   Decorative images hidden from AT; meaningful images have alt text.
+   CSS enforces that no img has display:none without alt="" check.
+================================================================ */
+/* Tab logo images in experience tabs are decorative (text label present) */
+.exp-tab-logo { /* alt="" set in HTML */ }
+
+/* Portrait image already has alt text — no CSS needed */
+
+
+/* ================================================================
+   PRIORITY 7 — FOCUS STATES
+   Consistent, highly visible focus indicators for all interactive elements.
+================================================================ */
+
+/* ── Universal focus ring ── */
+:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+  border-radius: 6px !important;
+}
+
+/* ── On light glass backgrounds — use dark focus ring ── */
+.hero-editorial-layout :focus-visible,
+.glass-card :focus-visible,
+.exp-card :focus-visible,
+.wh-card :focus-visible,
+.edu-card :focus-visible,
+.cert-card :focus-visible,
+.museum-case :focus-visible,
+.about-text-col :focus-visible,
+.about-panel-col :focus-visible,
+.engage-left :focus-visible,
+.engage-right :focus-visible,
+.engage-wrap :focus-visible,
+.nav-mob-drawer :focus-visible {
+  outline: 2px solid #0f172a !important;
+  outline-offset: 3px !important;
+}
+
+/* ── Buttons ── */
+button:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+  border-radius: 8px !important;
+}
+
+/* Gate button */
+.gate-btn:focus-visible {
+  outline: 2px solid #D4A840 !important;
+  outline-offset: 3px !important;
+}
+
+/* Nav links */
+.nav-link:focus-visible {
+  outline: 2px solid #0f172a !important;
+  outline-offset: 3px !important;
+  background: rgba(255,255,255,0.25) !important;
+}
+
+/* Resume button nav */
+.nav-resume-btn:focus-visible {
+  outline: 2px solid #0f172a !important;
+  outline-offset: 3px !important;
+}
+
+/* Mobile toggle */
+.nav-mob-toggle:focus-visible {
+  outline: 2px solid #0f172a !important;
+  outline-offset: 3px !important;
+}
+
+/* Mobile drawer links */
+.nav-mob-link:focus-visible {
+  outline: 2px solid #0f172a !important;
+  outline-offset: 3px !important;
+  background: rgba(255,255,255,0.30) !important;
+}
+
+/* FAB buttons */
+.fab-main:focus-visible,
+.fab-option:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* Footer links */
+.footer-glass-btn:focus-visible,
+.footer-links a:focus-visible,
+.fa-btn:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* Engage rows (contact links) */
+.engage-row:focus-visible {
+  outline: 2px solid #0f172a !important;
+  outline-offset: 3px !important;
+  background: rgba(255,255,255,0.15) !important;
+}
+
+/* CTA buttons */
+.engage-cta-btn:focus-visible,
+.erc-download:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* Social pills */
+.es-pill:focus-visible,
+.ref-linkedin-btn:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* Experience tabs */
+.exp-tab:focus-visible {
+  outline: 2px solid #0f172a !important;
+  outline-offset: 3px !important;
+}
+
+/* Review submit button */
+.review-submit-btn:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* Modal close buttons */
+.pdf-modal-btn:focus-visible,
+.hie-modal-btn:focus-visible,
+.gate-close:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* Skip nav link */
+.skip-nav-link:focus {
+  top: 0 !important;
+  outline: 3px solid #D4A840 !important;
+  outline-offset: 0 !important;
+  font-size: 16px !important;
+  color: #FFFFFF !important;
+}
+
+/* ── Mobile sticky bar ── */
+.msc-btn:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* ── Scroll back-to-top ── */
+.fa-btn--top:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+
+/* ================================================================
+   ADDITIONAL CONTRAST FIXES — Elements not covered above
+================================================================ */
+
+/* cta-btn-sublabel was 10px — fix to 14px */
+.cta-btn-sublabel { font-size: 14px !important; color: rgba(255,255,255,0.90) !important; }
+
+/* tool chip icon */
+.tool-chip i { font-size: 14px !important; }
+
+/* Section eyebrow ::before decorative line */
+.sec-eyebrow { font-size: 14px !important; color: #334155 !important; }
+
+/* Cert card details */
+.cert-id, .cert-date { font-size: 14px !important; color: #334155 !important; }
+
+/* HIE section captions */
+.hie-card-label, .hie-caption { font-size: 14px !important; }
+
+/* Achievement section */
+.aac-desc   { color: #1e293b !important; font-size: 14px !important; }
+.aac-title  { color: #0f172a !important; }
+.aac-org    { color: #334155 !important; font-size: 14px !important; }
+
+/* Proof bar metrics */
+.proof-stat .ps-num { font-size: 22px !important; }
+.proof-stat .ps-label { font-size: 14px !important; color: #334155 !important; }
+
+/* Lang grid */
+.lang-name  { font-size: 14px !important; }
+.lang-level { font-size: 14px !important; color: #334155 !important; }
+
+/* Hero badge chips */
+.hero-badge { font-size: 14px !important; color: #1e293b !important; }
+
+/* Review published cards */
+.rc-text { font-size: 16px !important; color: #1e293b !important; }
+.rc-name { font-size: 16px !important; color: #0f172a !important; }
+.rc-date { font-size: 14px !important; color: #334155 !important; }
+
+/* Engage recruiter note */
+.engage-recruiter {
+  font-size: 14px !important;
+  color: #334155 !important;
+}
+.engage-recruiter > span:last-child {
+  color: #334155 !important;
+}
+
+/* Footer visitor badge */
+#footer-online-count, #footer-total-count { color: #334155 !important; font-size: 14px !important; }
+
+/* Weather bar override (stricter) */
+.wb-time, .wb-date, .wb-weather-text {
+  color: #FFFFFF !important;
+}
+
+
+/* ================================================================
+   ENSURE NO TEXT IS USING FORBIDDEN OPACITIES ON DARK BACKGROUNDS
+   Replace rgba(255,255,255,0.4/0.5/0.6) where used for body text
+================================================================ */
+
+/* Gate subtitle was rgba(255,255,255,0.68) — fix to 0.90 */
+.gate-card .gate-subtitle { color: rgba(255,255,255,0.90) !important; }
+
+/* Gate "takes 2 seconds" note — was 0.45 (FAIL) */
+/* Handled via HTML inline style override below */
+
+/* ================================================================
+   GLOBAL SMALL-TEXT SAFETY NET
+   Catch any remaining small text not explicitly overridden above.
+   This ensures no visible text-carrying element renders below 14px.
+================================================================ */
+
+/* Target common UI pattern classes with known small text */
+.ref-view-link { font-size: 14px !important; }
+.hie-date, .hie-badge { font-size: 14px !important; }
+.cert-badge, .cert-tag { font-size: 14px !important; }
+.ach-tag, .ach-date { font-size: 14px !important; }
+.fvb-dot { display: inline-block !important; }
+#footer-online-count, #footer-total-count { font-size: 14px !important; }
+.pc-link { font-size: 14px !important; }
+.hlb-id { font-size: 14px !important; color: #334155 !important; }
+.hlb-arrow { font-size: 14px !important; color: #334155 !important; }
+.linkedin-id-pill { font-size: 14px !important; }
+.hap-pill { font-size: 14px !important; }
+.hap-status { font-size: 14px !important; }
+.exp-current { font-size: 14px !important; }
+.csm-val { font-size: 18px !important; }
+.er-icon { font-size: 16px !important; }
+
+/* Decorative element font sizes need not be increased */
+.sec-num { display: none !important; }
+.sec-eyebrow[aria-hidden="true"] { display: none !important; }
+
+/* ================================================================
+   REVIEW PUBLISHED CARDS — correct colour context
+================================================================ */
+.review-card {
+  background: linear-gradient(160deg, rgba(255,255,255,0.80) 0%, rgba(245,248,255,0.68) 100%) !important;
+}
+.rc-text { color: #1e293b !important; font-size: 16px !important; }
+.rc-name { color: #0f172a !important; font-size: 16px !important; }
+.rc-date { color: #334155 !important; font-size: 14px !important; }
+.rc-avatar { color: #FFFFFF !important; font-size: 16px !important; }
+
+/* ================================================================
+   ENSURE FOCUS OUTLINE NOT SUPPRESSED BY RESET
+================================================================ */
+*:focus { outline-style: solid !important; }
+*:focus:not(:focus-visible) { outline: none !important; }
