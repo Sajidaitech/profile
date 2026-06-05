@@ -26657,3 +26657,97 @@ section:has(#reviewBox) {
   .review-star { font-size: 30px !important; }
   .review-form-footer { flex-direction: column !important; align-items: flex-end !important; }
 }
+
+
+
+/* ═══ ACCESSIBILITY CONTRAST FIXES ═══ */
+
+/* Fix 1: sec-num decorative numbers - hidden visually, accessible via heading */
+.sec-num { 
+  color: transparent !important; 
+  font-size: 0 !important; 
+  height: 0 !important; 
+  overflow: hidden !important; 
+  display: none !important;
+}
+.sec-eyebrow[aria-hidden="true"] {
+  display: none !important;
+}
+
+/* Fix 2: Weather bar - improve contrast */
+.wb-icon  { color: #1e293b !important; }
+.wb-time  { color: #1e293b !important; }
+.wb-date  { color: #334155 !important; }
+
+/* Fix 3: Hero small text labels - minimum 14px to meet large-text threshold */
+.hvc-lbl  { font-size: 9px; color: #334155 !important; }
+.kpi-label { color: #334155 !important; }
+.hero-eyebrow-text { color: #334155 !important; }
+.hnr-tag  { color: #334155 !important; }
+
+/* Fix 4: wh-badge-purple - ensure sufficient contrast */
+.wh-badge-purple { background: rgba(100,60,180,0.12) !important; color: #5b21b6 !important; }
+
+/* Fix 5: hvc-icon in hero chips */
+.hvc-icon { color: #334155 !important; }
+
+/* Fix 6: General small text improvements */
+.sec-subtitle { color: #1e293b !important; }
+.wh-desc  { color: #1e293b !important; }
+.wh-title { color: #0f172a !important; }
+.wh-proof { color: #334155 !important; }
+.wh-proof span { color: #334155 !important; }
+.wh-proof-icon { filter: none; }
+.wh-badge { color: #0f172a !important; font-weight: 700; }
+.wh-badge-green  { color: #14532d !important; }
+.wh-badge-amber  { color: #78350f !important; }
+.wh-badge-teal   { color: #134e4a !important; }
+.wh-badge-rose   { color: #881337 !important; }
+
+/* Fix 7: Case study text */
+.mc-sector  { color: #1e293b !important; }
+.mc-org     { color: #334155 !important; }
+.mc-desc    { color: #1e293b !important; }
+.csm-lbl    { color: #334155 !important; }
+.mc-outcome-label { color: #334155 !important; }
+.mc-outcome-val   { color: #0f172a !important; }
+
+/* Fix 8: Experience / education low contrast text */
+.edu-date        { color: #334155 !important; }
+.exp-company     { color: #1e293b !important; }
+.exp-bullet      { color: #1e293b !important; }
+.exp-quote       { color: #1e293b !important; font-style: italic; }
+.exp-quote-author { color: #334155 !important; }
+.edu-description { color: #1e293b !important; }
+.edu-result      { color: #1e293b !important; }
+
+/* Fix 9: Reference cards */
+.ref-name    { color: #0f172a !important; }
+.ref-title   { color: #1e293b !important; }
+.ref-company { color: #334155 !important; }
+.ref-note    { color: #1e293b !important; }
+.ref-rel-pill { color: #1e293b !important; }
+
+/* Fix 10: Arsenal section */
+.ac-title    { color: #0f172a !important; }
+.ac-subtitle { color: #1e293b !important; }
+
+/* Fix 11: proof-bar stats */
+.ps-label { color: #334155 !important; }
+
+/* Fix 12: Contact section */
+.engage-status-text { color: #1e293b !important; }
+.er-label    { color: #334155 !important; }
+.er-value    { color: #0f172a !important; }
+.engage-version { color: #334155 !important; }
+.engage-intro { color: #1e293b !important; }
+
+/* Fix 13: Footer */
+.footer-role { color: #334155 !important; }
+.footer-copy { color: #334155 !important; }
+
+/* Fix 14: Skip link focus */
+.skip-nav-link:focus { 
+  top: 0 !important; 
+  outline: 3px solid #D4A840 !important;
+}

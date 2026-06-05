@@ -97,8 +97,38 @@
       #gate-bg-mobile { display: block !important; }
     }
   </style>
+
+<style>
+/* ── Accessibility: Skip Navigation Link ── */
+.skip-nav-link{position:absolute;top:-100%;left:0;z-index:99999;padding:12px 20px;background:#0f172a;color:#fff!important;font-size:15px;font-weight:600;text-decoration:none;border-radius:0 0 8px 0;transition:top .2s;outline:3px solid #D4A840;}
+.skip-nav-link:focus{top:0!important;}
+
+/* ═══ ACCESSIBILITY CONTRAST FIXES (inline override) ═══ */
+.sec-num, .sec-eyebrow[aria-hidden="true"] { display:none !important; }
+.wb-icon,.wb-time { color:#1e293b !important; }
+.wb-date { color:#334155 !important; }
+.hvc-lbl,.kpi-label,.hero-eyebrow-text,.hnr-tag { color:#334155 !important; }
+.hvc-icon { color:#334155 !important; }
+.wh-badge-purple { background:rgba(100,60,180,.12) !important; color:#5b21b6 !important; }
+.wh-badge { color:#0f172a !important; font-weight:700; }
+.wh-badge-green { color:#14532d !important; }
+.wh-badge-amber { color:#78350f !important; }
+.wh-badge-teal  { color:#134e4a !important; }
+.wh-badge-rose  { color:#881337 !important; }
+.wh-desc,.wh-proof,.wh-proof span { color:#334155 !important; }
+.wh-title { color:#0f172a !important; }
+.mc-sector,.mc-desc,.exp-company,.exp-bullet,.exp-quote,.edu-description,.edu-result { color:#1e293b !important; }
+.mc-org,.csm-lbl,.exp-quote-author,.edu-date { color:#334155 !important; }
+.mc-outcome-val,.er-value { color:#0f172a !important; }
+.mc-outcome-label,.er-label,.engage-version { color:#334155 !important; }
+.ref-name,.ac-title { color:#0f172a !important; }
+.ref-title,.ref-note,.engage-intro,.ref-rel-pill,.ac-subtitle { color:#1e293b !important; }
+.ref-company,.ps-label,.footer-role,.footer-copy,.engage-status-text { color:#334155 !important; }
+.sec-subtitle { color:#1e293b !important; }
+</style>
 </head>
 <body>
+  <a href="#main-content" class="skip-nav-link" style="position:absolute;top:-100%;left:0;z-index:99999;padding:12px 20px;background:#0f172a;color:#fff;font-size:14px;font-weight:600;text-decoration:none;border-radius:0 0 8px 0;transition:top 0.2s;outline:2px solid #fff;">Skip to main content</a>
 
   <!-- Matte wall texture + cinematic sunlight layers -->
   <div class="wall-grain"        aria-hidden="true"></div>
@@ -130,7 +160,7 @@
 
   <!-- Gate card — sits inside the blank glass rectangle in the image -->
   <div class="gate-card">
-      <button class="gate-close" id="gateClose" aria-label="Close">×</button>
+      <button class="gate-close" id="gateClose" aria-label="Close welcome overlay">×</button>
 
       <!-- ASK NAME STATE -->
       <div id="gateAsk">
@@ -144,8 +174,8 @@
 
         <div class="gate-fields">
           <div class="gate-field">
-            <label>Your Name</label>
-            <input type="text" id="visitorName" placeholder="e.g. Alex Johnson" autocomplete="given-name" maxlength="48">
+            <label for="visitorName">Your Name</label>
+            <input type="text" id="visitorName" placeholder="e.g. Alex Johnson" autocomplete="given-name" maxlength="48" aria-label="Your name">
           </div>
         </div>
 
@@ -186,15 +216,15 @@
       <i class="fas fa-times fab-icon-close"></i>
     </button>
     <div class="fab-options">
-      <a href="#" onclick="openPdfModal();return false;" class="fab-option" data-label="View Resume">
-        <i class="fas fa-file-arrow-down"></i>
+      <a href="#" onclick="openPdfModal();return false;" class="fab-option" data-label="View Resume" aria-label="View Resume PDF">
+        <i class="fas fa-file-arrow-down" aria-hidden="true"></i>
       </a>
-      <a href="#contact" class="fab-option fab-option-contact nav-anchor" data-label="Quick Connect">
-        <i class="fas fa-bolt"></i>
+      <a href="#contact" class="fab-option fab-option-contact nav-anchor" data-label="Quick Connect" aria-label="Quick Connect - Contact section">
+        <i class="fas fa-bolt" aria-hidden="true"></i>
       </a>
       <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer"
-         class="fab-option fab-option-whatsapp" data-label="WhatsApp">
-        <i class="fab fa-whatsapp"></i>
+         class="fab-option fab-option-whatsapp" data-label="WhatsApp" aria-label="Contact via WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i>
       </a>
     </div>
   </div>
@@ -274,7 +304,7 @@
   <!-- Scroll progress bar -->
   <div class="scroll-progress" id="scrollProgress"></div>
 
-  <main>
+  <main id="main-content">
 
     <!-- ================================================================
          HERO
@@ -411,7 +441,7 @@
     <section id="glass-cards-showcase" class="glass-cards-section section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">05</span>
+          <span class="sec-num" aria-hidden="true">05</span>
           <h2 class="sec-title">Capabilities &amp; Expertise</h2>
           <div class="sec-rule"></div>
           <p class="sec-subtitle" data-aos="fade-up" data-aos-delay="80">Core areas where precision meets innovation.</p>
@@ -579,7 +609,7 @@
     <section id="why-hire" class="section why-hire-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">00</span>
+          <span class="sec-num" aria-hidden="true">00</span>
           <h2 class="sec-title">Why Hire Sajid?</h2>
           <div class="sec-rule"></div>
           <p class="sec-subtitle" data-aos="fade-up" data-aos-delay="80">Enterprise traits that matter when infrastructure cannot fail.</p>
@@ -727,7 +757,7 @@
     <section id="about" class="section about-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">01</span>
+          <span class="sec-num" aria-hidden="true">01</span>
           <h2 class="sec-title">Profile</h2>
           <div class="sec-rule"></div>
         </header>
@@ -804,7 +834,7 @@
     <section id="projects" class="section projects-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">02</span>
+          <span class="sec-num" aria-hidden="true">02</span>
           <h2 class="sec-title">Case Studies</h2>
           <div class="sec-rule"></div>
         </header>
@@ -1459,7 +1489,7 @@
     <section id="arsenal" class="section arsenal-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">04</span>
+          <span class="sec-num" aria-hidden="true">04</span>
           <h2 class="sec-title">Arsenal</h2>
           <div class="sec-rule"></div>
         </header>
@@ -1657,7 +1687,7 @@
   <div class="container">
 
     <div class="section-header">
-      <span class="sec-eyebrow">05</span>
+      <span class="sec-eyebrow" aria-hidden="true">05</span>
       <h2 class="sec-title">Academic Foundation</h2>
     </div>
 
@@ -1923,7 +1953,7 @@
     <section id="achievements" class="section achievements-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">06</span>
+          <span class="sec-num" aria-hidden="true">06</span>
           <h2 class="sec-title">Awards</h2>
           <div class="sec-rule"></div>
         </header>
@@ -1967,7 +1997,7 @@
     <section id="certifications" class="section certs-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">07</span>
+          <span class="sec-num" aria-hidden="true">07</span>
           <h2 class="sec-title">Certifications</h2>
           <div class="sec-rule"></div>
         </header>
@@ -1984,7 +2014,7 @@
     <section id="fieldwork" class="section hie-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">08</span>
+          <span class="sec-num" aria-hidden="true">08</span>
           <h2 class="sec-title">Hands-On Infrastructure Experience</h2>
           <div class="sec-rule"></div>
           <p class="hie-subtitle" data-aos="fade-up" data-aos-delay="60">
@@ -2140,7 +2170,7 @@
     <section id="references" class="section references-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">09</span>
+          <span class="sec-num" aria-hidden="true">09</span>
           <h2 class="sec-title">References</h2>
           <div class="sec-rule"></div>
         </header>
@@ -2160,8 +2190,8 @@
                 <p class="ref-title">Senior IT Support Officer</p>
                 <p class="ref-company">🏗️ UBTJV Project · Qatar</p>
               </div>
-              <a href="https://www.linkedin.com/in/rayees-abdullah-927a171a1" target="_blank" rel="noopener noreferrer" class="ref-linkedin-btn">
-                <i class="fab fa-linkedin-in"></i>
+              <a href="https://www.linkedin.com/in/rayees-abdullah-927a171a1" target="_blank" rel="noopener noreferrer" class="ref-linkedin-btn" aria-label="View Rayees Abdullah on LinkedIn">
+                <i class="fab fa-linkedin-in" aria-hidden="true"></i>
               </a>
             </div>
             <div class="ref-relation">
@@ -2169,9 +2199,9 @@
               <span class="ref-rel-pill">🗓️ Feb – Oct 2022</span>
             </div>
             <p class="ref-note">Worked closely with Rayees during the UBTJV project deployment. His senior guidance and hands-on support were integral to the project's success.</p>
-            <a href="https://www.linkedin.com/in/rayees-abdullah-927a171a1" target="_blank" rel="noopener noreferrer" class="ref-view-link">
+            <span class="ref-view-link" aria-hidden="true">
               <i class="fab fa-linkedin-in"></i> View on LinkedIn <i class="fas fa-arrow-up-right-from-square" style="font-size:9px;"></i>
-            </a>
+            </span>
           </div>
 
           <!-- Shafeek Mohamed -->
@@ -2185,8 +2215,8 @@
                 <p class="ref-title">IT Manager</p>
                 <p class="ref-company">🏢 Power International Holding (PIH) · Qatar</p>
               </div>
-              <a href="https://www.linkedin.com/in/shafeek-mohamed-4434b951" target="_blank" rel="noopener noreferrer" class="ref-linkedin-btn">
-                <i class="fab fa-linkedin-in"></i>
+              <a href="https://www.linkedin.com/in/shafeek-mohamed-4434b951" target="_blank" rel="noopener noreferrer" class="ref-linkedin-btn" aria-label="View Shafeek Mohamed on LinkedIn">
+                <i class="fab fa-linkedin-in" aria-hidden="true"></i>
               </a>
             </div>
             <div class="ref-relation">
@@ -2194,9 +2224,9 @@
               <span class="ref-rel-pill">🗓️ Apr – Aug 2023</span>
             </div>
             <p class="ref-note">Shafeek provided critical support during the UBTJV server incident resolution and mentored me while I was leading IT operations for C-suite executives at PIH Head Office.</p>
-            <a href="https://www.linkedin.com/in/shafeek-mohamed-4434b951" target="_blank" rel="noopener noreferrer" class="ref-view-link">
+            <span class="ref-view-link" aria-hidden="true">
               <i class="fab fa-linkedin-in"></i> View on LinkedIn <i class="fas fa-arrow-up-right-from-square" style="font-size:9px;"></i>
-            </a>
+            </span>
           </div>
 
         </div>
@@ -2213,7 +2243,7 @@
     <section id="contact" class="section contact-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">10</span>
+          <span class="sec-num" aria-hidden="true">10</span>
           <h2 class="sec-title">Engage</h2>
           <div class="sec-rule"></div>
         </header>
@@ -2236,7 +2266,7 @@
             <!-- Contact rows -->
             <div class="engage-rows">
               <a href="mailto:SAJID.TEECH@GMAIL.COM" class="engage-row">
-                <span class="er-icon"><i class="fas fa-envelope"></i></span>
+                <span class="er-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span>
                 <span class="er-body">
                   <span class="er-label">Primary Email</span>
                   <span class="er-value">sajid.teech@gmail.com</span>
@@ -2244,7 +2274,7 @@
                 <span class="er-cta">Email</span>
               </a>
               <a href="mailto:INFO@SAJIDMK.COM" class="engage-row">
-                <span class="er-icon"><i class="fas fa-at"></i></span>
+                <span class="er-icon"><i class="fas fa-at" aria-hidden="true"></i></span>
                 <span class="er-body">
                   <span class="er-label">Domain Email</span>
                   <span class="er-value">info@sajidmk.com</span>
@@ -2252,7 +2282,7 @@
                 <span class="er-cta">Email</span>
               </a>
               <a href="https://wa.me/97466969598?text=Hi%20Sajid%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!" target="_blank" rel="noopener noreferrer" class="engage-row engage-row-wa">
-                <span class="er-icon er-icon-wa"><i class="fab fa-whatsapp"></i></span>
+                <span class="er-icon er-icon-wa"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>
                 <span class="er-body">
                   <span class="er-label">WhatsApp</span>
                   <span class="er-value">+974 6696 9598</span>
@@ -2260,7 +2290,7 @@
                 <span class="er-cta er-cta-wa">Chat</span>
               </a>
               <a href="https://t.me/imsajidmehmood" target="_blank" rel="noopener noreferrer" class="engage-row engage-row-tg">
-                <span class="er-icon er-icon-tg"><i class="fab fa-telegram"></i></span>
+                <span class="er-icon er-icon-tg"><i class="fab fa-telegram" aria-hidden="true"></i></span>
                 <span class="er-body">
                   <span class="er-label">Telegram</span>
                   <span class="er-value">@imsajidmehmood</span>
@@ -2268,7 +2298,7 @@
                 <span class="er-cta er-cta-tg">Message</span>
               </a>
               <a href="tel:+97466969598" class="engage-row">
-                <span class="er-icon"><i class="fas fa-phone"></i></span>
+                <span class="er-icon"><i class="fas fa-phone" aria-hidden="true"></i></span>
                 <span class="er-body">
                   <span class="er-label">Direct Line · Qatar</span>
                   <span class="er-value">+974 6696 9598</span>
@@ -2291,7 +2321,7 @@
                   <span class="erc-sub">PDF · CCNA · ITIL · 4+ yrs · Updated Jun 2025</span>
                 </div>
               </div>
-              <a href="#" onclick="openPdfModal();return false;" class="erc-download">
+              <a href="#" onclick="openPdfModal();return false;" class="erc-download" aria-label="Download Sajid Mehmood resume PDF">
                 <i class="fas fa-file-arrow-down"></i>
                 Download PDF Resume
                 <i class="fas fa-arrow-up-right-from-square erc-ext"></i>
@@ -2313,11 +2343,11 @@
             <!-- Social links — compact pill row -->
             <div class="engage-socials">
               <span class="engage-socials-label">Also on</span>
-              <a href="https://www.linkedin.com/in/sajid-mk-1b3954333" target="_blank" rel="noopener noreferrer" class="es-pill" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-              <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer" class="es-pill es-pill-wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-              <a href="https://t.me/imsajidmehmood" target="_blank" rel="noopener noreferrer" class="es-pill es-pill-tg" title="Telegram"><i class="fab fa-telegram"></i></a>
-              <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer" class="es-pill" title="Instagram"><i class="fab fa-instagram"></i></a>
-              <a href="https://x.com/im_sajidmehmood?s=11" target="_blank" rel="noopener noreferrer" class="es-pill" title="X / Twitter"><i class="fab fa-x-twitter"></i></a>
+              <a href="https://www.linkedin.com/in/sajid-mk-1b3954333" target="_blank" rel="noopener noreferrer" class="es-pill" aria-label="LinkedIn profile"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+              <a href="https://wa.me/97466969598" target="_blank" rel="noopener noreferrer" class="es-pill es-pill-wa" aria-label="WhatsApp contact"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+              <a href="https://t.me/imsajidmehmood" target="_blank" rel="noopener noreferrer" class="es-pill es-pill-tg" aria-label="Telegram contact"><i class="fab fa-telegram" aria-hidden="true"></i></a>
+              <a href="https://www.instagram.com/5aj1d._" target="_blank" rel="noopener noreferrer" class="es-pill" aria-label="Instagram profile"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+              <a href="https://x.com/im_sajidmehmood?s=11" target="_blank" rel="noopener noreferrer" class="es-pill" aria-label="X (formerly Twitter) profile"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
             </div>
 
             <!-- Recruiter note -->
@@ -2346,8 +2376,8 @@
                     <span class="review-star" data-val="5">★</span>
                   </div>
                 </div>
-                <input id="reviewName" type="text" maxlength="60" placeholder="Your name" style="width:100%;padding:9px 12px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.13);font-size:13px;font-family:inherit;background:rgba(0,0,0,0.04);color:inherit;outline:none;">
-                <textarea id="reviewText" class="review-textarea" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="3" maxlength="500"></textarea>
+                <input id="reviewName" type="text" maxlength="60" placeholder="Your name" aria-label="Your name for review" style="width:100%;padding:9px 12px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.13);font-size:13px;font-family:inherit;background:rgba(0,0,0,0.04);color:inherit;outline:none;">
+                <textarea id="reviewText" class="review-textarea" aria-label="Review text" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="3" maxlength="500"></textarea>
                 <div class="review-form-footer">
                   <span class="review-char-count"><span id="reviewCharCount">0</span>/500</span>
                   <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
@@ -2377,7 +2407,7 @@
     <section id="website-reviews" class="section reviews-section" style="display:none;">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num">★</span>
+          <span class="sec-num" aria-hidden="true">★</span>
           <h2 class="sec-title">What Visitors Say</h2>
           <div class="sec-rule"></div>
           <p class="sec-subtitle">Genuine feedback from recruiters, colleagues, and professionals who visited this portfolio.</p>
@@ -2402,19 +2432,19 @@
       </div>
       <nav class="footer-links footer-nav-btns" aria-label="Footer navigation">
         <a href="#about"    class="footer-glass-btn nav-anchor">
-          <i class="fas fa-user footer-btn-icon"></i>
+        <i class="fas fa-user footer-btn-icon" aria-hidden="true"></i>
           <span>Profile</span>
         </a>
         <a href="#projects" class="footer-glass-btn nav-anchor">
-          <i class="fas fa-folder-open footer-btn-icon"></i>
+        <i class="fas fa-folder-open footer-btn-icon" aria-hidden="true"></i>
           <span>Projects</span>
         </a>
         <a href="#arsenal"  class="footer-glass-btn nav-anchor">
-          <i class="fas fa-toolbox footer-btn-icon"></i>
+        <i class="fas fa-toolbox footer-btn-icon" aria-hidden="true"></i>
           <span>Arsenal</span>
         </a>
         <a href="#contact"  class="footer-glass-btn nav-anchor">
-          <i class="fas fa-bolt footer-btn-icon"></i>
+        <i class="fas fa-bolt footer-btn-icon" aria-hidden="true"></i>
           <span>Contact</span>
         </a>
       </nav>
@@ -2562,7 +2592,7 @@
       <i class="fab fa-whatsapp"></i>
       <span>WhatsApp</span>
     </a>
-    <a href="#" onclick="openPdfModal();return false;" class="msc-btn msc-resume">
+    <a href="#" onclick="openPdfModal();return false;" class="msc-btn msc-resume" aria-label="View Resume PDF">
       <i class="fas fa-file-arrow-down"></i>
       <span>Resume</span>
     </a>
