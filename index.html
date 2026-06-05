@@ -2359,74 +2359,41 @@
               <span>Available for enterprise roles in Qatar &amp; GCC — respond within 4 hrs</span>
             </div>
 
-            <!-- ── REVIEW BOX ── -->
+            <!-- ── REVIEW BOX (compact, in engage column) ── -->
             <div class="review-box" id="reviewBox">
               <div class="review-box-header">
                 <i class="fas fa-star review-box-star"></i>
                 <span class="review-box-title">Leave a Review</span>
               </div>
-              <p class="review-box-hint">What do you think about this portfolio?</p>
+              <p class="review-box-hint">Enjoyed this portfolio? Share your thoughts below.</p>
 
-              <!-- Step 1: Input form -->
               <div id="reviewForm">
                 <div class="review-rating-row" id="reviewRatingRow">
-                  <span class="review-rating-label" id="reviewRatingLabel">Rating</span>
-                  <div class="review-stars"
-                       id="reviewStars"
-                       role="radiogroup"
-                       aria-labelledby="reviewRatingLabel"
-                       aria-required="false">
-                    <span class="review-star"
-                          role="radio"
-                          aria-checked="false"
-                          aria-label="1 star"
-                          data-val="1"
-                          tabindex="0">★</span>
-                    <span class="review-star"
-                          role="radio"
-                          aria-checked="false"
-                          aria-label="2 stars"
-                          data-val="2"
-                          tabindex="-1">★</span>
-                    <span class="review-star"
-                          role="radio"
-                          aria-checked="false"
-                          aria-label="3 stars"
-                          data-val="3"
-                          tabindex="-1">★</span>
-                    <span class="review-star"
-                          role="radio"
-                          aria-checked="false"
-                          aria-label="4 stars"
-                          data-val="4"
-                          tabindex="-1">★</span>
-                    <span class="review-star"
-                          role="radio"
-                          aria-checked="false"
-                          aria-label="5 stars"
-                          data-val="5"
-                          tabindex="-1">★</span>
+                  <span class="review-rating-label" id="reviewRatingLabel">Your Rating</span>
+                  <div class="review-stars" id="reviewStars" role="radiogroup" aria-labelledby="reviewRatingLabel" aria-required="true">
+                    <span class="review-star" role="radio" aria-checked="false" aria-label="1 star"  data-val="1" tabindex="0">★</span>
+                    <span class="review-star" role="radio" aria-checked="false" aria-label="2 stars" data-val="2" tabindex="-1">★</span>
+                    <span class="review-star" role="radio" aria-checked="false" aria-label="3 stars" data-val="3" tabindex="-1">★</span>
+                    <span class="review-star" role="radio" aria-checked="false" aria-label="4 stars" data-val="4" tabindex="-1">★</span>
+                    <span class="review-star" role="radio" aria-checked="false" aria-label="5 stars" data-val="5" tabindex="-1">★</span>
                   </div>
                 </div>
-                <label for="reviewName" class="review-field-label" style="display:block;font-size:14px;font-weight:600;color:rgba(255,255,255,0.90);margin-bottom:6px;">Your Name</label>
-                <input id="reviewName" name="reviewName" type="text" maxlength="60" placeholder="Your name" aria-label="Your name for the review" aria-describedby="reviewNameHint" style="width:100%;padding:12px 14px;margin-bottom:4px;border-radius:10px;border:1px solid rgba(255,255,255,0.20);font-size:16px;font-family:inherit;background:rgba(0,0,0,0.20);color:#FFFFFF;outline:none;">
-                <span id="reviewNameHint" style="display:block;font-size:14px;color:rgba(255,255,255,0.75);margin-bottom:12px;">Optional — shown with your review</span>
-                <label for="reviewText" class="review-field-label" style="display:block;font-size:14px;font-weight:600;color:rgba(255,255,255,0.90);margin-bottom:6px;">Your Review</label>
-                <textarea id="reviewText" name="reviewText" class="review-textarea" aria-label="Your review text" aria-describedby="reviewCharCount reviewTextHint" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="3" maxlength="500"></textarea>
-                <span id="reviewTextHint" style="display:none;">Maximum 500 characters</span>
+                <label for="reviewName" class="review-field-label" style="display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,0.90);margin-bottom:6px;">Your Name</label>
+                <input id="reviewName" name="reviewName" type="text" maxlength="120" placeholder="e.g. Alex Johnson" aria-label="Your name for the review" autocomplete="name" style="width:100%;padding:11px 14px;margin-bottom:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);font-size:15px;font-family:inherit;background:rgba(0,0,0,0.22);color:#FFFFFF;outline:none;box-sizing:border-box;">
+                <label for="reviewText" class="review-field-label" style="display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,0.90);margin-bottom:6px;">Your Review</label>
+                <textarea id="reviewText" name="reviewText" class="review-textarea" aria-label="Your review text" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="3" maxlength="1000"></textarea>
                 <div class="review-form-footer">
-                  <span class="review-char-count"><span id="reviewCharCount">0</span>/500</span>
+                  <span class="review-char-count"><span id="reviewCharCount">0</span>/1000</span>
                   <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
                     <i class="fas fa-paper-plane"></i> Submit Review
                   </button>
                 </div>
               </div>
 
-              <!-- Step 2: Thank-you state (hidden) -->
               <div id="reviewThanks" style="display:none; text-align:center; padding: 16px 0 8px;">
-                <i class="fas fa-circle-check" style="color:#22c55e; font-size:28px; margin-bottom:8px; display:block;"></i>
-                <p style="font-weight:600; color:var(--ink); margin-bottom:4px;">Thank you for your review!</p>
-                <p style="font-size:14px; color:rgba(255,255,255,0.90);">It will appear on this portfolio once approved.</p>
+                <i class="fas fa-circle-check" style="color:#22c55e; font-size:32px; margin-bottom:10px; display:block;"></i>
+                <p style="font-weight:700; color:#fff; margin-bottom:4px; font-size:16px;">Thank you for your review!</p>
+                <p style="font-size:13px; color:rgba(255,255,255,0.80);">It will appear here once approved by the site admin.</p>
               </div>
             </div>
             <!-- ── /REVIEW BOX ── -->
@@ -2666,230 +2633,14 @@
   <script src="script.js" defer></script>
   <noscript><style>.gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
 
-  <!-- ═══ REVIEW SYSTEM ═══ -->
-  <script>
-  /* ── Dedicated review Supabase client ── */
-  const _REVIEW_URL = 'https://ruiqfkzuqxxbyvycvsfo.supabase.co';
-  // Service-role key used here so inserts bypass RLS and always reach the DB
-  const _REVIEW_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1aXFma3p1cXh4Ynl2eWN2c2ZvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDUxMjY5OCwiZXhwIjoyMDk2MDg4Njk4fQ.8ZROoodpIVf9vwN34oM-WuT8qY_PWcryJnWKURZFkAI';
-
-  let _reviewClient = null;
-  function _getReviewClient() {
-    if (_reviewClient) return _reviewClient;
-    if (window.supabase && window.supabase.createClient) {
-      try {
-        _reviewClient = window.supabase.createClient(_REVIEW_URL, _REVIEW_KEY, {
-          auth: { persistSession: false, autoRefreshToken: false }
-        });
-      } catch(e) { console.warn('Review client init failed:', e); }
-    }
-    return _reviewClient;
-  }
-
-  /* ── Star rating interaction — ARIA radiogroup pattern ── */
-  (function(){
-    let _rating = 0;
-
-    function highlightStars(n) {
-      document.querySelectorAll('.review-star').forEach(s => {
-        const val = +s.dataset.val;
-        if (val <= n) {
-          s.classList.add('active');
-          s.setAttribute('aria-checked', 'true');
-        } else {
-          s.classList.remove('active');
-          s.setAttribute('aria-checked', 'false');
-        }
-      });
-    }
-
-    function selectRating(val) {
-      _rating = val;
-      highlightStars(_rating);
-      // Update roving tabindex: only selected star is tab-reachable
-      document.querySelectorAll('.review-star').forEach(s => {
-        s.setAttribute('tabindex', +s.dataset.val === val ? '0' : '-1');
-      });
-    }
-
-    function initStars() {
-      const stars = document.querySelectorAll('.review-star[role="radio"]');
-      if (!stars.length) return;
-
-      stars.forEach((s, i) => {
-        // Mouse events
-        s.addEventListener('mouseover', () => {
-          if (_rating === 0) highlightStars(+s.dataset.val);
-        });
-        s.addEventListener('mouseleave', () => {
-          highlightStars(_rating);
-        });
-
-        // Click
-        s.addEventListener('click', (e) => {
-          e.preventDefault();
-          selectRating(+s.dataset.val);
-          s.focus();
-        });
-
-        // Touch
-        s.addEventListener('touchend', (e) => {
-          e.preventDefault();
-          selectRating(+s.dataset.val);
-        }, { passive: false });
-
-        // Keyboard: Enter / Space to select; Arrow keys to navigate
-        s.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            selectRating(+s.dataset.val);
-          } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
-            e.preventDefault();
-            const next = stars[Math.min(i + 1, stars.length - 1)];
-            selectRating(+next.dataset.val);
-            next.focus();
-          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
-            e.preventDefault();
-            const prev = stars[Math.max(i - 1, 0)];
-            selectRating(+prev.dataset.val);
-            prev.focus();
-          }
-        });
-      });
-    }
-
-    initStars();
-    window._getReviewRating = () => _rating;
-
-    /* char counter */
-    const ta = document.getElementById('reviewText');
-    const cc = document.getElementById('reviewCharCount');
-    if(ta && cc) ta.addEventListener('input', () => cc.textContent = ta.value.length);
-
-    /* Pre-fill name field from localStorage (set by gate overlay) */
-    try {
-      const saved = localStorage.getItem('sajid_visitor_name') || sessionStorage.getItem('sajid_visitor_name');
-      const nameField = document.getElementById('reviewName');
-      if (saved && nameField) nameField.value = saved;
-    } catch(e) {}
-  })();
-
-  /* ── Submit review ── */
-  async function submitReview(){
-    const text   = (document.getElementById('reviewText')?.value || '').trim();
-    const rating = window._getReviewRating ? window._getReviewRating() : 0;
-    const btn    = document.getElementById('reviewSubmitBtn');
-
-    if(!text){ alert('Please write a short review before submitting.'); return; }
-
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
-
-    /* Name: prefer the form field, then localStorage, then gate session, then Anonymous */
-    const nameField = (document.getElementById('reviewName')?.value || '').trim();
-    const visitorName = nameField
-      || localStorage.getItem('sajid_visitor_name')
-      || sessionStorage.getItem('sajid_visitor_name')
-      || 'Anonymous';
-
-    /* Persist whatever name they typed so future reviews keep it */
-    if (nameField) {
-      try {
-        localStorage.setItem('sajid_visitor_name', nameField);
-        sessionStorage.setItem('sajid_visitor_name', nameField);
-      } catch(e) {}
-    }
-
-    // Wait up to 3s for Supabase SDK to be ready if it isn't yet
-    let attempts = 0;
-    let client = null;
-    while (!client && attempts < 6) {
-      client = _getReviewClient();
-      if (!client) { await new Promise(r => setTimeout(r, 500)); attempts++; }
-    }
-
-    let stored = false;
-    if (client) {
-      try {
-        const payload = {
-          sender_name:      visitorName,
-          sender_email:     null,
-          subject:          '⭐ Portfolio Review — ' + (rating || '?') + '/5 stars',
-          message:          text,
-          message_type:     'review',
-          status:           'new',
-          review_rating:    rating || null,
-          review_published: false
-        };
-        const { error } = await client.from('contact_messages').insert(payload);
-        if (!error) {
-          stored = true;
-        } else if (error.message && error.message.toLowerCase().includes('column')) {
-          // Columns missing — retry without review-specific columns
-          const { review_rating: _rr, review_published: _rp, ...fallback } = payload;
-          const { error: e2 } = await client.from('contact_messages').insert(fallback);
-          if (!e2) stored = true;
-        } else {
-          console.warn('Review insert error:', error);
-        }
-      } catch(e) { console.warn('Review submit error:', e); }
-    }
-
-    /* Always show thank-you — good UX */
-    document.getElementById('reviewForm').style.display   = 'none';
-    document.getElementById('reviewThanks').style.display = 'block';
-  }
-
-  /* ── Load published reviews ── */
-  async function loadPublishedReviews(){
-    // Wait for Supabase SDK
-    let attempts = 0;
-    let client = null;
-    while (!client && attempts < 8) {
-      client = _getReviewClient();
-      if (!client) { await new Promise(r => setTimeout(r, 500)); attempts++; }
-    }
-    if (!client) return;
-
-    try {
-      const { data, error } = await client
-        .from('contact_messages')
-        .select('sender_name, message, review_rating, created_at')
-        .eq('message_type', 'review')
-        .eq('review_published', true)
-        .order('created_at', { ascending: false });
-
-      if (error || !data || !data.length) return;
-
-      const section = document.getElementById('website-reviews');
-      if (section) section.style.display = '';
-      const grid = document.getElementById('reviewsGrid');
-      if (!grid) return;
-
-      grid.innerHTML = data.map(r => {
-        const n       = Math.max(0, Math.min(5, r.review_rating || 5));
-        const stars   = '<span style="color:#f59e0b">' + '★'.repeat(n) + '</span>' +
-                        '<span style="opacity:0.3">' + '☆'.repeat(5 - n) + '</span>';
-        const date    = new Date(r.created_at).toLocaleDateString('en-GB', {year:'numeric', month:'short', day:'numeric'});
-        const initials= (r.sender_name||'A').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-        return `
-          <div class="review-card">
-            <div class="rc-stars">${stars}</div>
-            <p class="rc-text">"${(r.message||'').replace(/"/g,'&quot;')}"</p>
-            <div class="rc-footer">
-              <span class="rc-avatar">${initials}</span>
-              <div>
-                <span class="rc-name">${r.sender_name||'Anonymous'}</span>
-                <span class="rc-date">${date}</span>
-              </div>
-            </div>
-          </div>`;
-      }).join('');
-    } catch(e) { /* silent */ }
-  }
-
-  window.addEventListener('load', () => setTimeout(loadPublishedReviews, 2000));
-  </script>
+  <!-- ═══════════════════════════════════════════════════════════
+       REVIEW SYSTEM — secure rewrite
+       · review-submit.js  : form handler (anon key only, validates
+                              name + review + rating, inserts as pending)
+       · reviews-portfolio.js: marquee display (anon key, approved only)
+       · NO service_role key anywhere in frontend code.
+  ════════════════════════════════════════════════════════════ -->
+  <script src="review-submit.js" defer></script>
 
 </body>
 </html>
