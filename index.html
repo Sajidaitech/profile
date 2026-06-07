@@ -331,27 +331,26 @@
           </div>
         </div>
 
-        <div class="hero-vertical-chips" data-aos="fade-up" data-aos-delay="500">
-          <div class="hero-vchip">
-            <span class="hvc-val">4-Day</span>
-            <span class="hvc-lbl">Cyber Incident Lead 🛡️</span>
-          </div>
-          <div class="hvc-connector"></div>
-          <div class="hero-vchip">
-            <i class="fas fa-network-wired hvc-icon"></i>
-            <span class="hvc-lbl">CCNA Certified 🏆</span>
-          </div>
-          <div class="hvc-connector"></div>
-          <div class="hero-vchip">
-            <span class="hvc-val">600+</span>
-            <span class="hvc-lbl">Systems Managed 🖥️</span>
-          </div>
-        </div>
-
         <div class="hero-type-col" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="200">
           <div class="hero-eyebrow-row">
             <span class="hero-eyebrow-pulse"></span>
             <span class="hero-eyebrow-text">📍 Doha, Qatar &nbsp;·&nbsp; Systems Engineer &nbsp;·&nbsp; CCNA · ITIL</span>
+          </div>
+
+          <!-- Hero stat badges — horizontal, outside photo -->
+          <div class="hero-stat-badges">
+            <span class="hero-stat-badge">
+              <span class="hsb-val">4-Day</span>
+              <span class="hsb-lbl">Cyber Incident Lead 🛡️</span>
+            </span>
+            <span class="hero-stat-badge">
+              <i class="fas fa-network-wired hsb-icon"></i>
+              <span class="hsb-lbl">CCNA Certified 🏆</span>
+            </span>
+            <span class="hero-stat-badge">
+              <span class="hsb-val">600+</span>
+              <span class="hsb-lbl">Systems Managed 🖥️</span>
+            </span>
           </div>
 
           <h1 class="hero-display-name">
@@ -414,23 +413,22 @@
             <i class="fas fa-arrow-up-right-from-square hlb-arrow"></i>
           </a>
 
-          <!-- CHIP PILL — scoped styles + inline so no external CSS can break layout -->
-          <style>
-            #chipPill{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,0.10);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 2px 12px rgba(0,0,0,0.20),0 0 0 1px rgba(255,255,255,0.12);margin-top:12px;width:100%;box-sizing:border-box;}
-            #chipPill .chip{display:inline-flex!important;align-items:center;gap:5px;padding:5px 13px;border-radius:999px;background:rgba(255,255,255,0.14);box-shadow:inset 0 1px 0 rgba(255,255,255,0.35),0 1px 4px rgba(0,0,0,0.14);font-size:12px;font-weight:500;font-family:'DM Sans',system-ui,sans-serif;color:rgba(244,244,245,0.88);white-space:nowrap;transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1),background 0.45s ease,box-shadow 0.45s ease,color 0.45s ease;flex-shrink:0;position:static!important;top:auto!important;left:auto!important;transform:none;opacity:1!important;}
-            @media(max-width:600px){#chipPill{gap:6px;padding:8px 10px;}#chipPill .chip{font-size:11px;padding:4px 10px;gap:4px;}}
-            @media(max-width:380px){#chipPill{gap:5px;padding:7px 8px;}#chipPill .chip{font-size:10px;padding:4px 8px;gap:3px;}}
-          </style>
-          <div class="hero-sector-tags hero-sector-tags--vertical">
-            <div id="chipPill">
-              <span class="chip">✈️ Aviation</span>
-              <span class="chip">🏥 Healthcare</span>
-              <span class="chip">🏛️ Government</span>
-              <span class="chip">📡 Telecom</span>
-              <span class="chip">⚙️ IT Support</span>
-            </div>
-          </div>
         </div>
+      </div>
+
+      <!-- CHIP PILL — below hero card, outside photo -->
+      <style>
+        #chipPill{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,0.10);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 2px 12px rgba(0,0,0,0.20),0 0 0 1px rgba(255,255,255,0.12);margin-top:16px;width:fit-content;max-width:100%;box-sizing:border-box;margin-left:auto;margin-right:auto;}
+        #chipPill .chip{display:inline-flex!important;align-items:center;gap:5px;padding:5px 13px;border-radius:999px;background:rgba(255,255,255,0.14);box-shadow:inset 0 1px 0 rgba(255,255,255,0.35),0 1px 4px rgba(0,0,0,0.14);font-size:12px;font-weight:500;font-family:'DM Sans',system-ui,sans-serif;color:rgba(244,244,245,0.88);white-space:nowrap;flex-shrink:0;position:static!important;opacity:1!important;}
+        @media(max-width:600px){#chipPill{gap:6px;padding:8px 10px;}#chipPill .chip{font-size:11px;padding:4px 10px;gap:4px;}}
+        @media(max-width:380px){#chipPill{gap:5px;padding:7px 8px;}#chipPill .chip{font-size:10px;padding:4px 8px;gap:3px;}}
+      </style>
+      <div id="chipPill">
+        <span class="chip">✈️ Aviation</span>
+        <span class="chip">🏥 Healthcare</span>
+        <span class="chip">🏛️ Government</span>
+        <span class="chip">📡 Telecom</span>
+        <span class="chip">⚙️ IT Support</span>
       </div>
 
       
@@ -1203,7 +1201,7 @@
           </div>
 
           <!-- Hospital logos strip -->
-          <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.55);border:0.5px solid rgba(255,255,255,.80);border-radius:14px;backdrop-filter:blur(12px);">
+          <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.28);border:0.5px solid rgba(255,255,255,.45);border-radius:12px;">
             <div class="exp-site-logo-item" title="Military Medical City Hospital">
               <img src="mmch.jpg" alt="MMCH" style="height:36px;width:auto;object-fit:contain;border-radius:6px;" loading="lazy">
             </div>
@@ -1314,7 +1312,7 @@
           </div>
 
           <!-- PIH logos strip -->
-          <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.55);border:0.5px solid rgba(255,255,255,.80);border-radius:14px;backdrop-filter:blur(12px);">
+          <div class="exp-site-logos" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,.28);border:0.5px solid rgba(255,255,255,.45);border-radius:12px;">
             <div class="exp-site-logo-item" title="Power International Holding">
               <img src="PIH.png" alt="PIH" style="height:38px;width:auto;object-fit:contain;" loading="lazy">
             </div>
@@ -1681,274 +1679,174 @@
     <!-- ================================================================
          EDUCATION
     ================================================================ -->
-    <!-- =========================
- EDUCATION SECTION
-========================= -->
+    <!-- ================================================================
+         EDUCATION SECTION — Single glass panel, horizontal tabs
+    ================================================================ -->
+    <section class="section" id="education">
+      <div class="container">
 
-<section class="section" id="education">
-
-  <div class="container">
-
-    <div class="section-header">
-      <span class="sec-eyebrow" aria-hidden="true">05</span>
-      <h2 class="sec-title">Academic Foundation</h2>
-    </div>
-
-    <!-- EDUCATION TABS -->
-    <div class="edu-tabs-wrap">
-      <button class="edu-tab active" data-edu="middlesex" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="middlesex.png" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:4px;background:#000;" loading="lazy"> Middlesex University
-      </button>
-      <button class="edu-tab" data-edu="aptech" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="aptech.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Aptech Qatar
-      </button>
-      <button class="edu-tab" data-edu="igcse" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="brighfuture.jpg" alt="" class="exp-tab-logo" style="height:18px;width:18px;object-fit:contain;border-radius:50%;" loading="lazy"> IGCSE
-      </button>
-    </div>
-
-    <!-- =========================
-      MIDDLESEX
-    ========================= -->
-
-    <div class="edu-panel active" id="middlesex">
-
-      <div class="edu-card">
-
-        <div class="edu-icon edu-icon-img">
-          <img src="middlesex.png" alt="Middlesex University Dubai" class="edu-logo-img" loading="lazy">
+        <div class="section-header">
+          <span class="sec-eyebrow" aria-hidden="true">05</span>
+          <h2 class="sec-title">Academic Foundation</h2>
         </div>
 
-        <div class="edu-content">
+        <!-- ONE glass panel wraps everything -->
+        <div class="edu-glass-panel">
 
-          <span class="edu-date">
-            Sep 2024 – Jun 2025
-          </span>
-
-          <h3 class="edu-degree">
-            Bachelor of Science in Information Technology
-          </h3>
-
-          <div class="edu-school">
-            Middlesex University Dubai
+          <!-- TAB BUTTONS — horizontal row at top -->
+          <div class="edu-tabs-wrap" role="tablist" aria-label="Education tabs">
+            <button class="edu-tab active" data-edu="middlesex" role="tab" aria-selected="true" aria-controls="middlesex" style="display:inline-flex;align-items:center;gap:7px;">
+              <img src="middlesex.png" alt="" style="height:18px;width:18px;object-fit:contain;border-radius:4px;background:#000;" loading="lazy"> Middlesex University
+            </button>
+            <button class="edu-tab" data-edu="aptech" role="tab" aria-selected="false" aria-controls="aptech" style="display:inline-flex;align-items:center;gap:7px;">
+              <img src="aptech.jpg" alt="" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Aptech Qatar
+            </button>
+            <button class="edu-tab" data-edu="igcse" role="tab" aria-selected="false" aria-controls="igcse" style="display:inline-flex;align-items:center;gap:7px;">
+              <img src="brighfuture.jpg" alt="" style="height:18px;width:18px;object-fit:contain;border-radius:50%;" loading="lazy"> IGCSE
+            </button>
           </div>
 
-          <div class="edu-badges">
+          <!-- ── MIDDLESEX ── -->
+          <div class="edu-panel active" id="middlesex" role="tabpanel">
+            <div class="edu-panel-inner">
 
-            <span class="edu-badge">
-              Merit — Upper Second Class Honours (2:1)
-            </span>
-
-            <span class="edu-badge">
-              Graduated 2025
-            </span>
-
-            <span class="edu-badge">
-              Cambridge Validated Programme
-            </span>
-
-          </div>
-
-          <p class="edu-description">
-            Specialized in enterprise systems, infrastructure,
-            networking, cybersecurity fundamentals, and
-            modern IT operations aligned with real-world
-            enterprise environments.
-          </p>
-
-          <a href="https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing"
-             target="_blank" rel="noopener noreferrer"
-             class="btn-sm-gold" style="margin-top:1rem;display:inline-flex;gap:.4rem;align-items:center;color:#7209b7;">
-            <i class="fas fa-certificate" style="color:#7209b7;"></i> View Certificate
-          </a>
-
-          <div class="rec-glass-card edu-rec-card" style="--rec-accent:#C8A96E; margin-top:1.5rem;">
-            <div class="rec-glass-inner">
-              <div class="rec-quote-mark" aria-hidden="true">&#x201C;</div>
-              <p class="rec-quote-text">
-                Sajid consistently performed well, demonstrating strong technical and analytical skills through his coursework. He worked effectively in team settings, showing a collaborative mindset and a practical approach to problem-solving — attributes that will serve him well in any advanced program.
-              </p>
-              <div class="rec-footer">
-                <div class="rec-avatar" style="border-color:#C8A96E;">MA</div>
-                <div class="rec-author">
-                  <span class="rec-author-name">Mukarram Ahmed</span>
-                  <span class="rec-author-title">Adjunct Faculty · Computer Engineering &amp; Informatics · Middlesex University Dubai</span>
+              <!-- Logo + header row -->
+              <div class="edu-header-row">
+                <div class="edu-logo-wrap">
+                  <img src="middlesex.png" alt="Middlesex University Dubai" class="edu-logo-img" loading="lazy">
                 </div>
-                <div class="rec-actions">
-                  <span class="rec-verified-badge"><i class="fas fa-shield-check"></i> Verified</span>
-                  <a href="https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing"
-                     target="_blank" rel="noopener noreferrer"
-                     class="rec-linkedin-btn rec-letter-btn" title="View original reference letter">
-                    <i class="fas fa-file-lines"></i>
-                    <span>View Letter</span>
-                  </a>
+                <div class="edu-header-text">
+                  <span class="edu-date">Sep 2024 – Jun 2025</span>
+                  <h3 class="edu-degree">Bachelor of Science in Information Technology</h3>
+                  <div class="edu-school">Middlesex University Dubai</div>
                 </div>
               </div>
-            </div>
-            <div class="rec-glass-shimmer"></div>
-          </div>
 
-        </div>
+              <!-- Badges + description + cert link -->
+              <div class="edu-badges">
+                <span class="edu-badge">Merit — Upper Second Class Honours (2:1)</span>
+                <span class="edu-badge">Graduated 2025</span>
+                <span class="edu-badge">Cambridge Validated Programme</span>
+              </div>
 
-      </div>
+              <p class="edu-description">Specialized in enterprise systems, infrastructure, networking, cybersecurity fundamentals, and modern IT operations aligned with real-world enterprise environments.</p>
 
-    </div>
+              <a href="https://drive.google.com/file/d/17IYNcUbLLQfEJS0_4VtscE6xejH7p4XB/view?usp=sharing"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn-sm-gold" style="display:inline-flex;gap:.4rem;align-items:center;color:#7209b7;">
+                <i class="fas fa-certificate" style="color:#7209b7;"></i> View Certificate
+              </a>
 
-    <!-- =========================
-      APTECH
-    ========================= -->
-
-    <div class="edu-panel" id="aptech">
-
-      <div class="edu-card">
-
-        <div class="edu-icon edu-icon-img">
-          <img src="aptech.jpg" alt="Aptech Qatar" class="edu-logo-img" loading="lazy">
-        </div>
-
-        <div class="edu-content">
-
-          <span class="edu-date">
-            Nov 2020 – Nov 2023
-          </span>
-
-          <h3 class="edu-degree">
-            Advanced Diploma in Software Engineering
-          </h3>
-
-          <div class="edu-school">
-            Aptech Qatar · ACCP Programme
-          </div>
-
-          <div class="edu-badges">
-
-            <span class="edu-badge">
-              Overall Distinction
-            </span>
-
-            <span class="edu-badge">
-              3 Year Programme
-            </span>
-
-          </div>
-
-          <div class="edu-results">
-
-            <div class="edu-result">
-              Year 1 · CISE-ACCP — 81%
-            </div>
-
-            <div class="edu-result">
-              Year 2 · HCSE-ACCP — 87%
-            </div>
-
-            <div class="edu-result">
-              Year 3 · ACSE-ACCP — 86%
-            </div>
-
-          </div>
-
-          <p class="edu-description">
-            Intensive software engineering programme focused on
-            networking, databases, development, enterprise systems,
-            troubleshooting, and infrastructure management.
-          </p>
-
-          <a href="https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing"
-             target="_blank" rel="noopener noreferrer"
-             class="btn-sm-gold" style="margin-top:1rem;display:inline-flex;gap:.4rem;align-items:center;color:#e85d04;">
-            <i class="fas fa-certificate" style="color:#e85d04;"></i> View Certificate
-          </a>
-
-          <div class="rec-glass-card edu-rec-card" style="--rec-accent:#3a7bd5; margin-top:1.5rem;">
-            <div class="rec-glass-inner">
-              <div class="rec-quote-mark" aria-hidden="true">&#x201C;</div>
-              <p class="rec-quote-text">
-                I evaluate Sajid Mehmood as an intelligent, dependable, dedicated student with good moral character who is ready to achieve his goals. He has shown himself to be a promising student, achieving marked results across different academic fields — I recommend him without reservation.
-              </p>
-              <div class="rec-footer">
-                <div class="rec-avatar" style="border-color:#3a7bd5;">AK</div>
-                <div class="rec-author">
-                  <span class="rec-author-name">Ashish Kumar Jha &amp; Suresh Babu U</span>
-                  <span class="rec-author-title">Training Officer &amp; Centre Academic Head · Aptech Qatar Computer Education</span>
-                </div>
-                <div class="rec-actions">
-                  <span class="rec-verified-badge" style="color:#3a7bd5;background:rgba(58,123,213,0.1);border-color:rgba(58,123,213,0.25);"><i class="fas fa-shield-check"></i> Verified</span>
-                  <a href="https://drive.google.com/file/d/1_xIdGWW2zvsfsGrag6hmhK33SiQsQBVa/view?usp=drive_link"
-                     target="_blank" rel="noopener noreferrer"
-                     class="rec-linkedin-btn rec-letter-btn aptech-letter-btn" title="View original reference letter">
-                    <i class="fas fa-file-lines"></i>
-                    <span>View Letter</span>
-                  </a>
+              <!-- Reference quote — flat, no glass -->
+              <div class="edu-ref-quote">
+                <div class="edu-ref-quote-bar" style="background:#C8A96E;"></div>
+                <div class="edu-ref-quote-body">
+                  <p class="edu-ref-text">"Sajid consistently performed well, demonstrating strong technical and analytical skills through his coursework. He worked effectively in team settings, showing a collaborative mindset and a practical approach to problem-solving — attributes that will serve him well in any advanced program."</p>
+                  <div class="edu-ref-footer">
+                    <div class="rec-avatar" style="border-color:#C8A96E;">MA</div>
+                    <div>
+                      <span class="rec-author-name">Mukarram Ahmed</span>
+                      <span class="rec-author-title">Adjunct Faculty · Computer Engineering &amp; Informatics · Middlesex University Dubai</span>
+                    </div>
+                    <div class="edu-ref-actions">
+                      <span class="rec-verified-badge"><i class="fas fa-shield-check"></i> Verified</span>
+                      <a href="https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="rec-linkedin-btn rec-letter-btn">
+                        <i class="fas fa-file-lines"></i><span>View Letter</span>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
+
             </div>
-            <div class="rec-glass-shimmer"></div>
           </div>
 
-        </div>
+          <!-- ── APTECH ── -->
+          <div class="edu-panel" id="aptech" role="tabpanel" hidden>
+            <div class="edu-panel-inner">
 
+              <div class="edu-header-row">
+                <div class="edu-logo-wrap">
+                  <img src="aptech.jpg" alt="Aptech Qatar" class="edu-logo-img" loading="lazy">
+                </div>
+                <div class="edu-header-text">
+                  <span class="edu-date">Nov 2020 – Nov 2023</span>
+                  <h3 class="edu-degree">Advanced Diploma in Software Engineering</h3>
+                  <div class="edu-school">Aptech Qatar · ACCP Programme</div>
+                </div>
+              </div>
+
+              <div class="edu-badges">
+                <span class="edu-badge">Overall Distinction</span>
+                <span class="edu-badge">3 Year Programme</span>
+              </div>
+
+              <div class="edu-results">
+                <div class="edu-result">Year 1 · CISE-ACCP — 81%</div>
+                <div class="edu-result">Year 2 · HCSE-ACCP — 87%</div>
+                <div class="edu-result">Year 3 · ACSE-ACCP — 86%</div>
+              </div>
+
+              <p class="edu-description">Intensive software engineering programme focused on networking, databases, development, enterprise systems, troubleshooting, and infrastructure management.</p>
+
+              <a href="https://drive.google.com/file/d/1J_d7bN2xAYlI33Uzp5YQPZ3kt8fFHamy/view?usp=sharing"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn-sm-gold" style="display:inline-flex;gap:.4rem;align-items:center;color:#e85d04;">
+                <i class="fas fa-certificate" style="color:#e85d04;"></i> View Certificate
+              </a>
+
+              <div class="edu-ref-quote">
+                <div class="edu-ref-quote-bar" style="background:#3a7bd5;"></div>
+                <div class="edu-ref-quote-body">
+                  <p class="edu-ref-text">"I evaluate Sajid Mehmood as an intelligent, dependable, dedicated student with good moral character who is ready to achieve his goals. He has shown himself to be a promising student, achieving marked results across different academic fields — I recommend him without reservation."</p>
+                  <div class="edu-ref-footer">
+                    <div class="rec-avatar" style="border-color:#3a7bd5;">AK</div>
+                    <div>
+                      <span class="rec-author-name">Ashish Kumar Jha &amp; Suresh Babu U</span>
+                      <span class="rec-author-title">Training Officer &amp; Centre Academic Head · Aptech Qatar Computer Education</span>
+                    </div>
+                    <div class="edu-ref-actions">
+                      <span class="rec-verified-badge" style="color:#3a7bd5;background:rgba(58,123,213,0.10);border-color:rgba(58,123,213,0.25);"><i class="fas fa-shield-check"></i> Verified</span>
+                      <a href="https://drive.google.com/file/d/1_xIdGWW2zvsfsGrag6hmhK33SiQsQBVa/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="rec-linkedin-btn rec-letter-btn">
+                        <i class="fas fa-file-lines"></i><span>View Letter</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── IGCSE ── -->
+          <div class="edu-panel" id="igcse" role="tabpanel" hidden>
+            <div class="edu-panel-inner">
+
+              <div class="edu-header-row">
+                <div class="edu-logo-wrap">
+                  <img src="brighfuture.jpg" alt="Bright Future International School" class="edu-logo-img" loading="lazy" style="border-radius:50%;">
+                </div>
+                <div class="edu-header-text">
+                  <span class="edu-date">Foundation Studies</span>
+                  <h3 class="edu-degree">IGCSE / Secondary Education</h3>
+                  <div class="edu-school">Edexcel Curriculum · Bright Future International School</div>
+                </div>
+              </div>
+
+              <div class="edu-badges">
+                <span class="edu-badge">Mathematics</span>
+                <span class="edu-badge">Physics</span>
+                <span class="edu-badge">Computer Science</span>
+              </div>
+
+              <p class="edu-description">Built strong analytical and technical foundations in mathematics, problem-solving, and computer science principles that later supported enterprise IT specialization.</p>
+
+            </div>
+          </div>
+
+        </div><!-- /edu-glass-panel -->
       </div>
-
-    </div>
-
-    <!-- =========================
-      IGCSE
-    ========================= -->
-
-    <div class="edu-panel" id="igcse">
-
-      <div class="edu-card">
-
-        <div class="edu-icon edu-icon-img">
-          <img src="brighfuture.jpg" alt="Bright Future International School" class="edu-logo-img" loading="lazy">
-        </div>
-
-        <div class="edu-content">
-
-          <span class="edu-date">
-            Foundation Studies
-          </span>
-
-          <h3 class="edu-degree">
-            IGCSE / Secondary Education
-          </h3>
-
-          <div class="edu-school">
-            Edexcel Curriculum
-          </div>
-
-          <div class="edu-badges">
-
-            <span class="edu-badge">
-              Mathematics
-            </span>
-
-            <span class="edu-badge">
-              Physics
-            </span>
-
-            <span class="edu-badge">
-              Computer Science
-            </span>
-
-          </div>
-
-          <p class="edu-description">
-            Built strong analytical and technical foundations
-            in mathematics, problem-solving, and computer science
-            principles that later supported enterprise IT specialization.
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
+    </section>
 
     <!-- ================================================================
          ACHIEVEMENTS
@@ -2359,17 +2257,38 @@
               <span>Available for enterprise roles in Qatar &amp; GCC — respond within 4 hrs</span>
             </div>
 
-            <!-- ── REVIEW BOX (compact, in engage column) ── -->
-            <div class="review-box" id="reviewBox">
-              <div class="review-box-header">
-                <i class="fas fa-star review-box-star"></i>
-                <span class="review-box-title">Leave a Review</span>
-              </div>
-              <p class="review-box-hint">Enjoyed this portfolio? Share your thoughts below.</p>
 
-              <div id="reviewForm">
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================
+         LEAVE A REVIEW — standalone section
+    ================================================================ -->
+    <section id="leave-review" class="section review-submit-section">
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <h2 class="sec-title">Leave a Review</h2>
+          <div class="sec-rule"></div>
+          <p class="sec-subtitle">Enjoyed this portfolio? Share your thoughts below.</p>
+        </header>
+
+        <div class="review-standalone-wrap" data-aos="fade-up" data-aos-delay="80">
+          <div class="review-box" id="reviewBox">
+
+            <div id="reviewForm" class="review-form-horizontal">
+
+              <!-- LEFT: stars + rating -->
+              <div class="review-left-col">
+                <div class="review-box-header">
+                  <i class="fas fa-star review-box-star"></i>
+                  <span class="review-box-title">Your Rating</span>
+                </div>
                 <div class="review-rating-row" id="reviewRatingRow">
-                  <span class="review-rating-label" id="reviewRatingLabel">Your Rating</span>
+                  <span class="review-rating-label" id="reviewRatingLabel">Select stars</span>
                   <div class="review-stars" id="reviewStars" role="radiogroup" aria-labelledby="reviewRatingLabel" aria-required="true">
                     <span class="review-star" role="radio" aria-checked="false" aria-label="1 star"  data-val="1" tabindex="0">★</span>
                     <span class="review-star" role="radio" aria-checked="false" aria-label="2 stars" data-val="2" tabindex="-1">★</span>
@@ -2378,10 +2297,14 @@
                     <span class="review-star" role="radio" aria-checked="false" aria-label="5 stars" data-val="5" tabindex="-1">★</span>
                   </div>
                 </div>
-                <label for="reviewName" class="review-field-label" style="display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,0.90);margin-bottom:6px;">Your Name</label>
-                <input id="reviewName" name="reviewName" type="text" maxlength="120" placeholder="e.g. Alex Johnson" aria-label="Your name for the review" autocomplete="name" style="width:100%;padding:11px 14px;margin-bottom:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);font-size:15px;font-family:inherit;background:rgba(0,0,0,0.22);color:#FFFFFF;outline:none;box-sizing:border-box;">
-                <label for="reviewText" class="review-field-label" style="display:block;font-size:13px;font-weight:600;color:rgba(255,255,255,0.90);margin-bottom:6px;">Your Review</label>
-                <textarea id="reviewText" name="reviewText" class="review-textarea" aria-label="Your review text" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="3" maxlength="1000"></textarea>
+              </div>
+
+              <!-- RIGHT: name + textarea + submit -->
+              <div class="review-right-col">
+                <label for="reviewName" class="review-field-label">Your Name</label>
+                <input id="reviewName" name="reviewName" type="text" maxlength="120" placeholder="e.g. Alex Johnson" aria-label="Your name for the review" autocomplete="name">
+                <label for="reviewText" class="review-field-label">Your Review</label>
+                <textarea id="reviewText" name="reviewText" class="review-textarea" aria-label="Your review text" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="4" maxlength="1000"></textarea>
                 <div class="review-form-footer">
                   <span class="review-char-count"><span id="reviewCharCount">0</span>/1000</span>
                   <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
@@ -2390,14 +2313,13 @@
                 </div>
               </div>
 
-              <div id="reviewThanks" style="display:none; text-align:center; padding: 16px 0 8px;">
-                <i class="fas fa-circle-check" style="color:#22c55e; font-size:32px; margin-bottom:10px; display:block;"></i>
-                <p style="font-weight:700; color:#fff; margin-bottom:4px; font-size:16px;">Thank you for your review!</p>
-                <p style="font-size:13px; color:rgba(255,255,255,0.80);">It will appear here once approved by the site admin.</p>
-              </div>
             </div>
-            <!-- ── /REVIEW BOX ── -->
 
+            <div id="reviewThanks" style="display:none; text-align:center; padding: 24px 0 8px;">
+              <i class="fas fa-circle-check" style="color:#22c55e; font-size:36px; margin-bottom:12px; display:block;"></i>
+              <p style="font-weight:700; color:#fff; margin-bottom:4px; font-size:17px;">Thank you for your review!</p>
+              <p style="font-size:13px; color:rgba(255,255,255,0.75);">It will appear here once approved by the site admin.</p>
+            </div>
           </div>
         </div>
 

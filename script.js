@@ -665,11 +665,21 @@ function initFolderTabs() {
   eduTabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
       var target = tab.getAttribute('data-edu');
-      eduTabs.forEach(function (t)   { t.classList.remove('active'); });
-      eduPanels.forEach(function (p) { p.classList.remove('active'); });
+      eduTabs.forEach(function (t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      eduPanels.forEach(function (p) {
+        p.classList.remove('active');
+        p.setAttribute('hidden', '');
+      });
       tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
       var panel = target ? document.getElementById(target) : null;
-      if (panel) panel.classList.add('active');
+      if (panel) {
+        panel.classList.add('active');
+        panel.removeAttribute('hidden');
+      }
     });
   });
 }

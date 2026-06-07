@@ -610,31 +610,14 @@ body::after {
 ================================================================ */
 
 /* ── Universal glass surface mixin ── */
+/* Primary glass surface elements — outermost containers only */
 .glass-card,
-.museum-case,
-.project-card,
 .glass-card-deep,
-.exp-card,
-.lge-card,
-.edu-card,
-.cert-card,
-.cert-hero-card,
-.ach-award-card,
 .wh-card,
-.rec-glass-card,
-.edu-rec-card,
 .arsenal-category,
-.about-text-col,
-.about-panel-col,
-.about-bio-col,
-.about-stats-row,
-.ach-item,
+.ach-award-card,
 .hero-glass-card,
-.exp-tabs-wrap,
-.lge-tabs-nav,
-.kpi-block,
-.panel-sla-ring,
-.panel-achievements {
+.lge-tabs-nav {
   background: linear-gradient(160deg,
     rgba(255,255,255,0.68) 0%,
     rgba(245,248,255,0.52) 50%,
@@ -644,6 +627,30 @@ body::after {
   -webkit-backdrop-filter: var(--blur-mid) !important;
   border: none !important;
   box-shadow: var(--sh-glass-md) !important;
+}
+
+/* Elements that are children of a glass surface — NO glass of their own */
+.museum-case,
+.project-card,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.rec-glass-card,
+.edu-rec-card,
+.about-text-col,
+.about-panel-col,
+.about-bio-col,
+.about-stats-row,
+.ach-item,
+.exp-tabs-wrap,
+.kpi-block,
+.panel-sla-ring,
+.panel-achievements {
+  /* Controlled individually in their section rules below */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* Clear any child filter suppression */
@@ -761,20 +768,19 @@ body::after {
 .gate-card {
   position: relative;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.11);
-  backdrop-filter: blur(7px) saturate(1.4) brightness(1.03);
-  -webkit-backdrop-filter: blur(7px) saturate(1.4) brightness(1.03);
-  border: 1px solid rgba(255, 255, 255, 0.30);
-  /* Desktop: 430-440px wide, 16-20px radius to match loginpage.png glass rect */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 18px;
   padding: 36px 38px 32px;
   width: 435px;
   box-shadow:
-    0 0 0 0.5px rgba(255,255,255,0.20),
-    0 8px 32px rgba(6, 18, 55, 0.28),
-    0 28px 60px rgba(6, 18, 55, 0.20),
-    inset 0 1.5px 0 rgba(255,255,255,0.55),
-    inset 0 -1px 0 rgba(255,255,255,0.08);
+    0 0 0 0.5px rgba(255,255,255,0.12),
+    0 8px 32px rgba(0,0,0,0.30),
+    0 28px 60px rgba(0,0,0,0.18),
+    inset 0 1.5px 0 rgba(255,255,255,0.30),
+    inset 0 -1px 0 rgba(255,255,255,0.05);
   transform: translateY(36px) scale(0.95);
   transition: transform 0.60s cubic-bezier(0.22, 1, 0.36, 1),
               opacity 0.45s ease;
@@ -1013,15 +1019,11 @@ html, body { max-width: 100vw; overflow-x: hidden; }
   padding: clamp(28px, 3.5vw, 42px);
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(0,220px) 64px minmax(0,1fr);
-  gap: 24px; align-items: center;
-  background: linear-gradient(160deg,
-    rgba(255,255,255,0.72) 0%,
-    rgba(245,248,255,0.55) 50%,
-    rgba(255,255,255,0.66) 100%
-  ) !important;
-  backdrop-filter: var(--blur-strong) !important;
-  -webkit-backdrop-filter: var(--blur-strong) !important;
+  grid-template-columns: minmax(0,220px) minmax(0,1fr);
+  gap: 32px; align-items: center;
+  background: rgba(255,255,255,0.18) !important;
+  backdrop-filter: blur(14px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.3) !important;
   border-radius: 32px !important;
   box-shadow: var(--sh-glass-float) !important;
   animation: heroCardIn 0.9s var(--ease-out) 0.2s both;
@@ -1100,11 +1102,8 @@ html, body { max-width: 100vw; overflow-x: hidden; }
 .hero-vchip {
   display: flex; flex-direction: column; align-items: center; gap: 3px;
   position: relative;
-  background: linear-gradient(170deg,
-    rgba(255,255,255,0.72) 0%,
-    rgba(255,255,255,0.52) 100%
-  );
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.28);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
   box-shadow: var(--sh-glass-sm);
   border-radius: 16px; padding: 10px 8px;
   text-align: center; min-width: 56px;
@@ -1657,8 +1656,8 @@ footer, .site-footer {
 .footer-glass-btn {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 9px 18px; border-radius: 999px;
-  background: linear-gradient(170deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 100%);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.28);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
   box-shadow: var(--sh-glass-sm);
   color: var(--ink-2); font-size: 12px; font-weight: 600;
   transition: transform 0.28s var(--ease-spring), box-shadow 0.28s ease;
@@ -1676,8 +1675,8 @@ footer, .site-footer {
 .fa-btn {
   display: inline-flex; align-items: center; gap: 7px;
   padding: 10px 20px; border-radius: 999px;
-  background: linear-gradient(170deg, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.48) 100%);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.28);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
   box-shadow: var(--sh-glass-sm);
   color: var(--ink-2); font-size: 13px; font-weight: 600;
   transition: transform 0.28s var(--ease-spring), box-shadow 0.28s ease;
@@ -27799,3 +27798,1470 @@ input:focus-visible, textarea:focus-visible {
 
 /* Suppress outline on mouse clicks, keep for keyboard */
 *:focus:not(:focus-visible) { outline: none !important; }
+
+/* ================================================================
+   ██████╗ ██╗      █████╗ ███████╗███████╗    ██████╗ ███████╗███████╗███████╗████████╗
+   GLASS CLEANUP — SINGLE LAYER ENFORCEMENT v2.0
+   ONE glass surface per section. All child elements: backdrop-filter: none.
+================================================================ */
+
+/* ─────────────────────────────────────────────
+   0. LAYOUT CENTERING — fix left empty space
+─────────────────────────────────────────────── */
+.container {
+  width: 100% !important;
+  max-width: var(--container) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: clamp(16px, 4vw, 48px) !important;
+  padding-right: clamp(16px, 4vw, 48px) !important;
+  box-sizing: border-box !important;
+}
+.section {
+  padding-top: clamp(48px, 6vw, 80px) !important;
+  padding-bottom: clamp(48px, 6vw, 80px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   1. HERO — one glass card: hero-editorial-layout
+      Everything inside: no backdrop-filter
+─────────────────────────────────────────────── */
+
+/* The ONE glass surface */
+.hero-editorial-layout {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+  border-radius: 28px !important;
+  padding: clamp(20px, 3vw, 36px) !important;
+  box-shadow: var(--sh-glass-md) !important;
+}
+
+/* KPI strip — no separate glass, part of the hero */
+.hero-kpis {
+  background: rgba(255,255,255,0.18) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.50), 0 0 0 1px rgba(255,255,255,0.25) !important;
+  border-radius: 14px !important;
+}
+
+/* kpi-block — transparent child */
+.kpi-block {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Stat chips — simple translucent pills, no blur */
+.hero-vchip {
+  background: rgba(255,255,255,0.22) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 1px 4px rgba(0,0,0,0.08),
+    0 0 0 1px rgba(255,255,255,0.30) !important;
+}
+
+/* Availability pills — simple pills */
+.hap-status, .hap-pill {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Hero badges */
+.hero-badge {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(255,255,255,0.22) !important;
+}
+
+/* ALL children inside hero: no nested glass */
+.hero-editorial-layout * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* Re-allow only buttons — small blur (max 4px) */
+.hero-editorial-layout .btn-primary,
+.hero-editorial-layout .btn-ghost,
+.hero-editorial-layout .hero-linkedin-btn {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   2. ABOUT — one glass panel, children transparent
+─────────────────────────────────────────────── */
+
+/* The ONE glass surface — the about layout grid becomes the panel */
+.about-section .about-layout {
+  background: linear-gradient(160deg,
+    rgba(255,255,255,0.68) 0%,
+    rgba(245,248,255,0.50) 100%
+  ) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
+  border-radius: 24px !important;
+  padding: clamp(24px, 3.5vw, 40px) !important;
+  box-shadow: var(--sh-glass-md) !important;
+  gap: clamp(20px, 3vw, 40px) !important;
+}
+
+/* All sub-panels: transparent, no blur */
+.about-text-col,
+.about-panel-col,
+.about-bio-col,
+.about-stats-row,
+.panel-sla-ring,
+.panel-achievements,
+.ach-item {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Stats row — simple divider-bordered row */
+.about-stats-row {
+  border-top: 1px solid rgba(255,255,255,0.40) !important;
+  padding-top: 16px !important;
+  padding: 16px 0 0 !important;
+}
+
+/* Individual stat — simple pill, no blur */
+.about-stat {
+  background: rgba(255,255,255,0.25) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55) !important;
+  border-radius: 12px !important;
+}
+
+/* Achievements list items — simple rows */
+.ach-item {
+  padding: 8px 0 !important;
+  border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+  border-radius: 0 !important;
+}
+.ach-item:last-child { border-bottom: none !important; }
+
+/* Chips — pills, no blur */
+.p-chip {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(255,255,255,0.30) !important;
+}
+
+/* ─────────────────────────────────────────────
+   3. EXPERIENCE — one glass container, job cards transparent
+─────────────────────────────────────────────── */
+
+/* Wrap the tabs + content in one glass surface */
+#experience .exp-tabs-wrap {
+  background: linear-gradient(160deg,
+    rgba(255,255,255,0.68) 0%,
+    rgba(245,248,255,0.50) 100%
+  ) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
+  border-radius: 20px 20px 0 0 !important;
+  padding: 12px 16px !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.85),
+    0 0 0 0.75px rgba(255,255,255,0.50) !important;
+  margin-bottom: 0 !important;
+}
+
+#experience .exp-content-wrap {
+  background: linear-gradient(160deg,
+    rgba(255,255,255,0.60) 0%,
+    rgba(245,248,255,0.44) 100%
+  ) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
+  border-radius: 0 0 20px 20px !important;
+  padding: clamp(16px, 2.5vw, 28px) !important;
+  box-shadow:
+    inset 0 0 0 0.75px rgba(255,255,255,0.50),
+    0 8px 32px rgba(0,0,40,0.08) !important;
+}
+
+/* Individual job cards: transparent, borders only */
+.exp-card,
+.lge-card {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.35) !important;
+  border-radius: 0 !important;
+  padding: clamp(16px, 2vw, 24px) 0 !important;
+}
+.exp-card:last-child, .lge-card:last-child {
+  border-bottom: none !important;
+}
+
+/* All children inside exp cards: no blur */
+.exp-card *,
+.lge-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Chips inside experience: pills, no blur */
+.exp-meta-chip, .exp-stat-chip, .lge-stat-chip {
+  background: rgba(255,255,255,0.30) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Logo strip inside exp cards: no blur */
+.exp-site-logos {
+  background: rgba(255,255,255,0.28) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.40) !important;
+}
+
+/* ─────────────────────────────────────────────
+   4. EDUCATION — one glass panel, tabs + flat content
+─────────────────────────────────────────────── */
+
+/* The single glass surface */
+.edu-glass-panel {
+  background: linear-gradient(160deg,
+    rgba(255,255,255,0.68) 0%,
+    rgba(245,248,255,0.50) 100%
+  ) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
+  border-radius: 24px !important;
+  padding: 0 !important;
+  box-shadow: var(--sh-glass-md) !important;
+  overflow: hidden !important;
+}
+
+/* Tab bar inside the glass panel */
+.edu-glass-panel .edu-tabs-wrap {
+  background: rgba(255,255,255,0.20) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.35) !important;
+  padding: 12px 20px !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+/* Tab buttons — simple pills, max 4px blur */
+.edu-tab {
+  background: rgba(255,255,255,0.15) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
+  border-radius: 999px !important;
+  padding: 7px 16px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--ink-2) !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+  box-shadow: none !important;
+}
+.edu-tab.active,
+.edu-tab[aria-selected="true"] {
+  background: rgba(255,255,255,0.55) !important;
+  color: var(--ink) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.80), 0 2px 8px rgba(0,0,40,0.08) !important;
+  border-color: rgba(255,255,255,0.60) !important;
+}
+
+/* Panel content area — fully transparent */
+.edu-panel {
+  display: none !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+.edu-panel.active,
+.edu-panel:not([hidden]) {
+  display: block !important;
+}
+
+/* The inner content wrapper */
+.edu-panel-inner {
+  padding: clamp(20px, 3vw, 36px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+/* Header row — logo + text side by side */
+.edu-header-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+.edu-logo-wrap {
+  flex-shrink: 0 !important;
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  background: rgba(255,255,255,0.40) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.70), 0 2px 8px rgba(0,0,40,0.08) !important;
+}
+.edu-logo-wrap .edu-logo-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  padding: 4px !important;
+}
+.edu-header-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+}
+.edu-date {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--ink-3) !important;
+  letter-spacing: 0.03em !important;
+  text-transform: uppercase !important;
+}
+.edu-degree {
+  font-family: var(--ff-serif) !important;
+  font-size: clamp(15px, 2vw, 19px) !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+}
+.edu-school {
+  font-size: 12px !important;
+  color: var(--ink-3) !important;
+  font-weight: 500 !important;
+}
+
+/* Badges — pills, no glass */
+.edu-badges {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.edu-badge {
+  display: inline-flex !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--ink-2) !important;
+  background: rgba(255,255,255,0.35) !important;
+  border: 1px solid rgba(255,255,255,0.55) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Description */
+.edu-description {
+  font-size: 13.5px !important;
+  color: var(--ink-2) !important;
+  line-height: 1.65 !important;
+  margin: 0 !important;
+}
+
+/* Results */
+.edu-results {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+.edu-result {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--ink) !important;
+  padding: 4px 12px !important;
+  border-radius: 6px !important;
+  background: rgba(255,255,255,0.30) !important;
+  border: 1px solid rgba(255,255,255,0.45) !important;
+}
+
+/* Reference quote — flat, left-bar style, NO glass */
+.edu-ref-quote {
+  display: flex !important;
+  gap: 14px !important;
+  padding-top: 16px !important;
+  border-top: 1px solid rgba(255,255,255,0.35) !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.edu-ref-quote-bar {
+  width: 3px !important;
+  border-radius: 999px !important;
+  flex-shrink: 0 !important;
+  min-height: 100% !important;
+}
+.edu-ref-quote-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+.edu-ref-text {
+  font-size: 13px !important;
+  color: var(--ink-2) !important;
+  line-height: 1.65 !important;
+  font-style: italic !important;
+  margin: 0 !important;
+}
+.edu-ref-footer {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+.edu-ref-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-left: auto !important;
+  flex-wrap: wrap !important;
+}
+
+/* Kill old edu-card nesting */
+.edu-card {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* ─────────────────────────────────────────────
+   5. CERTIFICATIONS — section glass only, cert cards transparent
+─────────────────────────────────────────────── */
+
+/* Section gets ONE glass via .section inherited — just make sure
+   cert-card and cert-hero-card have NO backdrop-filter */
+.cert-hero-card {
+  background: rgba(255,255,255,0.28) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.75),
+    0 2px 12px rgba(0,0,40,0.08),
+    0 0 0 1px rgba(255,255,255,0.40) !important;
+  border-radius: 20px !important;
+}
+.cert-hero-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.cert-card {
+  background: rgba(255,255,255,0.22) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 1px 4px rgba(0,0,40,0.06),
+    0 0 0 1px rgba(255,255,255,0.35) !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+.cert-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.75),
+    0 6px 18px rgba(0,0,40,0.10),
+    0 0 0 1px rgba(255,255,255,0.45) !important;
+}
+.cert-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* CCNA cert button — small blur OK */
+.chc-verify-btn,
+.cc-cert-btn {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   6. PROJECTS — one section container, project cards: border + hover only
+─────────────────────────────────────────────── */
+
+/* Project / museum-case cards — NO backdrop blur */
+.museum-case,
+.project-card,
+.glass-card {
+  background: rgba(255,255,255,0.22) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.45) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 2px 8px rgba(0,0,40,0.06) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+.museum-case:hover,
+.project-card:hover,
+.glass-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(255,255,255,0.65) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.75),
+    0 6px 24px rgba(0,0,40,0.10),
+    0 12px 40px rgba(0,0,40,0.06) !important;
+}
+.museum-case *,
+.project-card *,
+.glass-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* Buttons inside project cards — small blur OK */
+.museum-case .btn-sm-gold,
+.project-card .btn-sm-gold,
+.museum-case a[class*="btn"],
+.project-card a[class*="btn"] {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   7. GLOBAL — no nested backdrop-filter anywhere
+─────────────────────────────────────────────── */
+
+/* rec-glass-card, edu-rec-card: never glass */
+.rec-glass-card,
+.edu-rec-card,
+.rec-glass-inner,
+.rec-glass-shimmer,
+.edu-card .rec-glass-card,
+.edu-card .edu-rec-card {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* engage-row, engage-resume-card inside engage columns */
+.engage-left .engage-row,
+.engage-right .engage-row,
+.engage-left .engage-resume-card,
+.engage-right .engage-resume-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* exp-site-logos inside exp cards */
+.exp-site-logos,
+.exp-card .exp-site-logos {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* about-stat inside about-layout */
+.about-stat {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* All small chips and badges globally: no blur */
+.gc-tag, .mc-tool-tag, .hie-tag, .hie-env-tag,
+.cs-impact-pill, .cs-year-badge, .cs-sector-banner,
+.exp-meta-chip, .exp-stat-chip, .edu-badge,
+.wh-badge, .ac-skill, .ac-cert-badge, .ac-enterprise-tag {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ─────────────────────────────────────────────
+   8. BUTTON RULE — may use small blur only
+─────────────────────────────────────────────── */
+.btn-primary,
+.btn-ghost,
+.btn-sm-gold,
+.chc-verify-btn,
+.cc-cert-btn,
+.hero-linkedin-btn,
+.engage-cta-btn,
+.gate-btn,
+.fab-main,
+.fa-btn,
+.nav-resume-btn {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   9. HORIZONTAL LAYOUT IMPROVEMENTS
+─────────────────────────────────────────────── */
+
+/* About: two-column stays horizontal on desktop */
+.about-section .about-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+@media (max-width: 767px) {
+  .about-section .about-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Hero: two-column layout — portrait + content */
+.hero-editorial-layout {
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) !important;
+  gap: 32px !important;
+}
+@media (max-width: 900px) {
+  .hero-editorial-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+@media (max-width: 767px) {
+  .hero-portrait-col { max-width: 180px !important; margin: 0 auto !important; }
+}
+
+/* Education tab content: horizontal on desktop */
+@media (min-width: 768px) {
+  .edu-header-row { align-items: flex-start !important; }
+}
+@media (max-width: 600px) {
+  .edu-header-row { flex-direction: column !important; align-items: flex-start !important; }
+  .edu-ref-footer { flex-direction: column !important; align-items: flex-start !important; }
+  .edu-ref-actions { margin-left: 0 !important; }
+}
+
+/* Section headers: reduce top padding */
+.section-header {
+  margin-bottom: clamp(24px, 3vw, 40px) !important;
+}
+
+
+/* ─── Education panel visibility: both class and attribute ─── */
+.edu-panel[hidden] {
+  display: none !important;
+}
+.edu-panel:not(.active):not([hidden]) {
+  /* safety fallback — if neither active nor hidden, hide */
+  display: none !important;
+}
+.edu-panel.active {
+  display: block !important;
+}
+
+/* ── engage-status-bar: round the corners to pill shape ── */
+.engage-status-bar {
+  border-radius: 999px !important;
+  padding: 6px 14px !important;
+}
+
+/* ================================================================
+   HERO STAT BADGES — horizontal row, in text column, no nested blur
+================================================================ */
+.hero-stat-badges {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.hero-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.26);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 1px 4px rgba(0,0,40,0.08),
+    0 0 0 1px rgba(255,255,255,0.35);
+  font-family: var(--ff-sans);
+}
+
+.hsb-val {
+  font-family: var(--ff-serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.hsb-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+}
+
+.hsb-icon {
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+/* ── Hero editorial layout: two columns on desktop ── */
+.hero-editorial-layout {
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) !important;
+}
+
+@media (max-width: 900px) {
+  .hero-editorial-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+/* ── Footer: single glass layer — remove nested blur from footer-glass-btn and fa-btn ── */
+.footer-glass-btn {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(255,255,255,0.28) !important;
+}
+
+.fa-btn {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(255,255,255,0.28) !important;
+}
+
+/* ── Review box horizontal layout ── */
+.review-form-horizontal {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 24px !important;
+  align-items: start !important;
+}
+
+.review-left-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.review-right-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+
+/* Review box: remove nested backdrop-filter since it sits inside contact section glass */
+.review-box {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(0,0,0,0.20) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+}
+
+/* Review box hint: remove bottom margin (spacing handled by column gap) */
+.review-box-hint {
+  margin-bottom: 0 !important;
+}
+
+/* Mobile: stack review form vertically */
+@media (max-width: 640px) {
+  .review-form-horizontal {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* ── engage-status-bar: already pill-shaped, reinforce ── */
+.engage-status-bar {
+  border-radius: 999px !important;
+  padding: 6px 16px !important;
+  background: rgba(255,255,255,0.18) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.30) !important;
+}
+
+
+/* ================================================================
+   FINAL OVERRIDE — Hero transparent glass, no white blur
+================================================================ */
+.hero-editorial-layout,
+.hero-section .hero-editorial-layout {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+
+
+/* ================================================================
+   HERO EYEBROW ROW — tight pill, no excess glass
+================================================================ */
+.hero-eyebrow-row {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  width: fit-content !important;
+  padding: 5px 12px 5px 8px !important;
+  border-radius: 999px !important;
+  margin-bottom: 14px !important;
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.30) !important;
+}
+
+
+/* ================================================================
+   ABOUT / PROFILE SECTION — transparent glass, single blur layer
+   about-bio-col and about-panel-col: no backdrop-filter (no nested blur)
+   Light translucent background only
+================================================================ */
+.about-section .about-bio-col,
+.about-section .about-panel-col,
+.about-section .about-text-col,
+.about-text-col,
+.about-panel-col,
+.about-bio-col {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 4px 20px rgba(0,0,0,0.08),
+    0 0 0 0.5px rgba(255,255,255,0.15) !important;
+}
+
+/* Stats row inside about col — no nested blur */
+.about-stats-row,
+.about-section .about-stats-row {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25) !important;
+}
+
+/* Stat items inside stats row — no blur */
+.about-stat {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+
+/* ================================================================
+   ★ GLOBAL TRANSPARENCY OVERRIDE — removes all white blur site-wide
+   Single source of truth, appended last so it wins the cascade.
+   Rule: ONE glass layer per section. Children = transparent/no blur.
+================================================================ */
+
+/* ── GATE CARD ─────────────────────────────────────── */
+.gate-card {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(16px) saturate(1.3) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+}
+.gate-backdrop {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.gate-field input {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── HERO ──────────────────────────────────────────── */
+.hero-editorial-layout,
+.hero-section .hero-editorial-layout {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.hero-editorial-layout * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.hero-editorial-layout .btn-primary,
+.hero-editorial-layout .btn-ghost,
+.hero-editorial-layout .hero-linkedin-btn,
+.hero-editorial-layout .nav-resume-btn {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+.hero-kpis {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.hero-portrait-frame {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.hap-status, .hap-pill {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.hero-badge, .hero-vchip {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.hero-stat-badge {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.hero-eyebrow-row {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── GLASS CARDS (why-hire, capabilities) ──────────── */
+.glass-card,
+.wh-card,
+.gc-card {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.glass-card *,
+.wh-card *,
+.gc-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── ABOUT / PROFILE ───────────────────────────────── */
+.about-bio-col,
+.about-text-col,
+.about-panel-col,
+.about-section .about-bio-col,
+.about-section .about-panel-col,
+.about-section .about-text-col {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+}
+.about-bio-col *,
+.about-text-col *,
+.about-panel-col * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.about-stats-row,
+.about-section .about-stats-row {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+.about-stat {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── EXPERIENCE ────────────────────────────────────── */
+.exp-card {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.exp-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.exp-tabs-wrap, .exp-tab {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.exp-meta-chip, .exp-stat-chip, .exp-site-logos {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── PROJECTS / MUSEUM CASE ────────────────────────── */
+.museum-case,
+.project-card {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.museum-case *,
+.project-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── ARSENAL ───────────────────────────────────────── */
+.arsenal-category {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.arsenal-category * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── EDUCATION ─────────────────────────────────────── */
+.lge-card, .edu-card {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.lge-card *, .edu-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.lge-tabs-nav, .edu-tabs-wrap, .exp-tabs-wrap,
+.edu-glass-panel .edu-tabs-wrap, .edu-tab, .exp-tab {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── CERTIFICATIONS ────────────────────────────────── */
+.cert-card, .cert-hero-card {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.cert-card *, .cert-hero-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── ACHIEVEMENTS ──────────────────────────────────── */
+.ach-award-card, .ach-item {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── REFERENCES ────────────────────────────────────── */
+.rec-glass-card, .edu-rec-card {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* ── CONTACT / ENGAGE ──────────────────────────────── */
+.contact-glass-wrap, .contact-form-panel, .contact-info-col {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.engage-row {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.engage-resume-card,
+.engage-left .engage-resume-card,
+.engage-right .engage-resume-card {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.engage-status-bar {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── REVIEW BOX (standalone section) ──────────────── */
+.review-box {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+}
+.review-standalone-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.review-rating-row {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#reviewName, .review-textarea {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── CHIPS & SMALL PILLS — no blur ─────────────────── */
+.p-chip, .ac-skill, .lge-tag, .lge-stat-chip,
+.exp-meta-chip, .exp-stat-chip,
+.stb-sector, .wh-badge,
+.gc-tag, .mc-tool-tag, .hie-tag, .hie-env-tag,
+.cs-impact-pill, .cs-year-badge, .cs-sector-banner,
+.edu-badge, .wh-badge, .ac-skill, .ac-cert-badge, .ac-enterprise-tag,
+.es-pill, .tool-chip {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── FOOTER ─────────────────────────────────────────── */
+footer, .site-footer, .footer {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(14px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.2) !important;
+}
+.footer-glass-btn, .fa-btn {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── MOBILE STICKY CTA ──────────────────────────────── */
+.mobile-sticky-cta {
+  background: rgba(10,14,30,0.75) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+.msc-btn {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── HANDSON / FIELDWORK CARDS ──────────────────────── */
+.hie-modal-panel {
+  background: rgba(10,14,30,0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+/* ── PDF MODAL ──────────────────────────────────────── */
+.pdf-modal-panel {
+  background: rgba(10,14,30,0.88) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+.pdf-modal-topbar, .hie-modal-topbar {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.pdf-modal-btn, .hie-modal-btn {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── PANEL ELEMENTS ─────────────────────────────────── */
+.panel-sla-ring, .panel-achievements {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── WEATHER BAR ─────────────────────────────────────── */
+.weather-bar {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+
+/* ================================================================
+   ██ DEFINITIVE TRANSPARENCY FIX — FINAL CASCADE WINNER ██
+   All remaining white/grey blur panels → transparent glass.
+   This block is last in the file. It beats everything above.
+================================================================ */
+
+/* ── ABOUT / PROFILE ─────────────────────────────────────────── */
+.about-section .about-layout > *,
+.about-bio-col,
+.about-text-col,
+.about-panel-col,
+.about-section .about-bio-col,
+.about-section .about-panel-col,
+.about-section .about-text-col {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 4px 24px rgba(0,0,0,0.10) !important;
+}
+.about-stats-row,
+.about-section .about-stats-row {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: none !important;
+}
+.about-stat {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── EXPERIENCE ──────────────────────────────────────────────── */
+#experience .exp-tabs-wrap,
+.exp-tabs-wrap {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 0 0 1px rgba(255,255,255,0.10) !important;
+}
+#experience .exp-content-wrap {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10), 0 8px 32px rgba(0,0,0,0.08) !important;
+}
+.exp-card,
+.lge-card {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.exp-card *, .lge-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.exp-tab, .lge-tab {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.exp-tab.active, .exp-tab[aria-selected="true"],
+.lge-tab.active, .lge-tab[aria-selected="true"] {
+  background: rgba(255,255,255,0.18) !important;
+}
+
+/* ── EDUCATION ───────────────────────────────────────────────── */
+.edu-glass-panel {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 8px 32px rgba(0,0,0,0.10) !important;
+}
+.edu-glass-panel .edu-tabs-wrap,
+.edu-tabs-wrap {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.edu-tab {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.edu-tab.active, .edu-tab[aria-selected="true"] {
+  background: rgba(255,255,255,0.20) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.40) !important;
+}
+.edu-card, .lge-card {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+.edu-card *, .lge-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* edu badges/pills inside panels */
+.edu-badge, .edu-result-tag {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── ALL SECTION WRAPPERS — transparent background ───────────── */
+.section,
+section {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── PROOF BAR / WHY HIRE ────────────────────────────────────── */
+.proof-bar {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.wh-card {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.wh-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── CAPABILITIES CARDS ──────────────────────────────────────── */
+.gc-card {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.gc-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── CERTIFICATIONS ──────────────────────────────────────────── */
+.cert-hero-card, .cert-card {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── FIELDWORK / HIE CARDS ───────────────────────────────────── */
+.hie-card {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.hie-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── ACHIEVEMENTS ────────────────────────────────────────────── */
+.ach-award-card {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.ach-award-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.ach-item {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── CONTACT / ENGAGE ────────────────────────────────────────── */
+.engage-wrap {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.engage-wrap * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.engage-row {
+  background: rgba(255,255,255,0.06) !important;
+}
+.engage-resume-card {
+  background: rgba(255,255,255,0.06) !important;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+footer, .footer {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.footer-glass-btn, .fa-btn {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── GATE CARD ───────────────────────────────────────────────── */
+.gate-card {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+/* ── NAV (keep its blur — it's the UI anchor) ────────────────── */
+/* Nav keeps blur(14px) — intentional single element */
+
+
+/* ================================================================
+   PROFILE SECTION — FULL TRANSPARENCY (FINAL WIN)
+   Kills: outer .about-layout box + both inner column cards
+================================================================ */
+
+/* Outer wrapper — no glass at all */
+.about-section .about-layout,
+#about .about-layout {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Both inner column cards — fully transparent */
+.about-bio-col,
+.about-text-col,
+.about-panel-col,
+.about-section .about-bio-col,
+.about-section .about-panel-col,
+.about-section .about-text-col,
+#about .about-bio-col,
+#about .about-panel-col,
+#about .about-text-col {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Stats row inside — transparent */
+.about-stats-row,
+.about-section .about-stats-row,
+#about .about-stats-row {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Stat items — subtle pill only */
+.about-stat {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
