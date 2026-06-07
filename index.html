@@ -23,7 +23,8 @@
   <meta name="twitter:description" content="CCNA Certified IT Support Engineer | Aviation &amp; Healthcare — Qatar | Government Immigration — UAE">
 
   <!-- Critical resource preloads — LCP optimization -->
-  <link rel="preload" href="background.png" as="image" fetchpriority="high">
+  <link rel="preload" href="background.png" as="image" fetchpriority="high" media="(min-width: 768px)">
+  <link rel="preload" href="mobilebackground.png" as="image" fetchpriority="high" media="(max-width: 767px)">
   <link rel="preload" href="logo.png" as="image" fetchpriority="high">
   <link rel="preload" href="photo.jpg" as="image" fetchpriority="high">
   <link rel="preload" href="styles.css" as="style">
@@ -52,8 +53,7 @@
 
   <!-- ONE stylesheet only -->
   <link rel="stylesheet" href="styles.css">
-  <!-- Accessibility overrides — loaded after main styles for correct cascade -->
-  <link rel="stylesheet" href="accessibility.css">
+  <!-- Accessibility overrides merged into styles.css -->
   <!-- Critical inline: real-vh fallback & mobile-sticky initial state -->
   <style>
     :root { --real-vh: 1vh; }

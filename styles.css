@@ -26751,3 +26751,1051 @@ section:has(#reviewBox) {
   top: 0 !important; 
   outline: 3px solid #D4A840 !important;
 }
+
+
+/* ================================================================
+   GLASSMORPHISM REDESIGN — True Backdrop Blur System v7.0
+   Merged into styles.css — no separate file needed.
+
+   Rules:
+   · backdrop-filter: blur(14px) desktop / blur(10px) mobile
+   · Glass opacity: rgba(255,255,255,0.04–0.08) only
+   · One glass surface per section — no glass-in-glass
+   · Borders: 1px solid rgba(255,255,255,0.10–0.15)
+   · No glowing borders, no stacked pseudo-element overlays
+   · background.png on desktop/tablet, mobilebackground.png on mobile
+================================================================ */
+
+/* ── §1 Override glass tokens ── */
+:root {
+  --glass-ultra:   rgba(255,255,255,0.08);
+  --glass-strong:  rgba(255,255,255,0.07);
+  --glass-mid:     rgba(255,255,255,0.06);
+  --glass-light:   rgba(255,255,255,0.05);
+  --glass-whisper: rgba(255,255,255,0.04);
+
+  --blur-ultra:  blur(14px) saturate(1.6) brightness(1.04);
+  --blur-strong: blur(14px) saturate(1.5) brightness(1.03);
+  --blur-mid:    blur(14px) saturate(1.4) brightness(1.02);
+  --blur-light:  blur(14px) saturate(1.3);
+  --blur-soft:   blur(10px) saturate(1.2);
+
+  --sh-glass-sm:
+    0 2px 8px rgba(0,0,0,0.12),
+    0 6px 20px rgba(0,0,0,0.10),
+    0 0 0 0.5px rgba(255,255,255,0.14);
+
+  --sh-glass-md:
+    0 4px 12px rgba(0,0,0,0.14),
+    0 12px 32px rgba(0,0,0,0.12),
+    0 24px 56px rgba(0,0,0,0.06),
+    0 0 0 0.5px rgba(255,255,255,0.16);
+
+  --sh-glass-lg:
+    0 6px 18px rgba(0,0,0,0.16),
+    0 18px 48px rgba(0,0,0,0.14),
+    0 40px 80px rgba(0,0,0,0.08),
+    0 0 0 0.5px rgba(255,255,255,0.18);
+
+  --sh-glass-float:
+    0 8px 24px rgba(0,0,0,0.18),
+    0 22px 56px rgba(0,0,0,0.16),
+    0 48px 100px rgba(0,0,0,0.10),
+    0 0 0 0.5px rgba(255,255,255,0.20);
+}
+
+/* ── §2 Background: desktop vs mobile photo ── */
+body::before {
+  background: url('background.png') center 40% / cover no-repeat !important;
+}
+@media (max-width: 767px) {
+  body::before {
+    background: url('mobilebackground.png') center center / cover no-repeat !important;
+  }
+}
+/* Lighten atmospheric overlay so photo stays vivid */
+body::after {
+  background:
+    radial-gradient(ellipse 80% 55% at 75% 30%, rgba(215,178,112,0.04) 0%, transparent 60%),
+    linear-gradient(to bottom, rgba(5,12,30,0.12) 0%, transparent 35%) !important;
+}
+
+/* ── §3 Suppress ambient decorative elements (cause flicker with backdrop-filter) ── */
+.amb-orb, .neon-scanline, .global-mouse-glow,
+.lg-light-leak, .gallery-spotlight, .cinematic-canvas,
+.wall-grain, .wall-grain-fine, .wall-light,
+.wall-vignette, .wall-shadow-left { display: none !important; }
+
+/* ── §4 Remove section fog overlay ── */
+.section::before { display: none !important; }
+
+/* ── §5 Universal glass card — single frosted surface ── */
+.glass-card,
+.museum-case,
+.project-card,
+.glass-card-deep,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.ach-award-card,
+.wh-card,
+.rec-glass-card,
+.edu-rec-card,
+.arsenal-category,
+.about-text-col,
+.about-panel-col,
+.about-bio-col,
+.hero-glass-card {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(14px) saturate(1.5) brightness(1.03) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.5) brightness(1.03) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: var(--sh-glass-md) !important;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+
+/* Suppress all shimmer pseudo-elements on cards — they stack extra opacity */
+.glass-card::before, .glass-card::after,
+.wh-card::before, .wh-card::after,
+.exp-card::before, .exp-card::after,
+.lge-card::before, .lge-card::after,
+.cert-card::before, .cert-card::after,
+.museum-case::before, .museum-case::after,
+.project-card::before, .project-card::after,
+.rec-glass-card::before, .rec-glass-card::after,
+.arsenal-category::before, .arsenal-category::after,
+.about-text-col::before, .about-text-col::after,
+.about-panel-col::before, .about-panel-col::after { display: none !important; }
+
+/* Strip backdrop-filter from ALL children — no glass-in-glass */
+.glass-card *, .museum-case *, .project-card *,
+.exp-card *, .lge-card *, .edu-card *,
+.cert-card *, .cert-hero-card *, .wh-card *,
+.ach-award-card *, .rec-glass-card *, .glass-card-deep *,
+.hero-glass-card *, .about-text-col *, .about-panel-col *,
+.about-bio-col *, .arsenal-category * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Hover: gentle lift only, no glow ring */
+.glass-card:hover, .project-card:hover, .exp-card:hover,
+.wh-card:hover, .edu-card:hover, .cert-card:hover, .ach-award-card:hover {
+  transform: translateY(-4px) scale(1.006) translateZ(0) !important;
+  box-shadow: var(--sh-glass-float) !important;
+  background: rgba(255,255,255,0.08) !important;
+}
+
+/* ── §6 Hero layout ── */
+.hero-editorial-layout {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(14px) saturate(1.5) brightness(1.03) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.5) brightness(1.03) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: var(--sh-glass-float) !important;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+.hero-editorial-layout::before,
+.hero-editorial-layout::after { display: none !important; }
+
+/* KPI bar inside hero */
+.hero-kpis {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: none !important;
+}
+
+/* Vertical stat chips */
+.hero-vchip {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+.hero-vchip::before { display: none !important; }
+
+/* Hero badges */
+.hero-badge {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: none !important;
+}
+
+/* ── §7 Navbar ── */
+.top-nav {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(14px) saturate(1.4) brightness(1.02) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) brightness(1.02) !important;
+  border: 1px solid rgba(255,255,255,0.13) !important;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.22),
+    0 8px 24px rgba(0,0,0,0.18),
+    0 0 0 0.5px rgba(255,255,255,0.16) !important;
+  isolation: isolate;
+  transform: translateZ(0);
+}
+.top-nav::before, .top-nav::after { display: none !important; }
+
+.nav-resume-btn {
+  background: rgba(255,255,255,0.14) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.35),
+    0 2px 6px rgba(0,0,0,0.18) !important;
+}
+.nav-resume-btn::before { display: none !important; }
+
+.nav-mob-toggle {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+}
+
+.nav-mob-drawer {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(14px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: var(--sh-glass-lg) !important;
+}
+
+/* ── §8 About section nested panels ── */
+.about-stats-row {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: none !important;
+}
+.about-stat {
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12) !important;
+}
+.panel-sla-ring, .panel-achievements {
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: none !important;
+}
+.ach-item {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* ── §9 Small pill chips — no blur, light transparent bg ── */
+.p-chip, .ac-skill, .lge-tag, .exp-meta-chip,
+.exp-stat-chip, .lge-stat-chip, .stb-sector, .wh-badge, .tool-chip {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: none !important;
+}
+
+/* ── §10 CTA Buttons ── */
+.btn-primary {
+  background: rgba(255,255,255,0.16) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.32), 0 2px 8px rgba(0,0,0,0.16) !important;
+}
+.btn-primary:hover {
+  background: rgba(255,255,255,0.22) !important;
+  transform: translateY(-2px) scale(1.03) !important;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10) !important;
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.12) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* ── §11 Experience tabs ── */
+.exp-tabs-wrap, .lge-tabs-nav {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(14px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+  border: 1px solid rgba(255,255,255,0.11) !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+.exp-tab { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.exp-tab.active { background: rgba(255,255,255,0.10) !important; border: 1px solid rgba(255,255,255,0.16) !important; }
+
+/* ── §12 Contact section ── */
+.contact-glass-wrap, .contact-form-panel, .contact-info-col {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(14px) saturate(1.5) brightness(1.03) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.5) brightness(1.03) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: var(--sh-glass-lg) !important;
+}
+.form-input, .form-textarea, .form-select,
+input[type="text"], input[type="email"], textarea {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus,
+.form-input:focus, .form-textarea:focus {
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 0 0 2px rgba(255,255,255,0.08) !important;
+  outline: none !important;
+}
+
+/* Review box inside engage panel */
+.review-box {
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: none !important;
+}
+#reviewName, .review-textarea {
+  background: rgba(0,0,0,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── §13 Footer ── */
+footer, .site-footer {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(14px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+  border-top: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.12) !important;
+}
+.footer-glass-btn, .fa-btn {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10) !important;
+}
+.footer-glass-btn:hover, .fa-btn:hover {
+  background: rgba(255,255,255,0.13) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.16) !important;
+}
+.fa-btn::before { display: none !important; }
+
+/* ── §14 FAB ── */
+.fab-main {
+  background: rgba(255,255,255,0.12) !important;
+  backdrop-filter: blur(14px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.5) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.20), 0 10px 28px rgba(0,0,0,0.16), 0 0 0 0.5px rgba(255,255,255,0.22) !important;
+  isolation: isolate;
+}
+.fab-main:hover {
+  background: rgba(255,255,255,0.18) !important;
+  transform: scale(1.08) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.24), 0 14px 40px rgba(0,0,0,0.20) !important;
+}
+.fab-option {
+  background: rgba(255,255,255,0.10) !important;
+  backdrop-filter: blur(14px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+.fab-option:hover { background: rgba(255,255,255,0.16) !important; }
+
+/* ── §15 Gate card (login overlay) ── */
+.gate-card {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.4) brightness(1.03) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) brightness(1.03) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow:
+    0 8px 32px rgba(6,18,55,0.28),
+    0 24px 60px rgba(6,18,55,0.18),
+    0 0 0 0.5px rgba(255,255,255,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.28) !important;
+}
+.gate-card::before { display: none !important; }
+.gate-field input {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* ── §16 Mobile sticky bar ── */
+.mobile-sticky-cta {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(14px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.5) !important;
+  border-top: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.16) !important;
+}
+.msc-btn {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* ── §17 Modals ── */
+.pdf-modal-panel, .hie-modal-panel {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(14px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: var(--sh-glass-float) !important;
+}
+.pdf-modal-topbar, .hie-modal-topbar {
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+}
+.pdf-modal-btn, .hie-modal-btn {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+/* ── §18 Search bar ── */
+.search-bar, .search-input-wrap,
+[class*="search-wrap"], [class*="search-bar"] {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(14px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.4) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+
+/* ── §19 Mobile performance: reduce blur to 10px below 768px ── */
+@media (max-width: 767px) {
+  .glass-card,
+  .museum-case, .project-card, .glass-card-deep,
+  .exp-card, .lge-card, .edu-card, .cert-card,
+  .cert-hero-card, .ach-award-card, .wh-card,
+  .rec-glass-card, .edu-rec-card, .arsenal-category,
+  .about-text-col, .about-panel-col, .about-bio-col,
+  .hero-glass-card, .hero-editorial-layout {
+    backdrop-filter: blur(10px) saturate(1.3) brightness(1.02) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.3) brightness(1.02) !important;
+    background: rgba(255,255,255,0.08) !important;
+  }
+  .top-nav {
+    backdrop-filter: blur(10px) saturate(1.3) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.3) !important;
+  }
+  footer, .site-footer {
+    backdrop-filter: blur(10px) saturate(1.3) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.3) !important;
+  }
+  .fab-main, .fab-option {
+    backdrop-filter: blur(10px) saturate(1.3) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.3) !important;
+  }
+  .mobile-sticky-cta, .nav-mob-drawer {
+    backdrop-filter: blur(10px) saturate(1.3) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.3) !important;
+  }
+  .exp-tabs-wrap, .lge-tabs-nav,
+  .contact-glass-wrap, .contact-form-panel,
+  .contact-info-col {
+    backdrop-filter: blur(10px) saturate(1.3) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.3) !important;
+  }
+  .gate-card {
+    backdrop-filter: blur(10px) saturate(1.3) brightness(1.02) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(1.3) brightness(1.02) !important;
+  }
+}
+
+/* ── §20 Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .glass-card, .project-card, .exp-card,
+  .wh-card, .edu-card, .cert-card, .ach-award-card { transition: none !important; }
+  .glass-card:hover, .project-card:hover, .exp-card:hover,
+  .wh-card:hover, .edu-card:hover, .cert-card:hover,
+  .ach-award-card:hover { transform: none !important; }
+}
+
+/* ── §21 Backdrop-filter fallback ── */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-card, .museum-case, .project-card, .glass-card-deep,
+  .exp-card, .lge-card, .edu-card, .cert-card, .cert-hero-card,
+  .ach-award-card, .wh-card, .rec-glass-card, .edu-rec-card,
+  .arsenal-category, .about-text-col, .about-panel-col,
+  .hero-glass-card, .hero-editorial-layout {
+    background: rgba(240,244,250,0.88) !important;
+  }
+  .top-nav { background: rgba(240,244,250,0.92) !important; }
+  footer, .site-footer { background: rgba(240,244,250,0.90) !important; }
+  .gate-card { background: rgba(6,18,55,0.82) !important; }
+}
+
+
+/* ================================================================
+   BACKGROUND IMAGE — DEFINITIVE FINAL OVERRIDE
+   Fixes the body::before kill at line 25130.
+   Uses body directly since body::before was nuked upstream.
+   desktop / tablet / TV  → background.png
+   mobile (< 768px)       → mobilebackground.png
+================================================================ */
+
+/* Restore body::before and body::after (overrides the display:none kill) */
+body::before,
+body::after {
+  display: block !important;
+  content: '' !important;
+  opacity: 1 !important;
+}
+
+/* Desktop background on body::before */
+body::before {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -2 !important;
+  pointer-events: none !important;
+  background: url('background.png') center 40% / cover no-repeat !important;
+  background-attachment: fixed !important;
+  transform: translateZ(0) !important;
+  will-change: transform !important;
+}
+
+/* Mobile background swap */
+@media (max-width: 767px) {
+  body::before {
+    background: url('mobilebackground.png') center center / cover no-repeat !important;
+    background-attachment: scroll !important;
+  }
+}
+
+/* Remove the direct body background set at line 25119 */
+body {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Subtle atmospheric vignette on body::after */
+body::after {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(ellipse 80% 55% at 75% 30%, rgba(215,178,112,0.04) 0%, transparent 60%),
+    linear-gradient(to bottom, rgba(5,12,30,0.12) 0%, transparent 35%) !important;
+  background-color: transparent !important;
+  transform: translateZ(0) !important;
+}
+
+
+/* ================================================================
+   TEXT COLOR — FINAL WHITE OVERRIDE
+   Catches any dark ink values (#0f172a, #1e293b, #334155, #475569)
+   set inline in styles.css that accessibility.css didn't reach.
+================================================================ */
+
+/* Section headers */
+.sec-title {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+.sec-subtitle { color: rgba(255,255,255,0.80) !important; }
+.sec-eyebrow  { color: rgba(255,255,255,0.65) !important; }
+
+/* Hero name gradient → plain white */
+.hero-name-first, .hero-name-last {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+
+/* KPI numbers */
+.kpi-num {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+
+/* Nav links */
+.nav-link      { color: rgba(255,255,255,0.85) !important; }
+.nav-logo-name { color: #FFFFFF !important; }
+.nav-logo-role { color: rgba(255,255,255,0.70) !important; }
+.nav-resume-btn { color: #FFFFFF !important; }
+
+/* Global ink variables — remap to white */
+* { --ink:   #FFFFFF; --ink-2: rgba(255,255,255,0.88); --ink-3: rgba(255,255,255,0.70); --ink-4: rgba(255,255,255,0.55); }
+
+/* ================================================================
+   ACCESSIBILITY + WHITE TEXT — merged from accessibility.css
+================================================================ */
+/* ================================================================
+   ACCESSIBILITY + TEXT COLOR OVERRIDES
+   All body text → white / near-white for visibility on dark
+   scenic photo backgrounds (mountain lake at night).
+   Gate card stays white text (already on dark bg).
+   Focus states, font sizes, ARIA patterns preserved.
+================================================================ */
+
+/* ================================================================
+   PRIORITY 1 — ALL TEXT WHITE ON GLASS CARDS
+================================================================ */
+
+/* ── Section headers ── */
+.sec-title {
+  color: #FFFFFF !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background-clip: unset !important;
+}
+.sec-subtitle  { color: rgba(255,255,255,0.80) !important; }
+.sec-eyebrow   { color: rgba(255,255,255,0.65) !important; }
+.sec-num       { display: none !important; }
+
+/* ── Navbar ── */
+.nav-logo-name { color: #FFFFFF !important; }
+.nav-logo-role { color: rgba(255,255,255,0.75) !important; }
+.nav-link      { color: rgba(255,255,255,0.85) !important; }
+.nav-link:hover, .nav-link.active, .nav-link.is-active { color: #FFFFFF !important; }
+.nav-resume-btn { color: #FFFFFF !important; }
+.nav-mob-link  { color: rgba(255,255,255,0.90) !important; }
+
+/* ── Weather bar ── */
+.wb-time         { color: #FFFFFF !important; }
+.wb-date         { color: rgba(255,255,255,0.90) !important; }
+.wb-weather-text { color: rgba(255,255,255,0.90) !important; }
+.wb-icon         { color: rgba(255,255,255,0.90) !important; }
+.wb-sep          { color: rgba(255,255,255,0.40) !important; }
+
+/* ── Gate card — dark scenic bg, white text ── */
+.gate-card h2        { color: #FFFFFF !important; }
+.gate-card h2 span   { color: #D4A840 !important; }
+.gate-card .gate-subtitle { color: rgba(255,255,255,0.85) !important; }
+.gate-logo           { color: rgba(255,255,255,0.85) !important; }
+.gate-field label    { color: rgba(255,255,255,0.90) !important; }
+.gate-field input    { color: #FFFFFF !important; }
+#gateWelcome p.gate-subtitle { color: rgba(255,255,255,0.85) !important; }
+
+/* ── Hero ── */
+.hvc-val           { color: #FFFFFF !important; }
+.hvc-icon          { color: rgba(255,255,255,0.75) !important; }
+.hvc-lbl           { color: rgba(255,255,255,0.70) !important; }
+.hero-eyebrow-text { color: rgba(255,255,255,0.80) !important; }
+.hnr-tag           { color: rgba(255,255,255,0.75) !important; }
+.hero-statement    { color: rgba(255,255,255,0.85) !important; }
+.hero-name-first, .hero-name-last {
+  color: #FFFFFF !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background-clip: unset !important;
+}
+.kpi-num   { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.kpi-unit  { color: rgba(255,255,255,0.75) !important; }
+.kpi-label { color: rgba(255,255,255,0.70) !important; }
+.hero-badge { color: rgba(255,255,255,0.90) !important; }
+
+/* ── Why Hire ── */
+.wh-title        { color: #FFFFFF !important; }
+.wh-desc         { color: rgba(255,255,255,0.85) !important; }
+.wh-proof        { color: rgba(255,255,255,0.75) !important; }
+.wh-proof span   { color: rgba(255,255,255,0.75) !important; }
+.wh-badge        { color: #FFFFFF !important; font-weight: 700; }
+.wh-badge-green  { color: rgba(255,255,255,0.90) !important; }
+.wh-badge-amber  { color: rgba(255,255,255,0.90) !important; }
+.wh-badge-teal   { color: rgba(255,255,255,0.90) !important; }
+.wh-badge-rose   { color: rgba(255,255,255,0.90) !important; }
+.wh-badge-purple { color: rgba(255,255,255,0.90) !important; }
+.ps-num          { color: #FFFFFF !important; }
+.ps-label        { color: rgba(255,255,255,0.75) !important; }
+.stb-label       { color: rgba(255,255,255,0.75) !important; }
+.stb-sector      { color: rgba(255,255,255,0.90) !important; }
+
+/* ── About ── */
+.bio-lead        { color: #FFFFFF !important; }
+.bio-body        { color: rgba(255,255,255,0.85) !important; }
+.astat-num       { color: #FFFFFF !important; }
+.astat-label     { color: rgba(255,255,255,0.70) !important; }
+.ach-text strong { color: #FFFFFF !important; }
+.ach-text span   { color: rgba(255,255,255,0.80) !important; }
+.p-chip          { color: rgba(255,255,255,0.90) !important; }
+
+/* ── Projects ── */
+.mc-title         { color: #FFFFFF !important; }
+.mc-org           { color: rgba(255,255,255,0.75) !important; }
+.mc-sector        { color: rgba(255,255,255,0.70) !important; }
+.mc-desc          { color: rgba(255,255,255,0.85) !important; }
+.csm-lbl          { color: rgba(255,255,255,0.70) !important; }
+.csm-val          { color: #FFFFFF !important; }
+.mc-outcome-label { color: rgba(255,255,255,0.70) !important; }
+.mc-outcome-val   { color: #FFFFFF !important; }
+.mc-tool-tag      { color: rgba(255,255,255,0.85) !important; }
+.pc-block-text    { color: rgba(255,255,255,0.85) !important; }
+.pc-impact        { color: rgba(255,255,255,0.85) !important; }
+.pc-tool-badge    { color: rgba(255,255,255,0.85) !important; }
+.pc-block-label.challenge { color: rgba(255,200,100,0.95) !important; }
+.pc-block-label.solution  { color: rgba(150,255,180,0.95) !important; }
+
+/* ── Capabilities cards ── */
+.gc-card-title { color: #FFFFFF !important; }
+.gc-card-body  { color: rgba(255,255,255,0.85) !important; }
+.gc-stat       { color: rgba(255,255,255,0.70) !important; }
+.gc-tag        { color: rgba(255,255,255,0.85) !important; }
+
+/* ── Experience ── */
+.exp-role         { color: #FFFFFF !important; }
+.exp-company      { color: rgba(255,255,255,0.85) !important; }
+.exp-bullet       { color: rgba(255,255,255,0.85) !important; }
+.exp-quote        { color: rgba(255,255,255,0.80) !important; }
+.exp-quote-author { color: rgba(255,255,255,0.65) !important; }
+.exp-stat-chip    { color: #FFFFFF !important; }
+.exp-meta-chip    { color: rgba(255,255,255,0.80) !important; }
+
+/* ── Education ── */
+.edu-description { color: rgba(255,255,255,0.85) !important; }
+.edu-result      { color: rgba(255,255,255,0.85) !important; }
+.edu-date        { color: rgba(255,255,255,0.70) !important; }
+
+/* ── Arsenal ── */
+.ac-title    { color: #FFFFFF !important; }
+.ac-subtitle { color: rgba(255,255,255,0.75) !important; }
+.tool-chip   { color: rgba(255,255,255,0.90) !important; }
+.lang-name   { color: #FFFFFF !important; }
+.lang-level  { color: rgba(255,255,255,0.70) !important; }
+
+/* ── References ── */
+.ref-name       { color: #FFFFFF !important; }
+.ref-title      { color: rgba(255,255,255,0.85) !important; }
+.ref-company    { color: rgba(255,255,255,0.70) !important; }
+.ref-note       { color: rgba(255,255,255,0.85) !important; }
+.ref-rel-pill   { color: rgba(255,255,255,0.85) !important; }
+.ref-disclaimer { color: rgba(255,255,255,0.60) !important; }
+.ref-view-link  { color: rgba(150,210,255,0.95) !important; }
+
+/* ── Contact / Engage ── */
+.engage-status-text { color: #FFFFFF !important; }
+.engage-version     { color: rgba(255,255,255,0.65) !important; }
+.engage-intro       { color: rgba(255,255,255,0.85) !important; }
+.er-label           { color: rgba(255,255,255,0.70) !important; }
+.er-value           { color: #FFFFFF !important; }
+.er-cta             { color: rgba(255,255,255,0.85) !important; }
+.erc-title          { color: #FFFFFF !important; }
+.erc-sub            { color: rgba(255,255,255,0.70) !important; }
+
+/* CTA buttons */
+.cta-resume .cta-btn-label   { color: #FFFFFF !important; }
+.cta-whatsapp .cta-btn-label { color: #FFFFFF !important; }
+.cta-resume .cta-btn-arrow   { color: #FFFFFF !important; }
+.cta-whatsapp .cta-btn-arrow { color: #FFFFFF !important; }
+
+/* ── Footer ── */
+.footer-name    { color: #FFFFFF !important; }
+.footer-role    { color: rgba(255,255,255,0.75) !important; }
+.footer-copy    { color: rgba(255,255,255,0.65) !important; }
+.footer-links a { color: rgba(255,255,255,0.85) !important; }
+
+/* ── Review box ── */
+.review-box-title    { color: #FFFFFF !important; }
+.review-box-hint     { color: rgba(255,255,255,0.80) !important; }
+.review-rating-label { color: rgba(255,255,255,0.80) !important; }
+.review-char-count   { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
+#reviewThanks p:first-of-type { color: #FFFFFF !important; }
+#reviewThanks p:last-of-type  { color: rgba(255,255,255,0.80) !important; }
+
+/* ── Published review cards ── */
+.rc-text { color: rgba(255,255,255,0.85) !important; }
+.rc-name { color: #FFFFFF !important; }
+.rc-date { color: rgba(255,255,255,0.60) !important; }
+
+/* ── Misc ── */
+.hlb-label    { color: #FFFFFF !important; }
+.hlb-id       { color: rgba(255,255,255,0.65) !important; }
+.hap-status   { color: rgba(150,255,180,0.95) !important; }
+.hap-pill     { color: rgba(255,255,255,0.85) !important; }
+.aac-title    { color: #FFFFFF !important; }
+.aac-org      { color: rgba(255,255,255,0.70) !important; }
+.aac-desc     { color: rgba(255,255,255,0.80) !important; }
+.cc-name, .cc-issuer { color: #FFFFFF !important; }
+.cc-date, .cc-id     { color: rgba(255,255,255,0.65) !important; }
+.engage-recruiter span:last-child { color: rgba(255,255,255,0.70) !important; }
+
+/* ── Form placeholders ── */
+#reviewName::placeholder      { font-size: 16px !important; color: rgba(255,255,255,0.35) !important; }
+.review-textarea::placeholder { color: rgba(255,255,255,0.35) !important; }
+#visitorName::placeholder     { color: rgba(255,255,255,0.35) !important; }
+
+/* ── Global body text fallback ── */
+body { color: #FFFFFF !important; }
+
+
+/* ================================================================
+   PRIORITY 2 — MINIMUM FONT SIZES (unchanged)
+================================================================ */
+
+body { font-size: 16px !important; }
+
+.hvc-lbl           { font-size: 14px !important; }
+.hero-eyebrow-text { font-size: 14px !important; }
+.hnr-tag           { font-size: 14px !important; }
+.kpi-label         { font-size: 14px !important; }
+.kpi-unit          { font-size: 14px !important; }
+.astat-label       { font-size: 14px !important; }
+.ach-text span     { font-size: 14px !important; }
+.p-chip            { font-size: 14px !important; }
+.ps-label          { font-size: 14px !important; }
+.stb-label         { font-size: 14px !important; }
+.stb-sector        { font-size: 14px !important; }
+.nav-mob-link      { font-size: 16px !important; }
+.exp-bullet        { font-size: 16px !important; }
+.mc-desc           { font-size: 14px !important; }
+.mc-outcome-label  { font-size: 14px !important; }
+.mc-outcome-val    { font-size: 14px !important; }
+.wh-desc           { font-size: 14px !important; }
+.bio-body          { font-size: 14px !important; }
+.exp-meta-chip     { font-size: 14px !important; }
+.exp-stat-chip     { font-size: 14px !important; }
+.edu-date          { font-size: 14px !important; }
+.edu-description   { font-size: 14px !important; }
+.ac-subtitle       { font-size: 14px !important; }
+.tool-chip         { font-size: 14px !important; }
+.lang-level        { font-size: 14px !important; }
+.ref-title         { font-size: 14px !important; }
+.ref-company       { font-size: 14px !important; }
+.ref-note          { font-size: 14px !important; }
+.ref-rel-pill      { font-size: 14px !important; }
+.ref-disclaimer    { font-size: 14px !important; }
+.er-label          { font-size: 14px !important; }
+.er-cta            { font-size: 14px !important; }
+.erc-sub           { font-size: 14px !important; }
+.engage-version    { font-size: 14px !important; }
+.engage-status-text { font-size: 14px !important; }
+.footer-role       { font-size: 14px !important; }
+.footer-copy       { font-size: 14px !important; }
+.sec-eyebrow       { font-size: 14px !important; }
+.sec-subtitle      { font-size: 16px !important; }
+.review-char-count { font-size: 14px !important; }
+.rc-date           { font-size: 14px !important; }
+.hlb-id            { font-size: 14px !important; }
+.hap-pill          { font-size: 14px !important; }
+.aac-desc          { font-size: 14px !important; }
+.aac-org           { font-size: 14px !important; }
+.cc-date, .cc-id   { font-size: 14px !important; }
+.engage-recruiter  { font-size: 14px !important; }
+.gc-stat           { font-size: 14px !important; }
+.gc-tag            { font-size: 14px !important; }
+
+/* Buttons — 16px minimum */
+.gate-btn          { font-size: 16px !important; }
+.review-submit-btn { font-size: 16px !important; }
+.engage-cta-btn    { font-size: 16px !important; }
+.msc-btn           { font-size: 16px !important; }
+.exp-tab           { font-size: 16px !important; }
+.fa-btn-label      { font-size: 14px !important; }
+
+/* Form inputs */
+#reviewName      { font-size: 16px !important; }
+.review-textarea { font-size: 16px !important; }
+#visitorName     { font-size: 16px !important; }
+
+/* Mobile: never below 14px */
+@media (max-width: 767px) {
+  .hvc-lbl, .kpi-label, .ps-label, .ac-subtitle,
+  .nav-link, .tool-chip, .ref-note, .er-label,
+  .stb-sector, .exp-meta-chip, .exp-stat-chip { font-size: 14px !important; }
+  .nav-mob-link, .exp-bullet { font-size: 16px !important; }
+}
+
+
+/* ================================================================
+   PRIORITY 3 — STAR RATING ARIA RADIO VISUAL STATES
+================================================================ */
+
+.review-stars[role="radiogroup"] {
+  display: inline-flex !important;
+  gap: 4px !important;
+  align-items: center !important;
+}
+
+.review-star[role="radio"] {
+  cursor: pointer !important;
+  outline: none !important;
+  font-size: 28px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  padding: 4px !important;
+  border-radius: 8px !important;
+  transition: transform 0.18s ease, color 0.15s ease !important;
+  background: transparent !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  color: rgba(255,255,255,0.30) !important;
+}
+
+.review-star[role="radio"]:focus-visible,
+.review-star[role="radio"]:focus {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 2px !important;
+  background: rgba(255,255,255,0.08) !important;
+  border-radius: 8px !important;
+}
+
+.review-star[role="radio"][aria-checked="true"],
+.review-star[role="radio"].active,
+.review-star[role="radio"]:hover {
+  color: #f59e0b !important;
+  -webkit-text-stroke: 0px transparent !important;
+  text-shadow: 0 0 14px rgba(245,158,11,0.65) !important;
+  transform: scale(1.22) !important;
+}
+
+
+/* ================================================================
+   PRIORITY 4 — FORM LABEL VISIBILITY
+================================================================ */
+
+.gate-field label {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: rgba(255,255,255,0.90) !important;
+  display: block !important;
+}
+
+.review-field-label {
+  display: block !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: rgba(255,255,255,0.85) !important;
+  margin-bottom: 6px !important;
+}
+
+input:focus-visible, textarea:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.70) !important;
+  outline-offset: 2px !important;
+}
+
+.gate-field input:focus,
+.gate-field input:focus-visible {
+  outline: 2px solid #D4A840 !important;
+  outline-offset: 2px !important;
+  border-color: rgba(212,168,64,0.80) !important;
+  box-shadow: 0 0 0 4px rgba(212,168,64,0.18) !important;
+}
+
+#reviewName:focus, #reviewName:focus-visible,
+.review-textarea:focus, .review-textarea:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.60) !important;
+  outline-offset: 2px !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+
+
+/* ================================================================
+   PRIORITY 5 — FOCUS STATES FOR ALL INTERACTIVE ELEMENTS
+================================================================ */
+
+:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 3px !important;
+  border-radius: 6px !important;
+}
+
+.gate-btn:focus-visible,
+.gate-close:focus-visible,
+#gateClose:focus-visible {
+  outline: 2px solid #D4A840 !important;
+  outline-offset: 3px !important;
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 3px !important;
+  background: rgba(255,255,255,0.10) !important;
+}
+
+.nav-resume-btn:focus-visible,
+.nav-mob-toggle:focus-visible,
+.nav-mob-link:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 3px !important;
+}
+
+.exp-tab:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 3px !important;
+}
+
+.fab-main:focus-visible,
+.fab-option:focus-visible {
+  outline: 2px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+.footer-glass-btn:focus-visible,
+.fa-btn:focus-visible,
+.es-pill:focus-visible,
+.ref-linkedin-btn:focus-visible,
+.engage-cta-btn:focus-visible,
+.erc-download:focus-visible,
+.msc-btn:focus-visible,
+.pdf-modal-btn:focus-visible,
+.hie-modal-btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 3px !important;
+}
+
+.engage-row:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 3px !important;
+  background: rgba(255,255,255,0.08) !important;
+}
+
+.review-submit-btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.80) !important;
+  outline-offset: 3px !important;
+}
+
+.skip-nav-link:focus {
+  top: 0 !important;
+  outline: 3px solid #D4A840 !important;
+  outline-offset: 0 !important;
+  font-size: 16px !important;
+  color: #FFFFFF !important;
+}
+
+/* Suppress outline on mouse clicks, keep for keyboard */
+*:focus:not(:focus-visible) { outline: none !important; }
