@@ -30,7 +30,7 @@
 
   /* ── CONFIG ── */
   var REVIEWS_URL      = 'https://ruiqfkzuqxxbyvycvsfo.supabase.co';
-  var REVIEWS_ANON_KEY = 'PASTE_YOUR_REVIEWS_ANON_KEY_HERE';
+  var REVIEWS_ANON_KEY = 'sb_publishable_B2lglqFpDltoMmz-RYQ_oA_UIDiWHNI'; /* Supabase → tbdgrhekycgfdeatxjnq project → Project Settings → API → anon (public) */
   /*
      Supabase Dashboard → Reviews Project
      → Project Settings → API → anon (public)

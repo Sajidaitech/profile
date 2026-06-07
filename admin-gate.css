@@ -1,0 +1,209 @@
+/* ============================================================
+   admin-gate.css  ·  sajidmk.com
+   Auth overlay, QR session, gate card, and login UI styles.
+   Extracted from admin-dashboard.html.
+   Link in <head>:  <link rel="stylesheet" href="admin-gate.css">
+============================================================ */
+
+/* ── Gate glass card ── */
+/* Gate overlay glass card */
+.gate-glass-card {
+  background: linear-gradient(160deg,
+    rgba(30,40,70,.72) 0%,
+    rgba(22,30,56,.66) 40%,
+    rgba(25,35,65,.60) 70%,
+    rgba(28,38,68,.68) 100%) !important;
+  backdrop-filter: blur(48px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(48px) saturate(200%) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.26),
+    inset 2px 0 0 rgba(255,255,255,.14),
+    inset -1px 0 0 rgba(255,255,255,.06),
+    inset 0 -2px 6px rgba(0,0,0,.30),
+    0 0 0 1px rgba(0,0,0,.60),
+    0 28px 70px rgba(0,0,0,.64),
+    0 10px 28px rgba(0,0,0,.44) !important;
+}
+
+/* ── Gate text colours ── */
+/* Gate text */
+.gate-headline    { color: rgba(255,255,255,.97) !important; text-shadow: 0 1px 4px rgba(0,0,0,.50) !important; }
+.gate-sub         { color: rgba(255,255,255,.80) !important; }
+.gate-eyebrow     { color: rgba(255,255,255,.60) !important; }
+.gate-brand-name  { color: rgba(255,255,255,.95) !important; }
+.gate-brand-sub   { color: rgba(255,255,255,.60) !important; }
+.gate-label       { color: rgba(255,255,255,.68) !important; }
+.gate-status-text { color: rgba(255,255,255,.55) !important; }
+
+/* ── Gate submit button ── */
+/* Gate submit button */
+.gate-submit-btn {
+  background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.08) 100%) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-top:    1.5px solid rgba(255,255,255,.22) !important;
+  border-left:   1px   solid rgba(255,255,255,.13) !important;
+  border-right:  1px   solid rgba(255,255,255,.07) !important;
+  border-bottom: 2px   solid rgba(0,0,0,.28) !important;
+  color: rgba(240,245,255,.92) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.20),
+    0 0 0 1px rgba(0,0,0,.52),
+    0 5px 18px rgba(0,0,0,.40),
+    0 2px 6px rgba(0,0,0,.30) !important;
+}
+.gate-submit-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.26),
+    0 0 0 1px rgba(0,0,0,.56),
+    0 8px 24px rgba(0,0,0,.50) !important;
+}
+
+/* Gate input */
+.gate-input {
+  background: rgba(0,0,0,.24) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-top:    1px solid rgba(255,255,255,.22) !important;
+  border-left:   1px solid rgba(255,255,255,.12) !important;
+  border-right:  1px solid rgba(255,255,255,.06) !important;
+  border-bottom: 1.5px solid rgba(0,0,0,.36) !important;
+  color: rgba(240,245,255,.92) !important;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.32), 0 1px 0 rgba(255,255,255,.08) !important;
+}
+.gate-input::placeholder { color: rgba(140,155,185,.60) !important; }
+.gate-input:focus {
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.28), 0 0 0 3px rgba(100,150,255,.22), 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+/* ── Auth overlay ── */
+/* ── Auth overlay ── */
+#auth-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  gap: 16px;
+
+  /* Desktop: landscape photo */
+  background-image:
+    linear-gradient(180deg, rgba(5,8,20,.52) 0%, rgba(5,8,20,.38) 50%, rgba(5,8,20,.62) 100%),
+    url('background.png');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* Mobile: portrait photo */
+@media (max-width: 768px) {
+  #auth-overlay {
+    background-image:
+      linear-gradient(180deg, rgba(5,8,20,.55) 0%, rgba(5,8,20,.38) 50%, rgba(5,8,20,.65) 100%),
+      url('mobilebackground.png') !important;
+    background-attachment: scroll !important;
+    background-position: center top !important;
+  }
+}
+
+.auth-card {
+  background:
+    linear-gradient(160deg,
+      rgba(255,255,255,.14) 0%,
+      rgba(255,255,255,.08) 55%,
+      rgba(60,90,180,.07) 100%);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-top:    1.5px solid rgba(255,255,255,.30);
+  border-left:   1px   solid rgba(255,255,255,.16);
+  border-right:  1px   solid rgba(255,255,255,.07);
+  border-bottom: 1px   solid rgba(0,0,0,.28);
+  border-radius: 28px;
+  padding: 44px 40px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.30),
+    0 0 0 1px rgba(0,0,0,.44),
+    0 16px 56px rgba(0,0,0,.52),
+    0 4px 16px rgba(0,0,0,.28);
+}
+[data-theme="light"] #auth-overlay {
+  background: rgba(200,210,240,.55);
+}
+[data-theme="light"] .auth-card {
+  background: rgba(255,255,255,.90);
+  border-top-color: rgba(255,255,255,.98);
+  border-left-color: rgba(255,255,255,.80);
+  border-right-color: rgba(0,0,0,.04);
+  border-bottom-color: rgba(0,0,0,.08);
+  box-shadow: 0 8px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
+}
+.auth-logo   { font-size: 44px; text-align: center; }
+.auth-title  { font-size: 22px; font-weight: 700; color: var(--ink); text-align: center; }
+.auth-sub    { font-size: 13px; color: var(--ink-3); text-align: center; line-height: 1.5; }
+.auth-input {
+  padding: 13px 16px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.20);
+  border-top-color: rgba(255,255,255,.30);
+  border-radius: 12px;
+  color: var(--ink);
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+[data-theme="light"] .auth-input {
+  background: rgba(0,0,0,.04);
+  border-color: rgba(0,0,0,.12);
+  color: var(--ink);
+}
+.auth-input::placeholder { color: var(--ink-4); }
+.auth-input:focus {
+  border-color: rgba(100,150,255,.55);
+  box-shadow: 0 0 0 3px rgba(80,130,255,.18);
+}
+.auth-btn {
+  padding: 13px 20px;
+  background: linear-gradient(158deg, #1a5cff 0%, #003ab8 100%);
+  border: none;
+  border-top:    1.5px solid rgba(255,255,255,.26);
+  border-left:   1px   solid rgba(255,255,255,.14);
+  border-bottom: 1px   solid rgba(0,0,0,.28);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px; font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity .2s, transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 20px rgba(10,68,255,.44);
+}
+.auth-btn:hover {
+  opacity: .92;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(10,68,255,.56);
+}
+.auth-error {
+  color: #ff6b6b;
+  font-size: 13px; font-weight: 600;
+  text-align: center;
+  display: none;
+  padding: 8px 12px;
+  background: rgba(255,59,48,.10);
+  border: 1px solid rgba(255,59,48,.22);
+  border-radius: 8px;
+}
+
+
+/* ── Small screen auth card padding ── */
+@media (max-width: 430px) {
+  .auth-card { padding: 32px 22px; }
+}
