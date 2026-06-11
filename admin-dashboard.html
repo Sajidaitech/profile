@@ -198,56 +198,60 @@
    Graphite gray · smoke black · muted silver · soft blue blur
 ================================================================ */
 
-/* ── Base body — photo background ── */
-body {
-  background-color: #0d1018;
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-
-  /* Desktop: landscape photo */
-  background-image: url('background.png');
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+/* ── Base body — transparent so background image shows ── */
+body,
+body::before,
+body::after {
+  background-color: transparent !important;
 }
 
-/* ── Dark overlay so glass UI stays readable ── */
+body {
+  background: transparent !important;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Primary background — the actual background.png image ── */
 body::before {
   content: '' !important;
   position: fixed !important;
   inset: 0 !important;
   z-index: 0 !important;
   pointer-events: none !important;
+
   background:
-    /* Top vignette — deepens sky */
-    linear-gradient(180deg, rgba(5,8,18,.55) 0%, transparent 40%),
-    /* Bottom vignette */
-    linear-gradient(0deg,   rgba(5,8,18,.65) 0%, transparent 45%),
-    /* Overall dark tint to keep contrast */
-    rgba(8, 12, 24, .48) !important;
+    /* Dark overlay so glass cards stay readable */
+    linear-gradient(180deg, rgba(5,8,20,.55) 0%, rgba(5,8,20,.38) 50%, rgba(5,8,20,.62) 100%),
+    url('background.png') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+
+  will-change: opacity !important;
+  animation: cineAmbient 48s ease-in-out infinite !important;
 }
 
-/* ── Subtle depth shimmer on top ── */
+@keyframes cineAmbient {
+  0%,100% { opacity: 1; }
+  33%     { opacity: .96; }
+  66%     { opacity: .98; }
+}
+
+/* ── Secondary depth pools — subtle tint on top of photo ── */
 body::after {
   content: '' !important;
   position: fixed !important;
   inset: 0 !important;
   z-index: 0 !important;
   pointer-events: none !important;
-  background:
-    radial-gradient(ellipse 70% 40% at 50% 100%, rgba(5,8,20,.50) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 30% at 50%   0%, rgba(5,8,20,.30) 0%, transparent 55%) !important;
-  opacity: 1 !important;
-}
 
-/* ── Mobile: portrait photo ── */
-@media (max-width: 768px) {
-  body {
-    background-image: url('mobilebackground.png') !important;
-    background-attachment: scroll !important; /* fixed doesn't work well on iOS */
-    background-position: center top !important;
-  }
+  background:
+    /* Very subtle blue vignette — keeps glass contrast */
+    radial-gradient(ellipse 55% 40% at 28% 18%,  rgba(20, 40,100,.10)  0%, transparent 65%),
+    radial-gradient(ellipse 90% 50% at 50% 100%, rgba( 5,  8, 20,.25)  0%, transparent 55%);
+
+  opacity: 1 !important;
 }
 
 /* ── Scroll progress bar ── */
@@ -2731,6 +2735,212 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   .rev-btn { flex: 1; width: 100%; }
 }
 
+
+/* ── Auth overlay background — inline so path resolves relative to this HTML file ── */
+#auth-overlay {
+  background-image:
+    linear-gradient(180deg, rgba(5,8,20,.52) 0%, rgba(5,8,20,.38) 50%, rgba(5,8,20,.62) 100%),
+    url('background.png') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+@media (max-width: 768px) {
+  #auth-overlay {
+    background-image:
+      linear-gradient(180deg, rgba(5,8,20,.55) 0%, rgba(5,8,20,.38) 50%, rgba(5,8,20,.65) 100%),
+      url('mobilebackground.png') !important;
+    background-attachment: scroll !important;
+    background-position: center top !important;
+  }
+}
+
+/* ================================================================
+   SHARP TEXT + COLORLESS GLASS — ADMIN DASHBOARD FINAL OVERRIDE
+   • All glass surfaces: colorless backdrop-filter blur, no tint
+   • All text: maximum sharpness, strong text-shadow, white hierarchy
+================================================================ */
+
+/* ── Dashboard NAV: colorless glass ── */
+.top-nav,
+.top-nav.scrolled {
+  background: rgba(255,255,255,0.06) !important;
+  background-image: none !important;
+  backdrop-filter: blur(36px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  border-top-color: rgba(255,255,255,0.24) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.20),
+    0 4px 20px rgba(0,0,0,.40),
+    0 0 0 0.5px rgba(255,255,255,.10) !important;
+}
+
+/* ── Nav links sharp ── */
+.nav-link      { color: rgba(230,238,255,0.90) !important; text-shadow: 0 1px 5px rgba(0,0,0,.60) !important; }
+.nav-logo-name { color: #ffffff !important; text-shadow: 0 1px 6px rgba(0,0,0,.70) !important; }
+.nav-logo-role { color: rgba(200,215,245,0.72) !important; }
+
+/* ── Dashboard cards: colorless glass ── */
+.glass-card, .stat-card, .analytics-card,
+.dashboard-card, .kpi-card, .metric-card,
+.rev-card, .review-card, .visitor-card {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  backdrop-filter: blur(28px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.5) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-top-color: rgba(255,255,255,0.22) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.18),
+    0 4px 16px rgba(0,0,0,.32),
+    0 16px 40px rgba(0,0,0,.20) !important;
+}
+
+/* ── All headings: sharp white ── */
+h1, h2, h3, h4, h5, h6,
+.sec-title, .card-title, .stat-label,
+.dashboard-title, .section-title,
+.kpi-label, .metric-label {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,.70) !important;
+}
+
+/* ── Body text: readable white-blue ── */
+p, .card-body, .stat-value, .meta-text,
+.desc, .sub-text, .hint-text {
+  color: rgba(220,232,255,0.88) !important;
+  -webkit-text-fill-color: rgba(220,232,255,0.88) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,.60) !important;
+}
+
+/* ── Muted labels ── */
+.label, .caption, small, .text-muted,
+.ink-3, .ink-4 {
+  color: rgba(195,210,238,0.78) !important;
+  -webkit-text-fill-color: rgba(195,210,238,0.78) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.50) !important;
+}
+
+/* ── Gate glass card (auth overlay): colorless ── */
+.gate-glass-card {
+  background: rgba(255,255,255,0.06) !important;
+  background-image: none !important;
+  backdrop-filter: blur(40px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.5) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-top-color: rgba(255,255,255,0.28) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.22),
+    0 8px 40px rgba(0,0,0,.55),
+    0 32px 80px rgba(0,0,0,.40) !important;
+}
+
+/* ── Gate card text ── */
+.gate-headline, .gate-brand-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.85) !important;
+}
+.gate-sub, .gate-eyebrow {
+  color: rgba(220,232,255,0.90) !important;
+  -webkit-text-fill-color: rgba(220,232,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.70) !important;
+}
+.gate-label, .gate-brand-sub {
+  color: rgba(210,195,165,0.90) !important;
+  -webkit-text-fill-color: rgba(210,195,165,0.90) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.65) !important;
+}
+.gate-status-text {
+  color: rgba(190,205,232,0.82) !important;
+  -webkit-text-fill-color: rgba(190,205,232,0.82) !important;
+}
+
+/* ── Gate input: colorless glass ── */
+.gate-input, .auth-input {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.gate-input::placeholder, .auth-input::placeholder {
+  color: rgba(255,255,255,0.48) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.48) !important;
+}
+
+/* ── Auth card: colorless glass ── */
+.auth-card {
+  background: rgba(255,255,255,0.07) !important;
+  background-image: none !important;
+  backdrop-filter: blur(40px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.5) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  border-top-color: rgba(255,255,255,0.30) !important;
+}
+.auth-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important;
+}
+.auth-sub {
+  color: rgba(220,232,255,0.90) !important;
+  -webkit-text-fill-color: rgba(220,232,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
+}
+
+/* ── Mobile drawer: colorless dark glass ── */
+.nav-mob-drawer {
+  background: rgba(0,0,0,0.50) !important;
+  background-image: none !important;
+  backdrop-filter: blur(32px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.5) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+.nav-mob-link {
+  color: rgba(220,232,255,0.88) !important;
+  -webkit-text-fill-color: rgba(220,232,255,0.88) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.60) !important;
+}
+
+/* ── All stat / value numbers: bright white ── */
+.stat-value, .kpi-value, .metric-value,
+[class*="val"], [class*="-num"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 0 16px rgba(245,166,35,0.25), 0 2px 6px rgba(0,0,0,0.70) !important;
+}
+
+/* ── All pills / chips in dashboard: colorless ── */
+.badge, .pill, .chip, .tag,
+[class*="-badge"], [class*="-pill"], [class*="-chip"], [class*="-tag"] {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  color: rgba(225,218,195,0.92) !important;
+  -webkit-text-fill-color: rgba(225,218,195,0.92) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55) !important;
+}
+
+/* ── Form inputs in dashboard ── */
+input, textarea, select {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+input::placeholder, textarea::placeholder {
+  color: rgba(255,255,255,0.42) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.42) !important;
+}
+
 </style>
 <link rel="stylesheet" href="admin-gate.css">
 </head>
@@ -2743,11 +2953,28 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
     <div class="auth-title">Analytics Dashboard</div>
     <div class="auth-sub">sajidmk.com · Authenticate to continue</div>
 
-    <p style="font-size:12px;color:var(--ink-3);margin:0 0 6px;text-align:left;">Password</p>
-    <input class="auth-input" type="password" id="auth-input"
-           placeholder="Enter password" autocomplete="current-password">
-    <button class="auth-btn" id="auth-btn">Access Dashboard</button>
-    <div class="auth-error" id="auth-error" style="display:none;"></div>
+    <!-- Method toggle -->
+    <div class="auth-method-tabs" role="tablist">
+      <button class="auth-method-tab active" id="tab-password" role="tab"
+              aria-selected="true" aria-controls="password-panel">
+        <span class="auth-tab-icon">🔑</span>
+        <span>Password</span>
+      </button>
+
+    </div>
+
+    <!-- ── Password panel ── -->
+    <div id="password-panel" role="tabpanel" aria-labelledby="tab-password">
+      <p>Password</p>
+      <div class="auth-input-row">
+        <input class="auth-input" type="password" id="auth-input"
+               placeholder="Enter password" autocomplete="current-password">
+        <button class="auth-btn" id="auth-btn">Unlock</button>
+      </div>
+      <div class="auth-error" id="auth-error" style="display:none;"></div>
+
+    </div>
+
 
   </div>
   <a href="https://sajidmk.com" style="font-size:13px;color:var(--ink-3);text-decoration:none;margin-top:4px;transition:color .2s;"
@@ -2756,8 +2983,6 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
   </a>
 </div>
 
-
-<!-- ── Dashboard ─────────────────────────────────────────── -->
 <div id="dashboard">
 
   <header>
@@ -2966,15 +3191,9 @@ tbody tr.selected td { background: rgba(80,130,255,.08); }
 <!-- ── Toast ──────────────────────────────────────────────── -->
 <div id="toast"></div>
 
-
 <!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
-<!-- Dashboard logic -->
 <script src="dashboard.js"></script>
-<!-- Auth gate (password + QR + WebAuthn) -->
 <script src="admin-gate.js"></script>
-<!-- Review submit handler (used on public portfolio page) -->
-<script src="review-submit.js"></script>
 </body>
 </html>

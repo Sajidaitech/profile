@@ -28,9 +28,14 @@
 (function () {
   'use strict';
 
-  /* ── CONFIG ── */
+  /* ── CONFIG ──
+     PROJECT B — "Reviews" Supabase project (isolated from analytics/admin data).
+     See admin-gate.js for the full two-project split rationale.
+     Short version: reviews live in a separate project so a breach of public-
+     facing review data cannot expose analytics PII, and vice-versa.
+     Anon key only — no Supabase Auth. RLS does all server-side enforcement. */
   var REVIEWS_URL      = 'https://ruiqfkzuqxxbyvycvsfo.supabase.co';
-  var REVIEWS_ANON_KEY = 'sb_publishable_B2lglqFpDltoMmz-RYQ_oA_UIDiWHNI'; /* Supabase → tbdgrhekycgfdeatxjnq project → Project Settings → API → anon (public) */
+  var REVIEWS_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1aXFma3p1cXh4Ynl2eWN2c2ZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MTI2OTgsImV4cCI6MjA5NjA4ODY5OH0._5q21Pf3Wn2IIYCw5yU-lmt-j05DuQH-oCmalQ4no4U';
   /*
      Supabase Dashboard → Reviews Project
      → Project Settings → API → anon (public)
@@ -38,7 +43,26 @@
      ⚠ NEVER paste the service_role key here.
   */
 
-  /* ── Constraints (mirror SQL CHECK exactly) ── */
+  /* ── Constraints (mirror SQL CHECK exactly, with one intentional UX exception)
+     NAME_MIN / NAME_MAX and REVIEW_MAX match the SQL CHECK constraints exactly.
+
+     REVIEW_MIN intentionally diverges:
+       · SQL CHECK allows review length ≥ 1 character.
+       · Client enforces ≥ 10 characters (REVIEW_MIN below) as a UX guard
+         against accidental one-character submissions.
+     This is a conscious product decision, not an oversight. The server will
+     accept any review ≥ 1 char that passes RLS; the client rejects < 10.
+     RESOLVED: Run this once in Supabase SQL Editor (ruiqfkzuqxxbyvycvsfo):
+
+       ALTER TABLE reviews
+         DROP CONSTRAINT IF EXISTS reviews_review_check,
+         ADD CONSTRAINT reviews_review_check
+           CHECK (char_length(review) >= 10 AND char_length(review) <= 1000);
+
+     This raises the server-side minimum to 10, matching REVIEW_MIN here,
+     so a direct API call bypassing the form can no longer insert a 1-char
+     review that would appear in the dashboard.
+     ── */
   var NAME_MIN   = 1;
   var NAME_MAX   = 120;
   var REVIEW_MIN = 10;   /* UX minimum — SQL allows ≥1; we ask for ≥10 */

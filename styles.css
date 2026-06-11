@@ -583,9 +583,10 @@ body::after {
   font-family: var(--ff-serif);
   font-size: clamp(22px, 3vw, 36px);
   font-weight: 700; color: var(--ink); line-height: 1.1; margin-bottom: 6px;
-  background: linear-gradient(135deg, #1A1D24 0%, #3A3D50 60%, #5A5070 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: #ffffff;
+  background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(225,232,248,0.92) 60%, rgba(200,210,230,0.88) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 1px 6px rgba(0,0,0,0.40));
 }
 .sec-rule {
   width: 32px; height: 2.5px;
@@ -619,9 +620,9 @@ body::after {
 .hero-glass-card,
 .lge-tabs-nav {
   background: linear-gradient(160deg,
-    rgba(255,255,255,0.68) 0%,
-    rgba(245,248,255,0.52) 50%,
-    rgba(255,255,255,0.62) 100%
+    rgba(255,255,255,0.76) 0%,
+    rgba(245,248,255,0.60) 50%,
+    rgba(255,255,255,0.72) 100%
   ) !important;
   backdrop-filter: var(--blur-mid) !important;
   -webkit-backdrop-filter: var(--blur-mid) !important;
@@ -981,9 +982,120 @@ body::after {
   .gate-card { width: 430px; border-radius: 16px; padding: 30px 32px 26px; }
 }
 
-/* ── < 768px mobile — dark navy design ── */
+/* ── < 768px mobile — centred full-width gate card ── */
+@media (max-width: 767px) {
 
-/* ── < 480px small mobile ── */
+  /* Override: centre the overlay vertically, no right-padding offset */
+  #gate-overlay {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Card: fill most of the viewport width, centred */
+  .gate-card {
+    width: 100% !important;
+    max-width: 420px !important;
+    min-width: 0 !important;
+    padding: 28px 24px 24px !important;
+    border-radius: 20px !important;
+    /* Push slightly upward so it's not dead-centre — feels more natural */
+    margin-bottom: 24px !important;
+  }
+
+  /* Heading: slightly smaller on mobile */
+  .gate-card h2 {
+    font-size: 24px !important;
+    line-height: 1.12 !important;
+  }
+
+  /* Subtitle: tighten */
+  .gate-card .gate-subtitle {
+    font-size: 13px !important;
+    max-width: 100% !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Input: full height touch target */
+  .gate-field input {
+    height: 52px !important;
+    font-size: 16px !important; /* prevents iOS zoom on focus */
+  }
+
+  /* CTA button */
+  .gate-btn {
+    height: 52px !important;
+    font-size: 14px !important;
+  }
+
+  /* Show close button on mobile so visitors can skip the gate */
+  .gate-close {
+    display: flex !important;
+    position: absolute !important;
+    top: 14px !important;
+    right: 16px !important;
+    width: 32px !important;
+    height: 32px !important;
+    background: rgba(255,255,255,0.10) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    border-radius: 50% !important;
+    color: rgba(255,255,255,0.80) !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    z-index: 20 !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    transition: background 0.2s, transform 0.15s !important;
+  }
+  .gate-close:hover {
+    background: rgba(255,255,255,0.18) !important;
+    transform: scale(1.08) !important;
+  }
+
+  /* Backdrop: deeper tint for readability on portrait mobile photo */
+  .gate-backdrop {
+    background: rgba(5, 12, 30, 0.55) !important;
+  }
+
+  /* Logo eyebrow */
+  .gate-logo {
+    font-size: 9px !important;
+    letter-spacing: 0.40em !important;
+  }
+
+  /* Logo line: slightly shorter */
+  .gate-logo-line {
+    margin-bottom: 18px !important;
+  }
+}
+
+/* ── < 480px small mobile — tighten further ── */
+@media (max-width: 480px) {
+
+  #gate-overlay {
+    padding: 12px !important;
+  }
+
+  .gate-card {
+    padding: 24px 18px 20px !important;
+    border-radius: 18px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .gate-card h2 {
+    font-size: 22px !important;
+  }
+
+  .gate-card .gate-subtitle {
+    font-size: 12.5px !important;
+  }
+}
 
 /* ── Prevent horizontal scroll ── */
 html, body { max-width: 100vw; overflow-x: hidden; }
@@ -1021,7 +1133,7 @@ html, body { max-width: 100vw; overflow-x: hidden; }
   display: grid;
   grid-template-columns: minmax(0,220px) minmax(0,1fr);
   gap: 32px; align-items: center;
-  background: rgba(255,255,255,0.18) !important;
+  background: rgba(255,255,255,0.24) !important;
   backdrop-filter: blur(14px) saturate(1.3) !important;
   -webkit-backdrop-filter: blur(14px) saturate(1.3) !important;
   border-radius: 32px !important;
@@ -1151,8 +1263,9 @@ html, body { max-width: 100vw; overflow-x: hidden; }
   animation: onlinePulse 2s ease infinite;
 }
 .hero-eyebrow-text {
-  font-size: 11px; font-weight: 600; color: var(--ink-3);
+  font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.88);
   letter-spacing: 0.02em;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.55), 0 0 16px rgba(0,0,0,0.25);
 }
 
 .hero-display-name {
@@ -1163,15 +1276,17 @@ html, body { max-width: 100vw; overflow-x: hidden; }
 }
 .hero-name-first {
   font-weight: 400; font-style: italic;
-  background: linear-gradient(135deg, #1A1D24 0%, #3A3D50 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(225,232,248,0.95) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.45));
 }
 .hero-name-last {
   font-weight: 900;
-  background: linear-gradient(135deg, #2A2D38 0%, #4A4D60 60%, var(--purple) 100%);
+  background: linear-gradient(135deg, #ffffff 0%, rgba(240,244,255,0.98) 55%, rgba(212,216,224,0.95) 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,0.50));
 }
 
 .hero-name-rule {
@@ -1183,12 +1298,14 @@ html, body { max-width: 100vw; overflow-x: hidden; }
 }
 .hnr-tag {
   font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
-  color: var(--ink-3); text-transform: uppercase; flex-shrink: 0;
+  color: rgba(255,255,255,0.75); text-transform: uppercase; flex-shrink: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.50);
 }
 
 .hero-statement {
-  font-size: clamp(13px, 1.1vw, 15px); color: var(--ink-2);
+  font-size: clamp(13px, 1.1vw, 15px); color: rgba(255,255,255,0.88);
   line-height: 1.72; margin-bottom: 18px; max-width: 56ch;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.50);
 }
 
 /* KPI blocks */
@@ -1224,7 +1341,7 @@ html, body { max-width: 100vw; overflow-x: hidden; }
 .kpi-num {
   font-family: var(--ff-serif); font-size: 22px; font-weight: 700;
   color: var(--ink); font-variant-numeric: tabular-nums;
-  background: linear-gradient(135deg, var(--ink), var(--purple));
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
@@ -3237,11 +3354,13 @@ a, button, [role="button"] {
 }
 
 /* ================================================================
-   GLOBAL DARK TEXT — ensure all text is visible on light bg
+   GLOBAL TEXT VISIBILITY — sharp text on both backgrounds
+   Desktop (bright lake): white gradient names + halo shadows
+   Mobile (dark night):   full white token override in @media below
 ================================================================ */
 
 /* Section titles & numbers */
-.sec-title        { color: var(--ink) !important; }
+.sec-title        { -webkit-text-fill-color: transparent !important; }
 .sec-num          { color: var(--ink-3) !important; }
 
 /* About */
@@ -3250,20 +3369,20 @@ a, button, [role="button"] {
 .astat-label              { color: var(--ink-3) !important; }
 
 /* Hero */
-.hero-eyebrow-text        { color: var(--ink-2) !important; }
-.hero-statement           { color: var(--ink-2) !important; }
-.kpi-num, .kpi-unit       { color: var(--ink) !important; }
+.hero-eyebrow-text        { color: rgba(255,255,255,0.88) !important; }
+.hero-statement           { color: rgba(255,255,255,0.88) !important; }
+.kpi-num, .kpi-unit       { -webkit-text-fill-color: transparent !important; }
 .kpi-label                { color: var(--ink-3) !important; }
 .hero-name-first,
-.hero-name-last           { color: var(--ink) !important; }
-.hnr-tag                  { color: var(--ink-2) !important; }
+.hero-name-last           { -webkit-text-fill-color: transparent !important; }
+.hnr-tag                  { color: rgba(255,255,255,0.75) !important; }
 .hvc-lbl                  { color: var(--ink-2) !important; }
 .hvc-val                  { color: var(--ink) !important; }
 
 /* Nav */
 .nav-link                 { color: var(--ink-2) !important; }
 .nav-logo-name            { color: rgba(255,255,255,0.92) !important; }
-.nav-logo-role            { color: var(--ink-3) !important; }
+.nav-logo-role            { color: rgba(255,255,255,0.55) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.45) !important; }
 .nav-mob-link             { color: var(--ink) !important; }
 
 /* Projects / museum cases */
@@ -3312,8 +3431,8 @@ a, button, [role="button"] {
 .footer-links a           { color: var(--ink-2) !important; }
 .footer-copy span         { color: var(--ink-3) !important; }
 
-/* Weather bar */
-.wb-time, .wb-date, .wb-weather-text { color: var(--ink-2) !important; }
+/* Weather bar — floats over photo, needs strong contrast */
+.wb-time, .wb-date, .wb-weather-text { color: var(--ink-2) !important; text-shadow: 0 1px 4px rgba(255,255,255,0.55) !important; }
 
 /* Gate overlay */
 .gate-brand-name          { color: rgba(255,255,255,.95) !important; }
@@ -4559,6 +4678,267 @@ a, button, [role="button"] {
   .proof-divider { display: none; }
   .ps-num { font-size: 1.25rem; }
 }
+
+/* ================================================================
+   MOBILE TEXT VISIBILITY — dark night background (mobilebackground.png)
+   Every dark --ink token is invisible on the near-black photo.
+   This block flips all text to white and converts glass cards to
+   dark-tinted surfaces so white text pops with proper contrast.
+================================================================ */
+@media (max-width: 768px) {
+
+  /* ── Default body text ── */
+  body { color: rgba(255,255,255,0.90) !important; }
+
+  /* ── Override CSS ink tokens at root ── */
+  :root {
+    --ink:   rgba(255,255,255,0.95);
+    --ink-2: rgba(255,255,255,0.82);
+    --ink-3: rgba(255,255,255,0.65);
+    --ink-4: rgba(255,255,255,0.48);
+  }
+
+  /* ── Glass card surfaces → dark navy tint so white text has contrast ── */
+  .glass-card,
+  .glass-card-deep,
+  .wh-card,
+  .arsenal-category,
+  .ach-award-card,
+  .hero-glass-card,
+  .lge-tabs-nav {
+    background: linear-gradient(160deg,
+      rgba(6,14,44,0.70) 0%,
+      rgba(4,10,32,0.62) 50%,
+      rgba(8,18,52,0.68) 100%
+    ) !important;
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.18),
+      inset 2px 0 0 rgba(255,255,255,0.10),
+      0 8px 32px rgba(0,0,0,0.55),
+      0 0 0 0.75px rgba(255,255,255,0.12) !important;
+  }
+
+  .hero-editorial-layout {
+    background: rgba(5,12,38,0.65) !important;
+    backdrop-filter: blur(20px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+  }
+
+  .exp-card, .lge-card, .edu-card, .edu-rec-card,
+  .cert-card, .cert-hero-card, .project-card, .museum-case,
+  .exp-tabs-wrap, .rec-glass-card, .about-text-col,
+  .about-panel-col, .about-bio-col, .about-stats-row,
+  .ach-item, .kpi-block, .panel-sla-ring, .panel-achievements,
+  .ref-card, .hie-card-inner, .wh-card, .why-item,
+  .stack-tech-item, .lang-card, .rec-screenshot-card {
+    background: rgba(5,12,38,0.60) !important;
+  }
+
+  .contact-glass-wrap, .contact-form-panel, .contact-info-col,
+  footer, .site-footer {
+    background: linear-gradient(160deg,
+      rgba(5,12,38,0.72) 0%,
+      rgba(3,8,26,0.65) 100%
+    ) !important;
+  }
+
+  .hero-kpis {
+    background: linear-gradient(160deg,
+      rgba(255,255,255,0.11) 0%,
+      rgba(255,255,255,0.07) 100%
+    ) !important;
+  }
+
+  /* ── Hero name → white-to-gold for night sky ── */
+  .hero-name-first {
+    background: linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(210,220,242,0.92) 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    filter: drop-shadow(0 2px 12px rgba(0,0,0,0.70)) !important;
+  }
+  .hero-name-last {
+    background: linear-gradient(135deg, #ffffff 0%, rgba(220,185,90,0.97) 55%, rgba(185,148,55,0.93) 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    filter: drop-shadow(0 3px 14px rgba(0,0,0,0.75)) !important;
+  }
+
+  /* ── sec-title → white gradient ── */
+  .sec-title {
+    background: linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(210,220,242,0.90) 60%, rgba(185,200,225,0.85) 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    filter: drop-shadow(0 2px 10px rgba(0,0,0,0.65)) !important;
+  }
+
+  /* ── KPI numbers → white-gold on dark card ── */
+  .kpi-num {
+    background: linear-gradient(135deg, #ffffff, rgba(220,195,110,0.95)) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+  }
+  .kpi-unit { color: rgba(220,195,110,0.92) !important; -webkit-text-fill-color: rgba(220,195,110,0.92) !important; }
+  .kpi-label { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+
+  /* ── Hero stat chips ── */
+  .hero-vchip { background: rgba(255,255,255,0.11) !important; }
+  .hvc-val  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .hvc-icon { color: rgba(220,195,110,0.88) !important; }
+  .hvc-lbl  { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+
+  /* ── General heading & body text on dark cards ── */
+  h1, h2, h3, h4, h5, h6 {
+    color: rgba(255,255,255,0.95) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.95) !important;
+  }
+
+  /* Nav on mobile dark background */
+  .nav-mob-drawer {
+    background: linear-gradient(160deg, rgba(5,12,38,0.92) 0%, rgba(3,8,26,0.88) 100%) !important;
+  }
+  .nav-mob-link { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
+
+  /* Why hire section */
+  .wh-title  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .wh-desc   { color: rgba(255,255,255,0.80) !important; -webkit-text-fill-color: rgba(255,255,255,0.80) !important; }
+  .wh-proof, .wh-proof span { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .wh-badge  { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; background: rgba(255,255,255,0.12) !important; }
+  .wh-badge-green  { color: rgba(80,220,130,0.92) !important; -webkit-text-fill-color: rgba(80,220,130,0.92) !important; background: rgba(80,220,130,0.12) !important; }
+  .wh-badge-amber  { color: rgba(220,180,80,0.92) !important;  -webkit-text-fill-color: rgba(220,180,80,0.92) !important;  background: rgba(220,180,80,0.12) !important; }
+  .wh-badge-teal   { color: rgba(80,200,200,0.92) !important;  -webkit-text-fill-color: rgba(80,200,200,0.92) !important;  background: rgba(80,200,200,0.12) !important; }
+  .wh-badge-rose   { color: rgba(240,120,140,0.92) !important; -webkit-text-fill-color: rgba(240,120,140,0.92) !important; background: rgba(240,120,140,0.12) !important; }
+  .wh-badge-purple { color: rgba(190,160,255,0.92) !important; -webkit-text-fill-color: rgba(190,160,255,0.92) !important; background: rgba(190,160,255,0.12) !important; }
+
+  /* About section */
+  .bio-lead, .bio-body { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
+  .astat-num           { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .astat-label         { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .about-stat { background: rgba(255,255,255,0.10) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,0.20), 0 0 0 0.75px rgba(255,255,255,0.10) !important; }
+  .ach-text strong { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .ach-text span   { color: rgba(255,255,255,0.68) !important; -webkit-text-fill-color: rgba(255,255,255,0.68) !important; }
+
+  /* Experience / LGE */
+  .exp-role, .mc-title, .exp-company, .lge-card-title, .lge-stat-val, .lge-rec-name,
+  .lge-bullet-label, .mc-outcome-val, .er-value {
+    color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important;
+  }
+  .exp-org, .exp-period, .exp-bullet, .exp-quote, .mc-desc, .mc-sector,
+  .lge-stat-lbl, .lge-rec-role, .lge-bullet-desc, .lge-rec-text, .lge-bullet-row,
+  .mc-outcome-label, .er-label {
+    color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+  }
+  .mc-org, .csm-lbl, .exp-quote-author, .lge-section-eyebrow { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .lge-tab-pill { color: rgba(255,255,255,0.75) !important; -webkit-text-fill-color: rgba(255,255,255,0.75) !important; }
+  .lge-tab-pill.lge-tab-active { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+
+  /* Education */
+  .edu-degree, .edu-school, .edu-description, .edu-result { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
+  .edu-period, .edu-desc, .edu-date { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+
+  /* References */
+  .ref-name, .ac-title { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .ref-title, .ref-note, .ref-rel-pill, .ac-subtitle { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
+  .ref-company { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+
+  /* Projects */
+  .pc-title  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .pc-block-text, .pc-impact { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
+
+  /* Skills chips, tool tags */
+  .ac-skill, .p-chip, .exp-meta-chip, .exp-stat-chip, .lge-stat-chip,
+  .stb-sector, .tool-chip, .lge-tag, .pc-tool-badge, .tech-tag {
+    background: rgba(255,255,255,0.11) !important;
+    color: rgba(255,255,255,0.82) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
+  }
+  .ac-title    { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .ac-subtitle { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .sti-label   { color: rgba(255,255,255,0.90) !important; -webkit-text-fill-color: rgba(255,255,255,0.90) !important; }
+
+  /* Language cards */
+  .lang-name  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .lang-level { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .lang-card  { background: rgba(255,255,255,0.09) !important; }
+
+  /* Contact info */
+  .contact-intro { color: rgba(255,255,255,0.82) !important; -webkit-text-fill-color: rgba(255,255,255,0.82) !important; }
+  .ci-label      { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .ci-value      { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; }
+
+  /* Form inputs */
+  .form-input, .form-textarea, .form-select,
+  input[type="text"], input[type="email"], textarea {
+    background: rgba(255,255,255,0.09) !important;
+    color: rgba(255,255,255,0.92) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+  }
+  .form-input::placeholder, input[type="text"]::placeholder,
+  input[type="email"]::placeholder, textarea::placeholder {
+    color: rgba(255,255,255,0.38) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.38) !important;
+  }
+
+  /* Proof bar stats */
+  .ps-num   { color: rgba(220,195,110,0.95) !important; -webkit-text-fill-color: rgba(220,195,110,0.95) !important; }
+  .ps-label { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .stat-num { -webkit-text-fill-color: rgba(255,255,255,0.95) !important; color: rgba(255,255,255,0.95) !important; }
+  .stat-label { color: rgba(255,255,255,0.65) !important; }
+
+  /* Weather bar */
+  .wb-time { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; text-shadow: 0 1px 5px rgba(0,0,0,0.60) !important; }
+  .wb-date, .wb-weather-text { color: rgba(255,255,255,0.68) !important; -webkit-text-fill-color: rgba(255,255,255,0.68) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.50) !important; }
+
+  /* Ring */
+  .ring-val { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .ring-lbl { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+
+  /* Footer */
+  .footer-role, .footer-links a, .footer-copy span, .footer-visitor-badge { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .footer-name { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; }
+
+  /* Section eyebrow / subtitle */
+  .sec-eyebrow, .sec-subtitle, .hie-subtitle, .ref-intro {
+    color: rgba(255,255,255,0.65) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.65) !important;
+    text-shadow: none !important;
+  }
+
+  /* Stb label */
+  .stb-label { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+
+  /* Availability text */
+  .av-text, .hap-status, .engage-intro, .engage-status-text { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
+  .engage-version, .ps-label, .avail-text, .avail-pill { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+
+  /* Gate visitor strip */
+  .gvs-value { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .gvs-label { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+
+  /* CTA colored buttons keep their own white text — leave them alone */
+  .cta-resume .cta-btn-title,
+  .cta-whatsapp .cta-btn-title,
+  .cta-btn-resume, .cta-btn-whatsapp, .cta-btn-linkedin,
+  .msc-btn { color: #fff !important; -webkit-text-fill-color: #fff !important; }
+
+  /* HIE / fieldwork section */
+  .hie-card-title, .hie-card-subtitle { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; }
+  .hie-card-desc, .hie-tag { color: rgba(255,255,255,0.75) !important; -webkit-text-fill-color: rgba(255,255,255,0.75) !important; }
+
+  /* CCNA / cert */
+  .ccna-cert-title { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+  .ccna-cert-subtitle, .ccm-item { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
+  .ccna-id-label, .ccna-id-val { color: rgba(255,255,255,0.82) !important; -webkit-text-fill-color: rgba(255,255,255,0.82) !important; }
+
+  /* Review section */
+  .review-star { color: rgba(220,180,60,0.90) !important; }
+
+}
+/* END MOBILE TEXT VISIBILITY */
 
 /* ================================================================
    PDF RESUME MODAL
@@ -24170,7 +24550,7 @@ body::before {
   background-size: cover !important;
   background-position: center 35% !important;
   background-repeat: no-repeat !important;
-  background-attachment: fixed !important;
+  background-attachment: scroll !important;
   background-color: #030810 !important; /* fallback while image loads */
   will-change: transform !important;
   transform: translateZ(0) !important;
@@ -27279,7 +27659,7 @@ body::before {
   z-index: -2 !important;
   pointer-events: none !important;
   background: url('background.png') center 40% / cover no-repeat !important;
-  background-attachment: fixed !important;
+  background-attachment: scroll !important;
   transform: translateZ(0) !important;
   will-change: transform !important;
 }
@@ -29265,3 +29645,3435 @@ footer, .footer {
   -webkit-backdrop-filter: none !important;
 }
 
+
+/* ================================================================
+   REVIEW TWO-COLUMN LAYOUT — form left · approved pills right
+   v1.0 — sajidmk.com
+================================================================ */
+
+/* ── Two-column wrapper ── */
+.review-two-col-wrap {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 28px !important;
+  align-items: start !important;
+  margin-top: clamp(24px, 3vw, 40px) !important;
+}
+
+/* ── Left: form card — keep existing .review-box styles,
+   just override the old standalone centering ── */
+.review-two-col-wrap .review-box {
+  max-width: none !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* Ensure review-field-label renders */
+.review-field-label {
+  display: block !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.62) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.62) !important;
+  margin-bottom: 6px !important;
+  margin-top: 4px !important;
+}
+
+/* Stars row: keep inside form, ensure visibility */
+.review-two-col-wrap .review-rating-row {
+  margin-bottom: 16px !important;
+}
+
+/* ── Right: pills panel ── */
+.review-pills-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.08) 0%,
+    rgba(255,255,255,0.04) 55%,
+    rgba(255,255,255,0.07) 100%
+  ) !important;
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+  border-top:    1.5px solid rgba(255,255,255,0.20) !important;
+  border-left:   1px   solid rgba(255,255,255,0.12) !important;
+  border-right:  1px   solid rgba(255,255,255,0.07) !important;
+  border-bottom: 1px   solid rgba(0,0,0,0.18) !important;
+  border-radius: 24px !important;
+  padding: clamp(24px, 3vw, 36px) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.32),
+    inset 0 -0.5px 0 rgba(0,0,0,0.08),
+    0 4px 16px rgba(0,0,0,0.24),
+    0 12px 40px rgba(0,0,0,0.18),
+    0 0 0 0.75px rgba(255,255,255,0.12) !important;
+}
+
+/* Panel shimmer */
+.review-pills-panel::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(
+    130deg,
+    rgba(255,255,255,0.10) 0%,
+    rgba(255,255,255,0.03) 35%,
+    transparent 55%
+  ) !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+}
+
+/* Panel header */
+.rpp-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 18px !important;
+}
+.rpp-header-star {
+  font-size: 18px !important;
+  color: #f59e0b !important;
+  filter: drop-shadow(0 0 5px rgba(245,158,11,0.5)) !important;
+}
+.rpp-header-title {
+  font-family: var(--ff-serif) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: rgba(255,255,255,0.92) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* Pills list container */
+.rpp-pills-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  min-height: 220px !important;
+}
+
+/* ── Individual review pill ── */
+.rpp-pill {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  padding: 14px 18px !important;
+  border-radius: 999px !important;      /* pill shape */
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.12) 0%,
+    rgba(255,255,255,0.07) 100%
+  ) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-top-color: rgba(255,255,255,0.26) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 2px 8px rgba(0,0,0,0.18) !important;
+  transition: transform 0.22s cubic-bezier(.22,1,.36,1),
+              box-shadow 0.22s ease !important;
+  cursor: default !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.rpp-pill:hover {
+  transform: translateY(-2px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    0 6px 20px rgba(0,0,0,0.28) !important;
+}
+
+/* Pill inner: name row + stars + text — all on single horizontal line
+   to maintain the pill shape cleanly */
+.rpp-pill-row1 {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+.rpp-pill-name {
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  color: rgba(255,255,255,0.95) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.95) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 120px !important;
+}
+.rpp-pill-stars {
+  font-size: 12px !important;
+  letter-spacing: 1px !important;
+  flex-shrink: 0 !important;
+}
+.rpp-pill-stars .rpp-star-fill { color: #f59e0b !important; }
+.rpp-pill-stars .rpp-star-empty { color: rgba(255,255,255,0.20) !important; }
+
+.rpp-pill-text {
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  color: rgba(255,255,255,0.72) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.72) !important;
+  font-style: italic !important;
+  margin: 0 !important;
+  /* clamp text to 2 lines */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* ── Skeleton pills ── */
+.rpp-skel-pill {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  pointer-events: none !important;
+}
+.rpp-skel {
+  border-radius: 8px !important;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.06) 25%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.06) 75%
+  ) !important;
+  background-size: 400% 100% !important;
+  animation: rppSkelAnim 1.6s ease infinite !important;
+}
+@keyframes rppSkelAnim {
+  0%   { background-position: 100% 0 }
+  100% { background-position:   0% 0 }
+}
+.rpp-skel-name  { height: 11px; width: 40%; margin-bottom: 4px; }
+.rpp-skel-stars { height: 10px; width: 60px; margin-bottom: 5px; }
+.rpp-skel-text  { height: 9px; width: 88%; }
+
+/* ── Empty state ── */
+.rpp-empty {
+  text-align: center !important;
+  padding: 32px 16px !important;
+  color: rgba(255,255,255,0.45) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+  font-size: 13px !important;
+  font-style: italic !important;
+}
+
+/* ── Pagination dots ── */
+.rpp-pagination {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  margin-top: 16px !important;
+}
+.rpp-dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.28) !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease, transform 0.2s ease !important;
+}
+.rpp-dot.active {
+  background: rgba(255,255,255,0.85) !important;
+  transform: scale(1.25) !important;
+}
+.rpp-dot:hover:not(.active) {
+  background: rgba(255,255,255,0.50) !important;
+}
+
+/* ── Pill enter animation ── */
+@keyframes rppPillIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rpp-pill-enter {
+  animation: rppPillIn 0.28s cubic-bezier(.22,1,.36,1) both !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .review-two-col-wrap {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .review-pills-panel {
+    /* on mobile make pills horizontal scrollable row instead */
+  }
+}
+@media (max-width: 640px) {
+  .review-pills-panel { padding: 20px 16px !important; border-radius: 18px !important; }
+  .rpp-pill { border-radius: 16px !important; padding: 12px 14px !important; }
+}
+
+/* ── Disable old standalone-wrap centering ── */
+.review-standalone-wrap {
+  display: none !important;
+}
+
+
+/* ================================================================
+   ██████╗ ██╗      █████╗  ██████╗██╗  ██╗    ████████╗███████╗██╗  ██╗████████╗
+   BLACK TEXT SYSTEM + ENTRANCE ANIMATIONS — FINAL CASCADE WINNER
+   sajidmk.com · Appended last — beats every prior !important rule.
+   Strategy: remap CSS custom properties + direct !important selectors
+   covering every element that had white/rgba-white text above.
+================================================================ */
+
+/* ── 1. REMAP ALL INK TOKENS TO BLACK SCALE ── */
+:root,
+* {
+  --ink:   #000000 !important;
+  --ink-2: #111111 !important;
+  --ink-3: #333333 !important;
+  --ink-4: #555555 !important;
+  --ink-5: #777777 !important;
+}
+
+/* ── 2. GLOBAL BODY TEXT ── */
+body {
+  color: #000000 !important;
+  -webkit-text-fill-color: unset !important;
+}
+
+/* ── 3. SECTION HEADERS ── */
+.sec-title {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+.sec-subtitle  { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.sec-eyebrow   { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+
+/* ── 4. NAVBAR ── */
+.nav-logo-name  { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.nav-logo-role  { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.nav-link       { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.nav-link:hover, .nav-link.active, .nav-link.is-active { color: #000000 !important; }
+.nav-resume-btn { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.nav-mob-link   { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+
+/* ── 5. WEATHER BAR ── */
+.wb-time         { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.wb-date         { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.wb-weather-text { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.wb-icon         { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.wb-sep          { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+
+/* ── 6. HERO ── */
+.hero-name-first,
+.hero-name-last {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+}
+.hero-eyebrow-text { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.hero-statement    { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.hnr-tag           { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.kpi-num  { color: #000000 !important; -webkit-text-fill-color: #000000 !important; background: none !important; -webkit-background-clip: unset !important; background-clip: unset !important; }
+.kpi-unit  { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.kpi-label { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hvc-val   { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.hvc-icon  { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hvc-lbl   { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hap-status { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.hap-pill   { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.hsb-val    { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.hsb-lbl    { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hsb-icon   { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hlb-label  { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+
+/* ── 7. WHY HIRE ── */
+.wh-title         { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.wh-desc          { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.wh-proof         { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.wh-proof span    { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.wh-badge         { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.wh-badge-green   { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.wh-badge-amber   { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.wh-badge-teal    { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.wh-badge-rose    { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.wh-badge-purple  { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.ps-num           { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.ps-label         { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.stb-label        { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.stb-sector       { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.stb-sep          { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+
+/* ── 8. ABOUT / PROFILE ── */
+.bio-lead        { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.bio-body        { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.astat-num       { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.astat-label     { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.ach-text strong { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.ach-text span   { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.p-chip          { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.ring-val        { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.ring-lbl        { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+
+/* ── 9. PROJECTS / CASE STUDIES ── */
+.mc-title         { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.mc-org           { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.mc-sector        { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.mc-desc          { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.csm-val          { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.csm-lbl          { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.mc-outcome-label { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.mc-outcome-val   { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.mc-tool-tag      { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.gc-card-title    { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.gc-card-body     { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.gc-stat          { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.gc-tag           { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+
+/* ── 10. EXPERIENCE ── */
+.exp-role          { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.exp-company       { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.exp-bullet        { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.exp-quote         { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.exp-quote-author  { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+.exp-stat-chip     { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.exp-meta-chip     { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.exp-tab           { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.exp-tab.active    { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+
+/* ── 11. EDUCATION ── */
+.edu-degree        { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.edu-school        { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.edu-date          { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.edu-description   { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.edu-result        { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.edu-badge         { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.edu-ref-text      { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.edu-tab           { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.edu-tab.active    { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.rec-author-name   { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.rec-author-title  { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+
+/* ── 12. ARSENAL ── */
+.ac-title          { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.ac-subtitle       { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.ac-skill          { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.ac-cert-badge     { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.ac-enterprise-tag { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+
+/* ── 13. ACHIEVEMENTS / AWARDS ── */
+.aac-title { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.aac-org   { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.aac-desc  { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+
+/* ── 14. CERTIFICATIONS ── */
+.cc-name   { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.cc-issuer { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.cc-date   { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+.cc-id     { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+
+/* ── 15. HIE / FIELDWORK ── */
+.hie-title         { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.hie-desc          { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.hie-tag           { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.hie-activities-label { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hie-footer-label  { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.hie-footer-sub    { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hie-list li       { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.hie-tech-label    { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.hie-env-tag       { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+
+/* ── 16. REFERENCES ── */
+.ref-name        { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.ref-title       { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.ref-company     { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.ref-note        { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.ref-rel-pill    { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.ref-disclaimer  { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+.ref-view-link   { color: #0052cc !important; -webkit-text-fill-color: #0052cc !important; }
+
+/* ── 17. CONTACT / ENGAGE ── */
+.engage-status-text  { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.engage-version      { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+.engage-intro        { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.er-label            { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.er-value            { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.er-cta              { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.erc-title           { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.erc-sub             { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.engage-recruiter span:last-child { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+
+/* ── 18. REVIEW BOX ── */
+.review-box-title     { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.review-rating-label  { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.review-char-count    { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+.review-field-label   { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+#reviewThanks p       { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.rpp-header-title     { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.rpp-pill-name        { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.rpp-pill-text        { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.rc-text              { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.rc-name              { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.rc-date              { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+
+/* ── 19. FOOTER ── */
+.footer-name    { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.footer-role    { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.footer-copy    { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+.footer-links a { color: #111111 !important; -webkit-text-fill-color: #111111 !important; }
+.footer-visitor-badge { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+.footer-glass-btn     { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+.fa-btn-label         { color: #000000 !important; -webkit-text-fill-color: #000000 !important; }
+
+/* ── 20. GATE CARD — keep white (dark photo background) ── */
+.gate-card,
+.gate-card *,
+#gate-overlay,
+#gate-overlay * {
+  /* intentionally NOT overriding — gate sits on dark photo, white text is correct */
+}
+/* But gate-card text stays white explicitly */
+.gate-card h2        { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.gate-card h2 span   { color: #D4A840 !important; -webkit-text-fill-color: #D4A840 !important; }
+.gate-card .gate-subtitle { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
+.gate-logo           { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
+.gate-field label    { color: rgba(255,255,255,0.90) !important; -webkit-text-fill-color: rgba(255,255,255,0.90) !important; }
+.gate-field input    { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.gate-btn            { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+#gateWelcome p       { color: rgba(255,255,255,0.90) !important; -webkit-text-fill-color: rgba(255,255,255,0.90) !important; }
+.gate-brand-name     { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
+.gate-brand-sub      { color: rgba(255,255,255,0.70) !important; -webkit-text-fill-color: rgba(255,255,255,0.70) !important; }
+.gate-headline       { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.gate-sub            { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
+.gate-label          { color: rgba(255,255,255,0.80) !important; -webkit-text-fill-color: rgba(255,255,255,0.80) !important; }
+.gate-status-text    { color: rgba(255,255,255,0.70) !important; -webkit-text-fill-color: rgba(255,255,255,0.70) !important; }
+
+/* ── 21. MODALS — dark panels, keep white text ── */
+.pdf-modal-panel *,
+.hie-modal-panel * { /* white text already correct on dark modal bg */ }
+
+/* ── 22. MOBILE STICKY BAR — dark bg, keep white ── */
+.msc-btn { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+
+/* ── 23. FORM PLACEHOLDERS ── */
+#reviewName::placeholder,
+.review-textarea::placeholder,
+#visitorName::placeholder { color: rgba(0,0,0,0.35) !important; }
+.gate-field input::placeholder { color: rgba(255,255,255,0.40) !important; }
+
+/* ── 24. CTA BUTTONS — keep white text on coloured buttons ── */
+.auth-btn             { color: #FFFFFF !important; }
+.cta-resume .cta-btn-label   { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.cta-whatsapp .cta-btn-label { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.cta-resume .cta-btn-arrow   { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.cta-whatsapp .cta-btn-arrow { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.engage-cta-primary { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
+.fa-btn--whatsapp .fa-btn-label { color: #FFFFFF !important; }
+.fa-btn--linkedin .fa-btn-label { color: #FFFFFF !important; }
+.fa-btn--resume .fa-btn-label   { color: #FFFFFF !important; }
+
+/* ── 25. REVIEW PILLS PANEL ── */
+.rpp-empty { color: #555555 !important; -webkit-text-fill-color: #555555 !important; }
+
+
+/* ================================================================
+   ENTRANCE ANIMATIONS
+   Clean, performant — uses transform + opacity only (GPU-composited).
+   No layout thrash. Respects prefers-reduced-motion.
+================================================================ */
+
+/* ── Keyframes ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0);      }
+}
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.93); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(12px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0) scale(1);       }
+}
+
+/* ── Intersection Observer animation classes (added by JS below) ── */
+/* Default: visible immediately (no-JS fallback) */
+.anim-ready { opacity: 1; }
+
+/* When JS marks element as observed but not yet visible */
+.anim-pending {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1),
+              transform 0.55s cubic-bezier(0.22,1,0.36,1);
+}
+.anim-pending.anim-slide-right { transform: translateX(-28px); }
+.anim-pending.anim-slide-left  { transform: translateX(28px); }
+.anim-pending.anim-scale       { transform: scale(0.94); }
+.anim-pending.anim-fade        { transform: none; }
+
+/* When element enters viewport */
+.anim-visible {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Stagger children delay utilities */
+.anim-delay-1 { transition-delay: 0.05s !important; }
+.anim-delay-2 { transition-delay: 0.10s !important; }
+.anim-delay-3 { transition-delay: 0.15s !important; }
+.anim-delay-4 { transition-delay: 0.20s !important; }
+.anim-delay-5 { transition-delay: 0.25s !important; }
+.anim-delay-6 { transition-delay: 0.30s !important; }
+
+/* ── Hero: animate on load (no IntersectionObserver needed) ── */
+.hero-portrait-col {
+  animation: slideRight 0.75s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.1s;
+}
+.hero-type-col {
+  animation: slideLeft 0.75s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.2s;
+}
+.hero-eyebrow-row {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.35s;
+}
+.hero-stat-badges {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.45s;
+}
+.hero-display-name {
+  animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.50s;
+}
+.hero-name-rule {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.60s;
+}
+.hero-statement {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.65s;
+}
+.hero-kpis {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.72s;
+}
+.hero-ctas {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.80s;
+}
+.hero-avail-pills {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.88s;
+}
+.hero-linkedin-btn {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 0.94s;
+}
+#chipPill {
+  animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  animation-delay: 1.00s;
+}
+
+/* ── Section headers: fade up ── */
+.section-header,
+.section-header .sec-title,
+.section-header .sec-subtitle {
+  animation: none; /* handled by IntersectionObserver via JS */
+}
+
+/* ── Card grids: stagger via nth-child when anim-visible fires ── */
+.gc-card:nth-child(1) { transition-delay: 0.00s; }
+.gc-card:nth-child(2) { transition-delay: 0.07s; }
+.gc-card:nth-child(3) { transition-delay: 0.14s; }
+.gc-card:nth-child(4) { transition-delay: 0.21s; }
+.gc-card:nth-child(5) { transition-delay: 0.28s; }
+.gc-card:nth-child(6) { transition-delay: 0.35s; }
+
+.wh-card:nth-child(1) { transition-delay: 0.00s; }
+.wh-card:nth-child(2) { transition-delay: 0.07s; }
+.wh-card:nth-child(3) { transition-delay: 0.14s; }
+.wh-card:nth-child(4) { transition-delay: 0.21s; }
+.wh-card:nth-child(5) { transition-delay: 0.28s; }
+.wh-card:nth-child(6) { transition-delay: 0.35s; }
+
+.museum-case:nth-child(1) { transition-delay: 0.00s; }
+.museum-case:nth-child(2) { transition-delay: 0.08s; }
+.museum-case:nth-child(3) { transition-delay: 0.16s; }
+.museum-case:nth-child(4) { transition-delay: 0.24s; }
+.museum-case:nth-child(5) { transition-delay: 0.32s; }
+.museum-case:nth-child(6) { transition-delay: 0.40s; }
+
+.arsenal-category:nth-child(1) { transition-delay: 0.00s; }
+.arsenal-category:nth-child(2) { transition-delay: 0.07s; }
+.arsenal-category:nth-child(3) { transition-delay: 0.14s; }
+.arsenal-category:nth-child(4) { transition-delay: 0.21s; }
+.arsenal-category:nth-child(5) { transition-delay: 0.28s; }
+.arsenal-category:nth-child(6) { transition-delay: 0.35s; }
+
+.ach-award-card:nth-child(1) { transition-delay: 0.00s; }
+.ach-award-card:nth-child(2) { transition-delay: 0.08s; }
+.ach-award-card:nth-child(3) { transition-delay: 0.16s; }
+
+.ref-card:nth-child(1) { transition-delay: 0.00s; }
+.ref-card:nth-child(2) { transition-delay: 0.10s; }
+
+/* ── Hover lift — all cards ── */
+.gc-card,
+.wh-card,
+.museum-case,
+.arsenal-category,
+.ach-award-card,
+.ref-card,
+.hie-card,
+.cert-card,
+.exp-card {
+  transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.28s ease,
+              opacity 0.55s cubic-bezier(0.22,1,0.36,1) !important;
+}
+.gc-card:hover,
+.wh-card:hover,
+.museum-case:hover,
+.arsenal-category:hover,
+.ach-award-card:hover,
+.ref-card:hover,
+.hie-card:hover,
+.cert-card:hover {
+  transform: translateY(-5px) !important;
+}
+
+/* ── Reduced motion: kill all animations/transitions ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .anim-pending { opacity: 1 !important; transform: none !important; }
+}
+
+
+
+/* ================================================================
+   SHARP TEXT + COLORLESS GLASS MASTER OVERRIDE — v8.0 Final
+   Goals:
+   ✓ ALL glass surfaces: colorless blur only (no tint, no dark fog)
+   ✓ ALL text: maximum sharpness with strong text-shadow legibility
+   ✓ Gate card (desktop + mobile): colorless glass, white text
+   ✓ Admin gate CSS: colorless glass
+   ✓ Every card, nav, pill, chip, input, button: follows system
+   This block is LAST in the file — wins the entire cascade.
+================================================================ */
+
+/* ── 1. UNIVERSAL GLASS RECIPE: colorless, no tint ──────────── */
+/* All cards: pure glass with backdrop blur, no color added */
+.glass-card,
+.glass-card-deep,
+.museum-case,
+.project-card,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.ach-award-card,
+.wh-card,
+.gc-card,
+.hie-card,
+.ref-card,
+.contact-card,
+.rec-glass-card,
+.edu-rec-card,
+.hero-glass-card,
+.arsenal-category,
+.about-stat,
+.about-bio-col,
+.about-text-col,
+.about-panel-col,
+.review-box,
+.engage-wrap,
+.engage-row,
+.engage-resume-card,
+.engage-status-bar,
+.proof-bar,
+.sectors-trust-bar,
+.exp-tabs-wrap,
+.lge-tabs-nav,
+.hero-vchip,
+.hero-kpis,
+.glass-surface,
+.ach-item,
+.panel-sla-ring,
+.panel-achievements,
+.cisco-cert-card,
+.ccna-hero-card {
+  background: rgba(255,255,255,0.05) !important;
+  background-image: none !important;
+  backdrop-filter: blur(22px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.5) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-top-color: rgba(255,255,255,0.22) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.18),
+    0 4px 16px rgba(0,0,0,0.28),
+    0 16px 40px rgba(0,0,0,0.18) !important;
+}
+
+/* Card hover: lift + slightly more visible edge */
+.glass-card:hover,
+.museum-case:hover,
+.project-card:hover,
+.exp-card:hover,
+.wh-card:hover,
+.edu-card:hover,
+.cert-card:hover,
+.ach-award-card:hover,
+.arsenal-category:hover,
+.gc-card:hover,
+.ref-card:hover,
+.hie-card:hover {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.20) !important;
+  border-top-color: rgba(255,255,255,0.32) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.24),
+    0 8px 28px rgba(0,0,0,0.36),
+    0 24px 56px rgba(0,0,0,0.22) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* ── 2. NAVBAR: colorless pill glass ───────────────────────── */
+.top-nav,
+.top-nav.scrolled,
+.top-nav.is-scrolled {
+  background: rgba(255,255,255,0.06) !important;
+  background-image: none !important;
+  backdrop-filter: blur(32px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.8) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-top-color: rgba(255,255,255,0.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 20px rgba(0,0,0,0.32),
+    0 0 0 0.5px rgba(255,255,255,0.08) !important;
+}
+
+/* ── 3. GATE CARD (desktop): colorless glass, all text white ── */
+.gate-card,
+#gate-overlay .gate-card {
+  background: rgba(255,255,255,0.07) !important;
+  background-image: none !important;
+  backdrop-filter: blur(32px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-top-color: rgba(255,255,255,0.30) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.22),
+    0 8px 40px rgba(0,0,0,0.50),
+    0 32px 80px rgba(0,0,0,0.35),
+    0 0 0 0.5px rgba(255,255,255,0.10) !important;
+}
+
+/* Gate card text hierarchy */
+.gate-card h2,
+.gate-card #gateAsk h2 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important;
+}
+.gate-card h2 span,
+.gate-card #gateAsk h2 span {
+  color: #D4A840 !important;
+  -webkit-text-fill-color: #D4A840 !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.70) !important;
+}
+.gate-card .gate-subtitle,
+.gate-subtitle {
+  color: rgba(230,240,255,0.88) !important;
+  -webkit-text-fill-color: rgba(230,240,255,0.88) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.70) !important;
+}
+.gate-card .gate-logo,
+.gate-logo {
+  color: rgba(255,255,255,0.85) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.85) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.70) !important;
+}
+.gate-field label {
+  color: rgba(225,205,155,0.90) !important;
+  -webkit-text-fill-color: rgba(225,205,155,0.90) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.70) !important;
+}
+/* Gate input: colorless glass */
+.gate-field input,
+#visitorName {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
+}
+.gate-field input::placeholder,
+#visitorName::placeholder {
+  color: rgba(255,255,255,0.45) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+}
+/* Hint text */
+#gateAsk > p {
+  color: rgba(200,218,255,0.78) !important;
+  -webkit-text-fill-color: rgba(200,218,255,0.78) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.60) !important;
+}
+/* Welcome state */
+#welcomeHeading {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.80) !important;
+}
+#welcomeName {
+  color: #D4A840 !important;
+  -webkit-text-fill-color: #D4A840 !important;
+}
+#gateWelcome .gate-subtitle {
+  color: rgba(225,235,255,0.90) !important;
+  -webkit-text-fill-color: rgba(225,235,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
+}
+
+/* ── 4. MOBILE GATE CARD: colorless glass override ─────────── */
+@media (max-width: 767px) {
+  .gate-card {
+    background: rgba(255,255,255,0.08) !important;
+    backdrop-filter: blur(28px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.5) !important;
+    border: 1px solid rgba(255,255,255,0.20) !important;
+    border-top-color: rgba(255,255,255,0.32) !important;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,0.24),
+      0 8px 32px rgba(0,0,0,0.45) !important;
+  }
+  .gate-card h2,
+  #gateAsk h2 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.85) !important;
+  }
+  .gate-card h2 span,
+  #gateAsk h2 span {
+    color: #D4A840 !important;
+    -webkit-text-fill-color: #D4A840 !important;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.75) !important;
+  }
+  .gate-card .gate-subtitle {
+    color: rgba(230,240,255,0.90) !important;
+    -webkit-text-fill-color: rgba(230,240,255,0.90) !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.75) !important;
+  }
+  .gate-logo {
+    color: rgba(255,255,255,0.88) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.88) !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.70) !important;
+  }
+  .gate-field label {
+    color: rgba(225,205,155,0.92) !important;
+    -webkit-text-fill-color: rgba(225,205,155,0.92) !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.70) !important;
+  }
+  .gate-field input,
+  #visitorName {
+    background: rgba(255,255,255,0.09) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,0.22) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+  .gate-field input::placeholder,
+  #visitorName::placeholder {
+    color: rgba(255,255,255,0.48) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.48) !important;
+    font-style: normal !important;
+  }
+  #gateAsk > p {
+    color: rgba(210,225,255,0.80) !important;
+    -webkit-text-fill-color: rgba(210,225,255,0.80) !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
+  }
+}
+
+/* ── 5. ALL TEXT: sharp white hierarchy with text-shadow ────── */
+
+/* H1 / H2 / H3 / H4 — crisp white, strong depth shadow */
+h1, h2, h3, h4, h5, h6,
+.sec-title,
+.hero-display-name, .hero-name-first, .hero-name-last,
+.mc-title, .wh-title, .gc-card-title, .exp-role,
+.edu-degree, .aac-title, .ac-title, .ref-name,
+.hie-title, .engage-title, .rec-author-name,
+.erc-title, .footer-name, .review-box-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.75), 0 2px 16px rgba(0,0,0,0.45) !important;
+}
+
+/* Special: hero name last gets gold */
+.hero-name-last {
+  color: #D4AF37 !important;
+  -webkit-text-fill-color: #D4AF37 !important;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.75), 0 0 30px rgba(212,175,55,0.30) !important;
+}
+
+/* Paragraphs / body text — bright white-blue, readable on dark */
+p,
+.bio-lead, .bio-body,
+.hero-statement, .hero-eyebrow-text,
+.wh-desc, .mc-desc, .gc-card-body,
+.exp-bullet, .edu-description, .aac-desc,
+.hie-desc, .ref-note, .engage-intro,
+.sec-subtitle, .review-box-hint, .erc-sub {
+  color: rgba(225,235,255,0.90) !important;
+  -webkit-text-fill-color: rgba(225,235,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
+}
+
+/* Sub-labels, meta, organisations — warm amber-white */
+.mc-org, .mc-sector, .exp-company, .edu-school,
+.ref-title, .ref-company, .rec-author-title,
+.hvc-lbl, .er-label, .hie-activities-label,
+.wh-proof, .csm-lbl, .ac-subtitle, .kpi-label,
+.footer-role, .footer-copy, .engage-version,
+.engage-status-text, .nav-logo-role,
+.wb-date, .wb-weather-text,
+.astat-label, .ps-label, .er-label {
+  color: rgba(210,195,165,0.85) !important;
+  -webkit-text-fill-color: rgba(210,195,165,0.85) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.60) !important;
+}
+
+/* Numbers / stats — full white glow */
+.kpi-num, .kpi-unit, .csm-val, .hvc-val,
+.ps-num, .astat-num, .stat-num, .kpi-val {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 0 20px rgba(245,166,35,0.35), 0 2px 6px rgba(0,0,0,0.75) !important;
+}
+
+/* Section numbers / eyebrow — amber, readable */
+.sec-num, .sec-eyebrow {
+  color: rgba(245,180,55,0.92) !important;
+  -webkit-text-fill-color: rgba(245,180,55,0.92) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.60) !important;
+}
+
+/* Nav links */
+.nav-link {
+  color: rgba(230,238,255,0.88) !important;
+  -webkit-text-fill-color: rgba(230,238,255,0.88) !important;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.55) !important;
+}
+.nav-link:hover,
+.nav-link.is-active,
+.nav-link.active {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.65) !important;
+  background: rgba(255,255,255,0.10) !important;
+}
+.nav-logo-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.65) !important;
+}
+
+/* ── 6. TAGS / CHIPS / PILLS: colorless glass ────────────────── */
+.gc-tag, .mc-tool-tag, .ac-skill, .exp-meta-chip,
+.exp-stat-chip, .wh-badge, .wh-proof,
+.p-chip, .hap-pill, .hap-status,
+.cs-impact-pill, .cs-year-badge,
+.hie-tag, .hie-env-tag, .ref-rel-pill,
+.edu-badge, .edu-result, .proof-stat,
+.stb-sector, .es-pill, .tool-chip, .lge-tag,
+.lge-stat-chip, .stb-sector, .ac-cert-badge {
+  background: rgba(255,255,255,0.07) !important;
+  background-image: none !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  color: rgba(230,220,195,0.92) !important;
+  -webkit-text-fill-color: rgba(230,220,195,0.92) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55) !important;
+}
+
+/* ── 7. BUTTONS: colorless glass base (amber for primaries) ──── */
+.btn-primary {
+  background: linear-gradient(135deg, rgba(245,166,35,0.72), rgba(212,175,55,0.62)) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(245,200,100,0.35) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.55) !important;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: rgba(225,235,255,0.90) !important;
+  -webkit-text-fill-color: rgba(225,235,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.55) !important;
+}
+
+/* ── 8. INPUTS / FORM FIELDS: colorless glass ────────────────── */
+input:not(.gate-field input):not(#visitorName),
+textarea,
+select {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255,255,255,0.42) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.42) !important;
+}
+
+/* ── 9. WEATHER BAR: colorless glass strip ───────────────────── */
+.weather-bar {
+  background: rgba(255,255,255,0.04) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+}
+.wb-time, .wb-date, .wb-weather-text, .wb-icon {
+  color: rgba(215,225,248,0.88) !important;
+  -webkit-text-fill-color: rgba(215,225,248,0.88) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.60) !important;
+}
+
+/* ── 10. FOOTER: colorless dark glass ───────────────────────── */
+.footer {
+  background: rgba(0,0,0,0.40) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-top: 1px solid rgba(255,255,255,0.10) !important;
+}
+.footer-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.60) !important;
+}
+.footer-role, .footer-copy {
+  color: rgba(200,212,235,0.78) !important;
+  -webkit-text-fill-color: rgba(200,212,235,0.78) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55) !important;
+}
+
+/* ── 11. MOBILE DRAWER: colorless dark glass ─────────────────── */
+.nav-mob-drawer {
+  background: rgba(0,0,0,0.55) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+.nav-mob-link {
+  color: rgba(220,230,255,0.90) !important;
+  -webkit-text-fill-color: rgba(220,230,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.60) !important;
+}
+
+/* ── 12. HERO EYEBROW / AVAILABILITY PILLS ───────────────────── */
+.hero-eyebrow-row {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+.hero-eyebrow-text {
+  color: rgba(220,232,255,0.92) !important;
+  -webkit-text-fill-color: rgba(220,232,255,0.92) !important;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.65) !important;
+}
+.hap-status {
+  background: rgba(255,255,255,0.06) !important;
+  color: rgba(210,225,255,0.90) !important;
+  -webkit-text-fill-color: rgba(210,225,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.60) !important;
+}
+.hap-pill {
+  background: rgba(255,255,255,0.07) !important;
+  color: rgba(210,225,255,0.88) !important;
+  -webkit-text-fill-color: rgba(210,225,255,0.88) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.55) !important;
+}
+
+/* ── 13. HERO PORTRAIT FRAME: colorless glass ───────────────── */
+.hero-portrait-frame {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* ── 14. HERO CHIP PILL CONTAINER ────────────────────────────── */
+#chipPill {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.13) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+#chipPill .chip {
+  background: rgba(255,255,255,0.08) !important;
+  color: rgba(225,232,255,0.90) !important;
+  -webkit-text-fill-color: rgba(225,232,255,0.90) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55) !important;
+}
+
+/* ── 15. KPI BAR: colorless glass strip ──────────────────────── */
+.hero-kpis {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* ── 16. SECTION RULE: amber accent ──────────────────────────── */
+.sec-rule {
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(245,166,35,0.55),
+    rgba(245,166,35,0.85),
+    rgba(245,166,35,0.55),
+    transparent) !important;
+}
+
+/* ── 17. FAB: amber, no color noise ─────────────────────────── */
+.fab-main {
+  background: rgba(245,166,35,0.78) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,200,80,0.28) !important;
+}
+.fab-option {
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ── 18. MOBILE STICKY BAR ───────────────────────────────────── */
+.mobile-sticky-cta {
+  background: rgba(0,0,0,0.55) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-top: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* ── 19. ENGAGE ROWS ─────────────────────────────────────────── */
+.engage-row {
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+.engage-row:hover {
+  background: rgba(255,255,255,0.09) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
+.er-label {
+  color: rgba(195,210,238,0.82) !important;
+  -webkit-text-fill-color: rgba(195,210,238,0.82) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.60) !important;
+}
+.er-value {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.65) !important;
+}
+
+/* ── 20. REVIEW FORM INPUTS ──────────────────────────────────── */
+.review-textarea,
+#reviewName,
+#reviewText {
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ── 21. GATE GLASS CARD (admin-dashboard / admin-gate) ─────── */
+.gate-glass-card {
+  background: rgba(255,255,255,0.06) !important;
+  background-image: none !important;
+  backdrop-filter: blur(36px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-top-color: rgba(255,255,255,0.28) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.20),
+    0 8px 40px rgba(0,0,0,0.55),
+    0 32px 80px rgba(0,0,0,0.40) !important;
+}
+.gate-glass-card .gate-headline,
+.gate-glass-card .gate-brand-name {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important;
+}
+.gate-glass-card .gate-sub {
+  color: rgba(225,235,255,0.90) !important;
+  -webkit-text-fill-color: rgba(225,235,255,0.90) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
+}
+.gate-glass-card .gate-eyebrow {
+  color: rgba(210,195,165,0.88) !important;
+  -webkit-text-fill-color: rgba(210,195,165,0.88) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.60) !important;
+}
+.gate-glass-card .gate-label {
+  color: rgba(210,195,165,0.88) !important;
+  -webkit-text-fill-color: rgba(210,195,165,0.88) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.60) !important;
+}
+.gate-glass-card .gate-brand-sub {
+  color: rgba(200,215,240,0.80) !important;
+  -webkit-text-fill-color: rgba(200,215,240,0.80) !important;
+}
+.gate-glass-card .gate-status-text {
+  color: rgba(185,200,228,0.75) !important;
+  -webkit-text-fill-color: rgba(185,200,228,0.75) !important;
+}
+.gate-glass-card .gate-input {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.gate-glass-card .gate-input::placeholder {
+  color: rgba(255,255,255,0.45) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+}
+
+/* ── 22. AUTH OVERLAY (admin-gate.css context) ───────────────── */
+.auth-card {
+  background: rgba(255,255,255,0.07) !important;
+  background-image: none !important;
+  backdrop-filter: blur(36px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  border-top-color: rgba(255,255,255,0.32) !important;
+}
+.auth-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important;
+}
+.auth-sub {
+  color: rgba(220,232,255,0.88) !important;
+  -webkit-text-fill-color: rgba(220,232,255,0.88) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
+}
+.auth-input {
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.auth-input::placeholder {
+  color: rgba(255,255,255,0.45) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
+}
+#password-panel > p {
+  color: rgba(210,195,165,0.90) !important;
+  -webkit-text-fill-color: rgba(210,195,165,0.90) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.65) !important;
+}
+
+
+/* ================================================================
+   ██████╗ ██████╗ ██╗      ██████╗ ██████╗ ██╗     ███████╗███████╗███████╗
+  ██╔════╝██╔═══██╗██║     ██╔═══██╗██╔══██╗██║     ██╔════╝██╔════╝██╔════╝
+  ██║     ██║   ██║██║     ██║   ██║██████╔╝██║     █████╗  ███████╗███████╗
+  ██║     ██║   ██║██║     ██║   ██║██╔══██╗██║     ██╔══╝  ╚════██║╚════██║
+  ╚██████╗╚██████╔╝███████╗╚██████╔╝██║  ██║███████╗███████╗███████║███████║
+   ╚═════╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚══════╝
+   GLASS OVERRIDES — merged from colorless-glass.css
+   Drop-in override — Crystal-clear blur glass across the full site.
+   No white tint, no color fills — pure transparent frost.
+
+   DESIGN PHILOSOPHY
+   ─────────────────
+   Every glass surface becomes a pure lens onto the photo behind it.
+   Backgrounds drop to rgba(255,255,255,0) or a hair above zero.
+   Blur intensities are kept HIGH so the surface still "reads" as
+   material even without a white fill — the frosting IS the colour.
+   Top-rim specular lines (inset 0 1.5px rgba(255,255,255,...)) are
+   preserved because they are physics, not decoration.
+   Text on dark photo backgrounds uses strong text-shadow for
+   legibility instead of relying on a tinted backdrop.
+================================================================ */
+
+/* ================================================================
+   CG-0. DESIGN-SYSTEM TOKEN OVERRIDES
+   Replace every glass / bg token with fully transparent variants.
+================================================================ */
+:root {
+  /* Glass surfaces — zero fill */
+  --glass-ultra:   rgba(255,255,255,0.00);
+  --glass-strong:  rgba(255,255,255,0.00);
+  --glass-mid:     rgba(255,255,255,0.00);
+  --glass-light:   rgba(255,255,255,0.00);
+  --glass-whisper: rgba(255,255,255,0.00);
+
+  /* Blur stays the same — the blur IS the material */
+  --blur-ultra:  blur(28px) saturate(1.8) brightness(1.04);
+  --blur-strong: blur(24px) saturate(1.6) brightness(1.03);
+  --blur-mid:    blur(20px) saturate(1.5) brightness(1.02);
+  --blur-light:  blur(16px) saturate(1.4);
+  --blur-soft:   blur(12px) saturate(1.3);
+
+  /* Background vars — all transparent */
+  --bg:          rgba(255,255,255,0.00);
+  --bg-deep:     rgba(255,255,255,0.00);
+  --bg-surface:  rgba(255,255,255,0.00);
+  --bg-section:  rgba(255,255,255,0.00);
+
+  /* Shadow system — preserve specular, drop colour tints from ambient */
+  --sh-glass-sm:
+    inset 0 1.5px 0 rgba(255,255,255,0.70),
+    inset 0 -0.5px 0 rgba(0,0,0,0.04),
+    inset 1px 0 0 rgba(255,255,255,0.45),
+    0 2px 6px rgba(0,0,0,0.18),
+    0 8px 20px rgba(0,0,0,0.14),
+    0 0 0 0.75px rgba(255,255,255,0.35);
+
+  --sh-glass-md:
+    inset 0 1.5px 0 rgba(255,255,255,0.80),
+    inset 0 -0.5px 0 rgba(0,0,0,0.05),
+    inset 1.5px 0 0 rgba(255,255,255,0.55),
+    0 4px 12px rgba(0,0,0,0.22),
+    0 14px 36px rgba(0,0,0,0.18),
+    0 30px 60px rgba(0,0,0,0.10),
+    0 0 0 0.75px rgba(255,255,255,0.40);
+
+  --sh-glass-lg:
+    inset 0 2px 0 rgba(255,255,255,0.85),
+    inset 0 -1px 0 rgba(0,0,0,0.06),
+    inset 2px 0 0 rgba(255,255,255,0.60),
+    inset 0 4px 24px rgba(255,255,255,0.06),
+    0 6px 18px rgba(0,0,0,0.24),
+    0 20px 50px rgba(0,0,0,0.20),
+    0 50px 100px rgba(0,0,0,0.12),
+    0 0 0 0.75px rgba(255,255,255,0.45);
+
+  --sh-glass-float:
+    inset 0 2px 0 rgba(255,255,255,0.90),
+    inset 0 -1px 0 rgba(0,0,0,0.04),
+    inset 2.5px 0 0 rgba(255,255,255,0.65),
+    inset 0 6px 30px rgba(255,255,255,0.04),
+    0 8px 24px rgba(0,0,0,0.28),
+    0 24px 60px rgba(0,0,0,0.22),
+    0 60px 120px rgba(0,0,0,0.14),
+    0 0 0 0.75px rgba(255,255,255,0.50);
+}
+
+/* ================================================================
+   CG-1. BODY ATMOSPHERIC OVERLAY
+================================================================ */
+body::after {
+  background:
+    radial-gradient(ellipse 80% 60% at 75% 30%, rgba(0,0,0,0.02) 0%, transparent 65%),
+    linear-gradient(to bottom, rgba(0,0,0,0.10) 0%, transparent 40%) !important;
+}
+
+/* ================================================================
+   CG-2. NAVBAR
+================================================================ */
+.top-nav {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(26px) saturate(1.8) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(1.8) brightness(1.04) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.55),
+    inset 2px 0 0 rgba(255,255,255,0.30),
+    inset -1px 0 0 rgba(255,255,255,0.20),
+    inset 0 -1px 0 rgba(0,0,0,0.06),
+    0 0 0 0.75px rgba(255,255,255,0.22),
+    0 2px 4px rgba(0,0,0,0.28),
+    0 6px 16px rgba(0,0,0,0.22),
+    0 16px 40px rgba(0,0,0,0.16) !important;
+}
+.top-nav.scrolled {
+  background: rgba(255,255,255,0.00) !important;
+}
+.nav-mob-drawer {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(32px) saturate(1.8) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.8) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.60),
+    0 0 0 0.75px rgba(255,255,255,0.28),
+    0 10px 30px rgba(0,0,0,0.28),
+    0 24px 60px rgba(0,0,0,0.20) !important;
+}
+.nav-link:hover,
+.nav-link.active {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+.nav-resume-btn {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+.nav-resume-btn:hover {
+  background: rgba(255,255,255,0.00) !important;
+}
+.nav-mob-toggle {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* ================================================================
+   CG-3. GATE CARD (visitor welcome overlay)
+================================================================ */
+.gate-card {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(40px) saturate(1.9) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.9) brightness(1.05) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  box-shadow:
+    0 0 0 0.5px rgba(255,255,255,0.18),
+    0 8px 32px rgba(0,0,0,0.30),
+    0 28px 60px rgba(0,0,0,0.20),
+    inset 0 1.5px 0 rgba(255,255,255,0.45),
+    inset 0 -1px 0 rgba(0,0,0,0.04) !important;
+}
+.gate-field input {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.gate-btn {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1.5px solid rgba(255,255,255,0.38) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.55) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.35),
+    0 4px 16px rgba(0,0,0,0.25) !important;
+}
+.gate-btn:hover {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.55) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.45),
+    0 8px 28px rgba(0,0,0,0.35) !important;
+}
+.gate-welcome-icon {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* ================================================================
+   CG-4. HERO CARD
+================================================================ */
+.hero-editorial-layout {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(24px) saturate(1.6) brightness(1.03) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(1.03) !important;
+  box-shadow: var(--sh-glass-float) !important;
+}
+.hero-kpis {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(18px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.5) !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+.hero-vchip {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+.hero-stat-badge {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+.hero-eyebrow-row {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+#chipPill {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 2px 12px rgba(0,0,0,0.20),
+    0 0 0 1px rgba(255,255,255,0.16) !important;
+}
+#chipPill .chip {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+.hap-status {
+  background: rgba(52,199,89,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(52,199,89,0.28) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.20),
+    0 2px 8px rgba(0,0,0,0.16) !important;
+}
+.hap-pill {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+.hero-portrait-frame {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(0px) !important;
+  -webkit-backdrop-filter: blur(0px) !important;
+}
+.hero-linkedin-btn,
+.hero-linkedin-btn:hover {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+.btn-primary {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1.5px solid rgba(255,255,255,0.40) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 5px rgba(0,0,0,0.55) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.45),
+    0 0 0 0.75px rgba(255,255,255,0.25),
+    0 4px 12px rgba(0,0,0,0.22),
+    0 10px 28px rgba(0,0,0,0.16) !important;
+}
+.btn-primary:hover {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.60) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.55),
+    0 0 0 0.75px rgba(255,255,255,0.40),
+    0 6px 18px rgba(0,0,0,0.28),
+    0 14px 40px rgba(0,0,0,0.20) !important;
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.32) !important;
+  color: rgba(255,255,255,0.92) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.45) !important;
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.50) !important;
+}
+
+/* ================================================================
+   CG-5. UNIVERSAL GLASS CARD BASE
+================================================================ */
+.glass-card,
+.glass-card-deep,
+.wh-card,
+.arsenal-category,
+.ach-award-card,
+.hero-glass-card,
+.lge-tabs-nav {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(22px) saturate(1.6) brightness(1.02) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.6) brightness(1.02) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: var(--sh-glass-md) !important;
+}
+.glass-card .p-chip,
+.glass-card .ac-skill,
+.glass-card .exp-meta-chip,
+.glass-card .exp-stat-chip,
+.exp-card .p-chip,
+.exp-card .exp-meta-chip,
+.exp-card .exp-stat-chip,
+.lge-card .lge-tag,
+.museum-case .tool-chip,
+.hero-glass-card .btn-primary,
+.hero-glass-card .btn-ghost,
+.hero-glass-card .nav-resume-btn {
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* ================================================================
+   CG-6. PILL CHIPS & SMALL BADGES
+================================================================ */
+.p-chip,
+.ac-skill,
+.lge-tag,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip,
+.stb-sector,
+.wh-badge,
+.tool-chip,
+.lang-card,
+.hap-pill,
+.hero-badge,
+.pc-tool-badge,
+.lge-proj-chip,
+.ref-rel-pill,
+.linkedin-id-pill {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+
+/* ================================================================
+   CG-7. SECTION CARDS: Project, Experience, Education, Cert
+================================================================ */
+.project-card,
+.exp-card,
+.lge-card,
+.edu-card,
+.cert-card,
+.cert-hero-card,
+.rec-glass-card,
+.edu-rec-card,
+.ref-card,
+.museum-case {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(22px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: var(--sh-glass-md) !important;
+}
+.project-card:hover,
+.exp-card:hover,
+.lge-card:hover,
+.edu-card:hover,
+.cert-card:hover,
+.ref-card:hover,
+.ach-award-card:hover {
+  background: rgba(255,255,255,0.02) !important;
+  box-shadow: var(--sh-glass-float) !important;
+}
+
+/* ================================================================
+   CG-8. ABOUT SECTION PANELS
+================================================================ */
+.about-text-col,
+.about-panel-col,
+.about-bio-col,
+.about-stats-row {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(20px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  box-shadow: var(--sh-glass-md) !important;
+}
+.about-stat {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.60), 0 0 0 0.75px rgba(255,255,255,0.30) !important;
+}
+
+/* ================================================================
+   CG-9. PANEL FRAGMENTS: SLA ring, achievements
+================================================================ */
+.panel-sla-ring,
+.panel-achievements {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+}
+.ach-item {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+/* ================================================================
+   CG-10. WHY-HIRE SECTION
+================================================================ */
+.wh-card {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(22px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+.proof-bar,
+.wh-proof {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+/* ================================================================
+   CG-11. ENGAGE ROWS (contact section)
+================================================================ */
+.engage-row {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+.engage-row:hover {
+  background: rgba(255,255,255,0.03) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+}
+
+/* ================================================================
+   CG-12. CONTACT SECTION
+================================================================ */
+.cta-resume,
+.cta-whatsapp,
+.cta-linkedin {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(18px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.5) !important;
+}
+.cta-resume:hover,
+.cta-whatsapp:hover,
+.cta-linkedin:hover {
+  background: rgba(255,255,255,0.04) !important;
+}
+.cta-resume .cta-btn-title,
+.cta-resume .cta-btn-label,
+.cta-resume .cta-btn-arrow { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+.cta-whatsapp .cta-btn-title,
+.cta-whatsapp .cta-btn-label,
+.cta-whatsapp .cta-btn-arrow { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+.cta-linkedin .cta-btn-title { color: rgba(220,235,255,0.95) !important; -webkit-text-fill-color: rgba(220,235,255,0.95) !important; }
+.cta-linkedin .cta-btn-label { color: rgba(200,218,245,0.80) !important; -webkit-text-fill-color: rgba(200,218,245,0.80) !important; }
+.resume-preview-card,
+.contact-last-updated,
+.contact-promise,
+.rpc-tag {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+.recruiter-cta-block {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+/* ================================================================
+   CG-13. REVIEW FORM INPUTS
+================================================================ */
+.review-textarea,
+#reviewName,
+#reviewText,
+.gate-field input {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.28) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.review-textarea::placeholder,
+#reviewName::placeholder,
+#reviewText::placeholder {
+  color: rgba(255,255,255,0.40) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.40) !important;
+}
+
+/* ================================================================
+   CG-14. FAB (Floating Action Button)
+================================================================ */
+.fab-main {
+  background: rgba(245,166,35,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1.5px solid rgba(245,166,35,0.45) !important;
+  color: rgba(245,166,35,1.00) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.25),
+    0 4px 18px rgba(0,0,0,0.22),
+    0 0 0 0.75px rgba(245,166,35,0.28) !important;
+}
+.fab-main:hover {
+  background: rgba(245,166,35,0.08) !important;
+  border-color: rgba(245,166,35,0.65) !important;
+}
+.fab-option {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: var(--sh-glass-sm) !important;
+}
+
+/* ================================================================
+   CG-15. MOBILE STICKY BAR
+================================================================ */
+.mobile-sticky-cta {
+  background: rgba(0,0,0,0.00) !important;
+  backdrop-filter: blur(28px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.6) !important;
+  border-top: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+/* ================================================================
+   CG-16. WEATHER BAR
+================================================================ */
+.weather-bar {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+/* ================================================================
+   CG-17. ADMIN GATE CARD OVERRIDES
+================================================================ */
+.gate-glass-card {
+  background: rgba(255,255,255,0.00) !important;
+  background-image: none !important;
+  backdrop-filter: blur(44px) saturate(1.9) !important;
+  -webkit-backdrop-filter: blur(44px) saturate(1.9) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  border-top-color: rgba(255,255,255,0.35) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.25),
+    0 8px 40px rgba(0,0,0,0.50),
+    0 32px 80px rgba(0,0,0,0.35) !important;
+}
+.gate-glass-card .gate-input {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+}
+.gate-glass-card .gate-submit-btn {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1.5px solid rgba(255,255,255,0.30) !important;
+}
+.gate-glass-card .gate-submit-btn:hover {
+  background: rgba(255,255,255,0.06) !important;
+}
+#auth-overlay .auth-card {
+  background: rgba(255,255,255,0.00) !important;
+  background-image: none !important;
+  backdrop-filter: blur(44px) saturate(1.9) !important;
+  -webkit-backdrop-filter: blur(44px) saturate(1.9) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  border-top-color: rgba(255,255,255,0.38) !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.28),
+    0 0 0 1px rgba(255,255,255,0.12),
+    0 16px 56px rgba(0,0,0,0.48),
+    0 4px 16px rgba(0,0,0,0.28) !important;
+}
+.auth-card {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(44px) saturate(1.9) !important;
+  -webkit-backdrop-filter: blur(44px) saturate(1.9) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  border-top-color: rgba(255,255,255,0.38) !important;
+}
+.auth-input,
+.gate-input {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255,255,255,0.24) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.auth-input::placeholder,
+.gate-input::placeholder {
+  color: rgba(255,255,255,0.42) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.42) !important;
+}
+.auth-input:focus,
+.gate-input:focus {
+  border-color: rgba(255,255,255,0.45) !important;
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,0.16),
+    0 0 0 3px rgba(255,255,255,0.10) !important;
+}
+#auth-overlay {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ================================================================
+   CG-18. MISC GLASS FRAGMENTS
+================================================================ */
+.ref-disclaimer,
+.ref-note,
+.lge-rec-card,
+.pc-impact,
+.contact-item-clickable,
+.rpc-tag {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+/* ================================================================
+   CG-19. ADMIN DASHBOARD CARDS
+================================================================ */
+.dash-card,
+.admin-card,
+.stat-card,
+.metric-card {
+  background: rgba(255,255,255,0.00) !important;
+  backdrop-filter: blur(24px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: var(--sh-glass-md) !important;
+}
+
+/* ================================================================
+   CG-20. BACKDROP-FILTER FALLBACK
+================================================================ */
+@supports not (backdrop-filter: blur(1px)) {
+  .top-nav,
+  .gate-card,
+  .auth-card,
+  .gate-glass-card,
+  .glass-card, .glass-card-deep,
+  .project-card, .exp-card, .lge-card,
+  .edu-card, .cert-card, .wh-card,
+  .about-text-col, .about-panel-col {
+    background: rgba(10,20,45,0.72) !important;
+    border-color: rgba(255,255,255,0.16) !important;
+  }
+  .nav-mob-drawer {
+    background: rgba(10,20,45,0.82) !important;
+  }
+}
+
+/* ================================================================
+   CG-21. MOBILE OVERRIDES — maintain blur on small screens
+================================================================ */
+@media (max-width: 768px) {
+  .top-nav {
+    backdrop-filter: blur(22px) saturate(1.7) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(1.7) !important;
+  }
+  .gate-card,
+  .auth-card {
+    backdrop-filter: blur(36px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(36px) saturate(1.8) !important;
+  }
+  .hero-editorial-layout {
+    backdrop-filter: blur(20px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+  }
+  .glass-card,
+  .project-card,
+  .exp-card,
+  .edu-card,
+  .cert-card,
+  .wh-card {
+    backdrop-filter: blur(18px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.5) !important;
+  }
+}
+
+/* ================================================================
+   CG-22. REDUCED MOTION
+================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .gate-card, .auth-card, .top-nav, .hero-editorial-layout {
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+}
+
+
+/* ================================================================
+   GLASS HIERARCHY PATCH  ·  sajidmk.com
+   Phase 2 — Design Rule Enforcement
+   ──────────────────────────────────────────────────────────────
+   RULE 1: Only section-level containers may use glass backdrop.
+   RULE 2: Cards inside glass sections — NO backdrop blur.
+   RULE 3: No card may contain another glass card.
+   RULE 4: Badges, pills, chips, tags, counters — NO backdrop blur.
+   RULE 5: One visual layer: Section = Glass · Cards = Solid surface.
+   ──────────────────────────────────────────────────────────────
+   This block is the definitive cascade winner.
+   It intentionally overrides all prior conflicting declarations.
+================================================================ */
+
+/* ── TIER 0: Permitted glass — outermost section containers ──────
+   These are the ONLY elements allowed to use significant backdrop-
+   filter. Everything else in this file zeros or minimises it.
+──────────────────────────────────────────────────────────────── */
+.hero-editorial-layout,
+.hero-glass-card {
+  backdrop-filter: blur(20px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+}
+
+.top-nav {
+  backdrop-filter: blur(28px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.5) !important;
+}
+
+.about-text-col,
+.about-panel-col,
+.about-bio-col {
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+}
+
+.museum-case,
+.project-card {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+.exp-card,
+.lge-card {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+.cert-card,
+.cert-hero-card,
+.edu-card,
+.edu-rec-card,
+.wh-card {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+.ach-award-card,
+.ach-item {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+.gc-card {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+.engage-wrap,
+.engage-resume-card {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+.contact-glass-wrap,
+.contact-form-panel,
+.contact-info-col {
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+}
+
+.gate-card,
+.gate-glass-card,
+.auth-card {
+  backdrop-filter: blur(36px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(1.6) !important;
+}
+
+.weather-bar {
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+}
+
+footer,
+.footer,
+.site-footer {
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+}
+
+.proof-bar,
+.sectors-trust-bar {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+.nav-mob-drawer {
+  backdrop-filter: blur(24px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.5) !important;
+}
+
+.mobile-sticky-cta {
+  backdrop-filter: blur(20px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.4) !important;
+}
+
+.pdf-modal-inner,
+.pdf-modal-panel,
+.hie-modal-panel {
+  backdrop-filter: blur(28px) saturate(1.5) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.5) !important;
+}
+
+.review-box {
+  backdrop-filter: blur(16px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.4) !important;
+}
+
+/* ── RULE 2 & 3: Kill all backdrop-filter on sub-card containers ──
+   These are containers INSIDE the section-level glass above.
+   They must be solid surfaces — no nested blur.
+──────────────────────────────────────────────────────────────── */
+
+/* Hero — KPI blocks, vertical chips, stat badges, availability pills */
+.kpi-block,
+.kpi-inner,
+.hero-vchip,
+.hero-stat-badge,
+.hero-kpis,
+.hero-avail-pills,
+.hap-status,
+.hero-eyebrow-row,
+.hero-badge,
+.hpf-glass-reflect {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* About — stat boxes and inner wrappers */
+.about-stat,
+.about-stats-row {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* About — descendants inside glass panels (Rule 3: no glass inside glass) */
+.about-panel-col *,
+.about-bio-col *,
+.about-text-col * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Experience — inner elements */
+.exp-card *,
+.lge-card *,
+.exp-tabs-wrap,
+.exp-site-logos,
+.lge-tabs-nav {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Projects — inner elements */
+.project-card *,
+.museum-case *,
+.glass-card *,
+.gc-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Education / certs — inner elements */
+.cert-card *,
+.cert-hero-card *,
+.edu-card *,
+.wh-card * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Achievements — inner elements */
+.ach-award-card *,
+.ach-item * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Engage — rows, dots */
+.engage-row,
+.engage-dot,
+.engage-status-bar {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── RULE 4: Absolute zero — all chips, pills, badges, tags ──────
+   These are small inline elements. Backdrop-filter on them creates
+   expensive stacked blur that degrades surrounding readability.
+──────────────────────────────────────────────────────────────── */
+
+/* Skill / tech chips */
+.p-chip,
+.ac-skill,
+.ac-cert-badge,
+.ac-enterprise-tag,
+.ac-badge-blue,
+.ac-badge-sky,
+.ac-badge-indigo,
+[class*="-chip"],
+[class*="-skill"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Tag elements */
+.lge-tag,
+.mc-tool-tag,
+.gc-tag,
+.hie-tag,
+.rpc-tag,
+.stb-sector,
+.es-pill,
+.tool-chip,
+.wh-badge,
+.edu-badge,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip,
+.ref-rel-pill,
+.linkedin-id-pill,
+.hero-linkedin-btn,
+[class*="-tag"]:not([class*="section"]):not([class*="card"]):not([class*="wrap"]),
+[class*="-pill"]:not([class*="section"]):not([class*="card"]),
+[class*="-badge"]:not([class*="section"]):not([class*="card"]) {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Availability & status pills */
+.hap-pill,
+#chipPill,
+#chipPill .chip,
+.chip,
+.csm-lbl,
+.hnr-tag,
+.linkedin-id-pill {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Sector ticker — individual items inside the glass strip */
+.sector-ticker-item,
+.stb-sector {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── RULE 2 continued: Buttons get minimal blur only ─────────────
+   Per Rule 8 (button exemption): buttons may use max blur(4px)
+   as a subtle surface cue — not full frosted glass.
+──────────────────────────────────────────────────────────────── */
+
+.btn-primary,
+.btn-ghost,
+.msc-btn,
+.gate-btn,
+.gate-submit-btn,
+.nav-resume-btn,
+.hero-linkedin-btn,
+.footer-glass-btn,
+.fa-btn,
+.review-submit-btn,
+.mobile-whatsapp-btn,
+.cta-btn-resume,
+.cta-linkedin {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* ── Hover states: allow subtle upgrade but cap at blur(8px) ─────
+   A hover glow lift is fine. A new full frosted surface is not.
+──────────────────────────────────────────────────────────────── */
+
+.exp-card:hover,
+.lge-card:hover,
+.cert-card:hover,
+.ach-award-card:hover,
+.gc-card:hover,
+.museum-case:hover,
+.project-card:hover,
+.glass-card:hover,
+.wh-card:hover {
+  backdrop-filter: blur(20px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+}
+
+.btn-primary:hover,
+.btn-ghost:hover,
+.nav-resume-btn:hover,
+.msc-btn:hover {
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+/* Ensure card hover states don't re-introduce inner blur */
+.exp-card:hover *,
+.lge-card:hover *,
+.cert-card:hover *,
+.gc-card:hover *,
+.ach-award-card:hover *,
+.museum-case:hover * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── Miscellaneous named elements that had rogue blur ────────────
+   Identified individually in the audit.
+──────────────────────────────────────────────────────────────── */
+
+/* Text elements that somehow got blur applied */
+.hero-name-last,
+.hero-eyebrow-text,
+.kpi-label,
+.kpi-num,
+.bio-lead strong,
+.bio-body strong,
+.mc-org,
+.mc-desc,
+.mc-sector,
+.exp-quote,
+.ps-num,
+.astat-num,
+.wb-time,
+.wb-date,
+.wb-weather-text,
+.wb-icon,
+.wh-card h1,
+.wh-card h2,
+.wh-card h3,
+.wh-card h4 {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Nav elements that don't need glass beyond the navbar itself */
+.nav-link,
+.nav-link.active,
+.nav-link.is-active,
+.nav-logo-name,
+.nav-logo-role,
+.top-nav.is-scrolled .nav-logo-role {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* FAB — keep glass on main, strip from options */
+.fab-option {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Gate card sub-elements — gate-card is glass, its children are not */
+.gate-subtitle,
+.gate-welcome-icon,
+.gate-name-input,
+.gate-field input,
+#visitorName,
+#welcomeHeading {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Gate submit/input allowed blur (they are interactive surfaces within gate) */
+.gate-submit-btn,
+.gate-input,
+.auth-input {
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+}
+
+/* Review textarea — inside review-box which is glass */
+#reviewText,
+.review-textarea,
+input,
+textarea,
+select {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* .section rule — sections themselves should NOT have blur,
+   only their direct card children need it */
+section,
+.section {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── Restore permitted section-container blur after .section reset ──
+   (Re-declared so they win the cascade over the section reset above)
+──────────────────────────────────────────────────────────────── */
+.hero-editorial-layout,
+.hero-glass-card {
+  backdrop-filter: blur(20px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.6) !important;
+}
+
+.about-text-col,
+.about-panel-col,
+.about-bio-col {
+  backdrop-filter: blur(18px) saturate(1.4) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.4) !important;
+}
+
+/* ── Glass Hierarchy Patch v1.0 — END ────────────────────────── */
+
+
+/* ================================================================
+   PHASE 3 — UNIFIED GLASS SYSTEM  ·  sajidmk.com
+   ──────────────────────────────────────────────────────────────
+   One reusable glass surface class: .glass
+   Section containers use .glass (or have it overridden to match).
+   Zero other backdrop-filters on sub-elements.
+   ──────────────────────────────────────────────────────────────
+   Canonical glass spec:
+     background:      rgba(255,255,255,0.10)
+     backdrop-filter: blur(14px)
+     border:          1px solid rgba(255,255,255,0.18)
+================================================================ */
+
+/* ── The single canonical glass class ───────────────────────── */
+.glass {
+  background:                rgba(255,255,255,0.10) !important;
+  backdrop-filter:           blur(14px) !important;
+  -webkit-backdrop-filter:   blur(14px) !important;
+  border:                    1px solid rgba(255,255,255,0.18) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,0.28),
+    inset 1px 0 0  rgba(255,255,255,0.14),
+    0 8px 32px rgba(0,0,0,0.24),
+    0 2px 8px  rgba(0,0,0,0.14) !important;
+}
+
+/* ── Map all permitted section containers to the canonical spec ─
+   These override every prior declaration for backdrop-filter.
+   Background and border are set where the element has no other
+   intentional tint (dark navy cards keep their own bg color).
+──────────────────────────────────────────────────────────────── */
+
+/* Navbar */
+.top-nav {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Hero section glass layout */
+.hero-editorial-layout,
+.hero-glass-card {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* About section panels */
+.about-text-col,
+.about-panel-col,
+.about-bio-col {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Projects / Museum cases */
+.museum-case,
+.project-card,
+.gc-card,
+.glass-card,
+.glass-card-deep {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Experience */
+.exp-card,
+.lge-card {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Education / certs */
+.cert-card,
+.cert-hero-card,
+.edu-card,
+.edu-rec-card,
+.wh-card {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Achievements */
+.ach-award-card,
+.ach-item {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Contact */
+.contact-glass-wrap,
+.contact-form-panel,
+.contact-info-col {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Gate / Auth */
+.gate-card,
+.gate-glass-card,
+.auth-card {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* Footer, weather, proof bars, FAB, modals */
+footer, .footer, .site-footer,
+.weather-bar,
+.proof-bar,
+.sectors-trust-bar,
+.fab-main,
+.review-box,
+.engage-wrap,
+.engage-resume-card,
+.pdf-modal-inner,
+.pdf-modal-panel,
+.hie-modal-panel,
+.mobile-sticky-cta,
+.nav-mob-drawer,
+.ccna-hero-card,
+.ref-card {
+  backdrop-filter:         blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+}
+
+/* ── Remove ALL other backdrop-filter from every other element ──
+   This is the Phase 3 "zero everything else" sweep.
+   Applied as universal reset then permitted items re-stated above.
+──────────────────────────────────────────────────────────────── */
+
+/* Every child inside a glass container gets none */
+.top-nav *:not(.top-nav):not(.nav-resume-btn):not(.nav-mob-drawer),
+.hero-editorial-layout *:not(.hero-editorial-layout):not(.hero-glass-card),
+.hero-glass-card *,
+.about-text-col *, .about-panel-col *, .about-bio-col *,
+.museum-case *, .project-card *, .gc-card *, .glass-card *, .glass-card-deep *,
+.exp-card *, .lge-card *,
+.cert-card *, .cert-hero-card *, .edu-card *, .wh-card *,
+.ach-award-card *, .ach-item *,
+.contact-glass-wrap *, .contact-form-panel *, .contact-info-col *,
+.gate-card *, .gate-glass-card *, .auth-card *,
+.engage-wrap *, .engage-resume-card *,
+.review-box *,
+footer *, .footer *, .site-footer * {
+  backdrop-filter:         none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Buttons — minimal 4px surface hint only */
+.btn-primary, .btn-ghost,
+.nav-resume-btn, .msc-btn,
+.gate-btn, .gate-submit-btn,
+.footer-glass-btn, .fa-btn,
+.mobile-whatsapp-btn,
+.cta-btn-resume, .cta-linkedin,
+.review-submit-btn,
+.hero-linkedin-btn,
+.gate-input, .auth-input,
+.auth-btn {
+  backdrop-filter:         blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* FAB options */
+.fab-option {
+  backdrop-filter:         blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Section wrappers themselves — no glass (only the cards within them) */
+section, .section,
+.hero-section, .about-section,
+#skills, #experience, #education,
+#projects, #achievements, #contact {
+  backdrop-filter:         none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ── Phase 3 — END ─────────────────────────────────────────── */
+
+
+/* ================================================================
+   PHASE 4 — TEXT VISIBILITY SYSTEM  ·  sajidmk.com
+   ──────────────────────────────────────────────────────────────
+   Priority: readability above all else.
+   Rules:
+   1. All headings: #ffffff (pure white), no transparency
+   2. Body text: rgba(255,255,255,0.92) — near-white, highly readable
+   3. Secondary text: rgba(255,255,255,0.78) — NOT below 0.70
+   4. Tertiary / labels: rgba(255,255,255,0.62) — minimum allowed
+   5. NO text below opacity 0.55 unless it is a purely decorative
+      separator or placeholder hint.
+   6. Line-height: body 1.72, headings 1.1–1.25, labels 1.4
+   7. Letter-spacing: headings -0.01em, body 0, labels 0.04em
+   ──────────────────────────────────────────────────────────────
+   Applies to both desktop (photo bg) and mobile (dark photo bg).
+   Uses !important throughout to win the cascade.
+================================================================ */
+
+/* ── Token override: replace all ink tokens with light values ── */
+:root {
+  --text-h:       #ffffff;                   /* headings */
+  --text-body:    rgba(255,255,255,0.92);    /* primary body */
+  --text-2:       rgba(255,255,255,0.80);    /* secondary */
+  --text-3:       rgba(255,255,255,0.65);    /* tertiary / labels */
+  --text-4:       rgba(255,255,255,0.55);    /* muted — minimum */
+  --text-accent:  #D4C48A;                   /* gold accent for eyebrows */
+  --text-link:    #7EB8F7;                   /* readable blue link */
+}
+
+/* ── Base body text ─────────────────────────────────────────── */
+body {
+  color:       var(--text-body) !important;
+  line-height: 1.72 !important;
+}
+
+/* ── Heading hierarchy ───────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color:                   var(--text-h) !important;
+  -webkit-text-fill-color: var(--text-h) !important;
+  font-weight:             700 !important;
+  line-height:             1.18 !important;
+  letter-spacing:          -0.01em !important;
+  text-shadow:             0 1px 12px rgba(0,0,0,0.55) !important;
+}
+
+/* h1 — hero name, major titles */
+h1 {
+  line-height: 1.08 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* h2 — section titles */
+h2, .sec-title, .section-title {
+  font-size:      clamp(22px, 3.5vw, 36px) !important;
+  line-height:    1.15 !important;
+  letter-spacing: -0.015em !important;
+  color:          var(--text-h) !important;
+  -webkit-text-fill-color: var(--text-h) !important;
+}
+
+/* h3 — card titles */
+h3 {
+  font-size:   clamp(15px, 2vw, 20px) !important;
+  line-height: 1.25 !important;
+}
+
+/* ── Body paragraphs and descriptive text ────────────────────── */
+p, li, dd, dt,
+.bio-lead, .bio-body,
+.exp-bullet, .lge-bullet-row, .pc-block-text,
+.wh-desc, .rec-quote, .lge-rec-text,
+.contact-intro {
+  color:       var(--text-body) !important;
+  -webkit-text-fill-color: var(--text-body) !important;
+  line-height: 1.72 !important;
+}
+
+/* ── Secondary text — roles, orgs, sub-labels ────────────────── */
+.exp-org, .exp-period, .lge-org, .lge-period,
+.mc-org, .mc-desc, .mc-sector,
+.edu-school, .edu-period,
+.cert-org, .cert-period,
+.about-tagline, .hero-statement,
+.wh-proof,
+.rec-name, .lge-rec-author,
+.footer-role, .footer-tagline,
+.footer-legal,
+.sec-eyebrow, .hero-eyebrow-text,
+.gate-sub, .gate-brand-sub, .gate-status-text,
+.auth-sub {
+  color:       var(--text-2) !important;
+  -webkit-text-fill-color: var(--text-2) !important;
+  line-height: 1.55 !important;
+}
+
+/* ── Labels, meta, dates, small caps ────────────────────────── */
+.kpi-label, .hvc-lbl, .lge-stat-lbl,
+.exp-meta-chip, .exp-stat-chip, .lge-stat-chip,
+.sec-num, .sec-label,
+.wb-time, .wb-date, .wb-weather-text,
+.stat-label, .proof-stat,
+.nav-logo-role,
+.hero-eyebrow-text,
+.gate-eyebrow, .gate-label,
+.gate-brand-sub {
+  color:          var(--text-3) !important;
+  -webkit-text-fill-color: var(--text-3) !important;
+  line-height:    1.4 !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* ── High-value numerics — always full white ─────────────────── */
+.kpi-num, .stat-num, .ps-num, .astat-num,
+.hvc-val, .lge-stat-val,
+.hero-display-name, .hero-name-first, .hero-name-last {
+  color:                   #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow:             0 2px 16px rgba(0,0,0,0.60) !important;
+}
+
+/* ── Eyebrow tags — gold accent for warmth ────────────────────── */
+.hnr-tag, .csm-lbl,
+.gate-eyebrow, .gate-label,
+.wh-badge {
+  color:       var(--text-accent) !important;
+  -webkit-text-fill-color: var(--text-accent) !important;
+}
+
+/* ── Nav links ───────────────────────────────────────────────── */
+.nav-link, .nav-mob-link {
+  color:       var(--text-body) !important;
+  -webkit-text-fill-color: var(--text-body) !important;
+}
+.nav-link:hover, .nav-link.active, .nav-link.is-active,
+.nav-mob-link:hover {
+  color:       #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.nav-logo-name {
+  color:       #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* ── Experience / work history text ─────────────────────────── */
+.exp-role, .lge-role {
+  color:       #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-weight: 700 !important;
+}
+.exp-org, .lge-org {
+  color:       var(--text-2) !important;
+  -webkit-text-fill-color: var(--text-2) !important;
+  font-weight: 600 !important;
+}
+.exp-period, .lge-period {
+  color:       var(--text-3) !important;
+  -webkit-text-fill-color: var(--text-3) !important;
+}
+
+/* ── Chip and badge text ─────────────────────────────────────── */
+.p-chip, .ac-skill, .lge-tag, .mc-tool-tag,
+.exp-meta-chip, .exp-stat-chip, .lge-stat-chip,
+.hap-pill, .chip, .stb-sector, .es-pill, .tool-chip,
+.hero-badge, .edu-badge, .ref-rel-pill,
+.linkedin-id-pill, .hie-tag, .rpc-tag {
+  color:       var(--text-2) !important;
+  -webkit-text-fill-color: var(--text-2) !important;
+}
+
+/* ── Section titles — override gradient-clip text ───────────── */
+/* Some sec-titles use -webkit-text-fill-color: transparent (gradient).
+   We standardise to solid white with a subtle text-shadow instead. */
+.sec-title,
+.section-title {
+  background:              none !important;
+  -webkit-background-clip: unset !important;
+  background-clip:         unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color:                   #ffffff !important;
+  text-shadow:             0 2px 20px rgba(0,0,0,0.50) !important;
+  filter:                  none !important;
+}
+
+/* ── Footer text ─────────────────────────────────────────────── */
+.footer-tagline, .footer-legal, .footer-role {
+  color:       var(--text-3) !important;
+  -webkit-text-fill-color: var(--text-3) !important;
+}
+.nav-logo-name, .footer-name {
+  color:       #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ── Gate / auth text ────────────────────────────────────────── */
+.gate-headline, .auth-title {
+  color:       #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.70) !important;
+}
+.gate-sub, .auth-sub {
+  color:       var(--text-2) !important;
+  -webkit-text-fill-color: var(--text-2) !important;
+}
+.gate-brand-name {
+  color:       #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ── Input fields and form text ─────────────────────────────── */
+input, textarea, select {
+  color:       #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+input::placeholder,
+textarea::placeholder,
+.auth-input::placeholder,
+.gate-input::placeholder,
+.gate-field input::placeholder,
+#visitorName::placeholder,
+#reviewName::placeholder,
+.review-textarea::placeholder {
+  color:                   rgba(255,255,255,0.48) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.48) !important;
+}
+
+/* ── Separator elements — visual only, low opacity is fine ──── */
+.wb-sep, .stb-sep, .kpi-sep,
+.ps-divider, .proof-divider {
+  color:   rgba(255,255,255,0.22) !important;
+  opacity: 1 !important;
+}
+
+/* ── Minimum floor: nothing below 0.55 on key text ──────────── */
+/* Catch-all for any leftover low-opacity inline text that
+   didn't get targeted above */
+[style*="opacity: 0.2"],
+[style*="opacity: 0.3"],
+[style*="opacity: 0.4"] {
+  opacity: 0.72 !important;
+}
+
+/* ── Line-height reinforcement per element type ─────────────── */
+.bio-lead  { font-size: 16px !important; line-height: 1.75 !important; }
+.bio-body  { font-size: 14px !important; line-height: 1.78 !important; }
+
+.exp-bullet, .lge-bullet-row {
+  font-size:   13.5px !important;
+  line-height: 1.72 !important;
+  padding-bottom: 2px !important;
+}
+
+.wh-desc {
+  font-size:   13.5px !important;
+  line-height: 1.70 !important;
+}
+
+.rec-quote, .lge-rec-text {
+  font-size:   13px !important;
+  line-height: 1.72 !important;
+}
+
+.contact-intro {
+  font-size:   15px !important;
+  line-height: 1.72 !important;
+  max-width:   58ch !important;
+}
+
+/* ── Section header spacing ──────────────────────────────────── */
+.section-header,
+.sec-header {
+  margin-bottom: clamp(24px, 3.5vw, 44px) !important;
+}
+.sec-title + p,
+.section-title + p {
+  margin-top: 10px !important;
+  line-height: 1.72 !important;
+}
+
+/* ── Mobile text reinforcement ───────────────────────────────── */
+@media (max-width: 768px) {
+  body {
+    color:       var(--text-body) !important;
+    line-height: 1.70 !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color:                   #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow:             0 1px 10px rgba(0,0,0,0.65) !important;
+  }
+
+  /* Prevent 10px font-size shrinkage on very small viewports */
+  p, li, .bio-body, .exp-bullet {
+    font-size:   max(13px, 3.5vw) !important;
+    line-height: 1.70 !important;
+  }
+
+  .sec-title, .section-title {
+    font-size:               clamp(20px, 6vw, 30px) !important;
+    color:                   #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  /* Secondary text — raise opacity on mobile for small screens */
+  .exp-org, .exp-period, .mc-org,
+  .sec-eyebrow, .hero-eyebrow-text,
+  .about-tagline {
+    color:                   rgba(255,255,255,0.85) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.85) !important;
+  }
+
+  /* Labels — raise floor on mobile */
+  .kpi-label, .hvc-lbl, .stat-label,
+  .sec-num, .sec-label {
+    color:                   rgba(255,255,255,0.70) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.70) !important;
+  }
+}
+
+/* ── Phase 4 — END ─────────────────────────────────────────── */
+
+
+/* ================================================================
+   PHASE 5 — UNIFIED SHADOW SYSTEM  ·  sajidmk.com
+   ──────────────────────────────────────────────────────────────
+   Three canonical shadow tokens only:
+     --sh-card    : resting card elevation (soft depth, neutral)
+     --sh-hover   : lifted card on hover (more depth, still neutral)
+     --sh-float   : floating UI: modals, nav, gate (max elevation)
+   
+   Neon/colored glows removed entirely.
+   Exception: live-status indicator dots keep a 1-layer ring.
+   Exception: branded action buttons (WhatsApp green, LinkedIn blue)
+   keep a 1-layer color hint at ≤0.25 opacity — subtle, not neon.
+================================================================ */
+
+/* ── Canonical shadow tokens ─────────────────────────────────── */
+:root {
+  --sh-card:
+    0 1px 3px  rgba(0,0,0,0.20),
+    0 4px 14px rgba(0,0,0,0.18),
+    0 12px 32px rgba(0,0,0,0.14),
+    inset 0 1px 0 rgba(255,255,255,0.14);
+
+  --sh-hover:
+    0 2px 6px  rgba(0,0,0,0.22),
+    0 8px 24px rgba(0,0,0,0.22),
+    0 20px 48px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.18);
+
+  --sh-float:
+    0 2px 8px  rgba(0,0,0,0.24),
+    0 12px 36px rgba(0,0,0,0.24),
+    0 32px 64px rgba(0,0,0,0.18),
+    inset 0 1.5px 0 rgba(255,255,255,0.22);
+
+  /* Preserve inset highlight only variant for interactive chips */
+  --sh-chip: inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 8px rgba(0,0,0,0.18);
+}
+
+/* ── Apply --sh-card to all section glass containers ─────────── */
+.hero-editorial-layout,
+.hero-glass-card,
+.about-text-col,
+.about-panel-col,
+.about-bio-col,
+.exp-card,
+.lge-card,
+.museum-case,
+.project-card,
+.gc-card,
+.glass-card,
+.glass-card-deep,
+.cert-card,
+.cert-hero-card,
+.edu-card,
+.wh-card,
+.ach-award-card,
+.ach-item,
+.rec-glass-card,
+.edu-rec-card,
+.contact-glass-wrap,
+.contact-form-panel,
+.contact-info-col,
+.engage-wrap,
+.engage-resume-card,
+.review-box,
+.ref-card,
+.ccna-hero-card,
+.arsenal-category {
+  box-shadow: var(--sh-card) !important;
+}
+
+/* ── Hover elevation: add depth, never color ─────────────────── */
+.exp-card:hover,
+.lge-card:hover,
+.museum-case:hover,
+.project-card:hover,
+.gc-card:hover,
+.glass-card:hover,
+.glass-card-deep:hover,
+.cert-card:hover,
+.wh-card:hover,
+.ach-award-card:hover,
+.ach-item:hover,
+.rec-glass-card:hover,
+.edu-rec-card:hover,
+.about-stat:hover,
+.arsenal-category:hover,
+.ref-card:hover,
+.about-bio-col:hover,
+.about-panel-col:hover {
+  box-shadow: var(--sh-hover) !important;
+}
+
+/* ── Floating UI: modals, nav, gate, sticky elements ─────────── */
+.top-nav,
+.top-nav.scrolled,
+.top-nav.is-scrolled,
+.nav-mob-drawer,
+.gate-card,
+.gate-glass-card,
+.auth-card,
+.pdf-modal-inner,
+.pdf-modal-panel,
+.hie-modal-panel,
+.mobile-sticky-cta,
+footer,
+.footer,
+.site-footer,
+.weather-bar,
+.proof-bar {
+  box-shadow: var(--sh-float) !important;
+}
+
+/* ── Chip / pill / badge: subtle depth only ─────────────────── */
+.p-chip,
+.ac-skill,
+.lge-tag,
+.exp-meta-chip,
+.exp-stat-chip,
+.lge-stat-chip,
+.stb-sector,
+.hap-pill,
+.chip,
+.es-pill,
+.tool-chip,
+.edu-badge,
+.wh-badge,
+.hie-tag,
+.rpc-tag,
+.ref-rel-pill,
+.sector-ticker-item,
+.mc-tool-tag,
+.gc-tag,
+[class*="-tag"]:not([class*="section"]):not([class*="card"]):not([class*="wrap"]),
+[class*="-chip"]:not([class*="section"]):not([class*="card"]),
+[class*="-badge"]:not([class*="section"]):not([class*="card"]) {
+  box-shadow: var(--sh-chip) !important;
+}
+
+/* ── Buttons: restrained depth, no color glow ───────────────── */
+.btn-primary,
+.nav-resume-btn,
+.msc-btn,
+.msc-resume,
+.gate-btn,
+.gate-submit-btn,
+.auth-btn,
+.review-submit-btn,
+.footer-glass-btn,
+.fa-btn,
+.cta-btn-resume,
+.mobile-whatsapp-btn,
+[class*="-btn"]:not(.rpc-download-btn):not(.float-whatsapp):not(.fab-main):not(.fab-option) {
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.22),
+    0 4px 16px rgba(0,0,0,0.16),
+    inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+
+.btn-primary:hover,
+.nav-resume-btn:hover,
+.msc-btn:hover,
+.gate-btn:hover,
+.gate-submit-btn:hover,
+.auth-btn:hover,
+.review-submit-btn:hover:not(:disabled),
+.footer-glass-btn:hover,
+.fa-btn:hover {
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.26),
+    0 8px 28px rgba(0,0,0,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.20) !important;
+}
+
+/* ── FAB ─────────────────────────────────────────────────────── */
+.fab-main {
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.28),
+    0 8px 28px rgba(0,0,0,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.18) !important;
+}
+.fab-main:hover {
+  box-shadow:
+    0 6px 22px rgba(0,0,0,0.32),
+    0 12px 36px rgba(0,0,0,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.22) !important;
+}
+.fab-option {
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.24),
+    inset 0 1px 0 rgba(255,255,255,0.14) !important;
+}
+
+/* ── Status pulse dots: single ring only ────────────────────── */
+.av-pulse-dot,
+.gvs-dot--live,
+.hap-dot,
+.engage-dot,
+.lup-dot,
+.sti-dot {
+  box-shadow: 0 0 0 3px rgba(52,199,89,0.22) !important;
+}
+
+/* ── Branded social buttons: 1-layer color hint max 0.22 ────── */
+.float-whatsapp {
+  box-shadow: 0 4px 20px rgba(37,211,102,0.22), 0 2px 8px rgba(0,0,0,0.18) !important;
+}
+.float-whatsapp:hover {
+  box-shadow: 0 8px 28px rgba(37,211,102,0.28), 0 4px 12px rgba(0,0,0,0.22) !important;
+}
+
+/* Obliterate any remaining neon/colored shadow on non-branded elements */
+.neon-border,
+.hover-glow {
+  box-shadow: var(--sh-card) !important;
+}
+.hover-glow:hover {
+  box-shadow: var(--sh-hover) !important;
+}
+
+/* ── Phase 5 — END ─────────────────────────────────────────── */
+
+
+/* ================================================================
+   PHASE 6 — PERFORMANCE CLEANUP  ·  sajidmk.com
+   ──────────────────────────────────────────────────────────────
+   Targets:
+   1. will-change discipline: only transform on interactive elements
+   2. filter: drop-shadow → replaced by box-shadow (already done above)
+   3. background-attachment: fixed → scroll (kills mobile jank)
+   4. Animated blur transitions → removed (most expensive GPU op)
+   5. Excessive transform3d / translateZ(0) hacks → cleaned
+   6. animation-fill-mode: none on idle elements
+================================================================ */
+
+/* ── 1. will-change: strict discipline ───────────────────────── */
+
+/* Reset all existing will-change to auto first */
+* {
+  will-change: auto;
+}
+
+/* Allow only on genuinely animated interactive elements */
+.btn-primary,
+.btn-ghost,
+.nav-resume-btn,
+.fab-main,
+.fab-option,
+.exp-card,
+.lge-card,
+.museum-case,
+.gc-card,
+.glass-card,
+.cert-card,
+.ach-award-card,
+.float-whatsapp,
+.mobile-sticky-cta,
+.scroll-progress,
+.nav-mob-drawer {
+  will-change: transform;
+}
+
+/* ── 2. Kill all filter: drop-shadow that duplicate box-shadow ── */
+.hero-editorial-layout::after,
+.exp-card::after,
+.lge-card::after,
+.museum-case::after,
+.glass-card::after,
+.sec-rule,
+.kpi-block,
+.about-stat,
+[class*="card"]::after,
+[class*="card"]::before {
+  filter: none !important;
+}
+
+/* Kill drop-shadow on text elements (use text-shadow instead) */
+.sec-title,
+.section-title,
+.hero-name-first,
+.hero-name-last,
+.hero-display-name,
+h1, h2, h3 {
+  filter: none !important;
+}
+
+/* ── 3. background-attachment: fixed → scroll everywhere ────── */
+/* Fixed attachment triggers full-page repaint on every scroll frame */
+body,
+#auth-overlay,
+.hero-section,
+[style*="background-attachment: fixed"],
+[style*="background-attachment:fixed"] {
+  background-attachment: scroll !important;
+}
+
+/* ── 4. Backdrop-filter transitions removed ──────────────────── */
+/* Animating blur is the single most expensive GPU operation.
+   We keep opacity + transform transitions; blur must be instant. */
+*,
+*::before,
+*::after {
+  /* Override any transition that includes backdrop-filter */
+  transition-property: transform, opacity, box-shadow, border-color, color, background-color !important;
+}
+
+/* Restore full transitions on elements that legitimately animate */
+.btn-primary,
+.btn-ghost,
+.nav-resume-btn,
+.fab-main,
+.fab-option,
+.gate-submit-btn,
+.auth-btn,
+.nav-resume-btn,
+.msc-btn {
+  transition: transform 0.18s cubic-bezier(0.22,1,0.36,1),
+              opacity   0.18s ease,
+              box-shadow 0.22s ease !important;
+}
+
+.exp-card,
+.lge-card,
+.museum-case,
+.gc-card,
+.glass-card,
+.cert-card,
+.wh-card,
+.ach-award-card,
+.ref-card,
+.about-panel-col,
+.about-bio-col {
+  transition: transform 0.24s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.24s ease !important;
+}
+
+/* ── 5. translateZ(0) / GPU promotion hacks — remove ────────── */
+/* These stale hacks create new stacking contexts and break z-index */
+.hero-editorial-layout,
+.hero-glass-card,
+.project-card,
+.museum-case,
+.glass-card {
+  transform: none;
+}
+/* Allow transform only when JS adds hover/active states */
+.hero-editorial-layout:hover,
+.hero-glass-card:hover {
+  transform: none !important; /* These are large layout panels, not cards */
+}
+
+/* ── 6. Non-visible animations: pause when off-screen ───────── */
+/* Reduce CPU on scroll by using animation-play-state */
+.av-pulse-dot,
+.gvs-dot--live,
+.hap-dot {
+  animation-play-state: running;
+}
+
+/* Kill all infinite animations on elements not related to live status */
+/* (These run forever even when nobody is looking) */
+.sec-rule,
+.sec-eyebrow::before,
+.hero-eyebrow-pulse,
+.scroll-progress::after,
+[class*="shimmer"],
+[class*="aurora"],
+[class*="glow-pulse"]:not(.av-pulse-dot):not(.gvs-dot--live):not(.hap-dot) {
+  animation-iteration-count: 1 !important;
+  animation-fill-mode: forwards !important;
+}
+
+/* ── 7. Contain rendering on scroll-heavy sections ───────────── */
+#experience,
+#education,
+#projects,
+#achievements,
+#skills {
+  contain: layout style;
+}
+
+/* ── Phase 6 — END ─────────────────────────────────────────── */

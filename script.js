@@ -291,6 +291,22 @@
 /* ================================================================
    GATE OVERLAY — simple card name-entry (from mixed_index)
 ================================================================ */
+
+// ── Singleton analytics Supabase client (shared across this page) ──
+// Created once; reused by _writeVisitorName and any other gate code.
+// Prevents a new connection being spawned on every name submission.
+let _gateAnalyticsDb = null;
+function _getGateAnalyticsDb() {
+  if (_gateAnalyticsDb) return _gateAnalyticsDb;
+  if (!window.supabase) return null;
+  _gateAnalyticsDb = window.supabase.createClient(
+    'https://tbdgrhekycgfdeatxjnq.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiZGdyaGVreWNnZmRlYXR4am5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5MzEsImV4cCI6MjA5NDk2NzkzMX0.HP48nehewf5HajLukSkLdJwuqiUTmbnfdcAk6x8_UEU',
+    { auth: { persistSession: false } }
+  );
+  return _gateAnalyticsDb;
+}
+
 (function () {
   const overlay      = document.getElementById('gate-overlay');
   const closeBtn     = document.getElementById('gateClose');
@@ -307,6 +323,35 @@
 
   let triggered = false;
   let dismissed = false;
+
+  // ── Admin bypass ──
+  if (localStorage.getItem('admin-auth') === '1') {
+    dismissed = true;
+    triggered = true;
+    if (!localStorage.getItem('sajid_visitor_name')) {
+      localStorage.setItem('sajid_visitor_name', 'Sajid (Admin)');
+    }
+    sessionStorage.setItem('_smVisitorName', localStorage.getItem('sajid_visitor_name'));
+    sessionStorage.setItem('sajid_visitor_name', localStorage.getItem('sajid_visitor_name'));
+  }
+
+  // ── Already completed gate THIS SESSION — skip showing it again ──
+  // localStorage name only pre-fills the input; it no longer skips the gate.
+  if (!dismissed && sessionStorage.getItem('_gateCompleted') === '1') {
+    dismissed = true;
+    triggered = true;
+    const _ssName = sessionStorage.getItem('sajid_visitor_name') || localStorage.getItem('sajid_visitor_name') || '';
+    if (_ssName) {
+      sessionStorage.setItem('_smVisitorName', _ssName);
+      sessionStorage.setItem('sajid_visitor_name', _ssName);
+    }
+  }
+
+  // ── Pre-fill name input from last visit ──
+  if (!dismissed && nameInput) {
+    const _prev = localStorage.getItem('sajid_visitor_name');
+    if (_prev) nameInput.value = _prev;
+  }
 
   function showGate() {
     if (dismissed) return;
@@ -348,13 +393,78 @@
       setTimeout(() => nameInput.style.borderColor = '', 1200);
       return;
     }
-    // Persist name so the review form uses it as sender_name
+    // Persist name for review form + analytics
     try {
       localStorage.setItem('sajid_visitor_name', name);
       sessionStorage.setItem('sajid_visitor_name', name);
+      sessionStorage.setItem('_smVisitorName', name);
+      sessionStorage.setItem('_gateCompleted', '1'); // prevents re-showing this session
     } catch (e) { /* private browsing — ignore */ }
-    // Skip welcome screen — close overlay immediately and go straight to portfolio
     if (welcomeName) welcomeName.textContent = name;
+
+    // ── Write visitor name back to Supabase so the dashboard updates ──
+    // Strategy (in order):
+    //   1. session_id  — set by analytics tracker (_smSessionId / sajid_session_id)
+    //   2. fingerprint — set by analytics tracker (_smFingerprint)
+    //   3. recent-row fallback — update the most recent nameless row created in the
+    //      last 5 minutes (covers race condition where tracker hasn't written yet)
+    (async function _writeVisitorName() {
+      try {
+        const db = _getGateAnalyticsDb();
+        if (!db) return;
+
+        let nameWritten = false;
+
+        // ── 1. session_id match (most precise) ──────────────────────────
+        const sid = sessionStorage.getItem('_smSessionId')
+                 || sessionStorage.getItem('sajid_session_id')
+                 || null;
+        if (sid) {
+          const { error } = await db.from('visitors')
+            .update({ visitor_name: name })
+            .eq('session_id', sid);
+          if (!error) nameWritten = true;
+        }
+
+        // ── 2. fingerprint match + visitor_profiles upsert ───────────────
+        const fp = sessionStorage.getItem('_smFingerprint')
+                || localStorage.getItem('_smFingerprint')
+                || null;
+        if (fp) {
+          await db.from('visitor_profiles').upsert(
+            { fingerprint: fp, visitor_name: name },
+            { onConflict: 'fingerprint' }
+          );
+          const { error } = await db.from('visitors')
+            .update({ visitor_name: name })
+            .eq('fingerprint', fp)
+            .is('visitor_name', null);
+          if (!error) nameWritten = true;
+        }
+
+        // ── 3. Recent-row fallback (covers analytics tracker race condition) ──
+        // If neither session_id nor fingerprint was available (tracker hasn't
+        // fired yet), update the most recent row with no name created in the
+        // last 5 minutes. Safe: one browser tab = one row per session.
+        if (!nameWritten) {
+          const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+          // Fetch the single most recent nameless row
+          const { data: rows } = await db.from('visitors')
+            .select('id')
+            .is('visitor_name', null)
+            .gte('created_at', fiveMinAgo)
+            .order('created_at', { ascending: false })
+            .limit(1);
+          if (rows && rows.length) {
+            await db.from('visitors')
+              .update({ visitor_name: name })
+              .eq('id', rows[0].id);
+          }
+        }
+
+      } catch (e) { /* fire-and-forget — never block the UI */ }
+    })();
+
     hideGate();
   }
 

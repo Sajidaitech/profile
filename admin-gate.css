@@ -8,73 +8,73 @@
 /* ── Gate glass card ── */
 /* Gate overlay glass card */
 .gate-glass-card {
-  background: linear-gradient(160deg,
-    rgba(30,40,70,.72) 0%,
-    rgba(22,30,56,.66) 40%,
-    rgba(25,35,65,.60) 70%,
-    rgba(28,38,68,.68) 100%) !important;
-  backdrop-filter: blur(48px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(48px) saturate(200%) !important;
+  background: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(40px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(1.6) !important;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.26),
-    inset 2px 0 0 rgba(255,255,255,.14),
+    inset 0 2px 0 rgba(255,255,255,.22),
+    inset 2px 0 0 rgba(255,255,255,.10),
     inset -1px 0 0 rgba(255,255,255,.06),
-    inset 0 -2px 6px rgba(0,0,0,.30),
-    0 0 0 1px rgba(0,0,0,.60),
-    0 28px 70px rgba(0,0,0,.64),
-    0 10px 28px rgba(0,0,0,.44) !important;
+    inset 0 -2px 6px rgba(0,0,0,.22),
+    0 0 0 1px rgba(255,255,255,.12),
+    0 28px 70px rgba(0,0,0,.55),
+    0 10px 28px rgba(0,0,0,.38) !important;
 }
 
 /* ── Gate text colours ── */
 /* Gate text */
-.gate-headline    { color: rgba(255,255,255,.97) !important; text-shadow: 0 1px 4px rgba(0,0,0,.50) !important; }
-.gate-sub         { color: rgba(255,255,255,.80) !important; }
-.gate-eyebrow     { color: rgba(255,255,255,.60) !important; }
-.gate-brand-name  { color: rgba(255,255,255,.95) !important; }
-.gate-brand-sub   { color: rgba(255,255,255,.60) !important; }
-.gate-label       { color: rgba(255,255,255,.68) !important; }
-.gate-status-text { color: rgba(255,255,255,.55) !important; }
+.gate-headline    { color: #ffffff !important; text-shadow: 0 1px 8px rgba(0,0,0,0.85) !important; }
+.gate-sub         { color: rgba(225,235,255,0.92) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.70) !important; }
+.gate-eyebrow     { color: rgba(210,195,165,0.90) !important; text-shadow: 0 1px 3px rgba(0,0,0,0.65) !important; }
+.gate-brand-name  { color: #ffffff !important; text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important; }
+.gate-brand-sub   { color: rgba(200,215,240,0.82) !important; text-shadow: 0 1px 3px rgba(0,0,0,0.60) !important; }
+.gate-label       { color: rgba(210,195,165,0.90) !important; text-shadow: 0 1px 3px rgba(0,0,0,0.65) !important; }
+.gate-status-text { color: rgba(190,205,232,0.82) !important; text-shadow: 0 1px 3px rgba(0,0,0,0.55) !important; }
 
 /* ── Gate submit button ── */
 /* Gate submit button */
 .gate-submit-btn {
-  background: linear-gradient(180deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.08) 100%) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  background: rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
   border-top:    1.5px solid rgba(255,255,255,.22) !important;
-  border-left:   1px   solid rgba(255,255,255,.13) !important;
-  border-right:  1px   solid rgba(255,255,255,.07) !important;
-  border-bottom: 2px   solid rgba(0,0,0,.28) !important;
-  color: rgba(240,245,255,.92) !important;
+  border-left:   1px   solid rgba(255,255,255,.14) !important;
+  border-right:  1px   solid rgba(255,255,255,.08) !important;
+  border-bottom: 2px   solid rgba(0,0,0,.22) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.20),
-    0 0 0 1px rgba(0,0,0,.52),
-    0 5px 18px rgba(0,0,0,.40),
-    0 2px 6px rgba(0,0,0,.30) !important;
+    inset 0 2px 0 rgba(255,255,255,.18),
+    0 0 0 1px rgba(255,255,255,.10),
+    0 5px 18px rgba(0,0,0,.35),
+    0 2px 6px rgba(0,0,0,.25) !important;
 }
 .gate-submit-btn:hover {
   transform: translateY(-2px) !important;
+  background: rgba(255,255,255,0.12) !important;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.26),
-    0 0 0 1px rgba(0,0,0,.56),
-    0 8px 24px rgba(0,0,0,.50) !important;
+    inset 0 2px 0 rgba(255,255,255,.24),
+    0 0 0 1px rgba(255,255,255,.14),
+    0 8px 24px rgba(0,0,0,.45) !important;
 }
 
 /* Gate input */
 .gate-input {
-  background: rgba(0,0,0,.24) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   border-top:    1px solid rgba(255,255,255,.22) !important;
-  border-left:   1px solid rgba(255,255,255,.12) !important;
-  border-right:  1px solid rgba(255,255,255,.06) !important;
-  border-bottom: 1.5px solid rgba(0,0,0,.36) !important;
-  color: rgba(240,245,255,.92) !important;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,.32), 0 1px 0 rgba(255,255,255,.08) !important;
+  border-left:   1px solid rgba(255,255,255,.14) !important;
+  border-right:  1px solid rgba(255,255,255,.08) !important;
+  border-bottom: 1.5px solid rgba(0,0,0,.22) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.22), 0 1px 0 rgba(255,255,255,.08) !important;
 }
-.gate-input::placeholder { color: rgba(140,155,185,.60) !important; }
+.gate-input::placeholder { color: rgba(255,255,255,0.45) !important; -webkit-text-fill-color: rgba(255,255,255,0.45) !important; }
 .gate-input:focus {
-  box-shadow: inset 0 2px 6px rgba(0,0,0,.28), 0 0 0 3px rgba(100,150,255,.22), 0 1px 0 rgba(255,255,255,.08) !important;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.20), 0 0 0 3px rgba(255,255,255,.12), 0 1px 0 rgba(255,255,255,.10) !important;
+  border-color: rgba(255,255,255,.30) !important;
 }
 
 /* ── Auth overlay ── */
@@ -95,7 +95,7 @@
     url('background.png');
   background-size: cover;
   background-position: center center;
-  background-attachment: fixed;
+  background-attachment: scroll;
   background-repeat: no-repeat;
 }
 
@@ -108,20 +108,27 @@
     background-attachment: scroll !important;
     background-position: center top !important;
   }
+
+  /* Title & subtitle — sharp white on dark bg */
+  .auth-title { color: #ffffff !important; text-shadow: 0 1px 8px rgba(0,0,0,0.85) !important; }
+  .auth-sub   { color: rgba(220,232,255,0.90) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.70) !important; }
+
+  /* Input typed text & placeholder */
+  .auth-input { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+  .auth-input::placeholder { color: rgba(255,255,255,0.50) !important; -webkit-text-fill-color: rgba(255,255,255,0.50) !important; }
+
+  /* Password label raised opacity */
+  #password-panel > p { color: rgba(210,195,165,0.92) !important; }
 }
 
 .auth-card {
-  background:
-    linear-gradient(160deg,
-      rgba(255,255,255,.14) 0%,
-      rgba(255,255,255,.08) 55%,
-      rgba(60,90,180,.07) 100%);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border-top:    1.5px solid rgba(255,255,255,.30);
+  background: rgba(255,255,255,0.07) !important;
+  backdrop-filter: blur(40px) saturate(1.6);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
+  border-top:    1.5px solid rgba(255,255,255,.28);
   border-left:   1px   solid rgba(255,255,255,.16);
-  border-right:  1px   solid rgba(255,255,255,.07);
-  border-bottom: 1px   solid rgba(0,0,0,.28);
+  border-right:  1px   solid rgba(255,255,255,.08);
+  border-bottom: 1px   solid rgba(0,0,0,.20);
   border-radius: 28px;
   padding: 44px 40px;
   width: 100%;
@@ -130,9 +137,9 @@
   flex-direction: column;
   gap: 14px;
   box-shadow:
-    inset 0 2px 0 rgba(255,255,255,.30),
-    0 0 0 1px rgba(0,0,0,.44),
-    0 16px 56px rgba(0,0,0,.52),
+    inset 0 2px 0 rgba(255,255,255,.26),
+    0 0 0 1px rgba(255,255,255,.10),
+    0 16px 56px rgba(0,0,0,.50),
     0 4px 16px rgba(0,0,0,.28);
 }
 [data-theme="light"] #auth-overlay {
@@ -147,15 +154,15 @@
   box-shadow: 0 8px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
 }
 .auth-logo   { font-size: 44px; text-align: center; }
-.auth-title  { font-size: 22px; font-weight: 700; color: var(--ink); text-align: center; }
-.auth-sub    { font-size: 13px; color: var(--ink-3); text-align: center; line-height: 1.5; }
+.auth-title  { font-size: 22px; font-weight: 700; color: #ffffff !important; text-align: center; text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important; }
+.auth-sub    { font-size: 13px; color: rgba(220,232,255,0.88) !important; text-align: center; line-height: 1.5; text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important; }
 .auth-input {
   padding: 13px 16px;
-  background: rgba(255,255,255,.08);
+  background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,.20);
-  border-top-color: rgba(255,255,255,.30);
+  border-top-color: rgba(255,255,255,.28);
   border-radius: 12px;
-  color: var(--ink);
+  color: #ffffff;
   font-size: 15px;
   font-family: inherit;
   outline: none;
@@ -166,7 +173,7 @@
   border-color: rgba(0,0,0,.12);
   color: var(--ink);
 }
-.auth-input::placeholder { color: var(--ink-4); }
+.auth-input::placeholder { color: rgba(255,255,255,0.48); }
 .auth-input:focus {
   border-color: rgba(100,150,255,.55);
   box-shadow: 0 0 0 3px rgba(80,130,255,.18);
@@ -207,3 +214,35 @@
 @media (max-width: 430px) {
   .auth-card { padding: 32px 22px; }
 }
+
+
+
+/* ── Password panel layout ── */
+#password-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Input + button side-by-side row ── */
+.auth-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.auth-input-row .auth-input { flex: 1; min-width: 0; }
+.auth-input-row .auth-btn   { flex-shrink: 0; white-space: nowrap; }
+
+/* ── Password label (small, above input) ── */
+#password-panel > p {
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: rgba(210,195,165,0.92) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.65) !important;
+  margin: 0 !important;
+}
+[data-theme="light"] #password-panel > p { color: rgba(0,0,0,.40) !important; }
+
+.auth-card { gap: 16px; }

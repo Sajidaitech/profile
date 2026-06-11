@@ -38,6 +38,7 @@
   <!-- DNS prefetch for external APIs used at runtime -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="dns-prefetch" href="https://tbdgrhekycgfdeatxjnq.supabase.co">
+  <link rel="dns-prefetch" href="https://ruiqfkzuqxxbyvycvsfo.supabase.co">
   <link rel="dns-prefetch" href="https://api.telegram.org">
   <link rel="dns-prefetch" href="https://ipapi.co">
   <link rel="dns-prefetch" href="https://api.openweathermap.org">
@@ -89,7 +90,7 @@
     #gate-bg-mobile {
       display: none;
       position: absolute; inset: 0;
-      background-image: url('loginpage.png');
+      background-image: url('mobilegatecard.png');
       background-size: cover;
       background-position: center center;
       background-color: #07111f;
@@ -2266,7 +2267,7 @@
     </section>
 
     <!-- ================================================================
-         LEAVE A REVIEW — standalone section
+         LEAVE A REVIEW — two-column: form left · approved pills right
     ================================================================ -->
     <section id="leave-review" class="section review-submit-section">
       <div class="container">
@@ -2276,41 +2277,42 @@
           <p class="sec-subtitle">Enjoyed this portfolio? Share your thoughts below.</p>
         </header>
 
-        <div class="review-standalone-wrap" data-aos="fade-up" data-aos-delay="80">
+        <!-- TWO-COLUMN WRAPPER -->
+        <div class="review-two-col-wrap" data-aos="fade-up" data-aos-delay="80">
+
+          <!-- ── LEFT: form card ── -->
           <div class="review-box" id="reviewBox">
 
-            <div id="reviewForm" class="review-form-horizontal">
+            <div id="reviewForm">
 
-              <!-- LEFT: stars + rating -->
-              <div class="review-left-col">
-                <div class="review-box-header">
-                  <i class="fas fa-star review-box-star"></i>
-                  <span class="review-box-title">Your Rating</span>
-                </div>
-                <div class="review-rating-row" id="reviewRatingRow">
-                  <span class="review-rating-label" id="reviewRatingLabel">Select stars</span>
-                  <div class="review-stars" id="reviewStars" role="radiogroup" aria-labelledby="reviewRatingLabel" aria-required="true">
-                    <span class="review-star" role="radio" aria-checked="false" aria-label="1 star"  data-val="1" tabindex="0">★</span>
-                    <span class="review-star" role="radio" aria-checked="false" aria-label="2 stars" data-val="2" tabindex="-1">★</span>
-                    <span class="review-star" role="radio" aria-checked="false" aria-label="3 stars" data-val="3" tabindex="-1">★</span>
-                    <span class="review-star" role="radio" aria-checked="false" aria-label="4 stars" data-val="4" tabindex="-1">★</span>
-                    <span class="review-star" role="radio" aria-checked="false" aria-label="5 stars" data-val="5" tabindex="-1">★</span>
-                  </div>
+              <!-- Form header -->
+              <div class="review-box-header">
+                <i class="fas fa-star review-box-star"></i>
+                <span class="review-box-title">Your Rating</span>
+              </div>
+
+              <!-- Stars row — INSIDE the form, not outside -->
+              <div class="review-rating-row" id="reviewRatingRow">
+                <span class="review-rating-label" id="reviewRatingLabel">Select stars</span>
+                <div class="review-stars" id="reviewStars" role="radiogroup" aria-labelledby="reviewRatingLabel" aria-required="true">
+                  <span class="review-star" role="radio" aria-checked="false" aria-label="1 star"  data-val="1" tabindex="0">★</span>
+                  <span class="review-star" role="radio" aria-checked="false" aria-label="2 stars" data-val="2" tabindex="-1">★</span>
+                  <span class="review-star" role="radio" aria-checked="false" aria-label="3 stars" data-val="3" tabindex="-1">★</span>
+                  <span class="review-star" role="radio" aria-checked="false" aria-label="4 stars" data-val="4" tabindex="-1">★</span>
+                  <span class="review-star" role="radio" aria-checked="false" aria-label="5 stars" data-val="5" tabindex="-1">★</span>
                 </div>
               </div>
 
-              <!-- RIGHT: name + textarea + submit -->
-              <div class="review-right-col">
-                <label for="reviewName" class="review-field-label">Your Name</label>
-                <input id="reviewName" name="reviewName" type="text" maxlength="120" placeholder="e.g. Alex Johnson" aria-label="Your name for the review" autocomplete="name">
-                <label for="reviewText" class="review-field-label">Your Review</label>
-                <textarea id="reviewText" name="reviewText" class="review-textarea" aria-label="Your review text" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="4" maxlength="1000"></textarea>
-                <div class="review-form-footer">
-                  <span class="review-char-count"><span id="reviewCharCount">0</span>/1000</span>
-                  <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
-                    <i class="fas fa-paper-plane"></i> Submit Review
-                  </button>
-                </div>
+              <!-- Name + textarea -->
+              <label for="reviewName" class="review-field-label">Your Name</label>
+              <input id="reviewName" name="reviewName" type="text" maxlength="120" placeholder="e.g. Alex Johnson" aria-label="Your name for the review" autocomplete="name">
+              <label for="reviewText" class="review-field-label">Your Review</label>
+              <textarea id="reviewText" name="reviewText" class="review-textarea" aria-label="Your review text" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="4" maxlength="1000"></textarea>
+              <div class="review-form-footer">
+                <span class="review-char-count"><span id="reviewCharCount">0</span>/1000</span>
+                <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
+                  <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
               </div>
 
             </div>
@@ -2321,7 +2323,37 @@
               <p style="font-size:13px; color:rgba(255,255,255,0.75);">It will appear here once approved by the site admin.</p>
             </div>
           </div>
-        </div>
+
+          <!-- ── RIGHT: approved reviews pill panel ── -->
+          <div class="review-pills-panel" id="reviewPillsPanel">
+            <div class="rpp-header">
+              <i class="fas fa-star rpp-header-star"></i>
+              <span class="rpp-header-title">What People Say</span>
+            </div>
+            <!-- Pills injected by reviews-portfolio.js -->
+            <div class="rpp-pills-list" id="rppPillsList">
+              <!-- skeleton state -->
+              <div class="rpp-pill rpp-skel-pill" aria-hidden="true">
+                <div class="rpp-skel rpp-skel-name"></div>
+                <div class="rpp-skel rpp-skel-stars"></div>
+                <div class="rpp-skel rpp-skel-text"></div>
+              </div>
+              <div class="rpp-pill rpp-skel-pill" aria-hidden="true">
+                <div class="rpp-skel rpp-skel-name"></div>
+                <div class="rpp-skel rpp-skel-stars"></div>
+                <div class="rpp-skel rpp-skel-text"></div>
+              </div>
+              <div class="rpp-pill rpp-skel-pill" aria-hidden="true">
+                <div class="rpp-skel rpp-skel-name"></div>
+                <div class="rpp-skel rpp-skel-stars"></div>
+                <div class="rpp-skel rpp-skel-text"></div>
+              </div>
+            </div>
+            <!-- Pagination dots -->
+            <div class="rpp-pagination" id="rppPagination" style="display:none;" aria-label="Review pages"></div>
+          </div>
+
+        </div><!-- /review-two-col-wrap -->
 
       </div>
     </section>
@@ -2546,14 +2578,15 @@
   <div class="amb-orb amb-orb-b" aria-hidden="true"></div>
   <div class="amb-orb amb-orb-c" aria-hidden="true"></div>
 
-  <!-- ═══ Analytics Engine ═══ -->
-  <script src="analytics.js"></script>
-
   <!-- Scripts -->
   <!-- AOS JS removed — animation system disabled to prevent section flicker -->
-  <!-- ONE script file only -->
+  <!-- analytics.js MUST load before (or alongside) script.js.
+       Both use defer so they race, but analytics writes sessionStorage keys
+       immediately at startup (before any Supabase call) so _writeVisitorName()
+       in script.js always finds _smSessionId / _smFingerprint. -->
+  <script src="analytics.js" defer></script>
   <script src="script.js" defer></script>
-  <noscript><style>.gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
+  <noscript><style>#gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
 
   <!-- ═══════════════════════════════════════════════════════════
        REVIEW SYSTEM — secure rewrite
@@ -2563,6 +2596,7 @@
        · NO service_role key anywhere in frontend code.
   ════════════════════════════════════════════════════════════ -->
   <script src="review-submit.js" defer></script>
+  <script src="reviews-portfolio.js" defer></script>
 
 
   <!-- ── Admin Dashboard Modal ──────────────────────────────── -->
@@ -2582,6 +2616,62 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeAdminDashboard();
     });
+  </script>
+
+
+  <!-- ── Scroll Entrance Animations ───────────────────────────── -->
+  <script>
+  (function() {
+    // Elements to animate + their variant class
+    var targets = [
+      // Section headers
+      ['.section-header', 'anim-fade'],
+      // Hero chips (already CSS-animated, skip)
+      // Cards
+      ['.gc-card',          'anim-scale'],
+      ['.wh-card',          'anim-scale'],
+      ['.museum-case',      ''],
+      ['.arsenal-category', ''],
+      ['.ach-award-card',   ''],
+      ['.ref-card',         'anim-scale'],
+      ['.hie-card',         'anim-scale'],
+      ['.cert-card',        'anim-scale'],
+      ['.cert-hero-card',   'anim-scale'],
+      // Proof bar stats
+      ['.proof-stat',       ''],
+      // About stats
+      ['.about-stat',       'anim-scale'],
+      // Engage rows
+      ['.engage-row',       ''],
+      // Review pills panel
+      ['.review-pills-panel', 'anim-slide-left'],
+      ['.review-box',         'anim-slide-right'],
+    ];
+
+    if (!('IntersectionObserver' in window)) return; // no-JS fallback: elements stay visible
+
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('anim-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.10, rootMargin: '0px 0px -40px 0px' });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      targets.forEach(function(pair) {
+        var sel = pair[0], variant = pair[1];
+        document.querySelectorAll(sel).forEach(function(el, i) {
+          // Skip hero section elements (already CSS-animated)
+          if (el.closest('#home')) return;
+          el.classList.add('anim-pending');
+          if (variant) el.classList.add(variant);
+          io.observe(el);
+        });
+      });
+    });
+  })();
   </script>
 
 </body>
