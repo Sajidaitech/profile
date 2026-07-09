@@ -1419,14 +1419,15 @@ function loadLanguages() {
 var certData = [
   {
     icon: 'fa-network-wired',
-    badge: '⭐ FEATURED',
-    badgeClass: 'cc-badge--verified',
-    title: 'CCNA 200-301',
-    issuer: 'Simplilearn SkillUp',
-    date: 'January 17, 2026',
+    logo: 'corvitnetworkPeshawar.png',
+    badge: '🔄 IN PROGRESS',
+    badgeClass: 'cc-badge--progress',
+    title: 'CCNA (Cisco Certified Network Associate)',
+    issuer: 'Corvit Systems Peshawar · City Tower Branch',
+    date: 'In Progress · 2026',
     category: 'Networking',
-    desc: 'Cisco Certified Network Associate — enterprise routing & switching, TCP/IP, OSPF, VLANs, network security, and automation. Credential ID: 9726449.',
-    url: 'https://drive.google.com/file/d/18ZVcmGVI9DFaDImxK2py2AezvOP03YG8/view?usp=sharing'
+    desc: 'Classroom-based CCNA training covering enterprise routing & switching, TCP/IP, OSPF, VLANs, and network security — currently in progress at Corvit Systems Peshawar, City Tower branch.',
+    url: ''
   },
   {
     icon: 'fa-certificate',
@@ -1495,6 +1496,18 @@ var certData = [
     url: ''
   },
   {
+    icon: 'fa-cloud',
+    logo: 'corvitnetworkPeshawar.png',
+    badge: '🔄 IN PROGRESS',
+    badgeClass: 'cc-badge--progress',
+    title: 'Microsoft Azure Fundamentals',
+    issuer: 'Corvit Systems Peshawar · Ali Tower Branch',
+    date: 'In Progress · 2026',
+    category: 'Cloud',
+    desc: 'Building cloud computing foundations — Azure core services, identity, governance, and cloud infrastructure management — currently in progress at Corvit Systems Peshawar, Ali Tower branch.',
+    url: ''
+  },
+  {
     icon: 'fa-university',
     badge: '🏅 HONOURS',
     badgeClass: 'cc-badge--gold',
@@ -1530,7 +1543,12 @@ function loadCertifications() {
       '<div class="cert-hero-card" style="animation:certReveal .7s cubic-bezier(.22,1,.36,1) 0ms both;">' +
         '<div class="chc-shimmer" aria-hidden="true"></div>' +
         '<div class="chc-left">' +
-          '<div class="chc-icon-ring"><i class="fas ' + hero.icon + '"></i></div>' +
+          '<div class="chc-icon-ring" style="' + (hero.logo ? 'background:#ffffff;' : '') + '">' +
+            (hero.logo
+              ? '<img src="' + hero.logo + '" alt="' + hero.issuer + ' logo" style="width:38px;height:38px;object-fit:contain;">'
+              : '<i class="fas ' + hero.icon + '"></i>'
+            ) +
+          '</div>' +
         '</div>' +
         '<div class="chc-body">' +
           '<span class="chc-eyebrow">⭐ Featured Certification</span>' +
@@ -1539,12 +1557,18 @@ function loadCertifications() {
           '<div class="chc-meta-row">' +
             '<span class="chc-meta-pill"><i class="fas fa-building"></i>' + hero.issuer + '</span>' +
             '<span class="chc-meta-pill"><i class="fas fa-calendar-alt"></i>' + hero.date + '</span>' +
-            '<span class="chc-meta-pill chc-cred"><i class="fas fa-fingerprint"></i>Credential ID: 9726449</span>' +
+            (hero.credentialId
+              ? '<span class="chc-meta-pill chc-cred"><i class="fas fa-fingerprint"></i>Credential ID: ' + hero.credentialId + '</span>'
+              : ''
+            ) +
           '</div>' +
           '<p class="chc-desc">' + hero.desc + '</p>' +
-          '<a href="' + hero.url + '" target="_blank" rel="noopener noreferrer" class="chc-verify-btn">' +
-            '<i class="fas fa-shield-check"></i> Verify Certificate' +
-          '</a>' +
+          (hero.url
+            ? '<a href="' + hero.url + '" target="_blank" rel="noopener noreferrer" class="chc-verify-btn">' +
+                '<i class="fas fa-shield-check"></i> Verify Certificate' +
+              '</a>'
+            : '<span class="chc-verify-btn chc-verify-btn--progress"><i class="fas fa-clock"></i> Certification In Progress</span>'
+          ) +
         '</div>' +
         '<div class="chc-seal" aria-hidden="true">🏆</div>' +
       '</div>';
@@ -1573,8 +1597,11 @@ function loadCertifications() {
     frame.innerHTML =
       '<div class="cert-card-inner">' +
         '<div class="cc-top-row">' +
-          '<div class="cc-icon-wrap" style="background:' + accent + '22;color:' + accent + ';">' +
-            '<i class="fas ' + cert.icon + '"></i>' +
+          '<div class="cc-icon-wrap" style="background:' + (cert.logo ? '#ffffff' : accent + '22') + ';color:' + accent + ';">' +
+            (cert.logo
+              ? '<img src="' + cert.logo + '" alt="' + cert.issuer + ' logo" style="width:30px;height:30px;object-fit:contain;">'
+              : '<i class="fas ' + cert.icon + '"></i>'
+            ) +
           '</div>' +
           '<span class="cc-badge ' + cert.badgeClass + '">' + cert.badge + '</span>' +
         '</div>' +
