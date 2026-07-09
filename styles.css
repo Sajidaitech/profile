@@ -27192,7 +27192,7 @@ body::before {
 }
 @media (max-width: 767px) {
   body::before {
-    background: url('mobilebackground.png') center center / cover no-repeat !important;
+    background: url('mobilebackground.jpg') center center / cover no-repeat !important;
   }
 }
 /* Lighten atmospheric overlay so photo stays vivid */
@@ -27670,7 +27670,7 @@ body::before {
 /* Mobile background swap */
 @media (max-width: 767px) {
   body::before {
-    background: url('mobilebackground.png') center center / cover no-repeat !important;
+    background: url('mobilebackground.jpg') center center / cover no-repeat !important;
     background-attachment: scroll !important;
   }
 }
@@ -32853,13 +32853,16 @@ body::before {
   body::before {
     background:
       linear-gradient(180deg,
-        rgba(3,8,20,0.64) 0%,
-        rgba(3,8,20,0.48) 16%,
-        rgba(3,8,20,0.44) 34%,
-        rgba(3,8,20,0.46) 66%,
-        rgba(3,8,20,0.52) 86%,
-        rgba(3,8,20,0.64) 100%),
-      url('mobilebackground.png') center center / cover no-repeat !important;
+        rgba(3,8,20,0.66) 0%,
+        rgba(3,8,20,0.50) 16%,
+        rgba(3,8,20,0.46) 30%,
+        rgba(3,8,20,0.62) 42%,
+        rgba(3,8,20,0.66) 50%,
+        rgba(3,8,20,0.60) 58%,
+        rgba(3,8,20,0.52) 68%,
+        rgba(3,8,20,0.58) 82%,
+        rgba(3,8,20,0.68) 100%),
+      url('mobilebackground.jpg') center center / cover no-repeat !important;
     background-attachment: scroll !important;
   }
 }
