@@ -33548,3 +33548,30 @@ footer.ftr,
   .nav-mob-drawer { z-index: 998; }
   .nav-mob-toggle { z-index: 999; position: relative; }
 }
+
+/* ================================================================
+   ★★★ DEFINITIVE FINAL OVERRIDE v6 — WEATHER BAR CENTERING FIX ★★★
+   ----------------------------------------------------------------
+   Root cause: a later "compositor hint" rule re-set `transform` on
+   .weather-bar to `translateZ(0)` only. CSS transform values don't
+   merge — this silently wiped out the original translateX(-50%)
+   that did the actual centering, so the bar's LEFT EDGE (not its
+   center) sat at the horizontal midpoint of the screen, pushing
+   most of it off-screen to the right — worst on mobile. This
+   restores the centering transform (keeping the translateZ(0)
+   perf hint alongside it) and caps the width so it can never
+   overflow the viewport, on both mobile and desktop. Appended
+   last on purpose so nothing after it can wipe it out again.
+================================================================ */
+.weather-bar {
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) translateZ(0) !important;
+  max-width: calc(100vw - 24px) !important;
+  justify-content: center !important;
+}
+@media (max-width: 480px) {
+  .weather-bar {
+    max-width: calc(100vw - 16px) !important;
+  }
+}
