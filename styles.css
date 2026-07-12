@@ -33479,3 +33479,72 @@ footer.ftr,
   border-color: rgba(255,255,255,0.22) !important;
   color: #ffffff !important;
 }
+
+/* ================================================================
+   ★★★ DEFINITIVE FINAL OVERRIDE v5 — MOBILE NAV DROPDOWN FIX ★★★
+   ----------------------------------------------------------------
+   Root cause: an earlier pass further up this file ("CG-2 NAVBAR")
+   set .nav-mob-drawer's background to fully transparent
+   (rgba(255,255,255,0.00)) and only kept a backdrop blur. With no
+   tint behind it, the white menu links sat directly on the raw,
+   often-bright photo background and lost all contrast — the "blur
+   without a scrim" bug. This block is appended last on purpose so
+   it wins every tie in the cascade (same specificity, later wins).
+================================================================ */
+
+/* Solid, blurred dark panel — text now has guaranteed contrast
+   no matter how bright the photo behind it is. */
+.nav-mob-drawer {
+  background: rgba(6, 10, 22, 0.90) !important;
+  backdrop-filter: blur(28px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(160%) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 18px 46px rgba(0,0,0,0.50),
+    0 4px 16px rgba(0,0,0,0.35) !important;
+  padding: 8px !important;
+  gap: 2px !important;
+}
+
+/* Menu items — bright, legible text, tidy touch targets, subtle
+   dividers so the list reads as clean rows instead of a smear. */
+.nav-mob-link {
+  color: rgba(255,255,255,0.94) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.94) !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border-radius: 14px !important;
+  padding: 13px 16px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+  transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease !important;
+}
+.nav-mob-link:last-child { border-bottom: none !important; }
+
+.nav-mob-link:hover,
+.nav-mob-link:active,
+.nav-mob-link.is-active {
+  background: rgba(255,255,255,0.12) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  padding-left: 20px !important;
+}
+
+/* Dim the page behind the open drawer so the menu reads as its
+   own distinct layer rather than a see-through smear over the
+   hero photo. Progressive enhancement — harmless if :has() isn't
+   supported by the browser. */
+@media (max-width: 767px) {
+  body:has(.nav-mob-drawer.open)::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 6, 14, 0.45);
+    z-index: 997;
+    pointer-events: none;
+  }
+  .nav-mob-drawer { z-index: 998; }
+  .nav-mob-toggle { z-index: 999; position: relative; }
+}

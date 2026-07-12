@@ -1795,25 +1795,68 @@ function printSignature() {
   // (navigator.geolocation would be more precise but pops a browser
   // permission dialog most visitors will just dismiss — IP lookup is
   // "good enough" for a weather widget and works silently for everyone.)
-  var DOHA_LAT = 25.2854, DOHA_LON = 51.5310; // fallback if detection fails
+  var DOHA_LAT = 25.2854, DOHA_LON = 51.5310; // last-resort fallback if every provider fails
   var geo = { lat: DOHA_LAT, lon: DOHA_LON, label: 'Doha, QA' };
 
-  function detectLocation() {
-    return fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) })
+  // Several free, no-API-key IP-geolocation providers, tried in order.
+  // A single provider (ipapi.co) has a low free-tier rate limit and
+  // starts silently failing under normal traffic — that was causing
+  // every visitor to see the Doha fallback instead of their own city.
+  // Chaining providers means we only fall back to Doha if ALL of them
+  // are down at once.
+  var GEO_PROVIDERS = [
+    {
+      url: 'https://ipapi.co/json/',
+      parse: function (d) {
+        if (!d || !d.latitude || !d.longitude) return null;
+        var city = d.city || '';
+        var cc   = d.country_code || d.country_name || '';
+        return { lat: d.latitude, lon: d.longitude, label: (city ? city + ', ' : '') + cc };
+      }
+    },
+    {
+      url: 'https://ipwho.is/',
+      parse: function (d) {
+        if (!d || d.success === false || !d.latitude || !d.longitude) return null;
+        var city = d.city || '';
+        var cc   = (d.country_code || d.country || '');
+        return { lat: d.latitude, lon: d.longitude, label: (city ? city + ', ' : '') + cc };
+      }
+    },
+    {
+      url: 'https://get.geojs.io/v1/ip/geo.json',
+      parse: function (d) {
+        if (!d || !d.latitude || !d.longitude) return null;
+        var city = d.city || '';
+        var cc   = d.country_code || d.country || '';
+        return { lat: parseFloat(d.latitude), lon: parseFloat(d.longitude), label: (city ? city + ', ' : '') + cc };
+      }
+    }
+  ];
+
+  function tryProvider(i) {
+    if (i >= GEO_PROVIDERS.length) {
+      console.warn('[WeatherBar] all location providers failed, defaulting to Doha');
+      return Promise.resolve();
+    }
+    var provider = GEO_PROVIDERS[i];
+    return fetch(provider.url, { signal: AbortSignal.timeout(5000) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.latitude && d.longitude) {
-          geo.lat = d.latitude;
-          geo.lon = d.longitude;
-          var city = d.city || '';
-          var cc   = d.country_code || d.country_name || '';
-          geo.label = (city ? city + ', ' : '') + cc;
-        }
+        var result = provider.parse(d);
+        if (!result) throw new Error('empty/invalid response');
+        geo.lat = result.lat;
+        geo.lon = result.lon;
+        geo.label = result.label;
       })
       .catch(function (e) {
-        // Silent fallback to Doha — never blocks the widget from rendering
-        console.warn('[WeatherBar] location detect failed, defaulting to Doha:', e.message);
+        console.warn('[WeatherBar] provider failed (' + provider.url + '):', e.message);
+        return tryProvider(i + 1);
       });
+  }
+
+  function detectLocation() {
+    return tryProvider(0);
   }
 
   // ── 3. WEATHER (Open-Meteo — free, no API key needed) ────────
