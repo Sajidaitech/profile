@@ -251,6 +251,11 @@
         <span class="nmt-bar nmt-bar-2"></span>
         <span class="nmt-bar nmt-bar-3"></span>
       </button>
+
+      <!-- Admin login — desktop nav bar -->
+      <a href="#" onclick="openAdminDashboard();return false;" class="nav-admin-btn" title="Admin Login" aria-label="Admin login">
+        <i class="fas fa-lock"></i>
+      </a>
     </div>
 
     <nav class="nav-mob-drawer" id="navMobDrawer" aria-label="Mobile navigation menu">
@@ -265,6 +270,7 @@
       <a href="#fieldwork"      class="nav-mob-link nav-anchor">🔧 Hands-On Infrastructure</a>
       <a href="#references"     class="nav-mob-link nav-anchor">References</a>
       <a href="#contact"        class="nav-mob-link nav-anchor">Contact</a>
+      <a href="#" onclick="openAdminDashboard();return false;" class="nav-mob-link">🔒 Admin Login</a>
     </nav>
   </header>
 
@@ -2358,114 +2364,80 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <img src="logo.png" alt="SM" class="footer-logo" loading="lazy">
-        <div>
-          <span class="footer-name">Sajid Mehmood</span>
-          <span class="footer-role">IT Support Engineer · CCNA</span>
+  <footer class="footer ftr">
+    <div class="ftr-rim" aria-hidden="true"></div>
+    <div class="ftr-inner">
+
+      <!-- Column 1 — Brand -->
+      <div class="ftr-col ftr-col-brand">
+        <div class="ftr-brand-row">
+          <img src="logo.png" alt="SM" class="ftr-logo" loading="lazy">
+          <div>
+            <span class="ftr-name">Sajid Mehmood</span>
+            <span class="ftr-role">IT Support Engineer · CCNA</span>
+          </div>
+        </div>
+        <p class="ftr-tagline">Keeping systems online, one ticket at a time.</p>
+      </div>
+
+      <!-- Column 2 — Navigate -->
+      <nav class="ftr-col ftr-col-nav" aria-label="Footer navigation">
+        <span class="ftr-eyebrow">Navigate</span>
+        <a href="#about"    class="ftr-link nav-anchor"><i class="fas fa-user" aria-hidden="true"></i><span>Profile</span></a>
+        <a href="#projects" class="ftr-link nav-anchor"><i class="fas fa-folder-open" aria-hidden="true"></i><span>Projects</span></a>
+        <a href="#arsenal"  class="ftr-link nav-anchor"><i class="fas fa-toolbox" aria-hidden="true"></i><span>Arsenal</span></a>
+        <a href="#contact"  class="ftr-link nav-anchor"><i class="fas fa-bolt" aria-hidden="true"></i><span>Contact</span></a>
+      </nav>
+
+      <!-- Column 3 — Connect -->
+      <div class="ftr-col ftr-col-connect">
+        <span class="ftr-eyebrow">Connect</span>
+        <div class="ftr-icon-row">
+          <a href="https://wa.me/97466969598?text=Hi%20Sajid%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!"
+             target="_blank" rel="noopener noreferrer" class="ftr-icon-btn" aria-label="WhatsApp Sajid" title="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/sajid-mk-1b3954333"
+             target="_blank" rel="noopener noreferrer" class="ftr-icon-btn" aria-label="LinkedIn profile" title="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+          <a href="mailto:INFO@SAJIDMK.COM" class="ftr-icon-btn" aria-label="Send email" title="Email">
+            <i class="fas fa-envelope"></i>
+          </a>
+          <a href="tel:+97466969598" class="ftr-icon-btn" aria-label="Call Sajid" title="Call">
+            <i class="fas fa-phone"></i>
+          </a>
+          <a href="#" onclick="openPdfModal();return false;" class="ftr-icon-btn" aria-label="View Resume PDF" title="Resume">
+            <i class="fas fa-file-arrow-down"></i>
+          </a>
         </div>
       </div>
-      <nav class="footer-links footer-nav-btns" aria-label="Footer navigation">
-        <a href="#about"    class="footer-glass-btn nav-anchor">
-        <i class="fas fa-user footer-btn-icon" aria-hidden="true"></i>
-          <span>Profile</span>
-        </a>
-        <a href="#projects" class="footer-glass-btn nav-anchor">
-        <i class="fas fa-folder-open footer-btn-icon" aria-hidden="true"></i>
-          <span>Projects</span>
-        </a>
-        <a href="#arsenal"  class="footer-glass-btn nav-anchor">
-        <i class="fas fa-toolbox footer-btn-icon" aria-hidden="true"></i>
-          <span>Arsenal</span>
-        </a>
-        <a href="#contact"  class="footer-glass-btn nav-anchor">
-        <i class="fas fa-bolt footer-btn-icon" aria-hidden="true"></i>
-          <span>Contact</span>
-        </a>
-      </nav>
-      <div class="footer-copy">
-        <span>&copy; 2025 Sajid Mehmood. All Rights Reserved. 🌙</span>
-        <div class="footer-visitor-badge">
+
+    </div>
+
+    <!-- Status bar -->
+    <div class="ftr-status-bar">
+      <div class="ftr-status-left">
+        <span class="ftr-copy">&copy; 2025 Sajid Mehmood 🌙</span>
+        <span class="ftr-dot-sep">·</span>
+        <span class="ftr-live">
           <span class="fvb-dot" id="footer-online-dot"></span>
           <span id="footer-online-count">—</span> online
-          &nbsp;·&nbsp;
+          <span class="ftr-dot-sep">·</span>
           <span id="footer-total-count">—</span> total visits
-        </div>
+        </span>
       </div>
-
-      <!-- ── FOOTER ACTIONS AREA ───────────────────────────────── -->
-      <div class="footer-actions" aria-label="Quick contact actions">
-
-        <!-- Divider rule -->
-        <div class="fa-divider" aria-hidden="true"></div>
-
-        <!-- Row 1: Primary contact -->
-        <div class="fa-row fa-row-primary">
-          <a href="https://wa.me/97466969598?text=Hi%20Sajid%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!"
-             target="_blank" rel="noopener noreferrer"
-             class="fa-btn fa-btn--whatsapp"
-             aria-label="WhatsApp Sajid">
-            <span class="fa-btn-glow"></span>
-            <i class="fab fa-whatsapp fa-btn-icon"></i>
-            <span class="fa-btn-label">WhatsApp</span>
-          </a>
-
-          <a href="#" onclick="openPdfModal();return false;"
-             class="fa-btn fa-btn--resume"
-             aria-label="View Resume PDF">
-            <span class="fa-btn-glow"></span>
-            <i class="fas fa-file-arrow-down fa-btn-icon"></i>
-            <span class="fa-btn-label">Resume</span>
-          </a>
-
-          <a href="https://www.linkedin.com/in/sajid-mk-1b3954333"
-             target="_blank" rel="noopener noreferrer"
-             class="fa-btn fa-btn--linkedin"
-             aria-label="LinkedIn profile">
-            <span class="fa-btn-glow"></span>
-            <i class="fab fa-linkedin-in fa-btn-icon"></i>
-            <span class="fa-btn-label">LinkedIn</span>
-          </a>
-        </div>
-
-        <!-- Row 2: Secondary contact -->
-        <div class="fa-row fa-row-secondary">
-          <a href="mailto:INFO@SAJIDMK.COM"
-             class="fa-btn fa-btn--email"
-             aria-label="Send email">
-            <span class="fa-btn-glow"></span>
-            <i class="fas fa-envelope fa-btn-icon"></i>
-            <span class="fa-btn-label">Email</span>
-          </a>
-
-          <a href="tel:+97466969598"
-             class="fa-btn fa-btn--call"
-             aria-label="Call Sajid">
-            <span class="fa-btn-glow"></span>
-            <i class="fas fa-phone fa-btn-icon"></i>
-            <span class="fa-btn-label">Call</span>
-          </a>
-
-          <button onclick="window.scrollTo({top:0,behavior:'smooth'})"
-                  class="fa-btn fa-btn--top"
-                  aria-label="Back to top">
-            <span class="fa-btn-glow"></span>
-            <i class="fas fa-chevron-up fa-btn-icon"></i>
-            <span class="fa-btn-label">Top</span>
-          </button>
-        </div>
-
+      <div class="ftr-status-right">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="ftr-mini-btn" aria-label="Back to top" title="Back to top">
+          <i class="fas fa-chevron-up"></i>
+        </button>
+        <a href="#" onclick="openAdminDashboard();return false;" class="ftr-mini-btn ftr-admin-btn" title="Admin Analytics" aria-label="Admin dashboard">
+          <i class="fas fa-chart-line"></i>
+        </a>
       </div>
-      <!-- ── /FOOTER ACTIONS AREA ──────────────────────────────── -->
-
-      <!-- Hidden admin button — discreet chart icon, only you know it is here -->
-      <a href="#" onclick="openAdminDashboard();return false;" class="footer-admin-btn" title="Admin Analytics" aria-label="Admin dashboard">
-        <i class="fas fa-chart-line"></i>
-      </a>
     </div>
   </footer>
+
 
   <!-- ================================================================
        PDF RESUME MODAL — Embedded, no Google Drive needed

@@ -161,8 +161,22 @@ function initDashboard() {
   });
 
   // ── Realtime subscription ─────────────────────────────────
+  // Debounced: analytics.js inserts a `visitors` row on every single
+  // page view across your live site, so postgres_changes can fire in
+  // rapid bursts. Without debouncing, each event triggered its own
+  // loadAll() immediately — overlapping async calls could then resolve
+  // out of order, letting an older/slower response overwrite a newer
+  // one. That's what caused the dashboard to visibly flicker and
+  // occasionally show stale data. Now a burst of events collapses into
+  // a single refresh, fired 500ms after the last event in the burst.
+  let _refreshDebounceTimer = null;
+  function _debouncedLoadAll() {
+    clearTimeout(_refreshDebounceTimer);
+    _refreshDebounceTimer = setTimeout(loadAll, 500);
+  }
+
   db.channel('dash-live')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, loadAll)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'visitors' }, _debouncedLoadAll)
     .on('postgres_changes', { event: '*', schema: 'public', table: 'online_visitors' }, updateOnlineBadge)
     .subscribe();
 
@@ -205,7 +219,17 @@ async function updateOnlineBadge() {
 // ── Recent visitors table ────────────────────────────────────
 // FIX: LEFT JOIN visitor_profiles to get name + location as fallback
 // when the visitors row was inserted before the gate was submitted.
+//
+// Sequence guard: if loadRecentVisitors() gets called again before an
+// in-flight call finishes (e.g. two realtime bursts close together),
+// the older call's response can arrive AFTER the newer one and
+// overwrite the table with stale data — this was the other half of
+// the "blinking / not updating" bug. _visitorsReqId tags each call;
+// a response only gets rendered if it's still the most recent request.
+let _visitorsReqId = 0;
 async function loadRecentVisitors() {
+  const myReqId = ++_visitorsReqId;
+
   // Query visitors table; also pull from visitor_profiles via fingerprint
   // so that even rows inserted before name entry show the correct name.
   const { data, error } = await db
@@ -230,6 +254,8 @@ async function loadRecentVisitors() {
     .order('created_at', { ascending: false })
     .limit(100);
 
+  if (myReqId !== _visitorsReqId) return; // a newer call was already made — drop this one
+
   if (error) {
     console.error('loadRecentVisitors error:', error.message);
     return;
@@ -253,6 +279,8 @@ async function loadRecentVisitors() {
       profiles.forEach(p => { profileMap[p.fingerprint] = p; });
     }
   }
+
+  if (myReqId !== _visitorsReqId) return; // check again — the profile lookup also awaited
 
   const tbody = document.getElementById('visitors-tbody');
   if (!data.length) {

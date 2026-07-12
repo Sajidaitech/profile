@@ -307,6 +307,11 @@ function _getGateAnalyticsDb() {
   return _gateAnalyticsDb;
 }
 
+// ── How long we "remember" a visitor before asking their name again ──
+// Change to 24*60*60*1000 for daily, or leave at 7 days for weekly.
+// NOTE: analytics.js has a matching constant — keep both in sync.
+const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
 (function () {
   const overlay      = document.getElementById('gate-overlay');
   const closeBtn     = document.getElementById('gateClose');
@@ -336,7 +341,6 @@ function _getGateAnalyticsDb() {
   }
 
   // ── Already completed gate THIS SESSION — skip showing it again ──
-  // localStorage name only pre-fills the input; it no longer skips the gate.
   if (!dismissed && sessionStorage.getItem('_gateCompleted') === '1') {
     dismissed = true;
     triggered = true;
@@ -344,6 +348,26 @@ function _getGateAnalyticsDb() {
     if (_ssName) {
       sessionStorage.setItem('_smVisitorName', _ssName);
       sessionStorage.setItem('sajid_visitor_name', _ssName);
+    }
+  }
+
+  // ── Remembered visitor — gave their name recently, skip the gate ──────
+  // If they submitted a name within the last GATE_REMEMBER_MS window, don't
+  // ask again. Their page view is tracked regardless by analytics.js (which
+  // runs independently of the gate); here we just silently reattach their
+  // name to this new session's row/profile with no UI shown.
+  if (!dismissed) {
+    const _remName   = localStorage.getItem('sajid_visitor_name');
+    const _remSeenAt = parseInt(localStorage.getItem('sajid_visitor_seen_at') || '0', 10);
+    const _isFresh   = !!_remName && !!_remSeenAt && (Date.now() - _remSeenAt < GATE_REMEMBER_MS);
+    if (_isFresh) {
+      dismissed = true;
+      triggered = true;
+      sessionStorage.setItem('_smVisitorName', _remName);
+      sessionStorage.setItem('sajid_visitor_name', _remName);
+      sessionStorage.setItem('_gateCompleted', '1');
+      // Fire after the gate module below defines _writeVisitorName.
+      setTimeout(() => { if (window._smReattachName) window._smReattachName(_remName); }, 0);
     }
   }
 
@@ -385,6 +409,95 @@ function _getGateAnalyticsDb() {
     /* No scroll restoration needed — position was never changed */
   }
 
+  // ── Write visitor name back to Supabase so the dashboard updates ──────
+  // Shared by the explicit submitName() flow AND the silent "remembered
+  // visitor" flow (no UI shown). Strategy, in order:
+  //   1. fingerprint → visitor_profiles upsert. This is the ONLY step that
+  //      never depends on the visitors row already existing, so it's the
+  //      most reliable and runs first. dashboard.js already falls back to
+  //      visitor_profiles for any visitors row missing a name.
+  //   2. session_id  — updates THIS session's own visitors row directly,
+  //      when it exists.
+  //   3. recent-row fallback — covers the case where analytics.js's insert
+  //      genuinely hasn't landed yet (slow Supabase SDK load). We check the
+  //      actual returned rows (via .select()) rather than trusting "no
+  //      error", since Supabase does not error on a zero-row update — that
+  //      false positive was silently dropping names before.
+  // All Supabase errors are logged (not swallowed) so RLS/permission issues
+  // show up in the console instead of failing invisibly.
+  async function _writeVisitorName(name) {
+    try {
+      const db = _getGateAnalyticsDb();
+      if (!db) return;
+
+      let confirmed = false;
+
+      // ── 1. fingerprint → visitor_profiles upsert (race-free) ──────────
+      const fp = sessionStorage.getItem('_smFingerprint')
+              || localStorage.getItem('_smFingerprint')
+              || null;
+      if (fp) {
+        const { error: profErr } = await db.from('visitor_profiles').upsert(
+          { fingerprint: fp, visitor_name: name },
+          { onConflict: 'fingerprint' }
+        );
+        if (profErr) console.warn('[Gate] visitor_profiles upsert failed:', profErr.message);
+        else confirmed = true;
+
+        const { data: fpRows, error: fpErr } = await db.from('visitors')
+          .update({ visitor_name: name })
+          .eq('fingerprint', fp)
+          .is('visitor_name', null)
+          .select('id');
+        if (fpErr) console.warn('[Gate] visitors update (fingerprint) failed:', fpErr.message);
+      }
+
+      // ── 2. session_id match — this session's own row ───────────────────
+      const sid = sessionStorage.getItem('_smSessionId')
+               || sessionStorage.getItem('sajid_session_id')
+               || null;
+      if (sid) {
+        const { data: sidRows, error: sidErr } = await db.from('visitors')
+          .update({ visitor_name: name })
+          .eq('session_id', sid)
+          .select('id');
+        if (sidErr) console.warn('[Gate] visitors update (session_id) failed:', sidErr.message);
+        if (sidRows && sidRows.length) confirmed = true;
+      }
+
+      // ── 3. Recent-row fallback — only if nothing above actually matched
+      //      a row (guards the analytics.js insert race). ────────────────
+      if (!confirmed) {
+        const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+        const { data: rows } = await db.from('visitors')
+          .select('id')
+          .is('visitor_name', null)
+          .gte('created_at', fiveMinAgo)
+          .order('created_at', { ascending: false })
+          .limit(1);
+        if (rows && rows.length) {
+          const { error: fbErr } = await db.from('visitors')
+            .update({ visitor_name: name })
+            .eq('id', rows[0].id);
+          if (fbErr) console.warn('[Gate] visitors update (fallback) failed:', fbErr.message);
+        }
+      }
+    } catch (e) {
+      console.warn('[Gate] _writeVisitorName error:', e.message);
+    }
+  }
+
+  // Retry shortly after: covers analytics.js's insert landing a beat late
+  // on a slow connection (it can wait up to 8s for the Supabase SDK).
+  function _writeVisitorNameWithRetry(name) {
+    _writeVisitorName(name);
+    setTimeout(() => _writeVisitorName(name), 2500);
+  }
+
+  // Exposed so the silent "remembered visitor" boot path (above) can call
+  // it once this IIFE has finished defining it.
+  window._smReattachName = _writeVisitorNameWithRetry;
+
   function submitName() {
     const name = nameInput.value.trim();
     if (!name) {
@@ -393,77 +506,18 @@ function _getGateAnalyticsDb() {
       setTimeout(() => nameInput.style.borderColor = '', 1200);
       return;
     }
-    // Persist name for review form + analytics
+    // Persist name + "seen at" timestamp — the timestamp powers the
+    // remember-me window above (skip the gate for GATE_REMEMBER_MS).
     try {
       localStorage.setItem('sajid_visitor_name', name);
+      localStorage.setItem('sajid_visitor_seen_at', String(Date.now()));
       sessionStorage.setItem('sajid_visitor_name', name);
       sessionStorage.setItem('_smVisitorName', name);
       sessionStorage.setItem('_gateCompleted', '1'); // prevents re-showing this session
     } catch (e) { /* private browsing — ignore */ }
     if (welcomeName) welcomeName.textContent = name;
 
-    // ── Write visitor name back to Supabase so the dashboard updates ──
-    // Strategy (in order):
-    //   1. session_id  — set by analytics tracker (_smSessionId / sajid_session_id)
-    //   2. fingerprint — set by analytics tracker (_smFingerprint)
-    //   3. recent-row fallback — update the most recent nameless row created in the
-    //      last 5 minutes (covers race condition where tracker hasn't written yet)
-    (async function _writeVisitorName() {
-      try {
-        const db = _getGateAnalyticsDb();
-        if (!db) return;
-
-        let nameWritten = false;
-
-        // ── 1. session_id match (most precise) ──────────────────────────
-        const sid = sessionStorage.getItem('_smSessionId')
-                 || sessionStorage.getItem('sajid_session_id')
-                 || null;
-        if (sid) {
-          const { error } = await db.from('visitors')
-            .update({ visitor_name: name })
-            .eq('session_id', sid);
-          if (!error) nameWritten = true;
-        }
-
-        // ── 2. fingerprint match + visitor_profiles upsert ───────────────
-        const fp = sessionStorage.getItem('_smFingerprint')
-                || localStorage.getItem('_smFingerprint')
-                || null;
-        if (fp) {
-          await db.from('visitor_profiles').upsert(
-            { fingerprint: fp, visitor_name: name },
-            { onConflict: 'fingerprint' }
-          );
-          const { error } = await db.from('visitors')
-            .update({ visitor_name: name })
-            .eq('fingerprint', fp)
-            .is('visitor_name', null);
-          if (!error) nameWritten = true;
-        }
-
-        // ── 3. Recent-row fallback (covers analytics tracker race condition) ──
-        // If neither session_id nor fingerprint was available (tracker hasn't
-        // fired yet), update the most recent row with no name created in the
-        // last 5 minutes. Safe: one browser tab = one row per session.
-        if (!nameWritten) {
-          const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-          // Fetch the single most recent nameless row
-          const { data: rows } = await db.from('visitors')
-            .select('id')
-            .is('visitor_name', null)
-            .gte('created_at', fiveMinAgo)
-            .order('created_at', { ascending: false })
-            .limit(1);
-          if (rows && rows.length) {
-            await db.from('visitors')
-              .update({ visitor_name: name })
-              .eq('id', rows[0].id);
-          }
-        }
-
-      } catch (e) { /* fire-and-forget — never block the UI */ }
-    })();
+    _writeVisitorNameWithRetry(name);
 
     hideGate();
   }
@@ -1688,7 +1742,7 @@ function printSignature() {
 
 
 // ============================================================
-// WEATHER BAR — Clock + Live Doha Weather
+// WEATHER BAR — Clock + Live Weather, auto-detected per visitor
 // ============================================================
 
 (function () {
@@ -1700,22 +1754,30 @@ function printSignature() {
 
   if (!elTime && !elDate && !elWeather) return;
 
-  // ── 1. CLOCK (Qatar timezone, updates every second) ──────────
+  // ── 1. CLOCK — always the visitor's own device timezone ──────
+  // Intl reads this straight from the OS, no permission prompt needed,
+  // so a visitor in Pakistan sees Pakistan time, not Qatar time.
+  var LOCAL_TZ = (function () {
+    try {
+      return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Qatar';
+    } catch (e) {
+      return 'Asia/Qatar'; // ancient browsers with no Intl support
+    }
+  })();
+
   function tickClock() {
     var now = new Date();
 
-    // Time — Qatar is UTC+3, no DST
     var t = now.toLocaleTimeString('en-US', {
-      timeZone: 'Asia/Qatar',
+      timeZone: LOCAL_TZ,
       hour:     'numeric',
       minute:   '2-digit',
       second:   '2-digit',
       hour12:   true
     });
 
-    // Date — "Mon, 01 May 2026"
     var d = now.toLocaleDateString('en-GB', {
-      timeZone: 'Asia/Qatar',
+      timeZone: LOCAL_TZ,
       weekday:  'short',
       day:      '2-digit',
       month:    'short',
@@ -1729,11 +1791,32 @@ function printSignature() {
   tickClock();
   setInterval(tickClock, 1000);
 
-  // ── 2. WEATHER (Open-Meteo — free, no API key needed) ────────
-  // Doha, Qatar: lat 25.2854, lon 51.5310
-  var DOHA_LAT = 25.2854;
-  var DOHA_LON = 51.5310;
+  // ── 2. LOCATION — IP-based geolocation, no permission prompt ─
+  // (navigator.geolocation would be more precise but pops a browser
+  // permission dialog most visitors will just dismiss — IP lookup is
+  // "good enough" for a weather widget and works silently for everyone.)
+  var DOHA_LAT = 25.2854, DOHA_LON = 51.5310; // fallback if detection fails
+  var geo = { lat: DOHA_LAT, lon: DOHA_LON, label: 'Doha, QA' };
 
+  function detectLocation() {
+    return fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d && d.latitude && d.longitude) {
+          geo.lat = d.latitude;
+          geo.lon = d.longitude;
+          var city = d.city || '';
+          var cc   = d.country_code || d.country_name || '';
+          geo.label = (city ? city + ', ' : '') + cc;
+        }
+      })
+      .catch(function (e) {
+        // Silent fallback to Doha — never blocks the widget from rendering
+        console.warn('[WeatherBar] location detect failed, defaulting to Doha:', e.message);
+      });
+  }
+
+  // ── 3. WEATHER (Open-Meteo — free, no API key needed) ────────
   var WMO_CODES = {
     0:  { label: 'Clear',          icon: 'fa-sun' },
     1:  { label: 'Mostly Clear',   icon: 'fa-sun' },
@@ -1770,12 +1853,12 @@ function printSignature() {
 
     var url =
       'https://api.open-meteo.com/v1/forecast' +
-      '?latitude='  + DOHA_LAT +
-      '&longitude=' + DOHA_LON +
+      '?latitude='  + geo.lat +
+      '&longitude=' + geo.lon +
       '&current=temperature_2m,apparent_temperature,weathercode,windspeed_10m,relativehumidity_2m' +
       '&temperature_unit=celsius' +
       '&windspeed_unit=kmh' +
-      '&timezone=Asia%2FQatar';
+      '&timezone=' + encodeURIComponent(LOCAL_TZ);
 
     fetch(url)
       .then(function (r) {
@@ -1799,7 +1882,7 @@ function printSignature() {
             ' · Feels ' + feel + '°C' +
             ' · ' + hum + '% RH' +
             ' · ' + wind + ' km/h' +
-            ' <span style="opacity:.55;font-size:9px;">Doha, QA</span>' +
+            ' <span style="opacity:.55;font-size:9px;">' + geo.label + '</span>' +
           '</span>'
         );
 
@@ -1817,8 +1900,11 @@ function printSignature() {
       });
   }
 
-  // Fetch immediately, but give the page 800ms to settle first
-  setTimeout(fetchWeather, 800);
+  // Detect location first, THEN fetch weather for those coordinates.
+  // Give the page 800ms to settle either way.
+  detectLocation().then(function () {
+    setTimeout(fetchWeather, 800);
+  });
 
 })();
 

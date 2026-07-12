@@ -484,6 +484,42 @@ body::after {
 .nav-mob-toggle.active .nmt-bar-2 { opacity: 0; transform: scaleX(0); }
 .nav-mob-toggle.active .nmt-bar-3 { transform: translateY(-6.5px) rotate(-45deg); }
 
+/* ── Admin login button — desktop nav bar ──────────────────────
+   Self-contained (unique class name, not shared with any other
+   button) so it is not affected by the many theme/breakpoint
+   overrides elsewhere in this file. Hidden below 900px — the
+   mobile drawer link (.nav-mob-link, added in the drawer markup)
+   covers that case instead. */
+.nav-admin-btn {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: linear-gradient(158deg, #1a5cff 0%, #003ab8 100%);
+  border: none;
+  border-top:    1.5px solid rgba(255,255,255,.26);
+  border-left:   1px   solid rgba(255,255,255,.14);
+  border-bottom: 1px   solid rgba(0,0,0,.28);
+  box-shadow: 0 4px 14px rgba(10,68,255,.38);
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.nav-admin-btn i { font-size: 12px; }
+.nav-admin-btn:hover {
+  opacity: .92;
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 8px 22px rgba(10,68,255,.50);
+}
+.nav-admin-btn:active { transform: translateY(0) scale(0.96); }
+
+@media (max-width: 900px) {
+  .nav-admin-btn { display: none !important; }
+}
+
 /* ── Mobile Drawer ── */
 .nav-mob-drawer {
   display: none; flex-direction: column;
@@ -30524,10 +30560,10 @@ textarea::placeholder {
 
 /* ── 10. FOOTER: colorless dark glass ───────────────────────── */
 .footer {
-  background: rgba(0,0,0,0.40) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-top: 1px solid rgba(255,255,255,0.10) !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
 }
 .footer-name {
   color: #ffffff !important;
@@ -30538,6 +30574,162 @@ textarea::placeholder {
   color: rgba(200,212,235,0.78) !important;
   -webkit-text-fill-color: rgba(200,212,235,0.78) !important;
   text-shadow: 0 1px 3px rgba(0,0,0,0.55) !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FOOTER REDESIGN — self-contained, unique "ftr-" prefix.
+   Deliberately isolated from the legacy .footer-* / .fa-* rules
+   above so none of the many theme overrides in this file touch
+   it. Platinum-chrome-on-midnight palette to match the rest of
+   the site (var(--cyan)/var(--silver)/var(--pearl)), Playfair
+   Display for the brand name, DM Sans for links/labels, and a
+   monospace "system status" strip along the bottom — a nod to
+   the sysadmin subject matter — carrying the live visitor count.
+   ════════════════════════════════════════════════════════════ */
+.ftr {
+  position: relative;
+  padding-top: 4px;
+  overflow: hidden;
+}
+
+/* Thin metallic rim — echoes the top-nav's light-catch line */
+.ftr-rim {
+  position: absolute; top: 0; left: 8%; right: 8%; height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.45) 50%,
+    transparent 100%
+  );
+  box-shadow: 0 0 12px rgba(212,216,224,0.18);
+}
+
+.ftr-inner {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 64px) clamp(18px, 3vw, 32px) clamp(28px, 4vw, 40px);
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr 1fr;
+  gap: clamp(28px, 4vw, 56px);
+}
+
+.ftr-col { min-width: 0; }
+
+/* ── Column 1: Brand ── */
+.ftr-brand-row { display: flex; align-items: center; gap: 11px; }
+.ftr-logo {
+  width: 34px; height: 34px; border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.14);
+}
+.ftr-name {
+  display: block;
+  font-family: var(--ff-serif);
+  font-size: 16px; font-weight: 700;
+  color: #ffffff; letter-spacing: -0.01em;
+}
+.ftr-role {
+  display: block;
+  font-family: var(--ff-sans);
+  font-size: 11px;
+  color: rgba(200,205,216,0.62);
+  margin-top: 2px;
+}
+.ftr-tagline {
+  font-family: var(--ff-sans);
+  font-size: 12.5px; line-height: 1.6;
+  color: rgba(200,205,216,0.50);
+  max-width: 30ch;
+  margin: 14px 0 0;
+}
+
+/* ── Shared column eyebrow label ── */
+.ftr-eyebrow {
+  display: block;
+  font-family: var(--ff-sans);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(212,216,224,0.55);
+  margin-bottom: 14px;
+}
+
+/* ── Column 2: Navigate ── */
+.ftr-col-nav { display: flex; flex-direction: column; }
+.ftr-link {
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--ff-sans);
+  font-size: 13px; font-weight: 500;
+  color: rgba(226,229,235,0.68);
+  padding: 6px 0;
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease, gap 0.2s ease;
+  cursor: pointer;
+}
+.ftr-link i { font-size: 11px; width: 14px; color: rgba(212,216,224,0.55); transition: color 0.2s ease; }
+.ftr-link:hover { color: #ffffff; transform: translateX(3px); }
+.ftr-link:hover i { color: var(--cyan); }
+
+/* ── Column 3: Connect ── */
+.ftr-col-connect { display: flex; flex-direction: column; }
+.ftr-icon-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.ftr-icon-btn {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(226,229,235,0.75);
+  font-size: 14px;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), background 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+.ftr-icon-btn:hover {
+  color: #ffffff;
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(212,216,224,0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35), 0 0 16px rgba(212,216,224,0.14);
+}
+
+/* ── Bottom status bar ── */
+.ftr-status-bar {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 16px clamp(18px, 3vw, 32px) clamp(20px, 3vw, 28px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+  font-family: 'DM Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 11px;
+  color: rgba(190,196,210,0.55);
+}
+.ftr-status-left { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.ftr-dot-sep { opacity: 0.4; }
+.ftr-live { display: flex; align-items: center; gap: 6px; }
+
+.ftr-status-right { display: flex; align-items: center; gap: 8px; }
+.ftr-mini-btn {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  color: rgba(226,229,235,0.55);
+  font-size: 11px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.10);
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.25s ease, background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+}
+.ftr-mini-btn:hover { opacity: 1; color: #ffffff; background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+/* Admin stays the discreet one — low opacity until hovered */
+.ftr-admin-btn { opacity: 0.22; }
+.ftr-admin-btn:hover { opacity: 0.85; }
+
+@media (max-width: 780px) {
+  .ftr-inner { grid-template-columns: 1fr; gap: 30px; }
+  .ftr-tagline { max-width: none; }
+  .ftr-status-bar { flex-direction: column; align-items: flex-start; }
 }
 
 /* ── 11. MOBILE DRAWER: colorless dark glass ─────────────────── */
@@ -33239,4 +33431,51 @@ body :where(h1, h2, h3, h4, h5, h6, p, li, label, blockquote, dt, dd, small) {
   text-shadow: none !important;
   border-radius: 999px !important;
   padding: 4px 10px !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOOTER — FINAL OVERRIDE (fixes: too-tall footer + not actually
+   transparent). Placed last on purpose so it wins the cascade over
+   every earlier `footer, .site-footer { background: ... !important }`
+   rule scattered through this file (there were ~9 of them, several
+   in media queries, fighting each other — that's why the footer
+   rendered as a big opaque dark block instead of the intended
+   see-through glass). Text gets a soft shadow instead of a solid
+   backing so it stays readable straight over the page background.
+════════════════════════════════════════════════════════════════ */
+footer,
+footer.footer,
+footer.ftr,
+.site-footer {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border-top: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+/* Shrink the oversized vertical padding */
+.ftr-inner {
+  padding: clamp(20px, 3vw, 32px) clamp(18px, 3vw, 32px) clamp(14px, 2vw, 20px) !important;
+}
+.ftr-status-bar {
+  padding: 10px clamp(18px, 3vw, 32px) clamp(12px, 2vw, 16px) !important;
+}
+.ftr-tagline { margin-top: 8px !important; }
+.ftr-eyebrow { margin-bottom: 10px !important; }
+
+/* Readability over a busy photo background, without a solid backing */
+.ftr-name  { color: #ffffff !important; text-shadow: 0 1px 6px rgba(0,0,0,0.55); }
+.ftr-role,
+.ftr-tagline,
+.ftr-eyebrow,
+.ftr-status-bar,
+.ftr-copy,
+.ftr-live { color: rgba(255,255,255,0.82) !important; text-shadow: 0 1px 5px rgba(0,0,0,0.55); }
+.ftr-link { color: rgba(255,255,255,0.88) !important; text-shadow: 0 1px 5px rgba(0,0,0,0.55); }
+.ftr-link i { color: rgba(255,255,255,0.70) !important; }
+.ftr-icon-btn {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.22) !important;
+  color: #ffffff !important;
 }

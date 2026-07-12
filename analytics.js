@@ -198,6 +198,22 @@
     }
   }
 
+  /* ── Remembered-visitor name (kept in sync with script.js's gate) ────
+     If this visitor already gave their name within the last
+     GATE_REMEMBER_MS window, attach it to the row at INSERT time instead
+     of waiting on a separate UPDATE from the gate. This removes the race
+     where the gate's UPDATE can run before this row even exists (e.g. on
+     a slow connection where the Supabase SDK takes a moment to load). ── */
+  var GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days — must match script.js
+  function _rememberedVisitorName() {
+    try {
+      var seenAt = parseInt(localStorage.getItem('sajid_visitor_seen_at') || '0', 10);
+      var name   = localStorage.getItem('sajid_visitor_name');
+      if (name && seenAt && (Date.now() - seenAt) < GATE_REMEMBER_MS) return name;
+    } catch (_) {}
+    return null;
+  }
+
   /* ── Collect page-level metadata ─────────────────────────────── */
   function _collectMeta(sessionId, fingerprint) {
     var tz = 'Unknown';
@@ -206,7 +222,9 @@
     return {
       session_id:   sessionId,
       fingerprint:  fingerprint,
-      visitor_name: null,    /* name written later by _writeVisitorName() */
+      /* Pre-filled for a remembered visitor; null for a first-time visitor
+         (that case is written later, once they submit the gate). */
+      visitor_name: _rememberedVisitorName(),
       page:         (location.pathname + location.search).slice(0, 500),
       referrer:     (document.referrer || '').slice(0, 500),
       user_agent:   (navigator.userAgent || '').slice(0, 500),
