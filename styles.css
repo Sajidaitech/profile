@@ -33746,3 +33746,23 @@ footer.ftr,
     padding-top: max(10px, env(safe-area-inset-top, 10px));
   }
 }
+
+/* ================================================================
+   NAV OVERFLOW FIX — 12th link (Quotes) needs a bit less room
+   The nav bar's font-size/padding for desktop links comes from an
+   earlier rule in the cascade; this override wins via higher
+   specificity + !important + being last in source order, and
+   compacts links just enough to fit without changing how the nav
+   looks at a glance.
+================================================================ */
+@media (min-width: 1024px) {
+  .nav-links-center .nav-link {
+    padding: 5px 5px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .nav-links-center {
+    gap: 0px !important;
+  }
+}
