@@ -3351,6 +3351,12 @@ function closePdfModal() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closePdfModal();
 });
+
+// Expose to global scope — inline onclick="" handlers in the HTML
+// run in global/window scope and can't see functions declared only
+// inside this IIFE otherwise.
+window.openPdfModal  = openPdfModal;
+window.closePdfModal = closePdfModal;
 })();
 
 
@@ -3360,15 +3366,32 @@ document.addEventListener('keydown', function(e) {
 // ============================================================
 
 (function () {
-function openHieModal(src, title) {
+function openHieModal(src, title, returnTo) {
   var modal = document.getElementById('hieImgModal');
   var img   = document.getElementById('hieModalImg');
   var lbl   = document.getElementById('hieModalTitle');
+  var back  = document.getElementById('hieModalBackLink');
+  var wrap  = document.getElementById('hieModalImgWrap');
+  if (wrap) wrap.classList.remove('hie-img-load-error'); // reset any prior error state
+  img.style.display = '';
   img.src = src;
   img.alt = title;
   lbl.textContent = title;
+  if (back) back.setAttribute('href', '#' + (returnTo || 'fieldwork'));
   modal.classList.add('hie-modal--open');
   document.body.classList.add('hie-modal-body-lock');
+}
+function hieModalImgError() {
+  var wrap = document.getElementById('hieModalImgWrap');
+  var img  = document.getElementById('hieModalImg');
+  if (img.src) { // ignore the initial empty src="" firing onerror
+    if (wrap) wrap.classList.add('hie-img-load-error');
+    img.style.display = 'none';
+  }
+}
+function hieModalImgLoaded() {
+  var wrap = document.getElementById('hieModalImgWrap');
+  if (wrap) wrap.classList.remove('hie-img-load-error');
 }
 function closeHieModal() {
   document.getElementById('hieImgModal').classList.remove('hie-modal--open');
@@ -3377,6 +3400,16 @@ function closeHieModal() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeHieModal();
 });
+
+// Expose to global scope — inline onclick="" handlers in the HTML
+// run in global/window scope and can't see functions declared only
+// inside this IIFE otherwise. (This is what was breaking the
+// "View Graphic Version" popup on the Quotes cards, and would have
+// broken the Fieldwork gallery lightbox the same way.)
+window.openHieModal      = openHieModal;
+window.closeHieModal     = closeHieModal;
+window.hieModalImgError  = hieModalImgError;
+window.hieModalImgLoaded = hieModalImgLoaded;
 })();
 
 // ============================================================

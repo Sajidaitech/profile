@@ -33550,28 +33550,199 @@ footer.ftr,
 }
 
 /* ================================================================
-   ★★★ DEFINITIVE FINAL OVERRIDE v6 — WEATHER BAR CENTERING FIX ★★★
-   ----------------------------------------------------------------
-   Root cause: a later "compositor hint" rule re-set `transform` on
-   .weather-bar to `translateZ(0)` only. CSS transform values don't
-   merge — this silently wiped out the original translateX(-50%)
-   that did the actual centering, so the bar's LEFT EDGE (not its
-   center) sat at the horizontal midpoint of the screen, pushing
-   most of it off-screen to the right — worst on mobile. This
-   restores the centering transform (keeping the translateZ(0)
-   perf hint alongside it) and caps the width so it can never
-   overflow the viewport, on both mobile and desktop. Appended
-   last on purpose so nothing after it can wipe it out again.
+   QUOTES BY SAJID MEHMOOD — new section
+   Built entirely from existing theme variables so it inherits the
+   site's light/dark + responsive treatment without extra overrides.
 ================================================================ */
-.weather-bar {
-  left: 50% !important;
-  right: auto !important;
-  transform: translateX(-50%) translateZ(0) !important;
-  max-width: calc(100vw - 24px) !important;
-  justify-content: center !important;
+
+.quotes-subtitle {
+  font-family: var(--ff-sans);
+  font-size: 15px;
+  color: var(--ink-3);
+  text-align: center;
+  max-width: 560px;
+  margin: 10px auto 0;
+  line-height: 1.6;
 }
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+  justify-content: center;
+}
+
+/* Keep single/sparse cards from stretching edge-to-edge on wide screens */
+@media (min-width: 900px) {
+  .quotes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 380px));
+  }
+}
+
+.quote-card {
+  position: relative;
+  border-radius: var(--r-lg);
+  padding: 2px;
+  background: var(--glass-mid);
+  backdrop-filter: var(--blur-mid);
+  -webkit-backdrop-filter: var(--blur-mid);
+  box-shadow: var(--sh-glass-md);
+  transition: transform var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out);
+}
+
+.quote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-glass-lg);
+}
+
+.quote-card-inner {
+  position: relative;
+  border-radius: calc(var(--r-lg) - 2px);
+  padding: 34px 28px 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: rgba(255,255,255,0.02);
+}
+
+.quote-mark {
+  font-size: 20px;
+  color: var(--gold);
+  opacity: 0.85;
+  margin-bottom: 14px;
+}
+
+.quote-text-en {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+
+.quote-rule {
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 0 18px;
+}
+
+.quote-text-ur {
+  font-family: 'Noto Nastaliq Urdu', var(--ff-serif), serif;
+  font-size: 19px;
+  line-height: 2.1;
+  color: var(--ink-2);
+  margin: 0 0 20px;
+  max-width: 34ch;
+}
+
+.quote-author {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--gold);
+  margin: 0 0 22px;
+}
+
+.quote-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ff-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+  background: var(--glass-light);
+  border: var(--b-base, 1px solid rgba(255,255,255,.18));
+  border-radius: var(--r-pill);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out);
+}
+
+.quote-view-btn:hover {
+  background: var(--glass-strong);
+  transform: translateY(-2px);
+}
+
+.quote-view-btn i {
+  color: var(--gold);
+  font-size: 12px;
+}
+
+.quote-card-glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--r-lg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease-out);
+  background: radial-gradient(circle at 50% 0%, rgba(212,175,55,0.16), transparent 70%);
+}
+
+.quote-card:hover .quote-card-glow {
+  opacity: 1;
+}
+
 @media (max-width: 480px) {
-  .weather-bar {
-    max-width: calc(100vw - 16px) !important;
+  .quote-card-inner { padding: 28px 20px 22px; }
+  .quote-text-en { font-size: 18px; }
+  .quote-text-ur { font-size: 17px; max-width: 100%; }
+}
+
+/* ================================================================
+   HIE MODAL — mobile robustness fixes
+   1) Graceful fallback when an image 404s (e.g. file not yet
+      uploaded to the server) instead of a tiny broken-image icon.
+   2) dvh fallback for older/in-app mobile browsers that don't
+      support the dvh unit (WhatsApp/Instagram in-app browsers,
+      some older Android WebViews).
+   3) Safe-area padding so the close button isn't hidden behind
+      the home-indicator / notch on iPhone.
+================================================================ */
+
+.hie-modal-img-error {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 24px;
+  color: rgba(255,255,255,.55);
+  text-align: center;
+  font-family: var(--ff-sans);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.hie-modal-img-error i {
+  font-size: 30px;
+  color: rgba(255,255,255,.35);
+}
+
+.hie-img-load-error .hie-modal-img-error {
+  display: flex;
+}
+
+/* Fallback for browsers without dvh support */
+@supports not (height: 1dvh) {
+  .hie-modal-panel { max-height: 94vh; }
+  .hie-modal-img   { max-height: calc(94vh - 80px); }
+  @media (max-width: 480px) {
+    .hie-modal-panel { max-height: 98vh; }
+    .hie-modal-img   { max-height: calc(98vh - 100px); }
+  }
+}
+
+/* Respect iPhone notch / home-indicator safe areas */
+@media (max-width: 480px) {
+  .hie-modal-panel {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .hie-modal-topbar {
+    padding-top: max(10px, env(safe-area-inset-top, 10px));
   }
 }

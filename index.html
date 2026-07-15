@@ -27,13 +27,13 @@
   <link rel="preload" href="mobilebackground.png" as="image" fetchpriority="high" media="(max-width: 767px)">
   <link rel="preload" href="logo.png" as="image" fetchpriority="high">
   <link rel="preload" href="photo.jpg" as="image" fetchpriority="high">
-  <link rel="preload" href="styles.css?v=20260712c" as="style">
+  <link rel="preload" href="styles.css" as="style">
   <!-- Preconnect before font CSS loads -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Fonts: single optimized request, display=swap for no FOIT -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
 
   <!-- DNS prefetch for external APIs used at runtime -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -53,7 +53,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 
   <!-- ONE stylesheet only -->
-  <link rel="stylesheet" href="styles.css?v=20260712c">
+  <link rel="stylesheet" href="styles.css">
   <!-- Accessibility overrides merged into styles.css -->
   <!-- Critical inline: real-vh fallback & mobile-sticky initial state -->
   <style>
@@ -243,6 +243,7 @@
         <a href="#certifications" class="nav-link nav-anchor">Certs</a>
         <a href="#fieldwork"      class="nav-link nav-anchor">Hands-On</a>
         <a href="#references"     class="nav-link nav-anchor">References</a>
+        <a href="#quotes"         class="nav-link nav-anchor">Quotes</a>
         <a href="#contact"        class="nav-link nav-anchor">Contact</a>
       </nav>
 
@@ -269,6 +270,7 @@
       <a href="#certifications" class="nav-mob-link nav-anchor">Certs</a>
       <a href="#fieldwork"      class="nav-mob-link nav-anchor">🔧 Hands-On Infrastructure</a>
       <a href="#references"     class="nav-mob-link nav-anchor">References</a>
+      <a href="#quotes"         class="nav-mob-link nav-anchor">✍️ Quotes</a>
       <a href="#contact"        class="nav-mob-link nav-anchor">Contact</a>
       <a href="#" onclick="openAdminDashboard();return false;" class="nav-mob-link">🔒 Admin Login</a>
     </nav>
@@ -2126,12 +2128,74 @@
     </section>
 
     <!-- ================================================================
+         QUOTES BY SAJID MEHMOOD
+    ================================================================ -->
+    <section id="quotes" class="section quotes-section">
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <span class="sec-num" aria-hidden="true">10</span>
+          <h2 class="sec-title">Quotes by Sajid Mehmood</h2>
+          <div class="sec-rule"></div>
+          <p class="quotes-subtitle" data-aos="fade-up" data-aos-delay="60">
+            A few original reflections, written in English and Urdu.
+          </p>
+        </header>
+
+        <div class="quotes-grid">
+
+          <!-- QUOTE 1 -->
+          <article class="quote-card" data-aos="fade-up" data-aos-delay="0">
+            <div class="quote-card-inner">
+              <i class="fas fa-quote-left quote-mark" aria-hidden="true"></i>
+
+              <p class="quote-text-en">Sometimes, the heart grows so weary that it longs to escape to a place where no one exists.</p>
+
+              <div class="quote-rule" aria-hidden="true"></div>
+
+              <p class="quote-text-ur" lang="ur" dir="rtl">کبھی کبھی دل اتنا تھک جاتا ہے کہ وہ ایسی جگہ چلے جانے کو چاہتا ہے جہاں کوئی انسان نہ ہو۔</p>
+
+              <p class="quote-author">— Sajid Mehmood</p>
+
+              <button type="button" class="quote-view-btn" onclick="openHieModal('quote-heart-weary.jpg','Sometimes, the heart grows so weary...','quotes')">
+                <i class="fas fa-image"></i> View Graphic Version
+              </button>
+            </div>
+            <div class="quote-card-glow" aria-hidden="true"></div>
+          </article>
+
+          <!-- Add more quote-card articles here as new quotes are written -->
+
+          <!-- QUOTE 2 -->
+          <article class="quote-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="quote-card-inner">
+              <i class="fas fa-quote-left quote-mark" aria-hidden="true"></i>
+
+              <p class="quote-text-en">Sometimes a person becomes so exhausted that even their mind forgets how to rest peacefully.</p>
+
+              <div class="quote-rule" aria-hidden="true"></div>
+
+              <p class="quote-text-ur" lang="ur" dir="rtl">کبھی کبھی انسان اتنا تھک جاتا ہے کہ اس کا ذہن بھی سکون سے آرام کرنا بھول جاتا ہے۔</p>
+
+              <p class="quote-author">— Sajid Mehmood</p>
+
+              <button type="button" class="quote-view-btn" onclick="openHieModal('quote-exhausted-mind.jpg','Sometimes a person becomes so exhausted...','quotes')">
+                <i class="fas fa-image"></i> View Graphic Version
+              </button>
+            </div>
+            <div class="quote-card-glow" aria-hidden="true"></div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
          CONTACT
     ================================================================ -->
     <section id="contact" class="section contact-section">
       <div class="container">
         <header class="section-header" data-aos="fade-up">
-          <span class="sec-num" aria-hidden="true">10</span>
+          <span class="sec-num" aria-hidden="true">11</span>
           <h2 class="sec-title">Engage</h2>
           <div class="sec-rule"></div>
         </header>
@@ -2477,7 +2541,7 @@
       <div class="hie-modal-topbar">
         <span class="hie-modal-title" id="hieModalTitle"></span>
         <div class="hie-modal-actions">
-          <a href="#fieldwork" class="hie-modal-btn hie-modal-back" onclick="closeHieModal()" title="Go back to website">
+          <a href="#fieldwork" id="hieModalBackLink" class="hie-modal-btn hie-modal-back" onclick="closeHieModal()" title="Go back to website">
             <i class="fas fa-arrow-left"></i>
             <span>Back to Site</span>
           </a>
@@ -2488,8 +2552,12 @@
         </div>
       </div>
       <!-- Image -->
-      <div class="hie-modal-img-wrap">
-        <img src="" alt="" id="hieModalImg" class="hie-modal-img" loading="lazy">
+      <div class="hie-modal-img-wrap" id="hieModalImgWrap">
+        <img alt="" id="hieModalImg" class="hie-modal-img" loading="lazy" onerror="hieModalImgError()" onload="hieModalImgLoaded()">
+        <div class="hie-modal-img-error" id="hieModalImgError">
+          <i class="fas fa-image-slash"></i>
+          <p>This image couldn't load.<br>Check that the file was uploaded to the server.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -2537,7 +2605,7 @@
        immediately at startup (before any Supabase call) so _writeVisitorName()
        in script.js always finds _smSessionId / _smFingerprint. -->
   <script src="analytics.js" defer></script>
-  <script src="script.js?v=20260712c" defer></script>
+  <script src="script.js" defer></script>
   <noscript><style>#gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
 
   <!-- ═══════════════════════════════════════════════════════════
@@ -2598,6 +2666,8 @@
       // Review pills panel
       ['.review-pills-panel', 'anim-slide-left'],
       ['.review-box',         'anim-slide-right'],
+      // Quotes section
+      ['.quote-card',        'anim-scale'],
     ];
 
     if (!('IntersectionObserver' in window)) return; // no-JS fallback: elements stay visible
