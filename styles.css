@@ -356,7 +356,7 @@ body::after {
   -webkit-text-fill-color: unset;
   background-clip: unset;
 }
-.nav-logo-role  { font-size: 9px; color: rgba(255,255,255,0.55); letter-spacing: 0.04em; }
+.nav-logo-role  { font-size: 11px; color: rgba(255,255,255,0.85); letter-spacing: 0.04em; }
 
 /* ── Center nav links ── */
 .nav-links-center { display: flex; align-items: center; gap: 2px; }
@@ -856,7 +856,7 @@ body::after {
   font-weight: 700;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.80);
+  color: rgba(255,255,255,0.85);
   margin-bottom: 5px;
 }
 .gate-logo-line {
@@ -881,7 +881,7 @@ body::after {
 .gate-card .gate-subtitle {
   font-family: 'DM Sans', system-ui, sans-serif;
   font-size: 13.5px;
-  color: rgba(255,255,255,0.68);
+  color: rgba(255,255,255,0.85);
   margin-bottom: 24px;
   line-height: 1.60;
   max-width: 320px;
@@ -905,7 +905,7 @@ body::after {
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.72);
+  color: rgba(255,255,255,0.85);
 }
 .gate-field input {
   height: 50px;
@@ -1077,7 +1077,7 @@ body::after {
     background: rgba(255,255,255,0.10) !important;
     border: 1px solid rgba(255,255,255,0.18) !important;
     border-radius: 50% !important;
-    color: rgba(255,255,255,0.80) !important;
+    color: rgba(255,255,255,0.85) !important;
     font-size: 20px !important;
     cursor: pointer !important;
     align-items: center !important;
@@ -1101,7 +1101,7 @@ body::after {
 
   /* Logo eyebrow */
   .gate-logo {
-    font-size: 9px !important;
+    font-size: 11px !important;
     letter-spacing: 0.40em !important;
   }
 
@@ -1278,7 +1278,7 @@ html, body { max-width: 100vw; overflow-x: hidden; }
 }
 .hvc-val  { font-family: var(--ff-serif); font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1; position: relative; z-index: 1; }
 .hvc-icon { color: var(--purple); font-size: 11px; position: relative; z-index: 1; }
-.hvc-lbl  { font-size: 7.5px; font-weight: 600; color: var(--ink-3); line-height: 1.3; letter-spacing: 0.02em; position: relative; z-index: 1; }
+.hvc-lbl  { font-size: 11px; font-weight: 600; color: var(--ink-3); line-height: 1.3; letter-spacing: 0.02em; position: relative; z-index: 1; }
 .hvc-connector {
   width: 1px; height: 8px;
   background: linear-gradient(180deg, rgba(168,173,184,0.22) 0%, transparent 100%);
@@ -1334,7 +1334,7 @@ html, body { max-width: 100vw; overflow-x: hidden; }
 }
 .hnr-tag {
   font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.75); text-transform: uppercase; flex-shrink: 0;
+  color: rgba(255,255,255,0.85); text-transform: uppercase; flex-shrink: 0;
   text-shadow: 0 1px 4px rgba(0,0,0,0.50);
 }
 
@@ -1383,7 +1383,7 @@ html, body { max-width: 100vw; overflow-x: hidden; }
 }
 .kpi-unit { font-size: 13px; font-weight: 700; color: var(--cyan); }
 .kpi-sep  { display: none; }
-.kpi-label { font-size: 9.5px; font-weight: 600; color: var(--ink-3); text-align: center; }
+.kpi-label { font-size: 11px; font-weight: 600; color: var(--ink-3); text-align: center; }
 
 /* Hero CTA buttons */
 .hero-cta-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -1555,7 +1555,7 @@ html, body { max-width: 100vw; overflow-x: hidden; }
   box-shadow: var(--sh-glass-sm);
 }
 .wh-badge {
-  display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.10em;
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.10em;
   text-transform: uppercase; padding: 3px 10px; border-radius: 999px;
   color: var(--ink-2); margin-bottom: 8px;
 }
@@ -1930,7 +1930,7 @@ footer, .site-footer {
 }
 .ring-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
 .ring-val { font-family: var(--ff-serif); font-weight: 700; color: var(--ink); }
-.ring-lbl { font-size: 9px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.05em; }
+.ring-lbl { font-size: 11px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.05em; }
 
 /* ================================================================
    ANIMATE-ON-SCROLL (AOS overrides)
@@ -2079,7 +2079,7 @@ footer, .site-footer {
 .lge-tag {
   padding: 2px 8px; border-radius: var(--r-pill);
   background: rgba(255,255,255,.01); 
-  font-size: 9.5px; color: var(--ink-2); box-shadow: var(--sh-xs);
+  font-size: 11px; color: var(--ink-2); box-shadow: var(--sh-xs);
 }
 .lge-stats-strip { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .lge-stat-chip {
@@ -2088,7 +2088,7 @@ footer, .site-footer {
   background: rgba(0,102,255,.07);
 }
 .lge-stat-val { font-size: 14px; font-weight: 700; color: var(--ink); font-family: var(--ff-serif); line-height: 1; }
-.lge-stat-lbl { font-size: 9.5px; color: var(--ink-3); }
+.lge-stat-lbl { font-size: 11px; color: var(--ink-3); }
 
 .lge-projects-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
 .lge-proj-chip {
@@ -2145,7 +2145,7 @@ footer, .site-footer {
 
 .pc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .pc-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: rgba(0,102,255,.10); color: var(--accent); font-size: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,.28); }
-.pc-sector-tag { padding: 2px 8px; border-radius: var(--r-pill); background: rgba(0,102,255,.08); font-size: 9.5px; color: #0050c8; font-weight: 600; }
+.pc-sector-tag { padding: 2px 8px; border-radius: var(--r-pill); background: rgba(0,102,255,.08); font-size: 11px; color: #0050c8; font-weight: 600; }
 .pc-title { font-family: var(--ff-serif); font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.22; }
 .pc-challenge-solution { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
 .pc-block {}
@@ -2155,7 +2155,7 @@ footer, .site-footer {
 .pc-block-text { font-size: 12px; color: var(--ink-2); line-height: 1.62; }
 .pc-impact { font-size: 12px; color: var(--ink-2); line-height: 1.62; margin-bottom: 8px; padding: 7px 10px; background: rgba(0,102,255,.04); border-left: 2px solid rgba(0,102,255,.18); border-radius: var(--r-sm); }
 .pc-tools { display: flex; flex-wrap: wrap; gap: 3px; }
-.pc-tool-badge { padding: 2px 7px; border-radius: var(--r-pill); background: rgba(255,255,255,.01);  font-size: 9.5px; color: var(--ink-2); }
+.pc-tool-badge { padding: 2px 7px; border-radius: var(--r-pill); background: rgba(255,255,255,.01);  font-size: 11px; color: var(--ink-2); }
 .pc-link { display: flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 11px; font-weight: 600; color: var(--ink-2); padding: 5px 10px; border-radius: var(--r-lg); background: rgba(255,255,255,.01);  box-shadow: var(--sh-xs); transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease; }
 .pc-link:hover { background: rgba(255,255,255,.01); }
 
@@ -3373,7 +3373,7 @@ a, button, [role="button"] {
   
 }
 .ccna-id-label {
-  font-size: 9.5px; font-weight: 700; letter-spacing: .10em;
+  font-size: 11px; font-weight: 700; letter-spacing: .10em;
   color: var(--ink-3); text-transform: uppercase;
 }
 .ccna-id-val {
@@ -3411,14 +3411,14 @@ a, button, [role="button"] {
 .kpi-label                { color: var(--ink-3) !important; }
 .hero-name-first,
 .hero-name-last           { -webkit-text-fill-color: transparent !important; }
-.hnr-tag                  { color: rgba(255,255,255,0.75) !important; }
+.hnr-tag                  { color: rgba(255,255,255,0.85) !important; }
 .hvc-lbl                  { color: var(--ink-2) !important; }
 .hvc-val                  { color: var(--ink) !important; }
 
 /* Nav */
 .nav-link                 { color: var(--ink-2) !important; }
 .nav-logo-name            { color: rgba(255,255,255,0.92) !important; }
-.nav-logo-role            { color: rgba(255,255,255,0.55) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.45) !important; }
+.nav-logo-role            { color: rgba(255,255,255,0.85) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.45) !important; }
 .nav-mob-link             { color: var(--ink) !important; }
 
 /* Projects / museum cases */
@@ -3472,10 +3472,10 @@ a, button, [role="button"] {
 
 /* Gate overlay */
 .gate-brand-name          { color: rgba(255,255,255,.95) !important; }
-.gate-brand-sub           { color: rgba(255,255,255,.75) !important; }
+.gate-brand-sub           { color: rgba(255,255,255,0.85) !important; }
 .gate-headline            { color: #ffffff !important; }
 .gate-sub                 { color: rgba(255,255,255,.88) !important; }
-.gate-label               { color: rgba(255,255,255,.80) !important; }
+.gate-label               { color: rgba(255,255,255,0.85) !important; }
 
 /* Ring / panel labels */
 .ring-val, .ring-lbl      { color: var(--ink) !important; }
@@ -4818,13 +4818,13 @@ a, button, [role="button"] {
     background-clip: text !important;
   }
   .kpi-unit { color: rgba(220,195,110,0.92) !important; -webkit-text-fill-color: rgba(220,195,110,0.92) !important; }
-  .kpi-label { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .kpi-label { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* ── Hero stat chips ── */
   .hero-vchip { background: rgba(255,255,255,0.11) !important; }
   .hvc-val  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
   .hvc-icon { color: rgba(220,195,110,0.88) !important; }
-  .hvc-lbl  { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .hvc-lbl  { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* ── General heading & body text on dark cards ── */
   h1, h2, h3, h4, h5, h6 {
@@ -4840,8 +4840,8 @@ a, button, [role="button"] {
 
   /* Why hire section */
   .wh-title  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .wh-desc   { color: rgba(255,255,255,0.80) !important; -webkit-text-fill-color: rgba(255,255,255,0.80) !important; }
-  .wh-proof, .wh-proof span { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .wh-desc   { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
+  .wh-proof, .wh-proof span { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .wh-badge  { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; background: rgba(255,255,255,0.12) !important; }
   .wh-badge-green  { color: rgba(80,220,130,0.92) !important; -webkit-text-fill-color: rgba(80,220,130,0.92) !important; background: rgba(80,220,130,0.12) !important; }
   .wh-badge-amber  { color: rgba(220,180,80,0.92) !important;  -webkit-text-fill-color: rgba(220,180,80,0.92) !important;  background: rgba(220,180,80,0.12) !important; }
@@ -4852,10 +4852,10 @@ a, button, [role="button"] {
   /* About section */
   .bio-lead, .bio-body { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .astat-num           { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .astat-label         { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .astat-label         { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .about-stat { background: rgba(255,255,255,0.10) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,0.20), 0 0 0 0.75px rgba(255,255,255,0.10) !important; }
   .ach-text strong { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .ach-text span   { color: rgba(255,255,255,0.68) !important; -webkit-text-fill-color: rgba(255,255,255,0.68) !important; }
+  .ach-text span   { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* Experience / LGE */
   .exp-role, .mc-title, .exp-company, .lge-card-title, .lge-stat-val, .lge-rec-name,
@@ -4865,44 +4865,44 @@ a, button, [role="button"] {
   .exp-org, .exp-period, .exp-bullet, .exp-quote, .mc-desc, .mc-sector,
   .lge-stat-lbl, .lge-rec-role, .lge-bullet-desc, .lge-rec-text, .lge-bullet-row,
   .mc-outcome-label, .er-label {
-    color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important;
+    color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important;
   }
-  .mc-org, .csm-lbl, .exp-quote-author, .lge-section-eyebrow { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
-  .lge-tab-pill { color: rgba(255,255,255,0.75) !important; -webkit-text-fill-color: rgba(255,255,255,0.75) !important; }
+  .mc-org, .csm-lbl, .exp-quote-author, .lge-section-eyebrow { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
+  .lge-tab-pill { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .lge-tab-pill.lge-tab-active { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
 
   /* Education */
   .edu-degree, .edu-school, .edu-description, .edu-result { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
-  .edu-period, .edu-desc, .edu-date { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .edu-period, .edu-desc, .edu-date { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* References */
   .ref-name, .ac-title { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .ref-title, .ref-note, .ref-rel-pill, .ac-subtitle { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
-  .ref-company { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .ref-title, .ref-note, .ref-rel-pill, .ac-subtitle { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
+  .ref-company { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* Projects */
   .pc-title  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .pc-block-text, .pc-impact { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
+  .pc-block-text, .pc-impact { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* Skills chips, tool tags */
   .ac-skill, .p-chip, .exp-meta-chip, .exp-stat-chip, .lge-stat-chip,
   .stb-sector, .tool-chip, .lge-tag, .pc-tool-badge, .tech-tag {
     background: rgba(255,255,255,0.11) !important;
-    color: rgba(255,255,255,0.82) !important;
+    color: rgba(255,255,255,0.85) !important;
     -webkit-text-fill-color: rgba(255,255,255,0.82) !important;
   }
   .ac-title    { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .ac-subtitle { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .ac-subtitle { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .sti-label   { color: rgba(255,255,255,0.90) !important; -webkit-text-fill-color: rgba(255,255,255,0.90) !important; }
 
   /* Language cards */
   .lang-name  { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .lang-level { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .lang-level { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .lang-card  { background: rgba(255,255,255,0.09) !important; }
 
   /* Contact info */
-  .contact-intro { color: rgba(255,255,255,0.82) !important; -webkit-text-fill-color: rgba(255,255,255,0.82) !important; }
-  .ci-label      { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .contact-intro { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
+  .ci-label      { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .ci-value      { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; }
 
   /* Form inputs */
@@ -4927,33 +4927,33 @@ a, button, [role="button"] {
 
   /* Weather bar */
   .wb-time { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; text-shadow: 0 1px 5px rgba(0,0,0,0.60) !important; }
-  .wb-date, .wb-weather-text { color: rgba(255,255,255,0.68) !important; -webkit-text-fill-color: rgba(255,255,255,0.68) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.50) !important; }
+  .wb-date, .wb-weather-text { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; text-shadow: 0 1px 4px rgba(0,0,0,0.50) !important; }
 
   /* Ring */
   .ring-val { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .ring-lbl { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .ring-lbl { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* Footer */
-  .footer-role, .footer-links a, .footer-copy span, .footer-visitor-badge { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .footer-role, .footer-links a, .footer-copy span, .footer-visitor-badge { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
   .footer-name { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; }
 
   /* Section eyebrow / subtitle */
   .sec-eyebrow, .sec-subtitle, .hie-subtitle, .ref-intro {
-    color: rgba(255,255,255,0.65) !important;
+    color: rgba(255,255,255,0.85) !important;
     -webkit-text-fill-color: rgba(255,255,255,0.65) !important;
     text-shadow: none !important;
   }
 
   /* Stb label */
-  .stb-label { color: rgba(255,255,255,0.65) !important; -webkit-text-fill-color: rgba(255,255,255,0.65) !important; }
+  .stb-label { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* Availability text */
   .av-text, .hap-status, .engage-intro, .engage-status-text { color: rgba(255,255,255,0.88) !important; -webkit-text-fill-color: rgba(255,255,255,0.88) !important; }
-  .engage-version, .ps-label, .avail-text, .avail-pill { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .engage-version, .ps-label, .avail-text, .avail-pill { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* Gate visitor strip */
   .gvs-value { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .gvs-label { color: rgba(255,255,255,0.62) !important; -webkit-text-fill-color: rgba(255,255,255,0.62) !important; }
+  .gvs-label { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* CTA colored buttons keep their own white text — leave them alone */
   .cta-resume .cta-btn-title,
@@ -4963,12 +4963,12 @@ a, button, [role="button"] {
 
   /* HIE / fieldwork section */
   .hie-card-title, .hie-card-subtitle { color: rgba(255,255,255,0.92) !important; -webkit-text-fill-color: rgba(255,255,255,0.92) !important; }
-  .hie-card-desc, .hie-tag { color: rgba(255,255,255,0.75) !important; -webkit-text-fill-color: rgba(255,255,255,0.75) !important; }
+  .hie-card-desc, .hie-tag { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* CCNA / cert */
   .ccna-cert-title { color: rgba(255,255,255,0.95) !important; -webkit-text-fill-color: rgba(255,255,255,0.95) !important; }
-  .ccna-cert-subtitle, .ccm-item { color: rgba(255,255,255,0.78) !important; -webkit-text-fill-color: rgba(255,255,255,0.78) !important; }
-  .ccna-id-label, .ccna-id-val { color: rgba(255,255,255,0.82) !important; -webkit-text-fill-color: rgba(255,255,255,0.82) !important; }
+  .ccna-cert-subtitle, .ccm-item { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
+  .ccna-id-label, .ccna-id-val { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 
   /* Review section */
   .review-star { color: rgba(220,180,60,0.90) !important; }
@@ -6168,7 +6168,7 @@ a[href="#fieldwork"].nav-link::before { content: none; }
   background: rgba(255,255,255,.01);
 }
 .astat-num   { font-family: var(--ff-serif); font-size: 20px; font-weight: 700; color: var(--ink); line-height: 1; }
-.astat-label { font-size: 9px; color: var(--ink-3); text-align: center; line-height: 1.3; }
+.astat-label { font-size: 11px; color: var(--ink-3); text-align: center; line-height: 1.3; }
 
 
 /* ================================================================
@@ -7194,12 +7194,12 @@ body {
   color: rgba(255,255,255,.97);
   text-shadow: 0 1px 4px rgba(0,0,0,.30);
 }
-.gate-sub        { color: rgba(255,255,255,.82); }
-.gate-eyebrow    { color: rgba(255,255,255,.80); }
+.gate-sub        { color: rgba(255,255,255,0.85); }
+.gate-eyebrow    { color: rgba(255,255,255,0.85); }
 .gate-brand-name { color: rgba(255,255,255,.95); letter-spacing: .14em; }
-.gate-brand-sub  { color: rgba(255,255,255,.75); }
-.gate-label      { color: rgba(255,255,255,.80); }
-.gate-status-text { color: rgba(255,255,255,.70); }
+.gate-brand-sub  { color: rgba(255,255,255,0.85); }
+.gate-label      { color: rgba(255,255,255,0.85); }
+.gate-status-text { color: rgba(255,255,255,0.85); }
 
 /* ── 17. WEATHER BAR ────────────────────────────────────────── */
 .weather-bar { color: var(--ink-2); font-weight: 600; }
@@ -8514,7 +8514,7 @@ body {
 
 .about-stat .astat-icon { font-size: 13px; color: var(--ink-4); opacity: .72; line-height: 1; }
 .astat-num  { font-family: var(--ff-serif); font-size: 20px; font-weight: 700; color: var(--ink); line-height: 1; letter-spacing: -.02em; }
-.astat-label { font-size: 9px; font-weight: 500; color: var(--ink-3); text-align: center; line-height: 1.35; letter-spacing: .03em; text-transform: uppercase; }
+.astat-label { font-size: 11px; font-weight: 500; color: var(--ink-3); text-align: center; line-height: 1.35; letter-spacing: .03em; text-transform: uppercase; }
 
 /* ── Right panel column — floating glass card ── */
 .about-section .about-panel-col {
@@ -8785,7 +8785,7 @@ body {
   border-right: 0.5px solid rgba(255,255,255,.28);
   border-bottom: 0.5px solid rgba(255,255,255,.20);
 
-  font-size: 9.5px; color: var(--ink-2);
+  font-size: 11px; color: var(--ink-2);
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.28),
@@ -9046,7 +9046,7 @@ body {
 }
 
 .lge-stat-val { font-size: 14px; font-weight: 700; color: var(--ink); font-family: var(--ff-serif); line-height: 1; }
-.lge-stat-lbl { font-size: 9.5px; color: var(--ink-3); }
+.lge-stat-lbl { font-size: 11px; color: var(--ink-3); }
 
 /* ── Project chips inside exp ── */
 .lge-proj-chip {
@@ -10894,7 +10894,7 @@ p {
 .hnr-tag, .hero-eyebrow-text,
 .kpi-lbl, .hvc-lbl, .astat-label,
 .wb-date, .wb-weather-text, .nav-logo-role {
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.85);
 }
 
 /* Nav text */
@@ -11182,7 +11182,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
   text-shadow: none !important;
 }
 .gate-brand-sub, .gate-desc {
-  color: rgba(255,255,255,.75) !important;
+  color: rgba(255,255,255,0.85) !important;
   font-weight: 500 !important;
   text-shadow: none !important;
 }
@@ -11236,11 +11236,11 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
 
 /* Gate eyebrow — tighter */
 .gate-eyebrow {
-  font-size: 9px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
   letter-spacing: .16em !important;
   margin-bottom: 4px !important;
-  color: rgba(255,255,255,.80) !important;
+  color: rgba(255,255,255,0.85) !important;
 }
 
 /* Gate divider rule */
@@ -11305,7 +11305,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
 
 /* Gate label */
 .gate-label {
-  font-size: 9.5px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
   letter-spacing: .12em !important;
   color: rgba(255,255,255,.45) !important;
@@ -11353,8 +11353,8 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
 /* Gate status row */
 .gate-status-row { margin-top: 8px !important; gap: 5px !important; }
 .gate-status-text {
-  font-size: 9.5px !important;
-  color: rgba(255,255,255,.70) !important;
+  font-size: 11px !important;
+  color: rgba(255,255,255,0.85) !important;
   font-weight: 500 !important;
   letter-spacing: 0.02em !important;
 }
@@ -11402,7 +11402,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
   text-shadow: none !important;
 }
 .gate-brand-sub {
-  font-size: 9px !important;
+  font-size: 11px !important;
   color: rgba(255,255,255,.44) !important;
   font-weight: 450 !important;
   letter-spacing: 0.02em !important;
@@ -11513,7 +11513,7 @@ a:not(.btn-primary):not(.btn-ghost):not(.nav-link):not(.nav-resume-btn) {
   text-shadow: none !important;
 }
 .nav-logo-role {
-  font-size: 9px !important;
+  font-size: 11px !important;
   font-weight: 550 !important;
   color: #546070 !important;
   letter-spacing: 0.025em !important;
@@ -12009,7 +12009,7 @@ h1 {
 
 /* Contact labels and values */
 .ci-label {
-  font-size: 9.5px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
   letter-spacing: .10em !important;
   color: #546070 !important;
@@ -14267,7 +14267,7 @@ p, span, a, li, td, th, label, small,
   font-size: 10px !important;
 }
 .lge-stat-val { font-size: 12px !important; }
-.lge-stat-lbl { font-size: 8.5px !important; }
+.lge-stat-lbl { font-size: 11px !important; }
 
 /* ── HERO VCHIPS — compact floating stat pills ────────────────── */
 .hero-vchip {
@@ -14289,7 +14289,7 @@ p, span, a, li, td, th, label, small,
     0 4px 14px rgba(0,0,0,0.07) !important;
 }
 .hvc-val  { font-size: 12px !important; }
-.hvc-lbl  { font-size: 7px !important; }
+.hvc-lbl  { font-size: 11px !important; }
 
 /* ── BTN-PRIMARY — compact liquid glass capsule ───────────────── */
 .btn-primary {
@@ -14390,7 +14390,7 @@ p, span, a, li, td, th, label, small,
   .nav-inner { padding: 0 10px !important; gap: 8px !important; }
   .nav-logo-img-wrap img { width: 26px !important; height: 26px !important; }
   .nav-logo-name { font-size: 11px !important; }
-  .nav-logo-role { font-size: 8px !important; }
+  .nav-logo-role { font-size: 11px !important; }
   .nav-logo-divider { height: 18px !important; }
   .nav-links-center { display: none !important; }
   .nav-mob-toggle { display: flex !important; }
@@ -14473,7 +14473,7 @@ p, span, a, li, td, th, label, small,
   }
   .hvc-connector { display: none !important; }
   .hvc-val  { font-size: 11px !important; }
-  .hvc-lbl  { font-size: 7px !important; }
+  .hvc-lbl  { font-size: 11px !important; }
 
   /* ── TYPOGRAPHY — tighten for mobile ── */
   h1, .hero-name { font-size: clamp(22px, 6vw, 32px) !important; }
@@ -14501,7 +14501,7 @@ p, span, a, li, td, th, label, small,
   [class*="-chip"],
   [class*="-tag"]:not(.ac-badge-blue):not(.ac-badge-sky):not(.ac-badge-indigo) {
     padding: 2px 7px !important;
-    font-size: 9.5px !important;
+    font-size: 11px !important;
   }
 
   /* ── SECTION SPACING ── */
@@ -14518,7 +14518,7 @@ p, span, a, li, td, th, label, small,
 
   /* ── WEATHER BAR ── */
   .weather-bar {
-    font-size: 9.5px !important;
+    font-size: 11px !important;
     padding: 3px 10px !important;
     gap: 6px !important;
   }
@@ -14626,7 +14626,7 @@ p, span, a, li, td, th, label, small,
   .tool-chip,
   .mc-tool-tag {
     padding: 1.5px 6px !important;
-    font-size: 9px !important;
+    font-size: 11px !important;
   }
 
   /* Sections */
@@ -15356,7 +15356,7 @@ strong, em, b, i, code, pre,
   }
 
   .kpi-num   { font-size: 16px !important; }
-  .kpi-label { font-size: 7px !important; }
+  .kpi-label { font-size: 11px !important; }
 
   /* ── CTA BUTTONS ── */
   .hero-ctas {
@@ -15503,11 +15503,11 @@ strong, em, b, i, code, pre,
 
   .kpi-num   { font-size: 15px !important; }
   .kpi-unit  { font-size: 10px !important; }
-  .kpi-label { font-size: 6.5px !important; }
+  .kpi-label { font-size: 11px !important; }
 
   /* Chips compact */
   .hvc-val  { font-size: 11px !important; }
-  .hvc-lbl  { font-size: 7px !important; }
+  .hvc-lbl  { font-size: 11px !important; }
   .hero-vchip { padding: 5px 10px !important; }
 
   /* LinkedIn button full width */
@@ -23226,9 +23226,9 @@ body {
     padding: 16px 14px 18px !important;
   }
   .gate-card h2, #gateAsk h2 { font-size: 17px !important; }
-  .gate-card .gate-subtitle   { font-size: 9px !important; }
+  .gate-card .gate-subtitle   { font-size: 11px !important; }
   .gate-field input, #visitorName { height: 32px !important; }
-  .gate-btn, #gateContinueBtn, #gateDoneBtn { height: 32px !important; font-size: 9px !important; }
+  .gate-btn, #gateContinueBtn, #gateDoneBtn { height: 32px !important; font-size: 11px !important; }
 }
 
 
@@ -23379,7 +23379,7 @@ body {
 
   /* ── 7. LOGO TEXT ── */
   .gate-logo {
-    font-size: 8px !important;
+    font-size: 11px !important;
     font-weight: 700 !important;
     letter-spacing: 0.28em !important;
     color: rgba(15, 35, 80, 0.70) !important;
@@ -23426,7 +23426,7 @@ body {
 
   /* ── 11. FIELD LABEL ── */
   .gate-field label {
-    font-size: 8px !important;
+    font-size: 11px !important;
     font-weight: 700 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
@@ -23497,7 +23497,7 @@ body {
 
   /* ── 14. "Takes 2 seconds" hint ── */
   #gateAsk > p {
-    font-size: 9px !important;
+    font-size: 11px !important;
     color: rgba(10, 28, 75, 0.50) !important;
     text-align: center !important;
   }
@@ -23549,7 +23549,7 @@ body {
     padding: 18px 14px 18px !important;
   }
   .gate-card h2, #gateAsk h2 { font-size: 18px !important; }
-  .gate-card .gate-subtitle   { font-size: 9px !important; }
+  .gate-card .gate-subtitle   { font-size: 11px !important; }
   .gate-field input, #visitorName { height: 34px !important; }
   .gate-btn, #gateContinueBtn, #gateDoneBtn { height: 34px !important; }
 }
@@ -23618,7 +23618,7 @@ body::after {
   color: rgba(255,255,255,0.88) !important;
   text-shadow: 0 1px 6px rgba(0,0,0,0.55) !important;
 }
-.nav-logo-role { color: rgba(255,255,255,0.50) !important; }
+.nav-logo-role { color: rgba(255,255,255,0.85) !important; }
 .nav-link:hover,
 .nav-link.active {
   color: #ffffff !important;
@@ -25766,7 +25766,7 @@ canvas#heroCanvas,
 
 /* Nav logo text */
 .nav-logo-name { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
-.nav-logo-role { color: rgba(255,255,255,0.55) !important; }
+.nav-logo-role { color: rgba(255,255,255,0.85) !important; }
 
 /* ── BUTTONS: clean glass, white text ── */
 .btn-primary,
@@ -25904,7 +25904,7 @@ p,
 .sec-subtitle,
 .footer-role,
 .about-desc {
-  color: rgba(255,255,255,0.80) !important;
+  color: rgba(255,255,255,0.85) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.80) !important;
 }
 
@@ -25932,7 +25932,7 @@ p,
 small,
 .text-muted,
 .label {
-  color: rgba(255,255,255,0.60) !important;
+  color: rgba(255,255,255,0.85) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.60) !important;
 }
 
@@ -26907,7 +26907,7 @@ section:has(#reviewBox) {
 
 .review-box-hint {
   font-size: 14px !important;
-  color: rgba(255,255,255,0.65) !important;
+  color: rgba(255,255,255,0.85) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.65) !important;
   margin-bottom: 28px !important;
   line-height: 1.55 !important;
@@ -26928,7 +26928,7 @@ section:has(#reviewBox) {
 .review-rating-label {
   font-size: 13px !important;
   font-weight: 700 !important;
-  color: rgba(255,255,255,0.75) !important;
+  color: rgba(255,255,255,0.85) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.75) !important;
   flex-shrink: 0 !important;
   letter-spacing: 0.04em !important;
@@ -27098,7 +27098,7 @@ section:has(#reviewBox) {
 .wb-date  { color: #334155 !important; }
 
 /* Fix 3: Hero small text labels - minimum 14px to meet large-text threshold */
-.hvc-lbl  { font-size: 9px; color: #334155 !important; }
+.hvc-lbl  { font-size: 11px; color: #334155 !important; }
 .kpi-label { color: #334155 !important; }
 .hero-eyebrow-text { color: #334155 !important; }
 .hnr-tag  { color: #334155 !important; }
@@ -27745,8 +27745,8 @@ body::after {
   -webkit-background-clip: unset !important;
   background-clip: unset !important;
 }
-.sec-subtitle { color: rgba(255,255,255,0.80) !important; }
-.sec-eyebrow  { color: rgba(255,255,255,0.65) !important; }
+.sec-subtitle { color: rgba(255,255,255,0.85) !important; }
+.sec-eyebrow  { color: rgba(255,255,255,0.85) !important; }
 
 /* Hero name gradient → plain white */
 .hero-name-first, .hero-name-last {
@@ -27769,7 +27769,7 @@ body::after {
 /* Nav links */
 .nav-link      { color: rgba(255,255,255,0.85) !important; }
 .nav-logo-name { color: #FFFFFF !important; }
-.nav-logo-role { color: rgba(255,255,255,0.70) !important; }
+.nav-logo-role { color: rgba(255,255,255,0.85) !important; }
 .nav-resume-btn { color: #FFFFFF !important; }
 
 /* Global ink variables — remap to white */
@@ -27798,13 +27798,13 @@ body::after {
   -webkit-text-fill-color: #FFFFFF !important;
   background-clip: unset !important;
 }
-.sec-subtitle  { color: rgba(255,255,255,0.80) !important; }
-.sec-eyebrow   { color: rgba(255,255,255,0.65) !important; }
+.sec-subtitle  { color: rgba(255,255,255,0.85) !important; }
+.sec-eyebrow   { color: rgba(255,255,255,0.85) !important; }
 .sec-num       { display: none !important; }
 
 /* ── Navbar ── */
 .nav-logo-name { color: #FFFFFF !important; }
-.nav-logo-role { color: rgba(255,255,255,0.75) !important; }
+.nav-logo-role { color: rgba(255,255,255,0.85) !important; }
 .nav-link      { color: rgba(255,255,255,0.85) !important; }
 .nav-link:hover, .nav-link.active, .nav-link.is-active { color: #FFFFFF !important; }
 .nav-resume-btn { color: #FFFFFF !important; }
@@ -27828,10 +27828,10 @@ body::after {
 
 /* ── Hero ── */
 .hvc-val           { color: #FFFFFF !important; }
-.hvc-icon          { color: rgba(255,255,255,0.75) !important; }
-.hvc-lbl           { color: rgba(255,255,255,0.70) !important; }
-.hero-eyebrow-text { color: rgba(255,255,255,0.80) !important; }
-.hnr-tag           { color: rgba(255,255,255,0.75) !important; }
+.hvc-icon          { color: rgba(255,255,255,0.85) !important; }
+.hvc-lbl           { color: rgba(255,255,255,0.85) !important; }
+.hero-eyebrow-text { color: rgba(255,255,255,0.85) !important; }
+.hnr-tag           { color: rgba(255,255,255,0.85) !important; }
 .hero-statement    { color: rgba(255,255,255,0.85) !important; }
 .hero-name-first, .hero-name-last {
   color: #FFFFFF !important;
@@ -27841,15 +27841,15 @@ body::after {
   background-clip: unset !important;
 }
 .kpi-num   { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; }
-.kpi-unit  { color: rgba(255,255,255,0.75) !important; }
-.kpi-label { color: rgba(255,255,255,0.70) !important; }
+.kpi-unit  { color: rgba(255,255,255,0.85) !important; }
+.kpi-label { color: rgba(255,255,255,0.85) !important; }
 .hero-badge { color: rgba(255,255,255,0.90) !important; }
 
 /* ── Why Hire ── */
 .wh-title        { color: #FFFFFF !important; }
 .wh-desc         { color: rgba(255,255,255,0.85) !important; }
-.wh-proof        { color: rgba(255,255,255,0.75) !important; }
-.wh-proof span   { color: rgba(255,255,255,0.75) !important; }
+.wh-proof        { color: rgba(255,255,255,0.85) !important; }
+.wh-proof span   { color: rgba(255,255,255,0.85) !important; }
 .wh-badge        { color: #FFFFFF !important; font-weight: 700; }
 .wh-badge-green  { color: rgba(255,255,255,0.90) !important; }
 .wh-badge-amber  { color: rgba(255,255,255,0.90) !important; }
@@ -27857,27 +27857,27 @@ body::after {
 .wh-badge-rose   { color: rgba(255,255,255,0.90) !important; }
 .wh-badge-purple { color: rgba(255,255,255,0.90) !important; }
 .ps-num          { color: #FFFFFF !important; }
-.ps-label        { color: rgba(255,255,255,0.75) !important; }
-.stb-label       { color: rgba(255,255,255,0.75) !important; }
+.ps-label        { color: rgba(255,255,255,0.85) !important; }
+.stb-label       { color: rgba(255,255,255,0.85) !important; }
 .stb-sector      { color: rgba(255,255,255,0.90) !important; }
 
 /* ── About ── */
 .bio-lead        { color: #FFFFFF !important; }
 .bio-body        { color: rgba(255,255,255,0.85) !important; }
 .astat-num       { color: #FFFFFF !important; }
-.astat-label     { color: rgba(255,255,255,0.70) !important; }
+.astat-label     { color: rgba(255,255,255,0.85) !important; }
 .ach-text strong { color: #FFFFFF !important; }
-.ach-text span   { color: rgba(255,255,255,0.80) !important; }
+.ach-text span   { color: rgba(255,255,255,0.85) !important; }
 .p-chip          { color: rgba(255,255,255,0.90) !important; }
 
 /* ── Projects ── */
 .mc-title         { color: #FFFFFF !important; }
-.mc-org           { color: rgba(255,255,255,0.75) !important; }
-.mc-sector        { color: rgba(255,255,255,0.70) !important; }
+.mc-org           { color: rgba(255,255,255,0.85) !important; }
+.mc-sector        { color: rgba(255,255,255,0.85) !important; }
 .mc-desc          { color: rgba(255,255,255,0.85) !important; }
-.csm-lbl          { color: rgba(255,255,255,0.70) !important; }
+.csm-lbl          { color: rgba(255,255,255,0.85) !important; }
 .csm-val          { color: #FFFFFF !important; }
-.mc-outcome-label { color: rgba(255,255,255,0.70) !important; }
+.mc-outcome-label { color: rgba(255,255,255,0.85) !important; }
 .mc-outcome-val   { color: #FFFFFF !important; }
 .mc-tool-tag      { color: rgba(255,255,255,0.85) !important; }
 .pc-block-text    { color: rgba(255,255,255,0.85) !important; }
@@ -27889,48 +27889,48 @@ body::after {
 /* ── Capabilities cards ── */
 .gc-card-title { color: #FFFFFF !important; }
 .gc-card-body  { color: rgba(255,255,255,0.85) !important; }
-.gc-stat       { color: rgba(255,255,255,0.70) !important; }
+.gc-stat       { color: rgba(255,255,255,0.85) !important; }
 .gc-tag        { color: rgba(255,255,255,0.85) !important; }
 
 /* ── Experience ── */
 .exp-role         { color: #FFFFFF !important; }
 .exp-company      { color: rgba(255,255,255,0.85) !important; }
 .exp-bullet       { color: rgba(255,255,255,0.85) !important; }
-.exp-quote        { color: rgba(255,255,255,0.80) !important; }
-.exp-quote-author { color: rgba(255,255,255,0.65) !important; }
+.exp-quote        { color: rgba(255,255,255,0.85) !important; }
+.exp-quote-author { color: rgba(255,255,255,0.85) !important; }
 .exp-stat-chip    { color: #FFFFFF !important; }
-.exp-meta-chip    { color: rgba(255,255,255,0.80) !important; }
+.exp-meta-chip    { color: rgba(255,255,255,0.85) !important; }
 
 /* ── Education ── */
 .edu-description { color: rgba(255,255,255,0.85) !important; }
 .edu-result      { color: rgba(255,255,255,0.85) !important; }
-.edu-date        { color: rgba(255,255,255,0.70) !important; }
+.edu-date        { color: rgba(255,255,255,0.85) !important; }
 
 /* ── Arsenal ── */
 .ac-title    { color: #FFFFFF !important; }
-.ac-subtitle { color: rgba(255,255,255,0.75) !important; }
+.ac-subtitle { color: rgba(255,255,255,0.85) !important; }
 .tool-chip   { color: rgba(255,255,255,0.90) !important; }
 .lang-name   { color: #FFFFFF !important; }
-.lang-level  { color: rgba(255,255,255,0.70) !important; }
+.lang-level  { color: rgba(255,255,255,0.85) !important; }
 
 /* ── References ── */
 .ref-name       { color: #FFFFFF !important; }
 .ref-title      { color: rgba(255,255,255,0.85) !important; }
-.ref-company    { color: rgba(255,255,255,0.70) !important; }
+.ref-company    { color: rgba(255,255,255,0.85) !important; }
 .ref-note       { color: rgba(255,255,255,0.85) !important; }
 .ref-rel-pill   { color: rgba(255,255,255,0.85) !important; }
-.ref-disclaimer { color: rgba(255,255,255,0.60) !important; }
+.ref-disclaimer { color: rgba(255,255,255,0.85) !important; }
 .ref-view-link  { color: rgba(150,210,255,0.95) !important; }
 
 /* ── Contact / Engage ── */
 .engage-status-text { color: #FFFFFF !important; }
-.engage-version     { color: rgba(255,255,255,0.65) !important; }
+.engage-version     { color: rgba(255,255,255,0.85) !important; }
 .engage-intro       { color: rgba(255,255,255,0.85) !important; }
-.er-label           { color: rgba(255,255,255,0.70) !important; }
+.er-label           { color: rgba(255,255,255,0.85) !important; }
 .er-value           { color: #FFFFFF !important; }
 .er-cta             { color: rgba(255,255,255,0.85) !important; }
 .erc-title          { color: #FFFFFF !important; }
-.erc-sub            { color: rgba(255,255,255,0.70) !important; }
+.erc-sub            { color: rgba(255,255,255,0.85) !important; }
 
 /* CTA buttons */
 .cta-resume .cta-btn-label   { color: #FFFFFF !important; }
@@ -27940,15 +27940,15 @@ body::after {
 
 /* ── Footer ── */
 .footer-name    { color: #FFFFFF !important; }
-.footer-role    { color: rgba(255,255,255,0.75) !important; }
-.footer-copy    { color: rgba(255,255,255,0.65) !important; }
+.footer-role    { color: rgba(255,255,255,0.85) !important; }
+.footer-copy    { color: rgba(255,255,255,0.85) !important; }
 .footer-links a { color: rgba(255,255,255,0.85) !important; }
 
 /* ── Review box ── */
 .review-box-title    { color: #FFFFFF !important; }
-.review-box-hint     { color: rgba(255,255,255,0.80) !important; }
-.review-rating-label { color: rgba(255,255,255,0.80) !important; }
-.review-char-count   { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
+.review-box-hint     { color: rgba(255,255,255,0.85) !important; }
+.review-rating-label { color: rgba(255,255,255,0.85) !important; }
+.review-char-count   { color: rgba(255,255,255,0.85) !important; -webkit-text-fill-color: rgba(255,255,255,0.85) !important; }
 #reviewThanks p:first-of-type { color: #FFFFFF !important; }
 #reviewThanks p:last-of-type  { color: rgba(255,255,255,0.80) !important; }
 
@@ -27959,15 +27959,15 @@ body::after {
 
 /* ── Misc ── */
 .hlb-label    { color: #FFFFFF !important; }
-.hlb-id       { color: rgba(255,255,255,0.65) !important; }
+.hlb-id       { color: rgba(255,255,255,0.85) !important; }
 .hap-status   { color: rgba(150,255,180,0.95) !important; }
 .hap-pill     { color: rgba(255,255,255,0.85) !important; }
 .aac-title    { color: #FFFFFF !important; }
-.aac-org      { color: rgba(255,255,255,0.70) !important; }
-.aac-desc     { color: rgba(255,255,255,0.80) !important; }
+.aac-org      { color: rgba(255,255,255,0.85) !important; }
+.aac-desc     { color: rgba(255,255,255,0.85) !important; }
 .cc-name, .cc-issuer { color: #FFFFFF !important; }
-.cc-date, .cc-id     { color: rgba(255,255,255,0.65) !important; }
-.engage-recruiter span:last-child { color: rgba(255,255,255,0.70) !important; }
+.cc-date, .cc-id     { color: rgba(255,255,255,0.85) !important; }
+.engage-recruiter span:last-child { color: rgba(255,255,255,0.85) !important; }
 
 /* ── Form placeholders ── */
 #reviewName::placeholder      { font-size: 16px !important; color: rgba(255,255,255,0.35) !important; }
@@ -29714,7 +29714,7 @@ footer, .footer {
   font-weight: 700 !important;
   letter-spacing: 0.06em !important;
   text-transform: uppercase !important;
-  color: rgba(255,255,255,0.62) !important;
+  color: rgba(255,255,255,0.85) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.62) !important;
   margin-bottom: 6px !important;
   margin-top: 4px !important;
@@ -29856,7 +29856,7 @@ footer, .footer {
 .rpp-pill-text {
   font-size: 12px !important;
   line-height: 1.55 !important;
-  color: rgba(255,255,255,0.72) !important;
+  color: rgba(255,255,255,0.85) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.72) !important;
   font-style: italic !important;
   margin: 0 !important;
@@ -32619,7 +32619,7 @@ textarea::placeholder,
   /* Labels — raise floor on mobile */
   .kpi-label, .hvc-lbl, .stat-label,
   .sec-num, .sec-label {
-    color:                   rgba(255,255,255,0.70) !important;
+    color:                   rgba(255,255,255,0.85) !important;
     -webkit-text-fill-color: rgba(255,255,255,0.70) !important;
   }
 }
@@ -33471,9 +33471,9 @@ footer.ftr,
 .ftr-eyebrow,
 .ftr-status-bar,
 .ftr-copy,
-.ftr-live { color: rgba(255,255,255,0.82) !important; text-shadow: 0 1px 5px rgba(0,0,0,0.55); }
+.ftr-live { color: rgba(255,255,255,0.85) !important; text-shadow: 0 1px 5px rgba(0,0,0,0.55); }
 .ftr-link { color: rgba(255,255,255,0.88) !important; text-shadow: 0 1px 5px rgba(0,0,0,0.55); }
-.ftr-link i { color: rgba(255,255,255,0.70) !important; }
+.ftr-link i { color: rgba(255,255,255,0.85) !important; }
 .ftr-icon-btn {
   background: rgba(255,255,255,0.08) !important;
   border-color: rgba(255,255,255,0.22) !important;
@@ -33711,7 +33711,7 @@ footer.ftr,
   align-items: center;
   gap: 14px;
   padding: 32px 24px;
-  color: rgba(255,255,255,.55);
+  color: rgba(255,255,255,0.85);
   text-align: center;
   font-family: var(--ff-sans);
   font-size: 14px;
@@ -33765,4 +33765,133 @@ footer.ftr,
   .nav-links-center {
     gap: 0px !important;
   }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   READABILITY PASS — text-shadow scrim
+   Adds a soft contrast scrim behind existing label/caption text
+   so it stays legible over the glass panels & photo background
+   across laptop, tablet, phone and large/TV screens.
+   Does NOT touch color, background, blur, borders, or layout.
+   ══════════════════════════════════════════════════════════════ */
+#gateAsk > p,
+#gateContinueBtn,
+#gateDoneBtn,
+.aac-desc,
+.aac-org,
+.about-desc,
+.ac-subtitle,
+.ach-text span,
+.astat-label,
+.avail-pill,
+.avail-text,
+.cc-date,
+.cc-id,
+.ccm-item,
+.ccna-cert-subtitle,
+.ccna-id-label,
+.ccna-id-val,
+.ci-label,
+.contact-intro,
+.csm-lbl,
+.edu-date,
+.edu-desc,
+.edu-period,
+.engage-recruiter span:last-child,
+.engage-version,
+.er-label,
+.erc-sub,
+.exp-meta-chip,
+.exp-quote,
+.exp-quote-author,
+.footer-copy,
+.footer-copy span,
+.footer-links a,
+.footer-role,
+.footer-visitor-badge,
+.ftr-link i,
+.ftr-live,
+.gate-brand-sub,
+.gate-btn,
+.gate-card .gate-subtitle,
+.gate-desc,
+.gate-eyebrow,
+.gate-field label,
+.gate-label,
+.gate-status-text,
+.gate-sub,
+.gc-stat,
+.gvs-label,
+.hero-eyebrow-text,
+.hie-card-desc,
+.hie-subtitle,
+.hie-tag,
+.hlb-id,
+.hnr-tag,
+.hvc-icon,
+.hvc-lbl,
+.kpi-label,
+.kpi-unit,
+.lang-level,
+.lge-section-eyebrow,
+.lge-stat-lbl,
+.lge-tab-pill,
+.lge-tag,
+.mc-org,
+.mc-outcome-label,
+.mc-sector,
+.mc-tool-tag,
+.nav-logo-role,
+.pc-block-text,
+.pc-impact,
+.pc-sector-tag,
+.pc-tool-badge,
+.ps-label,
+.ref-company,
+.ref-disclaimer,
+.ref-intro,
+.ref-note,
+.ref-rel-pill,
+.ref-title,
+.review-box-hint,
+.review-char-count,
+.review-rating-label,
+.ring-lbl,
+.rpp-pill-text,
+.sec-eyebrow,
+.sec-subtitle,
+.stb-label,
+.stb-sector,
+.tech-tag,
+.tool-chip,
+.wb-date,
+.wb-weather-text,
+.weather-bar,
+.wh-badge,
+.wh-desc,
+.wh-proof,
+.wh-proof span,
+[class*="-tag"]:not(.ac-badge-blue):not(.ac-badge-sky):not(.ac-badge-indigo) {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.35) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   READABILITY PASS — large screens / TV / big monitors
+   Nudges the smallest labels and body copy up slightly once
+   there's ample room, since tiny text reads worse from a
+   couch/TV viewing distance even though it fits fine on paper.
+   ══════════════════════════════════════════════════════════════ */
+@media (min-width: 1600px) {
+  .kpi-label, .hvc-lbl, .astat-label, .nav-logo-role, .ring-lbl,
+  .stb-label, .ps-label, .footer-role, .footer-copy, .ci-label,
+  .lang-level, .ref-company, .er-label, .erc-sub, .engage-version,
+  .mc-org, .mc-sector, .csm-lbl, .edu-date, .gvs-label {
+    font-size: 12.5px !important;
+  }
+  .hero-statement, .about-desc {
+    font-size: 16px !important;
+    line-height: 1.75 !important;
+  }
+  body { line-height: 1.7; }
 }
