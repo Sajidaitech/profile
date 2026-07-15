@@ -548,7 +548,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // AOS disabled — was causing flicker on sections below hero
   // if (typeof AOS !== 'undefined') { AOS.init(...) }
   initNav();
-  initCursor();
   initFAB();
   initCounters();
   initRings();
@@ -683,33 +682,10 @@ function initNav() {
 
 
 // ============================================================
-// SECTION 4 · CUSTOM CURSOR (desktop only)
+// SECTION 4 · (custom cursor now handled by the cinematic effects
+// engine further down this file — see initCursor() under
+// "STEP 7 — ADVANCED CINEMATIC EFFECTS ENGINE")
 // ============================================================
-
-function initCursor() {
-  var dot  = document.getElementById('cursorDot');
-  var ring = document.getElementById('cursorRing');
-  if (!dot || !ring || window.innerWidth < 1024) return;
-
-  var ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
-
-  document.addEventListener('mousemove', function (e) {
-    mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
-  });
-
-  (function animateRing() {
-    ringX += (mouseX - ringX) * 0.15;
-    ringY += (mouseY - ringY) * 0.15;
-    ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
-    requestAnimationFrame(animateRing);
-  })();
-
-  document.querySelectorAll('a, button, .project-card, .exp-card, .arsenal-category').forEach(function (el) {
-    el.addEventListener('mouseenter', function () { ring.style.width = '48px'; ring.style.height = '48px'; ring.style.opacity = '0.3'; });
-    el.addEventListener('mouseleave', function () { ring.style.width = '28px'; ring.style.height = '28px'; ring.style.opacity = '0.6'; });
-  });
-}
 
 
 // ============================================================
@@ -1473,7 +1449,7 @@ function loadLanguages() {
 var certData = [
   {
     icon: 'fa-network-wired',
-    logo: 'corvitnetworkPeshawar.png',
+    logo: 'cisco-logo.svg',
     badge: '🔄 IN PROGRESS',
     badgeClass: 'cc-badge--progress',
     title: 'CCNA (Cisco Certified Network Associate)',
@@ -1496,6 +1472,7 @@ var certData = [
   },
   {
     icon: 'fa-cubes',
+    logo: 'odoo-logo.svg',
     badge: '✅ CERTIFIED',
     badgeClass: 'cc-badge--verified',
     title: 'Odoo ERP Training',
@@ -1551,7 +1528,7 @@ var certData = [
   },
   {
     icon: 'fa-cloud',
-    logo: 'corvitnetworkPeshawar.png',
+    logo: 'azure-logo.svg',
     badge: '🔄 IN PROGRESS',
     badgeClass: 'cc-badge--progress',
     title: 'Microsoft Azure Fundamentals',
@@ -1599,7 +1576,7 @@ function loadCertifications() {
         '<div class="chc-left">' +
           '<div class="chc-icon-ring" style="' + (hero.logo ? 'background:#ffffff;' : '') + '">' +
             (hero.logo
-              ? '<img src="' + hero.logo + '" alt="' + hero.issuer + ' logo" style="width:38px;height:38px;object-fit:contain;">'
+              ? '<img src="' + hero.logo + '" alt="' + hero.issuer + ' logo" style="width:100%;height:100%;object-fit:contain;">'
               : '<i class="fas ' + hero.icon + '"></i>'
             ) +
           '</div>' +
@@ -1653,7 +1630,7 @@ function loadCertifications() {
         '<div class="cc-top-row">' +
           '<div class="cc-icon-wrap" style="background:' + (cert.logo ? '#ffffff' : accent + '22') + ';color:' + accent + ';">' +
             (cert.logo
-              ? '<img src="' + cert.logo + '" alt="' + cert.issuer + ' logo" style="width:30px;height:30px;object-fit:contain;">'
+              ? '<img src="' + cert.logo + '" alt="' + cert.issuer + ' logo" style="width:100%;height:100%;object-fit:contain;">'
               : '<i class="fas ' + cert.icon + '"></i>'
             ) +
           '</div>' +
@@ -4508,5 +4485,87 @@ window.hieModalImgLoaded = hieModalImgLoaded;
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
+  }
+})();
+
+
+// ============================================================
+// SECTION NEW-C · HEADING & TEXT ENTRANCE ANIMATIONS
+// Progressive enhancement: tags headings/eyebrows/paragraphs with
+// .txt-reveal + reveals them via IntersectionObserver as the user
+// scrolls. Adds html.js-text-anim first — the CSS only hides text
+// when that class is present, so if this script fails or
+// IntersectionObserver isn't supported, everything just stays
+// visible (no permanently-blank text risk).
+// ============================================================
+
+(function () {
+  'use strict';
+
+  function initTextAnimations() {
+    if (!('IntersectionObserver' in window)) return;
+
+    // Groups of elements to animate, in the order they should be
+    // tagged (used to derive stagger for elements that sit right
+    // next to each other, e.g. the hero block).
+    var heroSelectors = [
+      '.hero-eyebrow-row',
+      '.hero-stat-badges',
+      '.hero-display-name .hero-name-first',
+      '.hero-display-name .hero-name-last',
+      '.hero-name-rule',
+      '.hero-statement',
+      '.hero-kpis',
+      '.hero-ctas'
+    ];
+
+    var siteWideSelectors = [
+      '.sec-eyebrow',
+      '.sec-title',
+      '.sec-subtitle'
+    ];
+
+    document.documentElement.classList.add('js-text-anim');
+
+    var revealObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+    function tag(el, staggerIndex) {
+      if (!el || el.classList.contains('txt-reveal')) return;
+      el.classList.add('txt-reveal');
+      if (staggerIndex) {
+        el.classList.add('txt-stagger-' + Math.min(staggerIndex, 4));
+      }
+      revealObs.observe(el);
+    }
+
+    // Hero: staggered, one after another, since it's all on screen
+    // together at load.
+    heroSelectors.forEach(function (sel, i) {
+      var el = document.querySelector(sel);
+      tag(el, i % 4 + 1);
+    });
+
+    // Section headings/eyebrows/subtitles sitewide: each section's
+    // own trio staggers slightly against itself, then plays as that
+    // section scrolls into view.
+    siteWideSelectors.forEach(function (sel) {
+      document.querySelectorAll(sel).forEach(function (el) {
+        var staggerIndex = sel === '.sec-eyebrow' ? 1 : (sel === '.sec-title' ? 2 : 3);
+        tag(el, staggerIndex);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTextAnimations);
+  } else {
+    initTextAnimations();
   }
 })();
