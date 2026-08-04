@@ -529,7 +529,7 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   // server-side instead of calling api.brevo.com directly from here.
   // If you're OK with that tradeoff for a low-key personal-site use
   // case, fill in the key below and this will work as-is.
-  var BREVO_API_KEY = ''; // e.g. 'xkeysib-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+  var BREVO_API_KEY = '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';
   var BREVO_NOTIFY_TO_EMAIL = 'info@sajidmk.com';
   var BREVO_NOTIFY_TO_NAME  = 'Sajid Mehmood';
   var BREVO_SENDER_EMAIL    = 'info@sajidmk.com'; // must be a verified sender/domain in your Brevo account
