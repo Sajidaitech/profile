@@ -1,11 +1,17 @@
 /* ================================================================
-   LUXURY LIQUID GLASS DESIGN SYSTEM — v6.0 Premium Overhaul
+   SUNSET AMBER GLASS DESIGN SYSTEM — v7.0
    Sajid Mehmood Portfolio
    
-   Design Vision: iOS 26 / Apple Vision Pro · Translucent surfaces
-   Background: Silver-gray gradient #D9DDE3 → #C7CCD4 → #EEF1F5
-   Glass: Frosted white panels · Metallic silver reflections
-   Accents: Cyan glow · Purple neon · Pink ambient
+   Design Vision: Apple Vision Pro · Translucent surfaces, warm-tinted
+   Background: background.webp (desktop) / mobilebackground.webp (mobile)
+               — sunset over coastline, sampled palette below
+   Glass: Amber-tinted frosted panels · real blur + saturation
+   Palette sampled from source photos:
+     Sunset gold core   #e6a056 / #eb990e
+     Deep amber accent  #cd771e
+     Base dark navy     #202f4a
+     Base dark teal     #0f1918 / #1e433a
+     Warm shadow tone    #5e4a31
 ================================================================ */
 
 /* ── GOOGLE FONTS IMPORT ── */
@@ -18,33 +24,39 @@
   /* ── Background — real photo ── */
   --luxury-bg: url('background.webp') center 35% / cover no-repeat fixed;
 
-  /* ── Glass surface layers — single ultra-light layer ── */
-  --glass-ultra:    rgba(255,255,255,0.10);
-  --glass-strong:   rgba(255,255,255,0.10);
-  --glass-mid:      rgba(255,255,255,0.08);
-  --glass-light:    rgba(255,255,255,0.06);
-  --glass-whisper:  rgba(255,255,255,0.04);
+  /* ── Glass surface layers — amber-tinted (sampled from background.webp) ── */
+  --glass-ultra:    rgba(230,160,86,0.14);
+  --glass-strong:   rgba(230,160,86,0.10);
+  --glass-mid:      rgba(235,153,14,0.07);
+  --glass-light:    rgba(230,160,86,0.045);
+  --glass-whisper:  rgba(230,160,86,0.03);
 
-  /* ── Blur intensities — light frosted glass ── */
-  --blur-ultra:  blur(0px) saturate(1.4) brightness(1.02);
-  --blur-strong: blur(0px) saturate(1.3) brightness(1.01);
-  --blur-mid:    blur(0px) saturate(1.2) brightness(1.01);
-  --blur-light:  blur(0px) saturate(1.15);
-  --blur-soft:   blur(0px)  saturate(1.1);
+  /* ── Blur intensities — real frosted-glass depth ── */
+  --blur-ultra:  blur(24px) saturate(1.5)  brightness(1.06);
+  --blur-strong: blur(20px) saturate(1.45) brightness(1.05);
+  --blur-mid:    blur(16px) saturate(1.35) brightness(1.03);
+  --blur-light:  blur(12px) saturate(1.25) brightness(1.02);
+  --blur-soft:   blur(8px)  saturate(1.15);
 
-  /* ── Platinum Chrome accent palette — zero blue/purple/cyan ── */
-  --cyan:         #D4D8E0;
-  --cyan-soft:    rgba(212,216,224,0.18);
-  --cyan-glow:    rgba(212,216,224,0.30);
-  --purple:       #A8ADB8;
-  --purple-soft:  rgba(168,173,184,0.18);
-  --purple-glow:  rgba(168,173,184,0.30);
-  --pink:         #E8ECF2;
-  --pink-soft:    rgba(232,236,242,0.10);
-  --pink-glow:    rgba(232,236,242,0.20);
-  --silver:       #C8CDD6;
-  --pearl:        #F1F3F6;
-  --metallic:     linear-gradient(135deg, #9ca3af 0%, #d1d5db 40%, #f9fafb 100%);
+  /* ── Amber border gradient — light catching top-left, sunset-lit edge ── */
+  --amber-border: linear-gradient(135deg,
+      rgba(255,210,150,0.45) 0%,
+      rgba(230,160,86,0.12) 45%,
+      rgba(205,119,30,0.05) 100%);
+
+  /* ── Sunset Amber accent palette — sampled from background.webp ── */
+  --cyan:         #E6A056;
+  --cyan-soft:    rgba(230,160,86,0.18);
+  --cyan-glow:    rgba(230,160,86,0.30);
+  --purple:       #CD771E;
+  --purple-soft:  rgba(205,119,30,0.18);
+  --purple-glow:  rgba(205,119,30,0.30);
+  --pink:         #FFD9A0;
+  --pink-soft:    rgba(255,217,160,0.12);
+  --pink-glow:    rgba(255,217,160,0.22);
+  --silver:       #E8C79A;
+  --pearl:        #FFF3E0;
+  --metallic:     linear-gradient(135deg, #cd771e 0%, #eb990e 40%, #ffd9a0 100%);
 
   /* ── Typography ── */
   --ff-serif:    'Playfair Display', Georgia, serif;
@@ -72,48 +84,48 @@
   --container:   1280px;
   --section-pad: clamp(32px, 4.5vw, 60px);
 
-  /* ── Shadows — glass floating system ── */
+  /* ── Shadows — warm amber glass floating system ── */
   --sh-glass-sm:
-    inset 0 1px 0 rgba(255,255,255,0.75),
-    inset 0 -0.5px 0 rgba(0,0,0,0.04),
-    inset 1px 0 0 rgba(255,255,255,0.55),
-    inset -0.5px 0 0 rgba(255,255,255,0.35),
-    0 2px 6px rgba(120,130,160,0.10),
-    0 8px 20px rgba(100,110,145,0.10),
-    0 0 0 0.75px rgba(255,255,255,0.50);
+    inset 0 1px 0 rgba(255,238,215,0.75),
+    inset 0 -0.5px 0 rgba(40,25,10,0.04),
+    inset 1px 0 0 rgba(255,238,215,0.55),
+    inset -0.5px 0 0 rgba(255,238,215,0.35),
+    0 2px 6px rgba(94,74,49,0.14),
+    0 8px 20px rgba(94,74,49,0.12),
+    0 0 0 0.75px rgba(255,217,160,0.35);
 
   --sh-glass-md:
-    inset 0 1.5px 0 rgba(255,255,255,0.85),
-    inset 0 -0.5px 0 rgba(0,0,0,0.05),
-    inset 1.5px 0 0 rgba(255,255,255,0.60),
-    inset -0.75px 0 0 rgba(255,255,255,0.40),
-    0 4px 12px rgba(100,110,145,0.12),
-    0 14px 36px rgba(90,100,135,0.12),
-    0 30px 60px rgba(80,90,120,0.06),
-    0 0 0 0.75px rgba(255,255,255,0.55);
+    inset 0 1.5px 0 rgba(255,238,215,0.85),
+    inset 0 -0.5px 0 rgba(40,25,10,0.05),
+    inset 1.5px 0 0 rgba(255,238,215,0.60),
+    inset -0.75px 0 0 rgba(255,238,215,0.40),
+    0 4px 12px rgba(94,74,49,0.16),
+    0 14px 36px rgba(94,74,49,0.16),
+    0 30px 60px rgba(60,45,25,0.08),
+    0 0 0 0.75px rgba(255,217,160,0.40);
 
   --sh-glass-lg:
-    inset 0 2px 0 rgba(255,255,255,0.90),
-    inset 0 -1px 0 rgba(0,0,0,0.06),
-    inset 2px 0 0 rgba(255,255,255,0.65),
-    inset -1px 0 0 rgba(255,255,255,0.45),
-    inset 0 4px 24px rgba(255,255,255,0.20),
-    0 6px 18px rgba(90,100,135,0.14),
-    0 20px 50px rgba(80,92,130,0.14),
-    0 50px 100px rgba(70,82,120,0.08),
-    0 0 0 0.75px rgba(255,255,255,0.60);
+    inset 0 2px 0 rgba(255,238,215,0.90),
+    inset 0 -1px 0 rgba(40,25,10,0.06),
+    inset 2px 0 0 rgba(255,238,215,0.65),
+    inset -1px 0 0 rgba(255,238,215,0.45),
+    inset 0 4px 24px rgba(255,217,160,0.22),
+    0 6px 18px rgba(94,74,49,0.18),
+    0 20px 50px rgba(94,74,49,0.18),
+    0 50px 100px rgba(60,45,25,0.10),
+    0 0 0 0.75px rgba(255,217,160,0.45);
 
   --sh-glass-float:
-    inset 0 2px 0 rgba(255,255,255,0.92),
-    inset 0 -1px 0 rgba(0,0,0,0.04),
-    inset 2.5px 0 0 rgba(255,255,255,0.70),
-    inset -1.5px 0 0 rgba(255,255,255,0.50),
-    inset 0 6px 30px rgba(255,255,255,0.22),
-    0 8px 24px rgba(80,95,135,0.16),
-    0 24px 60px rgba(70,85,125,0.16),
-    0 60px 120px rgba(60,75,115,0.10),
-    0 100px 160px rgba(50,65,105,0.05),
-    0 0 0 0.75px rgba(255,255,255,0.65);
+    inset 0 2px 0 rgba(255,238,215,0.92),
+    inset 0 -1px 0 rgba(40,25,10,0.04),
+    inset 2.5px 0 0 rgba(255,238,215,0.70),
+    inset -1.5px 0 0 rgba(255,238,215,0.50),
+    inset 0 6px 30px rgba(255,217,160,0.24),
+    0 8px 24px rgba(94,74,49,0.20),
+    0 24px 60px rgba(94,74,49,0.20),
+    0 60px 120px rgba(60,45,25,0.12),
+    0 100px 160px rgba(40,30,15,0.06),
+    0 0 0 0.75px rgba(255,217,160,0.50);
 
   /* ── Easing ── */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -161,6 +173,24 @@ img { max-width: 100%; display: block; }
 strong { font-weight: 600; }
 button { font-family: inherit; border: none; background: none; }
 ::selection { background: var(--cyan-soft); color: var(--ink); }
+
+/* ================================================================
+   TRACKPAD-STYLE TAP FEEDBACK — pairs with pointerdown haptics in JS
+================================================================ */
+button, .nav-anchor, [role="tab"], .exp-tab, .edu-tab, .fab-main, .gate-btn {
+  transition: transform 0.14s var(--ease-spring, cubic-bezier(0.34,1.56,0.64,1));
+  -webkit-tap-highlight-color: transparent;
+}
+button:active, .nav-anchor:active, [role="tab"]:active,
+.exp-tab:active, .edu-tab:active, .fab-main:active, .gate-btn:active {
+  transform: scale(0.94);
+  transition: transform 0.06s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  button, .nav-anchor, [role="tab"], .exp-tab, .edu-tab, .fab-main, .gate-btn { transition: none !important; }
+  button:active, .nav-anchor:active, [role="tab"]:active,
+  .exp-tab:active, .edu-tab:active, .fab-main:active, .gate-btn:active { transform: none !important; }
+}
 
 /* ================================================================
    BACKGROUND ATMOSPHERIC LAYERS
@@ -244,12 +274,12 @@ body::after {
   z-index: 1000 !important;
   overflow: visible !important;
 
-  /* Platinum chrome glass navbar */
+  /* Sunset amber glass navbar */
   background: linear-gradient(
     170deg,
-    rgba(255,255,255,0.14) 0%,
-    rgba(240,243,248,0.10) 40%,
-    rgba(255,255,255,0.13) 100%
+    rgba(255,217,160,0.16) 0%,
+    rgba(230,160,86,0.10) 40%,
+    rgba(255,238,215,0.13) 100%
   ) !important;
 
   backdrop-filter: var(--blur-strong) !important;
@@ -288,7 +318,7 @@ body::after {
   );
 }
 
-/* Metallic top rim precise line */
+/* Amber-gold top rim precise line */
 .top-nav::after {
   content: '';
   position: absolute;
@@ -298,9 +328,9 @@ body::after {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255,255,255,0.60) 20%,
-    rgba(255,255,255,0.85) 50%,
-    rgba(255,255,255,0.60) 80%,
+    rgba(255,217,160,0.65) 20%,
+    rgba(255,238,215,0.90) 50%,
+    rgba(255,217,160,0.65) 80%,
     transparent 100%
   );
   box-shadow: 0 0 10px rgba(255,255,255,0.35), 0 0 20px rgba(212,216,224,0.15);
@@ -520,7 +550,9 @@ body::after {
   .nav-admin-btn { display: none !important; }
 }
 
-/* ── Mobile Drawer ── */
+/* ── Mobile Drawer (base/legacy layer — the effective, currently
+   visible styling lives further down in the "header#topNav ...
+   nav#navMobDrawer" block, which has higher specificity) ── */
 .nav-mob-drawer {
   display: none; flex-direction: column;
   position: fixed;
@@ -4282,9 +4314,9 @@ a, button, [role="button"] {
 /* Featured case */
 .cs-featured {  }
 .cs-featured-badge {
-  position: absolute;
-  top: 44px;
-  right: 14px;
+  position: static;
+  align-self: flex-start;
+  margin: 16px 20px 0;
   background: linear-gradient(135deg,#7b1fa2,#c62828);
   color: #fff;
   font-size: .62rem;
@@ -4294,7 +4326,7 @@ a, button, [role="button"] {
   letter-spacing: .06em;
   text-transform: uppercase;
   z-index: 2;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 5px;
 }
@@ -34181,8 +34213,8 @@ header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open {
 
 header#topNav.top-nav nav#navMobDrawer .nmd-scrim {
   position: absolute; inset: 0;
-  background: rgba(6,8,14,0.62);
-  backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+  background: rgba(6,8,14,0.55);
+  backdrop-filter: blur(8px) saturate(1.1); -webkit-backdrop-filter: blur(8px) saturate(1.1);
   opacity: 0;
   animation: nmdScrimIn 0.4s ease forwards;
 }
@@ -34196,11 +34228,19 @@ header#topNav.top-nav nav#navMobDrawer .nmd-panel {
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(165deg, rgba(13,15,21,0.98) 0%, rgba(22,24,32,0.97) 55%, rgba(13,15,21,0.98) 100%);
+  /* Frosted dark glass — semi-transparent so the blurred page shows
+     through, with a subtle gold-tinted sheen to match the brand. */
+  background: linear-gradient(165deg, rgba(13,15,21,0.86) 0%, rgba(22,24,32,0.82) 55%, rgba(13,15,21,0.88) 100%);
+  backdrop-filter: blur(22px) saturate(1.5) brightness(1.05);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5) brightness(1.05);
   border-left: 1px solid rgba(212,168,64,0.30);
-  box-shadow: -18px 0 50px rgba(0,0,0,0.45);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  box-shadow:
+    inset 1px 0 0 rgba(255,255,255,0.06),
+    inset 0 0 40px rgba(212,168,64,0.03),
+    -18px 0 50px rgba(0,0,0,0.45);
+  /* The panel no longer scrolls as a whole — only .nmd-links does,
+     so the brand header and footer stay pinned in place. */
+  overflow: hidden;
   transform: translateX(100%);
   animation: nmdPanelIn 0.42s var(--ease-out) forwards;
 }
@@ -34210,6 +34250,7 @@ header#topNav.top-nav nav#navMobDrawer .nmd-header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 22px 22px 18px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
 }
 header#topNav.top-nav nav#navMobDrawer .nmd-header-brand { display: flex; align-items: center; gap: 10px; }
 header#topNav.top-nav nav#navMobDrawer .nmd-logo { width: 30px; height: 30px; border-radius: 8px; object-fit: cover; }
@@ -34235,6 +34276,26 @@ header#topNav.top-nav nav#navMobDrawer .nmd-close:hover {
 header#topNav.top-nav nav#navMobDrawer .nmd-links {
   display: flex; flex-direction: column;
   padding: 6px 10px; flex: 1;
+  /* min-height: 0 is required for a flex child to actually shrink and
+     become scrollable instead of pushing the footer off-screen. */
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212,168,64,0.45) transparent;
+  /* Fade the very top/bottom of the scroll area so it's visually clear
+     more items exist above/below, on top of the native scrollbar. */
+  mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+header#topNav.top-nav nav#navMobDrawer .nmd-links::-webkit-scrollbar { width: 4px; }
+header#topNav.top-nav nav#navMobDrawer .nmd-links::-webkit-scrollbar-track { background: transparent; }
+header#topNav.top-nav nav#navMobDrawer .nmd-links::-webkit-scrollbar-thumb {
+  background: rgba(212,168,64,0.45); border-radius: 10px;
+}
+header#topNav.top-nav nav#navMobDrawer .nmd-links::-webkit-scrollbar-thumb:hover {
+  background: rgba(212,168,64,0.65);
 }
 
 header#topNav.top-nav nav#navMobDrawer a.nav-mob-link {
@@ -34304,6 +34365,7 @@ header#topNav.top-nav nav#navMobDrawer .nmd-footer {
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 20px calc(20px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
 }
 header#topNav.top-nav nav#navMobDrawer .nmd-admin-link {
   display: flex; align-items: center; gap: 7px;
@@ -34480,4 +34542,24 @@ header#topNav.top-nav nav#navMobDrawer .nmd-footer-socials a:hover {
     margin: 14px 10px !important;
     border-radius: 20px !important;
   }
+}
+
+/* ================================================================
+   GLOBAL CORNER ROUNDING — safety net for any remaining sharp edges
+   (existing border-radius:0 rules elsewhere are intentional — hairline
+   dividers, transparent nested wrappers, full-bleed mobile drawer —
+   and are !important, so they stay flat and are untouched by this)
+================================================================ */
+img, video, iframe, canvas,
+input, textarea, select,
+table, pre, code, hr,
+.card, [class*="-card"], [class*="-panel"], [class*="-modal"],
+[class*="-box"], [class*="-tile"], [class*="-chip"], [class*="-badge"],
+[class*="-item"]:not(.ach-item) {
+  border-radius: var(--r, 16px);
+}
+
+button:not(.ach-item):not([class*="mob-toggle"]):not(.hie-modal-close),
+.btn, [class*="-btn"] {
+  border-radius: var(--r-pill, 999px);
 }

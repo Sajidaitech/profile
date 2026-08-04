@@ -34,6 +34,25 @@
 
 
 // ============================================================
+// SECTION 0A · TRACKPAD-STYLE HAPTIC FEEDBACK (Android only —
+// iOS Safari blocks the Vibration API; CSS :active press still fires there)
+// ============================================================
+
+(function () {
+  if (!('vibrate' in navigator)) return;
+
+  document.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'mouse') return; // real trackpad/mouse: no buzz needed
+    var el = e.target.closest('button, .nav-anchor, [role="tab"], .exp-tab, .edu-tab, .fab-main, .gate-btn');
+    if (!el) return;
+
+    var strong = el.id === 'reviewSubmitBtn' || el.classList.contains('gate-btn');
+    try { navigator.vibrate(strong ? 18 : 10); } catch (err) {}
+  }, { passive: true });
+})();
+
+
+// ============================================================
 // SECTION 0B · SCROLL PROGRESS BAR
 // ============================================================
 
@@ -316,7 +335,6 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   const overlay      = document.getElementById('gate-overlay');
   const closeBtn     = document.getElementById('gateClose');
   const backdrop     = document.getElementById('gateBackdrop');
-  const scrollHint   = document.getElementById('scrollHint');
   const nameInput    = document.getElementById('visitorName');
   const continueBtn  = document.getElementById('gateContinueBtn');
   const doneBtn      = document.getElementById('gateDoneBtn');
@@ -386,7 +404,6 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
     document.body.style.overflow = 'hidden';
     document.body.style.paddingRight = _scrollbarW + 'px';
     /* position:fixed removed — causes CLS on body */
-    if (scrollHint) scrollHint.classList.add('hidden');
     // Force correct background div visibility via JS (belt-and-suspenders on top of CSS)
     const bgDesktop = document.getElementById('gate-bg-desktop');
     const bgMobile  = document.getElementById('gate-bg-mobile');
@@ -498,6 +515,85 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   // it once this IIFE has finished defining it.
   window._smReattachName = _writeVisitorNameWithRetry;
 
+  // ── Optional email notification (Brevo) ───────────────────────────
+  // Sends an email to info@sajidmk.com whenever a visitor unlocks the
+  // resume or a certificate by entering their name.
+  //
+  // ⚠️ SECURITY NOTE: this is a static site with no backend, so this
+  // calls Brevo's REST API directly from the browser. That means the
+  // API key below is visible to anyone who views your page source —
+  // there is no way to hide it in pure client-side JS. Someone could
+  // copy it and send email through your Brevo account (their quota,
+  // their sending reputation). To avoid that, route this call through
+  // a small serverless function (Netlify/Vercel) that holds the key
+  // server-side instead of calling api.brevo.com directly from here.
+  // If you're OK with that tradeoff for a low-key personal-site use
+  // case, fill in the key below and this will work as-is.
+  var BREVO_API_KEY = ''; // e.g. 'xkeysib-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+  var BREVO_NOTIFY_TO_EMAIL = 'info@sajidmk.com';
+  var BREVO_NOTIFY_TO_NAME  = 'Sajid Mehmood';
+  var BREVO_SENDER_EMAIL    = 'info@sajidmk.com'; // must be a verified sender/domain in your Brevo account
+  var BREVO_SENDER_NAME     = 'Portfolio Notifier';
+
+  function _notifyOwnerByEmail(name, context) {
+    if (!BREVO_API_KEY) return;
+    try {
+      var resource = context || 'your portfolio';
+      var pageUrl  = window.location.href;
+      var visitTime = new Date().toLocaleString();
+      var safeName = String(name).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+
+      fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'api-key': BREVO_API_KEY
+        },
+        body: JSON.stringify({
+          sender: { name: BREVO_SENDER_NAME, email: BREVO_SENDER_EMAIL },
+          to: [{ email: BREVO_NOTIFY_TO_EMAIL, name: BREVO_NOTIFY_TO_NAME }],
+          subject: 'Portfolio: ' + safeName + ' unlocked ' + resource,
+          htmlContent:
+            '<html><body>' +
+            '<p><strong>' + safeName + '</strong> just entered their name to view <strong>' + resource + '</strong> on your portfolio.</p>' +
+            '<p>Page: ' + pageUrl + '<br>Time: ' + visitTime + '</p>' +
+            '</body></html>'
+        })
+      }).then(function (res) {
+        if (!res.ok) {
+          return res.text().then(function (t) {
+            console.warn('[Gate] Brevo send failed:', res.status, t);
+          });
+        }
+      })['catch'](function (e) {
+        console.warn('[Gate] Brevo request error:', e.message);
+      });
+    } catch (e) {
+      console.warn('[Gate] Brevo error:', e.message);
+    }
+  }
+
+  // ── Gate-on-demand ──────────────────────────────────────────────
+  // Other parts of the page (resume button, certificate links) call
+  // window.requireGateThen(action, context) instead of running their
+  // action directly. If the visitor's name is already known this
+  // session, the action runs immediately with no popup. Otherwise the
+  // gate opens, and the action fires only after they submit a name.
+  var _gatePendingAction = null;
+
+  window.requireGateThen = function (action, context) {
+    if (dismissed) {
+      if (typeof action === 'function') action();
+      return;
+    }
+    _gatePendingAction = { action: action, context: context || '' };
+    triggered = true;
+    showGate();
+  };
+
   function submitName() {
     const name = nameInput.value.trim();
     if (!name) {
@@ -506,6 +602,13 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
       setTimeout(() => nameInput.style.borderColor = '', 1200);
       return;
     }
+    // Haptic feedback — short "tap" pulse on devices/browsers that
+    // support the Vibration API (mainly Android Chrome/Firefox; iOS
+    // Safari and desktop browsers silently ignore this, no error).
+    try {
+      if (navigator.vibrate) navigator.vibrate(35);
+    } catch (e) { /* ignore */ }
+
     // Persist name + "seen at" timestamp — the timestamp powers the
     // remember-me window above (skip the gate for GATE_REMEMBER_MS).
     try {
@@ -519,7 +622,18 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
     _writeVisitorNameWithRetry(name);
 
+    var _pending = _gatePendingAction;
+    _gatePendingAction = null;
+
+    _notifyOwnerByEmail(name, _pending ? _pending.context : '');
+
     hideGate();
+
+    // Let the overlay finish closing before running the action that
+    // was waiting on it (e.g. opening the resume PDF or a certificate).
+    if (_pending && typeof _pending.action === 'function') {
+      setTimeout(_pending.action, 350);
+    }
   }
 
   continueBtn.addEventListener('click', submitName);
@@ -527,14 +641,9 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   doneBtn.addEventListener('click', submitName);
   // X button is hidden via CSS — gate cannot be closed without entering a name.
 
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-    if (!triggered && scrolled >= 0.10) {
-      triggered = true;
-      showGate();
-    }
-    if (scrollHint && window.scrollY > 30) scrollHint.classList.add('hidden');
-  }, { passive: true });
+  // NOTE: the gate no longer opens automatically on scroll. It now opens
+  // only when a visitor clicks to view the resume or a certificate — see
+  // window.requireGateThen(), used near the bottom of this file.
 
 })();
 
@@ -3334,6 +3443,51 @@ document.addEventListener('keydown', function(e) {
 // inside this IIFE otherwise.
 window.openPdfModal  = openPdfModal;
 window.closePdfModal = closePdfModal;
+})();
+
+
+// ============================================================
+// GATE INTEGRATION — resume + certificate links require a name
+// ============================================================
+// The gate no longer opens on scroll. Instead it opens the moment a
+// visitor tries to view the resume PDF or a certificate/credential
+// link, and only lets that specific action through once they've
+// entered a name (see window.requireGateThen in the gate module above).
+(function () {
+  // Wrap the resume opener so every "View Resume" button goes through
+  // the gate first.
+  var _openResumeDirect = window.openPdfModal;
+  window.openPdfModal = function () {
+    if (window.requireGateThen) {
+      window.requireGateThen(_openResumeDirect, 'your résumé');
+    } else {
+      _openResumeDirect();
+    }
+  };
+
+  // Certificate / credential links are plain <a href target="_blank">
+  // tags — some static in the HTML, some rendered later by
+  // loadCertifications(). One delegated listener on document covers
+  // both, regardless of when they appear in the DOM.
+  var GATED_LINK_SELECTOR = '.cc-cert-btn, .chc-verify-btn, .rec-letter-btn, .btn-sm-gold';
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest ? e.target.closest(GATED_LINK_SELECTOR) : null;
+    if (!link) return;
+    if (link.getAttribute('data-gate-ok') === '1') return; // already unlocked
+
+    e.preventDefault();
+
+    var card = link.closest('.cert-card, .cert-hero-card, .recommendation-card, .rec-card');
+    var titleEl = card ? card.querySelector('.cc-title, .chc-title') : null;
+    var title = titleEl ? titleEl.textContent.trim() : (link.textContent || '').trim() || 'a certificate';
+    var href = link.getAttribute('href');
+
+    window.requireGateThen(function () {
+      link.setAttribute('data-gate-ok', '1');
+      window.open(href, '_blank', 'noopener,noreferrer');
+    }, title);
+  });
 })();
 
 
