@@ -515,64 +515,66 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   // it once this IIFE has finished defining it.
   window._smReattachName = _writeVisitorNameWithRetry;
 
-  // ── Optional email notification (Brevo) ───────────────────────────
-  // Sends an email to info@sajidmk.com whenever a visitor unlocks the
+  // ── Optional Telegram notification ─────────────────────────────────
+  // Sends a Telegram message to you whenever a visitor unlocks the
   // resume or a certificate by entering their name.
   //
   // ⚠️ SECURITY NOTE: this is a static site with no backend, so this
-  // calls Brevo's REST API directly from the browser. That means the
-  // API key below is visible to anyone who views your page source —
-  // there is no way to hide it in pure client-side JS. Someone could
-  // copy it and send email through your Brevo account (their quota,
-  // their sending reputation). To avoid that, route this call through
-  // a small serverless function (Netlify/Vercel) that holds the key
-  // server-side instead of calling api.brevo.com directly from here.
-  // If you're OK with that tradeoff for a low-key personal-site use
-  // case, fill in the key below and this will work as-is.
-  var BREVO_API_KEY = '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';
-  var BREVO_NOTIFY_TO_EMAIL = 'info@sajidmk.com';
-  var BREVO_NOTIFY_TO_NAME  = 'Sajid Mehmood';
-  var BREVO_SENDER_EMAIL    = 'info@sajidmk.com'; // must be a verified sender/domain in your Brevo account
-  var BREVO_SENDER_NAME     = 'Portfolio Notifier';
+  // calls the Telegram Bot API directly from the browser. That means
+  // the bot token below is visible to anyone who views your page
+  // source. A leaked bot token only lets someone send messages through
+  // that bot (to chats the bot is already in) — it can't read your
+  // personal Telegram account. For extra safety you can still route
+  // this through a small serverless function (Netlify/Vercel) that
+  // holds the token server-side instead of calling api.telegram.org
+  // directly from here. If you're OK with the tradeoff for a low-key
+  // personal-site use case, fill in the values below and this will
+  // work as-is.
+  //
+  // Setup:
+  //   1. Message @BotFather on Telegram, run /newbot, copy the token.
+  //   2. Message your new bot once (e.g. "hi") so it can message you back.
+  //   3. Get your chat ID: visit
+  //      https://api.telegram.org/bot<TOKEN>/getUpdates
+  //      after step 2, and read the "chat":{"id": ...} value.
+  var TELEGRAM_BOT_TOKEN = '8634065770:AAFAU7VMwRyT5pSXI882JG_0kZbWMEBVbvY';
+  var TELEGRAM_CHAT_ID   = '8235795754';
 
-  function _notifyOwnerByEmail(name, context) {
-    if (!BREVO_API_KEY) return;
+  function _notifyOwnerByTelegram(name, context) {
+    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
     try {
       var resource = context || 'your portfolio';
       var pageUrl  = window.location.href;
       var visitTime = new Date().toLocaleString();
-      var safeName = String(name).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      var safeName = String(name).replace(/[&<>]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c];
       });
 
-      fetch('https://api.brevo.com/v3/smtp/email', {
+      var text =
+        '<b>' + safeName + '</b> just entered their name to view <b>' + resource + '</b> on your portfolio.\n' +
+        'Page: ' + pageUrl + '\n' +
+        'Time: ' + visitTime;
+
+      fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'api-key': BREVO_API_KEY
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          sender: { name: BREVO_SENDER_NAME, email: BREVO_SENDER_EMAIL },
-          to: [{ email: BREVO_NOTIFY_TO_EMAIL, name: BREVO_NOTIFY_TO_NAME }],
-          subject: 'Portfolio: ' + safeName + ' unlocked ' + resource,
-          htmlContent:
-            '<html><body>' +
-            '<p><strong>' + safeName + '</strong> just entered their name to view <strong>' + resource + '</strong> on your portfolio.</p>' +
-            '<p>Page: ' + pageUrl + '<br>Time: ' + visitTime + '</p>' +
-            '</body></html>'
+          chat_id: TELEGRAM_CHAT_ID,
+          text: text,
+          parse_mode: 'HTML',
+          disable_web_page_preview: true
         })
       }).then(function (res) {
         if (!res.ok) {
           return res.text().then(function (t) {
-            console.warn('[Gate] Brevo send failed:', res.status, t);
+            console.warn('[Gate] Telegram send failed:', res.status, t);
           });
         }
       })['catch'](function (e) {
-        console.warn('[Gate] Brevo request error:', e.message);
+        console.warn('[Gate] Telegram request error:', e.message);
       });
     } catch (e) {
-      console.warn('[Gate] Brevo error:', e.message);
+      console.warn('[Gate] Telegram error:', e.message);
     }
   }
 
@@ -625,7 +627,7 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
     var _pending = _gatePendingAction;
     _gatePendingAction = null;
 
-    _notifyOwnerByEmail(name, _pending ? _pending.context : '');
+    _notifyOwnerByTelegram(name, _pending ? _pending.context : '');
 
     hideGate();
 
