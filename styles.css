@@ -34823,3 +34823,296 @@ button.chc-verify-btn:focus-visible,
   .cert-modal-img--zoomed { transform: scale(1.5); }
   .cert-modal-zoom-hint { font-size: 10.5px; padding: 5px 10px; }
 }
+
+/* ================================================================
+   FINAL OVERRIDE — SIMPLE MOBILE NAV DROPDOWN
+   Replaces the full-screen slide-in drawer with a plain vertical
+   dropdown (like a classic hamburger menu), recolored to match the
+   site's Sunset Amber palette — dark navy glass + gold accents.
+   Appended last / uses matching high-specificity selectors so it
+   wins over every earlier .nav-mob-drawer rule in this file.
+================================================================ */
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer {
+  display: flex !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  position: fixed !important;
+  inset: auto !important;
+  top: calc(var(--nav-top) + var(--nav-h) + 10px) !important;
+  left: 12px !important;
+  right: 12px !important;
+  bottom: auto !important;
+  width: auto !important;
+  height: auto !important;
+  max-height: calc(100dvh - var(--nav-top) - var(--nav-h) - 30px) !important;
+  overflow-y: auto !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  margin: 0 !important;
+  padding: 10px !important;
+  background: linear-gradient(165deg, rgba(13,15,21,0.97) 0%, rgba(32,47,74,0.95) 55%, rgba(13,15,21,0.97) 100%) !important;
+  backdrop-filter: blur(24px) saturate(1.5) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.5) brightness(1.05) !important;
+  border: 1px solid rgba(230,160,86,0.30) !important;
+  border-radius: var(--r-xl) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 20px 50px rgba(0,0,0,0.45),
+    0 0 0 0.75px rgba(230,160,86,0.15) !important;
+  z-index: 998 !important;
+  transform: translateY(-8px) !important;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s !important;
+}
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open {
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 13px 16px !important;
+  margin: 0 !important;
+  border-radius: var(--r-lg) !important;
+  font-family: var(--ff-sans) !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  color: #F4E9CE !important;
+  -webkit-text-fill-color: #F4E9CE !important;
+  background: transparent !important;
+  text-decoration: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background 0.2s ease, color 0.2s ease, padding-left 0.2s ease !important;
+}
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link + .nav-mob-link {
+  border-top: 1px solid rgba(230,160,86,0.10) !important;
+}
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link:hover,
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link:active,
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link:focus-visible {
+  background: rgba(230,160,86,0.14) !important;
+  color: #E6A056 !important;
+  -webkit-text-fill-color: #E6A056 !important;
+  padding-left: 22px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FOOTER REDESIGN v2 — Sunset Amber glass panel
+   Appended last / matches the ".footer.ftr" selector used above so
+   it wins by source order. Kept solidly opaque (not a light taper)
+   so text stays readable regardless of what's behind it.
+   ════════════════════════════════════════════════════════════ */
+.footer.ftr {
+  background: linear-gradient(180deg, rgba(17,20,28,0.92) 0%, rgba(13,15,21,0.94) 45%, rgba(9,11,16,0.96) 100%) !important;
+  backdrop-filter: blur(22px) saturate(1.4) brightness(1.02) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.4) brightness(1.02) !important;
+  border-top: none !important;
+  border-radius: var(--r-2xl) var(--r-2xl) 0 0;
+  margin: 20px 10px 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 -18px 50px rgba(0,0,0,0.35);
+}
+.ftr-rim {
+  left: 6% !important; right: 6% !important;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(230,160,86,0.65) 50%,
+    transparent 100%
+  ) !important;
+  box-shadow: 0 0 16px rgba(230,160,86,0.35) !important;
+}
+
+.ftr-logo { box-shadow: 0 0 0 1.5px rgba(230,160,86,0.45) !important; }
+.ftr-eyebrow { color: rgba(230,160,86,0.75) !important; }
+
+.ftr-link i { color: rgba(230,160,86,0.65) !important; }
+.ftr-link:hover { color: #F4E9CE !important; gap: 12px !important; }
+.ftr-link:hover i { color: #E6A056 !important; }
+
+.ftr-icon-btn {
+  background: rgba(230,160,86,0.07) !important;
+  border: 1px solid rgba(230,160,86,0.18) !important;
+  color: rgba(244,233,206,0.80) !important;
+}
+.ftr-icon-btn:hover {
+  color: #1a1207 !important;
+  background: linear-gradient(150deg, #F1D488 0%, #E6A056 100%) !important;
+  border-color: rgba(230,160,86,0.60) !important;
+  box-shadow: 0 10px 24px rgba(230,160,86,0.30), 0 0 0 1px rgba(230,160,86,0.25) !important;
+}
+
+/* ── Status bar → slim glass pill instead of a flat monospace strip ── */
+.ftr-status-bar {
+  max-width: calc(var(--container) - 40px);
+  margin: 0 auto 22px;
+  padding: 12px 22px;
+  border-top: none !important;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(230,160,86,0.14);
+}
+.ftr-live .fvb-dot { background: #6EE7A8 !important; box-shadow: 0 0 6px rgba(110,231,168,0.7) !important; }
+
+.ftr-mini-btn {
+  background: rgba(230,160,86,0.06) !important;
+  border: 1px solid rgba(230,160,86,0.16) !important;
+}
+.ftr-mini-btn:hover {
+  background: rgba(230,160,86,0.18) !important;
+  color: #F4E9CE !important;
+}
+
+@media (max-width: 780px) {
+  .footer.ftr { margin: 14px 6px 0; border-radius: var(--r-xl) var(--r-xl) 0 0; }
+  .ftr-status-bar { border-radius: var(--r-lg); }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOOTER TEXT — FINAL VISIBILITY FIX
+   Root cause: .ftr-link / .ftr-live / .ftr-eyebrow color get
+   redefined by 3+ earlier theme passes in this file; the last one
+   only touched hover + icon states, leaving base text color
+   inconsistent. Pinning it here, scoped to .footer.ftr so nothing
+   above can out-specificity it, and last in source order so it
+   always wins the cascade.
+════════════════════════════════════════════════════════════════ */
+.footer.ftr .ftr-link,
+.footer.ftr .ftr-link span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+.footer.ftr .ftr-link i {
+  color: rgba(230,160,86,0.85) !important;
+  -webkit-text-fill-color: rgba(230,160,86,0.85) !important;
+  opacity: 1 !important;
+}
+.footer.ftr .ftr-link:hover,
+.footer.ftr .ftr-link:hover span {
+  color: #F4E9CE !important;
+  -webkit-text-fill-color: #F4E9CE !important;
+}
+.footer.ftr .ftr-eyebrow {
+  color: rgba(230,160,86,0.85) !important;
+  -webkit-text-fill-color: rgba(230,160,86,0.85) !important;
+}
+.footer.ftr .ftr-live,
+.footer.ftr .ftr-live span,
+.footer.ftr #footer-online-count,
+.footer.ftr #footer-total-count,
+.footer.ftr .ftr-copy {
+  color: rgba(255,255,255,0.90) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.90) !important;
+  opacity: 1 !important;
+}
+
+/* ── Footer: gratitude glass bubble ─────────────────────────────── */
+.ftr-gratitude-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: var(--ff-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.85) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.85) !important;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(230,160,86,0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 4px 14px rgba(0,0,0,0.20);
+  backdrop-filter: blur(6px) saturate(1.4);
+  -webkit-backdrop-filter: blur(6px) saturate(1.4);
+
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease,
+              background 0.2s ease,
+              border-color 0.2s ease;
+}
+.ftr-gratitude-bubble i {
+  font-size: 11px;
+  color: rgba(230,120,140,0.85);
+  flex-shrink: 0;
+}
+@media (hover: hover) {
+  .ftr-gratitude-bubble:hover {
+    transform: translateY(-2px) scale(1.03);
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(230,160,86,0.40);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.18),
+      0 8px 22px rgba(0,0,0,0.28);
+  }
+}
+@media (max-width: 480px) {
+  .ftr-gratitude-bubble { font-size: 11px; padding: 6px 12px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FAB — OPEN / CLOSE POP ANIMATION (final override)
+   Previously .fab-container.open toggled via JS but nothing in CSS
+   responded to it, so the 3 options + close-X icon sat permanently
+   visible/overlapping. This adds the actual show/hide behavior.
+════════════════════════════════════════════════════════════════ */
+
+/* Options: hidden + collapsed onto the main button by default */
+.fab-options {
+  pointer-events: none;
+}
+.fab-option {
+  opacity: 0 !important;
+  transform: scale(0.4) translateY(14px) !important;
+  transition:
+    opacity 0.22s ease,
+    transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Staggered pop-in, last option (closest to main btn) leads */
+.fab-container.open .fab-options { pointer-events: auto; }
+.fab-container.open .fab-option {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
+}
+.fab-container.open .fab-option:nth-child(1) { transition-delay: 0.09s !important; }
+.fab-container.open .fab-option:nth-child(2) { transition-delay: 0.05s !important; }
+.fab-container.open .fab-option:nth-child(3) { transition-delay: 0s    !important; }
+
+/* Closing: reverse stagger so nearest option tucks away first */
+.fab-container:not(.open) .fab-option:nth-child(1) { transition-delay: 0s    !important; }
+.fab-container:not(.open) .fab-option:nth-child(2) { transition-delay: 0.04s !important; }
+.fab-container:not(.open) .fab-option:nth-child(3) { transition-delay: 0.08s !important; }
+
+/* Main button icon: bolt \u2194 close cross-fade + rotate */
+.fab-icon-main, .fab-icon-close {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.fab-icon-close {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-90deg) scale(0.5);
+}
+.fab-main.open .fab-icon-main {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(90deg) scale(0.5);
+}
+.fab-main.open .fab-icon-close {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1);
+}
+.fab-main.open {
+  transform: scale(1.05) rotate(0deg);
+}
