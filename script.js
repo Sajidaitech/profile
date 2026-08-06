@@ -5,6 +5,34 @@
 
 
 // ============================================================
+// SECTION -1 · DAY THEME TOGGLE (mobile menu)
+// ============================================================
+(function () {
+  var DAY_KEY = 'sm_day_theme';
+
+  function applyTheme(isDay) {
+    document.documentElement.classList.toggle('day-theme', isDay);
+    var label = document.getElementById('dayThemeLabel');
+    if (label) label.textContent = isDay ? 'Night Theme' : 'Day Theme';
+  }
+
+  // Apply immediately on load (before other init) to avoid flash
+  var saved = localStorage.getItem(DAY_KEY) === '1';
+  applyTheme(saved);
+
+  window.toggleDayTheme = function () {
+    var isDay = !document.documentElement.classList.contains('day-theme');
+    applyTheme(isDay);
+    localStorage.setItem(DAY_KEY, isDay ? '1' : '0');
+  };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    applyTheme(localStorage.getItem(DAY_KEY) === '1');
+  });
+})();
+
+
+// ============================================================
 // SECTION 0 · SMOOTH SCROLL
 // ============================================================
 

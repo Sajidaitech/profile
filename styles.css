@@ -35116,3 +35116,87 @@ header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link:focus-visibl
 .fab-main.open {
   transform: scale(1.05) rotate(0deg);
 }
+
+/* ================================================================
+   MOBILE FIX PASS — lock icon removal, scroll containment,
+   and Day Theme (toggled via html.day-theme, mobile menu button)
+   Appended last in cascade — scoped, does not alter default dark
+   theme or desktop admin lock button.
+================================================================ */
+
+/* 1. Force-hide the circular admin lock icon on mobile navbar
+      (redundant safety net on top of the existing 900px rule) */
+@media (max-width: 900px) {
+  #topNav .nav-inner a.nav-admin-btn,
+  .nav-admin-btn {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* 2. Scroll containment — stop rubber-band / runaway scroll on mobile */
+html, body {
+  overscroll-behavior-y: none !important;
+}
+@media (max-width: 900px) {
+  html, body {
+    overflow-x: hidden !important;
+    overscroll-behavior: none !important;
+    height: auto !important;
+  }
+}
+
+/* 3. DAY THEME — activated by toggling class "day-theme" on <html> */
+html.day-theme {
+  --ink: #1C1C1E !important;
+  --ink-2: #3A3A3C !important;
+  --ink-3: #6E6E73 !important;
+  --ink-4: #8E8E93 !important;
+  --text-h: #1C1C1E !important;
+  --text-body: #2C2C2E !important;
+  --text-2: #3A3A3C !important;
+  --text-3: #6E6E73 !important;
+  --text-4: #8E8E93 !important;
+  --bg: #F5F5F7 !important;
+  --bg-deep: #F5F5F7 !important;
+  --bg-surface: #FFFFFF !important;
+  --bg-section: #FAFAFA !important;
+  --glass-ultra: rgba(255,255,255,0.75) !important;
+  --glass-strong: rgba(255,255,255,0.65) !important;
+  --glass-mid: rgba(255,255,255,0.55) !important;
+  --glass-light: rgba(255,255,255,0.45) !important;
+  --glass-whisper: rgba(255,255,255,0.35) !important;
+  --glass-border: rgba(0,0,0,0.08) !important;
+  --cyan: #2563EB !important;
+  --purple: #7C3AED !important;
+  --pink: #DB2777 !important;
+}
+
+html.day-theme body {
+  background: #F5F5F7 !important;
+  color: var(--text-body) !important;
+}
+html.day-theme body::before,
+html.day-theme body::after { opacity: 0.15 !important; }
+
+html.day-theme #topNav,
+html.day-theme .top-nav {
+  background: rgba(255,255,255,0.85) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+}
+html.day-theme .nav-link,
+html.day-theme .nav-mob-link,
+html.day-theme .nav-logo-name,
+html.day-theme .nav-logo-role { color: #1C1C1E !important; }
+
+html.day-theme .nav-mob-drawer {
+  background: linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(240,244,252,0.94) 100%) !important;
+}
+
+html.day-theme #dayThemeIcon:before { content: "\f186"; } /* fa-moon when active */
+
+html.day-theme section,
+html.day-theme .glass-card {
+  color: #1C1C1E !important;
+}
