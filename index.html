@@ -235,10 +235,10 @@
         <a href="#why-hire"       class="nav-link nav-anchor">Why Hire?</a>
         <a href="#about"          class="nav-link nav-anchor">About</a>
         <a href="#experience"     class="nav-link nav-anchor">Experience</a>
+        <a href="#certifications" class="nav-link nav-anchor">Certs</a>
         <a href="#projects"       class="nav-link nav-anchor">Projects</a>
         <a href="#education"      class="nav-link nav-anchor">Education</a>
         <a href="#arsenal"        class="nav-link nav-anchor">Arsenal</a>
-        <a href="#certifications" class="nav-link nav-anchor">Certs</a>
         <a href="#achievements"   class="nav-link nav-anchor">Awards</a>
         <a href="#fieldwork"      class="nav-link nav-anchor">Hands-On</a>
         <a href="#references"     class="nav-link nav-anchor">References</a>
@@ -275,10 +275,10 @@
           <a href="#why-hire"       class="nav-mob-link nav-anchor"><span class="nmd-num">01</span><i class="fas fa-star nmd-ico"></i><span class="nmd-label">Why Hire?</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
           <a href="#about"          class="nav-mob-link nav-anchor"><span class="nmd-num">02</span><i class="fas fa-user nmd-ico"></i><span class="nmd-label">About</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
           <a href="#experience"     class="nav-mob-link nav-anchor"><span class="nmd-num">03</span><i class="fas fa-briefcase nmd-ico"></i><span class="nmd-label">Experience</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
-          <a href="#projects"       class="nav-mob-link nav-anchor"><span class="nmd-num">04</span><i class="fas fa-diagram-project nmd-ico"></i><span class="nmd-label">Projects</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
-          <a href="#education"      class="nav-mob-link nav-anchor"><span class="nmd-num">05</span><i class="fas fa-graduation-cap nmd-ico"></i><span class="nmd-label">Education</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
-          <a href="#arsenal"        class="nav-mob-link nav-anchor"><span class="nmd-num">06</span><i class="fas fa-toolbox nmd-ico"></i><span class="nmd-label">Arsenal</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
-          <a href="#certifications" class="nav-mob-link nav-anchor"><span class="nmd-num">07</span><i class="fas fa-certificate nmd-ico"></i><span class="nmd-label">Certs</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
+          <a href="#certifications" class="nav-mob-link nav-anchor"><span class="nmd-num">04</span><i class="fas fa-certificate nmd-ico"></i><span class="nmd-label">Certs</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
+          <a href="#projects"       class="nav-mob-link nav-anchor"><span class="nmd-num">05</span><i class="fas fa-diagram-project nmd-ico"></i><span class="nmd-label">Projects</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
+          <a href="#education"      class="nav-mob-link nav-anchor"><span class="nmd-num">06</span><i class="fas fa-graduation-cap nmd-ico"></i><span class="nmd-label">Education</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
+          <a href="#arsenal"        class="nav-mob-link nav-anchor"><span class="nmd-num">07</span><i class="fas fa-toolbox nmd-ico"></i><span class="nmd-label">Arsenal</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
           <a href="#achievements"   class="nav-mob-link nav-anchor"><span class="nmd-num">08</span><i class="fas fa-trophy nmd-ico"></i><span class="nmd-label">Awards</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
           <a href="#fieldwork"      class="nav-mob-link nav-anchor"><span class="nmd-num">09</span><i class="fas fa-screwdriver-wrench nmd-ico"></i><span class="nmd-label">Hands-On Infrastructure</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
           <a href="#references"     class="nav-mob-link nav-anchor"><span class="nmd-num">10</span><i class="fas fa-quote-left nmd-ico"></i><span class="nmd-label">References</span><i class="fas fa-arrow-right nmd-arrow"></i></a>
@@ -1102,6 +1102,26 @@
 
 
     <!-- ================================================================
+         CERTIFICATIONS
+    ================================================================ -->
+    <section id="certifications" class="section certs-section glass-section">
+      <div class="hover-shade" aria-hidden="true"></div>
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <span class="sec-num" aria-hidden="true">02</span>
+          <h2 class="sec-title">Certifications</h2>
+          <div class="sec-rule"></div>
+        </header>
+
+        <!-- Certs rendered by JS: featured CCNA hero card + appreciation card,
+             then the rest of the certification grid. -->
+        <div id="certHero" class="cert-hero-wrap"></div>
+        <div class="certs-grid" id="certsGrid"></div>
+      </div>
+    </section>
+
+
+    <!-- ================================================================
          PROJECTS
     ================================================================ -->
     <section id="projects" class="section projects-section glass-section">
@@ -1873,25 +1893,6 @@
 
 
     <!-- ================================================================
-         CERTIFICATIONS
-    ================================================================ -->
-    <section id="certifications" class="section certs-section glass-section">
-      <div class="hover-shade" aria-hidden="true"></div>
-      <div class="container">
-        <header class="section-header" data-aos="fade-up">
-          <span class="sec-num" aria-hidden="true">05</span>
-          <h2 class="sec-title">Certifications</h2>
-          <div class="sec-rule"></div>
-        </header>
-
-        <!-- Certs rendered by JS -->
-        <div id="certHero" class="cert-hero-wrap"></div>
-        <div class="certs-grid" id="certsGrid"></div>
-      </div>
-    </section>
-
-
-    <!-- ================================================================
          ACHIEVEMENTS
     ================================================================ -->
     <section id="achievements" class="section achievements-section glass-section">
@@ -2604,6 +2605,37 @@
   </div>
 
   <!-- ================================================================
+       CERTIFICATE IMAGE LIGHTBOX MODAL (View Certificate)
+       Reuses the pdf-modal glass chrome; Close + Download only, per spec.
+       Click / tap the image to zoom in and out.
+  ================================================================ -->
+  <div id="certImgModal" class="pdf-modal cert-modal" role="dialog" aria-modal="true" aria-label="Certificate viewer">
+    <div class="pdf-modal-backdrop" onclick="closeCertModal()"></div>
+    <div class="pdf-modal-panel cert-modal-panel">
+      <div class="pdf-modal-topbar">
+        <div class="pdf-modal-title">
+          <i class="fas fa-certificate"></i>
+          <span id="certModalTitle">Certificate</span>
+        </div>
+        <div class="pdf-modal-actions">
+          <a id="certModalDownloadBtn" class="pdf-modal-btn pdf-modal-btn-download" href="#" download aria-label="Download certificate">
+            <i class="fas fa-arrow-down"></i>
+            <span>Download</span>
+          </a>
+          <button class="pdf-modal-btn pdf-modal-btn-close" onclick="closeCertModal()" aria-label="Close certificate viewer">
+            <i class="fas fa-xmark"></i>
+            <span>Close</span>
+          </button>
+        </div>
+      </div>
+      <div class="pdf-modal-viewer cert-modal-viewer">
+        <img id="certModalImg" class="cert-modal-img" src="" alt="Certificate" loading="lazy" onclick="toggleCertZoom()" title="Click to zoom">
+        <span class="cert-modal-zoom-hint"><i class="fas fa-magnifying-glass-plus"></i> Click image to zoom</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
        HIE IMAGE LIGHTBOX MODAL
   ================================================================ -->
   <div id="hieImgModal" class="hie-modal" role="dialog" aria-modal="true" aria-label="Full-size image viewer">
@@ -2740,6 +2772,7 @@
       ['.review-box',         'anim-slide-right'],
       // Quotes section
       ['.quote-card',        'anim-scale'],
+      ['.chc-thanks-card',   'anim-fade'],
     ];
 
     if (!('IntersectionObserver' in window)) return; // no-JS fallback: elements stay visible

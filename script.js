@@ -1560,15 +1560,29 @@ function loadLanguages() {
 var certData = [
   {
     icon: 'fa-network-wired',
-    logo: 'cisco-logo.svg',
-    badge: '🔄 IN PROGRESS',
-    badgeClass: 'cc-badge--progress',
-    title: 'CCNA (Cisco Certified Network Associate)',
-    issuer: 'Corvit Systems Peshawar · City Tower Branch',
-    date: 'In Progress · 2026',
+    logo: 'corvit-logo.png',
+    badge: '✅ SUCCESSFULLY COMPLETED',
+    badgeClass: 'cc-badge--verified',
+    title: 'CCNA Enterprise',
+    issuer: 'Corvit Systems Peshawar',
+    date: '06 August 2025 – 10 November 2025',
     category: 'Networking',
-    desc: 'Classroom-based CCNA training covering enterprise routing & switching, TCP/IP, OSPF, VLANs, and network security — currently in progress at Corvit Systems Peshawar, City Tower branch.',
-    url: ''
+    desc: 'Successfully completed the CCNA Enterprise program at Corvit Systems Peshawar, gaining strong practical knowledge in enterprise networking, routing and switching, IPv4 & IPv6 addressing, VLANs, STP, OSPF, ACLs, NAT, DHCP, network security, troubleshooting, and Cisco IOS configuration. The course emphasized hands-on labs and real-world enterprise networking scenarios, strengthening my ability to design, configure, secure, and troubleshoot modern network infrastructures.',
+    status: 'Successfully Completed',
+    verified: true,
+    // Google Drive file for the certificate image (publicly viewable link supplied by Sajid).
+    // thumbImg  = direct-viewable image render of the Drive file (used in the lightbox / on the card)
+    // driveView = the original "view" link (used as an external fallback / verify link)
+    // driveDownload = forces a download of the same file
+    certImg: 'https://drive.google.com/thumbnail?id=1jAvy9K836PHVtbM7t62TPv0kXfJ5r7kD&sz=w2000',
+    driveView: 'https://drive.google.com/file/d/1jAvy9K836PHVtbM7t62TPv0kXfJ5r7kD/view?usp=sharing',
+    driveDownload: 'https://drive.google.com/uc?export=download&id=1jAvy9K836PHVtbM7t62TPv0kXfJ5r7kD',
+    mentor: {
+      name: 'Mr. Waseem',
+      note: 'I would like to express my sincere gratitude to Mr. Waseem for his exceptional guidance, mentorship, and unwavering support throughout my CCNA Enterprise journey. His practical teaching methodology, deep technical knowledge, and commitment to student success made complex networking concepts easy to understand and apply in real-world environments. His encouragement and dedication have played a significant role in strengthening my networking skills and professional growth. I am truly thankful for his valuable mentorship and inspiration.',
+      quote: 'A great mentor doesn\u2019t just teach technology\u2014they inspire confidence, build character, and empower future professionals.'
+    },
+    url: 'https://drive.google.com/file/d/1jAvy9K836PHVtbM7t62TPv0kXfJ5r7kD/view?usp=sharing'
   },
   {
     icon: 'fa-certificate',
@@ -1684,10 +1698,13 @@ function loadCertifications() {
     heroWrap.innerHTML =
       '<div class="cert-hero-card" style="animation:certReveal .7s cubic-bezier(.22,1,.36,1) 0ms both;">' +
         '<div class="chc-shimmer" aria-hidden="true"></div>' +
+        (hero.verified
+          ? '<div class="chc-verified-badge" title="Verified Certificate"><i class="fas fa-check-circle"></i> Verified Certificate</div>'
+          : '') +
         '<div class="chc-left">' +
           '<div class="chc-icon-ring" style="' + (hero.logo ? 'background:#ffffff;' : '') + '">' +
             (hero.logo
-              ? '<img src="' + hero.logo + '" alt="' + hero.issuer + ' logo" style="width:100%;height:100%;object-fit:contain;">'
+              ? '<img src="' + hero.logo + '" alt="' + hero.issuer + ' logo" loading="lazy" style="width:100%;height:100%;object-fit:contain;">'
               : '<i class="fas ' + hero.icon + '"></i>'
             ) +
           '</div>' +
@@ -1695,25 +1712,51 @@ function loadCertifications() {
         '<div class="chc-body">' +
           '<span class="chc-eyebrow">⭐ Featured Certification</span>' +
           '<h3 class="chc-title">' + hero.title + ' 🌐</h3>' +
-          '<p class="chc-subtitle">Cisco Certified Network Associate</p>' +
+          '<p class="chc-subtitle">Cisco Certified Network Associate — Corvit Systems Peshawar</p>' +
           '<div class="chc-meta-row">' +
             '<span class="chc-meta-pill"><i class="fas fa-building"></i>' + hero.issuer + '</span>' +
             '<span class="chc-meta-pill"><i class="fas fa-calendar-alt"></i>' + hero.date + '</span>' +
+            (hero.status
+              ? '<span class="chc-meta-pill chc-status-pill"><i class="fas fa-circle-check"></i>' + hero.status + '</span>'
+              : ''
+            ) +
             (hero.credentialId
               ? '<span class="chc-meta-pill chc-cred"><i class="fas fa-fingerprint"></i>Credential ID: ' + hero.credentialId + '</span>'
               : ''
             ) +
           '</div>' +
+          '<div class="chc-net-icons" aria-hidden="true">' +
+            '<span class="chc-net-icon" title="Routing &amp; Switching"><i class="fas fa-network-wired"></i></span>' +
+            '<span class="chc-net-icon" title="VLANs &amp; STP"><i class="fas fa-diagram-project"></i></span>' +
+            '<span class="chc-net-icon" title="Security"><i class="fas fa-shield-halved"></i></span>' +
+            '<span class="chc-net-icon" title="Cisco IOS"><i class="fas fa-server"></i></span>' +
+          '</div>' +
           '<p class="chc-desc">' + hero.desc + '</p>' +
-          (hero.url
-            ? '<a href="' + hero.url + '" target="_blank" rel="noopener noreferrer" class="chc-verify-btn">' +
-                '<i class="fas fa-shield-check"></i> Verify Certificate' +
-              '</a>'
-            : '<span class="chc-verify-btn chc-verify-btn--progress"><i class="fas fa-clock"></i> Certification In Progress</span>'
-          ) +
+          '<div class="chc-actions">' +
+            (hero.url
+              ? '<a href="' + hero.url + '" target="_blank" rel="noopener noreferrer" class="chc-verify-btn">' +
+                  '<i class="fas fa-eye"></i> View Certificate' +
+                '</a>'
+              : (hero.certImg
+                  ? '<button type="button" class="chc-verify-btn chc-view-cert-btn" data-cert-img="' + hero.certImg + '" data-cert-title="' + hero.title + '">' +
+                      '<i class="fas fa-eye"></i> View Certificate' +
+                    '</button>'
+                  : '<span class="chc-verify-btn chc-verify-btn--progress"><i class="fas fa-clock"></i> Certification In Progress</span>'
+                )
+            )
+          + '</div>' +
         '</div>' +
         '<div class="chc-seal" aria-hidden="true">🏆</div>' +
-      '</div>';
+      '</div>' +
+      (hero.mentor
+        ? '<div class="chc-thanks-card" data-aos="fade-up">' +
+            '<div class="chc-thanks-icon"><i class="fas fa-hands-helping"></i></div>' +
+            '<h4 class="chc-thanks-title">A Special Note of Thanks</h4>' +
+            '<p class="chc-thanks-body">' + hero.mentor.note + '</p>' +
+            '<blockquote class="chc-thanks-quote">\u201C' + hero.mentor.quote + '\u201D</blockquote>' +
+            '<span class="chc-thanks-signature">— With gratitude, to ' + hero.mentor.name + '</span>' +
+          '</div>'
+        : '');
   }
 
   // ── 2. GRID CARDS — certData[1..] (no CCNA repeat) ─────────────────
@@ -3494,6 +3537,72 @@ window.closePdfModal = closePdfModal;
 
 
 // ============================================================
+// SECTION INLINE-A2 · CERTIFICATE IMAGE LIGHTBOX (View Certificate)
+// Gated: requires the visitor to submit their name first, same as the
+// résumé and other certificate links (see window.requireGateThen above).
+// ============================================================
+(function () {
+  function _openCertModalDirect(src, title, downloadHref) {
+    var modal   = document.getElementById('certImgModal');
+    var img     = document.getElementById('certModalImg');
+    var titleEl = document.getElementById('certModalTitle');
+    var dlBtn   = document.getElementById('certModalDownloadBtn');
+    if (!modal || !img) return;
+    img.classList.remove('cert-modal-img--zoomed');
+    img.src = src;
+    img.alt = title || 'Certificate';
+    if (titleEl) titleEl.textContent = title || 'Certificate';
+    if (dlBtn) {
+      if (downloadHref) {
+        dlBtn.href = downloadHref;
+        dlBtn.style.display = '';
+      } else {
+        dlBtn.style.display = 'none';
+      }
+    }
+    modal.classList.add('cert-modal--open');
+    document.body.classList.add('cert-modal-open');
+  }
+
+  function closeCertModal() {
+    var modal = document.getElementById('certImgModal');
+    if (modal) modal.classList.remove('cert-modal--open');
+    document.body.classList.remove('cert-modal-open');
+  }
+
+  function toggleCertZoom() {
+    var img = document.getElementById('certModalImg');
+    if (img) img.classList.toggle('cert-modal-img--zoomed');
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeCertModal();
+  });
+
+  // Delegated click on any "View Certificate" trigger — opens the gate
+  // first (unless the visitor's name is already known this session).
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.chc-view-cert-btn') : null;
+    if (!btn) return;
+    e.preventDefault();
+    var src   = btn.getAttribute('data-cert-img');
+    var title = btn.getAttribute('data-cert-title') || 'Certificate';
+    var dl    = btn.getAttribute('data-cert-download');
+    if (window.requireGateThen) {
+      window.requireGateThen(function () {
+        _openCertModalDirect(src, title, dl);
+      }, title);
+    } else {
+      _openCertModalDirect(src, title, dl);
+    }
+  });
+
+  window.closeCertModal   = closeCertModal;
+  window.toggleCertZoom   = toggleCertZoom;
+})();
+
+
+// ============================================================
 // SECTION INLINE-B · HIE IMAGE LIGHTBOX MODAL
 // Moved from inline <script> in index.html
 // ============================================================
@@ -4248,7 +4357,7 @@ window.hieModalImgLoaded = hieModalImgLoaded;
       // Swipe up: close drawer
       if (dy < -50 && dx < 40) {
         var toggle = document.getElementById('navToggle');
-        if (toggle && drawer.classList.contains('is-open')) {
+        if (toggle && drawer.classList.contains('open')) {
           toggle.click();
         }
       }

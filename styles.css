@@ -34202,7 +34202,9 @@ header#topNav.top-nav .nav-inner #navToggle.nav-mob-toggle.active .nmt-bar-3 { t
 }
 
 header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer {
-  display: none;
+  display: flex;
+  visibility: hidden;
+  pointer-events: none;
   position: fixed !important;
   inset: 0 !important;
   top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
@@ -34215,19 +34217,25 @@ header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer {
   flex-direction: row !important;
   gap: 0 !important;
 }
+/* Visibility/pointer-events are gated on .open (rather than display:none),
+   so the panel's transform transition always has a real box to animate —
+   this is what guarantees it slides in fully every time, instead of
+   occasionally stalling partway when display flips from none to flex. */
 header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open {
-  display: flex !important;
-  animation: none !important;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 header#topNav.top-nav nav#navMobDrawer .nmd-scrim {
   position: absolute; inset: 0;
   background: rgba(6,8,14,0.55);
-  backdrop-filter: blur(8px) saturate(1.1); -webkit-backdrop-filter: blur(8px) saturate(1.1);
+  backdrop-filter: blur(24px) saturate(1.1); -webkit-backdrop-filter: blur(24px) saturate(1.1);
   opacity: 0;
-  animation: nmdScrimIn 0.4s ease forwards;
+  transition: opacity 0.4s ease;
 }
-@keyframes nmdScrimIn { to { opacity: 1; } }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open .nmd-scrim {
+  opacity: 1;
+}
 
 header#topNav.top-nav nav#navMobDrawer .nmd-panel {
   position: relative;
@@ -34240,8 +34248,8 @@ header#topNav.top-nav nav#navMobDrawer .nmd-panel {
   /* Frosted dark glass — semi-transparent so the blurred page shows
      through, with a subtle gold-tinted sheen to match the brand. */
   background: linear-gradient(165deg, rgba(13,15,21,0.86) 0%, rgba(22,24,32,0.82) 55%, rgba(13,15,21,0.88) 100%);
-  backdrop-filter: blur(22px) saturate(1.5) brightness(1.05);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5) brightness(1.05);
+  backdrop-filter: blur(24px) saturate(1.5) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5) brightness(1.05);
   border-left: 1px solid rgba(212,168,64,0.30);
   box-shadow:
     inset 1px 0 0 rgba(255,255,255,0.06),
@@ -34251,9 +34259,11 @@ header#topNav.top-nav nav#navMobDrawer .nmd-panel {
      so the brand header and footer stay pinned in place. */
   overflow: hidden;
   transform: translateX(100%);
-  animation: nmdPanelIn 0.42s var(--ease-out) forwards;
+  transition: transform 0.42s var(--ease-out);
 }
-@keyframes nmdPanelIn { to { transform: translateX(0); } }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open .nmd-panel {
+  transform: translateX(0);
+}
 
 header#topNav.top-nav nav#navMobDrawer .nmd-header {
   display: flex; align-items: center; justify-content: space-between;
@@ -34323,22 +34333,24 @@ header#topNav.top-nav nav#navMobDrawer a.nav-mob-link {
   box-shadow: none !important;
   opacity: 0;
   transform: translateX(18px);
-  animation: nmdLinkIn 0.45s var(--ease-out) forwards;
-  transition: background 0.22s ease, color 0.22s ease, padding-left 0.22s ease;
+  transition: opacity 0.32s var(--ease-out), transform 0.32s var(--ease-out), background 0.22s ease, color 0.22s ease, padding-left 0.22s ease;
 }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(1)  { animation-delay: 0.06s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(2)  { animation-delay: 0.09s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(3)  { animation-delay: 0.12s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(4)  { animation-delay: 0.15s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(5)  { animation-delay: 0.18s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(6)  { animation-delay: 0.21s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(7)  { animation-delay: 0.24s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(8)  { animation-delay: 0.27s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(9)  { animation-delay: 0.30s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(10) { animation-delay: 0.33s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(11) { animation-delay: 0.36s; }
-header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:nth-child(12) { animation-delay: 0.39s; }
-@keyframes nmdLinkIn { to { opacity: 1; transform: translateX(0); } }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link {
+  opacity: 1;
+  transform: translateX(0);
+}
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(1)  { transition-delay: 0.06s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(2)  { transition-delay: 0.09s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(3)  { transition-delay: 0.12s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(4)  { transition-delay: 0.15s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(5)  { transition-delay: 0.18s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(6)  { transition-delay: 0.21s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(7)  { transition-delay: 0.24s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(8)  { transition-delay: 0.27s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(9)  { transition-delay: 0.30s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(10) { transition-delay: 0.33s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(11) { transition-delay: 0.36s; }
+header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer.open a.nav-mob-link:nth-child(12) { transition-delay: 0.39s; }
 
 header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:hover,
 header#topNav.top-nav nav#navMobDrawer a.nav-mob-link:active {
@@ -34571,4 +34583,243 @@ table, pre, code, hr,
 button:not(.ach-item):not([class*="mob-toggle"]):not(.hie-modal-close),
 .btn, [class*="-btn"] {
   border-radius: var(--r-pill, 999px);
+}
+
+
+/* ================================================================
+   CCNA CERTIFICATION FEATURE — verified badge, view/download actions,
+   network-themed icon row, and the "Special Note of Thanks" card.
+   Reuses the existing Liquid-Glass tokens (--ga-card, --border-v7-*,
+   --inset-v7, --ring-v7, --sh-v7-*, --r-xl, --gold, --ink, --ink-2)
+   so it matches the rest of the site without new visual language.
+================================================================ */
+
+/* Verified Certificate badge — top-right corner of the hero card */
+.chc-verified-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: #0f5132;
+  background: linear-gradient(175deg, rgba(120,224,170,.32) 0%, rgba(120,224,170,.16) 100%);
+  border: 1px solid rgba(34,197,94,.55);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(34,197,94,.18), inset 0 1px 0 rgba(255,255,255,.35);
+  z-index: 3;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.chc-verified-badge i { color: #16a34a; font-size: 14px; }
+
+@media (max-width: 600px) {
+  .chc-verified-badge { top: 12px; right: 12px; font-size: 10.5px; padding: 5px 10px; }
+}
+
+/* "Successfully Completed" status pill — same shape as chc-meta-pill,
+   tinted green instead of neutral */
+.chc-status-pill {
+  background: rgba(34,197,94,.14) !important;
+  border-color: rgba(34,197,94,.4) !important;
+  color: #16a34a !important;
+  font-weight: 700 !important;
+}
+.chc-status-pill i { margin-right: 5px; }
+
+/* Small network/Cisco-themed icon row under the meta pills */
+.chc-net-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 6px;
+}
+.chc-net-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--ink-2);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.10);
+  transition: transform var(--t-base) var(--ease-spring), color var(--t-base) ease, background var(--t-base) ease;
+}
+.chc-net-icon:hover {
+  transform: translateY(-3px) scale(1.06);
+  color: #1ba0d7;
+  background: rgba(27,160,215,.14);
+}
+
+/* Action row: View Certificate + Download, side by side */
+.chc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+/* Reset native <button> chrome so .chc-view-cert-btn matches the
+   existing .chc-verify-btn anchor styling exactly */
+button.chc-verify-btn {
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+button.chc-verify-btn:focus-visible,
+.chc-download-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Secondary "Download" pill button next to View Certificate */
+.chc-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.18);
+  transition: transform var(--t-base) var(--ease-spring), background var(--t-base) ease, box-shadow var(--t-base) ease;
+}
+.chc-download-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.10);
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+}
+.chc-download-btn i { font-size: 12px; }
+
+@media (max-width: 600px) {
+  .chc-actions { gap: 10px; }
+  .chc-download-btn, button.chc-verify-btn { flex: 1 1 auto; justify-content: center; }
+}
+
+/* ── Appreciation card: "A Special Note of Thanks" ──────────────── */
+.chc-thanks-card {
+  position: relative;
+  margin-top: 22px;
+  padding: 32px clamp(20px, 4vw, 40px);
+  background: var(--ga-card) !important;
+  border-top:    var(--border-v7-top) !important;
+  border-left:   var(--border-v7-left) !important;
+  border-right:  var(--border-v7-right) !important;
+  border-bottom: var(--border-v7-bottom) !important;
+  border-radius: var(--r-xl) !important;
+  box-shadow: var(--inset-v7), var(--ring-v7), var(--sh-v7-sm) !important;
+  overflow: hidden;
+}
+.chc-thanks-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: var(--gold);
+  background: rgba(212,175,55,.14);
+  border: 1px solid rgba(212,175,55,.35);
+}
+.chc-thanks-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(19px, 2.4vw, 24px);
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 14px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.35);
+}
+.chc-thanks-body {
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: var(--ink-2);
+  margin: 0 0 20px;
+  max-width: 74ch;
+}
+.chc-thanks-quote {
+  margin: 0 0 14px;
+  padding: 14px 20px;
+  border-left: 3px solid var(--gold);
+  font-family: var(--ff-serif);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: rgba(212,175,55,.06);
+  border-radius: 0 12px 12px 0;
+}
+.chc-thanks-signature {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: #FFD700;
+  text-shadow: 0 0 10px rgba(255,215,0,.35);
+}
+
+@media (max-width: 600px) {
+  .chc-thanks-card { padding: 24px 18px; }
+}
+
+/* ── Certificate lightbox (View Certificate) ─────────────────────
+   Reuses .pdf-modal / .pdf-modal-panel / .pdf-modal-btn chrome so it
+   is visually identical to the résumé viewer — Close + Download only. */
+.cert-modal-viewer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  background: rgba(10,12,20,.35);
+  position: relative;
+}
+.cert-modal-img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  cursor: zoom-in;
+  transition: transform .35s var(--ease-spring);
+  transform-origin: center center;
+  border-radius: 4px;
+}
+.cert-modal-img--zoomed {
+  cursor: zoom-out;
+  transform: scale(1.9);
+}
+.cert-modal-zoom-hint {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0,0,0,.45);
+  border-radius: 999px;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+@media (max-width: 600px) {
+  .cert-modal-img--zoomed { transform: scale(1.5); }
+  .cert-modal-zoom-hint { font-size: 10.5px; padding: 5px 10px; }
 }
