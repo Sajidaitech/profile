@@ -2115,8 +2115,6 @@ function printSignature() {
         var info = WMO_CODES[code] || { label: 'Unknown', icon: 'fa-cloud' };
         var temp = Math.round(c.temperature_2m);
         var feel = Math.round(c.apparent_temperature);
-        var wind = Math.round(c.windspeed_10m);
-        var hum  = Math.round(c.relativehumidity_2m);
 
         setWeather(
           '<i class="fas ' + info.icon + ' wb-icon"></i>' +
@@ -2124,8 +2122,6 @@ function printSignature() {
             '<strong style="color:var(--text-primary,#F1F5F9)">' + temp + '°C</strong>' +
             ' · ' + info.label +
             ' · Feels ' + feel + '°C' +
-            ' · ' + hum + '% RH' +
-            ' · ' + wind + ' km/h' +
             ' <span style="opacity:.55;font-size:9px;">' + escapeHtml(geo.label) + '</span>' +
           '</span>'
         );
@@ -5125,4 +5121,254 @@ window.hieModalImgLoaded = hieModalImgLoaded;
   } else {
     init();
   }
+})();
+
+
+/* =========================================================
+   NEW LIQUID GLASS FOOTER JAVASCRIPT
+   (replaces old .footer / .ftr footer JS behavior)
+   ========================================================= */
+
+(() => {
+  "use strict";
+
+  const footer = document.querySelector("#site-footer");
+
+  if (!footer) return;
+
+
+  /* =======================================================
+     REDUCED MOTION
+  ======================================================= */
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  );
+
+
+  /* =======================================================
+     POINTER LIQUID LIGHT
+  ======================================================= */
+
+  if (!reducedMotion.matches) {
+
+    let pointerFrame = null;
+
+    footer.addEventListener(
+      "pointermove",
+      (event) => {
+
+        if (event.pointerType === "touch") return;
+
+        if (pointerFrame) return;
+
+        pointerFrame = requestAnimationFrame(() => {
+
+          const rect = footer.getBoundingClientRect();
+
+          const x =
+            ((event.clientX - rect.left) / rect.width) * 100;
+
+          const y =
+            ((event.clientY - rect.top) / rect.height) * 100;
+
+          footer.style.setProperty(
+            "--pointer-x",
+            `${x}%`
+          );
+
+          footer.style.setProperty(
+            "--pointer-y",
+            `${y}%`
+          );
+
+          pointerFrame = null;
+        });
+
+      },
+      { passive: true }
+    );
+  }
+
+
+  /* =======================================================
+     PHOTO ORB POINTER RESPONSE
+  ======================================================= */
+
+  const photoOrb = document.querySelector("#photoOrb");
+
+  if (
+    photoOrb &&
+    !reducedMotion.matches &&
+    window.matchMedia("(pointer: fine)").matches
+  ) {
+
+    photoOrb.addEventListener(
+      "pointermove",
+      (event) => {
+
+        const rect = photoOrb.getBoundingClientRect();
+
+        const x =
+          (event.clientX - rect.left) / rect.width - 0.5;
+
+        const y =
+          (event.clientY - rect.top) / rect.height - 0.5;
+
+        photoOrb.style.transform = `
+          translateY(-5px)
+          rotateX(${y * -7}deg)
+          rotateY(${x * 7}deg)
+        `;
+      }
+    );
+
+
+    photoOrb.addEventListener(
+      "pointerleave",
+      () => {
+
+        photoOrb.style.transform = "";
+
+      }
+    );
+  }
+
+
+  /* =======================================================
+     BACK TO TOP
+  ======================================================= */
+
+  const backToTop =
+    document.querySelector("#backToTop");
+
+  if (backToTop) {
+
+    backToTop.addEventListener(
+      "click",
+      () => {
+
+        window.scrollTo({
+          top: 0,
+          behavior: reducedMotion.matches
+            ? "auto"
+            : "smooth"
+        });
+
+      }
+    );
+  }
+
+
+  /* =======================================================
+     VISITOR COUNT (new footer's "Total Visits" pill)
+
+     NOTE: this site already has a live Supabase-backed
+     analytics system used elsewhere (admin dashboard,
+     hero visitor badge). This block is a lightweight
+     localStorage fallback so the footer count works
+     out of the box. If you want the footer number to
+     reflect the real Supabase visit total instead,
+     swap the localStorage read below for a call into
+     that existing analytics code.
+  ======================================================= */
+
+  const totalVisits =
+    document.querySelector("#totalVisits");
+
+  if (totalVisits) {
+
+    const storedVisits =
+      Number(
+        localStorage.getItem("portfolio_demo_visits")
+      ) || 1248;
+
+    const nextVisits = storedVisits + 1;
+
+    localStorage.setItem(
+      "portfolio_demo_visits",
+      String(nextVisits)
+    );
+
+    totalVisits.textContent =
+      String(nextVisits).padStart(5, "0");
+  }
+
+
+  /* =======================================================
+     SOCIAL BUTTON MICRO INTERACTION
+  ======================================================= */
+
+  const socialButtons =
+    document.querySelectorAll(".social-orb");
+
+  socialButtons.forEach((button) => {
+
+    button.addEventListener(
+      "pointerenter",
+      () => {
+
+        if (reducedMotion.matches) return;
+
+        button.style.setProperty(
+          "--social-light",
+          "1"
+        );
+      }
+    );
+
+
+    button.addEventListener(
+      "pointerleave",
+      () => {
+
+        button.style.setProperty(
+          "--social-light",
+          "0"
+        );
+      }
+    );
+
+  });
+
+
+  /* =======================================================
+     VISIBILITY OBSERVER
+     ======================================================= */
+
+  const commandBar =
+    document.querySelector(".footer-command-bar");
+
+  if (
+    commandBar &&
+    "IntersectionObserver" in window &&
+    !reducedMotion.matches
+  ) {
+
+    const observer =
+      new IntersectionObserver(
+        (entries) => {
+
+          entries.forEach((entry) => {
+
+            if (entry.isIntersecting) {
+
+              commandBar.classList.add(
+                "command-visible"
+              );
+
+            }
+
+          });
+
+        },
+        {
+          threshold: 0.2
+        }
+      );
+
+    observer.observe(commandBar);
+  }
+
+
 })();

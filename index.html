@@ -71,8 +71,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Fonts: single optimized request, display=swap for no FOIT -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
 
   <!-- DNS prefetch for external APIs used at runtime -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -286,7 +286,6 @@
         <a href="#achievements"   class="nav-link nav-anchor">Awards</a>
         <a href="#fieldwork"      class="nav-link nav-anchor">Hands-On</a>
         <a href="#references"     class="nav-link nav-anchor">References</a>
-        <a href="#quotes"         class="nav-link nav-anchor">Quotes</a>
         <a href="#contact"        class="nav-link nav-anchor">Contact</a>
       </nav>
 
@@ -301,11 +300,6 @@
         <i class="fas fa-bolt" aria-hidden="true"></i>
         <span>Recruiter Fast Pass</span>
       </button>
-
-      <!-- Admin login — desktop nav bar -->
-      <a href="admin-dashboard.html" target="_blank" rel="noopener" class="nav-admin-btn" title="Admin Login" aria-label="Admin login">
-        <i class="fas fa-lock"></i>
-      </a>
     </div>
 
     <nav class="nav-mob-drawer" id="navMobDrawer" aria-label="Mobile navigation menu">
@@ -321,12 +315,10 @@
       <a href="#achievements"   class="nav-mob-link nav-anchor">Awards</a>
       <a href="#fieldwork"      class="nav-mob-link nav-anchor">Hands-On</a>
       <a href="#references"     class="nav-mob-link nav-anchor">References</a>
-      <a href="#quotes"         class="nav-mob-link nav-anchor">Quotes</a>
       <a href="#contact"        class="nav-mob-link nav-anchor">Contact</a>
       <button type="button" class="nav-mob-link recruiter-view-mob-btn" id="recruiterViewMobBtn" aria-haspopup="dialog" aria-controls="recruiterPanel">
         <i class="fas fa-bolt" aria-hidden="true"></i> Recruiter Fast Pass
       </button>
-      <a href="admin-dashboard.html" target="_blank" rel="noopener" class="nav-mob-link">Admin Login</a>
     </nav>
   </header>
 
@@ -2710,92 +2702,6 @@
 
 
     <!-- ================================================================
-         QUOTES
-    ================================================================ -->
-    <section id="quotes" class="section quotes-section glass-section">
-      <div class="hover-shade" aria-hidden="true"></div>
-      <div class="container">
-        <header class="section-header" data-aos="fade-up">
-          <span class="sec-num" aria-hidden="true">09</span>
-          <h2 class="sec-title">Quotes by Sajid Mehmood</h2>
-          <div class="sec-rule"></div>
-          <p class="quotes-subtitle" data-aos="fade-up" data-aos-delay="60">
-            A few original reflections, written in English and Urdu.
-          </p>
-        </header>
-
-        <div class="quotes-grid">
-
-          <!-- QUOTE 1 -->
-          <article class="quote-card" data-aos="fade-up" data-aos-delay="0">
-            <div class="quote-card-inner">
-              <i class="fas fa-quote-left quote-mark" aria-hidden="true"></i>
-
-              <p class="quote-text-en">Sometimes, the heart grows so weary that it longs to escape to a place where no one exists.</p>
-
-              <div class="quote-rule" aria-hidden="true"></div>
-
-              <p class="quote-text-ur" lang="ur" dir="rtl">کبھی کبھی دل اتنا تھک جاتا ہے کہ وہ ایسی جگہ چلے جانے کو چاہتا ہے جہاں کوئی انسان نہ ہو۔</p>
-
-              <p class="quote-author">— Sajid Mehmood</p>
-
-              <button type="button" class="quote-view-btn" onclick="openHieModal('quote-heart-weary.jpg','Sometimes, the heart grows so weary...','quotes')">
-                <i class="fas fa-image"></i> View Graphic Version
-              </button>
-            </div>
-            <div class="quote-card-glow" aria-hidden="true"></div>
-          </article>
-
-          <!-- Add more quote-card articles here as new quotes are written -->
-
-          <!-- QUOTE 2 -->
-          <article class="quote-card" data-aos="fade-up" data-aos-delay="120">
-            <div class="quote-card-inner">
-              <i class="fas fa-quote-left quote-mark" aria-hidden="true"></i>
-
-              <p class="quote-text-en">Sometimes a person becomes so exhausted that even their mind forgets how to rest peacefully.</p>
-
-              <div class="quote-rule" aria-hidden="true"></div>
-
-              <p class="quote-text-ur" lang="ur" dir="rtl">کبھی کبھی انسان اتنا تھک جاتا ہے کہ اس کا ذہن بھی سکون سے آرام کرنا بھول جاتا ہے۔</p>
-
-              <p class="quote-author">— Sajid Mehmood</p>
-
-              <button type="button" class="quote-view-btn" onclick="openHieModal('quote-exhausted-mind.jpg','Sometimes a person becomes so exhausted...','quotes')">
-                <i class="fas fa-image"></i> View Graphic Version
-              </button>
-            </div>
-            <div class="quote-card-glow" aria-hidden="true"></div>
-          </article>
-
-          <!-- QUOTE 3 -->
-          <article class="quote-card" data-aos="fade-up" data-aos-delay="240">
-            <div class="quote-card-inner">
-              <i class="fas fa-quote-left quote-mark" aria-hidden="true"></i>
-
-              <p class="quote-text-en">Life has taught me one important lesson: sometimes, when you're sitting in a gathering and you don't know what the conversation is about, it's better to remain silent.</p>
-
-              <div class="quote-rule" aria-hidden="true"></div>
-
-              <p class="quote-text-ur" lang="ur" dir="rtl">زندگی نے اتنا ضرور سکھایا ہے کہ کبھی کبھی محفل میں جب بات ہو رہی ہو اور آپ کو معلوم نہ ہو کہ کیا بات ہو رہی ہے، تو وہاں خاموش رہنا ہی بہتر ہوتا ہے۔</p>
-
-              <p class="quote-author">— Sajid Mehmood</p>
-
-              <button type="button" class="quote-view-btn" onclick="openHieModal('quote-remain-silent.jpg','Life has taught me one important lesson...','quotes')">
-                <i class="fas fa-image"></i> View Graphic Version
-              </button>
-            </div>
-            <div class="quote-card-glow" aria-hidden="true"></div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-
-
-
-    <!-- ================================================================
          CONTACT
     ================================================================ -->
     <section id="contact" class="section contact-section glass-section">
@@ -2925,100 +2831,6 @@
 
 
     <!-- ================================================================
-         LEAVE REVIEW
-    ================================================================ -->
-    <section id="leave-review" class="section review-submit-section">
-      <div class="hover-shade" aria-hidden="true"></div>
-      <div class="container">
-        <header class="section-header" data-aos="fade-up">
-          <h2 class="sec-title">Leave a Review</h2>
-          <div class="sec-rule"></div>
-          <p class="sec-subtitle">Enjoyed this portfolio? Share your thoughts below.</p>
-        </header>
-
-        <!-- TWO-COLUMN WRAPPER -->
-        <div class="review-two-col-wrap" data-aos="fade-up" data-aos-delay="80">
-
-          <!-- ── LEFT: form card ── -->
-          <div class="review-box" id="reviewBox">
-
-            <div id="reviewForm">
-
-              <!-- Form header -->
-              <div class="review-box-header">
-                <i class="fas fa-star review-box-star"></i>
-                <span class="review-box-title">Your Rating</span>
-              </div>
-
-              <!-- Stars row — INSIDE the form, not outside -->
-              <div class="review-rating-row" id="reviewRatingRow">
-                <span class="review-rating-label" id="reviewRatingLabel">Select stars</span>
-                <div class="review-stars" id="reviewStars" role="radiogroup" aria-labelledby="reviewRatingLabel" aria-required="true">
-                  <span class="review-star" role="radio" aria-checked="false" aria-label="1 star"  data-val="1" tabindex="0">★</span>
-                  <span class="review-star" role="radio" aria-checked="false" aria-label="2 stars" data-val="2" tabindex="-1">★</span>
-                  <span class="review-star" role="radio" aria-checked="false" aria-label="3 stars" data-val="3" tabindex="-1">★</span>
-                  <span class="review-star" role="radio" aria-checked="false" aria-label="4 stars" data-val="4" tabindex="-1">★</span>
-                  <span class="review-star" role="radio" aria-checked="false" aria-label="5 stars" data-val="5" tabindex="-1">★</span>
-                </div>
-              </div>
-
-              <!-- Name + textarea -->
-              <label for="reviewName" class="review-field-label">Your Name</label>
-              <input id="reviewName" name="reviewName" type="text" maxlength="120" placeholder="e.g. Alex Johnson" aria-label="Your name for the review" autocomplete="name">
-              <label for="reviewText" class="review-field-label">Your Review</label>
-              <textarea id="reviewText" name="reviewText" class="review-textarea" aria-label="Your review text" placeholder="Share your thoughts — as a recruiter, colleague, or visitor…" rows="4" maxlength="1000"></textarea>
-              <div class="review-form-footer">
-                <span class="review-char-count"><span id="reviewCharCount">0</span>/1000</span>
-                <button class="review-submit-btn" id="reviewSubmitBtn" onclick="submitReview()">
-                  <i class="fas fa-paper-plane"></i> Submit Review
-                </button>
-              </div>
-
-            </div>
-
-            <div id="reviewThanks" style="display:none; text-align:center; padding: 24px 0 8px;">
-              <i class="fas fa-circle-check" style="color:#22c55e; font-size:36px; margin-bottom:12px; display:block;"></i>
-              <p style="font-weight:700; color:#fff; margin-bottom:4px; font-size:17px;">Thank you for your review!</p>
-              <p style="font-size:13px; color:rgba(255,255,255,0.75);">It will appear here once approved by the site admin.</p>
-            </div>
-          </div>
-
-          <!-- ── RIGHT: approved reviews pill panel ── -->
-          <div class="review-pills-panel" id="reviewPillsPanel">
-            <div class="rpp-header">
-              <i class="fas fa-star rpp-header-star"></i>
-              <span class="rpp-header-title">What People Say</span>
-            </div>
-            <!-- Pills injected by reviews-portfolio.js -->
-            <div class="rpp-pills-list" id="rppPillsList">
-              <!-- skeleton state -->
-              <div class="rpp-pill rpp-skel-pill" aria-hidden="true">
-                <div class="rpp-skel rpp-skel-name"></div>
-                <div class="rpp-skel rpp-skel-stars"></div>
-                <div class="rpp-skel rpp-skel-text"></div>
-              </div>
-              <div class="rpp-pill rpp-skel-pill" aria-hidden="true">
-                <div class="rpp-skel rpp-skel-name"></div>
-                <div class="rpp-skel rpp-skel-stars"></div>
-                <div class="rpp-skel rpp-skel-text"></div>
-              </div>
-              <div class="rpp-pill rpp-skel-pill" aria-hidden="true">
-                <div class="rpp-skel rpp-skel-name"></div>
-                <div class="rpp-skel rpp-skel-stars"></div>
-                <div class="rpp-skel rpp-skel-text"></div>
-              </div>
-            </div>
-            <!-- Pagination dots -->
-            <div class="rpp-pagination" id="rppPagination" style="display:none;" aria-label="Review pages"></div>
-          </div>
-
-        </div><!-- /review-two-col-wrap -->
-
-      </div>
-    </section>
-
-
-    <!-- ================================================================
          WEBSITE REVIEWS
     ================================================================ -->
     <section id="website-reviews" class="section reviews-section" style="display:none;">
@@ -3039,82 +2851,205 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer ftr">
-    <div class="ftr-rim" aria-hidden="true"></div>
-    <div class="ftr-inner">
+  <footer class="liquid-footer" id="site-footer">
 
-      <!-- Column 1 — Brand -->
-      <div class="ftr-col ftr-col-brand">
-        <div class="ftr-brand-row">
-          <img src="logo.png" alt="Sajid Mehmood logo" class="ftr-logo" loading="lazy">
+    <!-- Ambient liquid light -->
+    <div class="footer-ambient footer-ambient-1"></div>
+    <div class="footer-ambient footer-ambient-2"></div>
+    <div class="footer-sunspill" aria-hidden="true"></div>
+
+    <!-- Main glass shell -->
+    <div class="footer-glass-shell">
+
+      <!-- Decorative glass curves -->
+      <div class="glass-wave glass-wave-left"></div>
+      <div class="glass-wave glass-wave-right"></div>
+
+      <!-- PHOTO ORB -->
+      <div class="photo-orb-wrap">
+
+        <div class="orbit-track orbit-track-1" aria-hidden="true"></div>
+        <div class="orbit-track orbit-track-2" aria-hidden="true"></div>
+        <div class="orbit-track orbit-track-3" aria-hidden="true"></div>
+
+        <div class="photo-orb" id="photoOrb">
+
+          <div class="orb-reflection"></div>
+
+          <div class="photo-frame">
+            <img
+              src="photo.jpg"
+              alt="Sajid Mehmood"
+              class="profile-photo"
+              loading="lazy"
+            />
+          </div>
+
+          <div class="orb-shine"></div>
+        </div>
+
+        <span class="orb-dot orb-dot-1"></span>
+        <span class="orb-dot orb-dot-2"></span>
+        <span class="orb-dot orb-dot-3"></span>
+      </div>
+
+
+      <!-- MAIN FOOTER CONTENT -->
+      <div class="footer-main">
+
+        <!-- LEFT -->
+        <section class="footer-brand">
+
+          <div class="brand-heading">
+            <div>
+              <h2>Sajid Mehmood</h2>
+              <p>IT Support Engineer <span>·</span> CCNA</p>
+            </div>
+          </div>
+
+          <div class="status-glass">
+            <span class="status-pulse"></span>
+            <span>Keeping systems online, one ticket at a time.</span>
+          </div>
+
+        </section>
+
+
+        <!-- CENTER SYSTEM STATUS -->
+        <section class="footer-system">
+
+          <div class="system-glass">
+
+            <div class="system-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2 4 5v6c0 5.25 3.42 10.14 8 11 4.58-.86 8-5.75 8-11V5l-8-3Z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+
+            <div class="system-content">
+              <span class="system-label">SYSTEM STATUS</span>
+              <div class="system-state">
+                <span class="online-dot"></span>
+                <span>Online &amp; Operational</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="system-ripple"></div>
+
+        </section>
+
+
+        <!-- RIGHT NAVIGATION -->
+        <section class="footer-navigation">
+
+          <div class="footer-column connect-column">
+            <h3>CONNECT</h3>
+
+            <div class="social-grid">
+
+              <a href="https://wa.me/97466969598?text=Hi%20Sajid%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!"
+                 target="_blank" rel="noopener noreferrer" class="social-orb whatsapp" aria-label="WhatsApp">
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 6.5a7.6 7.6 0 0 0-12 9.2L4 20l4.4-1.4a7.6 7.6 0 0 0 10.9-6.8 7.6 7.6 0 0 0-1.8-5.3Zm-5.5 12a6.1 6.1 0 0 1-3.1-.85l-.22-.13-2.3.75.76-2.24-.15-.23A6.15 6.15 0 1 1 12 18.5Zm3.4-4.6c-.19-.1-1.1-.55-1.27-.6-.17-.07-.3-.1-.42.1-.12.19-.48.6-.59.72-.11.13-.22.14-.4.05-.19-.1-.8-.3-1.5-.94-.56-.5-.93-1.1-1.04-1.3-.11-.19-.01-.3.08-.4.09-.1.19-.22.29-.34.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.42-1.02-.58-1.4-.15-.36-.3-.31-.42-.32h-.36c-.12 0-.32.05-.49.24-.17.19-.64.63-.64 1.53s.66 1.78.75 1.9c.1.13 1.3 2 3.16 2.8.44.19.79.3 1.06.39.44.14.85.12 1.17.07.36-.05 1.1-.45 1.25-.88.16-.43.16-.8.11-.88-.05-.08-.17-.13-.36-.23Z"/></svg></span>
+                <small>WhatsApp</small>
+              </a>
+
+              <a href="https://www.linkedin.com/in/sajid-mk-1b3954333"
+                 target="_blank" rel="noopener noreferrer" class="social-orb linkedin" aria-label="LinkedIn">
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.94 8.5H4V20h2.94V8.5ZM5.47 4a1.7 1.7 0 1 0 0 3.4A1.7 1.7 0 0 0 5.47 4ZM20 13.4c0-3-1.6-4.4-3.75-4.4a3.23 3.23 0 0 0-2.93 1.6V8.5H10.4c.04.85 0 11.5 0 11.5h2.92v-6.4c0-.35.02-.7.13-.95.28-.7.9-1.4 1.96-1.4 1.38 0 1.94 1.05 1.94 2.6V20H20v-6.6Z"/></svg></span>
+                <small>LinkedIn</small>
+              </a>
+
+              <a href="mailto:INFO@SAJIDMK.COM" class="social-orb email" aria-label="Email">
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></span>
+                <small>Email</small>
+              </a>
+
+              <a href="tel:+97466969598" class="social-orb phone" aria-label="Phone">
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5 4.5 6c-.6 3.6 2 8.3 5 11.3 3 3 7.7 5.6 11.3 5l2.5-2.5-3.9-3.4-2 1.6a10.7 10.7 0 0 1-5.6-5.6l1.6-2L10.4 7.4Z"/></svg></span>
+                <small>Phone</small>
+              </a>
+
+              <a href="#" onclick="openPdfModal();return false;" class="social-orb cv" aria-label="Download CV">
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11.5"/><path d="m7 10.5 5 5 5-5"/><path d="M4.5 18.5v1a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-1"/></svg></span>
+                <small>CV</small>
+              </a>
+
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+
+      <!-- BOTTOM COMMAND BAR -->
+      <div class="footer-command-bar">
+
+        <div class="command-item copyright">
+          <span>©</span>
+          <strong>2025 Sajid Mehmood</strong>
+        </div>
+
+        <div class="command-divider"></div>
+
+        <div class="command-item online-command">
+          <span class="online-dot"></span>
           <div>
-            <span class="ftr-name">Sajid Mehmood</span>
-            <span class="ftr-role">IT Support Engineer · CCNA</span>
+            <strong>Online Now</strong>
+            <small>Worldwide</small>
           </div>
         </div>
-        <p class="ftr-tagline">Keeping systems online, one ticket at a time.</p>
-        <span class="ftr-gratitude-bubble">
-          <i class="fas fa-heart" aria-hidden="true"></i>
-          <span>With gratitude, to Mr. Waseem</span>
-        </span>
-      </div>
 
-      <!-- Column 2 — Navigate -->
-      <nav class="ftr-col ftr-col-nav" aria-label="Footer navigation">
-        <span class="ftr-eyebrow">Navigate</span>
-        <a href="#about"    class="ftr-link nav-anchor"><i class="fas fa-user" aria-hidden="true"></i><span>Profile</span></a>
-        <a href="#projects" class="ftr-link nav-anchor"><i class="fas fa-folder-open" aria-hidden="true"></i><span>Projects</span></a>
-        <a href="#arsenal"  class="ftr-link nav-anchor"><i class="fas fa-toolbox" aria-hidden="true"></i><span>Arsenal</span></a>
-        <a href="#contact"  class="ftr-link nav-anchor"><i class="fas fa-bolt" aria-hidden="true"></i><span>Contact</span></a>
-      </nav>
+        <div class="command-divider"></div>
 
-      <!-- Column 3 — Connect -->
-      <div class="ftr-col ftr-col-connect">
-        <span class="ftr-eyebrow">Connect</span>
-        <div class="ftr-icon-row">
-          <a href="https://wa.me/97466969598?text=Hi%20Sajid%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect!"
-             target="_blank" rel="noopener noreferrer" class="ftr-icon-btn" aria-label="WhatsApp Sajid" title="WhatsApp">
-            <i class="fab fa-whatsapp"></i>
-          </a>
-          <a href="https://www.linkedin.com/in/sajid-mk-1b3954333"
-             target="_blank" rel="noopener noreferrer" class="ftr-icon-btn" aria-label="LinkedIn profile" title="LinkedIn">
-            <i class="fab fa-linkedin-in"></i>
-          </a>
-          <a href="mailto:INFO@SAJIDMK.COM" class="ftr-icon-btn" aria-label="Send email" title="Email">
-            <i class="fas fa-envelope"></i>
-          </a>
-          <a href="tel:+97466969598" class="ftr-icon-btn" aria-label="Call Sajid" title="Call">
-            <i class="fas fa-phone"></i>
-          </a>
-          <a href="#" onclick="openPdfModal();return false;" class="ftr-icon-btn" aria-label="View Resume PDF" title="Resume">
-            <i class="fas fa-file-arrow-down"></i>
-          </a>
+        <div class="command-item visits-command">
+          <span class="pulse-wave">⌁</span>
+          <div>
+            <strong id="totalVisits">01248</strong>
+            <small>Total Visits</small>
+          </div>
         </div>
-      </div>
 
-    </div>
+        <div class="command-divider"></div>
 
-    <!-- Status bar -->
-    <div class="ftr-status-bar">
-      <div class="ftr-status-left">
-        <span class="ftr-copy">&copy; 2025 Sajid Mehmood 🌙</span>
-        <span class="ftr-dot-sep">·</span>
-        <span class="ftr-live">
-          <span class="fvb-dot" id="footer-online-dot"></span>
-          <span id="footer-online-count">—</span> online
-          <span class="ftr-dot-sep">·</span>
-          <span id="footer-total-count">—</span> total visits
-        </span>
-      </div>
-      <div class="ftr-status-right">
-        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="ftr-mini-btn" aria-label="Back to top" title="Back to top">
-          <i class="fas fa-chevron-up"></i>
-        </button>
-        <a href="admin-dashboard.html" target="_blank" rel="noopener" class="ftr-mini-btn ftr-admin-btn" title="Admin Analytics" aria-label="Admin dashboard">
-          <i class="fas fa-chart-line"></i>
+        <div class="command-location">
+          <span class="location-icon">⌖</span>
+          <div>
+            <strong>Doha, Qatar</strong>
+            <small>Current Location</small>
+          </div>
+        </div>
+
+        <div class="command-spacer"></div>
+
+        <a
+          href="admin-dashboard.html"
+          target="_blank"
+          rel="noopener"
+          class="command-circle"
+          id="analyticsButton"
+          aria-label="Admin Analytics"
+          title="Admin Analytics"
+        >
+          <span>▥</span>
         </a>
+
+        <button
+          type="button"
+          class="back-top"
+          id="backToTop"
+        >
+          <span>↑</span>
+          <strong>Back to Top</strong>
+        </button>
+
       </div>
+
     </div>
+
   </footer>
 
 
@@ -3262,10 +3197,68 @@
   <script src="review-submit.js" defer></script>
   <script src="reviews-portfolio.js" defer></script>
 
-  <!-- Admin entry points (nav-admin-btn, nav-mob-link, ftr-admin-btn above)
-       now link straight to admin-dashboard.html in a new tab. The old
-       iframe-modal implementation and its open/close JS have been removed. -->
+  <!-- Admin entry point: footer ftr-admin-btn only (nav-bar lock icon and
+       mobile drawer link were removed — the footer button links straight
+       to admin-dashboard.html in a new tab.) -->
 
+
+  <!-- ── PASS 3: Liquid Glass pointer light + scroll depth ───────
+       Additive only. Does not touch any existing function, ID, or
+       Supabase/analytics code. Fully disabled under prefers-reduced-motion
+       and on touch/coarse-pointer devices (mirrors the CSS media guards). -->
+  <script>
+  (function () {
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var isFinePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    /* ── Pointer light: sets --mx/--my on the hovered glass element only.
+       Event-delegated (one listener), rAF-throttled, never touches layout —
+       only two custom properties via style.setProperty. ── */
+    if (isFinePointer && !reduceMotion) {
+      var LG_TARGET_SELECTOR = '.gate-card, .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card, .quote-card, .ach-award-card, .top-nav';
+      var lgPending = false, lgLastEvent = null;
+
+      function lgApply() {
+        lgPending = false;
+        if (!lgLastEvent) return;
+        var el = lgLastEvent.target.closest ? lgLastEvent.target.closest(LG_TARGET_SELECTOR) : null;
+        if (!el) return;
+        var r = el.getBoundingClientRect();
+        var x = ((lgLastEvent.clientX - r.left) / r.width) * 100;
+        var y = ((lgLastEvent.clientY - r.top) / r.height) * 100;
+        el.style.setProperty('--mx', x + '%');
+        el.style.setProperty('--my', y + '%');
+      }
+
+      document.addEventListener('pointermove', function (e) {
+        lgLastEvent = e;
+        if (!lgPending) {
+          lgPending = true;
+          requestAnimationFrame(lgApply);
+        }
+      }, { passive: true });
+    }
+
+    /* ── Scroll depth: toggles .lg-inview on glass sections via a single
+       IntersectionObserver (no scroll listener, no layout thrash). Skipped
+       entirely on mobile widths where the CSS above forces transforms off
+       anyway, so the observer has nothing meaningful to do there. ── */
+    if ('IntersectionObserver' in window && window.innerWidth >= 768) {
+      var lgSections = document.querySelectorAll(
+        '#why-hire.glass-section, #about.glass-section, #projects.glass-section, ' +
+        '#experience.glass-section, #arsenal.glass-section, #education.glass-section, ' +
+        '#achievements.glass-section, #certifications.glass-section, #fieldwork.glass-section, ' +
+        '#references.glass-section, #contact.glass-section'
+      );
+      var lgIo = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          entry.target.classList.toggle('lg-inview', entry.isIntersecting);
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+      lgSections.forEach(function (el) { lgIo.observe(el); });
+    }
+  })();
+  </script>
 
   <!-- ── Scroll Entrance Animations ───────────────────────────── -->
   <script>
@@ -3294,8 +3287,6 @@
       // Review pills panel
       ['.review-pills-panel', 'anim-slide-left'],
       ['.review-box',         'anim-slide-right'],
-      // Quotes section
-      ['.quote-card',        'anim-scale'],
       ['.chc-thanks-card',   'anim-fade'],
     ];
 

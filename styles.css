@@ -35867,3 +35867,1782 @@ body.recruiter-panel-open { overflow: hidden; }
   color: rgba(255,255,255,0.92) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
 }
+
+/* ================================================================================
+   ══════════════════════════════════════════════════════════════════════════════
+   PASS 2 — LIQUID SUNSET GLASS SYSTEM
+   HyperOS / Android Liquid-Glass inspired · amber sunset tint · Sajid Mehmood
+   Appended block. Overrides the near-opaque "dark glass fix" pass above by
+   design (later rule wins under equal !important specificity) to restore real
+   translucency + refraction while keeping text legible via layered gradients
+   rather than flat opaque fills.
+   Scope: PUBLIC SITE ONLY. Admin dashboard untouched. No IDs renamed. No JS
+   selectors touched. No Supabase / analytics code touched.
+   ══════════════════════════════════════════════════════════════════════════════
+================================================================================ */
+
+/* ────────────────────────────────────────────────────────────────────────────
+   1. LIQUID GLASS DESIGN TOKENS
+──────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Core liquid-glass surfaces — warm sunset amber, not neutral/blue */
+  --lg-glass-strong:  linear-gradient(155deg, rgba(255,224,178,0.16) 0%, rgba(230,160,86,0.09) 45%, rgba(60,38,18,0.30) 100%);
+  --lg-glass-medium:  linear-gradient(155deg, rgba(255,224,178,0.11) 0%, rgba(230,160,86,0.06) 45%, rgba(40,26,14,0.34) 100%);
+  --lg-glass-soft:    linear-gradient(155deg, rgba(255,224,178,0.07) 0%, rgba(230,160,86,0.035) 50%, rgba(20,14,10,0.32) 100%);
+  --lg-glass-nav:     linear-gradient(180deg, rgba(255,224,178,0.13) 0%, rgba(20,14,10,0.55) 100%);
+  --lg-glass-modal:   linear-gradient(160deg, rgba(255,224,178,0.10) 0%, rgba(14,10,8,0.72) 55%, rgba(8,6,5,0.86) 100%);
+
+  /* Border — the specular "edge catching sunset light" line */
+  --lg-border:        linear-gradient(120deg, rgba(255,230,190,0.65) 0%, rgba(255,200,130,0.18) 35%, rgba(255,200,130,0.05) 60%, rgba(255,190,110,0.22) 100%);
+  --lg-border-soft:    rgba(255,214,160,0.22);
+  --lg-border-strong:  rgba(255,224,180,0.40);
+
+  /* Internal highlight (the "liquid" sheen near the top edge) */
+  --lg-highlight:     radial-gradient(120% 80% at 20% -10%, rgba(255,236,205,0.35) 0%, rgba(255,236,205,0) 55%);
+  --lg-highlight-soft: radial-gradient(120% 80% at 20% -10%, rgba(255,236,205,0.18) 0%, rgba(255,236,205,0) 55%);
+
+  /* Blur + saturation stack */
+  --lg-blur-strong: blur(28px) saturate(1.6)  brightness(1.05);
+  --lg-blur-medium: blur(20px) saturate(1.45) brightness(1.03);
+  --lg-blur-soft:   blur(13px) saturate(1.3)  brightness(1.02);
+  --lg-blur-nav:    blur(24px) saturate(1.55) brightness(1.04);
+
+  /* Shadow / glow */
+  --lg-shadow:      0 10px 30px rgba(20,10,4,0.45), 0 2px 8px rgba(20,10,4,0.30);
+  --lg-shadow-lift: 0 26px 60px rgba(20,10,4,0.55), 0 8px 20px rgba(20,10,4,0.35);
+  --lg-glow-amber:  0 0 0 1px rgba(255,200,130,0.10), 0 0 28px rgba(230,160,86,0.22);
+  --lg-glow-amber-strong: 0 0 0 1px rgba(255,200,130,0.18), 0 0 46px rgba(230,160,86,0.36);
+
+  /* Radius scale (liquid = generously rounded, continuous-curve feel) */
+  --lg-r-sm:  14px;
+  --lg-r-md:  20px;
+  --lg-r-lg:  28px;
+  --lg-r-xl:  36px;
+  --lg-r-pill: 999px;
+
+  /* Motion */
+  --lg-ease: cubic-bezier(0.25, 0.9, 0.35, 1);
+  --lg-t: 0.32s;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   2. REUSABLE LIQUID GLASS CLASSES
+   (Not yet applied in HTML in this pass — available for Pass 3+, and used
+   internally below via the same visual recipe on existing selectors.)
+──────────────────────────────────────────────────────────────────────────── */
+.glass-liquid {
+  background: var(--lg-glass-strong) !important;
+  -webkit-backdrop-filter: var(--lg-blur-strong) !important;
+  backdrop-filter: var(--lg-blur-strong) !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--lg-r-lg) !important;
+  box-shadow: var(--lg-shadow-lift) !important;
+  position: relative;
+}
+.glass-medium {
+  background: var(--lg-glass-medium) !important;
+  -webkit-backdrop-filter: var(--lg-blur-medium) !important;
+  backdrop-filter: var(--lg-blur-medium) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-md) !important;
+  box-shadow: var(--lg-shadow) !important;
+  position: relative;
+}
+.glass-soft {
+  background: var(--lg-glass-soft) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-sm) !important;
+  box-shadow: var(--lg-shadow) !important;
+  position: relative;
+}
+.glass-nav {
+  background: var(--lg-glass-nav) !important;
+  -webkit-backdrop-filter: var(--lg-blur-nav) !important;
+  backdrop-filter: var(--lg-blur-nav) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  box-shadow: var(--lg-shadow) !important;
+}
+.glass-modal {
+  background: var(--lg-glass-modal) !important;
+  -webkit-backdrop-filter: var(--lg-blur-strong) !important;
+  backdrop-filter: var(--lg-blur-strong) !important;
+  border: 1px solid var(--lg-border-strong) !important;
+  border-radius: var(--lg-r-xl) !important;
+  box-shadow: var(--lg-shadow-lift) !important;
+}
+.glass-button {
+  background: linear-gradient(155deg, rgba(255,224,178,0.20) 0%, rgba(230,160,86,0.10) 100%) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-pill) !important;
+  box-shadow: var(--lg-glow-amber) !important;
+}
+
+/* Shared specular-edge pseudo-element recipe. Applied selectively below
+   to avoid the "glass inside glass" stacking problem — one highlight layer
+   per panel, added only on outer surfaces, never on nested children. */
+.lg-highlight-edge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lg-highlight);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  z-index: 0;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  /* Graceful fallback: no backdrop-filter support → solid warm-dark panels,
+     no blur, no highlight layer (avoids ugly flat rectangles with fake sheen). */
+  .glass-liquid, .glass-medium, .glass-soft, .glass-nav, .glass-modal,
+  .top-nav, .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card,
+  .quote-card, .gate-card, .pdf-modal-panel, .cert-modal-panel, .hie-modal-panel {
+    background: rgba(18,12,8,0.92) !important;
+  }
+  .lg-highlight-edge::before { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-liquid, .glass-medium, .glass-soft, .glass-nav, .glass-modal, .glass-button,
+  .top-nav, .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card,
+  .quote-card, .gate-btn, .gate-cancel-btn, .msc-btn, .fab-main, .recruiter-view-btn,
+  .review-submit-btn {
+    transition: none !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3. NAVIGATION — floating liquid glass bar
+──────────────────────────────────────────────────────────────────────────── */
+.top-nav {
+  background: var(--lg-glass-nav) !important;
+  -webkit-backdrop-filter: var(--lg-blur-nav) !important;
+  backdrop-filter: var(--lg-blur-nav) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-pill) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,230,195,0.30),
+    0 10px 30px rgba(20,10,4,0.40) !important;
+  transition: background var(--lg-t) var(--lg-ease), box-shadow var(--lg-t) var(--lg-ease), border-color var(--lg-t) var(--lg-ease) !important;
+}
+.top-nav.is-scrolled {
+  background: linear-gradient(180deg, rgba(255,224,178,0.16) 0%, rgba(14,10,8,0.72) 100%) !important;
+  border-color: var(--lg-border-strong) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,230,195,0.38),
+    0 14px 38px rgba(20,10,4,0.55) !important;
+}
+.nav-glass-shimmer {
+  background: var(--lg-highlight-soft) !important;
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+.nav-link {
+  border-radius: var(--lg-r-pill) !important;
+  transition: background var(--lg-t) var(--lg-ease), color var(--lg-t) var(--lg-ease), transform 0.18s var(--lg-ease) !important;
+}
+.nav-link:hover {
+  background: rgba(255,214,160,0.10) !important;
+  color: #FFF3E0 !important;
+}
+.nav-link.is-active {
+  background: linear-gradient(155deg, rgba(255,224,178,0.30) 0%, rgba(230,160,86,0.18) 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: var(--lg-glow-amber) !important;
+}
+.nav-mob-drawer {
+  background: var(--lg-glass-modal) !important;
+  -webkit-backdrop-filter: var(--lg-blur-strong) !important;
+  backdrop-filter: var(--lg-blur-strong) !important;
+  border-left: 1px solid var(--lg-border-soft) !important;
+}
+.nav-mob-link {
+  border-radius: var(--lg-r-sm) !important;
+  transition: background var(--lg-t) var(--lg-ease) !important;
+}
+.nav-mob-link:hover, .nav-mob-link:active {
+  background: rgba(255,214,160,0.10) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   4. CARDS — translucent, layered, cursor-reactive
+──────────────────────────────────────────────────────────────────────────── */
+.gc-card, .wh-card, .cert-card, .cert-hero-card, .museum-case, .ref-card,
+.hie-card, .quote-card, .ach-award-card, .arsenal-category, .exp-card, .lge-card,
+.edu-card, .engage-row, .review-pills-panel, .review-box, .about-bio-col,
+.about-text-col, .about-panel-col {
+  background: var(--lg-glass-medium) !important;
+  -webkit-backdrop-filter: var(--lg-blur-medium) !important;
+  backdrop-filter: var(--lg-blur-medium) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-md) !important;
+  box-shadow: var(--lg-shadow) !important;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--lg-t) var(--lg-ease),
+    box-shadow var(--lg-t) var(--lg-ease),
+    border-color var(--lg-t) var(--lg-ease) !important;
+}
+
+/* Single specular highlight layer per card — do not nest another blur
+   inside; children keep transparent backgrounds per the single-blur rule. */
+.gc-card::before, .wh-card::before, .cert-card::before, .cert-hero-card::before,
+.museum-case::before, .ref-card::before, .hie-card::before, .quote-card::before,
+.ach-award-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--lg-highlight-soft);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gc-card:hover, .wh-card:hover, .cert-card:hover, .cert-hero-card:hover,
+  .museum-case:hover, .ref-card:hover, .hie-card:hover, .quote-card:hover,
+  .ach-award-card:hover {
+    transform: translateY(-4px) !important;
+    border-color: var(--lg-border-strong) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,230,195,0.35),
+      var(--lg-shadow-lift) !important;
+  }
+}
+
+/* Footer / secondary panels — softer glass, no card hover */
+.footer, .footer-inner, .weather-bar, .mobile-sticky-cta, .fvb-dot {
+  background: var(--lg-glass-soft) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   5. BUTTONS — tactile liquid glass controls
+──────────────────────────────────────────────────────────────────────────── */
+.gate-btn, .msc-btn, .review-submit-btn, .recruiter-view-btn,
+.pdf-modal-btn-download, .fab-main {
+  background: linear-gradient(155deg, rgba(255,224,178,0.34) 0%, rgba(230,160,86,0.20) 100%) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-strong) !important;
+  border-radius: var(--lg-r-pill) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,236,210,0.55),
+    var(--lg-glow-amber) !important;
+  color: #2a1a0a !important;
+  transition: transform 0.16s var(--lg-ease), box-shadow var(--lg-t) var(--lg-ease), background var(--lg-t) var(--lg-ease) !important;
+}
+.gate-btn:hover, .msc-btn:hover, .review-submit-btn:hover, .recruiter-view-btn:hover,
+.pdf-modal-btn-download:hover, .fab-main:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255,236,210,0.65),
+    var(--lg-glow-amber-strong) !important;
+}
+.gate-btn:active, .msc-btn:active, .review-submit-btn:active, .fab-main:active {
+  transform: scale(0.96) !important;
+}
+
+.gate-cancel-btn, .pdf-modal-btn-close, .hie-modal-close, .nav-admin-btn {
+  background: rgba(255,224,178,0.06) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-pill) !important;
+  color: rgba(255,236,210,0.85) !important;
+  transition: background var(--lg-t) var(--lg-ease), border-color var(--lg-t) var(--lg-ease) !important;
+}
+.gate-cancel-btn:hover, .pdf-modal-btn-close:hover, .hie-modal-close:hover, .nav-admin-btn:hover {
+  background: rgba(255,224,178,0.14) !important;
+  border-color: var(--lg-border-strong) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   6. FORMS / INPUTS — transparent liquid glass fields
+──────────────────────────────────────────────────────────────────────────── */
+#visitorName, #reviewName, .review-textarea, #reviewText {
+  background: rgba(20,14,10,0.35) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-sm) !important;
+  color: #FFF3E0 !important;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.35) !important;
+  transition: border-color var(--lg-t) var(--lg-ease), box-shadow var(--lg-t) var(--lg-ease) !important;
+}
+#visitorName::placeholder, #reviewName::placeholder, .review-textarea::placeholder {
+  color: rgba(255,243,224,0.45) !important;
+}
+#visitorName:focus, #reviewName:focus, .review-textarea:focus, #reviewText:focus {
+  outline: none !important;
+  border-color: var(--lg-border-strong) !important;
+  box-shadow:
+    inset 0 1px 4px rgba(0,0,0,0.35),
+    0 0 0 3px rgba(230,160,86,0.28) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   7. MODALS — resume / certificate / fieldwork lightbox
+──────────────────────────────────────────────────────────────────────────── */
+.pdf-modal-panel, .cert-modal-panel, .hie-modal-panel, .pdf-modal-viewer,
+.cert-modal-viewer {
+  background: var(--lg-glass-modal) !important;
+  -webkit-backdrop-filter: var(--lg-blur-strong) !important;
+  backdrop-filter: var(--lg-blur-strong) !important;
+  border: 1px solid var(--lg-border-strong) !important;
+  border-radius: var(--lg-r-xl) !important;
+  box-shadow: var(--lg-shadow-lift) !important;
+}
+.pdf-modal-topbar, .cert-modal-topbar, .hie-modal-topbar {
+  background: rgba(255,224,178,0.08) !important;
+  border-bottom: 1px solid var(--lg-border-soft) !important;
+}
+.recruiter-panel-card {
+  background: var(--lg-glass-modal) !important;
+  -webkit-backdrop-filter: var(--lg-blur-strong) !important;
+  backdrop-filter: var(--lg-blur-strong) !important;
+  border: 1px solid var(--lg-border-strong) !important;
+  border-radius: var(--lg-r-xl) !important;
+  box-shadow: var(--lg-shadow-lift) !important;
+}
+.recruiter-panel-item {
+  border-radius: var(--lg-r-sm) !important;
+  transition: background var(--lg-t) var(--lg-ease), transform 0.18s var(--lg-ease) !important;
+}
+.recruiter-panel-item:hover {
+  background: rgba(255,214,160,0.10) !important;
+  transform: translateX(3px) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   8. GATE — basic liquid glass material only (full redesign in Pass 3)
+   All existing IDs / JS / backgrounds / close behavior untouched.
+──────────────────────────────────────────────────────────────────────────── */
+.gate-card {
+  background: var(--lg-glass-strong) !important;
+  -webkit-backdrop-filter: var(--lg-blur-strong) !important;
+  backdrop-filter: var(--lg-blur-strong) !important;
+  border: 1px solid var(--lg-border-strong) !important;
+  border-radius: var(--lg-r-xl) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,236,210,0.45),
+    var(--lg-shadow-lift) !important;
+  position: relative;
+  overflow: hidden;
+}
+.gate-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--lg-highlight);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+}
+.gate-card > * { position: relative; z-index: 1; }
+
+/* ────────────────────────────────────────────────────────────────────────────
+   9. HERO — layered depth (background → atmosphere → glass → content)
+──────────────────────────────────────────────────────────────────────────── */
+.hero-section {
+  position: relative;
+}
+.hero-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 20%, rgba(255,214,160,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 45% at 80% 70%, rgba(230,160,86,0.08) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-editorial-layout {
+  background: var(--lg-glass-soft) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-lg) !important;
+  box-shadow: var(--lg-shadow) !important;
+  position: relative;
+  z-index: 1;
+}
+#chipPill {
+  background: linear-gradient(155deg, rgba(255,224,178,0.22) 0%, rgba(230,160,86,0.12) 100%) !important;
+  -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+  backdrop-filter: var(--lg-blur-soft) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-pill) !important;
+  box-shadow: var(--lg-glow-amber) !important;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .hero-section { will-change: transform; }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   10. SECTION SHELL — .glass-section keeps its single-blur-layer convention,
+   only the token values shift toward the liquid recipe.
+──────────────────────────────────────────────────────────────────────────── */
+#why-hire.glass-section, #about.glass-section, #projects.glass-section,
+#experience.glass-section, #arsenal.glass-section, #education.glass-section,
+#achievements.glass-section, #certifications.glass-section, #fieldwork.glass-section,
+#references.glass-section, #contact.glass-section {
+  background: var(--lg-glass-soft) !important;
+  -webkit-backdrop-filter: var(--lg-blur-medium) !important;
+  backdrop-filter: var(--lg-blur-medium) !important;
+  border: 1px solid var(--lg-border-soft) !important;
+  border-radius: var(--lg-r-lg) !important;
+  box-shadow: var(--lg-shadow) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   11. MOBILE — ensure no overflow, lighter blur (perf), touch-friendly hit areas
+──────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  html, body { overflow-x: hidden !important; }
+  .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card, .quote-card,
+  .ach-award-card, .top-nav, .gate-card, .pdf-modal-panel, .cert-modal-panel,
+  .hie-modal-panel, .recruiter-panel-card {
+    -webkit-backdrop-filter: var(--lg-blur-soft) !important;
+    backdrop-filter: var(--lg-blur-soft) !important;
+  }
+  .gate-btn, .gate-cancel-btn, .msc-btn, .fab-main, .nav-mob-link,
+  .recruiter-panel-item, .nav-link {
+    min-height: 44px;
+  }
+}
+
+/* ── end Pass 2 Liquid Sunset Glass block ── */
+
+/* ================================================================================
+   ══════════════════════════════════════════════════════════════════════════════
+   PASS 3 — LIQUID GLASS POLISH · GATE · MOBILE · INTERACTION
+   Appended block. Wins the cascade over Pass 2 by source order where selectors
+   coincide. No IDs renamed. No JS-dependent classes altered. Admin/Supabase
+   untouched.
+   ══════════════════════════════════════════════════════════════════════════════
+================================================================================ */
+
+/* ────────────────────────────────────────────────────────────────────────────
+   1. GATE — "liquid glass floating in front of a sunset"
+──────────────────────────────────────────────────────────────────────────── */
+.gate-card {
+  /* Stronger, more transparent glass than a normal modal — sunset stays visible */
+  background: linear-gradient(155deg,
+      rgba(255,224,178,0.20) 0%,
+      rgba(230,160,86,0.10) 40%,
+      rgba(40,26,16,0.34) 100%) !important;
+  -webkit-backdrop-filter: blur(34px) saturate(1.75) brightness(1.06) !important;
+  backdrop-filter: blur(34px) saturate(1.75) brightness(1.06) !important;
+  border: 1px solid rgba(255,224,180,0.42) !important;
+  border-radius: var(--lg-r-xl, 36px) !important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,236,210,0.55),
+    inset 0 0 60px rgba(255,200,130,0.06),
+    0 30px 70px rgba(15,8,3,0.55),
+    0 6px 20px rgba(15,8,3,0.35) !important;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(10px) scale(0.97);
+  opacity: 0;
+  transition:
+    transform 0.55s cubic-bezier(0.22,1,0.36,1),
+    opacity 0.5s ease;
+}
+#gate-overlay.visible .gate-card {
+  transform: translateY(0) scale(1) !important;
+  opacity: 1 !important;
+}
+
+/* Slow-moving diagonal sheen — the "internal reflection" layer.
+   Single pseudo-element, animated background-position only (cheap: no
+   layout, no repaint of siblings). Reflection never overlaps text because
+   it sits at z-index:0, below the card's real content (z-index:1). */
+.gate-card::before {
+  content: '';
+  position: absolute;
+  inset: -40% -60%;
+  background: linear-gradient(115deg,
+      transparent 30%,
+      rgba(255,238,212,0.16) 45%,
+      rgba(255,238,212,0.22) 50%,
+      rgba(255,238,212,0.16) 55%,
+      transparent 70%);
+  background-size: 220% 220%;
+  background-position: 0% 50%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+  animation: lg-sheen-sweep 9s ease-in-out infinite alternate;
+}
+@keyframes lg-sheen-sweep {
+  0%   { background-position: 10% 30%; }
+  100% { background-position: 90% 70%; }
+}
+.gate-card > * { position: relative; z-index: 1; }
+
+/* Pointer-following light — desktop only, set via CSS custom properties
+   updated by a rAF-throttled listener (see script addition below). */
+.gate-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 20%),
+      rgba(255,224,178,0.22), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .gate-card:hover::after { opacity: 1; }
+}
+
+/* Gate text legibility: keep reflection/light layers behind content, and
+   nudge heading/body copy contrast up slightly against a now-translucent card */
+.gate-title, .gate-subtitle, .gate-logo, .gate-privacy-note, .gate-field label {
+  text-shadow: 0 1px 6px rgba(0,0,0,0.45);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   2. POINTER LIGHT — extended to major glass cards (desktop only)
+──────────────────────────────────────────────────────────────────────────── */
+.gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card, .quote-card,
+.ach-award-card, .top-nav {
+  --mx: 50%;
+  --my: 30%;
+}
+.gc-card::after, .wh-card::after, .cert-card::after, .museum-case::after,
+.ref-card::after, .hie-card::after, .quote-card::after, .ach-award-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(200px circle at var(--mx) var(--my),
+      rgba(255,224,178,0.16), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .gc-card:hover::after, .wh-card:hover::after, .cert-card:hover::after,
+  .museum-case:hover::after, .ref-card:hover::after, .hie-card:hover::after,
+  .quote-card:hover::after, .ach-award-card:hover::after {
+    opacity: 1;
+  }
+}
+/* Disable all pointer-tracking visuals on touch / coarse pointers entirely */
+@media (hover: none), (pointer: coarse) {
+  .gate-card::after, .gc-card::after, .wh-card::after, .cert-card::after,
+  .museum-case::after, .ref-card::after, .hie-card::after, .quote-card::after,
+  .ach-award-card::after {
+    display: none !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   3. REFRACTION FEEL — thin chromatic-adjacent edge, not a distortion filter
+   (kept subtle: a slim two-tone border gradient reads as "glass edge bending
+   light" without touching text or using SVG filters/WebGL)
+──────────────────────────────────────────────────────────────────────────── */
+.gate-card, .glass-modal, .pdf-modal-panel, .cert-modal-panel, .hie-modal-panel {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,224,178,0.18),
+    inset 1px 0 0 rgba(255,180,120,0.10),
+    inset -1px 0 0 rgba(160,200,255,0.05),
+    var(--lg-shadow-lift, 0 26px 60px rgba(20,10,4,0.55)) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   4. SCROLL EXPERIENCE — layered depth via class toggled by IntersectionObserver
+   (script addition below adds/removes .lg-inview only; no scroll-linked JS,
+   no layout thrash — pure opacity/transform/shadow, all GPU-cheap)
+──────────────────────────────────────────────────────────────────────────── */
+#why-hire.glass-section, #about.glass-section, #projects.glass-section,
+#experience.glass-section, #arsenal.glass-section, #education.glass-section,
+#achievements.glass-section, #certifications.glass-section, #fieldwork.glass-section,
+#references.glass-section, #contact.glass-section {
+  opacity: 0.86;
+  transform: translateY(6px) scale(0.994);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease;
+}
+#why-hire.glass-section.lg-inview, #about.glass-section.lg-inview,
+#projects.glass-section.lg-inview, #experience.glass-section.lg-inview,
+#arsenal.glass-section.lg-inview, #education.glass-section.lg-inview,
+#achievements.glass-section.lg-inview, #certifications.glass-section.lg-inview,
+#fieldwork.glass-section.lg-inview, #references.glass-section.lg-inview,
+#contact.glass-section.lg-inview {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  box-shadow:
+    inset 0 1px 0 rgba(255,230,195,0.20),
+    var(--lg-shadow, 0 10px 30px rgba(20,10,4,0.45)) !important;
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   5. HOVER — buttons: tactile lift + highlight, kept small
+──────────────────────────────────────────────────────────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .gate-btn:hover, .msc-btn:hover, .review-submit-btn:hover,
+  .recruiter-view-btn:hover, .fab-main:hover {
+    transform: translateY(-2px) !important;
+  }
+  .nav-link:hover, .nav-mob-link:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   6. TYPOGRAPHY / CONTRAST AUDIT
+   Ensure headings/body text on translucent surfaces keep sufficient contrast
+   without flattening the glass — small text-shadow, not opaque backers.
+──────────────────────────────────────────────────────────────────────────── */
+.glass-section .section-header h2, .glass-section .sec-subtitle,
+.gc-card h3, .wh-card h3, .cert-card h3, .museum-case h3, .ref-card p,
+.hie-card figcaption, .quote-card p {
+  text-shadow: 0 1px 4px rgba(0,0,0,0.30);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   7. ACCESSIBILITY — focus states + reduced motion
+──────────────────────────────────────────────────────────────────────────── */
+.gate-btn:focus-visible, .gate-cancel-btn:focus-visible, .msc-btn:focus-visible,
+.nav-link:focus-visible, .nav-mob-link:focus-visible, .review-submit-btn:focus-visible,
+#visitorName:focus-visible, #reviewName:focus-visible, .review-textarea:focus-visible,
+.recruiter-panel-item:focus-visible, .fab-main:focus-visible {
+  outline: 2px solid #FFD9A0 !important;
+  outline-offset: 2px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gate-card::before { animation: none !important; }
+  .gate-card, .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card,
+  .quote-card, .ach-award-card, .top-nav {
+    transition: none !important;
+  }
+  .gate-card::after, .gc-card::after, .wh-card::after, .cert-card::after,
+  .museum-case::after, .ref-card::after, .hie-card::after, .quote-card::after,
+  .ach-award-card::after {
+    display: none !important;
+  }
+  #why-hire.glass-section, #about.glass-section, #projects.glass-section,
+  #experience.glass-section, #arsenal.glass-section, #education.glass-section,
+  #achievements.glass-section, #certifications.glass-section, #fieldwork.glass-section,
+  #references.glass-section, #contact.glass-section {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  #gate-overlay.visible .gate-card {
+    transform: none !important;
+  }
+  .gate-card {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   8. MOBILE VISUAL AUDIT — 320 / 375 / 390 / 430 / 768
+──────────────────────────────────────────────────────────────────────────── */
+html, body { overflow-x: hidden !important; }
+
+@media (max-width: 767px) {
+  /* Lighter blur everywhere on mobile — performance + battery */
+  .gate-card, .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card,
+  .quote-card, .ach-award-card, .top-nav, .pdf-modal-panel, .cert-modal-panel,
+  .hie-modal-panel, .recruiter-panel-card, .nav-mob-drawer {
+    -webkit-backdrop-filter: blur(14px) saturate(1.3) brightness(1.02) !important;
+    backdrop-filter: blur(14px) saturate(1.3) brightness(1.02) !important;
+  }
+  /* Kill the animated sheen + all pointer-light layers on mobile: no cursor,
+     and continuous background-position animation is the most expensive part */
+  .gate-card::before { animation: none !important; background-position: 40% 40% !important; }
+  .gate-card::after, .gc-card::after, .wh-card::after, .cert-card::after,
+  .museum-case::after, .ref-card::after, .hie-card::after, .quote-card::after,
+  .ach-award-card::after {
+    display: none !important;
+  }
+  /* Scroll-depth transforms off on mobile: avoid jank on lower-end devices,
+     sections simply appear via the existing anim-fade/anim-scale system */
+  #why-hire.glass-section, #about.glass-section, #projects.glass-section,
+  #experience.glass-section, #arsenal.glass-section, #education.glass-section,
+  #achievements.glass-section, #certifications.glass-section, #fieldwork.glass-section,
+  #references.glass-section, #contact.glass-section {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .gate-card {
+    width: min(92vw, 420px) !important;
+    max-height: 88dvh !important;
+    overflow-y: auto !important;
+    padding: 26px 22px 22px !important;
+    border-radius: 24px !important;
+  }
+  .gate-title { font-size: clamp(20px, 6vw, 26px) !important; }
+  .gate-subtitle { font-size: clamp(13px, 3.6vw, 15px) !important; }
+
+  .pdf-modal-panel, .cert-modal-panel, .hie-modal-panel {
+    width: 94vw !important;
+    max-width: 94vw !important;
+    border-radius: 20px !important;
+  }
+
+  .gate-btn, .gate-cancel-btn, .msc-btn, .fab-main, .review-submit-btn,
+  .nav-mob-link, .recruiter-panel-item, .nav-link {
+    min-height: 44px !important;
+  }
+
+  #visitorName, #reviewName, .review-textarea {
+    font-size: 16px !important; /* prevents iOS auto-zoom on focus */
+  }
+}
+
+/* Narrow-phone tier: 320–390px — tighten padding/type further */
+@media (max-width: 390px) {
+  .gate-card { padding: 22px 18px 18px !important; }
+  .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card, .quote-card {
+    padding: 16px !important;
+  }
+  .top-nav { border-radius: 20px !important; }
+}
+
+/* 768px tablet tier: ensure the switch from mobile drawer to desktop nav
+   doesn't leave an in-between state with oversized glass */
+@media (min-width: 768px) and (max-width: 900px) {
+  .gate-card { width: min(80vw, 460px) !important; }
+}
+
+/* ── end Pass 3 Liquid Glass Polish block ── */
+
+
+/* =========================================================
+   LIQUID GLASS FOOTER — v2
+   Redesigned to match the amber liquid-glass / floating-orb
+   reference design. Same markup hooks as before
+   (#site-footer, #photoOrb, #backToTop, #totalVisits,
+   .social-orb, .footer-command-bar) so script.js needs no
+   changes.
+   ========================================================= */
+
+:root {
+  --lf-bg: rgba(9, 10, 13, 0.46);
+  --lf-bg-heavy: rgba(8, 10, 14, 0.7);
+
+  --lf-border: rgba(255, 255, 255, 0.14);
+  --lf-border-bright: rgba(255, 179, 71, 0.55);
+
+  --lf-text: #f7f5f2;
+  --lf-muted: rgba(255, 255, 255, 0.74);
+  --lf-muted-2: rgba(255, 255, 255, 0.46);
+
+  --lf-amber: #FFB347;
+  --lf-amber-light: #FFD08A;
+  --lf-amber-deep: #d9812f;
+  --lf-green: #54e6a2;
+
+  --lf-whatsapp: #3fd66b;
+  --lf-linkedin: #4da3ff;
+  --lf-email: #ffca80;
+  --lf-phone: #b48bff;
+  --lf-cv: #6fc3ff;
+
+  --lf-blur: 30px;
+  --lf-radius: 40px;
+}
+
+
+/* =========================================================
+   FOOTER ROOT
+   ========================================================= */
+
+.liquid-footer {
+  --pointer-x: 50%;
+  --pointer-y: 40%;
+
+  position: relative;
+  width: 100%;
+  padding: 96px 14px 26px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.liquid-footer,
+.liquid-footer .footer-glass-shell {
+  background-image: initial;
+}
+
+/* =========================================================
+   HANDWRITTEN FOOTER TEXT
+   ========================================================= */
+
+#site-footer,
+#site-footer * {
+  font-family: 'Caveat', cursive !important;
+}
+
+#site-footer .brand-heading h2 {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+#site-footer .brand-heading p {
+  font-size: 20px;
+}
+
+#site-footer .footer-column h3 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+#site-footer .social-orb small {
+  font-size: 14px;
+}
+
+#site-footer .command-item strong,
+#site-footer .command-location strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+#site-footer .command-item small,
+#site-footer .command-location small {
+  font-size: 14px;
+}
+
+#site-footer .back-top strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+#site-footer .status-glass {
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   AMBIENT LIGHT + SUNSET SPILL
+   ========================================================= */
+
+.footer-ambient {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(95px);
+  opacity: 0.32;
+  z-index: -1;
+}
+
+.footer-ambient-1 {
+  width: 380px;
+  height: 380px;
+  left: 4%;
+  bottom: 8%;
+  background: rgba(224, 130, 40, 0.32);
+}
+
+.footer-ambient-2 {
+  width: 320px;
+  height: 320px;
+  right: 4%;
+  top: 10%;
+  background: rgba(255, 170, 90, 0.2);
+}
+
+/* Warm light pooling down from the orb onto the glass top */
+.footer-sunspill {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  width: 640px;
+  height: 260px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 178, 90, 0.28),
+    rgba(255, 150, 60, 0.1) 45%,
+    transparent 72%
+  );
+  filter: blur(6px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+/* =========================================================
+   MAIN GLASS SHELL
+   ========================================================= */
+
+.footer-glass-shell {
+  position: relative;
+  z-index: 2;
+
+  width: 93%;
+  max-width: 1600px;
+  margin: auto;
+
+  padding: 84px 56px 25px;
+
+  border: 1px solid var(--lf-border);
+  border-radius: var(--lf-radius);
+
+  background: transparent !important;
+
+  overflow: visible;
+}
+
+.footer-glass-shell::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 181, 79, 0.65),
+    rgba(255, 255, 255, 0.28),
+    transparent
+  );
+  opacity: 0.7;
+}
+
+.footer-glass-shell::after {
+  content: "";
+  position: absolute;
+  width: 40%;
+  height: 100%;
+  top: 0;
+  left: -50%;
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 190, 90, 0.1),
+    transparent
+  );
+  transform: skewX(-18deg);
+  animation: glassSweep 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glassSweep {
+  0%, 65% { left: -55%; }
+  100% { left: 120%; }
+}
+
+
+/* =========================================================
+   DECORATIVE WAVES
+   ========================================================= */
+
+.glass-wave {
+  position: absolute;
+  width: 42%;
+  height: 100px;
+  top: -50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  filter: blur(0.3px);
+  pointer-events: none;
+}
+
+.glass-wave-left { left: 3%; transform: rotate(-4deg); }
+.glass-wave-right { right: 3%; transform: rotate(4deg); }
+
+
+/* =========================================================
+   PHOTO ORB
+   ========================================================= */
+
+.photo-orb-wrap {
+  position: absolute;
+  left: 50%;
+  top: -104px;
+  width: 208px;
+  height: 208px;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.photo-orb {
+  position: absolute;
+  inset: 22px;
+  border-radius: 50%;
+
+  background: transparent;
+
+  border: 1px solid rgba(255, 214, 160, 0.55);
+
+  animation: orbFloat 6s ease-in-out infinite;
+  overflow: hidden;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.photo-frame {
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.35);
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.02);
+}
+
+.orb-reflection {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 55%;
+  top: -8%;
+  left: -15%;
+  border-radius: 50%;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.42),
+    rgba(255, 255, 255, 0.08) 30%,
+    transparent 65%
+  );
+  transform: rotate(-20deg);
+  pointer-events: none;
+}
+
+.orb-shine {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 26px;
+  right: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.68);
+  filter: blur(5px);
+  opacity: 0.75;
+  z-index: 5;
+}
+
+/* Orbit tracks — thin elliptical rings crossing behind/through the orb */
+.orbit-track {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 1px solid rgba(240, 168, 78, 0.32);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.orbit-track-1 {
+  width: 340px;
+  height: 96px;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  animation: orbitSpin 16s linear infinite;
+}
+
+.orbit-track-2 {
+  width: 260px;
+  height: 118px;
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translate(-50%, -50%) rotate(24deg);
+  animation: orbitSpinReverse 20s linear infinite;
+}
+
+.orbit-track-3 {
+  width: 190px;
+  height: 140px;
+  border-color: rgba(255, 200, 130, 0.22);
+  transform: translate(-50%, -50%) rotate(-46deg);
+  animation: orbitSpin 25s linear infinite;
+}
+
+@keyframes orbitSpin {
+  to { transform: translate(-50%, -50%) rotate(calc(-10deg + 360deg)); }
+}
+@keyframes orbitSpinReverse {
+  to { transform: translate(-50%, -50%) rotate(calc(24deg - 360deg)); }
+}
+
+.orb-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lf-amber-light);
+  box-shadow: 0 0 14px var(--lf-amber);
+  z-index: 12;
+}
+
+.orb-dot-1 { left: 2px; top: 92px; }
+.orb-dot-2 { right: 2px; top: 68px; }
+.orb-dot-3 { left: 88px; bottom: -4px; }
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.footer-main {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns:
+    minmax(280px, 1.2fr)
+    minmax(200px, 0.7fr)
+    minmax(220px, 0.85fr);
+  gap: 40px;
+  align-items: center;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+/* Hardening: an older, unrelated footer design earlier in this
+   stylesheet also defines a bare `.footer-brand { display:flex;
+   align-items:center; gap:9px; }` rule (small top-bar logo+name
+   layout). That rule has no !important, but since this new block
+   never re-declared `display` for `.footer-brand`, the old flex-row
+   value was silently winning and forcing the name block and the
+   status pill onto the same row — squeezing the status pill down
+   to a sliver and wrapping its text one word per line. Scoping to
+   `.liquid-footer .footer-brand` guarantees this wins on specificity
+   regardless of source order, restoring the intended vertical stack. */
+.liquid-footer .footer-brand {
+  display: block;
+}
+
+.brand-heading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.brand-heading h2 {
+  margin: 0;
+  color: var(--lf-text);
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+.brand-heading p {
+  margin: 5px 0 0;
+  color: var(--lf-muted);
+  font-size: 15px;
+}
+
+.brand-heading p span { color: var(--lf-amber); }
+
+
+/* =========================================================
+   STATUS GLASS
+   ========================================================= */
+
+.status-glass {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.status-pulse,
+.online-dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 50%;
+  background: var(--lf-green);
+  box-shadow: 0 0 10px rgba(84, 230, 162, 0.85);
+  animation: onlinePulse 2s ease-in-out infinite;
+}
+
+@keyframes onlinePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.8); }
+}
+
+
+/* =========================================================
+   SYSTEM
+   ========================================================= */
+
+.footer-system {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.system-glass {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 26px;
+  min-width: 210px;
+  border-radius: 26px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.11),
+    rgba(255, 255, 255, 0.03)
+  );
+  border: 1px solid rgba(255, 207, 143, 0.3);
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.28),
+    0 0 30px rgba(233, 150, 61, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.system-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 15px;
+  background: rgba(240, 168, 78, 0.1);
+  border: 1px solid rgba(240, 168, 78, 0.3);
+}
+
+.system-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--lf-amber-light);
+  stroke-width: 1.5;
+}
+
+.system-content {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.system-label {
+  color: var(--lf-amber);
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  font-weight: 700;
+}
+
+.system-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--lf-text);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.system-ripple {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 1px solid rgba(240, 168, 78, 0.12);
+  animation: ripple 3.5s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  0% { opacity: 0.6; transform: scale(0.35); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.footer-navigation {
+  display: contents;
+}
+
+.footer-column h3 {
+  margin: 0 0 16px;
+  color: var(--lf-amber);
+  font-size: 12px;
+  letter-spacing: 1.6px;
+  white-space: nowrap;
+}
+
+.footer-nav-link {
+  display: grid;
+  grid-template-columns: 22px 1fr 14px;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  margin-bottom: 6px;
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.86) !important;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  border: 1px solid transparent;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.footer-nav-link:hover {
+  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 190, 104, 0.22);
+}
+
+.nav-icon {
+  display: inline-flex;
+  color: var(--lf-amber);
+}
+
+.nav-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-arrow {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 19px;
+  transition: transform 0.25s ease;
+}
+
+.footer-nav-link:hover .nav-arrow {
+  transform: translateX(3px);
+  color: var(--lf-amber);
+}
+
+
+/* =========================================================
+   SOCIAL ORBS
+   ========================================================= */
+
+.social-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.social-orb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.72);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-orb span {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.social-orb span svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.social-orb small { font-size: 9px; opacity: 0.68; }
+
+.social-orb:hover { transform: translateY(-5px); color: white; }
+
+.social-orb:hover span {
+  transform: scale(1.06);
+  box-shadow: 0 0 26px currentColor, inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Brand-tinted accent per platform, echoing the reference design */
+.social-orb.whatsapp { color: var(--lf-whatsapp); }
+.social-orb.whatsapp span { border-color: rgba(63, 214, 107, 0.28); }
+.social-orb.whatsapp span svg { fill: currentColor; stroke: none; }
+
+.social-orb.linkedin { color: var(--lf-linkedin); }
+.social-orb.linkedin span { border-color: rgba(77, 163, 255, 0.28); }
+.social-orb.linkedin span svg { fill: currentColor; stroke: none; }
+
+.social-orb.email { color: var(--lf-email); }
+.social-orb.email span { border-color: rgba(255, 202, 128, 0.3); }
+
+.social-orb.phone { color: var(--lf-phone); }
+.social-orb.phone span { border-color: rgba(180, 139, 255, 0.3); }
+.social-orb.phone span svg { fill: currentColor; stroke: none; }
+
+.social-orb.cv { color: var(--lf-cv); }
+.social-orb.cv span { border-color: rgba(111, 195, 255, 0.3); }
+
+
+/* =========================================================
+   COMMAND BAR
+   ========================================================= */
+
+.footer-command-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 72px;
+  margin-top: 56px;
+  padding: 9px 12px 9px 22px;
+  border-radius: 999px;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(0, 0, 0, 0.24)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+.footer-command-bar.command-visible {
+  animation: commandAppear 0.7s ease both;
+}
+
+@keyframes commandAppear {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.command-item,
+.command-location {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.82);
+  white-space: nowrap;
+}
+
+.command-item strong,
+.command-location strong { display: block; font-size: 12px; font-weight: 500; }
+
+.command-item small,
+.command-location small {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 9px;
+}
+
+.command-divider { width: 1px; height: 32px; background: rgba(255, 255, 255, 0.12); }
+
+.online-command .online-dot { width: 8px; height: 8px; flex-basis: 8px; }
+
+.pulse-wave { color: var(--lf-amber); font-size: 26px; line-height: 1; }
+
+.visits-command strong {
+  color: var(--lf-amber-light);
+  font-family: monospace;
+  font-size: 17px;
+  letter-spacing: 2.5px;
+}
+
+.command-location .location-icon { color: var(--lf-amber); font-size: 21px; }
+
+.command-spacer { flex: 1; }
+
+
+/* =========================================================
+   COMMAND BUTTONS
+   ========================================================= */
+
+.command-circle,
+.back-top {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.03)
+  );
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.command-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.command-circle:hover,
+.back-top:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 168, 78, 0.5);
+  background: linear-gradient(
+    145deg,
+    rgba(240, 168, 78, 0.18),
+    rgba(255, 255, 255, 0.04)
+  );
+}
+
+.back-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 999px;
+}
+
+.back-top span { color: var(--lf-amber-light); font-size: 19px; }
+.back-top strong { font-size: 12px; font-weight: 500; }
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .footer-glass-shell { padding: 78px 34px 22px; }
+
+  .footer-main {
+    grid-template-columns: 1.15fr 0.75fr 1fr;
+    row-gap: 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .footer-main { grid-template-columns: 1fr 1fr; }
+
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-system { grid-column: 1 / -1; justify-content: flex-start; }
+
+  .footer-navigation {
+    grid-column: 1 / -1;
+  }
+
+  .footer-command-bar {
+    border-radius: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+  }
+
+  .command-spacer { display: none; }
+}
+
+@media (max-width: 650px) {
+  .liquid-footer { padding: 66px 10px 15px; }
+  .footer-glass-shell { padding: 104px 20px 18px; border-radius: 28px; }
+
+  .photo-orb-wrap { width: 168px; height: 168px; top: -88px; }
+  .orbit-track-1 { width: 250px; height: 72px; }
+  .orbit-track-2 { width: 190px; height: 88px; }
+  .orbit-track-3 { width: 140px; height: 104px; }
+
+  .footer-main { display: flex; flex-direction: column; gap: 36px; }
+  .footer-brand, .footer-system, .footer-navigation { width: 100%; }
+
+  .brand-heading h2 { font-size: 23px; }
+  .status-glass { max-width: 100%; font-size: 12px; }
+
+  .footer-command-bar {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 24px;
+    gap: 12px;
+    margin-top: 40px;
+  }
+
+  .command-divider { width: 100%; height: 1px; }
+  .command-item, .command-location { justify-content: center; }
+  .command-circle, .back-top { width: 100%; }
+  .back-top { justify-content: center; }
+}
+
+@media (max-width: 420px) {
+  .social-grid { gap: 8px; }
+  .social-orb span { width: 40px; height: 40px; }
+  .social-orb small { display: none; }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-glass-shell::after,
+  .photo-orb,
+  .orbit-track,
+  .system-ripple,
+  .status-pulse,
+  .online-dot,
+  .footer-command-bar.command-visible {
+    animation: none !important;
+  }
+
+  .footer-nav-link,
+  .social-orb,
+  .command-circle,
+  .back-top {
+    transition: none !important;
+  }
+
+  .footer-command-bar { opacity: 1; transform: none; }
+}
+
+@supports not (backdrop-filter: blur(20px)) {
+  .system-glass,
+  .status-glass,
+  .footer-command-bar {
+    background: rgba(12, 14, 18, 0.9);
+  }
+}
+
+
+/* =========================================================
+   HARDENING — this stylesheet has an earlier, more generic
+   rule (`footer *, .footer *, .site-footer * { backdrop-filter:
+   none !important; }`) plus a global "flatten all glass layers"
+   sweep that both match elements by bare tag/class name, not
+   by component. Everything above already carries its own
+   !important on backdrop-filter for that reason; these re-state
+   background/border/shadow with higher specificity for the few
+   containers that still need it, so nothing upstream can silently
+   flatten the glass again.
+   ========================================================= */
+
+.liquid-footer .footer-glass-shell {
+  border: 1px solid var(--lf-border) !important;
+}
+
+.liquid-footer .photo-orb {
+  border: 1px solid rgba(255, 214, 160, 0.55) !important;
+}
+
+.liquid-footer .system-glass,
+.liquid-footer .footer-command-bar,
+.liquid-footer .status-glass,
+.liquid-footer .social-orb span,
+.liquid-footer .command-circle,
+.liquid-footer .back-top {
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+/* Hardening #2: a much earlier "light theme" pass in this stylesheet
+   restyles every plain <a> tag (via `a:not(.btn-primary):not(.btn-ghost)
+   :not(.nav-link):not(.nav-resume-btn)`) to a flat blue link color with
+   !important. Because that selector chains four :not() clauses it out-
+   specifies single- and double-class rules even with !important, so it
+   was silently flattening the NAVIGATE links and every CONNECT icon
+   (WhatsApp/LinkedIn/Email/Phone/CV) to the same blue instead of their
+   intended white / per-brand tint. Scoping to the #site-footer id beats
+   it outright. */
+#site-footer .footer-nav-link {
+  color: rgba(255, 255, 255, 0.86) !important;
+}
+
+#site-footer .social-orb {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+#site-footer .social-orb.whatsapp { color: var(--lf-whatsapp) !important; }
+#site-footer .social-orb.linkedin { color: var(--lf-linkedin) !important; }
+#site-footer .social-orb.email    { color: var(--lf-email) !important; }
+#site-footer .social-orb.phone    { color: var(--lf-phone) !important; }
+#site-footer .social-orb.cv       { color: var(--lf-cv) !important; }
+
+#site-footer .command-circle,
+#site-footer .back-top {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Hardening #3: a much earlier, unscoped "GLASS SPEC — Full Silver
+   Light Theme Upgrade" block (explicitly commented "Applied last in
+   cascade") sets `body, p, li, td, th, label, span { color: ... !important }`
+   with no wrapping class or media query, so it wins over every un-!important
+   color rule in this footer that relies on inheriting from an ancestor —
+   NAVIGATE icons/arrows/labels, the status pill text, the system-status
+   label/state text, and the plain wrapper span inside each CONNECT icon.
+   A second, unrelated rule (`[class*="location"] { color: ... !important }`,
+   meant for date/role/subtitle meta text elsewhere on the site) also
+   incidentally matches `.location-icon` and `.command-location` purely
+   because their class names contain the substring "location". Restoring
+   intended colors here, scoped to #site-footer, so id-selector specificity
+   always wins regardless of source order. */
+#site-footer span:not([class]) {
+  color: inherit !important;
+}
+
+#site-footer .nav-icon  { color: var(--lf-amber) !important; }
+#site-footer .nav-arrow { color: rgba(255, 255, 255, 0.35) !important; }
+#site-footer .footer-nav-link:hover .nav-arrow { color: var(--lf-amber) !important; }
+
+#site-footer .brand-heading p span { color: var(--lf-amber) !important; }
+
+#site-footer .status-glass { color: rgba(255, 255, 255, 0.82) !important; }
+
+#site-footer .system-label { color: var(--lf-amber) !important; }
+#site-footer .system-state { color: var(--lf-text) !important; }
+
+#site-footer .pulse-wave { color: var(--lf-amber) !important; }
+
+#site-footer .command-location,
+#site-footer .command-location strong,
+#site-footer .command-location .location-icon {
+  color: var(--lf-amber) !important;
+}
+#site-footer .command-location strong { color: rgba(255, 255, 255, 0.82) !important; }
