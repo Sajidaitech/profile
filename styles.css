@@ -899,7 +899,7 @@ body::after {
   margin-bottom: 22px;
 }
 
-.gate-card h2 {
+.gate-card .gate-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 28px;
   font-weight: 900;
@@ -908,7 +908,7 @@ body::after {
   margin-bottom: 10px;
   letter-spacing: -0.02em;
 }
-.gate-card h2 span { color: #D4A840; }
+.gate-card .gate-title span { color: #D4A840; }
 
 .gate-card .gate-subtitle {
   font-family: 'DM Sans', system-ui, sans-serif;
@@ -983,6 +983,43 @@ body::after {
   box-shadow: 0 6px 24px rgba(196,140,30,0.54);
 }
 .gate-btn:active { transform: translateY(0); }
+
+/* ── Secondary "Cancel" action — closes the gate without unlocking
+   the requested CV/certificate. Ghost style so it stays visually
+   subordinate to the primary Continue button. ── */
+.gate-cancel-btn {
+  width: 100%;
+  height: 44px;
+  background: transparent;
+  color: rgba(255,255,255,0.72);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 12px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  margin-bottom: 16px;
+}
+.gate-cancel-btn:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.30);
+  color: #ffffff;
+}
+.gate-cancel-btn:active { transform: translateY(0); }
+
+/* ── Privacy note under the form fields ── */
+.gate-privacy-note {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+  max-width: 340px;
+  margin: 0 auto;
+}
 
 .gate-footer {
   display: flex;
@@ -1074,7 +1111,7 @@ body::after {
   }
 
   /* Heading: slightly smaller on mobile */
-  .gate-card h2 {
+  .gate-card .gate-title {
     font-size: 24px !important;
     line-height: 1.12 !important;
   }
@@ -1156,7 +1193,7 @@ body::after {
     margin-bottom: 16px !important;
   }
 
-  .gate-card h2 {
+  .gate-card .gate-title {
     font-size: 22px !important;
   }
 
@@ -23293,7 +23330,7 @@ body {
     top: 27% !important;
     padding: 16px 14px 18px !important;
   }
-  .gate-card h2, #gateAsk h2 { font-size: 17px !important; }
+  .gate-card .gate-title, #gateAsk .gate-title { font-size: 17px !important; }
   .gate-card .gate-subtitle   { font-size: 11px !important; }
   .gate-field input, #visitorName { height: 32px !important; }
   .gate-btn, #gateContinueBtn, #gateDoneBtn { height: 32px !important; font-size: 11px !important; }
@@ -23465,8 +23502,8 @@ body {
   }
 
   /* ── 9. HEADING "Hey, Visitor." ── */
-  .gate-card h2,
-  #gateAsk h2 {
+  .gate-card .gate-title,
+  #gateAsk .gate-title {
     font-family: 'Playfair Display', Georgia, serif !important;
     font-size: 20px !important;
     font-weight: 900 !important;
@@ -23476,8 +23513,8 @@ body {
     margin-bottom: 10px !important;
     text-shadow: none !important;
   }
-  .gate-card h2 span,
-  #gateAsk h2 span {
+  .gate-card .gate-title span,
+  #gateAsk .gate-title span {
     color: #c48a1a !important;
     -webkit-text-fill-color: #c48a1a !important;
   }
@@ -23616,7 +23653,7 @@ body {
     top: 26% !important;
     padding: 18px 14px 18px !important;
   }
-  .gate-card h2, #gateAsk h2 { font-size: 18px !important; }
+  .gate-card .gate-title, #gateAsk .gate-title { font-size: 18px !important; }
   .gate-card .gate-subtitle   { font-size: 11px !important; }
   .gate-field input, #visitorName { height: 34px !important; }
   .gate-btn, #gateContinueBtn, #gateDoneBtn { height: 34px !important; }
@@ -24374,7 +24411,7 @@ h3, h4 {
     0 8px 32px rgba(0,0,0,0.50),
     0 32px 80px rgba(0,0,0,0.40) !important;
 }
-.gate-card h2, .gate-card h2 span { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
+.gate-card .gate-title, .gate-card .gate-title span { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; }
 .gate-subtitle { color: rgba(210,228,255,0.82) !important; -webkit-text-fill-color: rgba(210,228,255,0.82) !important; }
 .gate-field label { color: rgba(225,200,150,0.80) !important; -webkit-text-fill-color: rgba(225,200,150,0.80) !important; }
 .gate-field input {
@@ -27888,8 +27925,8 @@ body::after {
 .wb-sep          { color: rgba(255,255,255,0.40) !important; }
 
 /* ── Gate card — dark scenic bg, white text ── */
-.gate-card h2        { color: #FFFFFF !important; }
-.gate-card h2 span   { color: #D4A840 !important; }
+.gate-card .gate-title { color: #FFFFFF !important; }
+.gate-card .gate-title span { color: #D4A840 !important; }
 .gate-card .gate-subtitle { color: rgba(255,255,255,0.85) !important; }
 .gate-logo           { color: rgba(255,255,255,0.85) !important; }
 .gate-field label    { color: rgba(255,255,255,0.90) !important; }
@@ -30337,14 +30374,14 @@ footer, .footer {
 }
 
 /* Gate card text hierarchy */
-.gate-card h2,
-.gate-card #gateAsk h2 {
+.gate-card .gate-title,
+.gate-card #gateAsk .gate-title {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important;
 }
-.gate-card h2 span,
-.gate-card #gateAsk h2 span {
+.gate-card .gate-title span,
+.gate-card #gateAsk .gate-title span {
   color: #D4A840 !important;
   -webkit-text-fill-color: #D4A840 !important;
   text-shadow: 0 1px 8px rgba(0,0,0,0.70) !important;
@@ -30416,14 +30453,14 @@ footer, .footer {
       inset 0 2px 0 rgba(255,255,255,0.24),
       0 8px 32px rgba(0,0,0,0.45) !important;
   }
-  .gate-card h2,
-  #gateAsk h2 {
+  .gate-card .gate-title,
+  #gateAsk .gate-title {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     text-shadow: 0 1px 8px rgba(0,0,0,0.85) !important;
   }
-  .gate-card h2 span,
-  #gateAsk h2 span {
+  .gate-card .gate-title span,
+  #gateAsk .gate-title span {
     color: #D4A840 !important;
     -webkit-text-fill-color: #D4A840 !important;
     text-shadow: 0 1px 6px rgba(0,0,0,0.75) !important;
@@ -30932,97 +30969,11 @@ textarea::placeholder {
   -webkit-text-fill-color: #ffffff !important;
 }
 
-/* ── 21. GATE GLASS CARD (admin-dashboard / admin-gate) ─────── */
-.gate-glass-card {
-  background: rgba(255,255,255,0.06) !important;
-  background-image: none !important;
-  backdrop-filter: blur(0px) saturate(1.6) !important;
-  -webkit-backdrop-filter: blur(0px) saturate(1.6) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  border-top-color: rgba(255,255,255,0.28) !important;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.20),
-    0 8px 40px rgba(0,0,0,0.55),
-    0 32px 80px rgba(0,0,0,0.40) !important;
-}
-.gate-glass-card .gate-headline,
-.gate-glass-card .gate-brand-name {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important;
-}
-.gate-glass-card .gate-sub {
-  color: rgba(225,235,255,0.90) !important;
-  -webkit-text-fill-color: rgba(225,235,255,0.90) !important;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
-}
-.gate-glass-card .gate-eyebrow {
-  color: rgba(210,195,165,0.88) !important;
-  -webkit-text-fill-color: rgba(210,195,165,0.88) !important;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.60) !important;
-}
-.gate-glass-card .gate-label {
-  color: rgba(210,195,165,0.88) !important;
-  -webkit-text-fill-color: rgba(210,195,165,0.88) !important;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.60) !important;
-}
-.gate-glass-card .gate-brand-sub {
-  color: rgba(200,215,240,0.80) !important;
-  -webkit-text-fill-color: rgba(200,215,240,0.80) !important;
-}
-.gate-glass-card .gate-status-text {
-  color: rgba(185,200,228,0.75) !important;
-  -webkit-text-fill-color: rgba(185,200,228,0.75) !important;
-}
-.gate-glass-card .gate-input {
-  background: rgba(255,255,255,0.07) !important;
-  backdrop-filter: blur(0px) !important;
-  -webkit-backdrop-filter: blur(0px) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-.gate-glass-card .gate-input::placeholder {
-  color: rgba(255,255,255,0.45) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
-}
-
-/* ── 22. AUTH OVERLAY (admin-gate.css context) ───────────────── */
-.auth-card {
-  background: rgba(255,255,255,0.07) !important;
-  background-image: none !important;
-  backdrop-filter: blur(0px) saturate(1.6) !important;
-  -webkit-backdrop-filter: blur(0px) saturate(1.6) !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  border-top-color: rgba(255,255,255,0.32) !important;
-}
-.auth-title {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.80) !important;
-}
-.auth-sub {
-  color: rgba(220,232,255,0.88) !important;
-  -webkit-text-fill-color: rgba(220,232,255,0.88) !important;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.65) !important;
-}
-.auth-input {
-  background: rgba(255,255,255,0.07) !important;
-  backdrop-filter: blur(0px) !important;
-  -webkit-backdrop-filter: blur(0px) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-.auth-input::placeholder {
-  color: rgba(255,255,255,0.45) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.45) !important;
-}
-#password-panel > p {
-  color: rgba(210,195,165,0.90) !important;
-  -webkit-text-fill-color: rgba(210,195,165,0.90) !important;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.65) !important;
-}
+/* Old admin-dashboard/admin-gate CSS (sections 21-22) removed —
+   .gate-glass-card/.auth-card/#auth-overlay/#password-panel here
+   styled the old iframe'd admin-dashboard.html and are not used by
+   any element in index.html. The public visitor gate uses .gate-card,
+   defined elsewhere and left untouched. */
 
 
 /* ================================================================
@@ -31587,81 +31538,11 @@ body::after {
   box-shadow: none !important;
 }
 
-/* ================================================================
-   CG-17. ADMIN GATE CARD OVERRIDES
-================================================================ */
-.gate-glass-card {
-  background: rgba(255,255,255,0.00) !important;
-  background-image: none !important;
-  backdrop-filter: blur(0px) saturate(1.9) !important;
-  -webkit-backdrop-filter: blur(0px) saturate(1.9) !important;
-  border: 1px solid rgba(255,255,255,0.20) !important;
-  border-top-color: rgba(255,255,255,0.35) !important;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.25),
-    0 8px 40px rgba(0,0,0,0.50),
-    0 32px 80px rgba(0,0,0,0.35) !important;
-}
-.gate-glass-card .gate-input {
-  background: rgba(255,255,255,0.00) !important;
-  backdrop-filter: blur(0px) !important;
-  -webkit-backdrop-filter: blur(0px) !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
-}
-.gate-glass-card .gate-submit-btn {
-  background: rgba(255,255,255,0.00) !important;
-  backdrop-filter: blur(0px) !important;
-  -webkit-backdrop-filter: blur(0px) !important;
-  border: 1.5px solid rgba(255,255,255,0.30) !important;
-}
-.gate-glass-card .gate-submit-btn:hover {
-  background: rgba(255,255,255,0.06) !important;
-}
-#auth-overlay .auth-card {
-  background: rgba(255,255,255,0.00) !important;
-  background-image: none !important;
-  backdrop-filter: blur(0px) saturate(1.9) !important;
-  -webkit-backdrop-filter: blur(0px) saturate(1.9) !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
-  border-top-color: rgba(255,255,255,0.38) !important;
-  box-shadow:
-    inset 0 2px 0 rgba(255,255,255,0.28),
-    0 0 0 1px rgba(255,255,255,0.12),
-    0 16px 56px rgba(0,0,0,0.48),
-    0 4px 16px rgba(0,0,0,0.28) !important;
-}
-.auth-card {
-  background: rgba(255,255,255,0.00) !important;
-  backdrop-filter: blur(0px) saturate(1.9) !important;
-  -webkit-backdrop-filter: blur(0px) saturate(1.9) !important;
-  border: 1px solid rgba(255,255,255,0.22) !important;
-  border-top-color: rgba(255,255,255,0.38) !important;
-}
-.auth-input,
-.gate-input {
-  background: rgba(255,255,255,0.00) !important;
-  backdrop-filter: blur(0px) !important;
-  -webkit-backdrop-filter: blur(0px) !important;
-  border: 1px solid rgba(255,255,255,0.24) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-.auth-input::placeholder,
-.gate-input::placeholder {
-  color: rgba(255,255,255,0.42) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.42) !important;
-}
-.auth-input:focus,
-.gate-input:focus {
-  border-color: rgba(255,255,255,0.45) !important;
-  box-shadow:
-    inset 0 2px 6px rgba(0,0,0,0.16),
-    0 0 0 3px rgba(255,255,255,0.10) !important;
-}
-#auth-overlay {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
+/* CG-17. Old "ADMIN GATE CARD OVERRIDES" block removed — targeted
+   .gate-glass-card/.auth-card/#auth-overlay/.gate-input from the old
+   iframe'd admin-dashboard.html, none of which appear in index.html.
+   Note: .gate-input is also unused directly (public gate uses
+   #visitorName), so nothing here affected the live visitor gate. */
 
 /* ================================================================
    CG-18. MISC GLASS FRAGMENTS
@@ -31678,19 +31559,10 @@ body::after {
   border: 1px solid rgba(255,255,255,0.12) !important;
 }
 
-/* ================================================================
-   CG-19. ADMIN DASHBOARD CARDS
-================================================================ */
-.dash-card,
-.admin-card,
-.stat-card,
-.metric-card {
-  background: rgba(255,255,255,0.00) !important;
-  backdrop-filter: blur(0px) saturate(1.6) !important;
-  -webkit-backdrop-filter: blur(0px) saturate(1.6) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  box-shadow: var(--sh-glass-md) !important;
-}
+/* CG-19. Old "ADMIN DASHBOARD CARDS" block removed — .dash-card/
+   .admin-card/.stat-card/.metric-card are not used anywhere in
+   index.html. The new admin-dashboard.html is fully self-contained
+   with its own <style> block and doesn't load styles.css at all. */
 
 /* ================================================================
    CG-20. BACKDROP-FILTER FALLBACK
@@ -35118,85 +34990,729 @@ header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link:focus-visibl
 }
 
 /* ================================================================
-   MOBILE FIX PASS — lock icon removal, scroll containment,
-   and Day Theme (toggled via html.day-theme, mobile menu button)
-   Appended last in cascade — scoped, does not alter default dark
-   theme or desktop admin lock button.
+   CAREER TIMELINE — Experience section redesign
+   Vertical timeline: dot + connecting rail + card, all roles
+   visible at once for fast recruiter scanning.
 ================================================================ */
 
-/* 1. Force-hide the circular admin lock icon on mobile navbar
-      (redundant safety net on top of the existing 900px rule) */
-@media (max-width: 900px) {
-  #topNav .nav-inner a.nav-admin-btn,
-  .nav-admin-btn {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
+.career-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(14px, 2.4vw, 28px);
+}
+
+.timeline-rail {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 6px;
+}
+
+.timeline-dot {
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #ffffff !important;
+  background: linear-gradient(150deg, var(--cyan) 0%, #b9793a 100%) !important;
+  box-shadow:
+    0 0 0 4px rgba(230,160,86,0.14),
+    0 4px 14px rgba(120,74,20,0.28) !important;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-line {
+  flex: 1 1 auto;
+  width: 2px;
+  min-height: 24px;
+  margin-top: 4px;
+  background: linear-gradient(180deg, rgba(230,160,86,0.45), rgba(230,160,86,0.08));
+}
+
+.timeline-card {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.timeline-item-last .timeline-card {
+  margin-bottom: 0 !important;
+}
+
+/* ── Meta chips: date / location / industry ── */
+.exp-date-chip,
+.exp-industry-chip {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600 !important;
+}
+
+.exp-date-chip i,
+.exp-industry-chip i {
+  font-size: 9px;
+  opacity: 0.85;
+}
+
+.exp-industry-chip {
+  background: rgba(230,160,86,0.10) !important;
+  color: #8a5a1e !important;
+  -webkit-text-fill-color: #8a5a1e !important;
+  border-color: rgba(230,160,86,0.24) !important;
+}
+
+/* ── Key responsibilities: the 20-second scan ── */
+.timeline-resp-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 4px 0 10px;
+}
+
+.timeline-first-job-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  padding: 2px 9px;
+  border-radius: var(--r-pill);
+  background: rgba(230,160,86,0.14);
+  color: #8a5a1e;
+}
+
+.timeline-responsibilities {
+  margin-bottom: 6px;
+}
+
+.timeline-responsibilities-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 18px;
+}
+
+.timeline-responsibilities-grid .exp-bullet {
+  margin-bottom: 0;
+}
+
+/* ── Progressive disclosure: deeper stats / quotes / letters ── */
+.timeline-more {
+  margin-top: 14px;
+  border-top: 1px solid rgba(120,90,50,0.14);
+  padding-top: 14px;
+}
+
+.timeline-more summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #8a5a1e;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+.timeline-more summary::-webkit-details-marker { display: none; }
+
+.timeline-more summary::before {
+  content: '\f078';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 9px;
+  transition: transform 0.25s ease;
+}
+
+.timeline-more[open] summary::before {
+  transform: rotate(180deg);
+}
+
+.timeline-more[open] summary {
+  margin-bottom: 14px;
+}
+
+/* ================================================================
+   CASE STUDY ACCORDION — Problem / My Role / Environment /
+   Approach / Technologies / Outcome. Mirrors .timeline-more so the
+   Projects section stays visually consistent with the rest of the
+   page while keeping each card collapsed by default.
+================================================================ */
+.cs-case-study {
+  margin-top: 12px;
+  border-top: 1px solid rgba(120,90,50,0.14);
+  padding-top: 12px;
+}
+
+.cs-case-study summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #8a5a1e;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  user-select: none;
+}
+
+.cs-case-study summary::-webkit-details-marker { display: none; }
+
+.cs-case-study summary::before {
+  content: '\f078';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 9px;
+  transition: transform 0.25s ease;
+}
+
+.cs-case-study[open] summary::before {
+  transform: rotate(180deg);
+}
+
+.cs-case-study[open] summary {
+  margin-bottom: 14px;
+}
+
+.cs-case-study-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cs-field {
+  padding-bottom: 2px;
+}
+
+.cs-field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ff-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 4px;
+}
+
+.cs-field-label i {
+  font-size: 10px;
+  color: var(--cyan);
+}
+
+.cs-field-text {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.cs-field .mc-tools { margin: 0; }
+.cs-field .cs-outcome-premium { margin: 0; padding-left: 0; padding-right: 0; }
+
+@media (max-width: 640px) {
+  .cs-case-study-body { gap: 10px; }
+}
+
+/* ================================================================
+   CYBERSECURITY SECTION — Applied vs Working-Knowledge tiering
+   Reuses .arsenal-grid / .ac-premium card chrome for visual
+   consistency with the Arsenal section; adds tier labels only.
+================================================================ */
+.cyb-section-intro {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  max-width: 620px;
+  margin: -6px auto 22px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.cyb-tier { margin-bottom: 10px; }
+.cyb-tier:last-of-type { margin-bottom: 14px; }
+
+.cyb-tier .ac-skills { margin-bottom: 0; }
+
+.cyb-tier-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 6px;
+}
+
+.cyb-tier-applied .cyb-tier-label      { color: #009944; }
+.cyb-tier-applied .cyb-tier-label i    { color: #009944; }
+.cyb-tier-knowledge .cyb-tier-label    { color: var(--ink-4); }
+.cyb-tier-knowledge .cyb-tier-label i  { color: var(--ink-4); }
+
+.cyb-tier-knowledge .ac-skill {
+  border-style: dashed;
+  opacity: 0.82;
+}
+
+.cyb-applied-only-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: var(--ink-3);
+  font-style: italic;
+  margin: 0 0 12px;
+}
+
+/* ── Responsive: mobile ── */
+@media (max-width: 640px) {
+  .timeline-item {
+    gap: 12px;
+  }
+  .timeline-dot {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    font-size: 12px;
+  }
+  .timeline-responsibilities-grid {
+    grid-template-columns: 1fr;
+  }
+  .timeline-resp-label {
+    flex-wrap: wrap;
   }
 }
 
-/* 2. Scroll containment — stop rubber-band / runaway scroll on mobile */
-html, body {
-  overscroll-behavior-y: none !important;
-}
+/* ================================================================
+   MOBILE RESPONSIVENESS AUDIT FIXES — Aug 2026
+   Targeted, additive fixes for real horizontal-overflow bugs found
+   by testing at 320 / 375 / 390 / 430 / 768px. Placed at the very
+   end of the file so they win the cascade over the many earlier
+   (often duplicated) rules, without having to rewrite those rules.
+   Nothing here changes desktop layout — all wrapped in max-width
+   media queries.
+================================================================ */
+
+/* ── Arsenal skill-card headers: icon + title + tag pill were
+   overflowing their card at narrow widths because the header row
+   never got permission to shrink or wrap. ───────────────────── */
 @media (max-width: 900px) {
-  html, body {
-    overflow-x: hidden !important;
-    overscroll-behavior: none !important;
-    height: auto !important;
+  .ac-header {
+    flex-wrap: wrap !important;
+    row-gap: 6px !important;
+    min-width: 0 !important;
+  }
+  .ac-header-text {
+    min-width: 0 !important;
+    flex-basis: 0 !important;
+    flex-grow: 1 !important;
+  }
+  .ac-title {
+    overflow-wrap: anywhere !important;
+  }
+  .ac-enterprise-tag {
+    flex-shrink: 0 !important;
   }
 }
 
-/* 3. DAY THEME — activated by toggling class "day-theme" on <html> */
-html.day-theme {
-  --ink: #1C1C1E !important;
-  --ink-2: #3A3A3C !important;
-  --ink-3: #6E6E73 !important;
-  --ink-4: #8E8E93 !important;
-  --text-h: #1C1C1E !important;
-  --text-body: #2C2C2E !important;
-  --text-2: #3A3A3C !important;
-  --text-3: #6E6E73 !important;
-  --text-4: #8E8E93 !important;
-  --bg: #F5F5F7 !important;
-  --bg-deep: #F5F5F7 !important;
-  --bg-surface: #FFFFFF !important;
-  --bg-section: #FAFAFA !important;
-  --glass-ultra: rgba(255,255,255,0.75) !important;
-  --glass-strong: rgba(255,255,255,0.65) !important;
-  --glass-mid: rgba(255,255,255,0.55) !important;
-  --glass-light: rgba(255,255,255,0.45) !important;
-  --glass-whisper: rgba(255,255,255,0.35) !important;
-  --glass-border: rgba(0,0,0,0.08) !important;
-  --cyan: #2563EB !important;
-  --purple: #7C3AED !important;
-  --pink: #DB2777 !important;
+/* ── Hero name-rule tag ("IT Support Engineer · ...") was
+   flex-shrink:0 next to a divider line, forcing slight overflow. */
+@media (max-width: 480px) {
+  .hero-name-rule {
+    flex-wrap: wrap !important;
+    row-gap: 4px !important;
+  }
+  .hnr-tag {
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+  }
 }
 
-html.day-theme body {
-  background: #F5F5F7 !important;
-  color: var(--text-body) !important;
+/* ── Engage/Contact section: long unbroken strings (email
+   addresses, phone numbers) were forcing .engage-left/.engage-right
+   wider than their grid track once the layout collapsed to a
+   single column, pushing the right edge off-screen. Grid items
+   need min-width:0 to be allowed to shrink below content size. ── */
+@media (max-width: 700px) {
+  .engage-left,
+  .engage-right {
+    min-width: 0 !important;
+  }
+  .er-body {
+    min-width: 0 !important;
+  }
+  .er-value,
+  .erc-sub {
+    overflow-wrap: anywhere !important;
+  }
+  .engage-status-bar {
+    row-gap: 4px !important;
+  }
 }
-html.day-theme body::before,
-html.day-theme body::after { opacity: 0.15 !important; }
 
-html.day-theme #topNav,
-html.day-theme .top-nav {
-  background: rgba(255,255,255,0.85) !important;
-  border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+/* ── Weather bar: fixed, centered, white-space:nowrap pill with no
+   width cap — on narrow phones its content is wider than the
+   screen, so it bleeds off both edges. Let it shrink to the
+   viewport and truncate the weather text instead. ──────────── */
+@media (max-width: 480px) {
+  .weather-bar {
+    max-width: calc(100vw - 24px) !important;
+    padding: 4px 10px !important;
+    gap: 6px !important;
+    font-size: 10px !important;
+  }
+  .wb-weather-text {
+    max-width: 30vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .wb-date { display: none; }
 }
-html.day-theme .nav-link,
-html.day-theme .nav-mob-link,
-html.day-theme .nav-logo-name,
-html.day-theme .nav-logo-role { color: #1C1C1E !important; }
 
-html.day-theme .nav-mob-drawer {
-  background: linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(240,244,252,0.94) 100%) !important;
+/* ── Small pill badges (cert / education / experience-stat chips):
+   fine individually, but at 320px a couple run a few px past their
+   wrapped row. Let them wrap and shrink instead of overflowing. ── */
+@media (max-width: 480px) {
+  .ac-cert-badge,
+  .exp-stat-chip {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    white-space: normal !important;
+  }
 }
 
-html.day-theme #dayThemeIcon:before { content: "\f186"; } /* fa-moon when active */
+/* ── Primary WhatsApp/LinkedIn CTA buttons in the Engage section:
+   a broad `[class*="-btn"]` "compact button" rule elsewhere in this
+   file unintentionally catches .engage-cta-btn too and shrinks it
+   to ~30px tall — under the ~44px touch-target minimum. Restore a
+   comfortable tap size without touching that shared wildcard rule
+   (it's used by many other buttons intentionally). ────────────── */
+@media (max-width: 900px) {
+  .engage-cta-btn.engage-cta-btn.engage-cta-btn.engage-cta-btn.engage-cta-btn.engage-cta-btn {
+    padding: 13px 16px !important;
+    font-size: 13.5px !important;
+    min-height: 44px !important;
+  }
+}
 
-html.day-theme section,
-html.day-theme .glass-card {
-  color: #1C1C1E !important;
+/* ── General safety net: nothing on the page should be able to
+   force horizontal scroll on mobile. Belt-and-braces on top of the
+   existing html/body overflow-x:hidden rule. ────────────────── */
+@media (max-width: 900px) {
+  img, svg, video, iframe, table {
+    max-width: 100% !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RECRUITER VIEW — button + quick-jump panel
+   Self-contained, unique class names only (rv-/recruiter-* prefix)
+   so nothing here collides with existing rules elsewhere in file.
+══════════════════════════════════════════════════════════════ */
+
+.recruiter-view-btn {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #1a1508 !important;
+  background: linear-gradient(158deg, #F3D889 0%, #D4AF37 55%, #B8912A 100%);
+  border: none;
+  outline: 1px solid rgba(255,255,255,0.5);
+  outline-offset: -1px;
+  border-top: 1.5px solid rgba(255,255,255,.65);
+  border-bottom: 1px solid rgba(0,0,0,.28);
+  box-shadow:
+    0 0 0 1px rgba(180,140,20,.4),
+    0 4px 14px rgba(180,140,20,.42),
+    0 10px 28px rgba(180,140,20,.24);
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+.recruiter-view-btn i { font-size: 12px; }
+.recruiter-view-btn:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow:
+    0 0 0 1px rgba(180,140,20,.5),
+    0 8px 22px rgba(180,140,20,.55),
+    0 16px 36px rgba(180,140,20,.3);
+}
+.recruiter-view-btn:active { transform: translateY(0) scale(0.97); }
+
+@media (max-width: 900px) {
+  .recruiter-view-btn { display: none !important; }
+}
+
+.recruiter-view-mob-btn {
+  display: flex !important;
+  align-items: center; gap: 10px;
+  cursor: pointer;
+  background: linear-gradient(158deg, #F3D889 0%, #D4AF37 55%, #B8912A 100%) !important;
+  color: #1a1508 !important;
+  -webkit-text-fill-color: #1a1508 !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  margin: 4px 0;
+  box-shadow: 0 4px 14px rgba(180,140,20,.32);
+}
+
+/* ── Panel shell ── */
+.recruiter-panel { position: fixed; inset: 0; z-index: 100000; }
+.recruiter-panel[hidden] { display: none; }
+
+.recruiter-panel-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(8,8,12,0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: rvFadeIn 0.25s ease both;
+}
+
+.recruiter-panel-card {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 440px);
+  max-height: 86vh;
+  overflow-y: auto;
+  background: linear-gradient(165deg, rgba(30,26,18,0.97) 0%, rgba(18,16,12,0.98) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(212,175,55,0.35);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08);
+  padding: 26px 22px 20px;
+  animation: rvSlideUp 0.32s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes rvFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rvSlideUp {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.recruiter-panel-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+.recruiter-panel-close:hover { background: rgba(255,255,255,0.14); transform: rotate(90deg); }
+
+.recruiter-panel-head { padding-right: 30px; margin-bottom: 18px; }
+.recruiter-panel-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: #D4AF37;
+  margin-bottom: 8px;
+}
+.recruiter-panel-head h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 21px; font-weight: 700;
+  color: #f5f0e6;
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+.recruiter-panel-head p {
+  font-size: 13px;
+  color: rgba(245,240,230,0.62);
+  margin: 0;
+}
+
+.recruiter-panel-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.recruiter-panel-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.recruiter-panel-item:hover {
+  background: rgba(212,175,55,0.10);
+  border-color: rgba(212,175,55,0.35);
+  transform: translateX(3px);
+}
+.rpi-icon {
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(212,175,55,0.14);
+  color: #D4AF37;
+  font-size: 14px;
+}
+.rpi-text { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+.rpi-label { font-size: 13.5px; font-weight: 700; color: #f5f0e6; }
+.rpi-sub { font-size: 11.5px; color: rgba(245,240,230,0.55); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rpi-arrow { font-size: 11px; color: rgba(245,240,230,0.35); flex-shrink: 0; }
+
+@media (max-width: 480px) {
+  .recruiter-panel-card { padding: 22px 16px 16px; border-radius: 16px; }
+  .recruiter-panel-head h3 { font-size: 18px; }
+}
+
+body.recruiter-panel-open { overflow: hidden; }
+
+/* Momentary highlight so a jumped-to section is obvious */
+.recruiter-target-flash {
+  animation: rvTargetFlash 1.6s ease;
+}
+@keyframes rvTargetFlash {
+  0%   { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+  15%  { box-shadow: 0 0 0 6px rgba(212,175,55,0.28); }
+  100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   TROUBLESHOOTING LAB — interactive diagnostic demo
+   Prefixed tsl- so nothing collides with existing rules.
+══════════════════════════════════════════════════════════════ */
+
+.tsl-wrap { display: flex; flex-direction: column; gap: 22px; }
+
+.tsl-scenarios {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 720px) {
+  .tsl-scenarios { grid-template-columns: repeat(2, 1fr); }
+}
+
+.tsl-scenario-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 9px;
+  padding: 18px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  color: rgba(255,255,255,0.86);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  min-height: 44px;
+}
+.tsl-scenario-icon { font-size: 19px; color: #D4AF37; }
+.tsl-scenario-btn:hover {
+  background: rgba(212,175,55,0.10);
+  border-color: rgba(212,175,55,0.35);
+  transform: translateY(-2px);
+}
+.tsl-scenario-btn.tsl-active {
+  background: linear-gradient(158deg, rgba(243,216,137,0.20) 0%, rgba(212,175,55,0.14) 100%);
+  border-color: #D4AF37;
+  box-shadow: 0 6px 20px rgba(180,140,20,.22);
+  color: #fff;
+}
+.tsl-scenario-btn.tsl-active .tsl-scenario-icon { color: #F3D889; }
+
+.tsl-panel {
+  border-radius: 16px;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.09);
+  padding: 24px 22px;
+}
+
+.tsl-panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+.tsl-panel-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: #f5f0e6; margin: 0; }
+.tsl-panel-badge {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  color: #D4AF37;
+  background: rgba(212,175,55,0.12);
+  border: 1px solid rgba(212,175,55,0.30);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.tsl-panel-desc { font-size: 13px; color: rgba(245,240,230,0.60); margin: 6px 0 20px; }
+
+.tsl-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+
+.tsl-step {
+  position: relative;
+  display: flex; gap: 14px;
+  padding: 0 0 22px;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: tslStepIn 0.4s ease forwards;
+}
+.tsl-step:last-child { padding-bottom: 0; }
+@keyframes tslStepIn { to { opacity: 1; transform: translateY(0); } }
+
+.tsl-step-rail { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.tsl-step-num {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12.5px; font-weight: 800;
+  background: linear-gradient(158deg, #F3D889 0%, #D4AF37 60%, #B8912A 100%);
+  color: #1a1508;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(180,140,20,.30);
+}
+.tsl-step-line {
+  width: 2px; flex: 1;
+  min-height: 14px;
+  margin-top: 4px;
+  background: linear-gradient(rgba(212,175,55,0.55), rgba(212,175,55,0.10));
+}
+.tsl-step:last-child .tsl-step-line { display: none; }
+
+.tsl-step-body { padding-top: 2px; }
+.tsl-step-title { font-size: 14.5px; font-weight: 700; color: #f5f0e6; margin: 0 0 3px; }
+.tsl-step-detail { font-size: 12.5px; color: rgba(245,240,230,0.58); margin: 0; line-height: 1.55; }
+
+.tsl-panel-outcome {
+  margin-top: 6px;
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 13px 14px;
+  border-radius: 12px;
+  background: rgba(120,200,140,0.08);
+  border: 1px solid rgba(120,200,140,0.28);
+}
+.tsl-panel-outcome i { color: #7fd18f; font-size: 15px; margin-top: 1px; }
+.tsl-panel-outcome p { margin: 0; font-size: 12.5px; color: rgba(245,240,230,0.75); line-height: 1.5; }
+
+@media (max-width: 480px) {
+  .tsl-panel { padding: 18px 16px; }
 }

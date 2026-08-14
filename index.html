@@ -10,17 +10,57 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <!-- Safari scroll bounce fix -->
   <meta name="format-detection" content="telephone=no">
-  <title>Sajid Mehmood — IT Support Engineer</title>
+  <title>Sajid Mehmood — IT Support Engineer | Qatar</title>
   <link rel="icon" href="logo.png" type="image/png">
+  <link rel="canonical" href="https://sajidmk.com/">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Sajid Mehmood — IT Support Engineer">
   <meta property="og:description" content="CCNA Certified IT Support Engineer with 4+ years across aviation and healthcare in Qatar, and government immigration sector experience in the UAE.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="photo.jpg">
+  <meta property="og:url" content="https://sajidmk.com/">
+  <meta property="og:image" content="https://sajidmk.com/photo.jpg">
+  <meta property="og:site_name" content="Sajid Mehmood — Portfolio">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Sajid Mehmood — IT Support Engineer">
   <meta name="twitter:description" content="CCNA Certified IT Support Engineer | Aviation &amp; Healthcare — Qatar | Government Immigration — UAE">
+  <meta name="twitter:image" content="https://sajidmk.com/photo.jpg">
+
+  <!-- Structured data: Person + WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "name": "Sajid Mehmood",
+        "jobTitle": "IT Support Engineer",
+        "url": "https://sajidmk.com/",
+        "image": "https://sajidmk.com/photo.jpg",
+        "email": "mailto:info@sajidmk.com",
+        "telephone": "+974-6696-9598",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Doha",
+          "addressCountry": "QA"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/sajid-mk-1b3954333",
+          "https://www.instagram.com/5aj1d._",
+          "https://x.com/im_sajidmehmood",
+          "https://t.me/imsajidmehmood"
+        ],
+        "knowsAbout": ["Network Infrastructure", "CCNA", "ITIL", "Cybersecurity", "IT Support", "Systems Engineering"]
+      },
+      {
+        "@type": "WebSite",
+        "name": "Sajid Mehmood — Portfolio",
+        "url": "https://sajidmk.com/",
+        "description": "Portfolio of Sajid Mehmood, CCNA Certified IT Support Engineer with experience across aviation, healthcare, and government infrastructure in Qatar and the UAE."
+      }
+    ]
+  }
+  </script>
 
   <!-- Critical resource preloads — LCP optimization -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -149,22 +189,24 @@
         <div class="gate-logo">Sajid MK</div>
         <div class="gate-logo-line"></div>
 
-        <h2>Hey, <span>Visitor.</span></h2>
+        <p class="gate-title">Before you <span>continue</span></p>
         <p class="gate-subtitle">
-            Welcome to my digital portfolio. Explore real-world IT projects, technical expertise, certifications, and professional achievements crafted with passion and precision.
+            Access my professional documents.
         </p>
 
         <div class="gate-fields">
           <div class="gate-field">
-            <label for="visitorName">Your Name</label>
+            <label for="visitorName">Your name</label>
             <input type="text" id="visitorName" name="visitorName" placeholder="e.g. Alex Johnson" autocomplete="given-name" maxlength="48" aria-describedby="visitorNameHint">
-            <span id="visitorNameHint" style="display:none;">Enter your name to personalise the greeting</span>
+            <span id="visitorNameHint" style="display:none;">Enter your name to continue</span>
           </div>
         </div>
 
-        <button class="gate-btn" id="gateContinueBtn">Continue &rarr;</button>
-        <p style="text-align:center; font-size:14px; color:rgba(255,255,255,0.75); margin-top:-6px;">
-          Takes 2 seconds &nbsp;·&nbsp; No account needed
+        <button class="gate-btn" id="gateContinueBtn">Continue</button>
+        <button class="gate-cancel-btn" id="gateCancelBtn" type="button">Cancel</button>
+
+        <p class="gate-privacy-note">
+          Your name is used only to personalize your visit and improve portfolio analytics. We do not request your email or phone number.
         </p>
       </div>
 
@@ -176,7 +218,7 @@
             <path d="M14 25l7 7 13-14" stroke="#D4A840" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h2 id="welcomeHeading" style="margin-top:18px; color:#ffffff;">Welcome,<br><span id="welcomeName"></span><span style="color:#D4A840"> !</span></h2>
+        <p id="welcomeHeading" class="gate-title" style="margin-top:18px; color:#ffffff;">Welcome,<br><span id="welcomeName"></span><span style="color:#D4A840"> !</span></p>
         <p class="gate-subtitle" style="margin:14px auto 32px; text-align:center; color:rgba(255,255,255,0.90);">
           Great to have you here. Explore the portfolio and feel free to reach out.
         </p>
@@ -221,7 +263,7 @@
       <div class="nav-logo-wrapper" id="navLogoWrapper">
         <a href="#home" class="nav-logo-link nav-anchor" id="navLogoAnchor">
           <div class="nav-logo-img-wrap">
-            <img src="logo.png" alt="SM" loading="eager">
+            <img src="logo.png" alt="Sajid Mehmood logo" loading="eager">
           </div>
           <div class="nav-logo-divider"></div>
           <div class="nav-logo-text">
@@ -239,6 +281,8 @@
         <a href="#projects"       class="nav-link nav-anchor">Projects</a>
         <a href="#education"      class="nav-link nav-anchor">Education</a>
         <a href="#arsenal"        class="nav-link nav-anchor">Arsenal</a>
+        <a href="#cybersecurity"  class="nav-link nav-anchor">Cybersecurity</a>
+        <a href="#troubleshooting-lab" class="nav-link nav-anchor">Lab</a>
         <a href="#achievements"   class="nav-link nav-anchor">Awards</a>
         <a href="#fieldwork"      class="nav-link nav-anchor">Hands-On</a>
         <a href="#references"     class="nav-link nav-anchor">References</a>
@@ -252,8 +296,14 @@
         <span class="nmt-bar nmt-bar-3"></span>
       </button>
 
+      <!-- Recruiter Fast Pass — jumps straight to hiring-relevant sections -->
+      <button type="button" id="recruiterViewBtn" class="recruiter-view-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="recruiterPanel">
+        <i class="fas fa-bolt" aria-hidden="true"></i>
+        <span>Recruiter Fast Pass</span>
+      </button>
+
       <!-- Admin login — desktop nav bar -->
-      <a href="#" onclick="openAdminDashboard();return false;" class="nav-admin-btn" title="Admin Login" aria-label="Admin login">
+      <a href="admin-dashboard.html" target="_blank" rel="noopener" class="nav-admin-btn" title="Admin Login" aria-label="Admin login">
         <i class="fas fa-lock"></i>
       </a>
     </div>
@@ -266,17 +316,88 @@
       <a href="#projects"       class="nav-mob-link nav-anchor">Projects</a>
       <a href="#education"      class="nav-mob-link nav-anchor">Education</a>
       <a href="#arsenal"        class="nav-mob-link nav-anchor">Arsenal</a>
+      <a href="#cybersecurity"  class="nav-mob-link nav-anchor">Cybersecurity</a>
+      <a href="#troubleshooting-lab" class="nav-mob-link nav-anchor">Lab</a>
       <a href="#achievements"   class="nav-mob-link nav-anchor">Awards</a>
       <a href="#fieldwork"      class="nav-mob-link nav-anchor">Hands-On</a>
       <a href="#references"     class="nav-mob-link nav-anchor">References</a>
       <a href="#quotes"         class="nav-mob-link nav-anchor">Quotes</a>
       <a href="#contact"        class="nav-mob-link nav-anchor">Contact</a>
-      <a href="#" onclick="toggleDayTheme();return false;" class="nav-mob-link" id="dayThemeToggle">
-        <i class="fas fa-sun" id="dayThemeIcon"></i>
-        <span id="dayThemeLabel">Day Theme</span>
-      </a>
+      <button type="button" class="nav-mob-link recruiter-view-mob-btn" id="recruiterViewMobBtn" aria-haspopup="dialog" aria-controls="recruiterPanel">
+        <i class="fas fa-bolt" aria-hidden="true"></i> Recruiter Fast Pass
+      </button>
+      <a href="admin-dashboard.html" target="_blank" rel="noopener" class="nav-mob-link">Admin Login</a>
     </nav>
   </header>
+
+  <!-- ================================================================
+       RECRUITER VIEW PANEL
+       Quick-jump list of the 7 things a recruiter looks for first.
+  ================================================================ -->
+  <div id="recruiterPanel" class="recruiter-panel" role="dialog" aria-modal="true" aria-labelledby="recruiterPanelTitle" hidden>
+    <div class="recruiter-panel-backdrop" id="recruiterPanelBackdrop"></div>
+    <div class="recruiter-panel-card">
+      <button type="button" class="recruiter-panel-close" id="recruiterPanelClose" aria-label="Close recruiter view">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <div class="recruiter-panel-head">
+        <span class="recruiter-panel-eyebrow"><i class="fas fa-bolt"></i> 60-second recruiter path</span>
+        <h3 id="recruiterPanelTitle">Everything you need, in one tap</h3>
+        <p>The essentials — jump straight to any of them.</p>
+      </div>
+      <ul class="recruiter-panel-list">
+        <li>
+          <a href="#home" class="recruiter-panel-item nav-anchor" data-recruiter-close>
+            <span class="rpi-icon"><i class="fas fa-id-badge"></i></span>
+            <span class="rpi-text"><span class="rpi-label">Name</span><span class="rpi-sub">Sajid Mehmood</span></span>
+            <i class="fas fa-chevron-right rpi-arrow"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#home" class="recruiter-panel-item nav-anchor" data-recruiter-close>
+            <span class="rpi-icon"><i class="fas fa-briefcase"></i></span>
+            <span class="rpi-text"><span class="rpi-label">Job Title</span><span class="rpi-sub">IT Support Engineer</span></span>
+            <i class="fas fa-chevron-right rpi-arrow"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#experience" class="recruiter-panel-item nav-anchor" data-recruiter-close>
+            <span class="rpi-icon"><i class="fas fa-timeline"></i></span>
+            <span class="rpi-text"><span class="rpi-label">Experience</span><span class="rpi-sub">4+ years · Qatar &amp; UAE</span></span>
+            <i class="fas fa-chevron-right rpi-arrow"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#arsenal" class="recruiter-panel-item nav-anchor" data-recruiter-close>
+            <span class="rpi-icon"><i class="fas fa-toolbox"></i></span>
+            <span class="rpi-text"><span class="rpi-label">Skills</span><span class="rpi-sub">Networking, Systems, Security &amp; more</span></span>
+            <i class="fas fa-chevron-right rpi-arrow"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#certifications" class="recruiter-panel-item nav-anchor" data-recruiter-close>
+            <span class="rpi-icon"><i class="fas fa-certificate"></i></span>
+            <span class="rpi-text"><span class="rpi-label">Certifications</span><span class="rpi-sub">CCNA 200-301 &amp; more</span></span>
+            <i class="fas fa-chevron-right rpi-arrow"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="recruiter-panel-item" id="recruiterCvItem" onclick="openPdfModal();return false;" data-recruiter-close>
+            <span class="rpi-icon"><i class="fas fa-file-arrow-down"></i></span>
+            <span class="rpi-text"><span class="rpi-label">CV</span><span class="rpi-sub">View or download the PDF résumé</span></span>
+            <i class="fas fa-chevron-right rpi-arrow"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#contact" class="recruiter-panel-item nav-anchor" data-recruiter-close>
+            <span class="rpi-icon"><i class="fas fa-envelope"></i></span>
+            <span class="rpi-text"><span class="rpi-label">Contact</span><span class="rpi-sub">Email, phone &amp; WhatsApp</span></span>
+            <i class="fas fa-chevron-right rpi-arrow"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <!-- WEATHER BAR -->
   <div id="weatherBar" class="weather-bar">
@@ -330,7 +451,7 @@
         <div class="hero-type-col" data-aos="fade-left" data-aos-duration="1100" data-aos-delay="200">
           <div class="hero-eyebrow-row">
             <span class="hero-eyebrow-pulse"></span>
-            <span class="hero-eyebrow-text">📍 Doha, Qatar &nbsp;·&nbsp; IT Support Engineer &nbsp;·&nbsp; CCNA · ITIL</span>
+            <span class="hero-eyebrow-text">📍 Qatar &amp; UAE Experience &nbsp;·&nbsp; Infrastructure &amp; Networking &nbsp;·&nbsp; CCNA · ITIL</span>
           </div>
 
           <!-- Hero stat badges — horizontal, outside photo -->
@@ -356,7 +477,7 @@
 
           <div class="hero-name-rule">
             <div class="hnr-line"></div>
-            <span class="hnr-tag">IT Support Engineer · BSc IT</span>
+            <span class="hnr-tag">IT Support Engineer · Infrastructure &amp; Networking</span>
             <div class="hnr-line"></div>
           </div>
 
@@ -387,8 +508,9 @@
           </div>
 
           <div class="hero-ctas">
-            <a href="#projects" class="btn-primary nav-anchor">Case Studies <i class="fas fa-arrow-right"></i></a>
-            <a href="#contact"  class="btn-ghost nav-anchor">⚡ Engage</a>
+            <a href="#projects" class="btn-primary nav-anchor">View Case Studies <i class="fas fa-arrow-right"></i></a>
+            <a href="#" onclick="openPdfModal();return false;" class="btn-ghost" aria-label="Download Sajid Mehmood CV PDF"><i class="fas fa-download"></i> Download CV</a>
+            <a href="#contact" class="btn-ghost nav-anchor">Contact Me</a>
           </div>
 
           <!-- Availability Status Pills -->
@@ -669,34 +791,25 @@
 
     <div class="section-header">
       <span class="sec-eyebrow">Experience</span>
-      <h2 class="sec-title">Enterprise Journey</h2>
-    </div>
-
-    <!-- Tabs -->
-    <div class="exp-tabs-wrap">
-      <button class="exp-tab active" data-tab="tawkel" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="ALTAWKEL.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Al Tawkel
-      </button>
-      <button class="exp-tab" data-tab="elegancia" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="mmch.jpg" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Elegancia / MMCH
-      </button>
-      <button class="exp-tab" data-tab="starlink" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> PIH Group
-      </button>
-      <button class="exp-tab" data-tab="ooredoo" style="display:inline-flex;align-items:center;gap:7px;">
-        <img src="sartlink_Ooredoo.png" alt="" class="exp-tab-logo" style="height:18px;width:auto;object-fit:contain;border-radius:4px;" loading="lazy"> Ooredoo
-      </button>
+      <h2 class="sec-title">Career Timeline</h2>
+      <p class="sec-subtitle">Four roles across telecom, corporate enterprise, healthcare, and government sectors in Qatar &amp; the UAE — most recent first.</p>
     </div>
 
     <!-- CONTENT -->
     <div class="exp-content-wrap">
 
-      <!-- =========================
-       AL TAWKEL
-      ========================= -->
-      <div class="exp-panel active" id="tawkel">
+      <div class="career-timeline">
 
-        <div class="exp-card">
+      <!-- =========================
+       AL TAWKEL — most recent
+      ========================= -->
+      <div class="timeline-item">
+        <div class="timeline-rail" aria-hidden="true">
+          <span class="timeline-dot"><i class="fas fa-landmark"></i></span>
+          <span class="timeline-line"></span>
+        </div>
+
+        <div class="exp-card timeline-card">
           <div class="exp-card-header">
 
             <div class="exp-logo-wrap exp-logo-img-wrap">
@@ -705,7 +818,7 @@
 
             <div class="exp-title-group">
               <h3 class="exp-role">
-                IT Executive & Business Development
+                IT Executive &amp; Business Development
               </h3>
 
               <div class="exp-company">
@@ -713,18 +826,16 @@
               </div>
 
               <div class="exp-meta-wrap">
-                <span class="exp-meta-chip">
-                  Dubai, UAE
-                </span>
-
-                <span class="exp-meta-chip exp-current">
-                  Verified
-                </span>
+                <span class="exp-meta-chip exp-date-chip"><i class="fas fa-calendar"></i> May 2025 – Aug 2025</span>
+                <span class="exp-meta-chip"><i class="fas fa-location-dot"></i> Dubai, UAE</span>
+                <span class="exp-meta-chip exp-industry-chip"><i class="fas fa-landmark"></i> Government &amp; Immigration Services</span>
+                <span class="exp-meta-chip exp-current">Verified</span>
               </div>
             </div>
           </div>
 
-          <div class="exp-bullets">
+          <div class="timeline-resp-label">Key Responsibilities</div>
+          <div class="exp-bullets timeline-responsibilities">
 
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
@@ -748,30 +859,39 @@
 
           </div>
 
-          <div class="exp-quote">
-            “Sajid brought an exceptional level of initiative and technical clarity to Al Tawkel.”
-          </div>
+          <details class="timeline-more">
+            <summary>Reference &amp; documentation</summary>
 
-          <div class="exp-quote-author">
-            — Director, Al Tawkel Immigration Center
-          </div>
+            <div class="exp-quote">
+              “Sajid brought an exceptional level of initiative and technical clarity to Al Tawkel.”
+            </div>
 
-          <div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;">
-            <a href="https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=drive_link"
-               target="_blank" rel="noopener noreferrer"
-               class="btn-sm-gold" style="display:inline-flex;gap:.4rem;align-items:center;color:#7209b7;">
-              <i class="fas fa-file-contract" style="color:#7209b7;"></i> Experience Letter
-            </a>
-          </div>
+            <div class="exp-quote-author">
+              — Director, Al Tawkel Immigration Center
+            </div>
+
+            <div style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap;">
+              <a href="https://drive.google.com/file/d/1N8q3F1iHs38fhDz8FI1teS1ZOXaQ6CYP/view?usp=drive_link"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn-sm-gold" style="display:inline-flex;gap:.4rem;align-items:center;color:#7209b7;">
+                <i class="fas fa-file-contract" style="color:#7209b7;"></i> Experience Letter
+              </a>
+            </div>
+          </details>
 
         </div>
       </div>
 
-            <!-- =========================
+      <!-- =========================
        ELEGANCIA / MMCH
       ========================= -->
-      <div class="exp-panel" id="elegancia">
-        <div class="exp-card">
+      <div class="timeline-item">
+        <div class="timeline-rail" aria-hidden="true">
+          <span class="timeline-dot"><i class="fas fa-hospital"></i></span>
+          <span class="timeline-line"></span>
+        </div>
+
+        <div class="exp-card timeline-card">
           <div class="exp-card-header">
             <div class="exp-logo-wrap exp-logo-img-wrap">
               <img src="mmch.jpg" alt="Military Medical City Hospital" class="exp-logo-img" loading="lazy">
@@ -780,12 +900,26 @@
               <h3 class="exp-role">IT Support Engineer</h3>
               <div class="exp-company">Elegancia Healthcare &middot; Military Medical City Hospital (MMCH)</div>
               <div class="exp-meta-wrap">
-                <span class="exp-meta-chip">Nov 2023 &ndash; Feb 2024</span>
-                <span class="exp-meta-chip">Al-Rayyan, Qatar</span>
+                <span class="exp-meta-chip exp-date-chip"><i class="fas fa-calendar"></i> Nov 2023 &ndash; Feb 2024</span>
+                <span class="exp-meta-chip"><i class="fas fa-location-dot"></i> Al-Rayyan, Qatar</span>
+                <span class="exp-meta-chip exp-industry-chip"><i class="fas fa-hospital"></i> Healthcare</span>
                 <span class="exp-meta-chip exp-current">Verified</span>
               </div>
             </div>
           </div>
+
+          <div class="timeline-resp-label">Key Responsibilities</div>
+          <div class="exp-bullets timeline-responsibilities timeline-responsibilities-grid">
+            <div class="exp-bullet"><i class="fas fa-circle"></i> MMCH (Primary Site, Al-Rayyan) — 120–140 daily tickets via ManageEngine</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> KMC (Korean Medical Center, Lusail) — deployments &amp; server room inventory</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> TVH (The View Hospital) — end-user support &amp; full serial number audit</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> High-priority incident handling — EMR, network &amp; workstation escalations</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> EMR application support — zero downtime across all three sites</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> L1/L2 escalation &amp; preventive maintenance across all sites</div>
+          </div>
+
+          <details class="timeline-more">
+            <summary>Full site breakdown, stats &amp; reference</summary>
 
           <div class="exp-stats">
             <div class="exp-stat-chip">3 Hospital Sites</div>
@@ -875,14 +1009,20 @@
               <i class="fas fa-file-contract" style="color:#e85d04;"></i> Experience Letter
             </a>
           </div>
+          </details>
         </div>
       </div>
 
-            <!-- =========================
+      <!-- =========================
        STARLINK / PIH
       ========================= -->
-      <div class="exp-panel" id="starlink">
-        <div class="exp-card">
+      <div class="timeline-item">
+        <div class="timeline-rail" aria-hidden="true">
+          <span class="timeline-dot"><i class="fas fa-building-columns"></i></span>
+          <span class="timeline-line"></span>
+        </div>
+
+        <div class="exp-card timeline-card">
           <div class="exp-card-header">
             <div class="exp-logo-wrap exp-logo-img-wrap" style="background:#fff;">
               <img src="sartlink_Ooredoo.png" alt="Starlink - Power International Holding" class="exp-logo-img" loading="lazy">
@@ -891,12 +1031,26 @@
               <h3 class="exp-role">IT Support Engineer</h3>
               <div class="exp-company">Star Link &mdash; Power International Holding (PIH Group)</div>
               <div class="exp-meta-wrap">
-                <span class="exp-meta-chip">Feb 2022 &ndash; Nov 2023</span>
-                <span class="exp-meta-chip">Doha, Qatar</span>
+                <span class="exp-meta-chip exp-date-chip"><i class="fas fa-calendar"></i> Feb 2022 &ndash; Nov 2023</span>
+                <span class="exp-meta-chip"><i class="fas fa-location-dot"></i> Doha, Qatar</span>
+                <span class="exp-meta-chip exp-industry-chip"><i class="fas fa-building-columns"></i> Corporate Enterprise &middot; Aviation Project</span>
                 <span class="exp-meta-chip exp-current">Verified</span>
               </div>
             </div>
           </div>
+
+          <div class="timeline-resp-label">Key Responsibilities</div>
+          <div class="exp-bullets timeline-responsibilities timeline-responsibilities-grid">
+            <div class="exp-bullet"><i class="fas fa-circle"></i> Enterprise ticketing &amp; ITSM — 120–140 tickets/day across 10+ sites via ManageEngine</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> Executive-level support for C-suite &amp; Directors at PIH Head Office</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> Incident escalation — 50–60 critical tickets handled during peak periods</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> HIA Airport Expansion — on-site IT lead across two project phases</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> FIFA 2022 cyber attack response — 4-day incident lead, zero data loss</div>
+            <div class="exp-bullet"><i class="fas fa-circle"></i> Cross-subsidiary IT coverage — Aura, UCC, InfraRoad, Elegancia, UBTJV</div>
+          </div>
+
+          <details class="timeline-more">
+            <summary>Full project breakdown, stats &amp; reference</summary>
 
           <div class="exp-stats">
             <div class="exp-stat-chip">10+ Enterprise Sites</div>
@@ -1010,15 +1164,19 @@
               <i class="fas fa-file-contract" style="color:#1a6fbf;"></i> Airport Project Letter
             </a>
           </div>
+          </details>
         </div>
       </div>
 
       <!-- =========================
-       OOREDOO
+       OOREDOO — first job
       ========================= -->
-      <div class="exp-panel" id="ooredoo">
+      <div class="timeline-item timeline-item-last">
+        <div class="timeline-rail" aria-hidden="true">
+          <span class="timeline-dot"><i class="fas fa-tower-broadcast"></i></span>
+        </div>
 
-        <div class="exp-card">
+        <div class="exp-card timeline-card">
 
           <div class="exp-card-header">
 
@@ -1036,19 +1194,17 @@
               </div>
 
               <div class="exp-meta-wrap">
-                <span class="exp-meta-chip">
-                  Qatar
-                </span>
-
-                <span class="exp-meta-chip exp-current">
-                  Verified
-                </span>
+                <span class="exp-meta-chip exp-date-chip"><i class="fas fa-calendar"></i> May 2021 – Feb 2022</span>
+                <span class="exp-meta-chip"><i class="fas fa-location-dot"></i> Qatar</span>
+                <span class="exp-meta-chip exp-industry-chip"><i class="fas fa-tower-broadcast"></i> Telecom</span>
+                <span class="exp-meta-chip exp-current">Verified</span>
               </div>
             </div>
 
           </div>
 
-          <div class="exp-bullets">
+          <div class="timeline-resp-label">Key Responsibilities <span class="timeline-first-job-tag">First Job</span></div>
+          <div class="exp-bullets timeline-responsibilities">
 
             <div class="exp-bullet">
               <i class="fas fa-circle"></i>
@@ -1075,6 +1231,7 @@
         </div>
       </div>
 
+      </div><!-- /.career-timeline -->
     </div>
   </div>
 </section>
@@ -1129,25 +1286,52 @@
             </div>
             <h3 class="mc-title">Airport Expansion IT Deployment</h3>
             <p class="mc-org">HIA Project · Al Tawkel · Qatar</p>
-            <p class="mc-desc">End-to-end IT infrastructure deployment across live, active airport expansion sites. Managed emergency 10kVA UPS failure response single-handedly — sourced, deployed, and reinstalled replacement hardware with zero operational interruption. Received formal HIA Safety Award.</p>
             <div class="cs-metrics-row">
               <div class="cs-metric"><span class="csm-val">0</span><span class="csm-lbl">Downtime events</span></div>
               <div class="cs-metric"><span class="csm-val">10kVA</span><span class="csm-lbl">Emergency UPS handled</span></div>
               <div class="cs-metric"><span class="csm-val">1</span><span class="csm-lbl">Safety Award earned</span></div>
             </div>
-            <div class="mc-tools">
-              <span class="mc-tool-tag"><i class="fas fa-network-wired"></i> Network Infrastructure</span>
-              <span class="mc-tool-tag"><i class="fas fa-microchip"></i> Hardware Deployment</span>
-              <span class="mc-tool-tag"><i class="fas fa-bolt"></i> Power Systems</span>
-              <span class="mc-tool-tag"><i class="fas fa-clipboard-check"></i> ITIL</span>
-            </div>
-            <div class="mc-outcome cs-outcome-premium">
-              <div class="cs-outcome-left">
-                <span class="mc-outcome-label">Deployment Impact</span>
-                <span class="mc-outcome-val">🏆 HIA Safety Award · Zero Downtime</span>
+
+            <details class="cs-case-study">
+              <summary>View Full Case Study</summary>
+              <div class="cs-case-study-body">
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-circle-exclamation"></i>Problem</h4>
+                  <p class="cs-field-text">Live, active airport expansion sites needed end-to-end IT infrastructure deployment. Mid-project, heavy rainfall caused a 10kVA UPS to fail at a critical HIA site, putting live operations at risk.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-user-gear"></i>My Role</h4>
+                  <p class="cs-field-text">On-site IT lead across two project phases for Al Tawkel at HIA. When the UPS failed, I acted independently — sourcing, deploying, and reinstalling replacement hardware with zero assistance.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-location-dot"></i>Environment</h4>
+                  <p class="cs-field-text">Hamad International Airport (HIA) Expansion, Al Tawkel, Qatar — Corporate Enterprise · Aviation Project, 2023–2024.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-diagram-project"></i>Approach</h4>
+                  <p class="cs-field-text">Delivered end-to-end IT infrastructure deployment across live, active expansion sites. For the UPS failure, sourced and deployed a 5kVA replacement to keep operations running, then reinstalled the 10kVA unit upon its return — maintaining zero operational interruption throughout.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-toolbox"></i>Technologies</h4>
+                  <div class="mc-tools">
+                    <span class="mc-tool-tag"><i class="fas fa-network-wired"></i> Network Infrastructure</span>
+                    <span class="mc-tool-tag"><i class="fas fa-microchip"></i> Hardware Deployment</span>
+                    <span class="mc-tool-tag"><i class="fas fa-bolt"></i> Power Systems</span>
+                    <span class="mc-tool-tag"><i class="fas fa-clipboard-check"></i> ITIL</span>
+                  </div>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-flag-checkered"></i>Outcome</h4>
+                  <div class="mc-outcome cs-outcome-premium">
+                    <div class="cs-outcome-left">
+                      <span class="mc-outcome-label">Deployment Impact</span>
+                      <span class="mc-outcome-val">🏆 HIA Safety Award · Zero Downtime</span>
+                    </div>
+                    <div class="cs-impact-pill cs-impact-aviation">Aviation-grade reliability</div>
+                  </div>
+                </div>
               </div>
-              <div class="cs-impact-pill cs-impact-aviation">Aviation-grade reliability</div>
-            </div>
+            </details>
           </article>
 
           <!-- Case Study 2: Healthcare -->
@@ -1165,25 +1349,52 @@
             </div>
             <h3 class="mc-title">Multi-Site Hospital IT Rollout</h3>
             <p class="mc-org">MMCH · KMC · TVH · Qatar</p>
-            <p class="mc-desc">Sole IT engineer across three concurrent hospital deployments — MMCH (Al-Rayyan), Korean Medical Center (Lusail), and The View Hospital. Deployed 300+ workstations, built server room inventories, and maintained EMR continuity with zero downtime across the full engagement period.</p>
             <div class="cs-metrics-row">
               <div class="cs-metric"><span class="csm-val">300+</span><span class="csm-lbl">Systems deployed</span></div>
               <div class="cs-metric"><span class="csm-val">3</span><span class="csm-lbl">Concurrent sites</span></div>
               <div class="cs-metric"><span class="csm-val">0</span><span class="csm-lbl">EMR downtime incidents</span></div>
             </div>
-            <div class="mc-tools">
-              <span class="mc-tool-tag"><i class="fas fa-stethoscope"></i> EMR Systems</span>
-              <span class="mc-tool-tag"><i class="fas fa-server"></i> Network Setup</span>
-              <span class="mc-tool-tag"><i class="fas fa-laptop"></i> Device Provisioning</span>
-              <span class="mc-tool-tag"><i class="fas fa-list-check"></i> Asset Management</span>
-            </div>
-            <div class="mc-outcome cs-outcome-premium">
-              <div class="cs-outcome-left">
-                <span class="mc-outcome-label">Clinical Impact</span>
-                <span class="mc-outcome-val">⚡ 0 EMR Downtimes · 300+ Devices</span>
+
+            <details class="cs-case-study">
+              <summary>View Full Case Study</summary>
+              <div class="cs-case-study-body">
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-circle-exclamation"></i>Problem</h4>
+                  <p class="cs-field-text">Three concurrent hospital deployments — MMCH (Al-Rayyan), Korean Medical Center (Lusail), and The View Hospital — needed continuous IT coverage while keeping Electronic Medical Records (EMR) systems uninterrupted.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-user-gear"></i>My Role</h4>
+                  <p class="cs-field-text">Sole IT engineer across all three sites, reporting from PIH Elegancia Tower 18. Ticket lifecycle, escalation paths, and performance metrics were reviewed under close supervision by the IT Project Manager.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-location-dot"></i>Environment</h4>
+                  <p class="cs-field-text">MMCH · KMC · TVH, Qatar — Healthcare Infrastructure, 2022–2023.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-diagram-project"></i>Approach</h4>
+                  <p class="cs-field-text">Deployed 300+ workstations and built server room inventories across the three sites, while maintaining EMR application support through proactive patching, monitoring, and rapid incident response.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-toolbox"></i>Technologies</h4>
+                  <div class="mc-tools">
+                    <span class="mc-tool-tag"><i class="fas fa-stethoscope"></i> EMR Systems</span>
+                    <span class="mc-tool-tag"><i class="fas fa-server"></i> Network Setup</span>
+                    <span class="mc-tool-tag"><i class="fas fa-laptop"></i> Device Provisioning</span>
+                    <span class="mc-tool-tag"><i class="fas fa-list-check"></i> Asset Management</span>
+                  </div>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-flag-checkered"></i>Outcome</h4>
+                  <div class="mc-outcome cs-outcome-premium">
+                    <div class="cs-outcome-left">
+                      <span class="mc-outcome-label">Clinical Impact</span>
+                      <span class="mc-outcome-val">⚡ 0 EMR Downtimes · 300+ Devices</span>
+                    </div>
+                    <div class="cs-impact-pill cs-impact-healthcare">Healthcare-grade uptime</div>
+                  </div>
+                </div>
               </div>
-              <div class="cs-impact-pill cs-impact-healthcare">Healthcare-grade uptime</div>
-            </div>
+            </details>
           </article>
 
           <!-- Case Study 3: FIFA Cyber Attack -->
@@ -1202,25 +1413,52 @@
             </div>
             <h3 class="mc-title">FIFA 2022 Cyber Attack — Incident Lead</h3>
             <p class="mc-org">Star Link · PIH Group · Doha, Qatar</p>
-            <p class="mc-desc">During the FIFA World Cup, PIH's server infrastructure came under active cyber attack. Appointed as incident lead, I coordinated a 4-day response across Network and IT teams — systematically isolating threat vectors, deploying Kaspersky EDR across affected endpoints, and securing all server assets. Zero permanent data loss. Full operational recovery.</p>
             <div class="cs-metrics-row">
               <div class="cs-metric"><span class="csm-val">4</span><span class="csm-lbl">Days as incident lead</span></div>
               <div class="cs-metric"><span class="csm-val">0</span><span class="csm-lbl">Data loss events</span></div>
               <div class="cs-metric"><span class="csm-val">100%</span><span class="csm-lbl">Systems recovered</span></div>
             </div>
-            <div class="mc-tools">
-              <span class="mc-tool-tag"><i class="fas fa-bug-slash"></i> Incident Response</span>
-              <span class="mc-tool-tag"><i class="fas fa-shield-virus"></i> Kaspersky EDR</span>
-              <span class="mc-tool-tag"><i class="fas fa-server"></i> Server Security</span>
-              <span class="mc-tool-tag"><i class="fas fa-lock"></i> Threat Isolation</span>
-            </div>
-            <div class="mc-outcome cs-outcome-premium">
-              <div class="cs-outcome-left">
-                <span class="mc-outcome-label">Security Outcome</span>
-                <span class="mc-outcome-val">🛡️ Zero Data Loss · Full Recovery</span>
+
+            <details class="cs-case-study">
+              <summary>View Full Case Study</summary>
+              <div class="cs-case-study-body">
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-circle-exclamation"></i>Problem</h4>
+                  <p class="cs-field-text">During the FIFA World Cup, PIH's server infrastructure came under active cyber attack — a high-stakes threat given the scale and visibility of the event.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-user-gear"></i>My Role</h4>
+                  <p class="cs-field-text">Appointed incident lead, coordinating a 4-day response across the Network and IT teams.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-location-dot"></i>Environment</h4>
+                  <p class="cs-field-text">Star Link · PIH Group · PIH Servers, Doha, Qatar — Live Cyber Incident Response, FIFA 2022.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-diagram-project"></i>Approach</h4>
+                  <p class="cs-field-text">Systematically isolated threat vectors, deployed Kaspersky EDR across all affected endpoints, and secured all server assets to contain and eliminate the threat.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-toolbox"></i>Technologies</h4>
+                  <div class="mc-tools">
+                    <span class="mc-tool-tag"><i class="fas fa-bug-slash"></i> Incident Response</span>
+                    <span class="mc-tool-tag"><i class="fas fa-shield-virus"></i> Kaspersky EDR</span>
+                    <span class="mc-tool-tag"><i class="fas fa-server"></i> Server Security</span>
+                    <span class="mc-tool-tag"><i class="fas fa-lock"></i> Threat Isolation</span>
+                  </div>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-flag-checkered"></i>Outcome</h4>
+                  <div class="mc-outcome cs-outcome-premium">
+                    <div class="cs-outcome-left">
+                      <span class="mc-outcome-label">Security Outcome</span>
+                      <span class="mc-outcome-val">🛡️ Zero Data Loss · Full Recovery</span>
+                    </div>
+                    <div class="cs-impact-pill cs-impact-security">Government-grade response</div>
+                  </div>
+                </div>
               </div>
-              <div class="cs-impact-pill cs-impact-security">Government-grade response</div>
-            </div>
+            </details>
           </article>
 
           <!-- Case Study 4: Government -->
@@ -1238,25 +1476,52 @@
             </div>
             <h3 class="mc-title">Government Immigration Centre Infrastructure</h3>
             <p class="mc-org">MOI · Al Tawkel · Dubai, UAE</p>
-            <p class="mc-desc">Full IT infrastructure deployment and ongoing management for government immigration processing centres in the UAE. Built structured digital asset registries from scratch, managed device lifecycle across departments, and coordinated with UAE government authorities on credential and documentation systems.</p>
             <div class="cs-metrics-row">
               <div class="cs-metric"><span class="csm-val">100%</span><span class="csm-lbl">Asset coverage</span></div>
               <div class="cs-metric"><span class="csm-val">L1–L2</span><span class="csm-lbl">Full support tier</span></div>
               <div class="cs-metric"><span class="csm-val">Multi</span><span class="csm-lbl">Dept coordination</span></div>
             </div>
-            <div class="mc-tools">
-              <span class="mc-tool-tag"><i class="fas fa-building-columns"></i> Government IT</span>
-              <span class="mc-tool-tag"><i class="fas fa-recycle"></i> Device Lifecycle</span>
-              <span class="mc-tool-tag"><i class="fas fa-people-arrows"></i> Stakeholder Mgmt</span>
-              <span class="mc-tool-tag"><i class="fas fa-folder-tree"></i> Asset Registry</span>
-            </div>
-            <div class="mc-outcome cs-outcome-premium">
-              <div class="cs-outcome-left">
-                <span class="mc-outcome-label">Operational Impact</span>
-                <span class="mc-outcome-val">🏛️ Seamless Government Operations</span>
+
+            <details class="cs-case-study">
+              <summary>View Full Case Study</summary>
+              <div class="cs-case-study-body">
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-circle-exclamation"></i>Problem</h4>
+                  <p class="cs-field-text">Government immigration processing centres in the UAE needed full IT infrastructure deployment and ongoing management, without a structured digital asset registry in place.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-user-gear"></i>My Role</h4>
+                  <p class="cs-field-text">Delivered full L1–L2 support, managed device lifecycle across departments, and coordinated directly with UAE government authorities on credential and documentation systems.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-location-dot"></i>Environment</h4>
+                  <p class="cs-field-text">Ministry of Interior (MOI) · Al Tawkel, Dubai, UAE — Government Infrastructure, 2021–2022.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-diagram-project"></i>Approach</h4>
+                  <p class="cs-field-text">Built structured digital asset registries from scratch and coordinated cross-department device lifecycle management to support day-to-day immigration processing operations.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-toolbox"></i>Technologies</h4>
+                  <div class="mc-tools">
+                    <span class="mc-tool-tag"><i class="fas fa-building-columns"></i> Government IT</span>
+                    <span class="mc-tool-tag"><i class="fas fa-recycle"></i> Device Lifecycle</span>
+                    <span class="mc-tool-tag"><i class="fas fa-people-arrows"></i> Stakeholder Mgmt</span>
+                    <span class="mc-tool-tag"><i class="fas fa-folder-tree"></i> Asset Registry</span>
+                  </div>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-flag-checkered"></i>Outcome</h4>
+                  <div class="mc-outcome cs-outcome-premium">
+                    <div class="cs-outcome-left">
+                      <span class="mc-outcome-label">Operational Impact</span>
+                      <span class="mc-outcome-val">🏛️ Seamless Government Operations</span>
+                    </div>
+                    <div class="cs-impact-pill cs-impact-government">Ministry-grade delivery</div>
+                  </div>
+                </div>
               </div>
-              <div class="cs-impact-pill cs-impact-government">Ministry-grade delivery</div>
-            </div>
+            </details>
           </article>
 
           <!-- Case Study 5: Enterprise Multi-Site -->
@@ -1274,25 +1539,52 @@
             </div>
             <h3 class="mc-title">PIH Group — 10-Site Enterprise Support</h3>
             <p class="mc-org">Star Link · PIH · UCC · Aura · Lusail, Qatar</p>
-            <p class="mc-desc">Delivered IT support across 10+ enterprise sites within the PIH Group conglomerate including UCC, Aura Group, InfraRoad, Elegancia, and UBTJV. Managed 1000+ support tickets, maintained 95% SLA compliance, and supported C-suite executives at PIH Head Office Tower 18.</p>
             <div class="cs-metrics-row">
               <div class="cs-metric"><span class="csm-val">10+</span><span class="csm-lbl">Enterprise sites</span></div>
               <div class="cs-metric"><span class="csm-val">1000+</span><span class="csm-lbl">Tickets resolved</span></div>
               <div class="cs-metric"><span class="csm-val">95%</span><span class="csm-lbl">SLA compliance</span></div>
             </div>
-            <div class="mc-tools">
-              <span class="mc-tool-tag"><i class="fas fa-headset"></i> L1/L2 Support</span>
-              <span class="mc-tool-tag"><i class="fas fa-network-wired"></i> Network Admin</span>
-              <span class="mc-tool-tag"><i class="fas fa-windows"></i> Windows Server</span>
-              <span class="mc-tool-tag"><i class="fas fa-id-card"></i> AD Management</span>
-            </div>
-            <div class="mc-outcome cs-outcome-premium">
-              <div class="cs-outcome-left">
-                <span class="mc-outcome-label">Enterprise Scale</span>
-                <span class="mc-outcome-val">🏢 95% SLA · C-Suite Supported</span>
+
+            <details class="cs-case-study">
+              <summary>View Full Case Study</summary>
+              <div class="cs-case-study-body">
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-circle-exclamation"></i>Problem</h4>
+                  <p class="cs-field-text">The PIH Group conglomerate — spanning UCC, Aura Group, InfraRoad, Elegancia, and UBTJV — needed consistent, responsive IT support across 10+ enterprise sites, including executive-level demands at the PIH Head Office.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-user-gear"></i>My Role</h4>
+                  <p class="cs-field-text">Delivered IT support across all 10+ enterprise sites, including direct executive-level support for C-suite and Directors at PIH Head Office Tower 18, and led incident escalation during peak periods.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-location-dot"></i>Environment</h4>
+                  <p class="cs-field-text">Star Link · PIH · UCC · Aura, Lusail, Qatar — Enterprise Multi-Site, 2022–2023.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-diagram-project"></i>Approach</h4>
+                  <p class="cs-field-text">Managed enterprise ticketing and ITSM via ManageEngine — handling 120–140 tickets per day across the 10+ sites, including 50–60 critical escalations during peak periods, while maintaining SLA compliance conglomerate-wide.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-toolbox"></i>Technologies</h4>
+                  <div class="mc-tools">
+                    <span class="mc-tool-tag"><i class="fas fa-headset"></i> L1/L2 Support</span>
+                    <span class="mc-tool-tag"><i class="fas fa-network-wired"></i> Network Admin</span>
+                    <span class="mc-tool-tag"><i class="fas fa-windows"></i> Windows Server</span>
+                    <span class="mc-tool-tag"><i class="fas fa-id-card"></i> AD Management</span>
+                  </div>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-flag-checkered"></i>Outcome</h4>
+                  <div class="mc-outcome cs-outcome-premium">
+                    <div class="cs-outcome-left">
+                      <span class="mc-outcome-label">Enterprise Scale</span>
+                      <span class="mc-outcome-val">🏢 95% SLA · C-Suite Supported</span>
+                    </div>
+                    <div class="cs-impact-pill cs-impact-enterprise">Conglomerate-scale IT</div>
+                  </div>
+                </div>
               </div>
-              <div class="cs-impact-pill cs-impact-enterprise">Conglomerate-scale IT</div>
-            </div>
+            </details>
           </article>
 
           <!-- Case Study 6: CCNA -->
@@ -1310,25 +1602,52 @@
             </div>
             <h3 class="mc-title">CCNA 200-301 Enterprise Network Design</h3>
             <p class="mc-org">Cisco / Simplilearn · Applied to live deployments</p>
-            <p class="mc-desc">Completed Cisco CCNA 200-301 with comprehensive mastery of enterprise networking, OSPF/BGP routing, VLANs, STP, security fundamentals, and network automation. Certification knowledge applied directly across active PIH and HIA infrastructure deployments.</p>
             <div class="cs-metrics-row">
               <div class="cs-metric"><span class="csm-val">CCNA</span><span class="csm-lbl">200-301 Certified</span></div>
               <div class="cs-metric"><span class="csm-val">Live</span><span class="csm-lbl">Applied deployment</span></div>
               <div class="cs-metric"><span class="csm-val">120+</span><span class="csm-lbl">Endpoints migrated</span></div>
             </div>
-            <div class="mc-tools">
-              <span class="mc-tool-tag"><i class="fas fa-router"></i> Cisco IOS</span>
-              <span class="mc-tool-tag"><i class="fas fa-route"></i> OSPF / BGP</span>
-              <span class="mc-tool-tag"><i class="fas fa-lock"></i> Network Security</span>
-              <span class="mc-tool-tag"><i class="fas fa-code-branch"></i> VLANs / STP</span>
-            </div>
-            <div class="mc-outcome cs-outcome-premium">
-              <div class="cs-outcome-left">
-                <span class="mc-outcome-label">Certification Outcome</span>
-                <span class="mc-outcome-val">🌐 CCNA Certified · Production Deployed</span>
+
+            <details class="cs-case-study">
+              <summary>View Full Case Study</summary>
+              <div class="cs-case-study-body">
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-circle-exclamation"></i>Problem</h4>
+                  <p class="cs-field-text">Live PIH and HIA infrastructure deployments called for deeper enterprise networking expertise — routing, VLANs, STP, and security fundamentals — to support and optimise production environments.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-user-gear"></i>My Role</h4>
+                  <p class="cs-field-text">Completed the Cisco CCNA 200-301 certification and applied the knowledge directly across active PIH and HIA infrastructure deployments.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-location-dot"></i>Environment</h4>
+                  <p class="cs-field-text">Cisco / Simplilearn — applied to live production deployments, 2024.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-diagram-project"></i>Approach</h4>
+                  <p class="cs-field-text">Built comprehensive mastery of enterprise networking — OSPF/BGP routing, VLANs, Spanning Tree Protocol, security fundamentals, and network automation — then applied it directly to production infrastructure, migrating 120+ endpoints.</p>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-toolbox"></i>Technologies</h4>
+                  <div class="mc-tools">
+                    <span class="mc-tool-tag"><i class="fas fa-router"></i> Cisco IOS</span>
+                    <span class="mc-tool-tag"><i class="fas fa-route"></i> OSPF / BGP</span>
+                    <span class="mc-tool-tag"><i class="fas fa-lock"></i> Network Security</span>
+                    <span class="mc-tool-tag"><i class="fas fa-code-branch"></i> VLANs / STP</span>
+                  </div>
+                </div>
+                <div class="cs-field">
+                  <h4 class="cs-field-label"><i class="fas fa-flag-checkered"></i>Outcome</h4>
+                  <div class="mc-outcome cs-outcome-premium">
+                    <div class="cs-outcome-left">
+                      <span class="mc-outcome-label">Certification Outcome</span>
+                      <span class="mc-outcome-val">🌐 CCNA Certified · Production Deployed</span>
+                    </div>
+                    <div class="cs-impact-pill cs-impact-network">Cisco enterprise-grade</div>
+                  </div>
+                </div>
               </div>
-              <div class="cs-impact-pill cs-impact-network">Cisco enterprise-grade</div>
-            </div>
+            </details>
           </article>
 
         </div>
@@ -1866,6 +2185,268 @@
             </div>
           </div>
 
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================================================================
+         CYBERSECURITY
+    ================================================================ -->
+    <section id="cybersecurity" class="section arsenal-section glass-section">
+      <div class="hover-shade" aria-hidden="true"></div>
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <span class="sec-num" aria-hidden="true">06</span>
+          <h2 class="sec-title">Cybersecurity</h2>
+          <div class="sec-rule"></div>
+        </header>
+        <p class="cyb-section-intro" data-aos="fade-up" data-aos-delay="40">
+          Security-relevant capability drawn from live enterprise deployments. Each area separates what was <strong>applied hands-on</strong> from <strong>working knowledge</strong> gained through CCNA certification and academic study — not claimed as standalone professional cybersecurity experience.
+        </p>
+
+        <div class="arsenal-grid" data-aos="fade-up">
+
+          <!-- Network Security -->
+          <div class="arsenal-category ac-premium" data-category="cyb-network">
+            <div class="ac-card-glow ac-glow-blue"></div>
+            <div class="ac-header">
+              <div class="ac-icon-badge ac-badge-blue">
+                <i class="fas fa-network-wired ac-icon"></i>
+              </div>
+              <div class="ac-header-text">
+                <h3 class="ac-title">Network Security</h3>
+                <span class="ac-subtitle">VLAN Segmentation · Routing · CCNA</span>
+              </div>
+              <div class="ac-enterprise-tag">Enterprise</div>
+            </div>
+
+            <div class="cyb-tier cyb-tier-applied">
+              <p class="cyb-tier-label"><i class="fas fa-check"></i>Applied</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-layer-group"></i>VLAN Segmentation</span>
+                <span class="ac-skill"><i class="fas fa-tree"></i>STP</span>
+                <span class="ac-skill"><i class="fas fa-route"></i>OSPF/BGP Routing</span>
+              </div>
+            </div>
+            <div class="cyb-tier cyb-tier-knowledge">
+              <p class="cyb-tier-label"><i class="fas fa-book"></i>Working Knowledge</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-fire"></i>Firewall Config</span>
+                <span class="ac-skill"><i class="fas fa-vpn"></i>VPN</span>
+                <span class="ac-skill"><i class="fas fa-arrows-left-right"></i>NAT/PAT</span>
+              </div>
+            </div>
+
+            <div class="ac-cert-badge">
+              <i class="fas fa-certificate"></i> CCNA 200-301 · Applied to 120+ Live Endpoints
+            </div>
+          </div>
+
+          <!-- Endpoint Security -->
+          <div class="arsenal-category ac-premium" data-category="cyb-endpoint">
+            <div class="ac-card-glow ac-glow-indigo"></div>
+            <div class="ac-header">
+              <div class="ac-icon-badge ac-badge-indigo">
+                <i class="fas fa-laptop-code ac-icon"></i>
+              </div>
+              <div class="ac-header-text">
+                <h3 class="ac-title">Endpoint Security</h3>
+                <span class="ac-subtitle">EDR Deployment · Patch Management</span>
+              </div>
+              <div class="ac-enterprise-tag">Enterprise</div>
+            </div>
+
+            <div class="cyb-tier cyb-tier-applied">
+              <p class="cyb-tier-label"><i class="fas fa-check"></i>Applied</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-bug-slash"></i>Kaspersky EDR</span>
+                <span class="ac-skill"><i class="fas fa-patch"></i>Patch Management</span>
+                <span class="ac-skill"><i class="fas fa-laptop"></i>300+ Devices Provisioned</span>
+              </div>
+            </div>
+            <div class="cyb-tier cyb-tier-knowledge">
+              <p class="cyb-tier-label"><i class="fas fa-book"></i>Working Knowledge</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-mobile-screen"></i>MDM (Intune)</span>
+              </div>
+            </div>
+
+            <div class="ac-cert-badge ac-cert-indigo">
+              <i class="fas fa-shield-virus"></i> Kaspersky EDR Deployed Live · FIFA 2022
+            </div>
+          </div>
+
+          <!-- Incident Response -->
+          <div class="arsenal-category ac-premium" data-category="cyb-incident">
+            <div class="ac-card-glow ac-glow-red"></div>
+            <div class="ac-header">
+              <div class="ac-icon-badge ac-badge-red">
+                <i class="fas fa-fire-extinguisher ac-icon"></i>
+              </div>
+              <div class="ac-header-text">
+                <h3 class="ac-title">Incident Response</h3>
+                <span class="ac-subtitle">4-Day Cyber Incident Lead · ITIL</span>
+              </div>
+              <div class="ac-enterprise-tag ac-tag-red">Critical</div>
+            </div>
+
+            <div class="cyb-tier cyb-tier-applied">
+              <p class="cyb-tier-label"><i class="fas fa-check"></i>Applied</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-virus-slash"></i>Threat Isolation</span>
+                <span class="ac-skill"><i class="fas fa-people-arrows"></i>Cross-Team Coordination</span>
+                <span class="ac-skill"><i class="fas fa-book-open"></i>ITIL Incident Mgmt</span>
+              </div>
+            </div>
+            <p class="cyb-applied-only-note"><i class="fas fa-star"></i>Directly evidenced — led PIH's 4-day response to an active server attack during FIFA 2022, zero permanent data loss.</p>
+
+            <div class="ac-cert-badge ac-cert-red">
+              <i class="fas fa-shield-halved"></i> FIFA 2022 Incident Lead · Zero Data Loss
+            </div>
+          </div>
+
+          <!-- Access Control -->
+          <div class="arsenal-category ac-premium" data-category="cyb-access">
+            <div class="ac-card-glow ac-glow-amber"></div>
+            <div class="ac-header">
+              <div class="ac-icon-badge ac-badge-amber">
+                <i class="fas fa-user-lock ac-icon"></i>
+              </div>
+              <div class="ac-header-text">
+                <h3 class="ac-title">Access Control</h3>
+                <span class="ac-subtitle">Active Directory · Azure AD</span>
+              </div>
+              <div class="ac-enterprise-tag ac-tag-amber">Process</div>
+            </div>
+
+            <div class="cyb-tier cyb-tier-applied">
+              <p class="cyb-tier-label"><i class="fas fa-check"></i>Applied</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-users-cog"></i>Active Directory</span>
+                <span class="ac-skill"><i class="fas fa-id-badge"></i>Azure AD / M365</span>
+                <span class="ac-skill"><i class="fas fa-key"></i>Credential Recovery</span>
+              </div>
+            </div>
+            <div class="cyb-tier cyb-tier-knowledge">
+              <p class="cyb-tier-label"><i class="fas fa-book"></i>Working Knowledge</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-shield-alt"></i>Group Policy</span>
+              </div>
+            </div>
+
+            <div class="ac-cert-badge ac-cert-amber">
+              <i class="fas fa-building-columns"></i> Credential Coordination · UAE MOI
+            </div>
+          </div>
+
+          <!-- Security Monitoring -->
+          <div class="arsenal-category ac-premium" data-category="cyb-monitoring">
+            <div class="ac-card-glow ac-glow-sky"></div>
+            <div class="ac-header">
+              <div class="ac-icon-badge ac-badge-sky">
+                <i class="fas fa-magnifying-glass-chart ac-icon"></i>
+              </div>
+              <div class="ac-header-text">
+                <h3 class="ac-title">Security Monitoring</h3>
+                <span class="ac-subtitle">Proactive Monitoring · SLA Tracking</span>
+              </div>
+              <div class="ac-enterprise-tag ac-tag-sky">Cloud</div>
+            </div>
+
+            <div class="cyb-tier cyb-tier-applied">
+              <p class="cyb-tier-label"><i class="fas fa-check"></i>Applied</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-eye"></i>Proactive System Monitoring</span>
+                <span class="ac-skill"><i class="fas fa-ticket"></i>SLA-Driven Ticket Monitoring</span>
+              </div>
+            </div>
+            <div class="cyb-tier cyb-tier-knowledge">
+              <p class="cyb-tier-label"><i class="fas fa-book"></i>Working Knowledge</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-magnifying-glass"></i>Security Audits</span>
+              </div>
+            </div>
+
+            <div class="ac-cert-badge ac-cert-sky">
+              <i class="fas fa-chart-line"></i> 95% SLA Compliance · Zero EMR Downtime
+            </div>
+          </div>
+
+          <!-- Backup & Recovery -->
+          <div class="arsenal-category ac-premium" data-category="cyb-backup">
+            <div class="ac-card-glow ac-glow-green"></div>
+            <div class="ac-header">
+              <div class="ac-icon-badge ac-badge-green">
+                <i class="fas fa-database ac-icon"></i>
+              </div>
+              <div class="ac-header-text">
+                <h3 class="ac-title">Backup &amp; Recovery</h3>
+                <span class="ac-subtitle">Power Continuity · Live Recovery</span>
+              </div>
+              <div class="ac-enterprise-tag ac-tag-green">Field</div>
+            </div>
+
+            <div class="cyb-tier cyb-tier-applied">
+              <p class="cyb-tier-label"><i class="fas fa-check"></i>Applied</p>
+              <div class="ac-skills">
+                <span class="ac-skill"><i class="fas fa-bolt-lightning"></i>Emergency UPS Recovery</span>
+                <span class="ac-skill"><i class="fas fa-power-off"></i>Safe Shutdown/Restore</span>
+                <span class="ac-skill"><i class="fas fa-server"></i>Zero-Downtime Continuity</span>
+              </div>
+            </div>
+            <p class="cyb-applied-only-note"><i class="fas fa-star"></i>Directly evidenced — solo emergency UPS recovery at a live HIA site, zero infrastructure downtime.</p>
+
+            <div class="ac-cert-badge ac-cert-green">
+              <i class="fas fa-check-circle"></i> 10kVA UPS Recovery · HIA Live Site
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================================================================
+         TROUBLESHOOTING LAB — interactive diagnostic demo
+    ================================================================ -->
+    <section id="troubleshooting-lab" class="section arsenal-section glass-section">
+      <div class="hover-shade" aria-hidden="true"></div>
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <span class="sec-num" aria-hidden="true">07</span>
+          <h2 class="sec-title">Troubleshooting Lab</h2>
+          <div class="sec-rule"></div>
+        </header>
+        <p class="cyb-section-intro" data-aos="fade-up" data-aos-delay="40">
+          Pick a common IT support issue below to see the same step-by-step diagnostic path I follow on the job — from first check to root cause.
+        </p>
+
+        <div class="tsl-wrap" data-aos="fade-up">
+          <!-- Scenario picker -->
+          <div class="tsl-scenarios" id="tslScenarios" role="tablist" aria-label="Troubleshooting scenarios">
+            <button class="tsl-scenario-btn" type="button" data-scenario="no-internet" role="tab" aria-selected="true">
+              <i class="fas fa-wifi tsl-scenario-icon"></i>
+              <span>No Internet</span>
+            </button>
+            <button class="tsl-scenario-btn" type="button" data-scenario="slow-computer" role="tab" aria-selected="false">
+              <i class="fas fa-gauge-simple-high tsl-scenario-icon"></i>
+              <span>Slow Computer</span>
+            </button>
+            <button class="tsl-scenario-btn" type="button" data-scenario="printer" role="tab" aria-selected="false">
+              <i class="fas fa-print tsl-scenario-icon"></i>
+              <span>Printer Not Working</span>
+            </button>
+            <button class="tsl-scenario-btn" type="button" data-scenario="dns" role="tab" aria-selected="false">
+              <i class="fas fa-globe tsl-scenario-icon"></i>
+              <span>DNS Problem</span>
+            </button>
+          </div>
+
+          <!-- Diagnostic path output -->
+          <div class="tsl-panel" id="tslPanel" role="tabpanel" aria-live="polite">
+            <!-- Populated by JS -->
+          </div>
         </div>
       </div>
     </section>
@@ -2487,7 +3068,7 @@
       <!-- Column 1 — Brand -->
       <div class="ftr-col ftr-col-brand">
         <div class="ftr-brand-row">
-          <img src="logo.png" alt="SM" class="ftr-logo" loading="lazy">
+          <img src="logo.png" alt="Sajid Mehmood logo" class="ftr-logo" loading="lazy">
           <div>
             <span class="ftr-name">Sajid Mehmood</span>
             <span class="ftr-role">IT Support Engineer · CCNA</span>
@@ -2496,7 +3077,7 @@
         <p class="ftr-tagline">Keeping systems online, one ticket at a time.</p>
         <span class="ftr-gratitude-bubble">
           <i class="fas fa-heart" aria-hidden="true"></i>
-          <span>With gratitude, to Mr. Waseem khan</span>
+          <span>With gratitude, to Mr. Waseem</span>
         </span>
       </div>
 
@@ -2551,7 +3132,7 @@
         <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="ftr-mini-btn" aria-label="Back to top" title="Back to top">
           <i class="fas fa-chevron-up"></i>
         </button>
-        <a href="#" onclick="openAdminDashboard();return false;" class="ftr-mini-btn ftr-admin-btn" title="Admin Analytics" aria-label="Admin dashboard">
+        <a href="admin-dashboard.html" target="_blank" rel="noopener" class="ftr-mini-btn ftr-admin-btn" title="Admin Analytics" aria-label="Admin dashboard">
           <i class="fas fa-chart-line"></i>
         </a>
       </div>
@@ -2666,8 +3247,6 @@
     </a>
   </div>
 
-
-
   <!-- ================================================================
        STEP 7 — ADVANCED CINEMATIC EFFECTS CANVAS
        Particles · global mouse glow · neon reflections · depth layers
@@ -2705,25 +3284,9 @@
   <script src="review-submit.js" defer></script>
   <script src="reviews-portfolio.js" defer></script>
 
-
-  <!-- ── Admin Dashboard Modal ──────────────────────────────── -->
-  <div id="admin-modal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(10,12,20,.96);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);">
-    <button onclick="closeAdminDashboard()" style="position:absolute;top:16px;right:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer;z-index:10;line-height:1;" title="Close">✕</button>
-    <iframe id="admin-iframe" src="admin-dashboard.html" style="width:100%;height:100%;border:none;"></iframe>
-  </div>
-  <script>
-    function openAdminDashboard() {
-      document.getElementById('admin-modal').style.display = 'block';
-      document.body.style.overflow = 'hidden';
-    }
-    function closeAdminDashboard() {
-      document.getElementById('admin-modal').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeAdminDashboard();
-    });
-  </script>
+  <!-- Admin entry points (nav-admin-btn, nav-mob-link, ftr-admin-btn above)
+       now link straight to admin-dashboard.html in a new tab. The old
+       iframe-modal implementation and its open/close JS have been removed. -->
 
 
   <!-- ── Scroll Entrance Animations ───────────────────────────── -->

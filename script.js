@@ -5,34 +5,6 @@
 
 
 // ============================================================
-// SECTION -1 · DAY THEME TOGGLE (mobile menu)
-// ============================================================
-(function () {
-  var DAY_KEY = 'sm_day_theme';
-
-  function applyTheme(isDay) {
-    document.documentElement.classList.toggle('day-theme', isDay);
-    var label = document.getElementById('dayThemeLabel');
-    if (label) label.textContent = isDay ? 'Night Theme' : 'Day Theme';
-  }
-
-  // Apply immediately on load (before other init) to avoid flash
-  var saved = localStorage.getItem(DAY_KEY) === '1';
-  applyTheme(saved);
-
-  window.toggleDayTheme = function () {
-    var isDay = !document.documentElement.classList.contains('day-theme');
-    applyTheme(isDay);
-    localStorage.setItem(DAY_KEY, isDay ? '1' : '0');
-  };
-
-  document.addEventListener('DOMContentLoaded', function () {
-    applyTheme(localStorage.getItem(DAY_KEY) === '1');
-  });
-})();
-
-
-// ============================================================
 // SECTION 0 · SMOOTH SCROLL
 // ============================================================
 
@@ -369,6 +341,7 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   const gateAsk      = document.getElementById('gateAsk');
   const gateWelcome  = document.getElementById('gateWelcome');
   const welcomeName  = document.getElementById('welcomeName');
+  const cancelBtn    = document.getElementById('gateCancelBtn');
 
   if (!overlay) return;
 
@@ -445,8 +418,13 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
     setTimeout(() => nameInput && nameInput.focus(), 550);
   }
 
-  function hideGate() {
-    dismissed = true;
+  // opts.completed=true means the visitor actually submitted a name —
+  // only then do we permanently mark the gate as "unlocked" for the rest
+  // of this session (dismissed=true skips the gate on future triggers).
+  // A Cancel closes the overlay WITHOUT setting that flag, so the very
+  // next CV/certificate click gates again, same as a fresh visitor.
+  function hideGate(opts) {
+    if (opts && opts.completed) dismissed = true;
     overlay.classList.remove('visible');
     document.body.classList.remove('gate-active');
     document.body.style.overflow = '';
@@ -543,30 +521,60 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   // it once this IIFE has finished defining it.
   window._smReattachName = _writeVisitorNameWithRetry;
 
+  // ── Analytics event logging (resume_view, resume_download,
+  //    certificate_view, certificate_download) ───────────────────────
+  // Reuses the SAME Supabase client, fingerprint, and session_id already
+  // set up above for visitor tracking — this is not a second analytics
+  // system. If analytics.js already exposes a global tracker
+  // (window.smTrackEvent), that's used instead so events land wherever
+  // the rest of the analytics pipeline already writes them; otherwise
+  // this falls back to an 'analytics_events' insert on the shared client.
+  function _smTrackEvent(eventName, meta) {
+    try {
+      if (typeof window.smTrackEvent === 'function') {
+        window.smTrackEvent(eventName, meta || {});
+        return;
+      }
+      var db = _getGateAnalyticsDb();
+      if (!db) return;
+      var fp  = sessionStorage.getItem('_smFingerprint') || localStorage.getItem('_smFingerprint') || null;
+      var sid = sessionStorage.getItem('_smSessionId') || sessionStorage.getItem('sajid_session_id') || null;
+      db.from('analytics_events').insert({
+        event_name: eventName,
+        fingerprint: fp,
+        session_id: sid,
+        meta: meta || {},
+        page_url: window.location.href
+      }).then(function (res) {
+        if (res && res.error) console.warn('[Gate] analytics event insert failed:', res.error.message);
+      });
+    } catch (e) {
+      console.warn('[Gate] _smTrackEvent error:', e.message);
+    }
+  }
+  window._smTrackEvent = _smTrackEvent;
+
   // ── Optional Telegram notification ─────────────────────────────────
   // Sends a Telegram message to you whenever a visitor unlocks the
   // resume or a certificate by entering their name.
   //
-  // ⚠️ SECURITY NOTE: this is a static site with no backend, so this
-  // calls the Telegram Bot API directly from the browser. That means
-  // the bot token below is visible to anyone who views your page
-  // source. A leaked bot token only lets someone send messages through
-  // that bot (to chats the bot is already in) — it can't read your
-  // personal Telegram account. For extra safety you can still route
-  // this through a small serverless function (Netlify/Vercel) that
-  // holds the token server-side instead of calling api.telegram.org
-  // directly from here. If you're OK with the tradeoff for a low-key
-  // personal-site use case, fill in the values below and this will
-  // work as-is.
+  // 🔒 SECURITY FIX (Aug 2026): this previously called the Telegram Bot
+  // API directly from the browser with the bot token hardcoded in this
+  // file — visible to any visitor via "view source". That token has
+  // been removed from the code below. A leaked bot token lets anyone
+  // send messages as that bot to chats it's already in, and — more
+  // seriously — call admin-level bot methods like setWebhook, which
+  // could hijack all future notifications sent to it, or getMe/getChat.
   //
-  // Setup:
-  //   1. Message @BotFather on Telegram, run /newbot, copy the token.
-  //   2. Message your new bot once (e.g. "hi") so it can message you back.
-  //   3. Get your chat ID: visit
-  //      https://api.telegram.org/bot<TOKEN>/getUpdates
-  //      after step 2, and read the "chat":{"id": ...} value.
-  var TELEGRAM_BOT_TOKEN = '8634065770:AAFAU7VMwRyT5pSXI882JG_0kZbWMEBVbvY';
-  var TELEGRAM_CHAT_ID   = '8235795754';
+  // ACTION NEEDED: revoke the old token via @BotFather (/revoke or
+  // /token → Revoke current token) since it was exposed. If you still
+  // want owner notifications, add a small serverless function
+  // (Netlify/Vercel/Cloudflare Worker) that holds the token server-side
+  // and have this code POST the visitor name to that endpoint instead
+  // of calling api.telegram.org directly. Left disabled (no token) so
+  // this feature safely no-ops until that's set up.
+  var TELEGRAM_BOT_TOKEN = '';
+  var TELEGRAM_CHAT_ID   = '';
 
   function _notifyOwnerByTelegram(name, context) {
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
@@ -624,9 +632,16 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
     showGate();
   };
 
+  // A "reasonable" name: at least 2 characters and contains at least one
+  // letter (rejects blank input, pure whitespace, or symbol/number-only
+  // entries like "123" or "...").
+  function _isReasonableName(name) {
+    return !!name && name.length >= 2 && /[A-Za-z\u00C0-\u024F]/.test(name);
+  }
+
   function submitName() {
     const name = nameInput.value.trim();
-    if (!name) {
+    if (!_isReasonableName(name)) {
       nameInput.style.borderColor = '#e24b4a';
       nameInput.focus();
       setTimeout(() => nameInput.style.borderColor = '', 1200);
@@ -657,7 +672,7 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
     _notifyOwnerByTelegram(name, _pending ? _pending.context : '');
 
-    hideGate();
+    hideGate({ completed: true });
 
     // Let the overlay finish closing before running the action that
     // was waiting on it (e.g. opening the resume PDF or a certificate).
@@ -666,10 +681,27 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
     }
   }
 
+  // Cancel: close the gate WITHOUT saving a name, WITHOUT logging an
+  // analytics event, and WITHOUT running the pending action (the
+  // resume/certificate the visitor was about to open never opens).
+  // Portfolio browsing itself is never affected either way.
+  function cancelGate() {
+    _gatePendingAction = null;
+    hideGate();
+  }
+
   continueBtn.addEventListener('click', submitName);
   nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') submitName(); });
   doneBtn.addEventListener('click', submitName);
-  // X button is hidden via CSS — gate cannot be closed without entering a name.
+  if (cancelBtn) cancelBtn.addEventListener('click', cancelGate);
+  // X button (visible on mobile — see .gate-close media query) closes the
+  // gate the same way Cancel does: no name saved, no pending action run.
+  if (closeBtn) closeBtn.addEventListener('click', cancelGate);
+
+  // Escape closes the gate the same way Cancel does, whenever it's open.
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('visible')) cancelGate();
+  });
 
   // NOTE: the gate no longer opens automatically on scroll. It now opens
   // only when a visitor clicks to view the resume or a certificate — see
@@ -2047,6 +2079,16 @@ function printSignature() {
     if (elWeather) elWeather.innerHTML = html;
   }
 
+  // Escapes text pulled from third-party geolocation APIs before it's
+  // concatenated into innerHTML below — city/country names come from
+  // external services, so treat them as untrusted input rather than
+  // assuming they're always plain, safe text.
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function fetchWeather() {
     setWeather(
       '<i class="fas fa-location-crosshairs wb-icon wb-spin"></i>' +
@@ -2084,7 +2126,7 @@ function printSignature() {
             ' · Feels ' + feel + '°C' +
             ' · ' + hum + '% RH' +
             ' · ' + wind + ' km/h' +
-            ' <span style="opacity:.55;font-size:9px;">' + geo.label + '</span>' +
+            ' <span style="opacity:.55;font-size:9px;">' + escapeHtml(geo.label) + '</span>' +
           '</span>'
         );
 
@@ -3528,15 +3570,28 @@ window.closePdfModal = closePdfModal;
 // entered a name (see window.requireGateThen in the gate module above).
 (function () {
   // Wrap the resume opener so every "View Resume" button goes through
-  // the gate first.
+  // the gate first. The resume_view event fires only once the visitor
+  // has actually reached the PDF (i.e. after the gate, or immediately
+  // if already unlocked this session) — not on the click that triggers it.
   var _openResumeDirect = window.openPdfModal;
+  function _openResumeTracked() {
+    if (window._smTrackEvent) window._smTrackEvent('resume_view');
+    _openResumeDirect();
+  }
   window.openPdfModal = function () {
     if (window.requireGateThen) {
-      window.requireGateThen(_openResumeDirect, 'your résumé');
+      window.requireGateThen(_openResumeTracked, 'your résumé');
     } else {
-      _openResumeDirect();
+      _openResumeTracked();
     }
   };
+
+  // resume_download — fires when the visitor actually clicks the
+  // download link inside the (already-gated) resume modal.
+  document.addEventListener('click', function (e) {
+    var dl = e.target.closest ? e.target.closest('#pdfDownloadBtn') : null;
+    if (dl && window._smTrackEvent) window._smTrackEvent('resume_download');
+  });
 
   // Certificate / credential links are plain <a href target="_blank">
   // tags — some static in the HTML, some rendered later by
@@ -3558,6 +3613,7 @@ window.closePdfModal = closePdfModal;
 
     window.requireGateThen(function () {
       link.setAttribute('data-gate-ok', '1');
+      if (window._smTrackEvent) window._smTrackEvent('certificate_view', { title: title });
       window.open(href, '_blank', 'noopener,noreferrer');
     }, title);
   });
@@ -3616,13 +3672,22 @@ window.closePdfModal = closePdfModal;
     var src   = btn.getAttribute('data-cert-img');
     var title = btn.getAttribute('data-cert-title') || 'Certificate';
     var dl    = btn.getAttribute('data-cert-download');
-    if (window.requireGateThen) {
-      window.requireGateThen(function () {
-        _openCertModalDirect(src, title, dl);
-      }, title);
-    } else {
+    function _openTracked() {
+      if (window._smTrackEvent) window._smTrackEvent('certificate_view', { title: title });
       _openCertModalDirect(src, title, dl);
     }
+    if (window.requireGateThen) {
+      window.requireGateThen(_openTracked, title);
+    } else {
+      _openTracked();
+    }
+  });
+
+  // certificate_download — fires when the visitor clicks the download
+  // link inside the (already-gated) certificate lightbox.
+  document.addEventListener('click', function (e) {
+    var dl = e.target.closest ? e.target.closest('#certModalDownloadBtn') : null;
+    if (dl && window._smTrackEvent) window._smTrackEvent('certificate_download');
   });
 
   window.closeCertModal   = closeCertModal;
@@ -4860,5 +4925,204 @@ window.hieModalImgLoaded = hieModalImgLoaded;
     document.addEventListener('DOMContentLoaded', initTextAnimations);
   } else {
     initTextAnimations();
+  }
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   RECRUITER VIEW — quick-jump panel toggle
+══════════════════════════════════════════════════════════════ */
+(function () {
+  function init() {
+    var openBtnDesktop = document.getElementById('recruiterViewBtn');
+    var openBtnMobile  = document.getElementById('recruiterViewMobBtn');
+    var panel          = document.getElementById('recruiterPanel');
+    var backdrop       = document.getElementById('recruiterPanelBackdrop');
+    var closeBtn       = document.getElementById('recruiterPanelClose');
+    if (!panel) return;
+
+    var lastFocused = null;
+
+    function openPanel() {
+      lastFocused = document.activeElement;
+      panel.hidden = false;
+      document.body.classList.add('recruiter-panel-open');
+      if (openBtnDesktop) openBtnDesktop.setAttribute('aria-expanded', 'true');
+      // Close the mobile drawer if it happens to be open behind this
+      var drawer = document.getElementById('navMobDrawer');
+      if (drawer) drawer.classList.remove('active');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closePanel() {
+      panel.hidden = true;
+      document.body.classList.remove('recruiter-panel-open');
+      if (openBtnDesktop) openBtnDesktop.setAttribute('aria-expanded', 'false');
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    }
+
+    if (openBtnDesktop) openBtnDesktop.addEventListener('click', openPanel);
+    if (openBtnMobile)  openBtnMobile.addEventListener('click', openPanel);
+    if (backdrop)  backdrop.addEventListener('click', closePanel);
+    if (closeBtn)  closeBtn.addEventListener('click', closePanel);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panel.hidden) closePanel();
+    });
+
+    // Every list item closes the panel on click (anchors still scroll,
+    // the CV item still opens the PDF modal via its own onclick).
+    panel.querySelectorAll('[data-recruiter-close]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        closePanel();
+        var targetSel = el.getAttribute('href');
+        if (targetSel && targetSel.charAt(0) === '#' && targetSel.length > 1) {
+          var target = document.querySelector(targetSel);
+          if (target) {
+            window.setTimeout(function () {
+              target.classList.add('recruiter-target-flash');
+              window.setTimeout(function () {
+                target.classList.remove('recruiter-target-flash');
+              }, 1700);
+            }, 380);
+          }
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   TROUBLESHOOTING LAB — interactive diagnostic decision paths
+   Vanilla JS, no external libraries.
+══════════════════════════════════════════════════════════════ */
+(function () {
+  var SCENARIOS = {
+    'no-internet': {
+      title: 'No Internet',
+      badge: 'Connectivity',
+      desc: 'A device has no network access at all. Work from the physical layer up so you don\u2019t skip a cause.',
+      steps: [
+        { title: 'Check the cable / Wi-Fi', detail: 'Confirm the Ethernet cable is seated or that Wi-Fi is switched on and connected to the right SSID. Rules out a physical or link-layer issue first.' },
+        { title: 'Check the IP address', detail: 'Run ipconfig / ip addr. A 169.254.x.x address means the device never got a lease from DHCP \u2014 that\u2019s the next thing to chase.' },
+        { title: 'Check the default gateway', detail: 'Ping the gateway (usually the router). If that fails, the problem is local \u2014 switch port, router, or cabling \u2014 not upstream.' },
+        { title: 'Check DNS resolution', detail: 'Try pinging an IP directly (e.g. 8.8.8.8) versus a domain name. If the IP works but the domain doesn\u2019t, DNS is the culprit, not connectivity.' },
+        { title: 'Test end-to-end connectivity', detail: 'Load a real website and run a speed/latency check to confirm the fix holds under normal use, not just for a single ping.' }
+      ],
+      outcome: 'Root cause is usually one of: unplugged/disabled adapter, failed DHCP lease, dead gateway/router, or a DNS-only fault \u2014 each step above isolates which one it is.'
+    },
+    'slow-computer': {
+      title: 'Slow Computer',
+      badge: 'Performance',
+      desc: 'The machine boots and runs, but everything feels sluggish. Isolate whether it\u2019s CPU, memory, disk, or background load.',
+      steps: [
+        { title: 'Check Task Manager / Activity Monitor', detail: 'Sort by CPU and memory usage to spot a runaway process or an app that never releases resources.' },
+        { title: 'Check available disk space', detail: 'Under ~10\u201315% free space (especially on the system drive) causes noticeable slowdowns, particularly on drives without much cache headroom.' },
+        { title: 'Check startup programs', detail: 'Too many apps launching at boot compete for resources before the user even opens anything. Trim to what\u2019s actually needed.' },
+        { title: 'Check for malware / background updates', detail: 'A quick AV scan and checking Windows Update / background sync activity rules out silent resource hogs.' },
+        { title: 'Check hardware health', detail: 'Look at drive health (SMART status), RAM usage trends, and thermals \u2014 aging hardware or a failing disk shows up as slowness before it fails outright.' }
+      ],
+      outcome: 'Most slowdowns trace back to low disk space, a bloated startup list, or one misbehaving process \u2014 each is quick to confirm before assuming a hardware replacement is needed.'
+    },
+    'printer': {
+      title: 'Printer Not Working',
+      badge: 'Peripherals',
+      desc: 'A print job won\u2019t come out. Separate a driver/software problem from a connectivity or hardware one.',
+      steps: [
+        { title: 'Check power and connection', detail: 'Confirm the printer is powered on and the USB/network cable (or Wi-Fi link) is actually connected \u2014 the most common miss.' },
+        { title: 'Check the print queue', detail: 'A stuck job can block everything behind it. Clear the queue and restart the print spooler service before anything else.' },
+        { title: 'Check the correct printer is selected', detail: 'Confirm the default/target printer in the app matches the physical device \u2014 easy to send a job to the wrong one, especially after adding a new printer.' },
+        { title: 'Check drivers', detail: 'Outdated or corrupted drivers cause jobs to silently fail. Reinstalling or updating the driver resolves a large share of these cases.' },
+        { title: 'Check consumables and paper path', detail: 'Confirm there\u2019s toner/ink, paper is loaded correctly, and there\u2019s no paper jam or open cover triggering an error state.' }
+      ],
+      outcome: 'Printer faults split cleanly into connection, queue/spooler, driver, or hardware/consumables \u2014 working through them in order avoids reinstalling drivers when the real issue is a stuck queue.'
+    },
+    'dns': {
+      title: 'DNS Problem',
+      badge: 'Name Resolution',
+      desc: 'Sites won\u2019t load by name even though the network itself is up. Confirm it\u2019s DNS specifically before touching anything else.',
+      steps: [
+        { title: 'Confirm it\u2019s DNS, not connectivity', detail: 'Ping an IP address directly (e.g. 1.1.1.1). If that works but a domain name doesn\u2019t resolve, the fault is isolated to DNS.' },
+        { title: 'Check the configured DNS servers', detail: 'Review ipconfig /all (or equivalent) for the DNS servers in use \u2014 wrong, unreachable, or internal-only servers are a frequent cause.' },
+        { title: 'Flush the local DNS cache', detail: 'A stale or poisoned local cache (ipconfig /flushdns) can keep resolving an old or wrong address even after the server-side record is fixed.' },
+        { title: 'Test against a known-good DNS server', detail: 'Point resolution at a public resolver like 1.1.1.1 or 8.8.8.8 temporarily. If that fixes it, the issue is with the original DNS server, not the device.' },
+        { title: 'Check the DNS record itself', detail: 'For a specific domain, verify the record (A/CNAME) is correct and has propagated \u2014 especially after a recent change or migration.' }
+      ],
+      outcome: 'DNS issues almost always come down to a misconfigured resolver, a stale cache, or a bad/unpropagated record \u2014 this path finds which one in under five minutes.'
+    }
+  };
+
+  function renderScenario(key) {
+    var panel = document.getElementById('tslPanel');
+    var data = SCENARIOS[key];
+    if (!panel || !data) return;
+
+    var stepsHtml = data.steps.map(function (step, i) {
+      var delay = (i * 90);
+      return (
+        '<li class="tsl-step" style="animation-delay:' + delay + 'ms">' +
+          '<div class="tsl-step-rail">' +
+            '<div class="tsl-step-num">' + (i + 1) + '</div>' +
+            '<div class="tsl-step-line" aria-hidden="true"></div>' +
+          '</div>' +
+          '<div class="tsl-step-body">' +
+            '<p class="tsl-step-title">' + escapeHtml(step.title) + '</p>' +
+            '<p class="tsl-step-detail">' + escapeHtml(step.detail) + '</p>' +
+          '</div>' +
+        '</li>'
+      );
+    }).join('');
+
+    panel.innerHTML =
+      '<div class="tsl-panel-head">' +
+        '<h3 class="tsl-panel-title">' + escapeHtml(data.title) + ' \u2014 Diagnostic Path</h3>' +
+        '<span class="tsl-panel-badge">' + escapeHtml(data.badge) + '</span>' +
+      '</div>' +
+      '<p class="tsl-panel-desc">' + escapeHtml(data.desc) + '</p>' +
+      '<ol class="tsl-steps">' + stepsHtml + '</ol>' +
+      '<div class="tsl-panel-outcome">' +
+        '<i class="fas fa-circle-check" aria-hidden="true"></i>' +
+        '<p>' + escapeHtml(data.outcome) + '</p>' +
+      '</div>';
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function init() {
+    var scenarioBar = document.getElementById('tslScenarios');
+    if (!scenarioBar) return;
+    var buttons = scenarioBar.querySelectorAll('.tsl-scenario-btn');
+
+    function selectScenario(btn) {
+      buttons.forEach(function (b) {
+        b.classList.remove('tsl-active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('tsl-active');
+      btn.setAttribute('aria-selected', 'true');
+      renderScenario(btn.getAttribute('data-scenario'));
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () { selectScenario(btn); });
+    });
+
+    // Default to the first scenario on load
+    if (buttons.length) selectScenario(buttons[0]);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 })();
