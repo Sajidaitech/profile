@@ -546,7 +546,7 @@ body::after {
 }
 .nav-admin-btn:active { transform: translateY(0) scale(0.96); }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .nav-admin-btn { display: none !important; }
 }
 
@@ -35469,7 +35469,7 @@ header#topNav.top-nav nav#navMobDrawer.nav-mob-drawer .nav-mob-link:focus-visibl
 }
 .recruiter-view-btn:active { transform: translateY(0) scale(0.97); }
 
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .recruiter-view-btn { display: none !important; }
 }
 
@@ -35715,4 +35715,155 @@ body.recruiter-panel-open { overflow: hidden; }
 
 @media (max-width: 480px) {
   .tsl-panel { padding: 18px 16px; }
+}
+
+/* ================================================================
+   FLUID NAV FIT — keep every top-nav item (all 14 links, the
+   Recruiter Fast Pass button, and the Admin Login button) visible
+   at once across the whole desktop range, instead of any of them
+   getting clipped by .nav-inner's overflow:hidden or disappearing
+   at a breakpoint. Padding/gaps/font-size scale down smoothly with
+   viewport width via clamp() rather than jumping at a fixed point.
+   Wins the cascade because it's the last rule in the file.
+================================================================ */
+.nav-inner {
+  gap: clamp(3px, 0.6vw, 10px) !important;
+  padding: 0 clamp(5px, 1.2vw, 22px) !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Logo — shrink icon/text block so it never crowds out the links */
+.nav-logo-img-wrap img { width: clamp(22px, 1.8vw, 32px) !important; height: clamp(22px, 1.8vw, 32px) !important; }
+.nav-logo-text { max-width: clamp(46px, 8vw, 150px) !important; overflow: hidden !important; }
+.nav-logo-name {
+  max-width: 100% !important;
+  font-size: clamp(10px, 0.85vw, 13px) !important;
+  overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
+}
+.nav-logo-role {
+  max-width: 100% !important;
+  font-size: clamp(8.5px, 0.7vw, 11px) !important;
+  overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
+  display: block !important;
+}
+
+/* Center links — all 14 stay on one line, fully spelled out */
+.nav-links-center { gap: clamp(0px, 0.25vw, 2px) !important; flex-wrap: nowrap !important; }
+.nav-link {
+  padding: 5px clamp(3px, 0.65vw, 12px) !important;
+  font-size: clamp(10px, 0.82vw, 12px) !important;
+  white-space: nowrap !important;
+}
+
+/* Recruiter Fast Pass — text stays intact, just tightens up */
+.recruiter-view-btn {
+  padding: 8px clamp(6px, 1vw, 18px) !important;
+  gap: clamp(3px, 0.45vw, 7px) !important;
+  font-size: clamp(10px, 0.8vw, 12.5px) !important;
+  white-space: nowrap !important;
+}
+.recruiter-view-btn i { font-size: clamp(9.5px, 0.75vw, 12px) !important; }
+
+/* Admin Login — shrinks the circle a little rather than vanishing */
+.nav-admin-btn {
+  width: clamp(24px, 1.8vw, 32px) !important;
+  height: clamp(24px, 1.8vw, 32px) !important;
+}
+.nav-admin-btn i { font-size: clamp(10px, 0.75vw, 12px) !important; }
+
+/* ================================================================
+   ★★★ FINAL CONTRAST FIX — dark text on bright, white text on dark
+   ----------------------------------------------------------------
+   Two concrete bugs against the current daytime background.webp
+   (bright sky/grass with only a few dark pockets — rocks, stream
+   shadow, tree canopy):
+
+   1. The hero stat chips (.hero-vchip) and KPI numbers (.kpi-block)
+      sit on intentionally LIGHT/bright glass — but earlier passes
+      forced their text to white, so it's white-on-near-white and
+      unreadable. Restored to dark ink here, which is what a bright
+      chip needs regardless of the photo behind it.
+
+   2. Several dark glass surfaces (nav bar, cards, hero panel,
+      footer) had drifted to only ~32-42% opacity in a later "clear
+      glass" pass, letting the bright photo wash the white text out
+      in places. Raised back to a solid, photo-independent opacity
+      so white text always has a real dark surface under it. The
+      weather bar had NO background at all (fully transparent,
+      floating directly on the photo) — given a proper dark pill so
+      its text isn't unprotected raw-photo text.
+
+   Placed last so it wins the cascade over every earlier pass.
+================================================================ */
+
+/* ── 1. Stats bar (4+ Years / 500+ Incidents / 600+ Systems / 3
+   Verticals) — no visible box at all, per request: fully
+   transparent, numbers sit straight on the photo. Contrast comes
+   from a firm white-with-dark-halo treatment instead of a panel,
+   matching the hero name/statement above it. ── */
+.hero-kpis {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+.kpi-block { background: transparent !important; box-shadow: none !important; }
+.kpi-block + .kpi-block::before {
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.35), transparent) !important;
+}
+.kpi-num, .kpi-label, .kpi-unit {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.75), 0 1px 3px rgba(0,0,0,0.85) !important;
+}
+.kpi-label { font-weight: 600 !important; }
+
+/* Hero stat chips (beside the portrait) keep their light glass —
+   dark text so it stays readable on their own bright surface. */
+.hvc-val, .hvc-lbl, .hvc-icon {
+  color: var(--ink) !important;
+  -webkit-text-fill-color: var(--ink) !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.65) !important;
+}
+.hvc-lbl { color: var(--ink-3) !important; -webkit-text-fill-color: var(--ink-3) !important; }
+.hvc-icon { color: var(--purple) !important; -webkit-text-fill-color: var(--purple) !important; }
+.hero-vchip {
+  background: rgba(255,255,255,0.90) !important;
+}
+
+/* ── 2. Dark glass surfaces → solid, photo-independent opacity
+   (dark-area fix) ── */
+.top-nav, .top-nav.scrolled,
+.glass-card, .glass-card-deep, .wh-card, .gc-card, .project-card, .museum-case,
+.about-bio-col, .about-text-col, .about-panel-col,
+.exp-card, .lge-card, .edu-card, .cert-card, .cert-hero-card, .hie-card, .ref-card, .ach-award-card,
+.hero-editorial-layout,
+.footer, .footer-inner,
+.arsenal-category,
+.engage-row, .review-pills-panel, .review-box {
+  background: rgba(9,13,24,0.90) !important;
+}
+.mobile-sticky-cta {
+  background: rgba(9,13,24,0.92) !important;
+}
+
+/* Weather bar had zero background — plain text floating on the raw
+   photo. Give it a small solid pill so its text is never unguarded. */
+.weather-bar {
+  background: rgba(9,13,24,0.85) !important;
+  backdrop-filter: blur(6px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(140%) !important;
+  border-radius: 999px !important;
+  padding: 4px 12px !important;
+}
+.wb-date, .wb-time, .wb-weather-text, .wb-icon {
+  color: rgba(255,255,255,0.92) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.92) !important;
 }
