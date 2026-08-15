@@ -37547,8 +37547,19 @@ html, body { overflow-x: hidden !important; }
 
   .command-divider { width: 100%; height: 1px; }
   .command-item, .command-location { justify-content: center; }
-  .command-circle, .back-top { width: 100%; }
-  .back-top { justify-content: center; }
+
+  /* Keep the admin button a proper small circle instead of
+     stretching it to 100% width (which turned its
+     border-radius:50% into the distorted oval/glow-pill
+     shape sitting above Back to Top). */
+  .command-circle {
+    width: 46px;
+    height: 46px;
+    align-self: center;
+    margin: 0 auto;
+  }
+
+  .back-top { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 420px) {
