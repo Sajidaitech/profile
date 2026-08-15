@@ -36693,6 +36693,20 @@ html, body { overflow-x: hidden !important; }
   font-family: 'Caveat', cursive !important;
 }
 
+/* FIX — extra vertical whitespace throughout the footer:
+   Caveat is a cursive/handwriting font whose default ("normal")
+   line-height metric is much taller than a standard sans font at
+   the same font-size (~1.7x here vs ~1.2x expected). Because the
+   font-family above is applied to every descendant, that inflated
+   line-height was silently stacking through every heading, label,
+   and two-line command-bar row, which is what produced the large
+   empty gaps between sections on mobile. Pinning a sane line-height
+   here (once, for everything) removes that inflation without
+   touching layout/spacing rules individually. */
+#site-footer * {
+  line-height: 1.25;
+}
+
 #site-footer .brand-heading h2 {
   font-size: 40px;
   font-weight: 700;
@@ -37491,18 +37505,18 @@ html, body { overflow-x: hidden !important; }
   .orbit-track-2 { width: 190px; height: 88px; }
   .orbit-track-3 { width: 140px; height: 104px; }
 
-  .footer-main { display: flex; flex-direction: column; gap: 36px; }
+  .footer-main { display: flex; flex-direction: column; gap: 22px; }
   .footer-brand, .footer-system, .footer-navigation { width: 100%; }
 
   .brand-heading h2 { font-size: 23px; }
-  .status-glass { max-width: 100%; font-size: 12px; }
+  .status-glass { max-width: 100%; font-size: 12px; margin-top: 14px; }
 
   .footer-command-bar {
     flex-direction: column;
     align-items: stretch;
     border-radius: 24px;
-    gap: 12px;
-    margin-top: 40px;
+    gap: 8px;
+    margin-top: 24px;
   }
 
   .command-divider { width: 100%; height: 1px; }
