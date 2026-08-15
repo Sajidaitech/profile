@@ -33851,15 +33851,41 @@ footer.ftr,
 body {
   background-color: transparent !important;
 }
+/* FIX — this block used to set `background-image` alone (photo only),
+   which silently deleted the dark readability scrim that an earlier
+   rule had layered together with the photo in the `background`
+   shorthand (background-image is a sub-property, so this always won
+   and left the raw, undarkened photo behind all text). Re-including
+   the same scrim gradient here keeps this block's "wins the cascade"
+   role while no longer breaking text contrast on bright photos. */
 body::before {
-  background-image: url('background.webp') !important;
+  background-image:
+    linear-gradient(180deg,
+      rgba(3,8,20,0.62) 0%,
+      rgba(3,8,20,0.46) 16%,
+      rgba(3,8,20,0.42) 34%,
+      rgba(3,8,20,0.44) 66%,
+      rgba(3,8,20,0.50) 86%,
+      rgba(3,8,20,0.62) 100%),
+    url('background.webp') !important;
   background-size: cover !important;
   background-position: center 40% !important;
   background-repeat: no-repeat !important;
 }
 @media (max-width: 767px) {
   body::before {
-    background-image: url('mobilebackground.webp') !important;
+    background-image:
+      linear-gradient(180deg,
+        rgba(3,8,20,0.68) 0%,
+        rgba(3,8,20,0.54) 16%,
+        rgba(3,8,20,0.50) 30%,
+        rgba(3,8,20,0.64) 42%,
+        rgba(3,8,20,0.68) 50%,
+        rgba(3,8,20,0.62) 58%,
+        rgba(3,8,20,0.56) 68%,
+        rgba(3,8,20,0.60) 82%,
+        rgba(3,8,20,0.70) 100%),
+      url('mobilebackground.webp') !important;
     background-position: center center !important;
   }
 }
@@ -37533,6 +37559,101 @@ html, body { overflow-x: hidden !important; }
 
 
 /* =========================================================
+   LIQUID FLOTATION — MOBILE FOOTER REDESIGN
+   Every stacked block, social icon, and the command bar drifts
+   on its own slow, independent bob — like separate objects
+   floating on the same body of water. Delays are staggered so
+   nothing moves in sync; the amber glow behind the photo orb
+   drifts side to side like light moving on a liquid surface;
+   the system-status pill's corners breathe between round and
+   soft-blob to read as "glass on water" rather than a rigid
+   card. Scoped to the mobile stacked layout only — desktop
+   keeps its existing orb float / ripple / sweep animations.
+   ========================================================= */
+
+@keyframes liquidBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-9px) rotate(-0.6deg); }
+}
+
+@keyframes liquidBobSoft {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+@keyframes liquidWaveDrift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes liquidBlobMorph {
+  0%, 100% { border-radius: 26px 26px 26px 26px / 26px 26px 26px 26px; }
+  33%      { border-radius: 34px 22px 30px 24px / 22px 30px 20px 32px; }
+  66%      { border-radius: 22px 32px 22px 34px / 30px 20px 34px 20px; }
+}
+
+@media (max-width: 650px) {
+
+  /* Ambient glow drifts horizontally behind the photo orb,
+     like light rippling across water */
+  .footer-sunspill {
+    background-size: 180% 100%;
+    animation: liquidWaveDrift 9s ease-in-out infinite;
+  }
+
+  /* Stacked sections float independently, each with its own
+     timing so the footer never moves as one rigid block */
+  .liquid-footer .footer-brand {
+    animation: liquidBob 7.5s ease-in-out infinite;
+    animation-delay: 0s;
+  }
+
+  .footer-system {
+    animation: liquidBobSoft 6.5s ease-in-out infinite;
+    animation-delay: 0.9s;
+  }
+
+  .connect-column {
+    animation: liquidBob 8s ease-in-out infinite;
+    animation-delay: 1.6s;
+  }
+
+  /* System-status card breathes between rounded-rect and a
+     soft blob shape — reads as glass resting on liquid */
+  .system-glass {
+    animation:
+      liquidBobSoft 6.5s ease-in-out infinite,
+      liquidBlobMorph 10s ease-in-out infinite;
+    animation-delay: 0.9s, 0s;
+  }
+
+  /* Each CONNECT icon bobs on its own offset so the row ripples
+     left-to-right rather than moving together */
+  .social-orb span {
+    animation: liquidBobSoft 4.4s ease-in-out infinite;
+  }
+  .social-orb:nth-child(1) span { animation-delay: 0s; }
+  .social-orb:nth-child(2) span { animation-delay: 0.35s; }
+  .social-orb:nth-child(3) span { animation-delay: 0.7s; }
+  .social-orb:nth-child(4) span { animation-delay: 1.05s; }
+  .social-orb:nth-child(5) span { animation-delay: 1.4s; }
+
+  /* Freeze an icon's bob on touch so a tap always lands
+     precisely on its current position */
+  .social-orb:active span { animation-play-state: paused; }
+
+  /* Command bar keeps its existing rise-in entrance, then
+     settles into a slow, whole-bar bob once it has appeared */
+  .footer-command-bar.command-visible {
+    animation:
+      commandAppear 0.7s ease both,
+      liquidBobSoft 8.5s ease-in-out infinite 0.7s;
+  }
+}
+
+
+/* =========================================================
    ACCESSIBILITY
    ========================================================= */
 
@@ -37555,6 +37676,16 @@ html, body { overflow-x: hidden !important; }
   }
 
   .footer-command-bar { opacity: 1; transform: none; }
+
+  /* Liquid flotation redesign — mobile footer */
+  .footer-sunspill,
+  .liquid-footer .footer-brand,
+  .footer-system,
+  .connect-column,
+  .system-glass,
+  .social-orb span {
+    animation: none !important;
+  }
 }
 
 @supports not (backdrop-filter: blur(20px)) {
