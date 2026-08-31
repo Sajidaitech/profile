@@ -158,7 +158,19 @@ async function handleApproved(env, cors) {
 // ---------- Telegram ----------
 
 async function telegramApi(env, method, payload) {
-  const res = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/${method}`, {
+  const t = env.TELEGRAM_BOT_TOKEN || "";
+  console.log(
+    "TOKEN_DIAG",
+    "len=" + t.length,
+    "first4=" + JSON.stringify(t.slice(0, 4)),
+    "last4=" + JSON.stringify(t.slice(-4)),
+    "hasColon=" + t.includes(":"),
+    "hasWhitespace=" + /\s/.test(t),
+    "hasQuote=" + /['"]/.test(t)
+  );
+  const url = `https://api.telegram.org/bot${t}/${method}`;
+  console.log("TELEGRAM_URL_LEN", url.length);
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
