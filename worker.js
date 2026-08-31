@@ -127,9 +127,11 @@ async function handleSubmit(request, env, cors) {
   reviews.push(review);
   await saveReviews(env, reviews);
 
+  console.log("SUBMIT_HANDLER_REACHED", review.id);
+
   await notifyTelegram(env, review);
 
-  return jsonResponse({ ok: true }, 200, cors);
+  return jsonResponse({ ok: true, debugBuild: "diag-01" }, 200, cors);
 }
 
 // ---------- Approved (public) ----------
