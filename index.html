@@ -285,6 +285,7 @@
         <a href="#achievements"   class="nav-link nav-anchor">Awards</a>
         <a href="#fieldwork"      class="nav-link nav-anchor">Hands-On</a>
         <a href="#references"     class="nav-link nav-anchor">References</a>
+        <a href="#website-reviews" class="nav-link nav-anchor">Reviews</a>
         <a href="#contact"        class="nav-link nav-anchor">Contact</a>
       </nav>
 
@@ -314,6 +315,7 @@
       <a href="#achievements"   class="nav-mob-link nav-anchor">Awards</a>
       <a href="#fieldwork"      class="nav-mob-link nav-anchor">Hands-On</a>
       <a href="#references"     class="nav-mob-link nav-anchor">References</a>
+      <a href="#website-reviews" class="nav-mob-link nav-anchor">Reviews</a>
       <a href="#contact"        class="nav-mob-link nav-anchor">Contact</a>
       <button type="button" class="nav-mob-link recruiter-view-mob-btn" id="recruiterViewMobBtn" aria-haspopup="dialog" aria-controls="recruiterPanel">
         <i class="fas fa-bolt" aria-hidden="true"></i> Recruiter Fast Pass
@@ -2699,6 +2701,171 @@
       </div>
     </section>
 
+    <style>
+      .review-form-row { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+      .review-form-row label { font-size: 14px; opacity: 0.85; }
+      .review-form input[type="text"],
+      .review-form textarea {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 8px;
+        padding: 10px 12px;
+        color: inherit;
+        font: inherit;
+        resize: vertical;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .review-stars-input { display: flex; gap: 8px; font-size: 24px; cursor: pointer; }
+      .review-stars-input i { color: rgba(255,255,255,0.25); transition: color .15s ease, transform .15s ease; }
+      .review-stars-input i.filled { color: #C8A96E; }
+      .review-stars-input i:hover { transform: scale(1.15); }
+      .review-form-status { margin-top: 12px; font-size: 14px; min-height: 20px; }
+      .review-form-status.success { color: #4ade80; }
+      .review-form-status.error { color: #f87171; }
+      #reviewSubmitBtn.loading { opacity: 0.6; pointer-events: none; }
+
+      .review-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 20px;
+      }
+      .review-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+      .review-avatar {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: #C8A96E; color: #0D1017;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 700; flex-shrink: 0;
+      }
+      .review-meta { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+      .review-name { font-weight: 600; }
+      .review-role { font-size: 12px; opacity: 0.6; }
+      .review-date { font-size: 12px; opacity: 0.5; white-space: nowrap; }
+      .review-stars { color: #C8A96E; font-size: 13px; margin-bottom: 8px; }
+      .review-text { font-size: 14px; line-height: 1.5; opacity: 0.9; }
+
+      /* ── Two-box "Vision Pro" liquid-glass review layout ── */
+      .smrv-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(20px, 3vw, 32px);
+        align-items: start;
+        margin-top: clamp(28px, 4vw, 44px);
+      }
+      .smrv-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 26px;
+        padding: clamp(26px, 3.2vw, 40px);
+        background: linear-gradient(150deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,.06) 45%, rgba(255,255,255,.11) 100%);
+        -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.06);
+        backdrop-filter: blur(28px) saturate(180%) brightness(1.06);
+        border-top: 1.5px solid rgba(255,255,255,.65);
+        border-left: 1px solid rgba(255,255,255,.35);
+        border-right: 1px solid rgba(255,255,255,.18);
+        border-bottom: 1px solid rgba(255,255,255,.10);
+        box-shadow:
+          inset 0 1.5px 0 rgba(255,255,255,.55),
+          inset 0 -1px 0 rgba(0,0,0,.10),
+          0 8px 28px rgba(0,0,0,.30),
+          0 26px 60px rgba(0,0,0,.24),
+          0 0 0 .75px rgba(255,255,255,.14);
+        transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
+      }
+      .smrv-box::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(135deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,.05) 32%, transparent 55%);
+      }
+      .smrv-box:hover { transform: translateY(-3px); }
+      .smrv-box-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; position: relative; z-index: 1; }
+      .smrv-star-icon { color: #f59e0b; font-size: 18px; filter: drop-shadow(0 0 6px rgba(245,158,11,.5)); }
+      .smrv-box-title { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -.01em; color: #fff; }
+      .smrv-box-hint { margin: 0 0 22px; font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,.7); position: relative; z-index: 1; }
+      .smrv-submit-btn { position: relative; z-index: 1; }
+      .smrv-reviews-grid {
+        position: relative; z-index: 1;
+        display: flex; flex-direction: column; gap: 14px;
+        max-height: 480px; overflow-y: auto; padding-right: 4px;
+      }
+      .smrv-empty-state {
+        margin: 12px 0 0; padding: 28px 14px; text-align: center;
+        font-size: 13.5px; font-style: italic; color: rgba(255,255,255,.5);
+        border: 1px dashed rgba(255,255,255,.18); border-radius: 14px;
+      }
+      @media (max-width: 900px) {
+        .smrv-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+
+    <!-- ================================================================
+         WEBSITE REVIEWS — leave a review / approved reviews (public)
+    ================================================================ -->
+    <section id="website-reviews" class="section reviews-section">
+      <div class="hover-shade" aria-hidden="true"></div>
+      <div class="container">
+        <header class="section-header" data-aos="fade-up">
+          <span class="sec-num" aria-hidden="true">★</span>
+          <h2 class="sec-title">What Visitors Say</h2>
+          <div class="sec-rule"></div>
+          <p class="sec-subtitle">Genuine feedback from recruiters, colleagues, and professionals who visited this portfolio.</p>
+        </header>
+
+        <div class="smrv-grid">
+
+          <!-- Leave a review -->
+          <div class="smrv-box smrv-box--form" data-aos="fade-up">
+            <div class="smrv-box-head">
+              <i class="fas fa-star smrv-star-icon" aria-hidden="true"></i>
+              <h3 class="smrv-box-title">Leave a Review</h3>
+            </div>
+            <p class="smrv-box-hint">Tell other visitors what it was like working with me. Reviews are checked before they go live.</p>
+            <form id="reviewForm" class="review-form" novalidate>
+              <div class="review-form-row">
+                <label for="reviewName">Name</label>
+                <input type="text" id="reviewName" name="reviewName" maxlength="80" required placeholder="Your name" />
+              </div>
+              <div class="review-form-row">
+                <label for="reviewMessage">Review</label>
+                <textarea id="reviewMessage" name="reviewMessage" rows="5" maxlength="1000" required placeholder="Share your experience..."></textarea>
+              </div>
+              <div class="review-form-row">
+                <label>Rating</label>
+                <div class="review-stars-input" id="reviewStars">
+                  <i class="fas fa-star" data-star="1"></i>
+                  <i class="fas fa-star" data-star="2"></i>
+                  <i class="fas fa-star" data-star="3"></i>
+                  <i class="fas fa-star" data-star="4"></i>
+                  <i class="fas fa-star" data-star="5"></i>
+                </div>
+                <input type="hidden" id="reviewRatingValue" value="0" />
+              </div>
+              <button type="submit" id="reviewSubmitBtn" class="btn-gold smrv-submit-btn">
+                <span class="btn-label">Submit Review</span>
+              </button>
+              <p id="reviewFormStatus" class="review-form-status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <!-- Approved reviews — public, visible to everyone -->
+          <div class="smrv-box smrv-box--display" data-aos="fade-up" data-aos-delay="120">
+            <div class="smrv-box-head">
+              <i class="fas fa-star smrv-star-icon" aria-hidden="true"></i>
+              <h3 class="smrv-box-title">Approved Reviews</h3>
+            </div>
+            <p class="smrv-box-hint">Public reviews — visible to every visitor of this site.</p>
+            <div class="reviews-grid smrv-reviews-grid" id="reviewsGrid">
+              <p class="smrv-empty-state" id="reviewsEmptyState">No reviews yet — be the first to leave one.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
 
     <!-- ================================================================
          CONTACT
@@ -2828,23 +2995,7 @@
     </section>
 
 
-    <!-- ================================================================
-         WEBSITE REVIEWS
-    ================================================================ -->
-    <section id="website-reviews" class="section reviews-section" style="display:none;">
-      <div class="hover-shade" aria-hidden="true"></div>
-      <div class="container">
-        <header class="section-header" data-aos="fade-up">
-          <span class="sec-num" aria-hidden="true">★</span>
-          <h2 class="sec-title">What Visitors Say</h2>
-          <div class="sec-rule"></div>
-          <p class="sec-subtitle">Genuine feedback from recruiters, colleagues, and professionals who visited this portfolio.</p>
-        </header>
-        <div class="reviews-grid" id="reviewsGrid">
-          <!-- Cards injected by JS -->
-        </div>
-      </div>
-    </section>
+
 
   </main>
 
@@ -3186,14 +3337,11 @@
   <noscript><style>#gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
 
   <!-- ═══════════════════════════════════════════════════════════
-       REVIEW SYSTEM — secure rewrite
-       · review-submit.js  : form handler (anon key only, validates
-                              name + review + rating, inserts as pending)
-       · reviews-portfolio.js: marquee display (anon key, approved only)
-       · NO service_role key anywhere in frontend code.
+       REVIEW SYSTEM — now merged into script.js (Cloudflare Worker +
+       Telegram moderation instead of Supabase). No key/secret in
+       frontend code — the Worker only accepts new pending reviews
+       and only ever returns approved ones.
   ════════════════════════════════════════════════════════════ -->
-  <script src="review-submit.js" defer></script>
-  <script src="reviews-portfolio.js" defer></script>
 
   <!-- Admin entry point: footer ftr-admin-btn only (nav-bar lock icon and
        mobile drawer link were removed — the footer button links straight

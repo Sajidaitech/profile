@@ -1,0 +1,14 @@
+name = "sajidmk-reviews"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+routes = [
+  { pattern = "reviews.sajidmk.com", custom_domain = true }
+]
+
+kv_namespaces = [
+  { binding = "REVIEWS_KV", id = "0665c324f2214bdf91ccc45e47564d27" }
+]
+
+[vars]
+ALLOWED_ORIGIN = "https://www.sajidmk.com"
