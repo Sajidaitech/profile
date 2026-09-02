@@ -565,7 +565,7 @@ const GATE_REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
   //   3. Get your chat ID: visit
   //      https://api.telegram.org/bot<TOKEN>/getUpdates
   //      after step 2, and read the "chat":{"id": ...} value.
-  var TELEGRAM_BOT_TOKEN = '8634065770:AAFAU7VMwRyT5pSXI882JG_0kZbWMEBVbvY';
+  var TELEGRAM_BOT_TOKEN = '8934474613:AAF7w88DVEYa1w9vrGFxZ2aFzVvRVa7FydA';
   var TELEGRAM_CHAT_ID   = '8235795754';
 
   function _notifyOwnerByTelegram(name, context) {
@@ -3588,13 +3588,13 @@ window.closePdfModal = closePdfModal;
         dlBtn.style.display = 'none';
       }
     }
-    modal.classList.add('cert-modal--open');
+    modal.classList.add('pdf-modal--open');
     document.body.classList.add('cert-modal-open');
   }
 
   function closeCertModal() {
     var modal = document.getElementById('certImgModal');
-    if (modal) modal.classList.remove('cert-modal--open');
+    if (modal) modal.classList.remove('pdf-modal--open');
     document.body.classList.remove('cert-modal-open');
   }
 
