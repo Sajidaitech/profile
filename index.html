@@ -65,7 +65,7 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preload" href="logo.png" as="image" fetchpriority="high">
   <link rel="preload" href="photo.jpg" as="image" fetchpriority="high">
-  <link rel="preload" href="styles.css" as="style">
+  <link rel="preload" href="styles.min.css" as="style">
   <!-- Preconnect before font CSS loads -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3335,7 +3335,7 @@
        immediately at startup (before any Supabase call) so _writeVisitorName()
        in script.js always finds _smSessionId / _smFingerprint. -->
   <script src="analytics.js" defer></script>
-  <script src="script.js" defer></script>
+  <script src="script.min.js" defer></script>
   <!-- Separate CV/Certificate gate (new, standalone file — script.js is untouched).
        Loads after script.js; both use defer, so document order is preserved and
        this file's window.requireGateThen override takes effect for every call. -->

@@ -51,6 +51,19 @@ var CVGateTelegram = (function () {
   var TG_BOT_TOKEN = '8934474613:AAF7w88DVEYa1w9vrGFxZ2aFzVvRVa7FydA';
   var TG_CHAT_ID    = '8235795754';
 
+  // Server-side relay (Cloudflare Worker or similar) that forwards to
+  // Telegram FROM YOUR SERVER instead of the visitor's browser. This is
+  // what makes delivery work in places where api.telegram.org itself is
+  // blocked/throttled at the ISP level (this has happened in Pakistan,
+  // Iran, and a few other countries at various times) — the visitor's
+  // browser only ever talks to your own domain, which isn't blocked.
+  // Leave '' to skip straight to the direct Telegram call below.
+  var RELAY_URL = 'https://script.google.com/macros/s/AKfycbyjXRc2RRb8eKhJkHpdMoZInqxawSbHgHYbEbaDTGhu8yeuFci9jMwZOoLHzOfyrVj4Vg/exec';
+
+  var QUEUE_KEY = 'cvgate_tg_pending';
+  var MAX_QUEUE = 20;
+  var MAX_ATTEMPTS_PER_SEND = 2;
+
   // Minimal escaping so a visitor typing "<" or "&" into name/company
   // can't break Telegram's HTML parse_mode.
   function escapeHtml(str) {
@@ -59,15 +72,32 @@ var CVGateTelegram = (function () {
     });
   }
 
-  function send(text) {
-    if (!TG_BOT_TOKEN || TG_BOT_TOKEN.indexOf('PASTE_') === 0) return; // not configured yet
-    if (!TG_CHAT_ID || String(TG_CHAT_ID).indexOf('PASTE_') === 0) return;
+  function readQueue() {
+    try {
+      var raw = localStorage.getItem(QUEUE_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      return Object.prototype.toString.call(arr) === '[object Array]' ? arr : [];
+    } catch (e) { return []; }
+  }
 
+  function writeQueue(arr) {
+    try {
+      if (arr.length > MAX_QUEUE) arr = arr.slice(arr.length - MAX_QUEUE);
+      localStorage.setItem(QUEUE_KEY, JSON.stringify(arr));
+    } catch (e) { /* storage full/unavailable — drop silently */ }
+  }
+
+  function enqueue(text) {
+    var q = readQueue();
+    q.push({ text: text, ts: Date.now() });
+    writeQueue(q);
+  }
+
+  function directTelegramCall(text) {
+    if (!TG_BOT_TOKEN || TG_BOT_TOKEN.indexOf('PASTE_') === 0) return Promise.resolve(false);
+    if (!TG_CHAT_ID || String(TG_CHAT_ID).indexOf('PASTE_') === 0) return Promise.resolve(false);
     var url = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
-
-    // Fire-and-forget: never block or interrupt the visitor's flow if
-    // this fails (offline, ad blocker, Telegram down, etc).
-    fetch(url, {
+    return fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -76,7 +106,63 @@ var CVGateTelegram = (function () {
         parse_mode: 'HTML',
         disable_web_page_preview: true
       })
-    }).catch(function () { /* ignore — best effort only */ });
+    }).then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+
+  function relayCall(text) {
+    // Content-Type is deliberately 'text/plain' (not 'application/json')
+    // so this stays a CORS "simple request" and skips the OPTIONS
+    // preflight — Google Apps Script Web Apps don't handle preflight
+    // requests, so a JSON content-type here would make every call fail.
+    // The body itself is still valid JSON; Apps Script parses it fine
+    // via e.postData.contents regardless of the header.
+    return fetch(RELAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ text: text })
+    }).then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+
+  // Tries the relay (if configured) then the direct call, with one retry
+  // each on failure — covers transient blips without hammering anything.
+  function attemptDelivery(text, attemptsLeft) {
+    var chain = RELAY_URL ? relayCall(text) : Promise.resolve(false);
+    return chain.then(function (ok) {
+      if (ok) return true;
+      return directTelegramCall(text);
+    }).then(function (ok) {
+      if (ok) return true;
+      if (attemptsLeft > 1) return attemptDelivery(text, attemptsLeft - 1);
+      return false;
+    });
+  }
+
+  function send(text) {
+    // Fire-and-forget from the caller's point of view: never blocks or
+    // interrupts the visitor. If every attempt fails (e.g. this visitor's
+    // network blocks Telegram outright and no relay is configured), the
+    // message is queued and retried automatically next time this browser
+    // loads the page — silently, no visitor-facing effect either way.
+    attemptDelivery(text, MAX_ATTEMPTS_PER_SEND).then(function (ok) {
+      if (!ok) enqueue(text);
+    });
+  }
+
+  function flushQueue() {
+    var q = readQueue();
+    if (!q.length) return;
+    writeQueue([]); // clear now; anything that still fails re-queues itself
+    q.forEach(function (item) {
+      attemptDelivery(item.text, MAX_ATTEMPTS_PER_SEND).then(function (ok) {
+        if (!ok) enqueue(item.text);
+      });
+    });
+  }
+
+  // Retry any backlog on load and whenever the browser regains connectivity.
+  if (typeof window !== 'undefined') {
+    setTimeout(flushQueue, 1500);
+    window.addEventListener('online', flushQueue);
   }
 
   function readVisitorInfo() {
