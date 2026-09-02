@@ -39,25 +39,29 @@
    fine, but don't reuse a token for anything more sensitive.
 ================================================================= */
 
-(function () {
-  'use strict';
-
-  var TG_BOT_TOKEN = '7987553604:AAF6dCaRamMDhWXmAMvHkS83MYE07uMnDYU';
+// ================================================================
+// SHARED TELEGRAM HELPER
+// ----------------------------------------------------------------
+// Used by the gate module (initial submission message) below, and
+// by the activity-tracking module further down the file (per-view /
+// per-download "Opened" / "Downloaded" pings). Kept as one small
+// shared object so the bot token/chat id are only set in one place.
+// ================================================================
+var CVGateTelegram = (function () {
+  var TG_BOT_TOKEN = '8934474613:AAF7w88DVEYa1w9vrGFxZ2aFzVvRVa7FydA';
   var TG_CHAT_ID    = '8235795754';
 
-  function sendToTelegram(info) {
+  // Minimal escaping so a visitor typing "<" or "&" into name/company
+  // can't break Telegram's HTML parse_mode.
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function send(text) {
     if (!TG_BOT_TOKEN || TG_BOT_TOKEN.indexOf('PASTE_') === 0) return; // not configured yet
     if (!TG_CHAT_ID || String(TG_CHAT_ID).indexOf('PASTE_') === 0) return;
-
-    var lines = [
-      '\uD83D\uDCC4 New CV/Certificate gate submission',
-      'Name: ' + info.name,
-      'Company: ' + (info.company || '\u2014'),
-      'Purpose: ' + info.purpose,
-      'Page: ' + location.href,
-      'Time: ' + new Date().toLocaleString()
-    ];
-    var text = lines.join('\n');
 
     var url = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
 
@@ -66,8 +70,64 @@
     fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text })
+      body: JSON.stringify({
+        chat_id: TG_CHAT_ID,
+        text: text,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true
+      })
     }).catch(function () { /* ignore — best effort only */ });
+  }
+
+  function readVisitorInfo() {
+    try {
+      var raw = localStorage.getItem('cvgate_visitor_info');
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
+  // Sent every time a visitor opens or downloads the résumé, a
+  // certificate, or a recommendation letter — separate from the
+  // one-time "gate submission" message, so you can see not just who
+  // came by but what they actually looked at.
+  function notifyActivity(action, docLabel) {
+    var visitor = readVisitorInfo();
+    var emoji = action === 'Downloaded' ? '\u2B07\uFE0F' : '\uD83D\uDC41\uFE0F';
+    var text =
+      '\uD83D\uDCC4 <b>Document Activity</b>\n' +
+      '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
+      '\uD83D\uDC64 <b>Name:</b> ' + escapeHtml(visitor ? visitor.name : 'Unknown visitor') + '\n' +
+      '\uD83C\uDFE2 <b>Company:</b> ' + escapeHtml((visitor && visitor.company) || '\u2014') + '\n' +
+      '\uD83D\uDCC1 <b>Document:</b> ' + escapeHtml(docLabel || 'Document') + '\n' +
+      emoji + ' <b>Action:</b> ' + escapeHtml(action) + '\n' +
+      '\uD83D\uDD52 <b>Time:</b> ' + escapeHtml(new Date().toLocaleString());
+    send(text);
+  }
+
+  return { escapeHtml: escapeHtml, send: send, notifyActivity: notifyActivity };
+})();
+
+(function () {
+  'use strict';
+
+  function sendToTelegram(info) {
+    var pageUrl = location.href;
+    // Only linkify real http(s) pages — local file:// URLs (e.g. while
+    // testing) aren't a protocol Telegram will render as a link.
+    var pageLine = /^https?:\/\//i.test(pageUrl)
+      ? '<a href="' + CVGateTelegram.escapeHtml(pageUrl) + '">' + CVGateTelegram.escapeHtml(pageUrl.replace(/^https?:\/\//i, '')) + '</a>'
+      : CVGateTelegram.escapeHtml(pageUrl);
+
+    var text =
+      '\uD83C\uDD95 <b>New CV / Certificate Gate Submission</b>\n' +
+      '\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n' +
+      '\uD83D\uDC64 <b>Name:</b> ' + CVGateTelegram.escapeHtml(info.name) + '\n' +
+      '\uD83C\uDFE2 <b>Company:</b> ' + CVGateTelegram.escapeHtml(info.company || '\u2014') + '\n' +
+      '\uD83C\uDFAF <b>Purpose:</b> ' + CVGateTelegram.escapeHtml(info.purpose) + '\n' +
+      '\uD83D\uDD17 <b>Page:</b> ' + pageLine + '\n' +
+      '\uD83D\uDD52 <b>Time:</b> ' + CVGateTelegram.escapeHtml(new Date().toLocaleString());
+
+    CVGateTelegram.send(text);
   }
 
   var REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days, same window as the site's existing gate
@@ -242,6 +302,145 @@
 })();
 
 /* ================================================================
+   CV / CERTIFICATE GATE — INLINE DOCUMENT VIEWER
+   ----------------------------------------------------------------
+   Certificate and recommendation-letter links (.cc-cert-btn,
+   .chc-verify-btn, .rec-letter-btn, .btn-sm-gold) point straight at
+   Google Drive share URLs. script.js's own gate-integration handler
+   (see "GATED_LINK_SELECTOR" there) opens those with
+   window.open(href, '_blank') once the visitor is gated — i.e. it
+   navigates away to Google Drive.
+
+   This module intercepts the same clicks first (a capture-phase
+   listener always runs before script.js's bubble-phase one, so
+   stopping propagation here pre-empts it with zero edits to
+   script.js) and instead shows the file inline via Drive's
+   embeddable /preview endpoint, in a modal on top of the page. The
+   visitor never leaves sajidmk.com. An "open in Drive" and a direct
+   download link are kept in the modal header as a fallback/escape
+   hatch.
+
+   Only affects links that actually point at drive.google.com — any
+   other href on those same classes is left completely untouched.
+================================================================= */
+(function () {
+  'use strict';
+
+  var DOC_LINK_SELECTOR = '.cc-cert-btn, .chc-verify-btn, .rec-letter-btn, .btn-sm-gold';
+
+  function extractDriveId(href) {
+    var m = /\/d\/([a-zA-Z0-9_-]+)/.exec(href || '');
+    return m ? m[1] : null;
+  }
+
+  var els = null;
+
+  function buildModal() {
+    if (els) return els;
+
+    var overlay = document.createElement('div');
+    overlay.id = 'cvgDocOverlay';
+    overlay.className = 'cvg-doc-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-labelledby', 'cvgDocTitle');
+
+    overlay.innerHTML =
+      '<div class="cvg-doc-backdrop" id="cvgDocBackdrop"></div>' +
+      '<div class="cvg-doc-panel">' +
+        '<div class="cvg-doc-header">' +
+          '<span class="cvg-doc-title" id="cvgDocTitle">Document</span>' +
+          '<div class="cvg-doc-actions">' +
+            '<a class="cvg-doc-action-btn" id="cvgDocOpenBtn" target="_blank" rel="noopener noreferrer" title="Open in Google Drive"><i class="fas fa-up-right-from-square"></i></a>' +
+            '<a class="cvg-doc-action-btn" id="cvgDocDownloadBtn" title="Download"><i class="fas fa-download"></i></a>' +
+            '<button type="button" class="cvg-doc-action-btn cvg-doc-close" id="cvgDocCloseBtn" aria-label="Close">&times;</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cvg-doc-body">' +
+          '<div class="cvg-doc-loading" id="cvgDocLoading">Loading preview\u2026</div>' +
+          '<iframe class="cvg-doc-iframe" id="cvgDocFrame" src="" title="Document preview"></iframe>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    els = {
+      overlay: overlay,
+      backdrop: overlay.querySelector('#cvgDocBackdrop'),
+      title: overlay.querySelector('#cvgDocTitle'),
+      frame: overlay.querySelector('#cvgDocFrame'),
+      loading: overlay.querySelector('#cvgDocLoading'),
+      openBtn: overlay.querySelector('#cvgDocOpenBtn'),
+      dlBtn: overlay.querySelector('#cvgDocDownloadBtn'),
+      closeBtn: overlay.querySelector('#cvgDocCloseBtn')
+    };
+
+    function close() {
+      overlay.classList.remove('cvg-doc-visible');
+      document.body.classList.remove('cvg-doc-active');
+      // Clear the src once the close animation finishes so a Drive
+      // preview (or any embedded playback) doesn't keep running
+      // invisibly in the background.
+      setTimeout(function () { els.frame.src = ''; }, 300);
+    }
+
+    els.closeBtn.addEventListener('click', close);
+    els.backdrop.addEventListener('click', close);
+    els.dlBtn.addEventListener('click', function () {
+      // Never blocks the native download — only records that it happened.
+      CVGateTelegram.notifyActivity('Downloaded', els.dlBtn.getAttribute('data-doc-title'));
+    });
+    els.frame.addEventListener('load', function () {
+      els.loading.style.display = 'none';
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('cvg-doc-visible')) close();
+    });
+
+    els.close = close;
+    return els;
+  }
+
+  function openDocModal(href, title) {
+    var id = extractDriveId(href);
+    var e = buildModal();
+
+    e.title.textContent = title || 'Document';
+    e.openBtn.href = href;
+    e.dlBtn.href = id ? ('https://drive.google.com/uc?export=download&id=' + id) : href;
+    e.loading.style.display = '';
+    e.frame.src = id ? ('https://drive.google.com/file/d/' + id + '/preview') : href;
+
+    e.overlay.classList.add('cvg-doc-visible');
+    document.body.classList.add('cvg-doc-active');
+
+    e.dlBtn.setAttribute('data-doc-title', title || 'Document');
+    CVGateTelegram.notifyActivity('Opened', title);
+  }
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest ? e.target.closest(DOC_LINK_SELECTOR) : null;
+    if (!link) return;
+
+    var href = link.getAttribute('href') || '';
+    if (!/drive\.google\.com/i.test(href)) return; // not a Drive link — leave it alone
+
+    e.preventDefault();
+    e.stopPropagation(); // capture phase: runs before script.js's own handler on the same click
+
+    var card = link.closest('.cert-card, .cert-hero-card, .recommendation-card, .rec-card');
+    var titleEl = card ? card.querySelector('.cc-title, .chc-title') : null;
+    var title = titleEl ? titleEl.textContent.trim() : (link.textContent || '').trim() || 'Certificate';
+
+    if (window.requireGateThen) {
+      window.requireGateThen(function () { openDocModal(href, title); }, title);
+    } else {
+      openDocModal(href, title);
+    }
+  }, true); // capture phase — see comment block above
+})();
+
+/* ================================================================
    CV / CERTIFICATE GATE — VISITOR ACTIVITY TRACKING
    ----------------------------------------------------------------
    STEP 2. Standalone tracking layer, still separate from script.js
@@ -375,7 +574,7 @@
   // ── Generic "viewed" tracker for a modal that toggles the shared
   //    .pdf-modal--open class (both #pdfResumeModal and #certImgModal
   //    use that class per styles.css, so one watcher covers both) ──
-  function trackModal(modalId, eventType, getExtra) {
+  function trackModal(modalId, eventType, getExtra, labelFn) {
     var el = document.getElementById(modalId);
     if (!el) return; // element not present on this page — skip quietly
 
@@ -385,11 +584,13 @@
 
     function handleOpen() {
       openedAt = Date.now();
+      var extra = getExtra ? getExtra() : null;
       currentEventId = logEvent(eventType, merge({
         startedAt: new Date(openedAt).toISOString(),
         endedAt: null,
         durationMs: null
-      }, getExtra ? getExtra() : null));
+      }, extra));
+      CVGateTelegram.notifyActivity('Opened', labelFn ? labelFn(extra) : 'Document');
     }
 
     function handleClose() {
@@ -425,14 +626,16 @@
     });
   }
 
-  function attachDownloadTracker(btnId, eventType, getExtra) {
+  function attachDownloadTracker(btnId, eventType, getExtra, labelFn) {
     var btn = document.getElementById(btnId);
     if (!btn) return;
     btn.addEventListener('click', function () {
       // Never blocks or alters the native download — only records that
       // the download link was clicked; the browser's own save dialog
       // (if any) happens independently of this.
-      logEvent(eventType, getExtra ? getExtra() : null);
+      var extra = getExtra ? getExtra() : null;
+      logEvent(eventType, extra);
+      CVGateTelegram.notifyActivity('Downloaded', labelFn ? labelFn(extra) : 'Document');
     });
   }
 
@@ -441,12 +644,19 @@
     return { certName: titleEl ? titleEl.textContent.trim() : null };
   }
 
-  function init() {
-    trackModal('pdfResumeModal', 'cv_view');
-    trackModal('certImgModal', 'cert_view', getCertName);
+  function certLabel(extra) {
+    return (extra && extra.certName) || 'Certificate';
+  }
+  function resumeLabel() {
+    return 'R\u00e9sum\u00e9';
+  }
 
-    attachDownloadTracker('pdfDownloadBtn', 'cv_download');
-    attachDownloadTracker('certModalDownloadBtn', 'cert_download', getCertName);
+  function init() {
+    trackModal('pdfResumeModal', 'cv_view', null, resumeLabel);
+    trackModal('certImgModal', 'cert_view', getCertName, certLabel);
+
+    attachDownloadTracker('pdfDownloadBtn', 'cv_download', null, resumeLabel);
+    attachDownloadTracker('certModalDownloadBtn', 'cert_download', getCertName, certLabel);
   }
 
   if (document.readyState === 'loading') {
