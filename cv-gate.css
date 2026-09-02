@@ -29,9 +29,22 @@ body.cvg-active {
 .cvg-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(6, 10, 22, .38);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  /* fully replaces the live page behind the gate — no site content
+     shows or bleeds through, and it's easy for the visitor to focus
+     on the form since the page underneath is completely covered */
+  background-image:
+    linear-gradient(180deg, rgba(4,6,14,.66) 0%, rgba(4,6,14,.5) 45%, rgba(4,6,14,.72) 100%),
+    url('background.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+@media (max-width: 640px) {
+  .cvg-backdrop {
+    background-image:
+      linear-gradient(180deg, rgba(4,6,14,.66) 0%, rgba(4,6,14,.5) 45%, rgba(4,6,14,.72) 100%),
+      url('mobilebackground.webp');
+  }
 }
 
 .cvg-card {
@@ -63,9 +76,9 @@ body.cvg-active {
     0 18px 40px rgba(0,0,0,.34),
     0 40px 90px rgba(0,0,0,.30);
 
-  transform: translateY(28px) scale(.96);
+  transform: translateY(18px) scale(.88);
   opacity: 0;
-  transition: transform .5s cubic-bezier(.22,1,.36,1), opacity .4s ease;
+  transition: transform .48s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
 }
 #cvg-overlay.cvg-visible .cvg-card {
   transform: translateY(0) scale(1);
