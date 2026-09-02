@@ -19,13 +19,56 @@
    (optional), and Purpose
    (required single choice: Recruitment / Verification / Other).
 
-   No tracking, no Supabase, no Telegram, no dashboard — out of
-   scope for this pass. Submitted info is only kept in this
-   browser's storage so returning visitors aren't re-asked.
+   Submitted info is kept in this browser's storage (so returning
+   visitors aren't re-asked) AND sent straight to a Telegram chat via
+   the Bot API — directly from the browser, no backend/worker needed.
+
+   SETUP — fill these two in before deploying:
+     TG_BOT_TOKEN — from @BotFather, e.g. "123456789:AAExampleTokenHere"
+     TG_CHAT_ID   — the chat/user id that should receive the messages
+   Get your chat id by messaging your bot once, then visiting
+   https://api.telegram.org/bot<TOKEN>/getUpdates and reading the
+   "chat":{"id": ...} field from the response.
+
+   NOTE ON SECURITY: because this runs in the visitor's browser, the
+   bot token below is visible to anyone who views source / opens
+   devtools. That means someone could technically read it and use it
+   to send messages through your bot (they can't read your chat
+   history or messages sent to you, only send new ones as the bot).
+   For a simple portfolio lead-capture form this tradeoff is normally
+   fine, but don't reuse a token for anything more sensitive.
 ================================================================= */
 
 (function () {
   'use strict';
+
+  var TG_BOT_TOKEN = '7987553604:AAF6dCaRamMDhWXmAMvHkS83MYE07uMnDYU';
+  var TG_CHAT_ID    = '8235795754';
+
+  function sendToTelegram(info) {
+    if (!TG_BOT_TOKEN || TG_BOT_TOKEN.indexOf('PASTE_') === 0) return; // not configured yet
+    if (!TG_CHAT_ID || String(TG_CHAT_ID).indexOf('PASTE_') === 0) return;
+
+    var lines = [
+      '\uD83D\uDCC4 New CV/Certificate gate submission',
+      'Name: ' + info.name,
+      'Company: ' + (info.company || '\u2014'),
+      'Purpose: ' + info.purpose,
+      'Page: ' + location.href,
+      'Time: ' + new Date().toLocaleString()
+    ];
+    var text = lines.join('\n');
+
+    var url = 'https://api.telegram.org/bot' + TG_BOT_TOKEN + '/sendMessage';
+
+    // Fire-and-forget: never block or interrupt the visitor's flow if
+    // this fails (offline, ad blocker, Telegram down, etc).
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text })
+    }).catch(function () { /* ignore — best effort only */ });
+  }
 
   var REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days, same window as the site's existing gate
 
@@ -173,6 +216,8 @@
       localStorage.setItem(LS_SEEN_AT_KEY, String(Date.now()));
       sessionStorage.setItem(SS_UNLOCKED_KEY, '1');
     } catch (err) { /* private browsing — ignore */ }
+
+    sendToTelegram(info);
 
     unlocked = true;
 
