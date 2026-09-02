@@ -1,0 +1,305 @@
+/* ================================================================
+   CV / CERTIFICATE GATE — standalone stylesheet
+   Completely separate from styles.css / #gate-overlay.
+   Namespaced under .cvg- so nothing here can collide with the
+   existing name-only gate or any other page styles.
+================================================================= */
+
+#cvg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200; /* above the existing #gate-overlay (1100) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+  box-sizing: border-box;
+}
+#cvg-overlay.cvg-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+body.cvg-active {
+  overflow: hidden !important;
+}
+
+.cvg-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 10, 22, .38);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.cvg-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  isolation: isolate;
+
+  /* true glass: light, translucent tint + heavy blur of what's behind it */
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,.04) 40%, rgba(10,14,28,.22) 100%),
+    rgba(16, 20, 36, .32);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+
+  border: 1px solid rgba(255,255,255,.30);
+  border-radius: 22px;
+  padding: 34px 32px 28px;
+
+  /* layered shadow + inner highlights/shading for a 3D glass edge */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.35) inset,
+    0 0 0 1px rgba(255,255,255,.06) inset,
+    inset 0 24px 40px -24px rgba(255,255,255,.20),
+    inset 0 -30px 44px -26px rgba(0,0,0,.35),
+    0 18px 40px rgba(0,0,0,.34),
+    0 40px 90px rgba(0,0,0,.30);
+
+  transform: translateY(28px) scale(.96);
+  opacity: 0;
+  transition: transform .5s cubic-bezier(.22,1,.36,1), opacity .4s ease;
+}
+#cvg-overlay.cvg-visible .cvg-card {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* faux glass "sheen" streak for extra dimensionality, purely decorative */
+.cvg-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(255,255,255,.08) 100%);
+  pointer-events: none;
+}
+
+/* subtle scrim directly behind text content so copy stays readable
+   over whatever busy background shows through the glass */
+.cvg-card > * {
+  position: relative;
+}
+
+.cvg-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(10,14,28,.28);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: rgba(255,255,255,.85);
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, transform .15s ease;
+}
+.cvg-close:hover {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  transform: scale(1.06);
+}
+
+.cvg-eyebrow {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: #f0c460;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 6px rgba(0,0,0,.3);
+}
+
+.cvg-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 25px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.16;
+  margin: 0 0 8px;
+  letter-spacing: -.01em;
+  text-shadow: 0 1px 12px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.4);
+}
+.cvg-title span { color: #f0c460; }
+
+.cvg-subtitle {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255,255,255,.86);
+  margin: 0 0 22px;
+  max-width: 36ch;
+  text-shadow: 0 1px 8px rgba(0,0,0,.3);
+}
+
+.cvg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cvg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cvg-label {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.82);
+  text-shadow: 0 1px 6px rgba(0,0,0,.3);
+}
+.cvg-label .cvg-req { color: #f0c460; margin-left: 2px; }
+.cvg-label .cvg-opt {
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: rgba(255,255,255,.48);
+  margin-left: 5px;
+}
+
+.cvg-input {
+  height: 46px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 11px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(10,14,28,.28);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  padding: 0 14px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14.5px;
+  outline: 0;
+  box-shadow: 0 1px 0 rgba(255,255,255,.12) inset, 0 1px 3px rgba(0,0,0,.18) inset;
+  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+.cvg-input::placeholder { color: rgba(255,255,255,.5); }
+.cvg-input:focus {
+  border-color: rgba(240,196,96,.75);
+  background: rgba(10,14,28,.4);
+  box-shadow: 0 0 0 3px rgba(240,196,96,.18), 0 1px 0 rgba(255,255,255,.12) inset;
+}
+.cvg-input.cvg-invalid { border-color: #e0645f; }
+
+.cvg-radio-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cvg-radio-option {
+  flex: 1 1 auto;
+  min-width: 92px;
+}
+.cvg-radio-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.cvg-radio-option label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(10,14,28,.24);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: rgba(255,255,255,.9);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  padding: 0 8px;
+  text-shadow: 0 1px 4px rgba(0,0,0,.3);
+  box-shadow: 0 1px 0 rgba(255,255,255,.1) inset;
+  transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+.cvg-radio-option input:checked + label {
+  border-color: rgba(240,196,96,.8);
+  background: rgba(212,168,64,.28);
+  color: #fff;
+}
+
+.cvg-error-text {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 11.5px;
+  color: #e0645f;
+  min-height: 14px;
+  margin: -4px 0 0;
+}
+
+.cvg-submit-btn {
+  margin-top: 6px;
+  height: 48px;
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7a5010 0%, #c48a1a 55%, #d4a840 100%);
+  color: #fff;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(196,140,30,.4);
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+}
+.cvg-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 26px rgba(196,140,30,.5);
+}
+.cvg-submit-btn:active { transform: translateY(0); }
+
+.cvg-privacy-note {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(255,255,255,.58);
+  margin: 14px 0 0;
+  text-align: center;
+  text-shadow: 0 1px 6px rgba(0,0,0,.25);
+}
+
+@media (max-width: 480px) {
+  .cvg-card { padding: 28px 22px 24px; border-radius: 18px; }
+  .cvg-title { font-size: 22px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #cvg-overlay, .cvg-card { transition: opacity .15s ease !important; transform: none !important; }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .cvg-backdrop { background: rgba(6,10,22,.82); }
+  .cvg-card {
+    background: linear-gradient(160deg, rgba(24,28,44,.94) 0%, rgba(12,16,30,.96) 100%);
+  }
+  .cvg-input, .cvg-radio-option label, .cvg-close {
+    background: rgba(18,22,38,.9);
+  }
+}
