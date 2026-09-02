@@ -16,7 +16,7 @@
    hook for every future call, with zero edits to script.js itself.
 
    Fields collected: Visitor Name (required), Company/Organization
-   (optional), Email (optional, validated if filled), and Purpose
+   (optional), and Purpose
    (required single choice: Recruitment / Verification / Other).
 
    No tracking, no Supabase, no Telegram, no dashboard — out of
@@ -29,7 +29,7 @@
 
   var REMEMBER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days, same window as the site's existing gate
 
-  var LS_INFO_KEY    = 'cvgate_visitor_info';   // JSON: {name, company, email, purpose}
+  var LS_INFO_KEY    = 'cvgate_visitor_info';   // JSON: {name, company, purpose}
   var LS_SEEN_AT_KEY  = 'cvgate_seen_at';
   var SS_UNLOCKED_KEY = '_cvGateUnlocked';       // this tab/session only
 
@@ -79,10 +79,6 @@
             '<input class="cvg-input" id="cvgCompany" name="company" type="text" placeholder="Where you work" autocomplete="organization">' +
           '</div>' +
           '<div class="cvg-field">' +
-            '<label class="cvg-label" for="cvgEmail">Email<span class="cvg-opt">(optional)</span></label>' +
-            '<input class="cvg-input" id="cvgEmail" name="email" type="email" placeholder="you@company.com" autocomplete="email">' +
-          '</div>' +
-          '<div class="cvg-field">' +
             '<label class="cvg-label">Purpose<span class="cvg-req">*</span></label>' +
             '<div class="cvg-radio-group" id="cvgPurposeGroup">' +
               '<div class="cvg-radio-option">' +
@@ -114,7 +110,6 @@
       form:     overlay.querySelector('#cvgForm'),
       name:     overlay.querySelector('#cvgName'),
       company:  overlay.querySelector('#cvgCompany'),
-      email:    overlay.querySelector('#cvgEmail'),
       error:    overlay.querySelector('#cvgError')
     };
 
@@ -150,13 +145,10 @@
     pending = null; // declining does not run the gated action
   }
 
-  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
   function submitGate() {
     var e = buildModal();
     var name = e.name.value.trim();
     var company = e.company.value.trim();
-    var email = e.email.value.trim();
     var purposeEl = e.form.querySelector('input[name="cvgPurpose"]:checked');
     var purpose = purposeEl ? purposeEl.value : '';
 
@@ -168,21 +160,13 @@
     }
     e.name.classList.remove('cvg-invalid');
 
-    if (email && !EMAIL_RE.test(email)) {
-      e.error.textContent = 'That email address doesn\u2019t look right.';
-      e.email.classList.add('cvg-invalid');
-      e.email.focus();
-      return;
-    }
-    e.email.classList.remove('cvg-invalid');
-
     if (!purpose) {
       e.error.textContent = 'Please select a purpose.';
       return;
     }
     e.error.textContent = '';
 
-    var info = { name: name, company: company, email: email, purpose: purpose };
+    var info = { name: name, company: company, purpose: purpose };
 
     try {
       localStorage.setItem(LS_INFO_KEY, JSON.stringify(info));
@@ -234,7 +218,7 @@
    What's recorded (this browser's localStorage only — nothing is
    sent anywhere; no Telegram, no server, no dashboard yet):
      Visitor-level  (already collected by the gate above):
-       name, company, email, purpose, submission date/time
+       name, company, purpose, submission date/time
      Per-activity event:
        type          cv_view | cv_download | cert_view | cert_download
        certName      (certificate events only, read from the modal's
@@ -321,7 +305,6 @@
       visitorId: getVisitorId(),
       visitorName: visitor ? visitor.name : null,
       visitorCompany: visitor ? visitor.company : null,
-      visitorEmail: visitor ? visitor.email : null,
       visitorPurpose: visitor ? visitor.purpose : null,
       device: detectDevice(),
       type: type,
