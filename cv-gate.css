@@ -336,3 +336,141 @@ body.cvg-active {
     background: rgba(18,22,38,.9);
   }
 }
+
+/* ================================================================
+   DOCUMENT VIEWER — inline preview modal (#cvgDocOverlay)
+   Built at runtime by cv-gate.js for certificate / letter links that
+   point at drive.google.com, so the file opens inline instead of
+   navigating away. This block was missing entirely, which is why
+   "View Certificate" appeared to do nothing: the overlay existed in
+   the DOM but had no position/size/z-index, so it was invisible.
+================================================================= */
+#cvgDocOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1250; /* above #cvg-overlay (1200) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  box-sizing: border-box;
+}
+#cvgDocOverlay.cvg-doc-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+body.cvg-doc-active {
+  overflow: hidden !important;
+}
+
+.cvg-doc-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4,6,14,.78);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.cvg-doc-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  height: calc(100dvh - 48px);
+  max-height: 900px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: #14182a;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
+  transform: translateY(14px) scale(.96);
+  opacity: 0;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .25s ease;
+}
+#cvgDocOverlay.cvg-doc-visible .cvg-doc-panel {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.cvg-doc-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+
+.cvg-doc-title {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cvg-doc-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.cvg-doc-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease;
+}
+.cvg-doc-action-btn:hover {
+  background: rgba(255,255,255,.14);
+  color: #fff;
+}
+
+.cvg-doc-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #0b0e18;
+}
+
+.cvg-doc-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+}
+
+.cvg-doc-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .cvg-doc-panel { height: calc(100dvh - 24px); border-radius: 12px; }
+}
