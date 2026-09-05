@@ -91,9 +91,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script>
 
   <!-- ONE stylesheet only -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20260905">
   <!-- Separate CV/Certificate gate (new, standalone — does not touch styles.css) -->
-  <link rel="stylesheet" href="cv-gate.css">
+  <link rel="stylesheet" href="cv-gate.css?v=20260905">
   <!-- Accessibility overrides merged into styles.css -->
   <!-- Critical inline: real-vh fallback & mobile-sticky initial state -->
   <style>
@@ -3359,12 +3359,12 @@
       return false;
     }
   </script>
-  <script src="analytics.js" defer></script>
-  <script src="script.min.js" defer></script>
+  <script src="analytics.js?v=20260905" defer></script>
+  <script src="script.min.js?v=20260905" defer></script>
   <!-- Separate CV/Certificate gate (new, standalone file — script.js is untouched).
        Loads after script.js; both use defer, so document order is preserved and
        this file's window.requireGateThen override takes effect for every call. -->
-  <script src="cv-gate.js" defer></script>
+  <script src="cv-gate.js?v=20260905" defer></script>
   <noscript><style>#gate-overlay{display:none!important}body.gate-active{overflow:auto!important}</style></noscript>
 
   <!-- ═══════════════════════════════════════════════════════════
