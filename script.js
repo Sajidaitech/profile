@@ -109,10 +109,9 @@
   }
   resize();
   window.addEventListener('resize', function () { resize(); isMobile = window.innerWidth < 768; }, { passive: true });
-  window.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
-  window.addEventListener('touchmove', function (e) {
-    if (e.touches[0]) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
-  }, { passive: true });
+  // Cursor-reactivity removed — the ambient background must stay fully
+  // independent of pointer position. `mouse` stays at its off-screen
+  // default so any remaining distance checks below never trigger.
 
   function Particle() { this.reset(true); }
   Particle.prototype.reset = function (randomY) {
@@ -956,19 +955,13 @@ function initStaggerFadeIn() {
 
 
 // ============================================================
-// SECTION 15 · MAGNETIC BUTTONS (desktop)
+// SECTION 15 · MAGNETIC BUTTONS — removed (cursor-follow effect).
+// Buttons no longer respond to mouse position; fixed hover/active
+// states are handled entirely in CSS.
 // ============================================================
 
 function initMagneticButtons() {
-  if (!window.matchMedia('(pointer: fine)').matches) return;
-  document.querySelectorAll('.btn-gold, .btn-ghost, .nav-resume-btn').forEach(function (btn) {
-    btn.classList.add('btn-magnetic');
-    btn.addEventListener('mousemove', function (e) {
-      var r = btn.getBoundingClientRect();
-      btn.style.transform = 'translate(' + ((e.clientX - r.left - r.width / 2) * 0.28) + 'px,' + ((e.clientY - r.top - r.height / 2) * 0.28) + 'px) scale(1.04)';
-    });
-    btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
-  });
+  // no-op — retained as a stable call site since it's invoked elsewhere
 }
 
 
@@ -1131,33 +1124,13 @@ function enhanceLiquidButtons() {
   _lwbWireTouchPress();
 }
 
-// Desktop-only: the inner glass highlight (`.liquid-water-btn::before`)
-// tracks the pointer via CSS custom properties, set through one
-// delegated, rAF-throttled listener rather than per-button listeners.
+// Cursor-tracked glass highlight removed — buttons must not respond to
+// mouse position. The `--lwb-x`/`--lwb-y` custom properties are now set
+// once to a fixed center in CSS instead of being updated from pointer
+// events.
 var _lwbHighlightWired = false;
 function _lwbInitPointerHighlight() {
-  if (_lwbHighlightWired) return;
-  if (!window.matchMedia || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-  _lwbHighlightWired = true;
-
-  var raf = false, lastEl = null, lastX = 0, lastY = 0;
-  document.addEventListener('pointermove', function (e) {
-    var btn = e.target.closest ? e.target.closest('.liquid-water-btn') : null;
-    if (!btn) return;
-    lastEl = btn; lastX = e.clientX; lastY = e.clientY;
-    if (raf) return;
-    raf = true;
-    requestAnimationFrame(function () {
-      raf = false;
-      if (!lastEl) return;
-      var r = lastEl.getBoundingClientRect();
-      if (!r.width || !r.height) return;
-      var x = ((lastX - r.left) / r.width) * 100;
-      var y = ((lastY - r.top) / r.height) * 100;
-      lastEl.style.setProperty('--lwb-x', x.toFixed(1) + '%');
-      lastEl.style.setProperty('--lwb-y', y.toFixed(1) + '%');
-    });
-  }, { passive: true });
+  return; // no-op, kept as stable call site
 }
 
 // Touch: reuse the same `.pressed` mechanism the rest of the site
@@ -1487,31 +1460,10 @@ function printSignature() {
 })();
 
 // ============================================================
-// NEUBRUTALISM · CARD TILT ON HOVER
+// NEUBRUTALISM · CARD TILT ON HOVER — removed.
+// Cards no longer tilt or translate toward the cursor; their fixed
+// hover lift/shadow is handled entirely in CSS.
 // ============================================================
-
-(function () {
-  document.addEventListener('mousemove', function (e) {
-    var cards = document.querySelectorAll('.proj-card, .cert-card');
-    cards.forEach(function (card) {
-      // Only apply tilt to cards that are visible (not blocked by AO)
-      if (card.style.opacity === '0') return;
-      var rect = card.getBoundingClientRect();
-      var cx = rect.left + rect.width / 2;
-      var cy = rect.top + rect.height / 2;
-      var dx = (e.clientX - cx) / rect.width;
-      var dy = (e.clientY - cy) / rect.height;
-      if (Math.abs(dx) < 1.2 && Math.abs(dy) < 1.2) {
-        card.style.transform = 'translate(-4px,-4px) rotate(' + (dx * 1.5) + 'deg)';
-      }
-    });
-  });
-  document.addEventListener('mouseleave', function () {
-    document.querySelectorAll('.proj-card, .cert-card').forEach(function (card) {
-      card.style.transform = '';
-    });
-  });
-})();
 
 
 // ============================================================
@@ -1951,153 +1903,6 @@ function printSignature() {
     initWave();
   }
 })();
-
-
-// ============================================================
-// NAV LOGO NAME — Floating draggable with magnetic snap-back
-// ============================================================
-(function () {
-  'use strict';
-
-  function initFloatingName() {
-    var el = document.querySelector('.nav-logo-name');
-    if (!el) return;
-
-    var dragging  = false;
-    var startX    = 0, startY    = 0;
-    var currentX  = 0, currentY  = 0;
-    var velX      = 0, velY      = 0;
-    var raf       = null;
-    var resting   = true;   // idle float active?
-
-    // ── Physics constants ──
-    var FRICTION   = 0.88;   // momentum decay
-    var SPRING     = 0.12;   // snap-back spring strength
-    var DAMPING    = 0.72;   // snap-back damping
-    var MAX_DRAG   = 60;     // max drag distance (px)
-
-    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-
-    function applyTransform(x, y) {
-      el.style.transform = 'translate(' + x.toFixed(2) + 'px, ' + y.toFixed(2) + 'px)';
-    }
-
-    function snapBack() {
-      if (Math.abs(currentX) < 0.15 && Math.abs(currentY) < 0.15 &&
-          Math.abs(velX) < 0.15 && Math.abs(velY) < 0.15) {
-        currentX = 0; currentY = 0; velX = 0; velY = 0;
-        applyTransform(0, 0);
-        resting = true;
-        // Re-enable CSS float animation
-        el.style.animation = '';
-        cancelAnimationFrame(raf);
-        return;
-      }
-      // Spring toward origin
-      var ax = -SPRING * currentX;
-      var ay = -SPRING * currentY;
-      velX = (velX + ax) * DAMPING;
-      velY = (velY + ay) * DAMPING;
-      currentX += velX;
-      currentY += velY;
-      applyTransform(currentX, currentY);
-      raf = requestAnimationFrame(snapBack);
-    }
-
-    // ── Mouse drag ──
-    el.addEventListener('mousedown', function (e) {
-      dragging = true;
-      resting  = false;
-      cancelAnimationFrame(raf);
-      el.style.animation = 'none';   // pause CSS float
-      startX = e.clientX - currentX;
-      startY = e.clientY - currentY;
-      velX = 0; velY = 0;
-      e.preventDefault();
-    });
-
-    document.addEventListener('mousemove', function (e) {
-      if (!dragging) return;
-      var nx = e.clientX - startX;
-      var ny = e.clientY - startY;
-      // Clamp + elastic resistance near edges
-      nx = clamp(nx, -MAX_DRAG, MAX_DRAG);
-      ny = clamp(ny, -MAX_DRAG, MAX_DRAG);
-      velX = nx - currentX;
-      velY = ny - currentY;
-      currentX = nx;
-      currentY = ny;
-      applyTransform(currentX, currentY);
-    });
-
-    document.addEventListener('mouseup', function () {
-      if (!dragging) return;
-      dragging = false;
-      // Apply momentum then spring back
-      raf = requestAnimationFrame(snapBack);
-    });
-
-    // ── Touch drag ──
-    el.addEventListener('touchstart', function (e) {
-      dragging = true;
-      resting  = false;
-      cancelAnimationFrame(raf);
-      el.style.animation = 'none';
-      startX = e.touches[0].clientX - currentX;
-      startY = e.touches[0].clientY - currentY;
-      velX = 0; velY = 0;
-    }, { passive: true });
-
-    el.addEventListener('touchmove', function (e) {
-      if (!dragging) return;
-      var nx = e.touches[0].clientX - startX;
-      var ny = e.touches[0].clientY - startY;
-      nx = clamp(nx, -MAX_DRAG, MAX_DRAG);
-      ny = clamp(ny, -MAX_DRAG, MAX_DRAG);
-      velX = nx - currentX;
-      velY = ny - currentY;
-      currentX = nx;
-      currentY = ny;
-      applyTransform(currentX, currentY);
-    }, { passive: true });
-
-    el.addEventListener('touchend', function () {
-      dragging = false;
-      raf = requestAnimationFrame(snapBack);
-    });
-
-    // ── Magnetic mouse-follow (subtle, non-drag) ──
-    var navEl = document.querySelector('.top-nav');
-    if (navEl) {
-      navEl.addEventListener('mousemove', function (e) {
-        if (dragging || !resting) return;
-        var rect = el.getBoundingClientRect();
-        var cx   = rect.left + rect.width  / 2;
-        var cy   = rect.top  + rect.height / 2;
-        var dx   = e.clientX - cx;
-        var dy   = e.clientY - cy;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          var pull = (1 - dist / 120) * 6;  // max 6px pull
-          applyTransform(dx / dist * pull || 0, dy / dist * pull || 0);
-        } else {
-          applyTransform(0, 0);
-        }
-      });
-      navEl.addEventListener('mouseleave', function () {
-        if (!dragging) applyTransform(0, 0);
-      });
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initFloatingName);
-  } else {
-    initFloatingName();
-  }
-})();
-
-
 
 
 
@@ -2935,28 +2740,9 @@ function printSignature() {
   'use strict';
 
   function initMagneticEnhanced() {
-    var els = document.querySelectorAll('.magnetic, [data-magnetic]');
-    if (!els.length) return;
-
-    els.forEach(function (el) {
-      var strength = parseFloat(el.getAttribute('data-magnetic-strength') || '0.35');
-      var origTransform = '';
-
-      el.addEventListener('mousemove', function (e) {
-        var rect = el.getBoundingClientRect();
-        var cx   = rect.left + rect.width  / 2;
-        var cy   = rect.top  + rect.height / 2;
-        var dx   = (e.clientX - cx) * strength;
-        var dy   = (e.clientY - cy) * strength;
-        el.style.transform = 'translate(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px)';
-        el.style.transition = 'transform 0.1s ease';
-      });
-
-      el.addEventListener('mouseleave', function () {
-        el.style.transform  = origTransform;
-        el.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)';
-      });
-    });
+    // Cursor-follow magnetic effect removed — elements with .magnetic /
+    // [data-magnetic] now rely solely on fixed CSS hover states.
+    return;
   }
 
   if (document.readyState === 'loading') {
@@ -2968,44 +2754,11 @@ function printSignature() {
 
 
 // ============================================================
-// SECTION NEW-N · HERO SECTION TILT (desktop only)
-// Subtle 3D perspective tilt on the hero layout card
-// in response to mouse position. Non-intrusive.
+// SECTION NEW-N · HERO SECTION TILT — removed.
+// The hero card no longer rotates toward the cursor; its fixed
+// perspective/translateZ depth is set in CSS (see the "FIXED SPATIAL
+// 3D SYSTEM" block).
 // ============================================================
-
-(function () {
-  'use strict';
-
-  function initHeroTilt() {
-    if (window.innerWidth < 1024) return;
-    var hero = document.querySelector('.hero-editorial-layout, .hero-section');
-    if (!hero) return;
-
-    var TILT_MAX = 4; // max degrees
-
-    window.addEventListener('mousemove', function (e) {
-      var cx  = window.innerWidth  / 2;
-      var cy  = window.innerHeight / 2;
-      var dx  = (e.clientX - cx) / cx;
-      var dy  = (e.clientY - cy) / cy;
-      var rx  = (-dy * TILT_MAX).toFixed(2);
-      var ry  = ( dx * TILT_MAX).toFixed(2);
-      hero.style.transform = 'perspective(1200px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
-      hero.style.transition = 'transform 0.08s linear';
-    }, { passive: true });
-
-    hero.addEventListener('mouseleave', function () {
-      hero.style.transform  = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
-      hero.style.transition = 'transform 0.6s cubic-bezier(0.22,1,0.36,1)';
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHeroTilt);
-  } else {
-    initHeroTilt();
-  }
-})();
 
 
 // ============================================================
@@ -3300,71 +3053,11 @@ window.hieModalImgLoaded = hieModalImgLoaded;
 })();
 
 // ============================================================
-// STEP 4 — CINEMATIC HERO · Mouse-Reactive Lighting
+// STEP 4 — CINEMATIC HERO — removed.
+// The decorative glow is now fixed in place via CSS instead of
+// following the mouse; the background stays fully independent of
+// cursor position.
 // ============================================================
-(function () {
-  'use strict';
-
-  function initCinematicHero() {
-    var section = document.getElementById('cinematic-hero');
-    if (!section) return;
-
-    var glow = document.getElementById('chMouseGlow');
-    if (!glow) return;
-
-    var bounds = null;
-    var rafId = null;
-    var mouseX = 0, mouseY = 0;
-    var glowX = 0, glowY = 0;
-
-    function updateBounds() {
-      bounds = section.getBoundingClientRect();
-    }
-
-    function lerp(a, b, t) { return a + (b - a) * t; }
-
-    function animateGlow() {
-      glowX = lerp(glowX, mouseX, 0.06);
-      glowY = lerp(glowY, mouseY, 0.06);
-      glow.style.transform = 'translate(' + glowX.toFixed(1) + 'px,' + glowY.toFixed(1) + 'px) translateZ(0)';
-      rafId = requestAnimationFrame(animateGlow);
-    }
-
-    section.addEventListener('mousemove', function(e) {
-      if (!bounds) updateBounds();
-      mouseX = e.clientX - bounds.left;
-      mouseY = e.clientY - bounds.top;
-      glow.style.opacity = '1';
-    });
-
-    section.addEventListener('mouseleave', function() {
-      glow.style.opacity = '0';
-    });
-
-    section.addEventListener('mouseenter', function() {
-      updateBounds();
-      glow.style.opacity = '1';
-    });
-
-    window.addEventListener('resize', function() { bounds = null; });
-    window.addEventListener('scroll', function() { bounds = null; }, { passive: true });
-
-    // Start glow at center
-    updateBounds();
-    if (bounds) {
-      glowX = mouseX = bounds.width / 2;
-      glowY = mouseY = bounds.height / 2;
-    }
-
-    animateGlow();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCinematicHero);
-  } else {
-    initCinematicHero();
-  }
-})();
 
 // ============================================================
 // STEP 6 — VISIONOS FLOATING DOCK
@@ -3393,34 +3086,8 @@ window.hieModalImgLoaded = hieModalImgLoaded;
       });
     }
 
-    function onMouseMove(e) {
-      var cx = e.clientX;
-      var centers = getItemCenters();
-
-      items.forEach(function(item, i) {
-        // skip divider-adjacent non-anchor items
-        var dist = Math.abs(cx - centers[i]);
-        var t = Math.max(0, 1 - (dist / RADIUS));
-        // Smooth bell curve
-        t = t * t * (3 - 2 * t);
-
-        var scale = 1 + (MAX_SCALE - 1) * t;
-        var ty    = MAX_LIFT * t;
-
-        item.style.setProperty('--vd-scale', scale.toFixed(3));
-        item.style.setProperty('--vd-ty', ty.toFixed(1) + 'px');
-      });
-    }
-
-    function onMouseLeave() {
-      items.forEach(function(item) {
-        item.style.setProperty('--vd-scale', '1');
-        item.style.setProperty('--vd-ty', '0px');
-      });
-    }
-
-    dock.addEventListener('mousemove', onMouseMove);
-    dock.addEventListener('mouseleave', onMouseLeave);
+    // Cursor-follow magnification removed — dock items no longer scale
+    // toward the mouse. Fixed hover scale/lift is handled in CSS.
 
     // ── Active section highlighting ──
     function markActive() {
@@ -3471,92 +3138,12 @@ window.hieModalImgLoaded = hieModalImgLoaded;
 (function () {
   'use strict';
 
-  // ── 1. CUSTOM CURSOR ──────────────────────────────────────
-  function initCursor() {
-    // Only on non-touch devices
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+  // ── 1. CUSTOM CURSOR — removed. Uses the normal system cursor. ──
+  function initCursor() { return; }
 
-    var dot  = document.createElement('div');
-    var ring = document.createElement('div');
-    dot.className  = 'cinematic-cursor';
-    ring.className = 'cinematic-cursor-ring';
-    document.body.appendChild(dot);
-    document.body.appendChild(ring);
-
-    var mx = -100, my = -100;
-    var rx = -100, ry = -100;
-    var rafId;
-
-    document.addEventListener('mousemove', function(e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.transform  = 'translate(calc(-50% + ' + mx + 'px), calc(-50% + ' + my + 'px))';
-    }, { passive: true });
-
-    function animateRing() {
-      rx += (mx - rx) * 0.11;
-      ry += (my - ry) * 0.11;
-      ring.style.transform = 'translate(calc(-50% + ' + rx.toFixed(1) + 'px), calc(-50% + ' + ry.toFixed(1) + 'px))';
-      rafId = requestAnimationFrame(animateRing);
-    }
-    animateRing();
-
-    // Click pulse
-    document.addEventListener('mousedown', function() {
-      dot.classList.add('cursor-click');
-      ring.style.transform += ' scale(0.75)';
-    });
-    document.addEventListener('mouseup', function() {
-      dot.classList.remove('cursor-click');
-    });
-
-    // Hover on interactive elements
-    var hoverEls = 'a, button, .gc-card, .hero-vchip';
-    document.addEventListener('mouseover', function(e) {
-      if (e.target.closest(hoverEls)) {
-        ring.style.width  = '52px';
-        ring.style.height = '52px';
-        ring.style.borderColor = 'rgba(0,212,255,0.55)';
-        dot.style.opacity = '0.5';
-      }
-    });
-    document.addEventListener('mouseout', function(e) {
-      if (e.target.closest(hoverEls)) {
-        ring.style.width  = '36px';
-        ring.style.height = '36px';
-        ring.style.borderColor = 'rgba(155,114,247,0.35)';
-        dot.style.opacity = '1';
-      }
-    });
-  }
-
-  // ── 2. GLOBAL MOUSE GLOW ─────────────────────────────────
-  function initGlobalMouseGlow() {
-    var glow = document.getElementById('globalMouseGlow');
-    if (!glow) return;
-    var gx = window.innerWidth  / 2;
-    var gy = window.innerHeight / 2;
-    var tx = gx, ty = gy;
-
-    document.addEventListener('mousemove', function(e) {
-      tx = e.clientX; ty = e.clientY;
-    }, { passive: true });
-
-    var _glowRaf = null;
-    function animateGlow() {
-      gx += (tx - gx) * 0.04;
-      gy += (ty - gy) * 0.04;
-      glow.style.transform = 'translate(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px) translateZ(0)';
-      var settled = Math.abs(tx - gx) < 0.5 && Math.abs(ty - gy) < 0.5;
-      _glowRaf = settled ? null : requestAnimationFrame(animateGlow);
-    }
-    document.addEventListener('mousemove', function() {
-      if (!_glowRaf) _glowRaf = requestAnimationFrame(animateGlow);
-    }, { passive: true });
-    _glowRaf = requestAnimationFrame(animateGlow);
-
-    document.addEventListener('mouseleave', function() { glow.style.opacity = '0'; });
-    document.addEventListener('mouseenter', function() { glow.style.opacity = '1'; });
-  }
+  // ── 2. GLOBAL MOUSE GLOW — removed. The background/decorative glow
+  // must stay independent of cursor position; it is now fixed via CSS. ──
+  function initGlobalMouseGlow() { return; }
 
   // ── 3. PARTICLE SYSTEM ───────────────────────────────────
   function initParticles() {
@@ -3567,7 +3154,8 @@ window.hieModalImgLoaded = hieModalImgLoaded;
     var W, H, dpr;
     var particles = [];
     var PARTICLE_COUNT = 55;
-    var mouse = { x: -999, y: -999 };
+    // No cursor influence — background particles are fully independent
+    // of pointer position.
 
     function resize() {
       dpr = window.devicePixelRatio || 1;
@@ -3615,10 +3203,6 @@ window.hieModalImgLoaded = hieModalImgLoaded;
       particles.push(createParticle(true));
     }
 
-    document.addEventListener('mousemove', function(e) {
-      mouse.x = e.clientX; mouse.y = e.clientY;
-    }, { passive: true });
-
     var LINE_DIST = 130;
 
     function drawFrame() {
@@ -3634,16 +3218,6 @@ window.hieModalImgLoaded = hieModalImgLoaded;
 
         p.x += p.vx;
         p.y += p.vy;
-
-        // Gentle mouse attraction
-        var dx = mouse.x - p.x;
-        var dy = mouse.y - p.y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200 && dist > 0) {
-          var force = (200 - dist) / 200 * 0.0018;
-          p.vx += dx / dist * force;
-          p.vy += dy / dist * force;
-        }
 
         // Damping
         p.vx *= 0.995;
@@ -3794,34 +3368,10 @@ window.hieModalImgLoaded = hieModalImgLoaded;
     titles.forEach(function(t) { obs.observe(t); });
   }
 
-  // ── 7. GLASS CARD MOUSE-TILT (3D parallax) ───────────────
-  function initCardTilt() {
-    var cards = document.querySelectorAll('.gc-card');
-    var MAX_ROT = 6; // degrees
-
-    cards.forEach(function(card) {
-      var _rect = null;
-      card.addEventListener('mouseenter', function() {
-        _rect = card.getBoundingClientRect(); /* cache once per hover — not per mousemove */
-        card.style.willChange = 'transform';
-      });
-      card.addEventListener('mousemove', function(e) {
-        if (!_rect) return;
-        var cx   = _rect.left + _rect.width  / 2;
-        var cy   = _rect.top  + _rect.height / 2;
-        var dx   = (e.clientX - cx) / (_rect.width  / 2);
-        var dy   = (e.clientY - cy) / (_rect.height / 2);
-        var rotX = -dy * MAX_ROT;
-        var rotY =  dx * MAX_ROT;
-        card.style.transform = 'translateY(-10px) scale(1.012) perspective(800px) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) translateZ(0)';
-      });
-      card.addEventListener('mouseleave', function() {
-        _rect = null;
-        card.style.transform = '';
-        card.style.willChange = 'auto'; /* de-promote GPU layer when not hovering */
-      });
-    });
-  }
+  // ── 7. GLASS CARD MOUSE-TILT — removed.
+  // Cards keep a fixed hover lift (translateY/scale) defined in CSS,
+  // with no rotation or tracking toward the cursor.
+  function initCardTilt() { return; }
 
   // ── 8. GLASS REFRACTION ON SCROLL ENTRY ──────────────────
   function initScrollRefraction() {
@@ -3843,13 +3393,11 @@ window.hieModalImgLoaded = hieModalImgLoaded;
 
   // ── INIT ALL ──────────────────────────────────────────────
   function initAll() {
-    initCursor();
-    initGlobalMouseGlow();
-    // initParticles(); // disabled — dot particle canvas removed
+    // Cursor/mouse-reactive effects removed: initCursor, initGlobalMouseGlow,
+    // initParticles (mouse attraction), initCardTilt (rotateX/Y toward cursor).
     initScanline();
     initScrollDepth();
     initTitleGlow();
-    initCardTilt();
     initScrollRefraction();
   }
 
@@ -4193,54 +3741,11 @@ window.hieModalImgLoaded = hieModalImgLoaded;
   }
 
   // ============================================================
-  // H · FINAL QUALITY: Premium hover parallax (desktop only)
+  // H · FINAL QUALITY: Premium hover parallax — removed.
+  // The hero portrait/chips/type column no longer move in response to
+  // mouse position; their fixed spatial depth is set in CSS.
   // ============================================================
-  function initHeroParallax() {
-    if (isTouchDevice || ViewportManager.isMobile()) return;
-
-    var hero   = document.querySelector('.hero-editorial-layout');
-    var portrait = document.querySelector('.hero-portrait-frame');
-    var chips  = document.querySelector('.hero-vertical-chips');
-    var type   = document.querySelector('.hero-type-col');
-
-    if (!hero || !portrait) return;
-
-    var mx = 0, my = 0;
-    var cx = 0, cy = 0;
-    var raf;
-
-    function lerp(a, b, t) { return a + (b - a) * t; }
-
-    function animate() {
-      cx = lerp(cx, mx, 0.06);
-      cy = lerp(cy, my, 0.06);
-
-      if (portrait) portrait.style.transform = 'translate(' + (cx * 8) + 'px,' + (cy * 6) + 'px) translateZ(0)';
-      if (chips)    chips.style.transform    = 'translate(' + (cx * 4) + 'px,' + (cy * 3) + 'px) translateZ(0)';
-      if (type)     type.style.transform     = 'translate(' + (cx * -2) + 'px,' + (cy * -1.5) + 'px) translateZ(0)';
-
-      /* Stop rAF when settled — do not spin forever when mouse is still */
-      var settled = Math.abs(mx - cx) < 0.005 && Math.abs(my - cy) < 0.005;
-      raf = settled ? null : requestAnimationFrame(animate);
-    }
-
-    hero.addEventListener('mousemove', function (e) {
-      var r  = hero.getBoundingClientRect();
-      mx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
-      my = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-      if (!raf) raf = requestAnimationFrame(animate); /* start only if not running */
-    }, { passive: true });
-
-    hero.addEventListener('mouseleave', function () {
-      mx = 0; my = 0;
-      if (!raf) raf = requestAnimationFrame(animate);
-    }, { passive: true });
-
-    hero.addEventListener('mouseenter', function () {
-      if (!raf) raf = requestAnimationFrame(animate);
-    });
-    /* Do NOT call animate() unconditionally — only start on interaction */
-  }
+  function initHeroParallax() { return; }
 
   // ============================================================
   // I · FINAL QUALITY: Smooth mobile sticky CTA transition
@@ -4298,33 +3803,11 @@ window.hieModalImgLoaded = hieModalImgLoaded;
   }
 
   // ============================================================
-  // M · FINAL QUALITY: Orb mouse-follow (desktop only, throttled)
+  // M · FINAL QUALITY: Orb mouse-follow — removed.
+  // The glow orb no longer tracks the cursor; it is positioned with a
+  // fixed CSS transform instead.
   // ============================================================
-  function initChMouseFollow() {
-    if (isTouchDevice) return;
-
-    var glow = document.getElementById('chMouseGlow');
-    if (!glow) return;
-
-    var tx = 0, ty = 0, cx = 0, cy = 0;
-    var raf;
-
-    function lerp(a, b, t) { return a + (b - a) * t; }
-
-    function animate() {
-      cx = lerp(cx, tx, 0.07);
-      cy = lerp(cy, ty, 0.07);
-      glow.style.transform = 'translate(' + (cx - 300) + 'px,' + (cy - 300) + 'px) translateZ(0)';
-      raf = requestAnimationFrame(animate);
-    }
-
-    document.addEventListener('mousemove', function (e) {
-      tx = e.clientX;
-      ty = e.clientY;
-    }, { passive: true });
-
-    animate();
-  }
+  function initChMouseFollow() { return; }
 
   // ============================================================
   // INIT ALL — deferred after DOM ready

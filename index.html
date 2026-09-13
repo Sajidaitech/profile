@@ -93,6 +93,7 @@
   <!-- ONE stylesheet only (styles.css now also contains the CV/Certificate
        gate styles, under the "[SECTION: CV / CERTIFICATE GATE]" heading) -->
   <link rel="stylesheet" href="styles.css?v=20260905">
+  <link rel="stylesheet" href="desert-theme.css?v=1">
   <!-- Accessibility overrides merged into styles.css -->
   <!-- Critical inline: real-vh fallback & mobile-sticky initial state -->
   <style>
@@ -491,7 +492,7 @@
           </div>
 
           <p class="hero-statement">
-            Four years architecting enterprise infrastructure that powers <strong>aviation and healthcare</strong> operations across Qatar — alongside government immigration sector experience in the UAE — zero-downtime deployments, cyber incident response, mission-critical precision.
+            I keep aviation, healthcare, and government infrastructure running — <strong>4+ years, zero downtime.</strong>
           </p>
 
           <div class="hero-kpis">
@@ -3400,36 +3401,9 @@
        and on touch/coarse-pointer devices (mirrors the CSS media guards). -->
   <script>
   (function () {
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var isFinePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-    /* ── Pointer light: sets --mx/--my on the hovered glass element only.
-       Event-delegated (one listener), rAF-throttled, never touches layout —
-       only two custom properties via style.setProperty. ── */
-    if (isFinePointer && !reduceMotion) {
-      var LG_TARGET_SELECTOR = '.gate-card, .gc-card, .wh-card, .cert-card, .museum-case, .ref-card, .hie-card, .quote-card, .ach-award-card, .top-nav';
-      var lgPending = false, lgLastEvent = null;
-
-      function lgApply() {
-        lgPending = false;
-        if (!lgLastEvent) return;
-        var el = lgLastEvent.target.closest ? lgLastEvent.target.closest(LG_TARGET_SELECTOR) : null;
-        if (!el) return;
-        var r = el.getBoundingClientRect();
-        var x = ((lgLastEvent.clientX - r.left) / r.width) * 100;
-        var y = ((lgLastEvent.clientY - r.top) / r.height) * 100;
-        el.style.setProperty('--mx', x + '%');
-        el.style.setProperty('--my', y + '%');
-      }
-
-      document.addEventListener('pointermove', function (e) {
-        lgLastEvent = e;
-        if (!lgPending) {
-          lgPending = true;
-          requestAnimationFrame(lgApply);
-        }
-      }, { passive: true });
-    }
+    /* Pointer-tracked glass highlight removed — glass cards and the nav
+       must never respond to mouse position. --mx/--my are now fixed via
+       CSS instead of being updated from pointermove events. */
 
     /* ── Scroll depth: toggles .lg-inview on glass sections via a single
        IntersectionObserver (no scroll listener, no layout thrash). Skipped
