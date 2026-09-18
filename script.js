@@ -5181,3 +5181,45 @@ function initTroubleshootingLab() {
     _tslRenderPanel(initialBtn.getAttribute('data-scenario'));
   }
 }
+
+// ============================================================
+// PORTRAIT 360 — interactive 3D tilt on mouse move (desktop only;
+// the spinning ring halo itself is pure CSS, see styles.css).
+// Skips entirely on touch devices and prefers-reduced-motion.
+// ============================================================
+(function () {
+  var frame = document.getElementById('heroPortraitFrame');
+  var ring  = document.getElementById('heroPortraitRing');
+  if (!frame || !ring) return;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (reduceMotion || isCoarsePointer) return;
+
+  var MAX_TILT = 10; // degrees
+  var raf = null;
+
+  function handleMove(e) {
+    if (raf) return;
+    raf = requestAnimationFrame(function () {
+      raf = null;
+      var rect = ring.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width;  // 0..1
+      var py = (e.clientY - rect.top) / rect.height;   // 0..1
+      var tiltY = (px - 0.5) * 2 * MAX_TILT;   // left/right
+      var tiltX = (0.5 - py) * 2 * MAX_TILT;   // up/down
+      frame.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
+      frame.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
+      frame.style.setProperty('--tilt-scale', '1.03');
+    });
+  }
+
+  function resetTilt() {
+    frame.style.setProperty('--tilt-x', '0deg');
+    frame.style.setProperty('--tilt-y', '0deg');
+    frame.style.setProperty('--tilt-scale', '1');
+  }
+
+  ring.addEventListener('mousemove', handleMove);
+  ring.addEventListener('mouseleave', resetTilt);
+})();

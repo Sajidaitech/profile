@@ -92,7 +92,7 @@
 
   <!-- ONE stylesheet only (styles.css now also contains the CV/Certificate
        gate styles, under the "[SECTION: CV / CERTIFICATE GATE]" heading) -->
-  <link rel="stylesheet" href="styles.css?v=20260905">
+  <link rel="stylesheet" href="styles.css?v=20260917-chamfer1">
   <link rel="stylesheet" href="desert-theme.css?v=1">
   <!-- Accessibility overrides merged into styles.css -->
   <!-- Critical inline: real-vh fallback & mobile-sticky initial state -->
@@ -448,13 +448,15 @@
       <div class="hero-editorial-layout">
 
         <div class="hero-portrait-col" data-aos="fade-right" data-aos-duration="1100">
-          <div class="hero-portrait-frame">
-            <span class="hpf-corner hpf-tl" aria-hidden="true"></span>
-            <span class="hpf-corner hpf-tr" aria-hidden="true"></span>
-            <span class="hpf-corner hpf-bl" aria-hidden="true"></span>
-            <span class="hpf-corner hpf-br" aria-hidden="true"></span>
-            <div class="hpf-glass-reflect" aria-hidden="true"></div>
-            <img src="photo.jpg" alt="Sajid Mehmood — IT Support Engineer" class="hero-portrait-img" loading="eager">
+          <div class="hero-portrait-ring" id="heroPortraitRing">
+            <div class="hero-portrait-frame" id="heroPortraitFrame">
+              <span class="hpf-corner hpf-tl" aria-hidden="true"></span>
+              <span class="hpf-corner hpf-tr" aria-hidden="true"></span>
+              <span class="hpf-corner hpf-bl" aria-hidden="true"></span>
+              <span class="hpf-corner hpf-br" aria-hidden="true"></span>
+              <div class="hpf-glass-reflect" aria-hidden="true"></div>
+              <img src="photo.jpg" alt="Sajid Mehmood — IT Support Engineer" class="hero-portrait-img" loading="eager">
+            </div>
           </div>
         </div>
 
